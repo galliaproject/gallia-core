@@ -1,0 +1,273 @@
+package gallia.data.single
+
+import aptus.{Anything_, String_, Seq_}
+import aptus.Separator
+
+import gallia._
+import gallia.reflect.Container
+import gallia.domain.PathPair
+
+// ===========================================================================
+trait ObjOperations { self: Obj =>
+  // TODO: t210115095838 - more reliance on meta when available, to help with data, so as to minimize pattern matchings at runtime
+  // note:
+  // - t210104164036 and t210104164037: renaming(s) will only be applicable to the standalone version
+  // - t210104164036 and t210104164037: more generally, most of this will be rewritten in that context...
+
+  // ---------------------------------------------------------------------------
+  import ValueWrapper.to
+
+  private implicit def _toObj(x: UData): Obj = Obj.build(x)
+
+    // ---------------------------------------------------------------------------
+    private implicit def _toKey  (key :  KeyW)                :     Key    =  key.value
+    private implicit def _toKeys (keys:  KeyWz)               : Seq[Key]   =  keys.keys
+    private implicit def _toKeys (pair: (KeyW, Seq[KeyW]))    : Seq[Key]   = (pair._1 +: pair._2).map(_.value)
+    private implicit def _toPaths(pair: (KPathW, Seq[KPathW])): Seq[KPath] = (pair._1 +: pair._2).map(_.value)
+    private implicit def _toPaths(keys:  KPathWz)             : Seq[KPath] = keys.kpathz.values
+
+  // ===========================================================================
+  def merge(that: Obj): Obj = self.data ++ that.data
+
+  // ===========================================================================
+  def rename(x: ActualRen): Obj =
+      data.map { case (key, value) =>
+        if (key == x.from) x.to -> value
+        else               key  -> value }
+
+    // ---------------------------------------------------------------------------
+    def rename(from: KeyW, to: KeyW): Obj = rename(ActualRen.apply(from.value, to.value))
+    def rename(x: Ren ): Obj = x.actualOpt.map(rename).getOrElse(self)
+    def rename(x: Renz): Obj = x.flatMap(_.actualOpt).foldLeft(self)(_ rename _)
+    //TODO: path versions?
+
+  // ===========================================================================
+  private def _remove(keys: Seq[Key]) : Obj = data.filterNot(_._1.containedIn(keys))
+
+    // ---------------------------------------------------------------------------
+    def remove(key1: KeyW, more: KeyW*): Obj = _remove(key1, more)
+    def remove(keys: KeyWz)            : Obj = _remove(keys)
+
+  // ===========================================================================
+  private def _retainKeys(keys: Seq[Key]) : Obj = data.filter(_._1.containedIn(keys))
+
+    // ---------------------------------------------------------------------------
+    @deprecated("very inefficient")
+    private[single] def _retainPaths(paths: KPathz)                        : Obj = retain(paths, RetainMapping(paths.mapping))
+                    def retain      (paths: KPathz, mapping: RetainMapping): Obj =
+        data
+          .map { case (key, value) =>
+            key -> (
+              mapping.data.get(key).map {
+                case None              => value
+                case Some(nestedPaths) =>
+                  value match {
+                    case o2 : Obj    => o2                         ._retainPaths(nestedPaths)
+                    case o2s: Seq[_] => o2s.map(_.asInstanceOf[Obj]._retainPaths(nestedPaths)) } }) }
+
+    // ---------------------------------------------------------------------------
+    def retain(key1: KeyW, more: KeyW*): Obj = _retainKeys(key1, more)
+    def retain(keys: KeyWz)            : Obj = _retainKeys(keys)
+    def retain(keys: Seq[Key])         : Obj = _retainKeys(keys)
+    def retain(paths: KPathWz)         : Obj = retain(paths.kpathz)
+  //def retain(path1: KPathW, more: KPathW*): Obj = _retainPaths(KPathz((path1 +: more).map(_.value)))
+
+  // ===========================================================================
+  private def _put(key: Key, value: AnyValue) : Obj = // TODO: distinction only necessary until t201208103121 is done (Seq vs Map for Obj)
+        if (data.contains(key)) _replace(key, value)
+        else                    _add    (key, value)
+
+      // ---------------------------------------------------------------------------
+      private def _add    (key: Key, value: AnyValue) : Obj = data + (key -> value)
+      private def _replace(key: Key, value: AnyValue) : Obj =
+          data.map { case (k, v) => k ->
+            (if (key == k) value
+             else          v ) }
+
+    // ---------------------------------------------------------------------------
+    def add(target: KPathW, value: AnyValue): Obj =
+      target.value.initPair match {
+        case (None      , leaf) =>                            _add(leaf, value)
+        case (Some(tail), leaf) => transformPath(tail, _.asObj.add(leaf, value)) }
+
+    def replace(target: KPathW, value: AnyValue): Obj =
+      target.value.initPair match {
+        case (None      , leaf) =>                            _replace(leaf, value)
+        case (Some(tail), leaf) => transformPath(tail, _.asObj.replace(leaf, value)) }
+
+    def put(target: KPathW, value: AnyValue): Obj =
+      target.value.initPair match {
+        case (None      , leaf) =>                            _put(leaf, value)
+        case (Some(tail), leaf) => transformPath(tail, _.asObj.put(leaf, value)) }
+
+    // ---------------------------------------------------------------------------
+    def put(entries: Seq[(KPath, AnyValue)]): Obj = // TODO: quite inefficient
+      entries.foldLeft(self){ case (curr, (path, value)) =>
+        curr.put(path, value) }
+
+  // ===========================================================================
+  def transformPath(target: KPathW, f: AnyValue => AnyValue): Obj = // TODO: phase out
+      target.value.tailPair match {
+          case (leaf  , None      ) => _transformKey(leaf, f)
+          case (parent, Some(tail)) =>
+            (data.get(parent) match {
+              case None        => self
+              case Some(value) => replace(parent, value match { // TODO: could use meta
+                  case seq: Seq[_] => seq.asInstanceOf[Seq[Obj]].map(_.transformPath(tail, f))
+                  case sgl         => sgl.asInstanceOf[    Obj ]      .transformPath(tail, f) }) }) }
+
+    // ---------------------------------------------------------------------------
+    def transformPathx(target: KPathW, f: AnyValue => AnyValue): Obj =
+      target.value.tailPair match {
+          case (leaf  , None      ) => _transformKeyx(leaf, f)
+          case (parent, Some(tail)) =>
+            (data.get(parent) match {
+              case None        => self
+              case Some(value) => replace(parent, value match { // TODO: could use meta
+                  case seq: Seq[_] => seq.asInstanceOf[Seq[Obj]].map(_.transformPathx(tail, f))
+                  case sgl         => sgl.asInstanceOf[    Obj ]      .transformPathx(tail, f) }) }) }
+
+    // ---------------------------------------------------------------------------
+    def transformPathPair(target: PathPair, f: AnyValue => AnyValue): Obj =
+      target.path.tailPair match {
+          case (leaf  , None       ) => _transformKeyPair(leaf, target.optional)(f)
+          case (parent, Some(tail0)) =>
+            val tail = PathPair(tail0, target.optional)
+            (data.get(parent) match {
+              case None        => self
+              case Some(value) => replace(parent, value match { // TODO: could use meta
+                  case seq: Seq[_] => seq.asInstanceOf[Seq[Obj]].map(_.transformPathPair(tail, f))
+                  case sgl         => sgl.asInstanceOf[    Obj ]      .transformPathPair(tail, f) }) }) }
+
+      // ===========================================================================
+      def _transformKey(key: Key, f: AnyValue => AnyValue): Obj = // TODO: phase out
+          data
+            .get(key)
+            .map { value => _put(key, f(value)) }
+            .getOrElse(self)
+
+      // ---------------------------------------------------------------------------
+      def _transformKeyx(key: Key, f: AnyValue => AnyValue): Obj = _transformRenx(Ren.from(key))(f)
+      def _transformRenx(key: Ren)(f: AnyValue => AnyValue): Obj =
+          data
+            .get(key.from) // TODO: could use meta
+            .map {
+              case seq: Seq[_] => _put(key.from, seq.map(f))
+              case sgl         => _put(key.from, f(sgl)) }
+            .map(_.rename(key))
+            .getOrElse(self)
+
+      // ---------------------------------------------------------------------------
+      def _transformKeyPair(key: Key, optional: Boolean)(f: AnyValue => AnyValue): Obj =
+        (if (!optional) data.apply(key) // TODO: could use meta
+         else           data.get  (key))
+          .thn(f)
+          .thn(_put(key, _))
+
+    // ===========================================================================
+    def opt(target: KPathW): Option[AnyValue] =
+      target.value.tailPair match {
+        case (leaf  , None      ) => data.get(leaf)
+        case (parent, Some(tail)) =>
+          (data.get(parent) match {
+              case None => None
+              case Some(value) =>
+                value match { // TODO: could use meta
+                  case seq: Seq[_] => illegal(s"TODO:CantBeSeq-Opt:210106171801:${target}") // in theory should have been validated against..
+                  case sgl         => sgl.asInstanceOf[Obj].opt(tail) } }) }
+
+    // ---------------------------------------------------------------------------
+    def force(target: KPathW): AnyValue  =
+      target.value.tailPair match {
+        case (leaf  , None      ) => data.apply(leaf)
+        case (parent, Some(tail)) =>
+          (data.get(parent) match {
+              case None        => illegal(s"TODO:CantBeNone:210106171759:${target}") // in theory should have been validated against..
+              case Some(value) =>
+                value match { // TODO: could use meta
+                  case seq: Seq[_] => illegal(s"TODO:CantBeSeq-Force:210106171800:${target}") // in theory should have been validated against..
+                  case sgl         => sgl.asInstanceOf[Obj].force(tail) } }) }
+
+    // ===========================================================================
+    // TODO: t210116165405 - benchmark, which is faster?
+    @deprecated def seq0(target: KPathW, optional: Boolean, multiple: Boolean): Seq[AnyValue] =
+        (optional, multiple) match {
+          case (true , true ) => opt  (target).toSeq.flatMap(_.asSeq)
+          case (true , false) => opt  (target).toSeq
+          case (false, true ) => force(target)                .asSeq
+          case (false, false) => force(target).as.seq }
+
+      // ===========================================================================
+      def seq(target: KPathW, container: Container): Seq[AnyValue] =
+        container match {
+          case Container._One => force(target).as.seq // TODO: see t210116165559 - rename to "in"?
+          case Container._Opt => opt  (target).toSeq
+          case Container._Nes => force(target)                .asSeq
+          case Container._Pes => opt  (target).toSeq.flatMap(_.asSeq) }
+
+  // ===========================================================================
+  def toUpperCase(target: Key): Obj = _transformKey(target, _.asString.toUpperCase)
+  //TODO: more... (see t210104164037)
+
+  // ===========================================================================
+  def transformString (key: Key, f: String      => Any): Obj = transformPath(key, _.asString             .thn(f))
+  def transformInts   (key: Key, f: Seq[Int   ] => Any): Obj = transformPath(key, _.asSeq.map(_.asInt   ).thn(f))
+  def transformDoubles(key: Key, f: Seq[Double] => Any): Obj = transformPath(key, _.asSeq.map(_.asDouble).thn(f))
+
+  // ---------------------------------------------------------------------------
+  def transformObj   (key: Key, f: Obj    => Any): Obj = transformPath(key, _.asObj   .thn(f))
+  def transformObjx  (key: Key, f: Obj    => Any): Obj = transformPath(key,
+      _ match {
+        case x: Seq[_] => x.map(_.asObj.thn(f))
+        case x         => x      .asObj.thn(f) } )
+
+  // ===========================================================================
+  // ===========================================================================
+  // ===========================================================================
+  // more advanced
+
+  def swapEntries(key1: Key, key2: Key): Obj =
+    (contains(key1),contains(key2)) match {
+      case (false, false) => self
+      case (true , false) => rename      (key1, key2)
+      case (false, true ) => rename      (key2, key1)
+      case (true , true ) =>
+        data
+          .map { case (key, value) =>
+                 if (key == key1) key2 -> value
+            else if (key == key2) key1 -> value
+            else                  key  -> value } }
+
+  // ---------------------------------------------------------------------------
+  def copyEntries(original: Key, newKey: Key): Obj =
+    data
+      .flatMap { case (key, value) =>
+        if (key == original) Seq(key -> value, newKey -> value)
+        else                 Seq(key -> value) }
+
+  // ---------------------------------------------------------------------------
+  def nest(target: Key, nestingKey: Key): Obj = nest(Keyz.from(target), nestingKey)
+
+    /* req: nesting key can't be an array */
+    def nest(targets: Keyz, nestingKey: Key): Obj =
+      (retainOpt(targets), removeOpt(targets)) match {
+        case (None        , _         ) => self
+        case (Some(target), None      ) => gallia.obj(nestingKey -> target)
+        case (Some(target), Some(rest)) =>
+          data.get(nestingKey) match {
+            case None                   => rest.put(nestingKey,                      target )
+            case Some(existing)         => rest.put(nestingKey, existing.asObj.merge(target)) } }
+
+  // ---------------------------------------------------------------------------
+  def split(key: Key, splitter: String => Seq[String]): Obj = _transformKey(key, _.toString.thn(splitter.apply))
+
+  // ---------------------------------------------------------------------------
+  def unarrayCompositeKey(keys: Seq[Key], separator: Separator): Option[Key] =
+    keys
+      .flatMap { keyKey => opt(keyKey).map(_.str) } /* TODO or expect default values to be set if missing? or ignore collisions? */
+      .as.noneIf(_.isEmpty)
+      .map(_.join(separator).symbol)
+
+}
+
+// ===========================================================================

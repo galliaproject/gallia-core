@@ -760,7 +760,7 @@ Once a definitive license is chosen, code contributions will be more than welcom
 <a name="210127134033"></a>
 ### What are the biggest limitations by design?
 At this point, a given field can only be of a given type. Ironically this prevents _Gallia_ from having its own metaschema specified in _Gallia_ terms.
-See problem in action in the [code](http://github.com/galliaproject/gallia-core/blob/init/src/main/scala/gallia/meta/domain/MetaObj.scala#L35) . A more thorough discussion of design choices and trade-offs/limitations will come in a future article.
+See problem in action in the [code](http://github.com/galliaproject/gallia-core/blob/init/src/main/scala/gallia/meta/MetaObj.scala#L35) . A more thorough discussion of design choices and trade-offs/limitations will come in a future article.
 
 Another potential trick is that there can be only one meaning to a missing value. For instance `[{"foo": null}, {"foo": []}, {}]` would all collapse to the same absence of a value: `{}`.
 Note that overloading the various `null`/`Nil` mechanisms with alternative meanings is probably not great data modeling practise in the first place.
@@ -840,7 +840,7 @@ Where `test` wraps an equality assertion (I have not settled on a definitive tes
 ### Why so few comments, especially scaladoc?
 I try to leverage the language constructs as much as possible, e.g. by naming variables and methods so they convey semantics as much as possible.
 I then add the occasional comment when I deem it necessary, but overall expect any contributor to be sufficiently familiar with Scala to understand what's going on.
-As the project matures, proper scaladoc-friendly comments can hopefully be [added](http://github.com/galliaproject/gallia-docs/blob/init/quotes.md) as well.
+As the project matures, proper scaladoc-friendly comments can hopefully be [added](http://github.com/galliaproject/gallia-docs/blob/init/quotes.md#mvp) as well.
 
 <a name="210127134042"></a>
 ### Why does the [terminology](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210124100007) sometimes sound funny or full-on neological?

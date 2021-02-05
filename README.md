@@ -24,7 +24,7 @@ A more thorough discussion of design choices/limitations/direction will come as 
 <a name="210121153202"></a>
 Preliminary notes:
 - Some links lead to [documentation](http://github.com/galliaproject/gallia-docs) that is actually to be written.
-- The examples use _JSON_ - despite its [flaws](http://github.com/galliaproject/gallia-docs/json.md) - because of its ubiquity as a notation
+- The examples use _JSON_ - despite its [flaws](http://github.com/galliaproject/gallia-docs/blob/init/json.md) - because of its ubiquity as a notation
 
 <a name="210121153147"></a>
 ## Dependencies
@@ -128,7 +128,7 @@ Notes:
 <a name="210121153154"></a>
 Notes:
 - <a href="https://jsonlines.org/" target="_blank">JSONL</a> = one JSON document per line
-- This example makes use of `.toLocalDateFromIso()` and `.thn()` from our `import aptus._` above (see [docs](http://github.com/galliaproject/gallia-docs/aptus.md))
+- This example makes use of `.toLocalDateFromIso()` and `.thn()` from our `import aptus._` above (see [docs](http://github.com/galliaproject/gallia-docs/blob/init/aptus.md))
 
 ### Process CSV/TSV files
 
@@ -159,7 +159,7 @@ Keys can be referenced as scala's `Symbol`, `String`, `Enumeration`, and `enumer
 ```
 
 ### Path referencing
-Paths can be referenced conveniently via the "pipe+greater-than" (`|>`) [notation](http://github.com/galliaproject/gallia-docs/tasks.md#t210127123739) :
+Paths can be referenced conveniently via the "pipe+greater-than" (`|>`) [notation](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210127123739):
 ```scala
 """{"parent": {"foo": "value"}}"""
   .read().toUpperCase('parent |> 'foo)
@@ -216,7 +216,7 @@ obj.forAllKeys((x, k) => x.rename(k).using(_.toUpperCase)) // {"FOO": "hi", ...
 
 ### Renaming keys
 
-Renaming can be expressed conveniently via the "tilde+greater-than" (`~>`) [notation](http://github.com/galliaproject/gallia-docs/tasks.md#t210127123739) :
+Renaming can be expressed conveniently via the "tilde+greater-than" (`~>`) [notation](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210127123739) :
 
 ```scala
            """{"foo": "bar"}""" .read().rename           ('foo ~> 'FOO)
@@ -361,7 +361,7 @@ people
   //    {"city":"Lyon","male":22.5},     ...]
 ```
 
-Note that [unpivoting](http://github.com/galliaproject/gallia-docs/tasks.md#t210120171258) isn't available, but scheduled
+Note that [unpivoting](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210120171258) isn't available, but scheduled
 
 ## Renesting Tables
 
@@ -393,7 +393,7 @@ It is also common to encounter values such as `"John:32|Kate:33|Jean:34"` or com
   (the latter two actually sharing the same cardinality of elements pipe-wise).
 This alone would deserve its own article, but in the meantime the [DbNsfp](http://github.com/galliaproject/gallia-dbnsfp/blob/init/src/main/scala/galliaexample/dbnsfp/DbNsfp.scala#L26) example highlights a number of interesting such cases.
 
-The opposite operation (_flattening_) is [scheduled](http://github.com/galliaproject/gallia-docs/tasks.md#t210131110456) .
+The opposite operation (_flattening_) is [scheduled](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210131110456) .
 
 ## IO
 
@@ -585,7 +585,7 @@ logging.setToWarn()
 <a name="210121153220"></a>
  Notes:
  - The same code without the `_.rdd("...")` part would use an in-memory join ("local" mode)
- - Reading and writing to/from [HDFS](http://github.com/galliaproject/gallia-docs/tasks.md#t210120153618) and [S3](http://github.com/galliaproject/gallia-docs/tasks.md#t210120153619) isn't actually ready, neither is using [lzo](http://github.com/galliaproject/gallia-docs/tasks.md#t210120153618) compression
+ - Reading and writing to/from [HDFS](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210120153618) and [S3](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210120153619) isn't actually ready, neither is using [lzo](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210120153618) compression
 
 <a name="210121153221"></a>
  Modify underlying RDD (<a href="https://www.joelonsoftware.com/2002/11/11/the-law-of-leaky-abstractions/" target="_blank">The Law of Leaky Abstractions</a>):
@@ -631,9 +631,9 @@ Instead one would want to provide the schema as shown [below](#210121153230) .
 
 <a name="210121153224"></a>
 Notes:
-- This feature is *not* currently [implemented](http://github.com/galliaproject/gallia-docs/tasks.md#t210204111309), although I have some PoC code available - ideally this would be an alternative run mode for _Spark_ itself
+- This feature is *not* currently [implemented](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210204111309), although I have some PoC code available - ideally this would be an alternative run mode for _Spark_ itself
 - All wide transformations can be written in terms of an external sort such as <a href="https://www.gnu.org/software/coreutils/manual/html_node/sort-invocation.html" _target="blank">_GNU sort_</a> (although sorting on multiple fields of different types is challenging in this scenario)
-- We can combine such operations and leverage named pipes to ensure an execution tree can be executed lazily (forking however would benefit from a form of [checkpointing](http://github.com/galliaproject/gallia-docs/tasks.md#t210121160956)
+- We can combine such operations and leverage named pipes to ensure an execution tree can be executed lazily (forking however would benefit from a form of [checkpointing](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210121160956)
 
 <a name="201118133133"></a>
 ## Types (explicitly)
@@ -659,7 +659,7 @@ z.fuse(_.string('first), _.string('last)).as('name)
    .using { (f, n) => s"${f.head}${n.toUpperCase}" }
 ```
 
-More types than the currently [supported](http://github.com/galliaproject/gallia-core/blob/init/src/main/scala/gallia/reflect/BasicType.scala#L16) ones will be added in the [future](http://github.com/galliaproject/gallia-docs/tasks.md#t210121124808)
+More types than the currently [supported](http://github.com/galliaproject/gallia-core/blob/init/src/main/scala/gallia/reflect/BasicType.scala#L16) ones will be added in the [future](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210121124808)
 
 ## Schema (metadata)
 
@@ -745,7 +745,7 @@ I have never dealt with it personally but I imagine the likes of computational p
 ### Is this ready for production?
 Not even remotely. There are known bugs, blatantly missing features, a lot of missing validation, and most importantly it performs rather slowly at the moment.
 There is a lot planned in the way of addressing these issues, but it will require more resources than the author working alone. In particular, performance has
-a prominent place in the task [list](http://github.com/galliaproject/gallia-docs/tasks.md#t210121095401).
+a prominent place in the task [list](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210121095401).
 
 <a name="210127134031"></a>
 ### Why an "All right reserved" license?
@@ -753,7 +753,7 @@ This is temporary until I determine what the right license and funding model are
 
 <a name="210127134032"></a>
 ### How can I help?
-I'm already aware of many issues and have a long list of [tasks](http://github.com/galliaproject/gallia-docs/tasks.md#t210121100050) meant to address them, as well as add the features that are critically missing.
+I'm already aware of many issues and have a long list of [tasks](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210121100050) meant to address them, as well as add the features that are critically missing.
 As a result the most useful thing one can do to help at the moment is simply letting me know if this is an effort worth pursuing.
 Once a definitive license is chosen, code contributions will be more than welcome.
 
@@ -778,7 +778,7 @@ On the batch ETL front, it would be interesting to see how alternative libraries
 In particular, how would the various thresholds (readability/practicality/scalability) be shifted by a different choice.
 
 <a name="210127134036"></a>
-### What about features like streaming? EDA? [visualization](http://github.com/galliaproject/gallia-docs/tasks.md#t210124092211)? linear algebra? graph queries? notebooks? metadata [semantics](http://github.com/galliaproject/gallia-docs/tasks.md#t210124095616) ? squaring the circle?
+### What about features like streaming? EDA? [visualization](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210124092211)? linear algebra? graph queries? notebooks? metadata [semantics](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210124095616) ? squaring the circle?
 There are lots of features that could be added in the future, but they all require a pretty sturdy base first.
 
 <a name="210127140116"></a>
@@ -787,13 +787,13 @@ though it's more likely it would be replaced in phases short of a major design f
 
 <a name="210121130711"></a>
 ### Why Scala 2.12 instead of 2.13/Dotty
-I haven't acquainted myself with 2.13 yet, let alone Dotty. Corresponding support is [planned](http://github.com/galliaproject/gallia-docs/tasks.md#t210121101237) however.
+I haven't acquainted myself with 2.13 yet, let alone Dotty. Corresponding support is [planned](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210121101237) however.
 
 <a name="210127134037"></a>
 ### Why no macros?
 I prototyped a lot with macros and I think they will play an important role in the future of _Gallia_.
 They are also quite tricky to deal with, and since they are scheduled for a major overhaul, I am reluctant to invest a lot of time on that front at the moment.
-I see them helping a lot in particular with boilerplate and some compile-time validation (e.g. key [validation](http://github.com/galliaproject/gallia-docs/tasks.md#t210127134525)).
+I see them helping a lot in particular with boilerplate and some compile-time validation (e.g. key [validation](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210127134525)).
 The very initial plan was to leverage [whitebox](https://docs.scala-lang.org/overviews/macros/blackbox-whitebox.html) macros for every step, but I gave up on the idea pretty early on. I'd like to re-investigate it for a subset of features/use cases at some point however,
 especially since there seems to be some interesting projects (e.g. [quill](https://github.com/getquill/quill)) that already make interesting use of them.
 
@@ -840,12 +840,12 @@ Where `test` wraps an equality assertion (I have not settled on a definitive tes
 ### Why so few comments, especially scaladoc?
 I try to leverage the language constructs as much as possible, e.g. by naming variables and methods so they convey semantics as much as possible.
 I then add the occasional comment when I deem it necessary, but overall expect any contributor to be sufficiently familiar with Scala to understand what's going on.
-As the project matures, proper scaladoc-friendly comments can hopefully be [added](http://github.com/galliaproject/gallia-docs/quotes.md) as well.
+As the project matures, proper scaladoc-friendly comments can hopefully be [added](http://github.com/galliaproject/gallia-docs/blob/init/quotes.md) as well.
 
 <a name="210127134042"></a>
-### Why does the [terminology](http://github.com/galliaproject/gallia-docs/tasks.md#t210124100007) sometimes sound funny or full-on neological?
+### Why does the [terminology](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210124100007) sometimes sound funny or full-on neological?
 Naming things is hard. Sometimes I give up and favor an alternative until a better idea comes along. Sometimes a [temporary](http://github.com/galliaproject/gallia-core/blob/init/src/main/scala/gallia/heads/HeadU.scala#L8) name just sticks around, by way of organic growth.
-More generally I'd like to create an OWL [ontology](http://github.com/galliaproject/gallia-docs/tasks.md#t210127124029) to more formally define terms that may deserve it.
+More generally I'd like to create an OWL [ontology](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210127124029) to more formally define terms that may deserve it.
 
 <a name="210127134043"></a>
 ### What's with the IDs that look like timestamps and pop up everywhere (e.g. `210121162536`)?

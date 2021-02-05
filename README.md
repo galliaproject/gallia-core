@@ -638,7 +638,7 @@ Notes:
 <a name="201118133133"></a>
 ## Types (explicitly)
 
-Let's revisit the [SQL-like](#201118133206) example. Note that the [`Whatever`](http://github.com/galliaproject/gallia-core/blob/init/src/main/scala/org/gallia/Whatever#15) type placeholder is being used
+Let's revisit the [SQL-like](#201118133206) example. Note that the [`Whatever`](http://github.com/galliaproject/gallia-core/blob/init/src/main/scala/gallia/Whatever.scala#L15) type placeholder is being used
 (basically an `Any` wrapper that accepts very basic operations such as `+`, `<`, etc.)
 
 ```scala
@@ -659,7 +659,7 @@ z.fuse(_.string('first), _.string('last)).as('name)
    .using { (f, n) => s"${f.head}${n.toUpperCase}" }
 ```
 
-More types than the currently [supported](http://github.com/galliaproject/gallia-core/blob/init/src/main/scala/org/gallia/reflect/BasicType.scala#16) ones will be added in the [future](http://github.com/galliaproject/gallia-docs/tasks#t210121124808)
+More types than the currently [supported](http://github.com/galliaproject/gallia-core/blob/init/src/main/scala/gallia/reflect/BasicType.scala#L16) ones will be added in the [future](http://github.com/galliaproject/gallia-docs/tasks#t210121124808)
 
 ## Schema (metadata)
 
@@ -760,7 +760,7 @@ Once a definitive license is chosen, code contributions will be more than welcom
 <a name="210127134033"></a>
 ### What are the biggest limitations by design?
 At this point, a given field can only be of a given type. Ironically this prevents _Gallia_ from having its own metaschema specified in _Gallia_ terms.
-See problem in action in the [code](http://github.com/galliaproject/gallia-core/blob/init/src/main/scala/org/gallia/meta/domain/MetaObj.scala#35) . A more thorough discussion of design choices and trade-offs/limitations will come in a future article.
+See problem in action in the [code](http://github.com/galliaproject/gallia-core/blob/init/src/main/scala/gallia/meta/domain/MetaObj.scala#L35) . A more thorough discussion of design choices and trade-offs/limitations will come in a future article.
 
 Another potential trick is that there can be only one meaning to a missing value. For instance `[{"foo": null}, {"foo": []}, {}]` would all collapse to the same absence of a value: `{}`.
 Note that overloading the various `null`/`Nil` mechanisms with alternative meanings is probably not great data modeling practise in the first place.
@@ -769,7 +769,7 @@ Note that overloading the various `null`/`Nil` mechanisms with alternative meani
 ### In what way is readability prioritized?
 We aim to make the code as readable as possible (goal [#2](#210127120328)) whenever it doesn't affect practicality (goal [#1](#210127120327)).
 In particular we want to make it possible for domain experts - who may not be programmers - to understand at least superficially what is happening in each step.
-It is obviously not always [feasible](http://github.com/galliaproject/gallia-dbnsfp/blob/init/src/main/scala/org/gallia/galliaexample/dbnsfp/DbNsfp.scala#223) for the task at hand, but this is otherwise a major goal for the library.
+It is obviously not always [feasible](http://github.com/galliaproject/gallia-dbnsfp/blob/init/src/main/scala/gallia/galliaexample/dbnsfp/DbNsfp.scala#L223) for the task at hand, but this is otherwise a major goal for the library.
 
 <a name="210127134035"></a>
 ### What are good use cases for the library?
@@ -844,7 +844,7 @@ As the project matures, proper scaladoc-friendly comments can hopefully be [adde
 
 <a name="210127134042"></a>
 ### Why does the [terminology](http://github.com/galliaproject/gallia-docs/tasks#t210124100007) sometimes sound funny or full-on neological?
-Naming things is hard. Sometimes I give up and favor an alternative until a better idea comes along. Sometimes a [temporary](http://github.com/galliaproject/gallia-core/blob/init/src/main/scala/org/gallia/heads/HeadU.scala#8) name just sticks around, by way of organic growth.
+Naming things is hard. Sometimes I give up and favor an alternative until a better idea comes along. Sometimes a [temporary](http://github.com/galliaproject/gallia-core/blob/init/src/main/scala/gallia/heads/HeadU.scala#L8) name just sticks around, by way of organic growth.
 More generally I'd like to create an OWL [ontology](http://github.com/galliaproject/gallia-docs/tasks#t210127124029) to more formally define terms that may deserve it.
 
 <a name="210127134043"></a>

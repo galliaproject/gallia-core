@@ -50,6 +50,24 @@ object ActionsUUGenerates {
         def _meta (c: Cls): Cls   = to.puts0(c, from.containees(c))
         def atomuu(c: Cls): AtomUU = _Transform5to1(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) }
 
+      // ---------------------------------------------------------------------------
+      case class Generate6VtoV(from: TtqKPath6, to: TtqKPath, f: _ff61) extends ActionUUc {
+        def  vldt (c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
+        def _meta (c: Cls): Cls   = to.puts0(c, from.containees(c))
+        def atomuu(c: Cls): AtomUU = _Transform6to1(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) }
+
+      // ---------------------------------------------------------------------------
+      case class Generate7VtoV(from: TtqKPath7, to: TtqKPath, f: _ff71) extends ActionUUc {
+        def  vldt (c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
+        def _meta (c: Cls): Cls   = to.puts0(c, from.containees(c))
+        def atomuu(c: Cls): AtomUU = _Transform7to1(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) }
+
+      // ---------------------------------------------------------------------------
+      case class Generate8VtoV(from: TtqKPath8, to: TtqKPath, f: _ff81) extends ActionUUc {
+        def  vldt (c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
+        def _meta (c: Cls): Cls   = to.puts0(c, from.containees(c))
+        def atomuu(c: Cls): AtomUU = _Transform8to1(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) }
+
     // ===========================================================================
     case class GenerateVto2V(from: TtqKPath, to: TtqKPath2, f: _ff12) extends ActionUUc {
         def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
@@ -73,6 +91,24 @@ object ActionsUUGenerates {
         def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
         def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c))
         def atomuu(c: Cls): AtomUU = _Transform1to5(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) }
+
+      // ---------------------------------------------------------------------------
+      case class GenerateVto6V(from: TtqKPath, to: TtqKPath6, f: _ff16) extends ActionUUc {
+        def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
+        def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c))
+        def atomuu(c: Cls): AtomUU = _Transform1to6(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) }
+
+      // ---------------------------------------------------------------------------
+      case class GenerateVto7V(from: TtqKPath, to: TtqKPath7, f: _ff17) extends ActionUUc {
+        def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
+        def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c))
+        def atomuu(c: Cls): AtomUU = _Transform1to7(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) }
+
+      // ---------------------------------------------------------------------------
+      case class GenerateVto8V(from: TtqKPath, to: TtqKPath8, f: _ff18) extends ActionUUc {
+        def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
+        def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c))
+        def atomuu(c: Cls): AtomUU = _Transform1to8(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) }
 
   // ===========================================================================
   import ActionsUUTransforms.{checkUInput, checkZInput}

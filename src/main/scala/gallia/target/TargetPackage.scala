@@ -51,6 +51,15 @@ package object target { // TODO: t210202090211 - p3 - rename package and homogen
 
     type TtqKPath5  = TypedTargetQuery5[KPath]
     type TtqRPathz5 = TypedTargetQuery5[RPathz]
+
+    type TtqKPath6  = TypedTargetQuery6[KPath]
+    type TtqRPathz6 = TypedTargetQuery6[RPathz]
+
+    type TtqKPath7  = TypedTargetQuery7[KPath]
+    type TtqRPathz7 = TypedTargetQuery7[RPathz]
+
+    type TtqKPath8  = TypedTargetQuery8[KPath]
+    type TtqRPathz8 = TypedTargetQuery8[RPathz]
 }
 
 // ===========================================================================

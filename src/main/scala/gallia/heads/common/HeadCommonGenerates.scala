@@ -8,7 +8,7 @@ import gallia.target.utils.TypedTargetQueryUtils._
 // ===========================================================================
 trait HeadCommonGenerates[F <: HeadCommon[F]] { _: HeadCommon[F] =>
   import TSL.Generate1.{resolve, tqkpath}
-  import TSL.Generate2.{resolve => resolve1, resolve2, resolve3, resolve4, resolve5}
+  import TSL.Generate2.{resolve => resolve1, _}
 
   // ===========================================================================
   def generateCount(from: RenW, as: KeyW = _count): Self2 = ???//TODO
@@ -29,7 +29,7 @@ trait HeadCommonGenerates[F <: HeadCommon[F]] { _: HeadCommon[F] =>
       //TODO
       def from (k: Key): _FromWhatever = new _FromWhatever(_._explicit(k))
 
-      //def from         (f1: KPathW)       : _From11[WV] = from(_.explicit(f1.value))
+      //def from         (f1: KPathW)      : _From11[WV] = from(_.explicit(f1.value))
       //def from[O1: WTT](f1: Generate[O1]): _From11[O1] = new _From11(f1)
 
       // ---------------------------------------------------------------------------
@@ -64,55 +64,93 @@ trait HeadCommonGenerates[F <: HeadCommon[F]] { _: HeadCommon[F] =>
 
         // ===========================================================================
         //TODO: t210111171545 - validate origins aren't u or z
-        class Generate1From2[O1: WTT, O2: WTT](f1: Generate2[O1], f2: Generate2[O2]){
+        class Generate1From2[O1: WTT, O2: WTT](d1: Generate2[O1], d2: Generate2[O2]){
           def using[D1: WTT](f: (O1, O2) => D1): Self2 = self2 :+
             {
               val dest = ttqkpath1[D1](newPath)
-              Generate2VtoV(resolve2(f1, f2), dest, if (dest.node.isWhatever0) __wwrap21(f) else wrap21(f))
+              Generate2VtoV(resolve2(d1, d2), dest, if (dest.node.isWhatever0) __wwrap21(f) else wrap21(f))
             }
           }
 
+        // ---------------------------------------------------------------------------
+        class Generate1From3[O1: WTT, O2: WTT, O3: WTT](
+          d1: Generate2[O1], d2: Generate2[O2], d3: Generate2[O3]) {
+            def using[D1: WTT](f: (O1, O2, O3) => D1): Self2 = self2 :+
+              Generate3VtoV(resolve3(d1, d2, d3), ttqkpath1[D1](newPath), wrap31(f)) }
 
         // ---------------------------------------------------------------------------
-        class Generate1From3[O1: WTT, O2: WTT, O3: WTT](f1: Generate2[O1], f2: Generate2[O2], f3: Generate2[O3]) {
-          def using[D1: WTT](f: (O1, O2, O3) => D1): Self2 =  self2 :+
-            Generate3VtoV(resolve3(f1, f2, f3), ttqkpath1[D1](newPath), wrap31(f)) }
+        class Generate1From4[O1: WTT, O2: WTT, O3: WTT, O4: WTT](
+          d1: Generate2[O1], d2: Generate2[O2], d3: Generate2[O3], d4: Generate2[O4]) {
+            def using[D1: WTT](f: (O1, O2, O3, O4) => D1): Self2 = self2 :+
+              Generate4VtoV(resolve4(d1, d2, d3, d4), ttqkpath1[D1](newPath), wrap41(f)) }
 
         // ---------------------------------------------------------------------------
-        class Generate1From4[O1: WTT, O2: WTT, O3: WTT, O4: WTT](f1: Generate2[O1], f2: Generate2[O2], f3: Generate2[O3], f4: Generate2[O4]) {
-          def using[D1: WTT](f: (O1, O2, O3, O4) => D1): Self2 = self2 :+
-            Generate4VtoV(resolve4(f1, f2, f3, f4), ttqkpath1[D1](newPath), wrap41(f)) }
+        class Generate1From5[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT](
+          d1: Generate2[O1], d2: Generate2[O2], d3: Generate2[O3], d4: Generate2[O4], d5: Generate2[O5]) {
+            def using[D1: WTT](f: (O1, O2, O3, O4, O5) => D1): Self2 = self2 :+
+              Generate5VtoV(resolve5(d1, d2, d3, d4, d5), ttqkpath1[D1](newPath), wrap51(f)) }
 
         // ---------------------------------------------------------------------------
-        class Generate1From5[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT](f1: Generate2[O1], f2: Generate2[O2], f3: Generate2[O3], f4: Generate2[O4], f5: Generate2[O5]) {
-          def using[D1: WTT](f: (O1, O2, O3, O4, O5) => D1): Self2 = self2 :+
-            Generate5VtoV(resolve5(f1, f2, f3, f4, f5), ttqkpath1[D1](newPath), wrap51(f)) }
+        class Generate1From6[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT](
+          d1: Generate2[O1], d2: Generate2[O2], d3: Generate2[O3], d4: Generate2[O4], d5: Generate2[O5], d6: Generate2[O6]) {
+            def using[D1: WTT](f: (O1, O2, O3, O4, O5, O6) => D1): Self2 = self2 :+
+              Generate6VtoV(resolve6(d1, d2, d3, d4, d5, d6), ttqkpath1[D1](newPath), wrap61(f)) }
+
+        // ---------------------------------------------------------------------------
+        class Generate1From7[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT, O7: WTT](
+          d1: Generate2[O1], d2: Generate2[O2], d3: Generate2[O3], d4: Generate2[O4], d5: Generate2[O5], d6: Generate2[O6], d7: Generate2[O7]) {
+            def using[D1: WTT](f: (O1, O2, O3, O4, O5, O6, O7) => D1): Self2 = self2 :+
+              Generate7VtoV(resolve7(d1, d2, d3, d4, d5, d6, d7), ttqkpath1[D1](newPath), wrap71(f)) }
+
+        // ---------------------------------------------------------------------------
+        class Generate1From8[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT, O7: WTT, O8: WTT](
+          d1: Generate2[O1], d2: Generate2[O2], d3: Generate2[O3], d4: Generate2[O4], d5: Generate2[O5], d6: Generate2[O6], d7: Generate2[O7], d8: Generate2[O8]) {
+            def using[D1: WTT](f: (O1, O2, O3, O4, O5, O6, O7, O8) => D1): Self2 = self2 :+
+              Generate8VtoV(resolve8(d1, d2, d3, d4, d5, d6, d7, d8), ttqkpath1[D1](newPath), wrap81(f)) }
     }
 
     // ===========================================================================
     //TODO: t210111171545 - validate origin isn't u or z
-    def generate(a: KPathW, b: KPathW) = new {
-        def from[O1: WTT](f1: Generate2[O1]) = new {
+    def generate(d1: KPathW, d2: KPathW) = new {
+        def from[O1: WTT](o1: Generate2[O1]) = new {
           def using[D1: WTT, D2: WTT](f: O1 => (D1, D2)): Self2 = self2 :+
-            GenerateVto2V(resolve1(f1), ttqkpath2[D1, D2](a, b), wrap12(f)) } }
+            GenerateVto2V(resolve1(o1), ttqkpath2[D1, D2](d1, d2), wrap12(f)) } }
 
       // ---------------------------------------------------------------------------
-      def generate(a: KPathW, b: KPathW, c: KPathW) = new {
-        def from[O1: WTT](f1: Generate2[O1]) = new {
+      def generate(d1: KPathW, d2: KPathW, d3: KPathW) = new {
+        def from[O1: WTT](o1: Generate2[O1]) = new {
           def using[D1: WTT, D2: WTT, D3: WTT](f: O1 => (D1, D2, D3)): Self2 = self2 :+
-            GenerateVto3V(resolve1(f1), ttqkpath3[D1, D2, D3](a, b, c), wrap13(f)) } }
+            GenerateVto3V(resolve1(o1), ttqkpath3[D1, D2, D3](d1, d2, d3), wrap13(f)) } }
 
       // ---------------------------------------------------------------------------
-      def generate(a: KPathW, b: KPathW, c: KPathW, d: KPathW) = new {
-        def from[O1: WTT](f1: Generate2[O1]) = new {
+      def generate(d1: KPathW, d2: KPathW, d3: KPathW, d4: KPathW) = new {
+        def from[O1: WTT](o1: Generate2[O1]) = new {
           def using[D1: WTT, D2: WTT, D3: WTT, D4: WTT](f: O1 => (D1, D2, D3, D4)): Self2 = self2 :+
-            GenerateVto4V(resolve1(f1), ttqkpath4[D1, D2, D3, D4](a, b, c, d), wrap14(f)) } }
+            GenerateVto4V(resolve1(o1), ttqkpath4[D1, D2, D3, D4](d1, d2, d3, d4), wrap14(f)) } }
 
       // ---------------------------------------------------------------------------
-      def generate(a: KPathW, b: KPathW, c: KPathW, d: KPathW, e: KPathW) = new {
-        def from[O1: WTT](f1: Generate2[O1]) = new {
+      def generate(d1: KPathW, d2: KPathW, d3: KPathW, d4: KPathW, d5: KPathW) = new {
+        def from[O1: WTT](o1: Generate2[O1]) = new {
           def using[D1: WTT, D2: WTT, D3: WTT, D4: WTT, D5: WTT](f: O1 => (D1, D2, D3, D4, D5)): Self2 = self2 :+
-            GenerateVto5V(resolve1(f1), ttqkpath5[D1, D2, D3, D4, D5](a, b, c, d, e), wrap15(f)) } }
+            GenerateVto5V(resolve1(o1), ttqkpath5[D1, D2, D3, D4, D5](d1, d2, d3, d4, d5), wrap15(f)) } }
+
+      // ---------------------------------------------------------------------------
+      def generate(d1: KPathW, d2: KPathW, d3: KPathW, d4: KPathW, d5: KPathW, d6: KPathW) = new {
+        def from[O1: WTT](o1: Generate2[O1]) = new {
+          def using[D1: WTT, D2: WTT, D3: WTT, D4: WTT, D5: WTT, D6: WTT](f: O1 => (D1, D2, D3, D4, D5, D6)): Self2 = self2 :+
+            GenerateVto6V(resolve1(o1), ttqkpath6[D1, D2, D3, D4, D5, D6](d1, d2, d3, d4, d5, d6), wrap16(f)) } }
+
+      // ---------------------------------------------------------------------------
+      def generate(d1: KPathW, d2: KPathW, d3: KPathW, d4: KPathW, d5: KPathW, d6: KPathW, d7: KPathW) = new {
+        def from[O1: WTT](o1: Generate2[O1]) = new {
+          def using[D1: WTT, D2: WTT, D3: WTT, D4: WTT, D5: WTT, D6: WTT, D7: WTT](f: O1 => (D1, D2, D3, D4, D5, D6, D7)): Self2 = self2 :+
+            GenerateVto7V(resolve1(o1), ttqkpath7[D1, D2, D3, D4, D5, D6, D7](d1, d2, d3, d4, d5, d6, d7), wrap17(f)) } }
+
+      // ---------------------------------------------------------------------------
+      def generate(d1: KPathW, d2: KPathW, d3: KPathW, d4: KPathW, d5: KPathW, d6: KPathW, d7: KPathW, d8: KPathW) = new {
+        def from[O1: WTT](o1: Generate2[O1]) = new {
+          def using[D1: WTT, D2: WTT, D3: WTT, D4: WTT, D5: WTT, D6: WTT, D7: WTT, D8: WTT](f: O1 => (D1, D2, D3, D4, D5, D6, D7, D8)): Self2 = self2 :+
+            GenerateVto8V(resolve1(o1), ttqkpath8[D1, D2, D3, D4, D5, D6, D7, D8](d1, d2, d3, d4, d5, d6, d7, d8), wrap18(f)) } }
 
 }
 

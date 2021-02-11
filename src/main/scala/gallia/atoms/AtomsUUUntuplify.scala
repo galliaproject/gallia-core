@@ -43,7 +43,7 @@ object AtomsUUUntuplify {
         .thn(splitter.apply)
         .thn { values =>
           if (keys.size != values.size) {
-            runtimeError("210108212537", keys.size, values.size, keys.values.zipAll(values, null, null).joinln.sectionAllOff(2))  }
+            runtimeError("210108212537", keys.size, values.size, value, keys.values.zipAll(values, null, null).joinln.sectionAllOff(2))  }
 
           keys.values.zip(values).thn(obj) } }
 

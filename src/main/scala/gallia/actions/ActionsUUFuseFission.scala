@@ -55,25 +55,81 @@ object ActionsUUFuseFission {
 
     // ===========================================================================
     case class Fuse3(from: TtqKPath3, to: TtqKPath, f: _ff31) extends ActionUUb {
-      def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
-      def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c)).remove(from.__kpathz(c))
-      def atomuus(c: Cls): AtomUUs = _Transform3to1(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c))
-    }
+        def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
+        def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c)).remove(from.__kpathz(c))
+        def atomuus(c: Cls): AtomUUs = _Transform3to1(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c)) }
+
+      // ---------------------------------------------------------------------------
+      case class Fuse4(from: TtqKPath4, to: TtqKPath, f: _ff41) extends ActionUUb {
+        def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
+        def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c)).remove(from.__kpathz(c))
+        def atomuus(c: Cls): AtomUUs = _Transform4to1(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c)) }
+
+      // ---------------------------------------------------------------------------
+      case class Fuse5(from: TtqKPath5, to: TtqKPath, f: _ff51) extends ActionUUb {
+        def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
+        def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c)).remove(from.__kpathz(c))
+        def atomuus(c: Cls): AtomUUs = _Transform5to1(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c)) }
+
+      // ---------------------------------------------------------------------------
+      case class Fuse6(from: TtqKPath6, to: TtqKPath, f: _ff61) extends ActionUUb {
+        def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
+        def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c)).remove(from.__kpathz(c))
+        def atomuus(c: Cls): AtomUUs = _Transform6to1(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c)) }
+
+      // ---------------------------------------------------------------------------
+      case class Fuse7(from: TtqKPath7, to: TtqKPath, f: _ff71) extends ActionUUb {
+        def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
+        def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c)).remove(from.__kpathz(c))
+        def atomuus(c: Cls): AtomUUs = _Transform7to1(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c)) }
+
+      // ---------------------------------------------------------------------------
+      case class Fuse8(from: TtqKPath8, to: TtqKPath, f: _ff81) extends ActionUUb {
+        def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
+        def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c)).remove(from.__kpathz(c))
+        def atomuus(c: Cls): AtomUUs = _Transform8to1(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c)) }
 
   // ===========================================================================
   case class Fission2(from: TtqKPath, to: TtqKPath2, f: _ff12) extends ActionUUb {
       def  vldt(c: Cls): Errs  = Nil// TODO
       def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c)).remove(from.__kpathz(c))
-      def atomuus(c: Cls): AtomUUs = _Transform1to2(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c))
-    }
+      def atomuus(c: Cls): AtomUUs = _Transform1to2(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c)) }
 
     // ---------------------------------------------------------------------------
     case class Fission3(from: TtqKPath, to: TtqKPath3, f: _ff13) extends ActionUUb {
       def  vldt(c: Cls): Errs  = Nil// TODO
       def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c)).remove(from.__kpathz(c))
-      def atomuus(c: Cls): AtomUUs = _Transform1to3(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c))
-    }
+      def atomuus(c: Cls): AtomUUs = _Transform1to3(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c)) }
 
+    // ---------------------------------------------------------------------------
+    case class Fission4(from: TtqKPath, to: TtqKPath4, f: _ff14) extends ActionUUb {
+      def  vldt(c: Cls): Errs  = Nil// TODO
+      def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c)).remove(from.__kpathz(c))
+      def atomuus(c: Cls): AtomUUs = _Transform1to4(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c)) }
+
+    // ---------------------------------------------------------------------------
+    case class Fission5(from: TtqKPath, to: TtqKPath5, f: _ff15) extends ActionUUb {
+      def  vldt(c: Cls): Errs  = Nil// TODO
+      def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c)).remove(from.__kpathz(c))
+      def atomuus(c: Cls): AtomUUs = _Transform1to5(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c)) }
+
+    // ---------------------------------------------------------------------------
+    case class Fission6(from: TtqKPath, to: TtqKPath6, f: _ff16) extends ActionUUb {
+      def  vldt(c: Cls): Errs  = Nil// TODO
+      def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c)).remove(from.__kpathz(c))
+      def atomuus(c: Cls): AtomUUs = _Transform1to6(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c)) }
+
+    // ---------------------------------------------------------------------------
+    case class Fission7(from: TtqKPath, to: TtqKPath7, f: _ff17) extends ActionUUb {
+      def  vldt(c: Cls): Errs  = Nil// TODO
+      def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c)).remove(from.__kpathz(c))
+      def atomuus(c: Cls): AtomUUs = _Transform1to7(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c)) }
+
+    // ---------------------------------------------------------------------------
+    case class Fission8(from: TtqKPath, to: TtqKPath8, f: _ff18) extends ActionUUb {
+      def  vldt(c: Cls): Errs  = Nil// TODO
+      def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c)).remove(from.__kpathz(c))
+      def atomuus(c: Cls): AtomUUs = _Transform1to8(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c)) }
 }
 
 // ===========================================================================

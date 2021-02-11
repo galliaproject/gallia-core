@@ -28,10 +28,14 @@ private[typed] trait TsBase {
     // ---------------------------------------------------------------------------
     private type It[T] = TSelector[T]
 
-      def resolve2[T1: WTT, T2: WTT                           ](f1: It[T1], f2: It[T2]                                    ) = new TtqKPath2(resolve(f1), resolve(f2))
-      def resolve3[T1: WTT, T2: WTT, T3: WTT                  ](f1: It[T1], f2: It[T2], f3: It[T3]                        ) = new TtqKPath3(resolve(f1), resolve(f2), resolve(f3))
-      def resolve4[T1: WTT, T2: WTT, T3: WTT, T4: WTT         ](f1: It[T1], f2: It[T2], f3: It[T3], f4: It[T4]            ) = new TtqKPath4(resolve(f1), resolve(f2), resolve(f3), resolve(f4))
-      def resolve5[T1: WTT, T2: WTT, T3: WTT, T4: WTT, T5: WTT](f1: It[T1], f2: It[T2], f3: It[T3], f4: It[T4], f5: It[T5]) = new TtqKPath5(resolve(f1), resolve(f2), resolve(f3), resolve(f4), resolve(f5))
+      def resolve2[T1: WTT, T2: WTT](f1: It[T1], f2: It[T2]) = new TtqKPath2(resolve(f1), resolve(f2))
+
+        def resolve3[T1: WTT, T2: WTT, T3: WTT]                                             (f1: It[T1], f2: It[T2], f3: It[T3])                                                             = new TtqKPath3(resolve(f1), resolve(f2), resolve(f3))
+        def resolve4[T1: WTT, T2: WTT, T3: WTT, T4: WTT]                                    (f1: It[T1], f2: It[T2], f3: It[T3], f4: It[T4])                                                 = new TtqKPath4(resolve(f1), resolve(f2), resolve(f3), resolve(f4))
+        def resolve5[T1: WTT, T2: WTT, T3: WTT, T4: WTT, T5: WTT]                           (f1: It[T1], f2: It[T2], f3: It[T3], f4: It[T4], f5: It[T5])                                     = new TtqKPath5(resolve(f1), resolve(f2), resolve(f3), resolve(f4), resolve(f5))
+        def resolve6[T1: WTT, T2: WTT, T3: WTT, T4: WTT, T5: WTT, T6: WTT]                  (f1: It[T1], f2: It[T2], f3: It[T3], f4: It[T4], f5: It[T5], f6: It[T6])                         = new TtqKPath6(resolve(f1), resolve(f2), resolve(f3), resolve(f4), resolve(f5), resolve(f6))
+        def resolve7[T1: WTT, T2: WTT, T3: WTT, T4: WTT, T5: WTT, T6: WTT, T7: WTT]         (f1: It[T1], f2: It[T2], f3: It[T3], f4: It[T4], f5: It[T5], f6: It[T6], f7: It[T7])             = new TtqKPath7(resolve(f1), resolve(f2), resolve(f3), resolve(f4), resolve(f5), resolve(f6), resolve(f7))
+        def resolve8[T1: WTT, T2: WTT, T3: WTT, T4: WTT, T5: WTT, T6: WTT, T7: WTT, T8: WTT](f1: It[T1], f2: It[T2], f3: It[T3], f4: It[T4], f5: It[T5], f6: It[T6], f7: It[T7], f8: It[T8]) = new TtqKPath8(resolve(f1), resolve(f2), resolve(f3), resolve(f4), resolve(f5), resolve(f6), resolve(f7), resolve(f8))
   }
 
   // ===========================================================================

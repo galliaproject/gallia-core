@@ -220,43 +220,43 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { _: HeadCommon[F] =>
 
     // ===========================================================================
     class _Untuplify1z(targetKey: Ren) {
-          def asNewKeys(key1: KeyW, key2: KeyW, more: KeyW*): Self2 = asNewKeys((key1, key2, more))
-          def asNewKeys(keys: KeyWz)                        : Self2 = self2 :+
+          def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
+          def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
             Untuplify1z(targetKey, keys.keyz) }
 
     // ---------------------------------------------------------------------------
     class _Untuplify1a(targetKey: Ren) {
       def withSplitter(entriesSplitter: StringSplitter) = new {
-          def asNewKeys(key1: KeyW, key2: KeyW, more: KeyW*): Self2 = asNewKeys((key1, key2, more))
-          def asNewKeys(keys: KeyWz)                        : Self2 = self2 :+
+          def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
+          def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
             Untuplify1a(targetKey, entriesSplitter, keys.keyz) } }
 
     // ---------------------------------------------------------------------------
     class _Untuplify1b(targetKey: Ren) {
       def withSplitters(arraySplitter: StringSplitter, entriesSplitter: StringSplitter) = new {
-          def asNewKeys(key1: KeyW, key2: KeyW, more: KeyW*): Self2 = asNewKeys((key1, key2, more))
-          def asNewKeys(keys: KeyWz)                        : Self2 = self2 :+
+          def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
+          def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
             Untuplify1b(targetKey, arraySplitter, entriesSplitter, keys.keyz) } }
 
     // ===========================================================================
     final class _Untuplify2z(targetKey: Ren) {
         def withSplitter(entrySplitter: StringSplitter) = new {
-            def asNewKeys(key1: KeyW, key2: KeyW, more: KeyW*): Self2 = asNewKeys((key1, key2, more))
-            def asNewKeys(keys: KeyWz)                        : Self2 = self2 :+
+            def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
+            def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
               Untuplify2z(targetKey, entrySplitter, keys.keyz) } }
 
       // ---------------------------------------------------------------------------
       final class _Untuplify2a(targetKey: Ren) {
         def withSplitters(entriesSplitter: StringSplitter, entrySplitter: StringSplitter) = new {
-            def asNewKeys(key1: KeyW, key2: KeyW, more: KeyW*): Self2 = asNewKeys((key1, key2, more))
-            def asNewKeys(keys: KeyWz)                        : Self2 = self2 :+
+            def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
+            def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
               Untuplify2a(targetKey, entriesSplitter, entrySplitter, keys.keyz) } }
 
       // ---------------------------------------------------------------------------
       final class _Untuplify2b(targetKey: Ren) {
         def withSplitters(arraySplitter: StringSplitter, entriesSplitter: StringSplitter, entrySplitter: StringSplitter) = new {
-            def asNewKeys(key1: KeyW, key2: KeyW, more: KeyW*): Self2 = asNewKeys((key1, key2, more))
-            def asNewKeys(keys: KeyWz)                        : Self2 = self2 :+
+            def asNewKeys(key1: KeyW,  more: KeyW*): Self2 = asNewKeys((key1, more))
+            def asNewKeys(keys: KeyWz)             : Self2 = self2 :+
               Untuplify2b(targetKey, arraySplitter, entriesSplitter, entrySplitter, keys.keyz) } }
 
 }

@@ -106,4 +106,46 @@ case class TypedTargetQuery[$Target]( // t210110103720 - subclass TargetQuery an
       def fromOverride(value: HasTypes3)(implicit ev: $Target <:< KPath) = TypedTargetQueryUtils.ttqkpath5(super.ttqkpaths(value).force.tuple5)
     }
 
+  // ===========================================================================
+  case class TypedTargetQuery6[$Target](ttq1: TypedTargetQuery[$Target], ttq2: TypedTargetQuery[$Target], ttq3: TypedTargetQuery[$Target], ttq4: TypedTargetQuery[$Target], ttq5: TypedTargetQuery[$Target], ttq6: TypedTargetQuery[$Target])
+        extends HasTypes6 with HasTypedTargetQuerySeq[$Target] with _TypedTargetQuery[$Target] {
+      final override def ttqs: Seq[TypedTargetQuery[$Target]] = Seq(ttq1, ttq2, ttq3, ttq4, ttq5, ttq6)
+      def ht1 = ttq1; def ht2 = ttq2; def ht3 = ttq3; def ht4 = ttq4; def ht5 = ttq5; def ht6 = ttq6
+
+      // ---------------------------------------------------------------------------
+      def kpathT   (c: Cls)(implicit ev: $Target <:< KPath): KPaths6   = super.__kpathz(c).values.force.tuple6.thn(KPaths6.tupled)
+      def pathPairT(c: Cls)(implicit ev: $Target <:< KPath): PathPair6 = PathPair6(ttq1.pathPairT(c), ttq2.pathPairT(c), ttq3.pathPairT(c), ttq4.pathPairT(c), ttq5.pathPairT(c), ttq6.pathPairT(c))
+
+      // ---------------------------------------------------------------------------
+      def fromOverride(value: HasTypes6)(implicit ev: $Target <:< KPath) = TypedTargetQueryUtils.ttqkpath6(super.ttqkpaths(value).force.tuple6)
+    }
+
+  // ===========================================================================
+  case class TypedTargetQuery7[$Target](ttq1: TypedTargetQuery[$Target], ttq2: TypedTargetQuery[$Target], ttq3: TypedTargetQuery[$Target], ttq4: TypedTargetQuery[$Target], ttq5: TypedTargetQuery[$Target], ttq6: TypedTargetQuery[$Target], ttq7: TypedTargetQuery[$Target])
+        extends HasTypes7 with HasTypedTargetQuerySeq[$Target] with _TypedTargetQuery[$Target] {
+      final override def ttqs: Seq[TypedTargetQuery[$Target]] = Seq(ttq1, ttq2, ttq3, ttq4, ttq5, ttq6, ttq7)
+      def ht1 = ttq1; def ht2 = ttq2; def ht3 = ttq3; def ht4 = ttq4; def ht5 = ttq5; def ht6 = ttq6; def ht7 = ttq7
+
+      // ---------------------------------------------------------------------------
+      def kpathT   (c: Cls)(implicit ev: $Target <:< KPath): KPaths7   = super.__kpathz(c).values.force.tuple7.thn(KPaths7.tupled)
+      def pathPairT(c: Cls)(implicit ev: $Target <:< KPath): PathPair7 = PathPair7(ttq1.pathPairT(c), ttq2.pathPairT(c), ttq3.pathPairT(c), ttq4.pathPairT(c), ttq5.pathPairT(c), ttq6.pathPairT(c), ttq7.pathPairT(c))
+
+      // ---------------------------------------------------------------------------
+      def fromOverride(value: HasTypes7)(implicit ev: $Target <:< KPath) = TypedTargetQueryUtils.ttqkpath7(super.ttqkpaths(value).force.tuple7)
+    }
+
+  // ===========================================================================
+  case class TypedTargetQuery8[$Target](ttq1: TypedTargetQuery[$Target], ttq2: TypedTargetQuery[$Target], ttq3: TypedTargetQuery[$Target], ttq4: TypedTargetQuery[$Target], ttq5: TypedTargetQuery[$Target], ttq6: TypedTargetQuery[$Target], ttq7: TypedTargetQuery[$Target], ttq8: TypedTargetQuery[$Target])
+        extends HasTypes8 with HasTypedTargetQuerySeq[$Target] with _TypedTargetQuery[$Target] {
+      final override def ttqs: Seq[TypedTargetQuery[$Target]] = Seq(ttq1, ttq2, ttq3, ttq4, ttq5, ttq6, ttq7, ttq8)
+      def ht1 = ttq1; def ht2 = ttq2; def ht3 = ttq3; def ht4 = ttq4; def ht5 = ttq5; def ht6 = ttq6; def ht7 = ttq7; def ht8 = ttq8
+
+      // ---------------------------------------------------------------------------
+      def kpathT   (c: Cls)(implicit ev: $Target <:< KPath): KPaths8   = super.__kpathz(c).values.force.tuple8.thn(KPaths8.tupled)
+      def pathPairT(c: Cls)(implicit ev: $Target <:< KPath): PathPair8 = PathPair8(ttq1.pathPairT(c), ttq2.pathPairT(c), ttq3.pathPairT(c), ttq4.pathPairT(c), ttq5.pathPairT(c), ttq6.pathPairT(c), ttq7.pathPairT(c), ttq8.pathPairT(c))
+
+      // ---------------------------------------------------------------------------
+      def fromOverride(value: HasTypes8)(implicit ev: $Target <:< KPath) = TypedTargetQueryUtils.ttqkpath8(super.ttqkpaths(value).force.tuple8)
+    }
+
 // ===========================================================================

@@ -51,16 +51,14 @@ object ActionsUUSomewhatBasics {
       @deprecated val toOpt = to.as.someIf(_ != target.node)
 
       def  vldt(c: Cls): Errs =
-        target.vldtAsOrigin(c) ++
+        target.vldtAsOrigin(c, SpecialCardiMode.IgnoreRequiredness /* TODO: check no Some/None provided */) ++
         (toOpt match {
           case None     => Nil
           case Some(to) =>
             if (strict) {
               _vldt.validType(gallia.vldt.Location.Root, to)
             } else {
-
               if (to != target.node) Some(Err("201105140603 - MustBeSameType")) else None
-
               //_vldt.typeCompatibilities6(c, target, ignoreRequiredness = false)
             }
           })

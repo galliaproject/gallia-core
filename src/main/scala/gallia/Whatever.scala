@@ -111,6 +111,9 @@ class Whatever(private[gallia] val any: Any) extends AnyVal with Serializable { 
   def  isEmptyString: TypedWhatever[Boolean] = _string("210112163810")(_.isEmpty)
   def nonEmptyString: TypedWhatever[Boolean] = _string("210112163810")(_.nonEmpty)
 
+  def startsWith(prefix: String): TypedWhatever[Boolean] = _string("210112163810")(_.startsWith(prefix))
+  def endsWith  (suffix: String): TypedWhatever[Boolean] = _string("210112163810")(_.endsWith  (suffix))
+
   def  toLowerCase: TypedWhatever[String] = _string("210112163810")(_.toLowerCase)
   def  toUpperCase: TypedWhatever[String] = _string("210112163810")(_.toUpperCase)
 
@@ -262,6 +265,8 @@ class TypedWhatever[T](val either: Either[Seq[T], T]) extends AnyVal with Serial
     // ---------------------------------------------------------------------------
     override def toString: String = formatDefault
       def formatDefault: String = Whatever.formatDefault(any = either.fold(identity, identity))
+
+    def unary_!(implicit ev: T =:= Boolean): TypedWhatever[Boolean] = map { x => !x.boolean }
 
     // ---------------------------------------------------------------------------
     private[gallia] def map[T2](f: T => T2): TypedWhatever[T2] = new TypedWhatever[T2](either match {

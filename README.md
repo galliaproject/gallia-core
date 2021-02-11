@@ -391,7 +391,7 @@ In practice the renesting operation typically involves a lot more work,
   e.g. if a value is like `"foo1,foo2,foo3"`, it may also need to be split and denormalized on a one-per-row basis.
 It is also common to encounter values such as `"John:32|Kate:33|Jean:34"` or combinations of values such as `"John|Kate|Jean"` + `"32|33|34"`
   (the latter two actually sharing the same cardinality of elements pipe-wise).
-This alone would deserve its own article, but in the meantime the [DbNsfp](http://github.com/galliaproject/gallia-dbnsfp/blob/init/src/main/scala/galliaexample/dbnsfp/DbNsfp.scala#L26) example highlights a number of interesting such cases.
+This alone would deserve its own article, but in the meantime the [DbNsfp](http://github.com/galliaproject/gallia-dbnsfp/blob/init/src/main/scala/galliaexample/dbnsfp/DbNsfp.scala#L14) example highlights a number of interesting such cases.
 
 The opposite operation (_flattening_) is [scheduled](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210131110456) .
 
@@ -701,7 +701,8 @@ Where "/meta/myschema.json" contains: `{"fields":[{"key":"foo","info":...`
 ## Full blown example
 
 I am providing a [link](http://github.com/galliaproject/gallia-dbnsfp/blob/init/src/main/scala/galliaexample/dbnsfp/DbNsfp.scala#L26) to one of the full blow examples I've written using _Gallia_: turning the big
-<a href="https://sites.google.com/site/jpopgen/dbNSFP" target="_blank">dbNSFP</a> tables into a corresponding nested structure more conducive to querying (_mongodb_, _elasticsearch_, ...)
+<a href="https://sites.google.com/site/jpopgen/dbNSFP" target="_blank">dbNSFP</a> tables into a corresponding nested structure more conducive to querying (_mongodb_, _elasticsearch_, ...).
+See the example [input row](https://github.com/galliaproject/gallia-dbnsfp/blob/init/src/main/scala/galliaexample/dbnsfp/DbNsfpDriver.scala#L19-L20) and example [output object](https://github.com/galliaproject/gallia-dbnsfp/blob/init/src/main/scala/galliaexample/dbnsfp/DbNsfpDriver.scala#L31-L348).
 
 It is in no way complete or 100% correct in its current form, as it is primarily designed to showcase _Gallia_.
 I only tested it on a small subset of the data, and I expect unfortunate surprises would arise from processing the entire dataset.
@@ -739,6 +740,10 @@ The field of bioinformatics in particular is laden with archaic technologies and
 results in tons of lost opportunities for impactful medical discoveries.
 I have never dealt with it personally but I imagine the likes of computational physics and other "computational-driven" disciplines probably suffer from similar problems.
 
+More examples:
+- [clinvar VCF](https://github.com/galliaproject/gallia-clinvar)
+- (more coming soon)
+
 ## FAQ
 
 <a name="210127134030"></a>
@@ -774,7 +779,7 @@ It is obviously not always [feasible](http://github.com/galliaproject/gallia-dbn
 <a name="210127134035"></a>
 ### What are good use cases for the library?
 The main use cases that come to mind at this point are batch ETL, querying, feature engineering, internal application logic, and data validation and evolution.
-On the batch ETL front, it would be interesting to see how alternative libraries/languages take examples such as the [dbNSFP](http://github.com/galliaproject/gallia-dbnsfp/blob/init/src/main/scala/galliaexample/dbnsfp/DbNsfp.scala#L26) one above.
+On the batch ETL front, it would be interesting to see how alternative libraries/languages take examples such as the [dbNSFP](http://github.com/galliaproject/gallia-dbnsfp/blob/init/src/main/scala/galliaexample/dbnsfp/DbNsfp.scala#L14) one above.
 In particular, how would the various thresholds (readability/practicality/scalability) be shifted by a different choice.
 
 <a name="210127134036"></a>

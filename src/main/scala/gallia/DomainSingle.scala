@@ -100,6 +100,9 @@ case class RPath(parent: Seq[Key], ren: Ren) {
       def formatDebug = from.formatDebug + (if (ren.isActual) s" ~> ${ren.to}" else "")
 
     // ---------------------------------------------------------------------------
+    def prepend(root: KeyW): RPath = RPath(root.value +: parent, ren)
+    
+    // ---------------------------------------------------------------------------
     def isActual: Boolean = ren.isActual
     def isLeaf  : Boolean = parent.isEmpty
 

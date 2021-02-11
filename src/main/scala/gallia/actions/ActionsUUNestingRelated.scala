@@ -10,15 +10,17 @@ import gallia.atoms.AtomsUUResnesting
 
 // ===========================================================================
 object ActionsUUNestingRelated {
+  import utils.ActionsUUUtils.potentialRenaming
 
   // ===========================================================================
   class NestUnder(target: RPathz, destination: Key) extends ActionUUa {
         def  vldt(c: Cls): Errs = Nil //TODO
            // TODO: t210128155944 - validate new key names
+           // TODO: check target is distinct
         def _meta(c: Cls): Cls  = target.values.map(_.renFX).thn(Renz.apply).thn(c.nest(_, destination))
-        def atomuus = {
-          val from = target.values.map(_.ren.fromFX)
-          _Nest(Keyz(from), destination).as.seq }
+        def atomuus =
+          _Nest(target.fromz.forceKeyz /*FIXME*/, destination) +:
+            target.map(_.prepend(destination)).flatMap(potentialRenaming).toSeq
     }
 
     // ---------------------------------------------------------------------------

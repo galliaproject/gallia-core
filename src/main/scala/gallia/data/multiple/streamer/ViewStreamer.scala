@@ -23,10 +23,10 @@ class ViewStreamer[A](view: _utils.DataRepr[A]) extends Streamer[A] {
   def iterator: Iterator[A] = view.iterator
   def toList  : List    [A] = view.force.toList
 
-  def     map[B: CT](f: A =>      B ): Streamer[B] = view.    map(f).thn(_rewrap)
-  def flatMap[B: CT](f: A => Coll[B]): Streamer[B] = view.flatMap(f).thn(_rewrap)
+  def     map[B: CT](f: A =>      B ): Streamer[B] = view.    map(f).toSeq.view.thn(_rewrap)
+  def flatMap[B: CT](f: A => Coll[B]): Streamer[B] = view.flatMap(f).toSeq.view.thn(_rewrap)
 
-  def filter(p: A => Boolean): Streamer[A] = view.filter(p).thn(_rewrap)
+  def filter(p: A => Boolean): Streamer[A] = view.filter(p).toSeq.view.thn(_rewrap)
 
   def size: Int = view.force.size
 
@@ -39,10 +39,10 @@ class ViewStreamer[A](view: _utils.DataRepr[A]) extends Streamer[A] {
   def reduce(op: (A, A) => A): A = view.reduce(op)
 
   // ===========================================================================
-  def sortBy[K](ignored: CT[K], ord: Ordering[K])(f: A => K): Streamer[A] = view.sortBy(f)(ord).thn(_rewrap)
+  def sortBy[K](ignored: CT[K], ord: Ordering[K])(f: A => K): Streamer[A] = view.sortBy(f)(ord).toSeq.view.thn(_rewrap)
 
   // ---------------------------------------------------------------------------
-  def distinct: Streamer[A] = view.distinct.thn(_rewrap)
+  def distinct: Streamer[A] = view.distinct.toSeq.view.thn(_rewrap)
 
   // ---------------------------------------------------------------------------
   def groupByKey[K: CT, V: CT](implicit ev: A <:< (K, V)): Streamer[(K, List[V])] =

@@ -42,8 +42,8 @@ trait HeadCommonVeryBasics[F <: HeadCommon[F]] { _: HeadCommon[F] =>
     private def toRPathz(mapping : Map[SKey , SKey ])(implicit di: DI): RPathz = RPathz(mapping.toSeq.map(x => RPath.from(x._1.symbol, x._2.symbol)))
 
   // ---------------------------------------------------------------------------
-  def rename           (modifier: SKey  => SKey ): Self2 = self2 :+ new RenameDynamically(modifier, recursively = false)
-  def renameRecursively(modifier: SKey  => SKey ): Self2 = self2 :+ new RenameDynamically(modifier, recursively = true )
+  def rename           (modifier: SKey => SKey): Self2 = self2 :+ new RenameDynamically(modifier, recursively = false)
+  def renameRecursively(modifier: SKey => SKey): Self2 = self2 :+ new RenameDynamically(modifier, recursively = true )
 
   // ===========================================================================
   // remove

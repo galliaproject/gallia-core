@@ -99,7 +99,7 @@ sealed trait IoTypeZ { // TODO: t210118103012 - proper handling
     case object Table extends IoTypeZ {
       def defaultRead   = (start, conf) => start.table.thnIf(!conf.inMemoryMode)(_.iteratorMode).schemaProvider(conf.schemaProvider).project(conf.projectionOpt)
       def defaultFormat = gallia.illegal("TODO:210118103012")
-      def outputConf(path: String) = UrlLikeTableConf(path, UrlLike.Default, FormatConf.Default)
+      def outputConf(path: String) = UrlLikeTableConf(path, gallia.io.UrlLike.Default, gallia.io.FormatConf.Default)
     }
 
     // ===========================================================================

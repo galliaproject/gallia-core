@@ -42,6 +42,7 @@ object TableSchemaInferrer {
         .mapValues(combineInfos)
         .map { case (key, info) =>
           key -> mutable.potentiallyUpdateInfo(key, info) }
+        .toMap
 
   // ===========================================================================
   def stringsOnly(conf: CellConf, keys: Seq[Key])(z: Objs): Cls =
@@ -63,6 +64,7 @@ object TableSchemaInferrer {
         .toSeq
         .groupByKey
         .mapValues(combineContainers)
+        .toMap
 
   // ===========================================================================
   private def combineInfos(values: Seq[Info]): Info =

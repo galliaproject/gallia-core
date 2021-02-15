@@ -2,19 +2,37 @@
 //   trying to keep this to a mimimum; TODO: t210125110147 - investigate sbt alternatives
 
 // ===========================================================================
-lazy val root = (project in file("."))
-  .settings(
-    name         := "gallia-core",
-    version      := "0.1.0",
-    scalaVersion := "2.12.13")
+lazy val scala213 = "2.13.4"
+lazy val scala212 = "2.12.13"
+lazy val scala211 = "2.11.12"
+lazy val scala210 = "2.10.7"
+
+// ---------------------------------------------------------------------------
+// errors with <2.13 with collection.mutable.ArrayDeque and SeqView[T, Seq[_]] (even with scala.collection.compat._)
+//   see workaround toggle (210214150322): cat ./src/main/scala/cross/CrossPackage.scala | awk '/213/{sub(/^\/\//,"  ");print}/212/{sub(/^  /,"//");print}!/212/ && !/213/{print}'
+lazy val supportedScalaVersions = List(scala213) // TODO: t210213101700 - scala212, scala211, scala210
 
 // ===========================================================================
-scalacOptions in Compile ++= Seq( // TODO: more + inherit
-  "-Ywarn-value-discard",
-  "-Ywarn-unused-import")
+lazy val root = (project in file("."))
+  .settings(
+    name               := "gallia-core",
+    version            := "0.1.0",
+    scalaVersion       := supportedScalaVersions.head,
+    crossScalaVersions := supportedScalaVersions)
+
+// ===========================================================================
+// TODO: more
+scalacOptions in Compile ++=
+  Seq("-Ywarn-value-discard") ++ 
+  (scalaBinaryVersion.value match {
+    case "2.13" => Seq("-Ywarn-unused:imports")
+    case _      => Seq("-Ywarn-unused-import" ) })
+// TODO: -Xdisable-assertions (also turns off require?)
 
 // ===========================================================================
 // TODO: to their own external object?
+
+lazy val compatVersion          = "2.4.1"
 lazy val enumeratumVersion      = "1.5.13" 
 lazy val commonsVersion         = "3.5"
 lazy val commonsCsvVersion      = "1.8"
@@ -28,8 +46,8 @@ lazy val junitInterfaceVersion = "0.11" // see https://github.com/sbt/junit-inte
 // ===========================================================================    
 libraryDependencies ++=
   Seq(  
-    // else warning: Multiple dependencies with the same organization/name but different versions. To avoid conflict, pick one version: [warn]  * org.scala-lang:scala-reflect:(2.12.2, 2.12.4)
-    "org.scala-lang" % "scala-reflect" % "2.12.13", // TODO: reuse scala version above
+    "org.scala-lang"         %  "scala-reflect"           % scalaVersion.value, // else warning: "Multiple dependencies with the same organization/name but different versions"
+    "org.scala-lang.modules" %% "scala-collection-compat" % compatVersion,      // to support scala <2.13
 
     // ---------------------------------------------------------------------------
     // misc utils
@@ -51,10 +69,6 @@ libraryDependencies ++=
     // tests
     "junit"        % "junit"           % junitVersion          % "test" withSources() withJavadoc(),
     "com.novocode" % "junit-interface" % junitInterfaceVersion % "test" withSources() withJavadoc())
-
-// ===========================================================================
-// build
-// TODO: -Xdisable-assertions (also turns off require?)
 
 // ===========================================================================
 

@@ -8,7 +8,7 @@ import gallia.atoms.AtomsCustom._
 
 // ===========================================================================
 object ActionsFor {
-  import utils.NestedTransform.{parseUU, parseZZ, parseUZ, parseZU, parseUV, parseZV}
+  import gallia.actions.utils.NestedTransform.{parseUU, parseZZ, parseUZ, parseZU, parseUV, parseZV}
 
   // ===========================================================================
   case class ForPathUU(target: TqKPath, f: (HeadU, KPath) => HeadU) extends ActionUUc {

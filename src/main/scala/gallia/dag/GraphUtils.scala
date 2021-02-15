@@ -1,5 +1,7 @@
 package gallia.dag
 
+import scala.collection.compat._
+
 // ===========================================================================
 object GraphUtils {
 
@@ -21,9 +23,9 @@ object GraphUtils {
             .contains)
 
     val list = ListBuffer[A]()
-    val set  = roots.to[ListBuffer]
+    val set  = roots.to(ListBuffer)
 
-    val edges = originalEdges.to[ListBuffer]
+    val edges = originalEdges.to(ListBuffer)
 
     while (set.nonEmpty) {
       val n = set.remove(0)

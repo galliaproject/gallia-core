@@ -1,18 +1,21 @@
 package gallia.data.multiple.streamer
 
+import scala.collection.compat._
 import scala.reflect.{ClassTag => CT}
 
 import aptus.{Anything_, Seq_}
+import aptus.utils.MapUtils
+
 import gallia.heads.merging.MergingData._
 
 // ===========================================================================
 object ViewStreamerUtils {
-  type DataRepr[T] = scala.collection.SeqView[T, Seq[_]] // TODO: t210115103554 - confirm reads entire Seq once first (so can redo as needed)?
+  type DataRepr[T] = cross.SeqView[T] // TODO: t210115103554 - confirm reads entire Seq once first (so can redo as needed)?
 
   // ===========================================================================
   private[streamer] def groupByKey[K, V](list: DataRepr[(K, V)]): DataRepr[(K, List[V])] =
-    list
-      .groupByKeyWithListMap
+    MapUtils
+      .groupByKeyWithListMap(list)
       .toList.view
       .map { case (key, values) =>
         key -> values.toList }
@@ -41,8 +44,8 @@ object ViewStreamerUtils {
       right.tipe match {
         case StreamerType.ViewBased =>
             _coGroup(joinType)(
-                left .toList.groupByKey,
-                right.toList.groupByKey)
+                left .toList.groupByKeyWithListMap,
+                right.toList.groupByKeyWithListMap)
               .thn(new ViewStreamer(_))
 
         // ---------------------------------------------------------------------------
@@ -61,8 +64,8 @@ object ViewStreamerUtils {
 
         case StreamerType.ViewBased =>
           _join(joinType, combine)(
-                left.toList.groupByKey,
-                right.toList.groupByKey)
+                left .toList.groupByKeyWithListMap,
+                right.toList.groupByKeyWithListMap)
             .thn(new ViewStreamer(_))
 
         // ---------------------------------------------------------------------------
@@ -75,9 +78,9 @@ object ViewStreamerUtils {
           ( leftLookup: Map[K, Iterable[V]],
            rightLookup: Map[K, Iterable[V]])
         : DataRepr[(K, (Iterable[V], Iterable[V]))] =
-      _joinValueSet(joinType)(
-           leftLookup.keySet,
-          rightLookup.keySet)
+      _joinValues(joinType)(
+           leftLookup.keys.toSeq.distinct,
+          rightLookup.keys.toSeq.distinct)
         .toList.view
         .map { joinValueOpt =>
           ( joinValueOpt,
@@ -90,10 +93,10 @@ object ViewStreamerUtils {
           ( leftLookup: Map[K, Iterable[V]],
            rightLookup: Map[K, Iterable[V]])
         : DataRepr[V] =
-      _joinValueSet(joinType)(
-           leftLookup.keySet,
-          rightLookup.keySet)
-        .toList.view
+      _joinValues(joinType)(
+           leftLookup.keys.toSeq.distinct,
+          rightLookup.keys.toSeq.distinct)
+        .toSeq.view
         .flatMap { joinValueOpt =>
           val  left: Seq[V] =  leftLookup.get(joinValueOpt).toList.flatten
           val right: Seq[V] = rightLookup.get(joinValueOpt).toList.flatten
@@ -103,14 +106,16 @@ object ViewStreamerUtils {
           else if (right.isEmpty) left
           else for { l <- left; r <- right }
             yield { combiner(l, r) } } // 201126124701 - can't both be empty (by design)
+        .toSeq.view
 
   // ===========================================================================
-  private def _joinValueSet[K](joinType: JoinType)(left: Set[K], right: Set[K]): Set[K] =
-    joinType match {
-        case JoinType.full  => left.union    (right)
-        case JoinType.left  => left
-        case JoinType.right =>                right
-        case JoinType.inner => left.intersect(right) } // TODO: re-sort?
+  private def _joinValues[K](joinType: JoinType)(left: Seq[K], right: Seq[K]): Seq[K] = // TODO: or as set (but loses order)
+    (joinType match {
+          case JoinType.full  => left.union    (right)
+          case JoinType.left  => left
+          case JoinType.right =>                right
+          case JoinType.inner => left.intersect(right) })
+       .distinct
 
 }
 

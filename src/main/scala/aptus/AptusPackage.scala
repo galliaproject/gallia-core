@@ -88,7 +88,7 @@ package object aptus
     def pattern: JavaPattern = str.r.pattern
 
     // ---------------------------------------------------------------------------
-    def systemCall: String = sys.process.Process(str) !!
+    import scala.language.postfixOps; def systemCall: String = sys.process.Process(str) !!
 
     // ===========================================================================
     def writeFileContent(path: String): FilePath = utils.FileUtils.writeContent(path, content = str)

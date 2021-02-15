@@ -46,7 +46,7 @@ object MetaObj { // 201222111332
               case nesting: Cls       => cls(nesting) }))
 
   // ===========================================================================
-  def formatClassDebug(value: Cls): DebugString = value.fields.map(formatFieldDebug)joinln
+  def formatClassDebug(value: Cls): DebugString = value.fields.map(formatFieldDebug).joinln
 
     // ---------------------------------------------------------------------------
     def formatFieldDebug(value: Fld): DebugString = value.key.name.padRight(16, ' ').tab(value.info.thn(formatInfoDebug))

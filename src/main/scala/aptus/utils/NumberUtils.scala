@@ -39,7 +39,7 @@ object NumberUtils {
     else
       BigDecimal(nmbr) // TODO: *has* to transit through big?
         .round(mathContext(setPrecision))
-        .doubleValue()
+        .doubleValue
 
   // ===========================================================================
   def isValidInt(str: String): Boolean =

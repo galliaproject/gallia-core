@@ -111,6 +111,7 @@ case class KPathz(values: Seq[KPath]) extends Seq[KPath] {
         .mapValues {
           case Seq(None) => None
           case multiple  => Some(KPathz(multiple.flatten)) }
+        .toMap
   }
 
   // ===========================================================================

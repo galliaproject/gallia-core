@@ -17,11 +17,11 @@ package object gallia
   type HeadS = heads.HeadZ
 
   // ===========================================================================
-  private[gallia] type Cls = meta.Cls
-  private[gallia] val  Cls = meta.Cls
+  private[gallia] type     Cls = meta.Cls
+  private[gallia] lazy val Cls = meta.Cls
 
-  private[gallia] type Fld = meta.Fld
-  private[gallia] val  Fld = meta.Fld
+  private[gallia] type     Fld = meta.Fld
+  private[gallia] lazy val Fld = meta.Fld
 
   // ---------------------------------------------------------------------------
   private[gallia] type Err = vldt.Err
@@ -108,7 +108,7 @@ package object gallia
   // ===========================================================================
   var CheatMode: Boolean = false // temporary hack...; see t210107094406; performance won't improve much until t210104164036 is done at least
 
-  private[gallia] val closeables = collection.mutable.MutableList[java.io.Closeable]()
+  private[gallia] val closeables = cross.MutList[java.io.Closeable]()
 
   // ---------------------------------------------------------------------------
   sys.addShutdownHook {

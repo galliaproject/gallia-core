@@ -4,7 +4,7 @@ import aptus.{String_, Seq_}
 
 import enumeratum.{Enum, EnumEntry}
 
-import gallia._
+import gallia.{Fld => _, _}
 import gallia.meta._
 import gallia.reflect.Container
 

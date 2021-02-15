@@ -62,8 +62,8 @@ class DAG[$NodeType](
       private def defaultDotStyle(node: $NodeType) = (idResolver(node), "White")
 
     // ===========================================================================
-    private[dag] lazy val _efferents: Map[NodeId, Nes[NodeId]] = edges.groupBy(_._1).mapValues(_.map(_._2))
-    private[dag] lazy val _afferents: Map[NodeId, Nes[NodeId]] = edges.groupBy(_._2).mapValues(_.map(_._1))
+    private[dag] lazy val _efferents: Map[NodeId, Nes[NodeId]] = edges.groupBy(_._1).mapValues(_.map(_._2)).toMap
+    private[dag] lazy val _afferents: Map[NodeId, Nes[NodeId]] = edges.groupBy(_._2).mapValues(_.map(_._1)).toMap
 
     // ---------------------------------------------------------------------------
     lazy val roots : Seq[$NodeType] = nodeIds.diff(_afferents.keys.toSeq).map(_lookup)

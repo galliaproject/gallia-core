@@ -8,6 +8,7 @@ import gallia.FunctionWrappers._
 
 // ===========================================================================
 object ActionsUUTransforms {
+  import gallia.actions.utils
   import utils.ActionsUUUtils._
 
   // ===========================================================================

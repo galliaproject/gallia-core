@@ -29,7 +29,7 @@ Preliminary notes:
 <a name="210121153147"></a>
 ## Dependencies
 
-The library is written with Scala ([2.12](#210121130711))
+The library is written with Scala ([2.13](#210121130711))
 
 <a name="210121153201"></a>
 It requires the following inclusion:
@@ -77,7 +77,8 @@ import aptus._ // our utilities library
     .nest('baz).under('parent)
 
     // flip boolean value of field "baz" (now nested under "parent")
-    .flip('parent |> 'baz ~> 'BAZ) // rename it "while-at-it" ("baz" -> "BAZ")
+    .flip('parent |> 'baz ~> 'BAZ)
+                     // rename it "while-at-it" ("baz" -> "BAZ")
 
   .printJson()
   // prints: {"foo": "HELLO", "bar": 2, "parent": { "BAZ": false }}
@@ -121,8 +122,8 @@ Notes:
   .write(
     "/tmp/people.jsonl.gz")
     // OUTPUT:
-    //   {"username": "jjohnson", "name": "John JOHNSON", "age": 32, ...}\n
-    //   {"username": ...
+    //  {"username": "jjohnson", "name": "John JOHNSON", "age": 32, ...}\n
+    //  {"username": ...
 ```
 
 <a name="210121153154"></a>
@@ -789,10 +790,6 @@ There are lots of features that could be added in the future, but they all requi
 <a name="210127140116"></a>
 Note that the most important part of the library at this point is its client code interface. The internals could be entirely scrapped in the future,
 though it's more likely it would be replaced in phases short of a major design flaw.
-
-<a name="210121130711"></a>
-### Why Scala 2.12 instead of 2.13/Dotty
-I haven't acquainted myself with 2.13 yet, let alone Dotty. Corresponding support is [planned](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210121101237) however.
 
 <a name="210127134037"></a>
 ### Why no macros?

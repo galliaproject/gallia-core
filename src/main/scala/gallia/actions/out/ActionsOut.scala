@@ -34,8 +34,8 @@ case class UrlLikeTableOutput(
         urlLike       : UrlLike,
         formatConf    : FormatConf,
         nullValue     : String,
-        arraySeparator: String,
-      ) extends ActionZOb {
+        arraySeparator: String)
+      extends ActionZOb {
 
     def vldt(c: Cls): Errs = Nil // TODO: ensure no contradion with uriString? (eg '\t' vs tsv)
     def atomzos(c: Cls): AtomZOs =

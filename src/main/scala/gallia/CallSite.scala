@@ -18,10 +18,10 @@ case class CallSite(
 
   // ===========================================================================
   case class SubCallSite(
-        fileName     : FileName,       // eg         "MyOrigin.scala"
-        fullClassName: String,         // eg "foo.bar.MyOrigin$"
-        line         : Int,            // eg 15
-        filePathOpt  : Option[String], // eg "/path/to/foo/bar/MyOrigin$.class(MyOrigin.scala:15)"; meant to be clickable in IDE
+        fileName     : FileName,      // eg         "MyOrigin.scala"
+        fullClassName: String,        // eg "foo.bar.MyOrigin$"
+        line         : Int,           // eg 15
+        filePathOpt  : Option[String] // eg "/path/to/foo/bar/MyOrigin$.class(MyOrigin.scala:15)"; meant to be clickable in IDE
       ) {
     def formatPathOpt: Option[String] =
       filePathOpt

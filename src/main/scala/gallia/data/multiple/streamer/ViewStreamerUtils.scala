@@ -1,6 +1,7 @@
 package gallia.data.multiple.streamer
 
 import scala.collection.compat._
+import scala.util.chaining.scalaUtilChainingOps // trying it out
 import scala.reflect.{ClassTag => CT}
 
 import aptus.{Anything_, Seq_}
@@ -32,7 +33,7 @@ object ViewStreamerUtils {
         val right: Streamer[B] = that.asInstanceOf[Streamer[B]]
 
         left
-          .thn(right.asMeBased)
+          .pipe(right.asMeBased)
           .union(right)
     }
 
@@ -46,12 +47,12 @@ object ViewStreamerUtils {
             _coGroup(joinType)(
                 left .toList.groupByKeyWithListMap,
                 right.toList.groupByKeyWithListMap)
-              .thn(new ViewStreamer(_))
+              .pipe(new ViewStreamer(_))
 
         // ---------------------------------------------------------------------------
         case StreamerType.IteratorBased | StreamerType.RDDBased => // delegate
           left
-            .thn(right.asMeBased)
+            .pipe(right.asMeBased)
             .coGroup(joinType)(right)
       }
 
@@ -66,7 +67,7 @@ object ViewStreamerUtils {
           _join(joinType, combine)(
                 left .toList.groupByKeyWithListMap,
                 right.toList.groupByKeyWithListMap)
-            .thn(new ViewStreamer(_))
+            .pipe(new ViewStreamer(_))
 
         // ---------------------------------------------------------------------------
         case StreamerType.IteratorBased | StreamerType.RDDBased => ??? // delegate

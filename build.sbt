@@ -4,13 +4,9 @@
 // ===========================================================================
 lazy val scala213 = "2.13.4"
 lazy val scala212 = "2.12.13"
-lazy val scala211 = "2.11.12"
-lazy val scala210 = "2.10.7"
 
 // ---------------------------------------------------------------------------
-// errors with <2.13 with collection.mutable.ArrayDeque and SeqView[T, Seq[_]] (even with scala.collection.compat._)
-//   see workaround toggle (210214150322): cat ./src/main/scala/cross/CrossPackage.scala | awk '/213/{sub(/^\/\//,"  ");print}/212/{sub(/^  /,"//");print}!/212/ && !/213/{print}'
-lazy val supportedScalaVersions = List(scala213) // TODO: t210213101700 - scala212, scala211, scala210
+lazy val supportedScalaVersions = List(scala213, scala212)
 
 // ===========================================================================
 lazy val root = (project in file("."))

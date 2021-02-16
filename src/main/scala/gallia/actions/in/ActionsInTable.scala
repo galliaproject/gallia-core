@@ -18,8 +18,8 @@ case class TableInputZ( // TODO: t210101150123 - split up?
       indexKeysMode : Boolean, // may still be invoked if a header is present (will take precedence over key names from the header)
 
       schemaProvider: TableSchemaProvider,
-      projectionOpt : Option[ReadProjection],
-    ) extends ActionIZd with HasProjection {
+      projectionOpt : Option[ReadProjection])
+    extends ActionIZd with HasProjection {
   private val Tsp = TableSchemaProvider
 
   private var defaultCls2: Cls = _ // can't use resultCls because of t210106120036 (delayed data projection)

@@ -206,8 +206,8 @@ object AtomsIX {
       hasHeader: Boolean,
 
       // ---------------------------------------------------------------------------
-      defaultSchema: Cls,
-  ) extends AtomIZ with HasProjection {
+      defaultSchema: Cls)
+  extends AtomIZ with HasProjection {
 
     def naive: Option[Objs] =
       aobjs(

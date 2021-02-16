@@ -129,8 +129,7 @@ case class JsonLinesFileConf(
 
       inMemoryMode  : Boolean                = true,
       schemaProvider: OtherSchemaProvider    = InferSchema,
-      projectionOpt : Option[ReadProjection] = None,
-      )
+      projectionOpt : Option[ReadProjection] = None)      
     extends InputConfZ {
   def actionZ: ActionIZ =
     JsonLinesFileInputZ(
@@ -161,8 +160,8 @@ case class TableConf(
       indexKeysMode       : Boolean                = false,
 
       schemaProvider      : TableSchemaProvider    = TableSchemaProvider.InferSchema,
-      projectionOpt       : Option[ReadProjection] = None,
-    ) extends InputConfZ {
+      projectionOpt       : Option[ReadProjection] = None)
+    extends InputConfZ {
 
   def updateFormatConf(f: FormatConf => FormatConf) = copy(formatConf = f(formatConf))
   def updateCellConf  (f: CellConf   => CellConf  ) = copy(cellConf   = f(cellConf))

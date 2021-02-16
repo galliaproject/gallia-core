@@ -11,8 +11,7 @@ case class CellConf(
     nullValues: Seq[String] = Seq(DefaultNullValue),
 
     /** order matters, acts dumb if more than one such separator within the same value */
-    arraySeparators: Seq[String] = Seq(DefaultArraySeparator),
-  ) {
+    arraySeparators: Seq[String] = Seq(DefaultArraySeparator)) {
 
   private val noNulls : Boolean = nullValues     .isEmpty
   private val noArrays: Boolean = arraySeparators.isEmpty

@@ -44,8 +44,8 @@ case class OtherTableConf(outlet: OutletType, twc: TableWritingContext = TableWr
       formatConf    : FormatConf = FormatConf.Default,
 
       nullValue     : String     = DefaultNullValue,
-      arraySeparator: String     = DefaultArraySeparator,
-    ) extends OutputConfZ {
+      arraySeparator: String     = DefaultArraySeparator)
+    extends OutputConfZ {
 
     def actionZ = UrlLikeTableOutput(uriString, urlLike, formatConf, nullValue, arraySeparator)
 

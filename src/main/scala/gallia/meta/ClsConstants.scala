@@ -14,8 +14,7 @@ private object ClsConstants { // TODO: revamp, see t210118084355
 
       'p75        .double,
       'p95        .double,
-      'p99        .double,
-    )
+      'p99        .double)    
 
   // ===========================================================================
   val FullDescriptiveStats = cls(

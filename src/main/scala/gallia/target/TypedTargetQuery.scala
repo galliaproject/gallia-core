@@ -53,6 +53,8 @@ case class TypedTargetQuery[$Target]( // t210110103720 - subclass TargetQuery an
   case class TypedTargetQuery2[$Target](ttq1: TypedTargetQuery[$Target], ttq2: TypedTargetQuery[$Target])
         extends HasTypes2 with HasTypedTargetQuerySeq[$Target] with _TypedTargetQuery[$Target] {
 
+      def tqkpath2(implicit ev: $Target <:< KPath) = new TargetQuery2[$Target](ttq1.tq, ttq2.tq)
+
       final override def ttqs: Seq[TypedTargetQuery[$Target]] = Seq(ttq1, ttq2)
       def ht1 = ttq1; def ht2 = ttq2
 

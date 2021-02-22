@@ -27,6 +27,12 @@ object ActionsUUGenerates {
         def _meta (c: Cls): Cls   = c.add(to.tq.resolve(c), to.node.forceNonBObjInfo)
         def atomuu(c: Cls): AtomUU = _Transform1to1(from.pathPairT(c), to.tq.resolve(c), f) }
 
+    // ---------------------------------------------------------------------------
+    case class GenerateWV2(from: TqKPath2, to: TtqKPath, f: _ff21) extends ActionUUc {
+        def  vldt (c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
+        def _meta (c: Cls): Cls   = c.add(to.tq.resolve(c), to.node.forceNonBObjInfo)
+        def atomuu(c: Cls): AtomUU = _Transform2to1(from.pathPairT(c), to.tq.resolve(c), f) }
+    
     // ===========================================================================
     case class Generate2VtoV(from: TtqKPath2, to: TtqKPath, f: _ff21) extends ActionUUc {
         def  vldt (c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO

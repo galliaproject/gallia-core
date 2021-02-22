@@ -27,13 +27,13 @@ trait HeadCommonGenerates[F <: HeadCommon[F]] { _: HeadCommon[F] =>
 
       // ---------------------------------------------------------------------------
       //TODO
-      def from (k: Key): _FromWhatever = new _FromWhatever(_._explicit(k))
+      def from (k: KeyW): _FromWhatever = new _FromWhatever(_._explicit(k.value))
 
       //def from         (f1: KPathW)      : _From11[WV] = from(_.explicit(f1.value))
       //def from[O1: WTT](f1: Generate[O1]): _From11[O1] = new _From11(f1)
 
       // ---------------------------------------------------------------------------
-      def from(f1: KPathW, f2: KPathW) = from[WV, WV](_._explicit(f1), _._explicit(f2))
+      def from(f1: KPathW, f2: KPathW) = new _FromWhatever2(_._explicit(f1.value), _._explicit(f2.value)) // TODO: also add for 3 to 10
 
       def from[O1: WTT, O2: WTT]                  (f1: Generate2[O1], f2: Generate2[O2])                                       = new Generate1From2(f1, f2)
       def from[O1: WTT, O2: WTT, O3: WTT]         (f1: Generate2[O1], f2: Generate2[O2], f3: Generate2[O3])                    = new Generate1From3(f1, f2, f3)
@@ -71,6 +71,11 @@ trait HeadCommonGenerates[F <: HeadCommon[F]] { _: HeadCommon[F] =>
               Generate2VtoV(resolve2(d1, d2), dest, if (dest.node.isWhatever0) __wwrap21(f) else wrap21(f))
             }
           }
+        
+          // ---------------------------------------------------------------------------
+          class _FromWhatever2(f1: Generate1[WV], f2: Generate1[WV]) {
+            def using[D: WTT](f: (WV, WV) => WV2[D]): Self2 = self2 :+
+              GenerateWV2(TSL.Generate1.resolve2(f1, f2).tqkpath2, ttqkpath1[D](newPath), (x: Any, y: Any) => f(new WV(x), new WV(y)).forceOne) }
 
         // ---------------------------------------------------------------------------
         class Generate1From3[O1: WTT, O2: WTT, O3: WTT](

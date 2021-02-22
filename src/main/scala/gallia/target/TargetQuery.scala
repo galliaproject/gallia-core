@@ -92,7 +92,9 @@ class TargetQuery[$Target]( //TODO: t210110103720 - subclass rather, in terms of
 
 // ===========================================================================
 case class TargetQuery2[$Target](tq1: TargetQuery[$Target], tq2: TargetQuery[$Target]) extends HasTargetQuerySeq[$Target] {
+  def vldtAsOrigin(c: Cls): Errs = tq1.vldtAsOrigin(c) ++ tq2.vldtAsOrigin(c) // TODO: also validate distinct
 
+  // ---------------------------------------------------------------------------  
   def pathPairT(c: Cls)(implicit ev: $Target <:< KPath): PathPair2 = PathPair2(tq1.pathPairT(c), tq2.pathPairT(c))
 
   override def tqs: Seq[TargetQuery[$Target]] = Seq(tq1, tq2)

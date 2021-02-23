@@ -745,6 +745,11 @@ I have never dealt with it personally but I imagine the likes of computational p
 
 <a name="210223093237"></a>
 ## List of concrete examples
+- <a name="210223143334"></a>Trivial examples:
+  - [Word Count](https://gist.github.com/anthony-cros/2ceba1be56bd99a8d4bafd2b9f52b9b3#file-wordcount-scala-L11) example, the "hello world" of big data
+  - [Count by word length](https://gist.github.com/anthony-cros/2ceba1be56bd99a8d4bafd2b9f52b9b3#file-wordcount-scala-L29) example
+- <a name="210223143709"></a>SQL-like:
+  - Northwind queries: coming soon
 - <a name="210223094317"></a>Reproducing random examples encountered in articles on data manipulation:
   - Eurostat census data [example queries](https://gist.github.com/anthony-cros/74811b85f9634f3e5646eed71ad7aa20) as discussed in Mathijs Vogelzang's [Medium article](https://medium.com/@thijser/doing-cool-data-science-in-java-how-3-dataframe-libraries-stack-up-5e6ccb7b437): _"Doing cool data science in Java: how 3 DataFrame libraries stack up"_ (September 2018)
   - (more coming soon)
@@ -753,7 +758,7 @@ I have never dealt with it personally but I imagine the likes of computational p
   - re-processing [clinvar VCF file](https://github.com/galliaproject/gallia-clinvar)
   - re-processing [rare disease LOVD data](https://gist.github.com/anthony-cros/1416c544438ef39ca36ae723d02c3ce9) (from [EDS Variant Database](https://databases.lovd.nl/shared/genes/COL3A1))
 - <a name="210223095346"></a>Physics examples
-  - WIP
+  - WIP (see [forum question](https://www.physicsforums.com/threads/looking-for-large-dataset-of-non-image-centric-physics-data.1000073/))
 - <a name="210223094318"></a>Spark-powered:
   - WIP
 - (more coming soon)

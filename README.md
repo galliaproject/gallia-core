@@ -743,7 +743,7 @@ The field of bioinformatics in particular is laden with archaic technologies and
 results in tons of lost opportunities for impactful medical discoveries.
 I have never dealt with it personally but I imagine the likes of computational physics and other "computational-driven" disciplines probably suffer from similar problems.
 
-<a name="210223093237"></a>
+<a name="examples"></a><a name="210223093237"></a>
 ## List of concrete examples
 - <a name="210223143334"></a>Trivial examples:
   - [Word Count](https://gist.github.com/anthony-cros/2ceba1be56bd99a8d4bafd2b9f52b9b3#file-wordcount-scala-L11) example, the "hello world" of big data
@@ -752,6 +752,7 @@ I have never dealt with it personally but I imagine the likes of computational p
   - Northwind queries: coming soon
 - <a name="210223094317"></a>Reproducing random examples encountered in articles on data manipulation:
   - Eurostat census data [example queries](https://gist.github.com/anthony-cros/74811b85f9634f3e5646eed71ad7aa20) as discussed in Mathijs Vogelzang's [Medium article](https://medium.com/@thijser/doing-cool-data-science-in-java-how-3-dataframe-libraries-stack-up-5e6ccb7b437): _"Doing cool data science in Java: how 3 DataFrame libraries stack up"_ (September 2018)
+  - Football premier league data [manipulations](https://gist.github.com/anthony-cros/4a3a9ae9a31881d9fd85c4c67b8a5559) as discussed in Chloe Connor's [Towards Data Science article](https://towardsdatascience.com/stop-using-pandas-and-start-using-spark-with-scala-f7364077c2e0): _"Stop using Pandas and start using Spark with Scala"_ (June 2020)
   - (more coming soon)
 - <a name="210223094353"></a>Bioinformatics examples
   - re-processing [dbNSFP table](#210121135252) example from section just above

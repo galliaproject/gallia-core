@@ -36,6 +36,8 @@ It requires the following inclusion:
 ```
 libraryDependencies += "org.gallia" %% "gallia-core" % "0.0.1"
 ```
+<a name="210223095748"></a>
+<ins>__IMPORTANT NOTE__</ins>: no JAR has actually been published yet, license will need to be [finalized first](#210127134031)
 
 <a name="210121153200"></a>
 The client code then requires the following import:
@@ -175,14 +177,14 @@ Applicable for both `.read()` and `.stream()` (one vs multiple objects)
 // INPUT: {"foo": "hello", "bar": 1, "baz": true, "qux": "world"}
 data.retain(_.firstKey) // {"foo": "hello"}
 
-data.retain(_.allBut('qux))       // {"foo": "hello", "bar": 1, "baz": true}
-data.retain(_.customKeys(_.tail)) // {"bar": 1, "baz": true, "qux": "world"}
+data.retain(_.allBut('qux))      //{"foo": "hello", "bar": 1, "baz": true}
+data.retain(_.customKeys(_.tail))//{"bar": 1, "baz": true, "qux": "world"}
 
 // (overly) complex example:
 """{"k1": "v1", "K2": "v2", "k3": "V3", "K4": "V4", "k5": "v5"}""".read()
   .removeIfValueFor(_.string(_.filterKeys {
       _.startsWith("k") })) // careful not to confuse key selection
-  .matches {
+    .matches {
       _.startsWith("v") }   // with value selection
   // OUTPUT: {"K2": "v2", "k3": "V3", "K4": "V4"}
 
@@ -204,7 +206,7 @@ obj.forKey    ('foo)      .zen(_ toUpperCase _) // { "foo": "HI", ...
 obj.forEachKey('foo)      .zen(_ toUpperCase _)
 obj.forEachKey('foo, 'bar).zen(_ toUpperCase _)
 
-obj.forAllKeys((x, k) => x.rename(k).using(_.toUpperCase)) // {"FOO": "hi", ...
+obj.forAllKeys((x, k) => x.rename(k).using(_.toUpperCase)) //{"FOO":"hi",..
 // ... likewise with forPath, forEachPath, forAllPaths, forLeafPaths, ...
 ```
 
@@ -318,16 +320,16 @@ people
   .group(_.initKeys)
     .by(_.lastKey)
       .as('grouped) // would use '_group if unspecified
-  // OUTPUT: [
-  //  [{"gender":"male","grouped":[{"name":"John","age":21,"city":"Toronto"},
-  //   ... ]
+  //OUTPUT: [
+  // [{"gender":"male","grouped":[{"name":"John","age":21,"city":"Toronto"},
+  //     ... ]
 
 // other count types available:
 //   distinct, present, missing and distinct+present
 people.count('name).by('city)
 
 people.sum  ('age).by('city) // also sum, mean, stdev, ...
-people.stats('age).by('city) // descriptive statistics (very minimal for now)
+people.stats('age).by('city) // descriptive statistics (minimal for now)
   // OUTPUT: [ {"city":"Toronto","_stats":{"mean":21.0, ...
 ```
 
@@ -353,8 +355,8 @@ people
   .pivot(_.int('age)).usingMean
     .rows   ('city)
     .columns('gender)
-      // having to provide those is an unfortunate consequence of maintaining
-      // a schema (these values are only known at runtime)
+      // having to provide those is an unfortunate consequence of
+      // maintaining a schema (these values are only known at runtime)
       .asNewKeys('male, 'female)
   // OUTPUT:
   //  [ {"city":"Toronto","male":21},
@@ -374,7 +376,7 @@ Common prefixes can be leveraged for re-nesting, e.g. "contact_" below:
 table
   .renest(_.allKeys)
     .usingSeparator("_")
-    // OUTPUT: "{"name":"John", "contact":{"phone": 1234567, "address": ...
+    // OUTPUT: "{"name":"John", "contact":{"phone": 1234567, "address":..
     //                           ^^^^^^^
 ```
 
@@ -445,7 +447,7 @@ Here are some examples of input consumption:
 
 // requires gallia-mongodb module and import gallia.mongodb._
 "mongodb://localhost:27017/test.coll1".stream()
-"mongodb://localhost:27017/test"      .stream(_.query("""{"find": "coll1"}"""))
+"mongodb://localhost:27017/test"      .stream(_.query("""{"find":"coll1"}"""))
 ```
 
 #### Tables
@@ -476,10 +478,10 @@ val schema =
       'f6.string_, 'f7.strings_, 'f8.boolean_)
 
 val data =
-  Seq(
-    obj('f1 -> "z", 'f2 -> 1, 'f3 -> 1.1, 'f4 -> true , 'f5 -> Seq(9, 8, 7),
-          'f6 -> "k", 'f7 -> Seq("d", "e", "f"), 'f8 -> true),
-    obj('f1 -> "y", 'f2 -> 2, 'f3 -> 2.2, 'f4 -> false, 'f5 -> Seq(6, 5, 4)) )
+ Seq(
+  obj('f1 -> "z", 'f2 -> 1, 'f3 -> 1.1, 'f4 -> true , 'f5 -> Seq(9, 8, 7),
+        'f6 -> "k", 'f7 -> Seq("d", "e", "f"), 'f8 -> true),
+  obj('f1 -> "y", 'f2 -> 2, 'f3 -> 2.2, 'f4 -> false, 'f5 -> Seq(6, 5, 4)))
 ```
 
 <a name="210121153214"></a>
@@ -497,9 +499,9 @@ Note that `_` here stands for `?`, meaning optional. For instance `'f7.strings_`
 // Sparql
 "http://www.disease-ontology.org?query=".stream(
     _.query("""
-        SELECT DISTINCT *
-        WHERE {?s <http://www.w3.org/2000/01/rdf-schema#label> "common cold"}
-        LIMIT 3"""))
+      SELECT DISTINCT *
+      WHERE {?s <http://www.w3.org/2000/01/rdf-schema#label> "common cold"}
+      LIMIT 3"""))
 
 // GraphQL
 "https://swapi.com/graphql".stream(
@@ -533,8 +535,8 @@ modifiedPeople.write(
     container = "coll1")
 
 modifiedPeople.write(
-    uri       = "jdbc:myfavdb://localhost:1234/test?user=foo&password=bar",
-    container = "SOME_RESULT_TABLE")
+  uri       = "jdbc:myfavdb://localhost:1234/test?user=foo&password=bar",
+  container = "SOME_RESULT_TABLE")
 ```
 
 ## Scaling
@@ -563,7 +565,7 @@ logging.setToWarn()
 "/data/file.jsonl"
     .stream(_.rdd) // will run with `local[*]` as master by default
     .rename('foo ~> 'FOO)
-    .printJsonl() // note: closes the SparkContext upon completion by default
+    .printJsonl() // note: closes SparkContext upon completion by default
 
 "/data/huge.tsv.bz2"
   .stream(_.rdd)
@@ -741,8 +743,19 @@ The field of bioinformatics in particular is laden with archaic technologies and
 results in tons of lost opportunities for impactful medical discoveries.
 I have never dealt with it personally but I imagine the likes of computational physics and other "computational-driven" disciplines probably suffer from similar problems.
 
-More examples:
-- [clinvar VCF](https://github.com/galliaproject/gallia-clinvar)
+<a name="210223093237"></a>
+## List of concrete examples
+- <a name="210223094317"></a>Reproducing random examples encountered in articles on data manipulation:
+  - Eurostat census data [example queries](https://gist.github.com/anthony-cros/74811b85f9634f3e5646eed71ad7aa20) as discussed in Mathijs Vogelzang's [Medium article](https://medium.com/@thijser/doing-cool-data-science-in-java-how-3-dataframe-libraries-stack-up-5e6ccb7b437): _"Doing cool data science in Java: how 3 DataFrame libraries stack up"_ (September 2018)
+  - (more coming soon)
+- <a name="210223094353"></a>Bioinformatics examples
+  - re-processing [dbNSFP table](#210121135252) example from section just above
+  - re-processing [clinvar VCF file](https://github.com/galliaproject/gallia-clinvar)
+  - re-processing [rare disease LOVD data](https://gist.github.com/anthony-cros/1416c544438ef39ca36ae723d02c3ce9) (from [EDS Variant Database](https://databases.lovd.nl/shared/genes/COL3A1))
+- <a name="210223095346"></a>Physics examples
+  - WIP
+- <a name="210223094318"></a>Spark-powered:
+  - WIP
 - (more coming soon)
 
 ## FAQ
@@ -756,6 +769,9 @@ a prominent place in the task [list](http://github.com/galliaproject/gallia-docs
 <a name="210127134031"></a>
 ### Why an "All right reserved" license?
 This is temporary until I determine what the right license and funding model are going to be for this project.
+
+<a name="210223092122"></a>
+<ins>__UPDATE__</ins> on 2021-02-23: started process of creating a [Business Source License (BSL)](https://mariadb.com/bsl-faq-adopting/#whatis) with specific terms still to be determined, but essentially free for anyone doing important work.
 
 <a name="210127134032"></a>
 ### How can I help?
@@ -814,7 +830,7 @@ It may still become a reality but I'd rather focus on maturing a Scala version f
 <a name="210129170214"></a>
 ### What is aptus?
 "Aptus" is latin for suitable, appropriate, fitting. It is our utility library to help smooth certain pain points of the Java/Scala ecosystem.
-The plan is to externalize it eventually. In fact, the _Aptus_ code included in _Gallia_ is a small subset of the full library, which was embedded for convenience.
+The plan is to externalize it eventually (Apache 2 license). In fact, the _Aptus_ code included in _Gallia_ is a small subset of the full library, which was embedded for convenience.
 
 <a name="210127134040"></a>
 ### Where are the tests?

@@ -338,8 +338,19 @@ package object aptus
   implicit class Int_(val nmbr: Int) extends AnyVal {
       def isNanOrInfinity: Boolean = nmbr.isNaN || nmbr.isInfinity
 
+      // ---------------------------------------------------------------------------
+      def add       (n: Int): Int = nmbr + n
+      def subtract  (n: Int): Int = nmbr - n
+      
+      def multiplyBy(n: Int)   : Int    = nmbr * n
+      def multiplyBy(n: Number): Double = nmbr * n.doubleValue()
+  
+      def divideBy(n: Int)   : Int    = nmbr / n
+      def divideBy(n: Number): Double = nmbr / n.doubleValue()    
+      
+      // ---------------------------------------------------------------------------
       def formatUsLocale: String = utils.NumberUtils.IntegerFormatter.format(nmbr)
-      def formatExplicit: String = formatUsLocale.replace(",", "") //def formatExplicit: String = f"${int}%0f" // TODO: try
+      def formatExplicit: String = formatUsLocale.replace(",", "") //def formatExplicit: String = f"${int}%0f" // TODO: try      
     }
 
     // ---------------------------------------------------------------------------
@@ -354,6 +365,13 @@ package object aptus
     implicit class Double_(val nmbr: Double) extends AnyVal {
       def isNanOrInfinity: Boolean = nmbr.isNaN || nmbr.isInfinity
 
+      // ---------------------------------------------------------------------------
+      def divideBy  (n: Number): Double = nmbr / n.doubleValue()
+      def multiplyBy(n: Number): Double = nmbr * n.doubleValue()
+      def add       (n: Number): Double = nmbr + n.doubleValue()
+      def subtract  (n: Number): Double = nmbr - n.doubleValue()
+
+      // ---------------------------------------------------------------------------
       def formatUsLocale               : FormattedNumber = utils.NumberUtils.NumberFormatter.format(nmbr)
       def formatExplicit               : FormattedNumber = f"${nmbr}%.16f".stripTrailingZeros
       def formatDecimals(decimals: Int): FormattedNumber = s"%.${decimals}f".format(nmbr)

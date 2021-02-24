@@ -13,8 +13,11 @@ class EntirelyUriDrivenFluencyZ(val conf: OutputConfZ) extends EndWriteZFluency
         val conf = OutputStringDrivenConf.urlLikeConfU(path)
 
         // ---------------------------------------------------------------------------
-        def content = IoTypeU.RawContent.urlLikeFluency(path)
-        def json    = IoTypeU.JsonObject.urlLikeFluency(path)
+        def content = IoTypeU.RawContent       .urlLikeFluency(path)
+        
+        def json          = prettyJson
+          def compactJson = IoTypeU.CompactJsonObject.urlLikeFluency(path)
+          def prettyJson  = IoTypeU.PrettyJsonObject .urlLikeFluency(path)
       }
 
       // ===========================================================================

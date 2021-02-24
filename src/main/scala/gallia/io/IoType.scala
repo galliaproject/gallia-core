@@ -19,7 +19,7 @@ sealed trait IoTypeU {
   object IoTypeU { // TODO: t210118103012 - proper handling
 
     /** flawed as it may be, it is still the most common/convenient at the moment */
-    val Default = JsonObject
+    val Default = CompactJsonObject
 
     // ---------------------------------------------------------------------------
     def parsePathOpt(path: String): Option[IoTypeU] =
@@ -38,10 +38,15 @@ sealed trait IoTypeU {
         def defaultFormat = _.formatCompactJson }
 
       // ---------------------------------------------------------------------------
-      case object JsonObject extends IoTypeU {
+      case object CompactJsonObject extends IoTypeU {
         def defaultRead   = (start, conf) => start.jsonObjectFile.schemaProvider(conf.schemaProvider)
         def defaultFormat = _.formatCompactJson }
 
+      // ---------------------------------------------------------------------------
+      case object PrettyJsonObject extends IoTypeU {
+        def defaultRead   = (start, conf) => start.jsonObjectFile.schemaProvider(conf.schemaProvider)
+        def defaultFormat = _.formatPrettyJson }
+      
   }
 
 // ===========================================================================

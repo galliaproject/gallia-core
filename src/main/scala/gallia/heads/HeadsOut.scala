@@ -23,8 +23,11 @@ trait HeadUOut { _: HeadU =>
   def formatJson  : String = { val sw = new  java.io.StringWriter; write(_.formatString(sw).json); sw.toString }
 
   // ---------------------------------------------------------------------------
-  def printString() { printJson }
-  def printJson  () { write(_.stdout.json); () }
+  def printString    () { printJson }
+  
+  def printJson         () { printPrettyJson }  
+    def printCompactJson() { write(_.stdout.compactJson); () }
+    def printPrettyJson () { write(_.stdout.prettyJson);  () }
 
   // ===========================================================================
   def writeFile(path: String) { write(_.file(path)); () }

@@ -58,8 +58,11 @@ class OtherFluencyU(outlet: OutletType) extends EndWriteUFluency {
     val conf = json.conf
 
     // ===========================================================================
-    def content = endOtherU(IoTypeU.RawContent, outlet)
-    def json    = endOtherU(IoTypeU.JsonObject, outlet)
+    def content = endOtherU(IoTypeU.RawContent,        outlet)
+    
+    def json          = prettyJson    
+      def compactJson = endOtherU(IoTypeU.CompactJsonObject, outlet)
+      def prettyJson  = endOtherU(IoTypeU.PrettyJsonObject,  outlet)
   }
 
   // ===========================================================================

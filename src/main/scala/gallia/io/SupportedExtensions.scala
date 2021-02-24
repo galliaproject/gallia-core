@@ -63,11 +63,11 @@ sealed trait SupportedExtensions extends EnumEntry {
 
     // ---------------------------------------------------------------------------
     case object json  extends SupportedExtensions {
-        override def utype = IoTypeU.JsonObject
+        override def utype = IoTypeU.CompactJsonObject
         override def ztype = IoTypeZ.JsonLines }
 
-      case object jsono extends SupportedExtensions { override def utype = IoTypeU.JsonObject } // non-standard
-      case object jsona extends SupportedExtensions { override def ztype = IoTypeZ.JsonArray  } // non-standard
+      case object jsono extends SupportedExtensions { override def utype = IoTypeU.CompactJsonObject } // non-standard
+      case object jsona extends SupportedExtensions { override def ztype = IoTypeZ.JsonArray         } // non-standard
 
       case object jsonl extends SupportedExtensions { override def ztype = IoTypeZ.JsonLines }
       case object jsons extends SupportedExtensions { override def ztype = IoTypeZ.JsonLines } // non-standard

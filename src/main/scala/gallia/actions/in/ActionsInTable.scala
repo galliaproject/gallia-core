@@ -41,7 +41,7 @@ case class TableInputZ( // TODO: t210101150123 - split up?
           .firstLine()
           .splitXsv(sep)
           .thn { cells =>
-            if (hasHeader && !indexKeysMode) cells.map(_.symbol)
+            if (hasHeader && !indexKeysMode) cells.map(_.thnIf(_.isEmpty)(_ => "_missing").symbol)
             else                             cells.size.thn(sizeToKeys) }
           .thn(Cls.from)
 

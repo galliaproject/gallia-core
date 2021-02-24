@@ -759,6 +759,7 @@ I have never dealt with it personally but I imagine the likes of computational p
 - <a name="210223143709"></a>SQL-like:
   - Northwind queries: coming soon
 - <a name="210223094317"></a>Reproducing random examples encountered in articles on data manipulation:
+  - TPC-DS Sales summary [example query](https://gist.github.com/anthony-cros/f6d82744523349a65bc86598c79cabdc) as discussed in Andrew Ray's [Databricks post](https://databricks.com/blog/2016/02/09/reshaping-data-with-pivot-in-apache-spark.html): _"Reshaping Data with Pivot in Apache Spark"_ (February 2016)
   - Eurostat census data [example queries](https://gist.github.com/anthony-cros/74811b85f9634f3e5646eed71ad7aa20) as discussed in Mathijs Vogelzang's [Medium article](https://medium.com/@thijser/doing-cool-data-science-in-java-how-3-dataframe-libraries-stack-up-5e6ccb7b437): _"Doing cool data science in Java: how 3 DataFrame libraries stack up"_ (September 2018)
   - Football premier league data [manipulations](https://gist.github.com/anthony-cros/4a3a9ae9a31881d9fd85c4c67b8a5559) as discussed in Chloe Connor's [Towards Data Science article](https://towardsdatascience.com/stop-using-pandas-and-start-using-spark-with-scala-f7364077c2e0): _"Stop using Pandas and start using Spark with Scala"_ (June 2020)
   - (more coming soon)

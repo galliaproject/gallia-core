@@ -894,7 +894,7 @@ _Gallia_ is the name of a Romano-Gallic [goddess](https://en.wikipedia.org/wiki/
 
 Rumor has it that the goddess Gallia appeared in 16 BCE to a group of data engineers gathered at a local tavern in Lugdunum (now [Lyon](https://www.google.com/maps/place/Lyon,+France)),
 and that she told them to keepeth their code (1) _practical_, (2) _readable_, and (3) _scalable_ (if needed), in that exact order.
-//
+
 ## Contact & Announcements
 
 You may contact the author at: <sub><img src="./images/ct.png"></sub>

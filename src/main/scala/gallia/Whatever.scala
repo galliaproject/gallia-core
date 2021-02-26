@@ -266,7 +266,13 @@ class TypedWhatever[T](val either: Either[Seq[T], T]) extends AnyVal with Serial
     override def toString: String = formatDefault
       def formatDefault: String = Whatever.formatDefault(any = either.fold(identity, identity))
 
-    def unary_!(implicit ev: T =:= Boolean): TypedWhatever[Boolean] = map { x => !x.boolean }
+    // ---------------------------------------------------------------------------
+    def unary_!                      (implicit ev: T =:= Boolean): TypedWhatever[Boolean] = map { !_.boolean }
+
+    def &&(y: TypedWhatever[Boolean])(implicit ev: T =:= Boolean): TypedWhatever[Boolean] = map { _.boolean && y.boolean }
+    def ||(y: TypedWhatever[Boolean])(implicit ev: T =:= Boolean): TypedWhatever[Boolean] = map { _.boolean || y.boolean }
+    def ^ (y: TypedWhatever[Boolean])(implicit ev: T =:= Boolean): TypedWhatever[Boolean] = map { _.boolean ^  y.boolean }
+    // TODO: also do | and &?
 
     // ---------------------------------------------------------------------------
     private[gallia] def map[T2](f: T => T2): TypedWhatever[T2] = new TypedWhatever[T2](either match {

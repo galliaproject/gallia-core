@@ -36,7 +36,10 @@ private[io] trait InputBase { val inputString: InputString }
   }
 
   // ===========================================================================
-  trait ReadHead extends InputBase {
+  trait ReadHead extends InputBase {    
+    def readContent(): HeadU = bobj(_content -> inputString)
+
+    // ---------------------------------------------------------------------------
     def read()                                       : HeadU = read(_.inputDriven)
 
     def read[T: WTT]                                 : HeadU = read(_.schema[T]) // TODO: nicer error due to invoking .read.
@@ -53,6 +56,9 @@ private[io] trait InputBase { val inputString: InputString }
 
   // ===========================================================================
   trait StreamHead extends InputBase {
+    def streamLines(): HeadZ = inputString.splitBy("\n").thn(lines => gallia.domain.BObjs(lines.map(line => bobj(_line -> line))))
+
+    // ---------------------------------------------------------------------------
     def stream()                                       : HeadZ = stream(_.inputDriven) // TODO: nicer error due to invoking .read.
     def streamContainer(container: String)             : HeadZ = stream(_.allFrom(container))
 

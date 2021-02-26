@@ -124,17 +124,29 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
 
   // ===========================================================================
   // TODO: add more common ones
-  // TODO: t210117110015 - move to common
+  // TODO: t210117110015 - move to common (need to abstract ForX...)
+
   def retainFirst                : Self2 = forKey(_.firstKey).zen(_ retain _)
   def renameSoleKey(value: KeyW): Self2 = forKey(_.soleKey).zen(_.rename(_).to(value))
+  
+  def removeRecursivelyIfValue(value: String): Self2 = forLeafPaths { _.removeIfValueFor(_).is(value) } 
 
-  // ===========================================================================
+  def convertToIntRecursively                : Self2 = forLeafPaths(_.convert(_).toInt)
+  def convertToDoubleRecursively             : Self2 = forLeafPaths(_.convert(_).toDouble)
+  def convertToBooleanRecursively            : Self2 = forLeafPaths(_.convert(_).toBoolean)
+
+  // ===========================================================================  
   def size: HeadV[Int] = zv(Size)
 
     // TODO: t210127164715 - if not top-level? (check missing will return size = 0)
     def isEmpty : HeadV[Boolean] = size.mapV(_ == 0)
     def nonEmpty: HeadV[Boolean] = size.mapV(_ >  0)
 
+    // ---------------------------------------------------------------------------
+    def forceSize     = size    .forceValue
+    def forceIsEmpty  =  isEmpty.forceValue
+    def forceNonEmpty = nonEmpty.forceValue
+    
   // ===========================================================================
   // TODO: t210117112314
   def head: HeadU = take(1).force.one

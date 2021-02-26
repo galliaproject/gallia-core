@@ -65,9 +65,15 @@ class HeadU private[gallia]( // TODO: t210121105809 - rename to HeadO and genera
 
   // ===========================================================================
   // TODO: add more common ones
-  // TODO: t210117110015 - move to common
+  // TODO: t210117110015 - move to common (need to abstract ForX...)
   def retainFirst               : Self2 = forKey(_.firstKey).zen(_ retain _)
   def renameSoleKey(value: KeyW): Self2 = forKey(_.soleKey) .zen(_.rename(_).to(value))
+  
+  def removeRecursivelyIfValue(value: String): Self2 = forLeafPaths { _.removeIfValueFor(_).is(value) } 
+
+  def convertToIntRecursively                : Self2 = forLeafPaths(_.convert(_).toInt)
+  def convertToDoubleRecursively             : Self2 = forLeafPaths(_.convert(_).toDouble)
+  def convertToBooleanRecursively            : Self2 = forLeafPaths(_.convert(_).toBoolean)
 }
 
 // ===========================================================================

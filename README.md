@@ -765,9 +765,10 @@ I have never dealt with it personally but I imagine the likes of computational p
   - <a name="210224103608"></a>Football premier league data [manipulations](https://gist.github.com/anthony-cros/4a3a9ae9a31881d9fd85c4c67b8a5559) as discussed in Chloe Connor's [Towards Data Science article](https://towardsdatascience.com/stop-using-pandas-and-start-using-spark-with-scala-f7364077c2e0): _"Stop using Pandas and start using Spark with Scala"_ (June 2020)
   - (more coming soon)
 - <a name="210223094353"><a name="bioinformatics-examples"></a>Bioinformatics examples
-  - re-processing [dbNSFP table](#210121135252) example from section just above
-  - re-processing [clinvar VCF file](https://github.com/galliaproject/gallia-clinvar)
-  - re-processing [rare disease LOVD data](https://gist.github.com/anthony-cros/1416c544438ef39ca36ae723d02c3ce9) (from [EDS Variant Database](https://databases.lovd.nl/shared/genes/COL3A1))
+  - <a name="clinvar-example">re-processing [clinvar VCF file](https://github.com/galliaproject/gallia-clinvar)
+  - <a name="snpeff-example">re-processing [SnpEff output](https://github.com/galliaproject/gallia-snpeff)
+  - <a name="dbnsfp-example">re-processing [dbNSFP table](#210121135252) example from section just above
+  - <a name="lovd-example">re-processing [rare disease LOVD data](https://gist.github.com/anthony-cros/1416c544438ef39ca36ae723d02c3ce9) (from [EDS Variant Database](https://databases.lovd.nl/shared/genes/COL3A1))
 - <a name="210223095346"></a><a name="physics-examples">Physics examples
   - [ENSDF](https://www.nndc.bnl.gov/ensdf/) data (WIP)
   - WIP (see [forum question](https://www.physicsforums.com/threads/looking-for-large-dataset-of-non-image-centric-physics-data.1000073/))

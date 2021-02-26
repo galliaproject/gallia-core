@@ -753,22 +753,23 @@ I have never dealt with it personally but I imagine the likes of computational p
 
 <a name="examples"></a><a name="210223093237"></a>
 ## List of concrete examples
-- <a name="210223143334"></a>Trivial examples:
+- <a name="210223143334"></a><a name="trivial-examples">Trivial examples:
   - [Word Count](https://gist.github.com/anthony-cros/2ceba1be56bd99a8d4bafd2b9f52b9b3#file-wordcount-scala-L11) example, the "hello world" of big data
   - [Count by word length](https://gist.github.com/anthony-cros/2ceba1be56bd99a8d4bafd2b9f52b9b3#file-wordcount-scala-L29) example
 - <a name="210223143709"></a>SQL-like:
   - <a name="210224103624"></a>Northwind queries: coming soon
-- <a name="210223094317"></a>Reproducing random examples encountered in articles on data manipulation:
+- <a name="210223094317"></a><a name="articles-examples">Reproducing random examples encountered in articles on data manipulation:
   - <a name="210224103606"></a>TPC-DS Sales summary [example query](https://gist.github.com/anthony-cros/f6d82744523349a65bc86598c79cabdc) as discussed in Andrew Ray's [Databricks post](https://databricks.com/blog/2016/02/09/reshaping-data-with-pivot-in-apache-spark.html): _"Reshaping Data with Pivot in Apache Spark"_ (February 2016)
   - <a name="210224123645"></a>[data manipulation task](https://gist.github.com/anthony-cros/4b5d40014dd52d57bc7dd05c35029066) for the Cars93 dataset (R MASS package), as discussed in Darren Wilkinson's [blog post](https://darrenjw.wordpress.com/2015/08/21/data-frames-and-tables-in-scala/): _"Data frames and tables in Scala"_ (August 2015)
   - <a name="210224103607"></a>Eurostat census data [example queries](https://gist.github.com/anthony-cros/74811b85f9634f3e5646eed71ad7aa20) as discussed in Mathijs Vogelzang's [Medium article](https://medium.com/@thijser/doing-cool-data-science-in-java-how-3-dataframe-libraries-stack-up-5e6ccb7b437): _"Doing cool data science in Java: how 3 DataFrame libraries stack up"_ (September 2018)
   - <a name="210224103608"></a>Football premier league data [manipulations](https://gist.github.com/anthony-cros/4a3a9ae9a31881d9fd85c4c67b8a5559) as discussed in Chloe Connor's [Towards Data Science article](https://towardsdatascience.com/stop-using-pandas-and-start-using-spark-with-scala-f7364077c2e0): _"Stop using Pandas and start using Spark with Scala"_ (June 2020)
   - (more coming soon)
-- <a name="210223094353"></a>Bioinformatics examples
+- <a name="210223094353"><a name="bioinformatics-examples"></a>Bioinformatics examples
   - re-processing [dbNSFP table](#210121135252) example from section just above
   - re-processing [clinvar VCF file](https://github.com/galliaproject/gallia-clinvar)
   - re-processing [rare disease LOVD data](https://gist.github.com/anthony-cros/1416c544438ef39ca36ae723d02c3ce9) (from [EDS Variant Database](https://databases.lovd.nl/shared/genes/COL3A1))
-- <a name="210223095346"></a>Physics examples
+- <a name="210223095346"></a><a name="physics-examples">Physics examples
+  - [ENSDF](https://www.nndc.bnl.gov/ensdf/) data (WIP)
   - WIP (see [forum question](https://www.physicsforums.com/threads/looking-for-large-dataset-of-non-image-centric-physics-data.1000073/))
 - <a name="210223094318"></a>Spark-powered:
   - WIP

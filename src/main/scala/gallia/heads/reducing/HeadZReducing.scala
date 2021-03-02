@@ -49,6 +49,7 @@ trait HeadZReducing { _: HeadZ =>
     def reduce(pair1: ReducingPair1, more: ReducingPair1*): HeadU = reduce(pair1 +: more)
     def reduce(pair1: ReducingPair , more: ReducingPair *): HeadU = reduce(pair1 +: more)
 
+  // TODO: custom reduce
 }
 
 // ===========================================================================

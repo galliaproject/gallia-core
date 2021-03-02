@@ -154,6 +154,8 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
 
     // TODO: t210117112314
     @Distributivity def take(n: Int): HeadZ = zz(Take(n))
+
+      def take(n: Option[Int]): HeadZ = n.map(take).getOrElse(self)
       //def drop(n: Int): HeadZ = ???
       //def takeLeft (n: Int): HeadZ = ??? // = take
       //def dropLeft (n: Int): HeadZ = ???

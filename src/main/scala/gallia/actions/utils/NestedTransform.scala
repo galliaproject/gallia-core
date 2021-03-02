@@ -43,47 +43,49 @@ class NestedTransform(adag: MetaPlan, val rootId: RootId) { // TODO: as a peer o
   // ===========================================================================
   // data
 
-  def atomuusUU(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(_.atomPlan.FromNesting.u2u(optional))
-  def atomuusZZ(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(_.atomPlan.FromNesting.z2z(optional))
+  def atomuusUU(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(_.FromNesting.u2u(optional))
+  def atomuusZZ(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(_.FromNesting.z2z(optional))
 
-  def atomuusUZ(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(_.atomPlan.FromNesting.u2z(optional))
-  def atomuusZU(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(_.atomPlan.FromNesting.z2u(optional))
+  def atomuusUZ(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(_.FromNesting.u2z(optional))
+  def atomuusZU(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(_.FromNesting.z2u(optional))
 
-  def atomuusUV(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(_.atomPlan.FromNesting.u2v(optional))
-  def atomuusZV(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(_.atomPlan.FromNesting.z2v(optional))
+  def atomuusUV(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(_.FromNesting.u2v(optional))
+  def atomuusZV(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(_.FromNesting.z2v(optional))
 
     // ---------------------------------------------------------------------------
-    private def atomuus(c: Cls)(qpathz: RPathz, optional: Boolean)(f: ActionPlan => Any => Any): AtomUUs =
+    private def atomuus(c: Cls)(qpathz: RPathz, optional: Boolean)(f: AtomPlan => Any => Any): AtomUUs =
         qpathz.values.thn(_atoms(c)(pair => {
           assert(pair.optional == optional)
-          val actionPlan = this.actionPlan(c.forceNestedClass(pair.path))
+           val nestedClass = c.forceNestedClass(pair.path)
 
-          _Transform1to1(pair, pair.path, f(actionPlan)) }))
+          _Transform1to1(pair, pair.path, f(atomPlan(nestedClass))) }))
 
   // ---------------------------------------------------------------------------
   // eg as used in generate
-  def uu(c: Cls, optional: Boolean): _ff11 = actionPlan(c).atomPlan.FromNesting.u2u(optional)
-  def zz(c: Cls, optional: Boolean): _ff11 = actionPlan(c).atomPlan.FromNesting.z2z(optional)
+  def uu(c: Cls, optional: Boolean): _ff11 = atomPlan(c).FromNesting.u2u(optional)
+  def zz(c: Cls, optional: Boolean): _ff11 = atomPlan(c).FromNesting.z2z(optional)
 
   // ---------------------------------------------------------------------------
   // used in zen/for-key
-  def dataU2U(c: Cls): Obj  => Obj  = actionPlan(c).atomPlan.naiveRunUU _
-  def dataZ2Z(c: Cls): Objs => Objs = actionPlan(c).atomPlan.naiveRunZZ _
+  def dataU2U(c: Cls): Obj  => Obj  = atomPlan(c).naiveRunUU _
+  def dataZ2Z(c: Cls): Objs => Objs = atomPlan(c).naiveRunZZ _
 
-  def dataU2Z(c: Cls): Obj  => Objs = actionPlan(c).atomPlan.naiveRunUZ _
-  def dataZ2U(c: Cls): Objs => Obj  = actionPlan(c).atomPlan.naiveRunZU _
+  def dataU2Z(c: Cls): Obj  => Objs = atomPlan(c).naiveRunUZ _
+  def dataZ2U(c: Cls): Objs => Obj  = atomPlan(c).naiveRunZU _
 
-  def dataU2V(c: Cls): Obj  => Vle  = actionPlan(c).atomPlan.naiveRunUV _
-  def dataZ2V(c: Cls): Objs => Vle  = actionPlan(c).atomPlan.naiveRunZV _
+  def dataU2V(c: Cls): Obj  => Vle  = atomPlan(c).naiveRunUV _
+  def dataZ2V(c: Cls): Objs => Vle  = atomPlan(c).naiveRunZV _
 
-  def dataU2B(c: Cls): Obj  => Boolean = x => actionPlan(c).atomPlan.naiveRunUV(x).asInstanceOf[Boolean]
-  def dataZ2B(c: Cls): Objs => Boolean = x => actionPlan(c).atomPlan.naiveRunZV(x).asInstanceOf[Boolean]
+  def dataU2B(c: Cls): Obj  => Boolean = x => atomPlan(c).naiveRunUV(x).asInstanceOf[Boolean]
+  def dataZ2B(c: Cls): Objs => Boolean = x => atomPlan(c).naiveRunZV(x).asInstanceOf[Boolean]
 
   // ===========================================================================
-  private def actionPlan(c: Cls): ActionPlan =
+  private def atomPlan(c: Cls): AtomPlan =
     adag
       .runMeta(rootId, c)
       .forceActionPlan
+      .atomPlan
+
 }
 
 // ===========================================================================

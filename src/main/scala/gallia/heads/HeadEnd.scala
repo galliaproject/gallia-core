@@ -9,7 +9,7 @@ import gallia.result._
 import gallia.dag.LeafId
 
 // ===========================================================================
-case class HeadEnd private (leafId : LeafId, env: Env) {
+case class HeadEnd private (leafId : LeafId) {
 
     def runu(): RunResultU =
       adagm
@@ -36,13 +36,13 @@ case class HeadEnd private (leafId : LeafId, env: Env) {
 
     // ===========================================================================
     private def adagm: IntermediatePlan =
-      env
+      Env
         .retrieveDagFromNode(leafId)
         .afferentSubGraph   (leafId)
         .thn(IntermediatePlanPopulator.apply)
 
     // ===========================================================================
-    def runMetaOnly()           = ???// TODO: t210106101457 - wouldn't it be nice
+    def runMetaOnly()              = ???// TODO: t210106101457 - wouldn't it be nice
     def runDataOnly(): gallia.Objs = ???// TODO: t210106101459 - may be complicated by atoms that require pre/post schemata
   }
 

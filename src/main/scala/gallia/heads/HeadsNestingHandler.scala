@@ -22,68 +22,60 @@ object HeadsNestingHandler { // TODO: move thse to handler/handler helper
   // FIXME: disable forking in these case
 
   private[gallia] def uToV[T](f: HeadU => HeadV[T]): (RootId, ActionDag, LeafId) = {
-    val env    = new Env()
-    val head   = Head.inputU(env)(NestingMetaPlaceholderU)
+    val head   = Head.inputU(NestingMetaPlaceholderU)
     val leafId = f(head).nodeId // populates DAG
 
-    (head.nodeId, env.retrieveDagFromNode(leafId), leafId)
+    (head.nodeId, Env.retrieveDagFromNode(leafId), leafId)
   }
 
   // ---------------------------------------------------------------------------
   private[gallia] def zToV[T](f: HeadZ => HeadV[T]): (RootId, ActionDag, LeafId) = {
-    val env    = new Env()
-    val head   = Head.inputZ(env)(NestingMetaPlaceholderZ)
+    val head   = Head.inputZ(NestingMetaPlaceholderZ)
     val leafId = f(head).nodeId // populates DAG
 
-    (head.nodeId, env.retrieveDagFromNode(leafId), leafId)
+    (head.nodeId, Env.retrieveDagFromNode(leafId), leafId)
   }
 
   // ---------------------------------------------------------------------------
   private[gallia] def uToU(f: HeadU => HeadU): (RootId, ActionDag, LeafId) = {
-    val env    = new Env()
-    val head   = Head.inputU(env)(NestingMetaPlaceholderU)
+    val head   = Head.inputU(NestingMetaPlaceholderU)
     val leafId = f(head).nodeId // populates DAG
 
-    (head.nodeId, env.retrieveDagFromNode(leafId), leafId)
+    (head.nodeId, Env.retrieveDagFromNode(leafId), leafId)
   }
 
   // ---------------------------------------------------------------------------
   private[gallia] def zToZ(f: HeadZ => HeadZ): (RootId, ActionDag, LeafId) = {
-    val env    = new Env()
-    val head   = Head.inputZ(env)(NestingMetaPlaceholderZ)
+    val head   = Head.inputZ(NestingMetaPlaceholderZ)
     val leafId = f(head).nodeId // populates DAG
 
-    (head.nodeId, env.retrieveDagFromNode(leafId), leafId)
+    (head.nodeId, Env.retrieveDagFromNode(leafId), leafId)
   }
 
   // ---------------------------------------------------------------------------
   private[gallia] def uToZ(f: HeadU => HeadZ): (RootId, ActionDag, LeafId) = {
-    val env    = new Env()
-    val head   = Head.inputU(env)(NestingMetaPlaceholderU)
+    val head   = Head.inputU(NestingMetaPlaceholderU)
     val leafId = f(head).nodeId // populates DAG
 
-    (head.nodeId, env.retrieveDagFromNode(leafId), leafId)
+    (head.nodeId, Env.retrieveDagFromNode(leafId), leafId)
   }
 
   // ---------------------------------------------------------------------------
   private[gallia] def zToU(f: HeadZ => HeadU): (RootId, ActionDag, LeafId) = {
-    val env    = new Env()
-    val head   = Head.inputZ(env)(NestingMetaPlaceholderZ)
+    val head   = Head.inputZ(NestingMetaPlaceholderZ)
     val leafId = f(head).nodeId // populates DAG
 
-    (head.nodeId, env.retrieveDagFromNode(leafId), leafId)
+    (head.nodeId, Env.retrieveDagFromNode(leafId), leafId)
   }
 
   // ---------------------------------------------------------------------------
   private[gallia] def uuToU(f: (HeadU, HeadU) => HeadU): ((RootId, RootId), ActionDag, LeafId) = {
-    val env   = new Env()
-
-    val head1 = Head.inputU(env)(NestingMetaPlaceholderU)
-    val head2 = Head.inputU(env)(NestingMetaPlaceholderU)
+    val head1 = Head.inputU(NestingMetaPlaceholderU)
+    val head2 = Head.inputU(NestingMetaPlaceholderU)
 
     val leafId = f(head1, head2).nodeId // populates DAG
 
-    ((head1.nodeId, head2.nodeId), env.retrieveDagFromNode(leafId), leafId)
+    ((head1.nodeId, head2.nodeId), Env.retrieveDagFromNode(leafId), leafId)
   }
 
 }

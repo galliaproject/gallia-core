@@ -7,8 +7,8 @@ import gallia.heads.HeadEnd
 import gallia.heads.grouping.HasAs
 
 // ===========================================================================
-class Handler(val env: Env) { // TODO: t210128152949 - add missing cycle detection
-  private val _helper = new HandlerHelper(env)
+class Handler() { // TODO: t210128152949 - add missing cycle detection
+  private val _helper = new HandlerHelper()
 
   // ---------------------------------------------------------------------------
   def startu        (action: ActionIU): HeadU    = new HeadU   (nodeId = _helper.start(action), this)
@@ -42,7 +42,7 @@ class Handler(val env: Env) { // TODO: t210128152949 - add missing cycle detecti
   def chainzo(head: HeadZ)(action: ActionZO): HeadZ = head.rewrap(_helper.chain(head.nodeId, action))
 
   // ---------------------------------------------------------------------------
-  def end(head: heads.Head[_]): HeadEnd = HeadEnd(_helper.chain(head.nodeId, ActionsOthers.Output), env)
+  def end(head: heads.Head[_]): HeadEnd = HeadEnd(_helper.chain(head.nodeId, ActionsOthers.Output))
 }
 
 // ===========================================================================

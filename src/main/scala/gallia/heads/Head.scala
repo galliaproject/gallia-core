@@ -19,7 +19,7 @@ import gallia.env._
           node.isInstanceOf[ActionZO] }
 
     // ---------------------------------------------------------------------------
-    private def retrieveDag: ActionDag = handler.env.retrieveDagFromNode(nodeId)
+    private def retrieveDag: ActionDag = Env.retrieveDagFromNode(nodeId)
   }
 
   // ===========================================================================
@@ -27,15 +27,10 @@ import gallia.env._
     def inputV[T: WTT](a: T): HeadV[T] = inputV[T](new gallia.actions.in.InMemoryInputV(a))
 
     // ===========================================================================
-    private[gallia] def inputU        (input: ActionIU): HeadU    = inputU(env.Global)(input)
-    private[gallia] def inputZ        (input: ActionIZ): HeadZ    = inputZ(env.Global)(input)
-    private[gallia] def inputV[T: WTT](input: ActionIV): HeadV[T] = inputV(env.Global)(input)
-
-      // ---------------------------------------------------------------------------
-      // also for nesting
-      private[gallia] def inputU        (env: Env)(input: ActionIU): HeadU    = new Handler(env).startu(input)
-      private[gallia] def inputZ        (env: Env)(input: ActionIZ): HeadZ    = new Handler(env).startz(input)
-      private[gallia] def inputV[T: WTT](env: Env)(input: ActionIV): HeadV[T] = new Handler(env).startv(input)
+    // also for nesting
+    private[gallia] def inputU        (input: ActionIU): HeadU    = new Handler().startu(input)
+    private[gallia] def inputZ        (input: ActionIZ): HeadZ    = new Handler().startz(input)
+    private[gallia] def inputV[T: WTT](input: ActionIV): HeadV[T] = new Handler().startv(input)
   }
 
 // ===========================================================================

@@ -18,7 +18,7 @@ trait HeadCommon[F <: HeadCommon[F]]
       with    HeadCommonGenerates          [F]
       with    HeadCommonMiscTransformations[F] {
 
-    def fullDag: ActionDag = handler.env.retrieveDagFromNode(nodeId)
+    def fullDag: ActionDag = gallia.env.Env.retrieveDagFromNode(nodeId)
     def showFullGraph(): Self2 = ???//fullDag.thn(misc.CanDot.showGraph)
     // TODO: print
 

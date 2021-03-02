@@ -1,10 +1,9 @@
 package gallia.data.multiple.streamer
 
-import scala.collection.compat._
 import scala.util.chaining.scalaUtilChainingOps // trying it out
 import scala.reflect.{ClassTag => CT}
 
-import aptus.{Anything_, Seq_}
+import aptus.Seq_
 import aptus.utils.MapUtils
 
 import gallia.heads.merging.MergingData._
@@ -45,6 +44,7 @@ object ViewStreamerUtils {
       right.tipe match {
         case StreamerType.ViewBased =>
             _coGroup(joinType)(
+                // note: n210302094313 - the ListMap aspect comes with a 50% time increase...
                 left .toList.groupByKeyWithListMap,
                 right.toList.groupByKeyWithListMap)
               .pipe(new ViewStreamer(_))

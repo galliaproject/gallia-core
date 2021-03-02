@@ -3,6 +3,16 @@ package gallia.data.multiple.streamer
 import scala.util.chaining._
 import scala.reflect.{ClassTag => CT}
 
+import aptus._
+import aptus.utils.IteratorUtils
+
+import spilling.SpillingHackSerialization._
+import spilling.SpillingHackDeserialization._
+import spilling.GnuSortByFirstFieldHack
+import spilling.GnuJoinByFirstFieldHack
+
+import gallia.heads.merging.MergingData._
+
 // ===========================================================================
 object IteratorStreamerUtils {
 
@@ -34,38 +44,38 @@ object IteratorStreamerUtils {
       // ---------------------------------------------------------------------------
       // see https://github.com/galliaproject/gallia-core#poor-mans-scaling-spilling
       itr
-        .map(spilling.SpillingHackUtils.serializeEntry(valueIsObj))
-          .pipe(spilling.GnuSortByFirstFieldHack(numerical = false /* TODO: allow */))
-        .map(spilling.SpillingHackUtils.deserializeEntry[K, V](valueIsObj))
-          .pipe(groupByPreSortedKey)  
+        .map(serializeSortingLine(valueIsObj))
+          .pipe(GnuSortByFirstFieldHack(spilling.executionContext, debug = "gbk")(numerical = false /* TODO: allow */))
+        .map(deserializeSortingLine[K, V](valueIsObj))
+          .pipe(IteratorUtils.groupByPreSortedKey)          
     }
 
-    // ===========================================================================      
-    private def groupByPreSortedKey[K, V](itr: Iterator[(K, V)]): Iterator[(K, List[V])] = {
-      var previousKeyOpt: Option[K] = None
-      
-      var currentGroup = cross.MutList[V]()
-      
-      itr
-        .flatMap { current =>          
-          val (currentKey, currentValue) = (current._1, current._2)
-  
-          val tmp =
-            if (previousKeyOpt.exists(_ != currentKey)) { // new key
-              val entry = previousKeyOpt.get -> currentGroup.toList
-              
-              currentGroup = cross.MutList[V]()
-             
-              Some(entry)             
-            }
-            else // repeated key
-              None
-          
-          currentGroup += currentValue            
-          previousKeyOpt = Some(currentKey)
-          
-          tmp } ++
-        previousKeyOpt.map(_ -> cross.mutList(currentGroup)).iterator
+  // ===========================================================================
+  private[streamer] def join[K: CT, V: CT]
+        (joinType: JoinType, combine: (V, V) => V)
+        (left: Streamer[(K, V)], right: Streamer[(K, V)])
+      : Iterator[V] =
+    right.tipe match {
+
+      // ---------------------------------------------------------------------------
+      case StreamerType.ViewBased | StreamerType.IteratorBased =>
+        
+        def sortByKey(debug: String)(input: Iterator[(K, V)]): Iterator[Line] =
+          input
+            .map(serializeSideSortingLine)
+              .pipe(GnuSortByFirstFieldHack(spilling.executionContext, debug)(numerical = false /* TODO: allow */))
+
+        // ---------------------------------------------------------------------------              
+        val sortedLeft : Iterator[Line] = sortByKey(debug = "left")(left .iterator)
+        val sortedRight: Iterator[Line] = sortByKey(debug = "rite")(right.iterator)
+
+        // ---------------------------------------------------------------------------
+        GnuJoinByFirstFieldHack(spilling.executionContext)(sortedLeft, sortedRight)
+          .map(deserializeJoiningLine[V])
+          .map(combine.tupled)               
+
+      // ---------------------------------------------------------------------------         
+      case StreamerType.RDDBased => ??? // delegate
     }
 
 }

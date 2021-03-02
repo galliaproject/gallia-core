@@ -4,6 +4,7 @@ import scala.reflect.{ClassTag => CT}
 import java.io.Closeable
 
 import aptus.Anything_
+import aptus.utils.IteratorUtils
 
 import gallia.heads.merging.MergingData._
 import gallia.Aliases.Coll
@@ -91,7 +92,7 @@ trait Streamer[A] { // note: not necessarily bothering with genericity (in the g
     def fromIterator[A](data: Iterator[A]): Streamer[A] = new IteratorStreamer(data) // must close separately (eg to read first N lines)
     def fromIterator[A](pair: (Iterator[A], Closeable)): Streamer[A] = { // for now... (TODO see t210116154537 as part of t210115104555)
       gallia.closeables += pair._2
-      fromIterator(StreamerUtils.selfClosing(pair._1, pair._2))
+      fromIterator(IteratorUtils.selfClosing(pair._1, pair._2))
     }
   }
 

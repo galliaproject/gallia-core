@@ -64,7 +64,8 @@ class IteratorStreamer[A](itr: Iterator[A]) extends Streamer[A] {
 
   // ---------------------------------------------------------------------------
   override def join[K: CT, V: CT](joinType: JoinType, combine: (V, V) => V)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[V] =
-    gallia.illegal("TODO:210115103135:NotImplemented") // TODO: see spilling hack
+    _utils.join(joinType, combine)(this.asInstanceOf[Streamer[(K, V)]], that).thn(_rewrap)
+
 }
 
 // ===========================================================================

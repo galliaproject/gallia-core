@@ -10,7 +10,7 @@ trait ObjsMerging { self: Objs =>
   // note, if reuse cogroup then must reinsert join key in its original place (TODO: worth bothering?)
   def join(joinType: JoinType, joinKeys: JoinKey)(that: Objs): Objs =
      (  ObjsMerging.pairs2(this.values, joinKeys.left),
-        ObjsMerging.pairs1(that.values, joinKeys.right) )
+        ObjsMerging.pairs2(that.values, joinKeys.right) )
       .thn { case (left, right) => left.join(joinType, gallia.data.single.ObjUtils.combine _)(right) }
       .map(_.get /* guaranteed by 201126124701 */)
       .thn(Objs.build)

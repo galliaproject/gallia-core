@@ -3,8 +3,9 @@ package gallia.data.multiple.streamer
 import scala.reflect.{ClassTag => CT}
 
 import aptus.Anything_
-import gallia.heads.merging.MergingData._
 import gallia.Aliases.Coll
+import gallia.heads.merging.MergingData._
+import gallia.data.multiple.streamer.{IteratorStreamerUtils => _utils}
 
 // ===========================================================================
 class IteratorStreamer[A](itr: Iterator[A]) extends Streamer[A] {
@@ -12,9 +13,9 @@ class IteratorStreamer[A](itr: Iterator[A]) extends Streamer[A] {
   //   - keep track of closeable
   //   - keep track of consumption (consumed or not, eg via .size)
   //   - keep access to source so can reproduce
-  //   - detect "forking"
   //   - provide "checkpointing"?
   //   - look into geny?
+	// FIXME: detect "forking", will need intermediate file
 
   val tipe = StreamerType.IteratorBased
 
@@ -45,24 +46,25 @@ class IteratorStreamer[A](itr: Iterator[A]) extends Streamer[A] {
   def reduce(op: (A, A) => A): A = itr.reduce(op)
 
   // ===========================================================================
-  def sortBy[K](ignored: CT[K], ord: Ordering[K])(f: A => K): Streamer[A] = gallia.illegal("TODO:210115103130:NotImplemented")
+  def sortBy[K](ignored: CT[K], ord: Ordering[K])(f: A => K): Streamer[A] = gallia.illegal("TODO:210115103131:NotImplemented") // TODO: see spilling hack
 
   // ---------------------------------------------------------------------------
-  def distinct: Streamer[A] = gallia.illegal("TODO:210115103130:NotImplemented")
+  def distinct: Streamer[A] = gallia.illegal("TODO:210115103132:NotImplemented") // TODO: see spilling hack
 
   // ---------------------------------------------------------------------------
-  def groupByKey[K: CT, V: CT](implicit ev: A <:< (K, V)): Streamer[(K, List[V])] = gallia.illegal("TODO:210115103130:NotImplemented")
+  def groupByKey[K: CT, V: CT](implicit ev: A <:< (K, V)): Streamer[(K, List[V])] =
+     itr.asInstanceOf[Iterator[(K, V)]].thn(_utils.groupByKey).thn(_rewrap)  
 
   // ===========================================================================
-  def union[B >: A : CT](that: Streamer[B]): Streamer[B] = ???
+  def union[B >: A : CT](that: Streamer[B]): Streamer[B] = _rewrap(_utils.union(this.asInstanceOf[IteratorStreamer[B]], that))
 
   // ===========================================================================
   override def coGroup[K: CT, V: CT](joinType: JoinType)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[(K, (Iterable[V], Iterable[V]))] =
-    gallia.illegal("TODO:210115103130:NotImplemented")
+    gallia.illegal("TODO:210115103134:NotImplemented") // TODO: see spilling hack
 
   // ---------------------------------------------------------------------------
   override def join[K: CT, V: CT](joinType: JoinType, combine: (V, V) => V)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[V] =
-    gallia.illegal("TODO:210115103130:NotImplemented")
+    gallia.illegal("TODO:210115103135:NotImplemented") // TODO: see spilling hack
 }
 
 // ===========================================================================

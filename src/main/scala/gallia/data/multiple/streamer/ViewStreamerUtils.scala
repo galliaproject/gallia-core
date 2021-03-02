@@ -65,6 +65,7 @@ object ViewStreamerUtils {
 
         case StreamerType.ViewBased =>
           _join(joinType, combine)(
+                // note: n210302094313 - the ListMap aspect comes with a 50% time increase...
                 left .toList.groupByKeyWithListMap,
                 right.toList.groupByKeyWithListMap)
             .pipe(new ViewStreamer(_))

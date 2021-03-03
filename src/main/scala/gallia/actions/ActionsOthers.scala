@@ -91,33 +91,47 @@ object ActionsOthers {
     def atoms(ignored: NodeMetaContext): Atoms = _ForceOne.as.seq }
 
   // ===========================================================================
-  //FIXME t210115175242 - runtime validation of newKeys for both
-
-  // ---------------------------------------------------------------------------
-  case class UnarrayEntries(
+  //FIXME t210115175242 - runtime validation of newKeys for these
+  case class Pivone(
           newKeys  : Keyz, // only for meta
-          keyKeys  : Keyz, // only for data - may or may not have the same cardinality as newKeys
-          separator: Separator, // for data only, and only needed if more than one "key" key
-          valueKey : Key)
+          keyKey   : Key , // only for data - may or may not have the same cardinality as newKeys - TODO: t210303102200 - also allow selection
+          valueKey : TqKPath /* TODO: key only? */)
         extends ActionZU {
-      def vldt (in: Cls): Errs = Nil //TODO; consistency of key separator; reasonnable separator; check "textable" value; check separator availble if more than 1 keykey
-      def _meta(in: Cls): Cls = in.unarrayEntries(newKeys, valueKey)
-
-      def atoms(ignored: NodeMetaContext): Atoms = Seq(
-          _EnsureUniquenessBy(keyKeys),
-          _UnarrayEntries(keyKeys, separator, valueKey) ) }
+      private def resolveTargetKey(c: Cls): Key = valueKey.resolve(c).forceLeafFX /* see  t210303111953 */
+      
+      // ---------------------------------------------------------------------------
+      def vldt (in: Cls)             : Errs  = Nil //TODO: t210303101704 - check reasonnably "to-textable" value
+      def _meta(in: Cls)             : Cls   = resolveTargetKey(in)                     .thn(in.unarrayEntries(newKeys, _))
+      def atoms(ctx: NodeMetaContext): Atoms = resolveTargetKey(ctx.forceSingleAfferent).thn { key =>
+        Seq(
+          _EnsureUniquenessBy(Keyz.from(keyKey)),
+          _Pivone(keyKey, key)) } }
 
     // ---------------------------------------------------------------------------
-    case class UnarrayBy(
+    @deprecated case class UnarrayEntries0(
+            newKeys  : Keyz, // only for meta
+            keyKeys  : Keyz, // only for data - may or may not have the same cardinality as newKeys
+            separator: Separator, // for data only, and only needed if more than one "key" key
+            valueKey : Key)
+          extends ActionZU {
+        def vldt (in: Cls): Errs = Nil //TODO; consistency of key separator; reasonnable separator; check "textable" value; check separator availble if more than 1 keykey
+        def _meta(in: Cls): Cls = valueKey.thn(in.unarrayEntries(newKeys, _))
+  
+        def atoms(ignored: NodeMetaContext): Atoms = Seq(
+            _EnsureUniquenessBy(keyKeys),
+            _UnarrayEntries0(keyKeys, separator, valueKey) ) }
+  
+    // ---------------------------------------------------------------------------
+    @deprecated("see 210303104417") case class UnarrayBy0(
           newKeys: Keyz, // only for meta
           keys   : Keyz,
           sep    : Separator) // for data only
         extends ActionZU {
       def vldt (in: Cls): Errs = Nil //TODO
-      def _meta(in: Cls): Cls = in.unarrayBy(keys, newKeys)
+      def _meta(in: Cls): Cls = in.unarrayBy0(keys, newKeys)
       def atoms(ignored: NodeMetaContext): Atoms = Seq(
         _EnsureUniquenessBy(keys),
-        _UnarrayBy(keys, sep)) }
+        _UnarrayBy0(keys, sep)) }
 
   // ===========================================================================
   // vv

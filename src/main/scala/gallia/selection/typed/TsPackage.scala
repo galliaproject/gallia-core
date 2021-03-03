@@ -11,6 +11,7 @@ package object typed {
   type TypeNode = gallia.reflect.TypeNode
 
   // ---------------------------------------------------------------------------
+  type TQKey    = TargetQuery[Key]
   type TQRen    = TargetQuery[Ren]
   type TqKeyz   = TargetQuery[Keyz]
   type TqKPath  = TargetQuery[KPath]

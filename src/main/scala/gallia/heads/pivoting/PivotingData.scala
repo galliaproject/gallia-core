@@ -1,59 +1,49 @@
 package gallia.heads.pivoting
 
+import aptus.Anything_
+
 import gallia._
+import gallia.heads.TSL.Squash
+import gallia.actions.ActionsOthers  
+import gallia.selection.typed.TsBoilerplate.Squash
 
 // ===========================================================================
-object Data { val InitValue = null /* for now... */ }
-  import Data.InitValue
-  import gallia.selection.typed.TsBoilerplate.Squash.TSelector // see 200924162200
+private[pivoting] case class PivotingData[O1: WTT, D: WTT](
+    target   : Squash.TSelector[O1], // see 200924162200
+
+    aggOpt   : Option[Seq[O1] => D] = None,
+
+    rows     : Renz = PivotingData.InitValue,
+    column   : Key  = PivotingData.InitValue,
+    newKeys  : Keyz = PivotingData.InitValue) {
+
+  def pivone(input: HeadZ): HeadU = // TODO: t210303111953 - use different structure now
+    input.zu(ActionsOthers.Pivone(
+        newKeys,
+        column,
+        valueKey = target.thn(Squash.resolve(_)).tq))
 
   // ===========================================================================
-  private[pivoting] case class Data1[O1: WTT, D: WTT](
-      target1: TSelector[O1],
+  def pivot[O1: WTT, D: WTT](input: HeadZ): HeadZ =
+    input // TODO: use cascade group by rather once done (see t210124100722)
+      .groupBy(rows).as( _tmp1)
+      .transform(_.objz(_tmp1)).using {
+        _ .groupBy(column).as(_tmp2) // 200930125015 - this flattens, so must set defaults ahead of time if needed
 
-      aggOpt   : Option[Seq[O1] => D] = None /* can only be missing for N = 1 in DataN */,
-      rows     : Renz = InitValue,
-      columns  : Keyz = InitValue,
-      newKeys  : Keyz = InitValue)
+          .thn { headZ =>            
+            aggOpt match {
+              case None      => headZ.unnestOOO(_tmp2)
+              case Some(agg) =>
+                headZ
+                  .transform(_.objz(_tmp2)).using {
+                  _.squash(target) // compatible because of 200924162200
+                    .using(agg) } } }
 
-  // ---------------------------------------------------------------------------
-  private[pivoting] case class Data2[O1: WTT, O2: WTT, D: WTT](
-      target1: TSelector[O1], target2: TSelector[O2],
+          .pivot(_tmp2).column(column).asNewKeys(newKeys.values) }
+      .unnestAllFrom(_tmp1)
+}      
 
-      agg      : Seq[(O1, O2)] => D = InitValue,
-
-      // TODO: common interface for those three
-      rows     : Renz = InitValue,
-      columns  : Keyz = InitValue,
-      newKeys  : Keyz = InitValue)
-
-  // ---------------------------------------------------------------------------
-  private[pivoting] case class Data3[O1: WTT, O2: WTT, O3: WTT, D: WTT](
-      target1: TSelector[O1], target2: TSelector[O2], target3: TSelector[O3],
-
-      agg      : Seq[(O1, O2, O3)] => D = InitValue,
-      rows     : Renz = InitValue,
-      columns  : Keyz = InitValue,
-      newKeys  : Keyz = InitValue)
-
-  // ---------------------------------------------------------------------------
-  private[pivoting] case class Data4[O1: WTT, O2: WTT, O3: WTT, O4: WTT, D: WTT](
-      target1: TSelector[O1], target2: TSelector[O2], target3: TSelector[O3], target4: TSelector[O4],
-
-      agg      : Seq[(O1, O2, O3, O4)] => D = InitValue,
-
-      rows     : Renz = InitValue,
-      columns  : Keyz = InitValue,
-      newKeys  : Keyz = InitValue)
-
-  // ---------------------------------------------------------------------------
-  private[pivoting] case class Data5[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, D: WTT](
-      target1  : TSelector[O1], target2  : TSelector[O2], target3  : TSelector[O3], target4  : TSelector[O4], target5  : TSelector[O5],
-
-      agg      : Seq[(O1, O2, O3, O4, O5)] => D = InitValue,
-
-      rows     : Renz = InitValue,
-      columns  : Keyz = InitValue,
-      newKeys  : Keyz = InitValue)
+// ---------------------------------------------------------------------------
+object PivotingData { private val InitValue = null /* for now... */ }
 
 // ===========================================================================

@@ -70,29 +70,41 @@ object AtomsOthers {
   case object _MergeAll extends AtomZU { def naive(z: Objs) =
     z.toListAndTrash.reduceLeft(_ merge _) } //z.toList.map(_.data).reduceLeft(_ ++ _).thn(obj)
 
-  // ---------------------------------------------------------------------------
-  @gallia.Scalability case class _UnarrayEntries(keyKeys: Keyz, separator: Separator, valueKey: Key) extends AtomZU { def naive(z: Objs) =
-    z .toListAndTrash
-      .flatMap { o =>
-        val newKey =
-          o .unarrayCompositeKey(keyKeys.values, separator)
-            .getOrElse(runtimeError(ErrorId.Runtime.NoKeysLeft)) //TODO: or offer alterative if all missing?
-
-        o.opt(valueKey).map(newKey -> _) }
-     .thn(obj) }
-     // t201122154119 - if in is empty...
-
-  // ---------------------------------------------------------------------------
-  @gallia.Scalability case class _UnarrayBy(keys: Keyz, sep: Separator) extends AtomZU { def naive(z: Objs) =
-      // FIXME: runtime check of keys
+  // ===========================================================================
+  @gallia.Scalability case class _Pivone(keyKey: Key, valueKey: Key) extends AtomZU { def naive(z: Objs) =
       z .toListAndTrash
         .flatMap { o =>
           val newKey =
-            o .unarrayCompositeKey(keys.values, sep)
-              .getOrElse(runtimeError(ErrorId.Runtime.NoKeysLeft)) //TODO: or offer alterative if all missing?
-
-          o.removeOpt(keys).map(newKey -> _) }
-        .thn(obj(_)) }
+            o .unarrayCompositeKey2(keyKey)
+              .getOrElse(runtimeError(ErrorId.Runtime.EmptyKey))
+  
+          o.opt(valueKey).map(newKey -> _) }
+       .thn(obj) }
+       // t201122154119 - if in is empty...
+      
+    // ---------------------------------------------------------------------------
+    @gallia.Scalability @deprecated case class _UnarrayEntries0(keyKeys: Keyz, separator: Separator, valueKey: Key) extends AtomZU { def naive(z: Objs) =
+        z .toListAndTrash
+          .flatMap { o =>
+            val newKey =
+              o .unarrayCompositeKey(keyKeys.values, separator)
+                .getOrElse(runtimeError(ErrorId.Runtime.NoKeysLeft)) //TODO: or offer alterative if all missing?
+    
+            o.opt(valueKey).map(newKey -> _) }
+         .thn(obj) }
+         // t201122154119 - if in is empty...
+    
+    // ---------------------------------------------------------------------------
+    @gallia.Scalability @deprecated case class _UnarrayBy0(keys: Keyz, sep: Separator) extends AtomZU { def naive(z: Objs) =
+        // FIXME: runtime check of keys
+        z .toListAndTrash
+          .flatMap { o =>
+            val newKey =
+              o .unarrayCompositeKey(keys.values, sep)
+                .getOrElse(runtimeError(ErrorId.Runtime.NoKeysLeft)) //TODO: or offer alterative if all missing?
+  
+            o.removeOpt(keys).map(newKey -> _) }
+          .thn(obj(_)) }
 
   // ===========================================================================
   // uz

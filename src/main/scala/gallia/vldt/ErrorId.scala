@@ -48,6 +48,7 @@ import gallia.meta._
       @deprecated val NotExactlyOneElement = "201110144608" -> "NotExactlyOneElement" // force.one
       @deprecated val NotUnique            = "201110144609" -> "NotUnique"
       @deprecated val NoKeysLeft           = "201110144610" -> "NoKeysLeft" //TODO: or offer alterative if all missing?
+      @deprecated val EmptyKey             = "201110144611" -> "EmptyKey"
 
       @deprecated val InvalidKey = "201101144150" -> "InvalidKey"
     }

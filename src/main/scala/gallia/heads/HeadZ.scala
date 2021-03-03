@@ -27,6 +27,7 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
       with    reducing.HeadZReducing
       with    sorting .HeadZSorting
       with    pivoting.HeadZPivoting
+      with    pivoting.HeadZUnarraying
       with    grouping.HeadZGrouping
       with    grouping.HeadZAggregations
       with    merging .HeadZMerging {

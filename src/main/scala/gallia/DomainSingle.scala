@@ -40,8 +40,10 @@ case class KPath(parent: Seq[Key], key: Key) {
 
     def skey = key.name
 
-    def isLeaf   : Boolean = parent.isEmpty
-    def forceLeaf: Key     = this.assert(_.isLeaf   ).key
+    def isLeaf     : Boolean = parent.isEmpty
+    def forceLeaf  : Key     = this.assert(_.isLeaf   ).key
+    @deprecated
+    def forceLeafFX: Key     = this.assert(_.isLeaf   ).key // FIXME
 
     def appendLevel(that: Key): KPath = KPath(all, that)
 

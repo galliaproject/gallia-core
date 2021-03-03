@@ -151,6 +151,11 @@ object UtsBase {
       type Target = RenSelection
       def resolve(sel: Selector): TQRen = sel(origin).thn(tqren) }
 
+    // ---------------------------------------------------------------------------
+    trait KeyBase extends UtsBase { val origin: Origin
+      type Target = KeySelection
+      def resolve(sel: Selector): TQKey = sel(origin).thn(tqkey) }
+    
 }
 
 // ===========================================================================

@@ -1,82 +1,57 @@
 package gallia.heads.pivoting
 
-import aptus.Separator
-
+import aptus.Seq_
 import gallia._
-import gallia.actions.ActionsOthers._
+import gallia.heads.common.{WV, Pivot}
 
 // ===========================================================================
 trait HeadZPivoting { self: HeadZ =>
-  import gallia.heads.common.Pivot
-
-  // ---------------------------------------------------------------------------
   //TODO: t210110094829 - opaque nesting: accept Obj as value (standalone version), so may not provide newKeys when unwanted
   //TODO: t210117192141 - enum counterpart to provide newKeys, eg def asNewKeys[MyEnum]
 
   // ===========================================================================
-  @Max5 protected val _pivot = new PivotingHelper(self)
+  def pivot         (x1: KPathW)    = new PivotStartU    (PivotingData[WV, Nothing](_._explicit(x1) /* TODO: see t210303111953 */))
+  def pivot[O1: WTT](x1: Pivot[O1]) = new PivotStartT[O1](PivotingData[O1, Nothing](x1))
+  
+  // ===========================================================================
+  class PivotStartU private[pivoting] (data: PivotingData[WV, Nothing] /* TODO: t210303111953 - use different structure now */) {
+      def column(target: KeyW): NewKeysU[WV] = new NewKeysU(data.copy(column = target.value))
+  
+      // ---------------------------------------------------------------------------
+      //TODO: keep or just expect pre-grouping?      
+      def rows(target: RenW)                             : Columns[WV, WV] = rows(Renz.from(target))
+      def rows(target1: RenW, target2: RenW, more: RenW*): Columns[WV, WV] = rows(Renz.from(target1, target2, more))
+      def rows(targets: RenWz)                           : Columns[WV, WV] = new Columns[WV, WV](PivotingData[WV, WV](data.target.asInstanceOf[Pivot[WV]], rows = targets.renz) ) }
+    
+    // ===========================================================================  
+    class NewKeysU[T: WTT] private[pivoting] (data: PivotingData[WV, Nothing]) {
+      def asNewKeys(value1: KeyW, more: KeyW*): HeadU = asNewKeys(Keyz.from(value1, more))
+      def asNewKeys(values: KeyWz)            : HeadU = data.copy(newKeys = values.keyz).pivone(self) }
 
-    def pivot                                             (x1: KPathW                                                               ) = _pivot.pivot1(_._explicit(x1))
-    def pivot[O1: WTT                                    ](x1: Pivot[O1]                                                            ) = _pivot.pivot1(x1)
-    def pivot[O1: WTT, O2: WTT                           ](x1: Pivot[O1], x2: Pivot[O2]                                             ) = _pivot.pivot2(x1, x2)
-    def pivot[O1: WTT, O2: WTT, O3: WTT                  ](x1: Pivot[O1], x2: Pivot[O2], x3: Pivot[O3]                              ) = _pivot.pivot3(x1, x2, x3)
-    def pivot[O1: WTT, O2: WTT, O3: WTT, O4: WTT         ](x1: Pivot[O1], x2: Pivot[O2], x3: Pivot[O3], x4: Pivot[O4]               ) = _pivot.pivot4(x1, x2, x3, x4)
-    def pivot[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT](x1: Pivot[O1], x2: Pivot[O2], x3: Pivot[O3], x4: Pivot[O4], x5: Pivot[O5]) = _pivot.pivot5(x1, x2, x3, x4, x5)
+  // ===========================================================================  
+  class PivotStartT[O1: WTT] private[pivoting] (data: PivotingData[O1, Nothing]) {    
+    def noAggregation                       : Rows[O1, Seq[O1]] = new Rows[O1, Seq[O1]](PivotingData[O1, Seq[O1]](data.target, None))      
+    def using[D: WTT](agg: Seq[O1] => D)    : Rows[O1, D]       = new Rows[O1,     D  ](PivotingData[O1,     D  ](data.target, Some(agg)))
+    def usingCount                          : Rows[O1, Int]     = using(_.size)
+    def usingSum (implicit num: Numeric[O1]): Rows[O1, O1]      = using(_.sum)
+    def usingMean(implicit num: Numeric[O1]): Rows[O1, Double]  = using(_.mean)
+    //TODO: usingMedian, ..., ... (see reducer)
+  }
 
   // ===========================================================================
-  def unarrayBy(key1: KeyW)                          = new _UnarrayBy1(Keyz.from(key1))
+  class Rows[O1: WTT, D: WTT] private[pivoting] (data: PivotingData[O1, D]) {
+      def rows(target: RenW)                             : Columns[O1, D] = rows(Renz.from(target))
+      def rows(target1: RenW, target2: RenW, more: RenW*): Columns[O1, D] = rows(Renz.from(target1, target2, more))
+      def rows(targets: RenWz)                           : Columns[O1, D] = new Columns[O1, D](data.copy(rows = targets.renz)) }
 
-  def unarrayBy(key1: KeyW, key2: KeyW, more: KeyW*) = new _UnarrayByN(Keyz.from(key1, key2, more))
-  def unarrayBy(keys: KeyWz)                         = new _UnarrayByN(keys.keyz)
-
-    // ---------------------------------------------------------------------------
-    class _UnarrayBy1(keyKeys: Keyz) {
-      def asNewKeys(x1: KeyW, xs: KeyW*) = zu(UnarrayBy(Keyz.from(x1, xs), keyKeys, sep = null /* ignored by design */))
-      def asNewKeys(xs: KeyWz)           = zu(UnarrayBy(xs.keyz          , keyKeys, sep = null /* ignored by design */)) }
-
-
-    // ---------------------------------------------------------------------------
-    class _UnarrayByN(keyKeys: Keyz) {
-      def asNewKeys(x1: KeyW, xs: KeyW*) = new __UnarrayByN(Keyz.from(x1, xs))
-      def asNewKeys(xs: KeyWz)           = new __UnarrayByN(xs.keyz)
+    // ---------------------------------------------------------------------------    
+    class Columns[O1: WTT, D: WTT] private[pivoting] (data: PivotingData[O1, D]) {          
+        def column(target: KeyW): NewKeysT[O1, D] = new NewKeysT(data.copy(column = target.value)) }
 
       // ---------------------------------------------------------------------------
-      class __UnarrayByN protected[HeadZPivoting] (newKeys: Keyz) {
-        def withDefaultKeySeparator = withKeySeparator("_")
-
-        def withKeySeparator(value: Separator) =
-          zu(UnarrayBy(newKeys, keyKeys, sep = value)) } }
-
-  // ---------------------------------------------------------------------------
-  def unarrayEntries(key1: KeyW) = new _UnarrayEntries1(Keyz.from(key1))
-
-  def unarrayEntries(key1: KeyW, key2: KeyW, more: KeyW*) = new _UnarrayEntriesN(Keyz.from(key1, key2, more))
-  def unarrayEntries(keys: KeyWz)                         = new _UnarrayEntriesN(keys.keyz)
-
-    // ---------------------------------------------------------------------------
-    class _UnarrayEntries1(keyKeys: Keyz) {
-      def asNewKeys(x1: KeyW, xs: KeyW*) = new __UnarrayEntries1(Keyz.from(x1, xs))
-      def asNewKeys(xs: KeyWz)           = new __UnarrayEntries1(xs.keyz)
-
-      // ---------------------------------------------------------------------------
-      class __UnarrayEntries1 protected[HeadZPivoting] (newKeys: Keyz) {
-        def valueKey(y: KeyW): HeadU =
-          zu(UnarrayEntries(newKeys, keyKeys, separator = null /* ignored by design */, y.value)) }
-    }
-
-    // ---------------------------------------------------------------------------
-    class _UnarrayEntriesN(keyKeys: Keyz) {
-      def asNewKeys(x1: KeyW, xs: KeyW*) = new __UnarrayEntriesN(Keyz.from(x1, xs))
-      def asNewKeys(xs: KeyWz)           = new __UnarrayEntriesN(xs.keyz)
-
-      // ---------------------------------------------------------------------------
-      class __UnarrayEntriesN protected[HeadZPivoting] (newKeys: Keyz) {
-        def withDefaultKeySeparator = withKeySeparator("_")
-
-        def withKeySeparator(value: Separator) =
-          new { def valueKey(y: KeyW): HeadU =
-            zu(UnarrayEntries(newKeys, keyKeys, separator = value, y.value)) } }
-    }
+      class NewKeysT[O1: WTT, D: WTT] private[pivoting] (data: PivotingData[O1, D]) {
+          def asNewKeys(value1: KeyW, more: KeyW*): HeadZ = asNewKeys(Keyz.from(value1, more))
+          def asNewKeys(values: KeyWz)            : HeadZ = data.copy(newKeys = values.keyz).pivot(self) }           
 
 }
 

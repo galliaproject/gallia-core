@@ -88,23 +88,23 @@ trait ClsAvanced { self: Cls =>
               .thn(Cls.apply)) }
 
   // ===========================================================================
-  def unarrayEntries(newKeys: Keyz, valueKey: Key): Cls =
-    field(valueKey)
-      .thn { valueField =>
-        newKeys
-          .values
-          .map(valueField.updateKey)
-          .map(_.toNonRequired) // pivot keys can't be required unless explicitly set so
-          .thn(Cls.apply) }
+  def unarrayEntries(newKeys: Keyz, valueKey: Key): Cls = // TODO: rename to include "pivot"
+      field(valueKey)
+        .thn { valueField =>
+          newKeys
+            .values
+            .map(valueField.updateKey)
+            .map(_.toNonRequired) // pivot keys can't be required unless explicitly set so
+            .thn(Cls.apply) }
 
-  // ---------------------------------------------------------------------------
-  def unarrayBy(keys: Keyz, newKeys: Keyz): Cls =
-    remove(keys)
-      .thn { remaining =>
-        newKeys
-          .values
-          .map(Fld(_, Info.one(remaining)))
-          .thn(Cls.apply) }
+    // ---------------------------------------------------------------------------
+    @deprecated("see 210303104417") def unarrayBy0(keys: Keyz, newKeys: Keyz): Cls =
+      remove(keys)
+        .thn { remaining =>
+          newKeys
+            .values
+            .map(Fld(_, Info.one(remaining)))
+            .thn(Cls.apply) }
 
 }
 

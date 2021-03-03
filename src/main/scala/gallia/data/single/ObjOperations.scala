@@ -262,11 +262,16 @@ trait ObjOperations { self: Obj =>
   def split(key: Key, splitter: String => Seq[String]): Obj = _transformKey(key, _.toString.thn(splitter.apply))
 
   // ---------------------------------------------------------------------------
-  def unarrayCompositeKey(keys: Seq[Key], separator: Separator): Option[Key] =
+  @deprecated("still needed after 210303101932?") def unarrayCompositeKey(keys: Seq[Key], separator: Separator): Option[Key] =
     keys
       .flatMap { keyKey => opt(keyKey).map(_.str) } /* TODO or expect default values to be set if missing? or ignore collisions? */
       .as.noneIf(_.isEmpty)
       .map(_.join(separator).symbol)
+      
+  def unarrayCompositeKey2(key: Key): Option[Key] =
+    opt(key)
+      .flatMap(_.str.as.noneIf(_.isEmpty)) /* TODO or expect default values to be set if missing? or ignore collisions? */      
+      .map(_.symbol)      
 
 }
 

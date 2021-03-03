@@ -25,7 +25,7 @@ object AtomsZZ {
 
     // ---------------------------------------------------------------------------
     case class _EnsureUniquenessBy(keys: Keyz) extends AtomZZ { def naive(z: Objs) =
-      z.ensureDistinct.fold(sizes => _Error.Runtime.NotUnique(Some(keys), sizes).throwRuntimeError(z), identity) }
+      z.ensureDistinctBy(keys).fold(sizes => _Error.Runtime.NotUnique(Some(keys), sizes).throwRuntimeError(z), identity) }
 
   // ===========================================================================
   // grouping

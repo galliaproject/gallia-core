@@ -354,7 +354,7 @@ people
 people
   .pivot(_.int('age)).usingMean
     .rows   ('city)
-    .columns('gender)
+    .column ('gender)
       // having to provide those is an unfortunate consequence of
       // maintaining a schema (these values are only known at runtime)
       .asNewKeys('male, 'female)

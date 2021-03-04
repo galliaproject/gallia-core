@@ -12,6 +12,9 @@ object Hacks {
 	var DisableRuntimeChecks: Boolean = false // temporary hack... (see t210107094406); performance won't improve much until t210104164036 is done at least
 	
 	// ---------------------------------------------------------------------------
+	var ExtraGnuSortOptions: Seq[String] = Nil // eg Seq("-T", "/dev/shm"), Seq("--parallel=16"); though note: https://unix.stackexchange.com/questions/120096/how-to-sort-big-files#comment188976_120100
+	
+	// ---------------------------------------------------------------------------
 	/** to provide an alternative ec if needed */
 	var ExecutionContext: concurrent.ExecutionContext = concurrent.ExecutionContext.global
     // these would need shutdown

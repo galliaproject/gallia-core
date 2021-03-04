@@ -36,10 +36,10 @@ trait InputStringDrivenConfHelper[InputAction, IoType] {
                match {
                 case SupportedUriScheme.file | SupportedUriScheme.http | SupportedUriScheme.https | SupportedUriScheme.ftp | SupportedUriScheme.sftp =>
                   Option(uri.getPath) match {
-                    case None          => ???
+                    case None          => inputString.p; ???
                     case Some(uriPath) =>
                       (parsePathOpt(uriPath) match {
-                          case None       => ???
+                          case None       => (inputString, uriPath).p; ???
                           case Some(tipe) => urlLikeAction(tipe) }) }
                 case scheme => otherAction(scheme) } }
 

@@ -626,26 +626,32 @@ sc.stop()
 The above Spark runs would be quite inefficient since the schema would have to be determined via an additional loop over the full data (costly when big).
 Instead one would want to provide the schema as shown [below](#210121153230) .
 
-<a name="poorman-scaling"></a><a name="210303163034"></a>
+<a name="poor-man-scaling"></a><a name="poorman-scaling"></a><a name="210303163034"></a>
 ### Poor man's scaling (_"spilling"_)
 
- May be useful to your average scientist who may have access to powerful machines (think `qsub`) but not to conveniently provisioned clusters.
- Sadly this is a very common occurrence in research settings and the author cares deeply about this problem.
+May be useful to your average scientist who may have access to powerful machines (think `qsub`) but not to conveniently provisioned clusters.
+Sadly this is a very common occurrence in research settings and the author cares deeply about this problem.
 
 ```scala
 "/data/huge.tsv.bz2"
-  // uses an external-sort based approach to sorting/grouping/joining
-  .stream(_.spilling)
-    .rename('GENE).to('hugo_symbol)
+  // uses an GNU sort-based approach to sorting/grouping/joining
+  .stream(_.iteratorMode)
+    .rename('gene).to('hugo_symbol)
     .groupBy('mutation_id).as('genes)
     // ...
 ```
 
 <a name="210121153224"></a>
 Notes:
-- This feature is *not* currently [implemented](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210204111309), although I have some PoC code available - ideally this would be an alternative run mode for _Spark_ itself
-- All wide transformations can be written in terms of an external sort such as <a href="https://www.gnu.org/software/coreutils/manual/html_node/sort-invocation.html" _target="blank">_GNU sort_</a> (although sorting on multiple fields of different types is challenging in this scenario)
-- We can combine such operations and leverage named pipes to ensure an execution tree can be executed lazily (forking however would benefit from a form of [checkpointing](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210121160956)
+- <a name="210304140445"></a>All wide transformations can be written in terms of an external sort such as <a href="https://www.gnu.org/software/coreutils/manual/html_node/sort-invocation.html" _target="blank">_GNU sort_</a>
+- <a name="210304140446"></a>We can combine such operations and leverage pipes to ensure the execution tree is executed lazily (forking however would benefit from a form of [checkpointing](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210121160956))
+- <a name="210304140447"></a>_GNU sort_ is favored for now because replacing it would constitute an significant endeavour, and even then it would be extremely hard to beat performance-wise
+- <a name="210304140448"></a>Ideally this would be an alternative run mode for _Spark_ itself
+- <a name="210304140449"></a>This feature is only __partially__ [implemented](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210204111309). It's basically enabled via the `_.stream(_.iteratorMode.[...])` call, and follows this type of invocation paths:
+[`Streamer.groupByKey`](./src/main/scala/gallia/data/multiple/streamer/Streamer.scala#L61)
+  -> [Iterator's](./src/main/scala/gallia/data/multiple/streamer/IteratorStreamer.scala#L56)
+  -> [utility](./src/main/scala/gallia/data/multiple/streamer/IteratorStreamerUtils.scala#L48)
+  -> [GNU sort wrapper](./src/main/scala/gallia/data/multiple/streamer/spilling/GnuSortByFirstFieldHack.scala#L17)
 
 <a name="201118133133"></a>
 ## Types (explicitly)

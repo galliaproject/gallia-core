@@ -11,7 +11,9 @@ object GnuJoinByFirstFieldHack { // see https://github.com/galliaproject/gallia-
 
   // =========================================================================== 
   def apply(ec: ExecutionContext)(left: Iterator[Line], right: Iterator[Line]): Iterator[Line] = {				
-
+      if (IsWindows) { windowsError() }
+      
+      // ---------------------------------------------------------------------------
       val ts = System.currentTimeMillis()
         val leftFifo  = s"/tmp/gallia.left.${ts}"
         val rightFifo = s"/tmp/gallia.right.${ts}"

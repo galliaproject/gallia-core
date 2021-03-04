@@ -648,10 +648,10 @@ Notes:
 - <a name="210304140447"></a>_GNU sort_ is favored for now because replacing it would constitute an significant endeavour, and even then it would be extremely hard to beat performance-wise
 - <a name="210304140448"></a>Ideally this would be an alternative run mode for _Spark_ itself
 - <a name="210304140449"></a>This feature is only __partially__ [implemented](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210204111309). It's basically enabled via the `_.stream(_.iteratorMode.[...])` call, and follows this type of invocation paths:
-[`Streamer.groupByKey`](./src/main/scala/gallia/data/multiple/streamer/Streamer.scala#L61)
-  -> [Iterator's](./src/main/scala/gallia/data/multiple/streamer/IteratorStreamer.scala#L56)
+[`Streamer.groupByKey`](./src/main/scala/gallia/data/multiple/streamer/Streamer.scala#L62)
+  -> [Iterator's](./src/main/scala/gallia/data/multiple/streamer/IteratorStreamer.scala#L57)
   -> [utility](./src/main/scala/gallia/data/multiple/streamer/IteratorStreamerUtils.scala#L48)
-  -> [GNU sort wrapper](./src/main/scala/gallia/data/multiple/streamer/spilling/GnuSortByFirstFieldHack.scala#L17)
+  -> [GNU sort wrapper](./src/main/scala/gallia/data/multiple/streamer/spilling/GnuSortByFirstFieldHack.scala#L15)
 
 <a name="201118133133"></a>
 ## Types (explicitly)

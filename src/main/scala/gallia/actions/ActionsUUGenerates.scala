@@ -22,17 +22,20 @@ object ActionsUUGenerates {
         def atomuu(c: Cls): AtomUU = _Transform1to1(from.pathPairT(c), to.kpath_(c), from.wrapc(to, f) ) }
 
     // ---------------------------------------------------------------------------
-    case class GenerateWV(from: TqKPath, to: TtqKPath, f: _ff11) extends ActionUUc {
+    case class GenerateWV1(from: TqKPath, to: TtqKPath, f: _ff11) extends ActionUUc {
         def  vldt (c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
-        def _meta (c: Cls): Cls   = c.add(to.tq.resolve(c), to.node.forceNonBObjInfo)
+        def _meta (c: Cls): Cls   = c.add(to.tq.resolve(c), from.resolve(c).thn(c.field).info)
         def atomuu(c: Cls): AtomUU = _Transform1to1(from.pathPairT(c), to.tq.resolve(c), f) }
 
-    // ---------------------------------------------------------------------------
-    case class GenerateWV2(from: TqKPath2, to: TtqKPath, f: _ff21) extends ActionUUc {
-        def  vldt (c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
-        def _meta (c: Cls): Cls   = c.add(to.tq.resolve(c), to.node.forceNonBObjInfo)
-        def atomuu(c: Cls): AtomUU = _Transform2to1(from.pathPairT(c), to.tq.resolve(c), f) }
-    
+      // ---------------------------------------------------------------------------
+      case class GenerateWV2(from: TqKPath2, to: TtqKPath, f: _ff21) extends ActionUUc {
+          def  vldt (c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO; TODO: ensure both from are same type, as well as to
+          def _meta (c: Cls): Cls   = c.add(to.tq.resolve(c), from.tq1.resolve(c).thn(c.field).info)
+          def atomuu(c: Cls): AtomUU = _Transform2to1(from.pathPairT(c), to.tq.resolve(c), {
+(a, b) => f(a, b) match { // FIXME
+      case wv: Whatever => wv.any
+      case x            => x } }) }
+
     // ===========================================================================
     case class Generate2VtoV(from: TtqKPath2, to: TtqKPath, f: _ff21) extends ActionUUc {
         def  vldt (c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO

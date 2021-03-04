@@ -775,12 +775,13 @@ I have never dealt with it personally but I imagine the likes of computational p
   - <a name="clinvar-example">re-processing [clinvar VCF file](https://github.com/galliaproject/gallia-clinvar)
   - <a name="snpeff-example">re-processing [SnpEff output](https://github.com/galliaproject/gallia-snpeff)
   - <a name="dbnsfp-example">re-processing [dbNSFP table](#210121135252) example from section just above
+  - <a name="genemania-example">re-processing [GeneMania TSV files](https://github.com/galliaproject/gallia-genemania#README.md); uses the [__poor man's scaling__](#poor-man-scaling) approach (_spilling_)
   - <a name="lovd-example">re-processing [rare disease LOVD data](https://gist.github.com/anthony-cros/1416c544438ef39ca36ae723d02c3ce9) (from [EDS Variant Database](https://databases.lovd.nl/shared/genes/COL3A1))
 - <a name="210223095346"></a><a name="physics-examples">Physics examples
   - [ENSDF](https://www.nndc.bnl.gov/ensdf/) data (WIP)
   - WIP (see [forum question](https://www.physicsforums.com/threads/looking-for-large-dataset-of-non-image-centric-physics-data.1000073/))
 - <a name="210223094318"></a><a name="spark-examples"></a>Spark-powered:
-  - WIP
+  - WIP: will provide an alternative version of the [genemania example](#genemania-example) above that uses Spark instead of the [poor man's scaling](#poor-man-scaling) approach (_spilling_)
 - (more coming soon)
 
 ## FAQ

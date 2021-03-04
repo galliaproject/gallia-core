@@ -289,14 +289,25 @@ package object aptus
     def toTreeMap   [K, V](implicit ev: A <:< (K, V), ord: Ordering[K]) = utils.MapUtils.toTreeMap(coll)
 
     // ---------------------------------------------------------------------------
-    def groupByKey           [K, V](implicit ev: A <:< (K, V)                  ):               Map[K, Seq[V]] = utils.MapUtils.groupByKey           (coll.asInstanceOf[Seq[(K, V)]])
-    def groupByKeyWithListMap[K, V](implicit ev: A <:< (K, V)                  ): immutable.ListMap[K, Seq[V]] = utils.MapUtils.groupByKeyWithListMap(coll.asInstanceOf[Seq[(K, V)]])
-    def groupByKeyWithTreeMap[K, V](implicit ev: A <:< (K, V), ord: Ordering[K]): immutable.TreeMap[K, Seq[V]] = utils.MapUtils.groupByKeyWithTreeMap(coll.asInstanceOf[Seq[(K, V)]])
+    def groupByKey           [K, V](implicit ev: A <:< (K, V)                  ):               Map[K, Seq[V]] = utils.MapUtils.groupByKey           (coll.iterator.asInstanceOf[Iterator[(K, V)]])
+    def groupByKeyWithListMap[K, V](implicit ev: A <:< (K, V)                  ): immutable.ListMap[K, Seq[V]] = utils.MapUtils.groupByKeyWithListMap(coll.iterator.asInstanceOf[Iterator[(K, V)]])
+    def groupByKeyWithTreeMap[K, V](implicit ev: A <:< (K, V), ord: Ordering[K]): immutable.TreeMap[K, Seq[V]] = utils.MapUtils.groupByKeyWithTreeMap(coll.iterator.asInstanceOf[Iterator[(K, V)]])
 
     // ===========================================================================
     def toOption[B](implicit ev: A <:< Option[B]): Option[Collection[B]] = if (coll.contains(None)) None else Some(coll.map(_.get))
   }
 
+  // ===========================================================================
+  implicit class Iterator_[A](val itr: Iterator[A]) extends AnyVal {
+    def last(): A = itr.next().assert(_ => !itr.hasNext)
+    
+    // ---------------------------------------------------------------------------
+    def groupByKey           [K, V](implicit ev: A <:< (K, V))                  :               Map[K, Seq[V]]  = utils.MapUtils.groupByKey              (itr.asInstanceOf[Iterator[(K, V)]])
+    def groupByKeyWithListMap[K, V](implicit ev: A <:< (K, V))                  : immutable.ListMap[K, Seq[V]]  = utils.MapUtils.groupByKeyWithListMap   (itr.asInstanceOf[Iterator[(K, V)]])
+    def groupByKeyWithTreeMap[K, V](implicit ev: A <:< (K, V), ord: Ordering[K]): immutable.TreeMap[K, Seq[V]]  = utils.MapUtils.groupByKeyWithTreeMap   (itr.asInstanceOf[Iterator[(K, V)]])    
+    def groupByPreSortedKey[K, V](implicit ev: A <:< (K, V))                    :         Iterator[(K, Seq[V])] = utils.IteratorUtils.groupByPreSortedKey(itr.asInstanceOf[Iterator[(K, V)]])
+  }
+  
   // ===========================================================================
   implicit class Map_[K, V](val mp: Map[K, V]) extends AnyVal {
     def toMutableMap                        :   mutable.    Map[K, V] = utils.MapUtils.toMutableMap(mp)
@@ -385,11 +396,6 @@ package object aptus
   // ===========================================================================
   implicit class Class_[A](val klass: Class[A]) extends AnyVal {
     def fullPath: String = klass.getCanonicalName.replace(".package.", ".") /* TODO */.replaceAll("\\$$", "")
-  }
-
-  // ---------------------------------------------------------------------------
-  implicit class Iterator_[A](val coll: Iterator[A]) extends AnyVal {
-    def last(): A = coll.next().assert(_ => !coll.hasNext)
   }
 
   // ---------------------------------------------------------------------------

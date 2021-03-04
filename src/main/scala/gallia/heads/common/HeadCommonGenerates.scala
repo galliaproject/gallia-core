@@ -54,7 +54,7 @@ trait HeadCommonGenerates[F <: HeadCommon[F]] { _: HeadCommon[F] =>
         // ---------------------------------------------------------------------------
         class _FromWhatever(f1: Generate1[WV]) {
           def using[D: WTT](f: WV => WV2[D]): Self2 = self2 :+
-            GenerateWV(resolve(f1).tqkpath, ttqkpath1[D](newPath), (x: Any) => f(new WV(x)).forceOne) }
+            GenerateWV1(resolve(f1).tqkpath, ttqkpath1[D](newPath), (x: Any) => f(new WV(x)).forceOne) }
 
         // ---------------------------------------------------------------------------
         class _FromV1[O: WTT](f1: Generate1[O]) {

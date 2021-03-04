@@ -9,11 +9,11 @@ import gallia.heads.merging.MergingData._
 import gallia.data.multiple.streamer.{ViewStreamerUtils => _utils}
 
 // ===========================================================================
-class ViewStreamer[A](view: _utils.DataRepr[A]) extends Streamer[A] {
+class ViewStreamer[A](view: ViewRepr[A]) extends Streamer[A] {
   val tipe = StreamerType.ViewBased
 
   // ---------------------------------------------------------------------------
-  private def _rewrap[B](newView: _utils.DataRepr[B]): Streamer[B] = new ViewStreamer(newView)
+  private def _rewrap[B](newView: ViewRepr[B]): Streamer[B] = new ViewStreamer(newView)
 
   protected def egal(that: Streamer[A]): Boolean = this.toList == that.toList
 
@@ -22,6 +22,7 @@ class ViewStreamer[A](view: _utils.DataRepr[A]) extends Streamer[A] {
 
   def iterator: Iterator[A] = view.iterator
   def toList  : List    [A] = view.force.toList
+  def toView  : ViewRepr[A] = view
 
   def     map[B: CT](f: A =>      B ): Streamer[B] = view.    map(f).toSeq.view.thn(_rewrap)
   def flatMap[B: CT](f: A => Coll[B]): Streamer[B] = view.flatMap(f).toSeq.view.thn(_rewrap)
@@ -46,7 +47,7 @@ class ViewStreamer[A](view: _utils.DataRepr[A]) extends Streamer[A] {
 
   // ---------------------------------------------------------------------------
   def groupByKey[K: CT, V: CT](implicit ev: A <:< (K, V)): Streamer[(K, List[V])] =
-    view.asInstanceOf[_utils.DataRepr[(K, V)]].thn(_utils.groupByKey).thn(_rewrap)
+    view.asInstanceOf[ViewRepr[(K, V)]].thn(_utils.groupByKey).thn(_rewrap)
 
   // ===========================================================================
   def union[B >: A : CT](that: Streamer[B]): Streamer[B] = _utils.union(this.asInstanceOf[ViewStreamer[B]], that)

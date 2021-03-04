@@ -3,20 +3,23 @@ package gallia.data.multiple.streamer
 import scala.util.chaining.scalaUtilChainingOps // trying it out
 import scala.reflect.{ClassTag => CT}
 
-import aptus.Seq_
-import aptus.utils.MapUtils
+import aptus.Iterator_
 
 import gallia.heads.merging.MergingData._
 
 // ===========================================================================
 object ViewStreamerUtils {
-  type DataRepr[T] = cross.SeqView[T] // TODO: t210115103554 - confirm reads entire Seq once first (so can redo as needed)?
+
+  // note: n210302094313 - the ListMap aspect comes with a 50% time increase...  
+  @inline private def keyGrouping[K, V](itr: Iterator[(K, V)]): Map[K, Seq[V]] =
+    if (gallia.Hacks.LoseOrderOnGrouping) itr.groupByKey
+    else                                  itr.groupByKeyWithListMap
 
   // ===========================================================================
-  private[streamer] def groupByKey[K, V](list: DataRepr[(K, V)]): DataRepr[(K, List[V])] =
-    MapUtils
-      .groupByKeyWithListMap(list)
-      .toList.view
+  private[streamer] def groupByKey[K, V](view: ViewRepr[(K, V)]): ViewRepr[(K, List[V])] =
+    view.iterator
+      .pipe(keyGrouping)
+      .toSeq.view
       .map { case (key, values) =>
         key -> values.toList }
 
@@ -24,7 +27,7 @@ object ViewStreamerUtils {
   private[streamer] def union[B: CT](dis: ViewStreamer[B], that: Streamer[B]): Streamer[B] =
     that.tipe match {
       case StreamerType.ViewBased =>
-        Streamer.fromList(dis.toList ++ that.toList)
+        Streamer.fromView(dis.toView ++ that.toView)
 
       // ---------------------------------------------------------------------------
       case StreamerType.IteratorBased | StreamerType.RDDBased => // delegate
@@ -44,9 +47,8 @@ object ViewStreamerUtils {
       right.tipe match {
         case StreamerType.ViewBased =>
             _coGroup(joinType)(
-                // note: n210302094313 - the ListMap aspect comes with a 50% time increase...
-                left .toList.groupByKeyWithListMap,
-                right.toList.groupByKeyWithListMap)
+                keyGrouping(left .iterator),
+                keyGrouping(right.iterator))
               .pipe(new ViewStreamer(_))
 
         // ---------------------------------------------------------------------------
@@ -65,9 +67,8 @@ object ViewStreamerUtils {
 
         case StreamerType.ViewBased =>
           _join(joinType, combine)(
-                // note: n210302094313 - the ListMap aspect comes with a 50% time increase...
-                left .toList.groupByKeyWithListMap,
-                right.toList.groupByKeyWithListMap)
+                keyGrouping(left .iterator),
+                keyGrouping(right.iterator))
             .pipe(new ViewStreamer(_))
 
         // ---------------------------------------------------------------------------
@@ -79,11 +80,11 @@ object ViewStreamerUtils {
           (joinType: JoinType)
           ( leftLookup: Map[K, Iterable[V]],
            rightLookup: Map[K, Iterable[V]])
-        : DataRepr[(K, (Iterable[V], Iterable[V]))] =
+        : ViewRepr[(K, (Iterable[V], Iterable[V]))] =
       _joinValues(joinType)(
            leftLookup.keys.toSeq.distinct,
           rightLookup.keys.toSeq.distinct)
-        .toList.view
+        .toSeq.view
         .map { joinValueOpt =>
           ( joinValueOpt,
              leftLookup.get(joinValueOpt).getOrElse(Nil) ->
@@ -94,7 +95,7 @@ object ViewStreamerUtils {
           (joinType: JoinType, combiner: (V, V) => V)
           ( leftLookup: Map[K, Iterable[V]],
            rightLookup: Map[K, Iterable[V]])
-        : DataRepr[V] =
+        : ViewRepr[V] =
       _joinValues(joinType)(
            leftLookup.keys.toSeq.distinct,
           rightLookup.keys.toSeq.distinct)

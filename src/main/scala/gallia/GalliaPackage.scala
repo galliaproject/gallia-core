@@ -106,8 +106,6 @@ package object gallia
   def  rankToKey(i: Int): Key = Symbol(s"_${i}")
 
   // ===========================================================================
-  var CheatMode: Boolean = false // temporary hack...; see t210107094406; performance won't improve much until t210104164036 is done at least
-
   private[gallia] val closeables = cross.MutList[java.io.Closeable]()
 
   // ---------------------------------------------------------------------------

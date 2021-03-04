@@ -62,7 +62,14 @@ sealed trait MergingData {
   }
 
   // ===========================================================================
-  sealed trait JoinType extends EnumEntry
+  sealed trait JoinType extends EnumEntry {      
+      def isFull : Boolean = this == JoinType.full
+      def isLeft : Boolean = this == JoinType.left
+      def isRight: Boolean = this == JoinType.right
+      def isInner: Boolean = this == JoinType.inner
+    }
+  
+    // ===========================================================================
     object JoinType extends Enum[JoinType] {
       val values = findValues
 

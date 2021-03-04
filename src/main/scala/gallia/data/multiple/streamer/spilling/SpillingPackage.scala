@@ -17,11 +17,6 @@ package object spilling {
   
   // ---------------------------------------------------------------------------
   type ExecutionContext = scala.concurrent.ExecutionContext
-  var  executionContext: ExecutionContext = concurrent.ExecutionContext.global
-    // ---------------------------------------------------------------------------
-    // these need shutdown
-    //val DefaultExecutorService  = java.util.concurrent.Executors.newFixedThreadPool(1000) // TODO: variable      
-    //val DefaultExecutionContext = concurrent.ExecutionContext.fromExecutorService(executorService)  
   
   // ---------------------------------------------------------------------------
   def closeable(f: => Unit) = new java.io.Closeable { def close() { f } }

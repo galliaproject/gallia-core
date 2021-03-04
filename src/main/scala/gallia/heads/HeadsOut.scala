@@ -20,8 +20,11 @@ trait HeadUOut { _: HeadU =>
   // TODO: def printSchema()
 
   def formatString: String = formatJson
-  def formatJson  : String = { val sw = new  java.io.StringWriter; write(_.formatString(sw).json); sw.toString }
 
+  def formatJson         : String = { formatPrettyJson }  
+    def formatCompactJson: String = { val sw = new  java.io.StringWriter; write(_.formatString(sw).compactJson); sw.toString }
+    def formatPrettyJson : String = { val sw = new  java.io.StringWriter; write(_.formatString(sw).prettyJson) ; sw.toString }
+  
   // ---------------------------------------------------------------------------
   def printString    () { printJson }
   

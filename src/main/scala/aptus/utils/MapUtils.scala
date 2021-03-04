@@ -33,7 +33,7 @@ object MapUtils {
   // ===========================================================================
   // all these below are inspired by TraversableLike's (2.12)
 
-  def groupByKey[K, V](entries: Iterable[(K, V)]): immutable.Map[K, Seq[V]] = {
+  def groupByKey[K, V](entries: Iterator[(K, V)]): immutable.Map[K, Seq[V]] = {
       val m = mutable.Map.empty[K, cross.MutList[V]]
 
       for (elem <- entries) {
@@ -50,7 +50,7 @@ object MapUtils {
     }
 
     // ---------------------------------------------------------------------------
-    def groupByKeyWithListMap[K, V](entries: Iterable[(K, V)]): immutable.ListMap[K, Seq[V]] = {
+    def groupByKeyWithListMap[K, V](entries: Iterator[(K, V)]): immutable.ListMap[K, Seq[V]] = {
       var m = immutable.ListMap.empty[K, cross.MutList[V]]
 
       for (elem <- entries) {
@@ -73,7 +73,7 @@ object MapUtils {
     }
 
     // ---------------------------------------------------------------------------
-    def groupByKeyWithTreeMap[K, V](entries: Iterable[(K, V)])(implicit ord: Ordering[K]): immutable.TreeMap[K, Seq[V]] = {
+    def groupByKeyWithTreeMap[K, V](entries: Iterator[(K, V)])(implicit ord: Ordering[K]): immutable.TreeMap[K, Seq[V]] = {
       val m = mutable.TreeMap.empty[K, cross.MutList[V]]
 
       for (elem <- entries) {

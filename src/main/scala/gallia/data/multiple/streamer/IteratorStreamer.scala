@@ -12,7 +12,7 @@ class IteratorStreamer[A](itr: Iterator[A]) extends Streamer[A] {
   // TODO: t210115104555 - tricky... depending on what it's used for, need to:
   //   - keep track of closeable
   //   - keep track of consumption (consumed or not, eg via .size)
-  //   - keep access to source so can reproduce
+  //   - keep access to source so can reread
   //   - provide "checkpointing"?
   //   - look into geny?
 	// FIXME: detect "forking", will need intermediate file
@@ -28,10 +28,11 @@ class IteratorStreamer[A](itr: Iterator[A]) extends Streamer[A] {
   def iteratorAndCloseable: (Iterator[A], java.io.Closeable) = (iterator, ??? /* see t210115104555 */)
 
   def iterator: Iterator[A] = itr
+  def toView  : ViewRepr[A] = itr.toSeq.view
   def toList  : List    [A] = itr.toList
 
-  def     map[B: CT](f: A =>      B ): Streamer[B] = itr.    map(f).thn(_rewrap)
-  def flatMap[B: CT](f: A => Coll[B]): Streamer[B] = itr.flatMap(f).thn(_rewrap)
+  def     map[B: CT](f: A =>      B ): Streamer[B] = IteratorParHack.    map(itr)(f).thn(_rewrap)
+  def flatMap[B: CT](f: A => Coll[B]): Streamer[B] = IteratorParHack.flatMap(itr)(f).thn(_rewrap)
 
   def filter(p: A => Boolean): Streamer[A] = itr.filter(p).thn(_rewrap)
 

@@ -626,6 +626,7 @@ sc.stop()
 The above Spark runs would be quite inefficient since the schema would have to be determined via an additional loop over the full data (costly when big).
 Instead one would want to provide the schema as shown [below](#210121153230) .
 
+<a name="poorman-scaling"></a><a name="210303163034"></a>
 ### Poor man's scaling (_"spilling"_)
 
  May be useful to your average scientist who may have access to powerful machines (think `qsub`) but not to conveniently provisioned clusters.
@@ -674,7 +675,7 @@ More types than the currently [supported](http://github.com/galliaproject/gallia
 
 ## Schema (metadata)
 
-<a name="210127201457"></a>
+<a name="schema-aware"></a><a name="210127201457"></a>
 _Gallia_ is "schema-aware", meaning it keeps track of schema changes for every step. This allows the library to detect many errors prior to seeing the actual data.
 
 As we've seen before, there are multiple ways to explicitly provide the data's underlying schema.
@@ -772,7 +773,7 @@ I have never dealt with it personally but I imagine the likes of computational p
 - <a name="210223095346"></a><a name="physics-examples">Physics examples
   - [ENSDF](https://www.nndc.bnl.gov/ensdf/) data (WIP)
   - WIP (see [forum question](https://www.physicsforums.com/threads/looking-for-large-dataset-of-non-image-centric-physics-data.1000073/))
-- <a name="210223094318"></a>Spark-powered:
+- <a name="210223094318"></a><a name="spark-examples"></a>Spark-powered:
   - WIP
 - (more coming soon)
 

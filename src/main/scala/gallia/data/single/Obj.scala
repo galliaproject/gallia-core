@@ -10,7 +10,7 @@ case /* for equality */ class Obj private (protected[data] val data: UData) // T
       with    ObjOperations {
       // TODO: extends Ordered?
 
-    if (!gallia.CheatMode) { // t210107094406 - possibility to opt out of the checks (for performance) - should opt out by default in prod
+    if (!gallia.Hacks.DisableRuntimeChecks) { // t210107094406 - possibility to opt out of the checks (for performance) - should opt out by default in prod
 
       // TODO: should use Key, Ren, ... directly for performance
       // ---------------------------------------------------------------------------

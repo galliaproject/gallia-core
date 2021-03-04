@@ -27,6 +27,7 @@ trait Streamer[A] { // note: not necessarily bothering with genericity (in the g
     def iteratorAndCloseable: (Iterator[A], Closeable) // TODO: t210205121008
 
     def iterator: Iterator[A]
+    def toView  : ViewRepr[A]
     def toList  : List    [A]
 
     // CT is a requirement of Spark RDD (easier to include it here than work around it); TODO: Coll as well?
@@ -88,6 +89,7 @@ trait Streamer[A] { // note: not necessarily bothering with genericity (in the g
     val Empty = fromList(Nil)
 
     // ---------------------------------------------------------------------------
+    def fromView    [A](data: ViewRepr[A]): Streamer[A] = new ViewStreamer(data)
     def fromList    [A](data: List[A])    : Streamer[A] = new ViewStreamer(data.view)
     def fromIterator[A](data: Iterator[A]): Streamer[A] = new IteratorStreamer(data) // must close separately (eg to read first N lines)
     def fromIterator[A](pair: (Iterator[A], Closeable)): Streamer[A] = { // for now... (TODO see t210116154537 as part of t210115104555)

@@ -6,6 +6,8 @@ import aptus.utils.JavaStreamUtils._
 // ===========================================================================
 object GnuJoinByFirstFieldHack { // see https://github.com/galliaproject/gallia-core#poor-mans-scaling-spilling
   // note: nt210302124437 - GNU join needs 2 inputs, forcing us to use at least one named pipe; may be simpler to reimplement in scala (unlike sort)
+  //   maybe via process substitution (but then how to provide sort inputs?)
+  //   nt210302124437: won't work with windows as a result
 
   // =========================================================================== 
   def apply(ec: ExecutionContext)(left: Iterator[Line], right: Iterator[Line]): Iterator[Line] = {				
@@ -15,7 +17,7 @@ object GnuJoinByFirstFieldHack { // see https://github.com/galliaproject/gallia-
         val rightFifo = s"/tmp/gallia.right.${ts}"
 
       // ---------------------------------------------------------------------------  	    
-      // create named pipes; TODO: won't work with windows (see note nt210302124437)
+      // create named pipes
       (s"mkfifo ${leftFifo}"  !)	    
       (s"mkfifo ${rightFifo}" !)
 
@@ -24,7 +26,7 @@ object GnuJoinByFirstFieldHack { // see https://github.com/galliaproject/gallia-
       val removeFifos = closeable { s"rm ${leftFifo} ${rightFifo}" !; () }
     
       // ---------------------------------------------------------------------------
-      val (os, is) = SystemUtils.streamSystemCall(ec)(
+      val (_, is) = SystemUtils.streamSystemCall(ec)(
         "join", 
             "-t", SpillingHackSerialization.FieldSeparator, 
             "-j", "1",       // on first field

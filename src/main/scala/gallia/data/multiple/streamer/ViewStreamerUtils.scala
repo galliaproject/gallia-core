@@ -27,7 +27,8 @@ object ViewStreamerUtils {
   private[streamer] def union[B: CT](dis: ViewStreamer[B], that: Streamer[B]): Streamer[B] =
     that.tipe match {
       case StreamerType.ViewBased =>
-        Streamer.fromView(dis.toView ++ that.toView)
+        //Streamer.fromView(dis.toView ++ that.toView) - FIXME: 2.13 issues
+        Streamer.fromList(dis.toList ++ that.toList)
 
       // ---------------------------------------------------------------------------
       case StreamerType.IteratorBased | StreamerType.RDDBased => // delegate

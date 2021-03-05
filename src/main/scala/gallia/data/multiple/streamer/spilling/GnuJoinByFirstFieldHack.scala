@@ -1,5 +1,6 @@
 package gallia.data.multiple.streamer.spilling
 
+import scala.language.postfixOps
 import aptus.utils.SystemUtils
 import aptus.utils.JavaStreamUtils._
 
@@ -8,7 +9,6 @@ object GnuJoinByFirstFieldHack { // see https://github.com/galliaproject/gallia-
   // note: nt210302124437 - GNU join needs 2 inputs, forcing us to use at least one named pipe; may be simpler to reimplement in scala (unlike sort)
   //   maybe via process substitution (but then how to provide sort inputs?)
   //   nt210302124437: won't work with windows as a result
-
   // =========================================================================== 
   def apply(ec: ExecutionContext)(left: Iterator[Line], right: Iterator[Line]): Iterator[Line] = {				
       if (IsWindows) { windowsError() }

@@ -28,19 +28,23 @@ scalacOptions in Compile ++=
 // ===========================================================================
 // TODO: to their own external object?
 
-lazy val compatVersion          = "2.4.1"
-lazy val enumeratumVersion      = "1.5.13" 
-lazy val commonsVersion         = "3.5"
-lazy val commonsCsvVersion      = "1.8"
-lazy val commonsCompressVersion = "1.20"
-//lazy val guavaVersion         = "28.0-jre"
+lazy val compatVersion              = "2.4.1"
+lazy val parallelCollectionsVersion = "1.0.0"
 
 // ---------------------------------------------------------------------------
-lazy val junitVersion          = "4.12"
-lazy val junitInterfaceVersion = "0.11" // see https://github.com/sbt/junit-interface
+lazy val enumeratumVersion          = "1.5.13" 
+lazy val commonsVersion             = "3.5"
+lazy val commonsCsvVersion          = "1.8"
+lazy val commonsCompressVersion     = "1.20"
+//lazy val guavaVersion             = "28.0-jre"
+
+// ---------------------------------------------------------------------------
+lazy val junitVersion              = "4.12"
+lazy val junitInterfaceVersion     = "0.11" // see https://github.com/sbt/junit-interface
 
 // ===========================================================================    
 libraryDependencies ++=
+  (if (scalaBinaryVersion.value == "2.13") Seq("org.scala-lang.modules" %% "scala-parallel-collections" % parallelCollectionsVersion) else Nil) ++
   Seq(  
     "org.scala-lang"         %  "scala-reflect"           % scalaVersion.value, // else warning: "Multiple dependencies with the same organization/name but different versions"
     "org.scala-lang.modules" %% "scala-collection-compat" % compatVersion,      // to support scala <2.13

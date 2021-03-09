@@ -5,26 +5,9 @@
 // ===========================================================================
 lazy val root = (project in file("."))
   .settings(
-    name               := "gallia-core",
-    version            := "0.1.0",
-    scalaVersion       := GalliaScalaVersions.supported.head,
-    crossScalaVersions := GalliaScalaVersions.supported)
-
-// ===========================================================================
-// TODO:
-// - more options
-// - t210121165741: -Xdisable-assertions (also turns off require?)
-lazy val galliaScalacOptions =
-  Seq(
-    "-encoding", "UTF-8",  
-  //"-Yimports:java.lang,scala,scala.Predef,scala.util.chaining,aptus.Anything_" -- not possible for 2.12 it seems (TODO: t210308154253 confirm)
-    "-Ywarn-value-discard")
-
-// ---------------------------------------------------------------------------
-scalacOptions in Compile ++= galliaScalacOptions ++ 
-  (scalaBinaryVersion.value match {
-    case "2.13" => Seq("-Ywarn-unused:imports")
-    case _      => Seq("-Ywarn-unused-import" ) })
+    name    := "gallia-core",
+    version := "0.1.0")
+  .settings(GalliaCommonSettings.mainSettings:_*)
 
 // ===========================================================================    
 libraryDependencies ++=

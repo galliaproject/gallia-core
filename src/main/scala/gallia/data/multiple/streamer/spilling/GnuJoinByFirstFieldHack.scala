@@ -28,7 +28,7 @@ object GnuJoinByFirstFieldHack { // see https://github.com/galliaproject/gallia-
       val removeFifos = closeable { s"rm ${leftFifo} ${rightFifo}" !; () }
     
       // ---------------------------------------------------------------------------
-      val (_, is) = SystemUtils.streamSystemCall(ec)(
+      val (_, is) = SystemUtils.streamSystemCall(ec)( // TODO: t210308150015 - look into https://github.com/com-lihaoyi/os-lib - especially for named pipes
         "join", 
             "-t", SpillingHackSerialization.FieldSeparator, 
             "-j", "1",       // on first field

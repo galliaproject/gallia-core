@@ -10,8 +10,8 @@ object GnuSortByFirstFieldHack { // see https://github.com/galliaproject/gallia-
     if (IsWindows) { windowsError() }        
 
     // ---------------------------------------------------------------------------
-    // call sort-by-first-field ("key" here) and stream results lines
-    val (os, is) = SystemUtils.streamSystemCall(ec)(Seq(
+    // call sort-by-first-field ("key" here) and stream results lines    
+    val (os, is) = SystemUtils.streamSystemCall(ec)(Seq( // TODO: t210308150015 - look into https://github.com/com-lihaoyi/os-lib
       "sort",
             "-t", SpillingHackSerialization.FieldSeparator,
             if (numerical) "-k1n,1n"

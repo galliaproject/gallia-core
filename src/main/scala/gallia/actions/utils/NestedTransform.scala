@@ -43,14 +43,14 @@ class NestedTransform(adag: MetaPlan, val rootId: RootId) { // TODO: as a peer o
   // ===========================================================================
   // data
 
-  def atomuusUU(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(_.FromNesting.u2u(optional))
-  def atomuusZZ(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(_.FromNesting.z2z(optional))
+  def atomuusUU(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(new NestedPlan(_).u2u(optional))
+  def atomuusZZ(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(new NestedPlan(_).z2z(optional))
 
-  def atomuusUZ(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(_.FromNesting.u2z(optional))
-  def atomuusZU(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(_.FromNesting.z2u(optional))
+  def atomuusUZ(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(new NestedPlan(_).u2z(optional))
+  def atomuusZU(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(new NestedPlan(_).z2u(optional))
 
-  def atomuusUV(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(_.FromNesting.u2v(optional))
-  def atomuusZV(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(_.FromNesting.z2v(optional))
+  def atomuusUV(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(new NestedPlan(_).u2v(optional))
+  def atomuusZV(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(new NestedPlan(_).z2v(optional))
 
     // ---------------------------------------------------------------------------
     private def atomuus(c: Cls)(qpathz: RPathz, optional: Boolean)(f: AtomPlan => Any => Any): AtomUUs =
@@ -62,8 +62,8 @@ class NestedTransform(adag: MetaPlan, val rootId: RootId) { // TODO: as a peer o
 
   // ---------------------------------------------------------------------------
   // eg as used in generate
-  def uu(c: Cls, optional: Boolean): _ff11 = atomPlan(c).FromNesting.u2u(optional)
-  def zz(c: Cls, optional: Boolean): _ff11 = atomPlan(c).FromNesting.z2z(optional)
+  def uu(c: Cls, optional: Boolean): _ff11 = atomPlan(c).thn(new NestedPlan(_)).u2u(optional)
+  def zz(c: Cls, optional: Boolean): _ff11 = atomPlan(c).thn(new NestedPlan(_)).z2z(optional)
 
   // ---------------------------------------------------------------------------
   // used in zen/for-key

@@ -12,7 +12,7 @@ sealed trait Atom extends ActionAN {
   }
 
   // ===========================================================================
-  object NestingDataPlaceholder extends Atom // data to be provided by runner
+  case object NestingDataPlaceholder extends Atom // data to be provided by runner
 
   // ===========================================================================
   trait AtomIU extends Atom { def naive: Option[Obj ] }

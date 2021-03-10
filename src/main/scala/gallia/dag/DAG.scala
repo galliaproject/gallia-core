@@ -10,8 +10,8 @@ class DAG[$NodeType](
         //TODO: change these to List
         val nodes     : Seq[$NodeType], // will always be relatively "small" (eg not millions of nodes)
         val edges     : Seq[Edge],      // will be pretty sparse so no need for density matrix
-        val idResolver: $NodeType => NodeId // less painful than subtyping...
-      ) {
+        val idResolver: $NodeType => NodeId) // less painful than subtyping...
+      extends Serializable {
     private type Self = DAG[$NodeType]
 
     // TODO: (t210116120349 - easier with graph lib?)
@@ -19,7 +19,7 @@ class DAG[$NodeType](
     // - check no isolates - TODO: will create issues for chain-traversal... (see 201123165502)
     // - check nodes are DOT friendly (see t210114113316)
 
-    private[dag] lazy val _lookup: Map[NodeId, $NodeType] = nodes.map(_.associateLeft(idResolver)).force.map
+    @transient private[dag] lazy val _lookup: Map[NodeId, $NodeType] = nodes.map(_.associateLeft(idResolver)).force.map
 
                  def lookup(nodeId: NodeId): $NodeType = _lookup(nodeId) // used in ASG creation
                  val nodeIds  : Seq[NodeId] = nodes.map(idResolver) // used in Handler's "join2"

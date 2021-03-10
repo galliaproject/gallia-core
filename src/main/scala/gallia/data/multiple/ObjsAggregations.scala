@@ -6,7 +6,7 @@ import gallia.obj
 
 // ===========================================================================
 trait ObjsAggregations { self: Objs =>
-  @deprecated private def tmp(keyObjOpt: Option[Obj]) = keyObjOpt.get // FIXME: t210202163714
+  import ObjsAggregations.tmp
 
   // ===========================================================================
   def group1N(groupee: Key, groupers: Keyz): Objs =
@@ -61,5 +61,9 @@ trait ObjsAggregations { self: Objs =>
       .thn(Objs.build)
 }
 
+// ---------------------------------------------------------------------------
+object ObjsAggregations {  	
+  @deprecated private def tmp(keyObjOpt: Option[Obj]): Obj = keyObjOpt.get // FIXME: t210202163714
+}
 
 // ===========================================================================

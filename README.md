@@ -559,7 +559,7 @@ And the following import:
 import gallia.spark._
 ```
 
-Abstraction:
+__Abstraction__:
 
 <a name="top-level-multiplicity-abstraction"></a><a name="210224092156"></a>
 The main abstraction for top-level multiplicity is [`data.multiple.streamer.Streamer[T]`](https://github.com/galliaproject/gallia-core/blob/init/src/main/scala/gallia/data/multiple/streamer/Streamer.scala#L12), which is then wrapped by the [`data.single.Obj`](https://github.com/galliaproject/gallia-core/blob/init/src/main/scala/gallia/data/single/Obj.scala#L8)-aware counterpart [`data.multiple.Objs`](https://github.com/galliaproject/gallia-core/blob/init/src/main/scala/gallia/data/multiple/Objs.scala#L8) (wraps a `Streamer[Obj]`). It currently comes in three flavors, all also under `data.multiple.streamer`:
@@ -601,7 +601,7 @@ logging.setToWarn()
  - Reading and writing to/from [HDFS](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210120153618) and [S3](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210120153619) isn't actually ready, neither is using [lzo](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210120153618) compression
 
 <a name="210121153221"></a>
- Modify underlying RDD (<a href="https://www.joelonsoftware.com/2002/11/11/the-law-of-leaky-abstractions/" target="_blank">The Law of Leaky Abstractions</a>):
+Modify underlying RDD (<a href="https://www.joelonsoftware.com/2002/11/11/the-law-of-leaky-abstractions/" target="_blank">The Law of Leaky Abstractions</a>):
 
 ```scala
 "s3://mybucket/huge.tsv.bz2"
@@ -649,6 +649,7 @@ Notes:
 - <a name="210304140446"></a>We can combine such operations and leverage pipes to ensure the execution tree is executed lazily (forking however would benefit from a form of [checkpointing](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210121160956))
 - <a name="210304140447"></a>_GNU sort_ is favored for now because replacing it would constitute an significant endeavour, and even then it would be extremely hard to beat performance-wise
 - <a name="210304140448"></a>Ideally this would be an alternative run mode for _Spark_ itself
+- <a name="210304140450"></a>The current implementation can be seen in action in the [GeneMania processing](https://github.com/galliaproject/gallia-genemania/blob/init/src/main/scala/galliaexample/genemania/GeneMania.scala#L95) sub-project
 - <a name="210304140449"></a>This feature is only __partially__ [implemented](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210204111309). It's basically enabled via the `_.stream(_.iteratorMode.[...])` call, and follows this type of invocation paths:
 [`Streamer.groupByKey`](./src/main/scala/gallia/data/multiple/streamer/Streamer.scala#L62)
   -> [Iterator's](./src/main/scala/gallia/data/multiple/streamer/IteratorStreamer.scala#L57)

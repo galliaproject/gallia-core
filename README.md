@@ -628,7 +628,7 @@ sc.stop()
 The above Spark runs would be quite inefficient since the schema would have to be determined via an additional loop over the full data (costly when big).
 Instead one would want to provide the schema as shown [below](#210121153230) .
 
-<a name="poor-man-scaling"></a><a name="poorman-scaling"></a><a name="210303163034"></a>
+<a name="spilling"></a><a name="poor-man-scaling"></a><a name="poorman-scaling"></a><a name="210303163034"></a>
 ### Poor man's scaling (_"spilling"_)
 
 May be useful to your average scientist who may have access to powerful machines (think `qsub`) but not to conveniently provisioned clusters.

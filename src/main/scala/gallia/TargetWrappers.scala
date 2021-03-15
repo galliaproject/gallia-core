@@ -25,7 +25,7 @@ case class ActualRPathWz(values: Seq[ActualRPathW]) extends TargetWrappers[Actua
 
 // ===========================================================================
 object KeyWz {
-    def from(value: KeyW) = KeyWz(Seq(value))
+    def from(value: KeyW, more: Seq[KeyW] = Nil) = KeyWz(value +: more)    
 
       // ---------------------------------------------------------------------------
       implicit def _to(tuple: (KeyW,       Seq[KeyW])): KeyWz = KeyWz(Seq(tuple._1          ) ++ tuple._2)

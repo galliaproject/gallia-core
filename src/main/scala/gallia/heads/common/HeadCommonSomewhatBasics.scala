@@ -200,7 +200,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { _: HeadCommon[F] =>
   /** eg for: {"f": ["foo", "3"]} */
   def untuplify1z(targetKey: RenW) = new _Untuplify1z(targetKey.value)
 
-  /** eg for: {"f": ["foo|3", "bar|4"]} */
+  /** eg for: {"f": "foo|3"} or {"f": ["foo|3", "bar|4"]} */
   def untuplify1a(targetKey: RenW) = new _Untuplify1a(targetKey.value)
 
   /** eg for: {"f": "foo|3,bar|4"} */
@@ -212,7 +212,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { _: HeadCommon[F] =>
   /** eg for: {"f": ["str=foo", "int=3"]} */
   def untuplify2z(targetKey: RenW) = new _Untuplify2z(targetKey.value)
 
-  /** eg for: {"f": "str=foo|int=3"} */
+  /** eg for: {"f": "str=foo|int=3"}  or {"f": [ "str=foo|int=3", "str=..." ]} */  
   def untuplify2a(targetKey: RenW) = new _Untuplify2a(targetKey.value)
 
   /** eg for: {"f": "str=foo;int=3,str=bar;int=4,str=baz;int=5"} */

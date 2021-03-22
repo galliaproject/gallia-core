@@ -5,7 +5,7 @@ import scala.reflect.ClassTag
 
 // ===========================================================================
 case class Objs private (  // TODO: two versions, see t210104164036
-    private[multiple] val values: Streamer[Obj])
+    private[gallia] val values: Streamer[Obj])
        extends ObjsOperations
        with    ObjsAggregations
        with    ObjsMerging

@@ -27,7 +27,7 @@ trait Streamer[A] { // note: not necessarily bothering with genericity (in the g
     def iteratorAndCloseable: (Iterator[A], Closeable) // TODO: t210205121008
 
     def iterator: Iterator[A]
-    def toView  : ViewRepr[A]
+  //def toView  : ViewRepr[A] - TODO: t210315114618 - causes odd compilation issue with gallia-spark, to investigate
     def toList  : List    [A]
 
     // CT is a requirement of Spark RDD (easier to include it here than work around it); TODO: Coll as well?

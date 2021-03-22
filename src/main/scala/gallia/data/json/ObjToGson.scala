@@ -44,7 +44,7 @@ object ObjToGson {
     private def array(seq: Seq[_]): JsonArray = {
       val elements: Seq[JsonElement] = seq.map(element)
 
-      new JsonArray(elements.size)
+      new JsonArray(/*elements.size; FIXME: t210315113950 - causes issues with EMR: look into more*/)
         .sideEffect { array =>
           elements.foreach(array.add) }
     }

@@ -7,9 +7,12 @@ private[plans] trait InputData { def formatDebug: String } // this is a bit of a
 
   // ===========================================================================
   object InputData {
-      private def formatObjsDebug(values: Objs) = // TODO: see t210114111539 (identity wrapped Us vs full on Zs)
-        if (values.isEmpty) "(empty data)"
-        else                values.consume /* TODO: close ... */.take(1).toList.head.formatPrettyJson // pretty ugly...
+      private def formatObjsDebug(values: Objs) = { // TODO: see t210114111539 (identity wrapped Us vs full on Zs)
+        val itr = values.consume /* TODO: close ... */ // safer with RDD
+
+        if (!itr.hasNext) "(empty data)"
+        else              itr.take(1).toList.head.formatPrettyJson // pretty ugly...
+      }
 
       // ===========================================================================
       case object _None extends InputData { def formatDebug = "(no input data)" }

@@ -95,6 +95,7 @@ private[plans] class AtomProcessor(missingInputs: RootId => NDT, data: NodeId =>
 
       //TODO: t210114111111 - distinguish RuntimeErrors (eg not distinct checking it is) from others (eg transform "".head or bugs)
       case util.Failure(throwable) =>
+        System.err.println(s"${throwable.getMessage}: ${throwable.getStackTrace.toList.mkString(", ")}")
         throw new Exception(
             RunCtx(node, throwable, inputData(node.atom)).formatDefault, // will be pretty ugly...
             throwable)

@@ -13,6 +13,7 @@ private[gallia] object InfoUtils {
            field.key.symbol,
            field.node.forceNonBObjInfo) }
        .thn(Cls.apply)
+       .setName(leaf.name.splitBy(".").last /* TODO: see t210325105833 - need to be in scope for macros */) // mostly for macros
 
   // ---------------------------------------------------------------------------
   def forceNonBObjInfo(node: TypeNode): Info =

@@ -16,12 +16,19 @@ case class Cls(fields: Seq[Fld])
       with    ClsNestingRelated
       with    ClsAggregating
       with    ClsMerging {
+  
     fields
       .require(_.nonEmpty)
       .requireDistinctBy(_.key)
 
     // ---------------------------------------------------------------------------
-    protected override val _fields: Seq[Fld]  = fields
+    // mostly for macros
+    private var nameOpt: Option[String] = None
+    def setName(name: String) = { nameOpt = Some(name); this }
+    def forceName: String = nameOpt.get
+
+    // ---------------------------------------------------------------------------
+    protected override val _fields: Seq[Fld]  = fields // see ClsLike
 
     // ---------------------------------------------------------------------------
     override val lookup: Map[Key, Fld] = fields.force.mapLeft(_.key)
@@ -38,7 +45,7 @@ case class Cls(fields: Seq[Fld])
       def formatDefault =
         fields
           .map(_.formatDefault)
-          .section("cls:")
+          .section(nameOpt.map(_.quote.colon).getOrElse("cls:"))
 
     // ---------------------------------------------------------------------------
     def hasNesting                   : Boolean = fields.exists(_.isNesting)

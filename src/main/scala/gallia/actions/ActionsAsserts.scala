@@ -13,7 +13,7 @@ import gallia.atoms.AtomsAsserts._
 object ActionsAsserts {
 
   case class AssertDataClass(node: TypeNode) extends ActionUUa with IdentityM1 with IdentityUUa {
-      def vldt (c: Cls): Errs = node.dataClassEither match {
+      def vldt (c: Cls): Errs = node.leaf.dataClassEither match {
         case Left (errorDetails)   => _Error.InvalidDataClass(errorDetails).errs
         case Right(validDataClass) => _vldt.classCompatibilities(c, validDataClass).toSeq } }
 
@@ -59,7 +59,7 @@ object ActionsAsserts {
           .tq.resolve(c)
           .thn { path =>
             if (from.tq.isRequired(c)) _AssertO1a(path, pwrap11(pred))
-            else                         _AssertO1b(path, pwrap11(pred)) } }
+            else                       _AssertO1b(path, pwrap11(pred)) } }
 
     // ---------------------------------------------------------------------------
     @Max5 case class AssertDataU2[I1, I2](from: TtqKPath2, pred: (I1, I2) => Boolean) extends ActionUUc with IdentityM1 {

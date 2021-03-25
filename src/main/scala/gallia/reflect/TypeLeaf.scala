@@ -2,7 +2,8 @@ package gallia.reflect
 
 import aptus.{Anything_, String_, Seq_}
 
-import gallia.Keyz
+import gallia._
+import gallia.meta.InfoUtils
 
 // ===========================================================================
 case class TypeLeaf(
@@ -28,6 +29,14 @@ case class TypeLeaf(
 
     def unaliased: TypeLeaf = copy(alias = None, fields = fields.map(_.unaliased))
 
+    // ===========================================================================
+    def forceDataClass: Cls = dataClassEither.right.get
+    
+    def dataClassEither: Either[Any, Cls] = // TODO: use Try until determine precise criteria (cc + not Some + valid types...)
+      util.Try(InfoUtils.forceNestedClass(this)) match {
+        case util.Failure(error)          => Left(s"TODO:t201015102536:${error.toString}")
+        case util.Success(validDataClass) => Right(validDataClass) }
+    
     // ===========================================================================
     override def toString: String = formatDefault
       def formatDefault: String =

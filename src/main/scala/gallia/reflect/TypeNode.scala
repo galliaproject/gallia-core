@@ -105,15 +105,7 @@ case class TypeNode(
       else                    None
 
     // ===========================================================================
-    def forceNonBObjInfo: Info = this.assert(!_.isContainedBObj).thn(InfoUtils.forceNonBObjInfo)
-
-    def forceDataClass: Cls = dataClassEither.right.get
-
-    def dataClassEither: Either[Any, Cls] = // TODO: use Try until determine precise criteria (cc + not Some + valid types...)
-      util.Try(InfoUtils.forceNestedClass(leaf)) match {
-        case util.Failure(error)          => Left(s"TODO:t201015102536:${error.toString}")
-        case util.Success(validDataClass) => Right(validDataClass) }
-
+    def forceNonBObjInfo: Info = this.assert(!_.isContainedBObj).thn(InfoUtils.forceNonBObjInfo)   
   }
 
   // ===========================================================================

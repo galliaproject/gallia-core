@@ -76,7 +76,7 @@ package object gallia
   implicit def _toWrappedSelection(x: selection.untyped.processors.RPathzSelection): selection.typed.TsWrapper[Whatever] = new selection.typed.TsWrapper[Whatever](x)
 
   // ===========================================================================
-  def cls[T: WTT]                 : Cls = reflect.TypeNode.parse[T].forceDataClass
+  def cls[T: WTT]                 : Cls = reflect.TypeNode.parse[T].leaf.forceDataClass
   def cls(schemaFilePath: String) : Cls = meta.MetaObj.clsFromFile(schemaFilePath) // TODO: or also detect file vs direct object?
   def cls(field1: Fld, more: Fld*): Cls = meta.Cls(field1 +: more)
 

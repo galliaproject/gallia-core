@@ -121,7 +121,9 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
 
   @aptus.fordevonly("pretty ugly...") def inspectAndAbort: Self = self ::+ InspectZ(None,      abort = true)
 
+  @deprecated
   def asListBased: HeadZ = self ::+ AsListBased
+  def asViewBased: HeadZ = self ::+ AsListBased
 
   // ===========================================================================
   // TODO: add more common ones

@@ -14,7 +14,7 @@ class IteratorStreamer[A](itr: Iterator[A]) extends Streamer[A] {
   //   - keep track of consumption (consumed or not, eg via .size)
   //   - keep access to source so can reread
   //   - provide "checkpointing"?
-  //   - look into geny?
+  //   - t210325115621 - look into https://github.com/com-lihaoyi/geny?
 	// FIXME: detect "forking", will need intermediate file
 
   val tipe = StreamerType.IteratorBased

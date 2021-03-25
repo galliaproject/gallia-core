@@ -1,6 +1,6 @@
 // gallia-core
 //   trying to keep this to a mimimum
-//   TODO: t210125110147 - investigate sbt alternatives
+//   TODO: t210125110147 - investigate sbt alternatives, especially https://github.com/com-lihaoyi/mill
 
 // ===========================================================================
 lazy val root = (project in file("."))
@@ -31,7 +31,7 @@ libraryDependencies ++=
     // ---------------------------------------------------------------------------
     // JSON
     "com.google.code.gson" % "gson" % GalliaCoreDependencyVersions.gsonVersion withSources() withJavadoc()) ++
-  //    
+  //
   // ---------------------------------------------------------------------------
   (scalaBinaryVersion.value match {
     case "2.13" => Seq("org.scala-lang.modules" %% "scala-parallel-collections" % GalliaCoreDependencyVersions.parallelCollectionsVersion)

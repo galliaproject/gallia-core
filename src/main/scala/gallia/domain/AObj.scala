@@ -6,8 +6,11 @@ import gallia._
 import gallia.heads.Head
 
 // ===========================================================================
-case class AObj (c: Cls, u: Obj ) { // TODO: tt210124100009 - initially stood for "Annotated Object"...
-
+case class AObj(c: Cls, u: Obj) { // TODO: tt210124100009 - initially stood for "Annotated Object"...
+    def schema = c
+    def data   = u
+    
+    // ---------------------------------------------------------------------------
     override def toString: String = formatDefault
       def formatDefault: String =
         c.formatDefault + "\n" +
@@ -26,7 +29,10 @@ case class AObj (c: Cls, u: Obj ) { // TODO: tt210124100009 - initially stood fo
 
 // ===========================================================================
 case class AObjs(c: Cls, z: Objs) {
-
+    def schema = c
+    def data   = z
+    
+    // ---------------------------------------------------------------------------
     override def toString: String = formatDefault
       def formatDefault: String =
         c.formatDefault + "\n" +

@@ -6,7 +6,7 @@ import gallia._
 import gallia.heads.Head
 
 // ===========================================================================
-case class BObj private[gallia] (entries: gallia.domain.KVEs) { // TODO: t210124100009 - no proper rationale for "B" prefix
+case class BObj private[gallia](entries: gallia.domain.KVEs) { // TODO: t210124100009 - no proper rationale for "B" prefix
 
     override def toString: String = formatDefault
       def formatDefault: String = entries.formatDefault

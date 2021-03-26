@@ -7,8 +7,9 @@ import gallia.meta.InfoUtils
 
 // ===========================================================================
 case class TypeLeaf(
-      name       : FullName,
-      alias      : Option[FullName] = None,
+      name       : FullName,                // eg java.lang.String
+      inScopeName: String,                  // eg String
+      alias      : Option[FullName] = None, // eg String
 
       dataClass  : Boolean = false, // eg "case class Foo(a: String, b: Int)", but not necessarily all case classes (eg not scala.Some)
       enum       : Boolean = false,

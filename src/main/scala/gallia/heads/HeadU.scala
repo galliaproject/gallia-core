@@ -21,7 +21,7 @@ class HeadU private[gallia]( // TODO: t210121105809 - rename to HeadO and genera
 
   override def toString: String = nodeId // TODO
 
-  @deprecated("bypasses the 210205063004 mechanism") def forceAObj: AObj = end().runu().forceData2(_.aobj) // TODO: or forceData? forceResult?
+  @deprecated("bypasses the 210205063004 mechanism (but ok for trivial cases)") def forceAObj: AObj = end().runu().forceData2(_.aobj) // TODO: or forceData? forceResult?
 
   // ---------------------------------------------------------------------------
   protected[gallia] def rewrap(id: NodeId): HeadU = new HeadU(id, handler)

@@ -30,7 +30,7 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
     // ===========================================================================
     final lazy val alias: Option[Alias] = ReflectUtils.simplify(fullName).as.noneIf(_ == fullName)
 
-    final lazy val node: TypeNode = TypeNode(TypeLeaf(fullName, alias) , Nil)
+    final lazy val node: TypeNode = TypeNode(TypeLeaf(fullName, fullName.split("\\.").last, alias) , Nil)
 
     // ===========================================================================
     def superPair(container: Container, descending: Boolean, missingLast: Boolean) =

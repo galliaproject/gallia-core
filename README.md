@@ -716,9 +716,15 @@ case class Foo(foo: String, bar: Int, baz: Boolean, qux: String)
 Where "/meta/myschema.json" contains: `{"fields":[{"key":"foo","info":...`
 
 <a name="210121153233"></a>
- More interactions with case classes are available (e.g. in transformations); they will be detailed in a future article.
+More interactions with case classes are available (e.g. in transformations); they will be detailed in a future article.
 
-<a name="210121135252"></a>
+## Macros
+
+<a name="macros"></a><a name="210326142045"></a>
+WIP
+
+
+<a name="full-blown"></a><a name="210121135252"></a>
 ## Full blown example
 
 I am providing a [link](http://github.com/galliaproject/gallia-dbnsfp/blob/init/src/main/scala/galliaexample/dbnsfp/DbNsfp.scala#L26) to one of the full blow examples I've written using _Gallia_: turning the big
@@ -836,9 +842,9 @@ There are lots of features that could be added in the future, but they all requi
 Note that the most important part of the library at this point is its client code interface. The internals could be entirely scrapped in the future,
 though it's more likely it would be replaced in phases short of a major design flaw.
 
-<a name="210127134037"></a>
-### Why no macros?
-I prototyped a lot with macros and I think they will play an important role in the future of _Gallia_.
+<a name="why-macros"></a><a name="210127134037"></a>
+### Why not more macros-based features?
+I [prototyped](#macros) a lot with macros and I think they will play an important role in the future of _Gallia_.
 They are also quite tricky to deal with, and since they are scheduled for a major overhaul, I am reluctant to invest a lot of time on that front at the moment.
 I see them helping a lot in particular with boilerplate and some compile-time validation (e.g. key [validation](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210127134525)).
 The very initial plan was to leverage [whitebox](https://docs.scala-lang.org/overviews/macros/blackbox-whitebox.html) macros for every step, but I gave up on the idea pretty early on. I'd like to re-investigate it for a subset of features/use cases at some point however,

@@ -234,7 +234,7 @@ object AtomsIX {
           .thn(Obj.build)
 
     // ===========================================================================
-    private def dataRows: Streamer[List[String]] =
+    private def dataRows: Streamer[List[String]] = // TODO: t210330110804 - separate each as their own atom
       input
         .streamLines(inMemoryMode)
         .thnIf(hasHeader)(_.drop(1)) // TODO: t210116110159 for n >= 1?

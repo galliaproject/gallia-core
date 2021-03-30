@@ -140,7 +140,9 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
     case object _BigDecimal    extends NumericalType { type T = BigDecimal; val fullName = "scala.math.BigDecimal"; /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse }
 
     // ---------------------------------------------------------------------------
-    // TODO: t210114093525 - capture enum values (will need to adapt serialization)
+    // TODO:
+    // - t210114093525 - capture enum values (will need to adapt serialization)
+    // - t210330102827 - capture enum name for macros
     case object _Enum extends BasicType { type T = EnumEntry; val fullName = "enumeratum.EnumEntry"
       private implicit val ord: Ordering[T] = Ordering.by(_.entryName)
       /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse }

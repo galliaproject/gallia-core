@@ -76,11 +76,11 @@ trait ObjAccessors { _: Obj => // id210326140514
   def dateTimes_(key: KPathW): Pes[LocalDateTime] = opt  (key).map(_.asSeq.map(_.asLocalDateTime))
 
   // ===========================================================================
-  //TODO: t210201095414
-  def enum  [T: WTT](key: KPathW):     Double  = ???//force(key).thn(_enum)
-  def enum_ [T: WTT](key: KPathW): Opt[Double] = ???//opt  (key).map(_enum)
-  def enums [T: WTT](key: KPathW): Seq[Double] = ???//force(key)      .asSeq.map(_enum)
-  def enums_[T: WTT/* <: EnumEntry*/](key: KPathW): Pes[Double] = ???//opt  (key).map(_.asSeq.map(_enum))
+  //TODO: t210201095414  
+  def enum  [T <: enumeratum.EnumEntry: WTT](key: KPathW):     T  = ???//force(key).thn(_enum)
+  def enum_ [T <: enumeratum.EnumEntry: WTT](key: KPathW): Opt[T] = ???//opt  (key).map(_enum)
+  def enums [T <: enumeratum.EnumEntry: WTT](key: KPathW): Seq[T] = ???//force(key)      .asSeq.map(_enum)
+  def enums_[T <: enumeratum.EnumEntry: WTT](key: KPathW): Pes[T] = ???//opt  (key).map(_.asSeq.map(_enum))
 
   // ---------------------------------------------------------------------------
   def text  (key: KPathW):     String  = force(key).thn(format)

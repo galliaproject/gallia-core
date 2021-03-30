@@ -565,68 +565,27 @@ __Abstraction__:
 The main abstraction for top-level multiplicity is [`data.multiple.streamer.Streamer[T]`](https://github.com/galliaproject/gallia-core/blob/init/src/main/scala/gallia/data/multiple/streamer/Streamer.scala#L12), which is then wrapped by the [`data.single.Obj`](https://github.com/galliaproject/gallia-core/blob/init/src/main/scala/gallia/data/single/Obj.scala#L8)-aware counterpart [`data.multiple.Objs`](https://github.com/galliaproject/gallia-core/blob/init/src/main/scala/gallia/data/multiple/Objs.scala#L8) (wraps a `Streamer[Obj]`). It currently comes in three flavors, all also under `data.multiple.streamer`:
 1. <a name="210224092157"></a>[`ViewStreamer`](https://github.com/galliaproject/gallia-core/blob/init/src/main/scala/gallia/data/multiple/streamer/ViewStreamer.scala#L12): _default_
 2. <a name="210224092158"></a>[`IteratorStreamer`](https://github.com/galliaproject/gallia-core/blob/init/src/main/scala/gallia/data/multiple/streamer/IteratorStreamer.scala#L10): enabled via `.stream(_.iteratorMode)`
-3. <a name="210224092159"></a>[`RddStreamer`](https://github.com/galliaproject/gallia-spark/blob/init/src/main/scala/gallia/data/multiple/streamer/RddStreamer.scala#L9): enabled via `.stream(_.rdd)` if `gallia.spark._` has been [imported](https://github.com/galliaproject/gallia-core/blob/init/README.md#spark-rdds)
+3. <a name="210224092159"></a>[`RddStreamer`](https://github.com/galliaproject/gallia-spark/blob/init/src/main/scala/gallia/data/multiple/streamer/RddStreamer.scala#L9): enabled via the `SparkContext` if `gallia.spark._` has been [imported](https://github.com/galliaproject/gallia-core/blob/init/README.md#spark-rdds)
 
-<a name="210121153218"></a>
-Example processing:
-```scala
-logging.setToWarn()
+__Example__:
 
-"/data/file.jsonl"
-    .stream(_.rdd) // will run with `local[*]` as master by default
-    .rename('foo ~> 'FOO)
-    .printJsonl() // note: closes SparkContext upon completion by default
+<a name="using-spark"></a><a name="210121153218"></a>
+See Spark used in action in [this repo](https://github.com/galliaproject/gallia-genemania-spark/blob/master/README.md#description)
 
-"/data/huge.tsv.bz2"
-  .stream(_.rdd)
-    .rename('gene).to('hugo_symbol)
-    .groupBy('mutation_id).as('genes)
-  .printJsonl()
-```
-
-<a name="210121153219"></a>
- Example Joins:
-```scala
-"/data/huge1.tsv.gz"       .stream(_.rdd("spark://localhost:7077"))
-  .leftJoin(
-"hdfs://data/huge2.tsv.lzo".stream(_.rdd("spark://localhost:7077")),
-     on = 'some_common_key)
-     // ...
-  .write("s3://mybucket/huge12.jsonl.bz2")
-```
-
-<a name="210121153220"></a>
- Notes:
- - The same code without the `_.rdd("...")` part would use an in-memory join ("local" mode)
- - Reading and writing to/from [HDFS](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210120153618) and [S3](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210120153619) isn't actually ready, neither is using [lzo](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210120153618) compression
+__Bypassing abstraction__:
 
 <a name="210121153221"></a>
-Modify underlying RDD (<a href="https://www.joelonsoftware.com/2002/11/11/the-law-of-leaky-abstractions/" target="_blank">The Law of Leaky Abstractions</a>):
+You can modify the underlying RDD (think <a href="https://www.joelonsoftware.com/2002/11/11/the-law-of-leaky-abstractions/" target="_blank">Law of Leaky Abstractions</a>) via `.rdd()`, eg:
 
 ```scala
-"s3://mybucket/huge.tsv.bz2"
-  .stream(_.rdd("spark://..."))
-    .retain('mutation_id, 'gene_symbol, 'chromosome)
-    // can by-pass abstraction when needed,
-    //   though schema is not allowed to change
-    //   (which cannot be enforced)
-    .rdd { _.coalesce(1).cache }
-    .groupBy('mutation_id).as('genes)
+data
+  // ...
+  // can by-pass abstraction when needed,
+  //   though schema is not allowed to change
+  //   (which cannot be enforced)
+  .rdd { _.coalesce(1).cache }
   // ...
 ```
-
-<a name="21012115320622"></a>
- One can use/reuse a pre-existing `SparkContext` instead:
-```scala
-(sc: SparkContext)
-  .stream("s3://mybucket/huge.tsv.bz2")
-  // ...
-sc.stop()
-```
-
-<a name="210121153223"></a>
-The above Spark runs would be quite inefficient since the schema would have to be determined via an additional loop over the full data (costly when big).
-Instead one would want to provide the schema as shown [below](#210121153230) .
 
 <a name="spilling"></a><a name="poor-man-scaling"></a><a name="poorman-scaling"></a><a name="210303163034"></a>
 ### Poor man's scaling (_"spilling"_)
@@ -718,10 +677,10 @@ Where "/meta/myschema.json" contains: `{"fields":[{"key":"foo","info":...`
 <a name="210121153233"></a>
 More interactions with case classes are available (e.g. in transformations); they will be detailed in a future article.
 
+<a name="macros"></a><a name="210326142045"></a>
 ## Macros
 
-<a name="macros"></a><a name="210326142045"></a>
-WIP
+See dedicated [repo](https://github.com/galliaproject/gallia-macros), which contains examples
 
 
 <a name="full-blown"></a><a name="210121135252"></a>
@@ -801,12 +760,10 @@ Not even remotely. There are known bugs, blatantly missing features, a lot of mi
 There is a lot planned in the way of addressing these issues, but it will require more resources than the author working alone. In particular, performance has
 a prominent place in the task [list](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210121095401).
 
-<a name="210127134031"></a>
-### Why an "All right reserved" license?
-This is temporary until I determine what the right license and funding model are going to be for this project.
+<a name="license"></a><a name="bsl"></a><a name="210127134031"></a><a name="210223092122"></a>
+### Why the Business Source License (BSL)?
 
-<a name="210223092122"></a>
-<ins>__UPDATE__</ins> on 2021-02-23: started process of creating a [Business Source License (BSL)](https://mariadb.com/bsl-faq-adopting/#whatis) with specific terms still to be determined, but essentially free for anyone doing important work.
+The [terms](https://github.com/galliaproject/gallia-core/blob/master/LICENSE#L9) of the license make Gallia free for any essential OR small entity. For more information, see the [F.A.Q](https://github.com/galliaproject/gallia-docs/blob/master/bsl.md)
 
 <a name="210127134032"></a>
 ### How can I help?
@@ -844,8 +801,9 @@ though it's more likely it would be replaced in phases short of a major design f
 
 <a name="why-macros"></a><a name="210127134037"></a>
 ### Why not more macros-based features?
-I [prototyped](#macros) a lot with macros and I think they will play an important role in the future of _Gallia_.
-They are also quite tricky to deal with, and since they are scheduled for a major overhaul, I am reluctant to invest a lot of time on that front at the moment.
+I [prototyped](#macros) a lot with macros and they will play an important role in the future of _Gallia_.
+
+They can also be tricky to deal with, and since they are scheduled for a major overhaul, I am reluctant to invest a lot of time on that front at the moment.
 I see them helping a lot in particular with boilerplate and some compile-time validation (e.g. key [validation](http://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210127134525)).
 The very initial plan was to leverage [whitebox](https://docs.scala-lang.org/overviews/macros/blackbox-whitebox.html) macros for every step, but I gave up on the idea pretty early on. I'd like to re-investigate it for a subset of features/use cases at some point however,
 especially since there seems to be some interesting projects (e.g. [quill](https://github.com/getquill/quill)) that already make interesting use of them.

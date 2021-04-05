@@ -1,8 +1,8 @@
-package aptus.misc
+package gallia.atoms.utils
 
-import aptus.Anything_
-import aptus.String_
-import aptus.JsonString
+
+import java.io.Closeable
+import aptus._
 
 // ===========================================================================
 trait MongoDb {

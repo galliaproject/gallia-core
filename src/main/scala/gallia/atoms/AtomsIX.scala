@@ -181,10 +181,10 @@ object AtomsIX {
       // FIXME: t201223100652 - proper DI; look into macwire
 
       // ---------------------------------------------------------------------------
-      var mongoDbOpt: Option[aptus.misc.MongoDb] = None // TODO: make sure can only set once
+      var mongoDbOpt: Option[utils.MongoDb] = None // TODO: make sure can only set once
 
         // ---------------------------------------------------------------------------
-        def mongoDb(): aptus.misc.MongoDb =
+        def mongoDb(): utils.MongoDb =
           mongoDbOpt match {
             case None        => illegal("requires gallia.mongodb.injectMongoDb") // TODO: t201223101425 prettify
             case Some(value) => value }

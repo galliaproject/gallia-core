@@ -29,13 +29,14 @@ case class IntermediateMetaResult(dag: gallia.dag.DAG[IntermediateMetaResultNode
             .thn(SuccessMetaResult.apply)
 
       // ---------------------------------------------------------------------------
-      def either: Either[ErrorResult, (SuccessMetaResult, ActionPlan)] =
+      def either: Either[MetaErrorResult, (SuccessMetaResult, ActionPlan)] =
         successOpt match {
             case None                             => Left (this)
             case Some(success: SuccessMetaResult) => Right(success, ActionPlanPopulator(success.dag)) }
 
       // ---------------------------------------------------------------------------
       def allErrors: Errs = dag.kahnTraverseNodes.flatMap(_.result.errors)
+        def containsAllErrorMarkers(markers: Seq[String]): Boolean = markers.forall(allErrors.toString.contains) // mostly for tests        
 
       // ---------------------------------------------------------------------------
       def metaErrorOpt: Option[MetaError] =

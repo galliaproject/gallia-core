@@ -88,10 +88,14 @@ object  ADataAliases extends  ADataAliases
   // ===========================================================================
   trait ADataAliases {
     type AObj  = gallia.domain.AObj
+    val  AObj  = gallia.domain.AObj
     type BObj  = gallia.domain.BObj
+    val  BObj  = gallia.domain.BObj
 
     type AObjs = gallia.domain.AObjs
+    val  AObjs = gallia.domain.AObjs
     type BObjs = gallia.domain.BObjs
+    val  BObjs = gallia.domain.BObjs
   }
 
 // ===========================================================================

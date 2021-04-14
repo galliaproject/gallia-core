@@ -41,7 +41,7 @@ import gallia.meta._
     // ---------------------------------------------------------------------------
     // selection
     @deprecated val MoreThanOneKey = "201110091500" -> "MoreThanOneKey"
-    @deprecated val OutOfBound     = "201110144638" -> "OutOfBound"
+    @deprecated val OutOfBoundKey  = "201110144638" -> "OutOfBoundKey"
 
     // ---------------------------------------------------------------------------
     @deprecated object Runtime {
@@ -132,8 +132,8 @@ import gallia.meta._
       case class SchemaMismatch(cls1: Cls, cls2: Cls) extends _Error3 { val errorId = "201015101700"; val label = "SchemaMismatch" }
 
       // ---------------------------------------------------------------------------
-      case class OutOfBound(maxSize: Int, offendingIndices: Seq[Int]) extends _Error1 {
-        val errorId = "201110144638"; val label = "OutOfBound"
+      case class OutOfBoundKey(maxSize: Int, offendingIndices: Seq[Int]) extends _Error1 {
+        val errorId = "201110144638"; val label = "OutOfBoundKey"
           def formatDetails = offendingIndices.#@@.append(s"(${maxSize})") }
 
       // ---------------------------------------------------------------------------

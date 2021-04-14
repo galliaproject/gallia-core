@@ -37,7 +37,6 @@ case class BObj private[gallia](entries: gallia.domain.KVEs) { // TODO: t2101241
 case class BObjs(values: Seq[BObj]) {
     def forceCls : Cls  = values.map(_.forceCls).thn(AObjs.combineCls)
     def forceObjs: Objs = values.map(_.forceObj).thn(Objs.from)
-    def forceAbjs : AObjs = AObjs.from(values.map(_.forceAObj))
     def forceAObjs: AObjs = AObjs.from(values.map(_.forceAObj))
   }
 

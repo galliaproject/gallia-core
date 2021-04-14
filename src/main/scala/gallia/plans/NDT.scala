@@ -6,6 +6,9 @@ import gallia.Vle
 // ===========================================================================
 /** NDT = NodeDataType */
 trait NDT {
+    def value: Any
+
+    // ---------------------------------------------------------------------------
     def forceVle: Vle   = this.asInstanceOf[NDT.V].value
 
     def forceT[T]: T    = this.asInstanceOf[NDT.V].value.asInstanceOf[T]

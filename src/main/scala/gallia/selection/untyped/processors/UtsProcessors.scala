@@ -42,7 +42,7 @@ object UtsProcessors {
   case class ExplicitIndex(value: MIndex, special: Option[ExplicitIndex.Special]) extends KeySelection {
       private def resolve(c: Cls) = _utils.unmirror(c.size)(value)
 
-      def vldt(c: Cls): Errs = resolve(c).thn { resolved => if (c.size <= resolved) _Error.OutOfBound(c.size, Seq(resolved)).errs else Nil }
+      def vldt(c: Cls): Errs = resolve(c).thn { resolved => if (c.size <= resolved) _Error.OutOfBoundKey(c.size, Seq(resolved)).errs else Nil }
       def key (c: Cls): Key  = resolve(c).thn(c.keys) }
 
     // ---------------------------------------------------------------------------
@@ -86,7 +86,7 @@ object UtsProcessors {
         _utils
           .outOfBounds(c.size)(values)
           .as.noneIf(_.isEmpty).toSeq
-          .map(_Error.OutOfBound(c.size, _)).map(_.err)
+          .map(_Error.OutOfBoundKey(c.size, _)).map(_.err)
 
       // ---------------------------------------------------------------------------
       protected def validUnmirroredIndices(c: Cls): Seq[Index] =

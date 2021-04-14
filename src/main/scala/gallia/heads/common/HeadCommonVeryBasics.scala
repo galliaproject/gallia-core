@@ -102,7 +102,7 @@ trait HeadCommonVeryBasics[F <: HeadCommon[F]] { _: HeadCommon[F] =>
   def renameToUnquoted    (x: KPathW): Self2 = ???
 
   // ---------------------------------------------------------------------------
-  def addId    [T: WTT](value: T): Self2 = add    (_id -> value)
+  def addId    [T: WTT](value: T): Self2 = add    (_id -> value) // TODO: t210408130938 - as first key rather
   def replaceId[T: WTT](value: T): Self2 = replace(_id -> value)
   // TODO: offert shofthand for the convert to double/int since so common?
 }

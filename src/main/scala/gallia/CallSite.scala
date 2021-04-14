@@ -11,9 +11,9 @@ case class CallSite(
 
     override def toString: String = formatDefault
       def formatDefault: String = formatLines.joinln
-        def formatLines: Seq[String] = sub.flatMap(_.formatPathOpt).toSeq ++ Seq(sub.toString, fullTrace.section)
+        def formatLines: Seq[String] = sub.flatMap(_.formatPathOpt.map(_.newline)).toSeq ++ Seq(sub.toString, fullTrace.section)
 
-    def formatSuccinct: String = sub.flatMap(_.formatPathOpt).getOrElse(fullTrace.joinln.sectionAllOff("?"))
+    def formatSuccinct: String = sub.flatMap(_.formatPathOpt.map(_.newline)).getOrElse(fullTrace.joinln.sectionAllOff("?"))
   }
 
   // ===========================================================================
@@ -26,7 +26,10 @@ case class CallSite(
     def formatPathOpt: Option[String] =
       filePathOpt
         .map(filePath =>
-          s"${filePath}(${fileName}:${line})\n")
+          s"${filePath}${location}")
+
+    // ---------------------------------------------------------------------------
+    def location: String = s"(${fileName}:${line})" // meant to be IDE-click-friendly          
   }
 
   // ===========================================================================

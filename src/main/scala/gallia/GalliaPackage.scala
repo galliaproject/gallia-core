@@ -1,3 +1,5 @@
+import java.lang.IllegalStateException
+
 import gallia.io.in._
 import gallia.domain._
 import gallia.data.single.ObjIn
@@ -34,9 +36,16 @@ package object gallia
   private[gallia] type ActionVMN = ActionVN with ActionMN
 
   // ===========================================================================
+  @deprecated
   private[gallia] def illegal        (anys: Any*) = throw new IllegalArgumentException(anys.mkString(","))
+  private[gallia] def illegalArgument(anys: Any*) = throw new IllegalArgumentException(anys.mkString(","))
+  private[gallia] def illegalState   (anys: Any*) = throw new IllegalStateException   (anys.mkString(","))
+  
+  @deprecated
+  private[gallia] def runtimeError   (anys: Any*) = throw new RuntimeError(anys.mkString(","))  
+  private[gallia] def dataError      (anys: Any*) = throw new RuntimeError(anys.mkString(","))
+
   private[gallia] def toBeImplemented(anys: Any*) = throw new ToBeImplemented(anys.mkString(","))
-  private[gallia] def runtimeError   (anys: Any*) = throw new RuntimeError(anys.mkString(","))
 
   // ---------------------------------------------------------------------------
   private[gallia] def errIf_(test: Boolean)(a: Any): Err_ = if (test) Some(Err(a)) else None

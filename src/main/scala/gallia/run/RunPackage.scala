@@ -2,8 +2,8 @@ package gallia
 
 // ===========================================================================
 package object run {
-  type ErrorResult         = IntermediateMetaResult
-  type ErrorMetaResultNode = IntermediateMetaResultNode
+  type MetaErrorResult         = IntermediateMetaResult
+  type MetaErrorMetaResultNode = IntermediateMetaResultNode
 
   // ---------------------------------------------------------------------------
   type    NodeId = gallia.dag.   NodeId

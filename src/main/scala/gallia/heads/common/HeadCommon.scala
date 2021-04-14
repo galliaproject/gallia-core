@@ -34,7 +34,7 @@ trait HeadCommon[F <: HeadCommon[F]]
   // ---------------------------------------------------------------------------
   // TODO: this will be very affected by t210104164036
   /** "Computer, I know better than you" */
-  def customUU(meta: Cls => Cls, data: Obj => Obj) = self2 :+ new gallia.actions.ActionsCustoms.CustomUU(meta, data)
+  def customU2U(meta: Cls => Cls, data: Obj => Obj) = self2 :+ new gallia.actions.ActionsCustoms.CustomUU(meta, data)
 
   // ---------------------------------------------------------------------------
   def showSchema        :  Self2 = self2 :+ ShowSchema(abort = false)

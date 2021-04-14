@@ -96,8 +96,8 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
 
   // ---------------------------------------------------------------------------
   // TODO: these will be very affected by t210104164036
-  def customZZ(meta: Cls => Cls, data: Objs     => Objs    ): Self = self ::+ new CustomZZ(meta, data)
-  def customSS(meta: Cls => Cls, data: Seq[Obj] => Seq[Obj]): Self = self ::+ CustomZZ.from(meta, data)
+  def customZ2Z(meta: Cls => Cls, data: Objs     => Objs    ): Self = self ::+ new CustomZZ(meta, data)
+  def customS2S(meta: Cls => Cls, data: Seq[Obj] => Seq[Obj]): Self = self ::+ CustomZZ.from(meta, data)
 
   // ---------------------------------------------------------------------------
   def assertDataUnsafeZ(pred: Objs => Boolean): Self = self ::+

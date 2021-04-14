@@ -6,6 +6,9 @@ package object result {
   type Objs = gallia.Objs
   
   // ---------------------------------------------------------------------------
+  type Plan = gallia.plans.ActionPlan
+  
+  // ---------------------------------------------------------------------------
   type MetaErrorResult = gallia.run.MetaErrorResult
 }
 

@@ -3,10 +3,8 @@ package gallia.result
 import aptus.Seq_
 
 import gallia._
-import gallia.run.ErrorResult
 
-// ===========================================================================
-abstract class RunResult[$SuccessResult <: SuccessResult[$Data], $Data](either: Either[ErrorResult, $SuccessResult]) {
+class RunResult[$SuccessResult <: SuccessResult[$Data], $Data](val either: Either[MetaErrorResult, $SuccessResult]) {
 
     override def toString: String = formatDefault
       def formatDefault: String =
@@ -19,7 +17,7 @@ abstract class RunResult[$SuccessResult <: SuccessResult[$Data], $Data](either: 
     def isError   : Boolean = either.isLeft
 
     // ---------------------------------------------------------------------------
-    def mapData[T](f: $Data => T): Either[ErrorResult, T] = either.map { success => f(success.data) }
+    def mapData[T](f: $Data => T): Either[MetaErrorResult, T] = either.map { success => f(success.data) }
 
     // ---------------------------------------------------------------------------
     private[gallia] def forceErrors: Errs =
@@ -42,8 +40,9 @@ abstract class RunResult[$SuccessResult <: SuccessResult[$Data], $Data](either: 
   }
 
   // ===========================================================================
-  case class RunResultU   (either: Either[ErrorResult, SuccessResultU   ]) extends RunResult[SuccessResultU   , Obj ](either)
-  case class RunResultZ   (either: Either[ErrorResult, SuccessResultZ   ]) extends RunResult[SuccessResultZ   , Objs](either)
-  case class RunResultV[T](either: Either[ErrorResult, SuccessResultV[T]]) extends RunResult[SuccessResultV[T], T   ](either)
+  case class RunResultM   (override val either: Either[MetaErrorResult, SuccessResultM])    extends RunResult[SuccessResultM,    Plan](either)
+  case class RunResultU   (override val either: Either[MetaErrorResult, SuccessResultU])    extends RunResult[SuccessResultU,    Obj] (either)
+  case class RunResultZ   (override val either: Either[MetaErrorResult, SuccessResultZ])    extends RunResult[SuccessResultZ,    Objs](either)
+  case class RunResultV[T](override val either: Either[MetaErrorResult, SuccessResultV[T]]) extends RunResult[SuccessResultV[T], T]   (either)  
 
 // ===========================================================================

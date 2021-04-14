@@ -827,7 +827,7 @@ The plan is to externalize it eventually (Apache 2 license). In fact, the _Aptus
 
 <a name="210127134040"></a>
 ### Where are the tests?
-They live in a different repo that will require some serious cleanup. I will release them in increments. They basically take the following form:
+They live in a different [repo](https://github.com/galliaproject/gallia-testing#gallia-testing) and are being introduced incrementally (unpublished ones need a lot of cleaning up). They basically take the following form:
 
 <a name="210121153250"></a>
 ```scala
@@ -839,13 +839,13 @@ aobj( // the "a" in aobj stands for "Annotated"
     .using {
         _ .translate('f ~> 'F).using("foo" -> "oof")
           .remove('g) }
-  .test {
+  .check {
     aobj(
       cls('p   .cls_('f.string, 'g.int   ), 'z.boolean, 'h .cls_ ('F.string)))(
       obj('p -> obj ('f -> "foo", 'g -> 1), 'z -> true, 'h -> obj('F -> "oof")) ) }
 ```
 
-Where `test` wraps an equality assertion (I have not settled on a definitive testing library yet).
+Where `check` wraps an equality assertion (I have not settled on a definitive [testing library](https://github.com/galliaproject/gallia-docs/blob/master/tasks.md#testing-library) yet).
 
 <a name="210127134041"></a>
 ### Why so few comments, especially scaladoc?

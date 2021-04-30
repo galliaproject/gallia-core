@@ -733,6 +733,12 @@ I have never dealt with it personally but I imagine the likes of computational p
   - [Count by word length](https://gist.github.com/anthony-cros/2ceba1be56bd99a8d4bafd2b9f52b9b3#file-wordcount-scala-L29) example
 - <a name="210223143709"></a>SQL-like:
   - <a name="210224103624"></a>Northwind queries: coming soon
+- <a name="210429153511"></a><a name="web-app-server-logic"></a>Web application server logic:
+  - <a name="210429153512"></a><a name="cbio-studies-summary"></a>cbioportal's "_studies summary_" API call:
+reproducing response to obtain a summary of all studies for [cbioportal](https://www.cbioportal.org/), arguably the most commonly used web portal for cancer data.
+  This is the first API call made upon loading the portal's [main page](https://www.cbioportal.org/), and it is specified on their [swagger page](https://www.cbioportal.org/api/swagger-ui.html#/Studies/getAllStudiesUsingGET]).
+  
+    See [dedicated page](https://github.com/galliaproject/gallia-docs/blob/master/examples/cbioportal_cancer_studies.md) for the code.
 - <a name="210223094317"></a><a name="articles-examples">Reproducing random examples encountered in articles on data manipulation:
   - <a name="210224103606"></a>TPC-DS Sales summary [example query](https://gist.github.com/anthony-cros/f6d82744523349a65bc86598c79cabdc) as discussed in Andrew Ray's [Databricks post](https://databricks.com/blog/2016/02/09/reshaping-data-with-pivot-in-apache-spark.html): _"Reshaping Data with Pivot in Apache Spark"_ (February 2016)
   - <a name="210224123645"></a>[data manipulation task](https://gist.github.com/anthony-cros/4b5d40014dd52d57bc7dd05c35029066) for the Cars93 dataset (R MASS package), as discussed in Darren Wilkinson's [blog post](https://darrenjw.wordpress.com/2015/08/21/data-frames-and-tables-in-scala/): _"Data frames and tables in Scala"_ (August 2015)

@@ -51,12 +51,12 @@ class DAG[$NodeType](
 
       // ---------------------------------------------------------------------------
       // TODO: t210114113316 - reenable graphviz dot's rendering
-      def formatDot: String = ???//gallia.graphviz.DAGDot.formatIdDot(toIdDAG)
-      def  printDot: Self   = { formatDot.p; this }
+      def formatDot: String    = ???//gallia.graphviz.DAGDot.formatIdDot(toIdDAG)
+      def  printDot: this.type = { formatDot.p; this }
 
       // ---------------------------------------------------------------------------
-      def formatDot(lookup: $NodeType => (String /* label */, String /* color */)): String = ???//gallia.graphviz.DAGDot.formatDot(this)(lookup)
-      def  printDot(lookup: $NodeType => (String /* label */, String /* color */)): Self   = { formatDot(lookup).p; this }
+      def formatDot(lookup: $NodeType => (String /* label */, String /* color */)): String    = ???//gallia.graphviz.DAGDot.formatDot(this)(lookup)
+      def  printDot(lookup: $NodeType => (String /* label */, String /* color */)): this.type = { formatDot(lookup).p; this }
 
       // ---------------------------------------------------------------------------
       private def defaultDotStyle(node: $NodeType) = (idResolver(node), "White")

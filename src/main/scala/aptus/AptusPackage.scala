@@ -2,6 +2,7 @@ import org.apache.commons.lang3
 
 import scala.collection.{mutable,immutable}
 
+import java.io._
 import java.time._
 import java.time.format.DateTimeFormatter
 
@@ -91,17 +92,23 @@ package object aptus
     import scala.language.postfixOps; def systemCall: String = sys.process.Process(str) !!
 
     // ===========================================================================
+    def mkdirs = { new java.io.File(str).mkdirs(); str }
+
+    // ---------------------------------------------------------------------------
     def writeFileContent(path: String): FilePath = utils.FileUtils.writeContent(path, content = str)
 
       // ---------------------------------------------------------------------------
-      def readFileContent()             : Content     = utils.FileUtils.readFileContent(path = str)
-      def readFileLines()               : Seq[String] = utils.FileUtils.readFileLines  (path = str)
+      def readFileContent(): Content     = utils.FileUtils.readFileContent(path = str)
+      def readFileLines  (): Seq[String] = utils.FileUtils.readFileLines  (path = str)
 
-      def readFileTsv  ()               : Seq[Vector[String]] = readFileTsv(header = true)
-      def readFileTsv  (header: Boolean): Seq[Vector[String]] = readFileLines.thnIf(header)(_.drop(1)).map(_.split('\t').toVector)
+      def readFileTsv(): Seq[Vector[String]] = readFileLines.map(_.splitBy("\t").toVector)    
+      def readFileCsv(): Seq[Vector[String]] = readFileLines.map(_.splitBy( ",").toVector)
 
-      def readFileCsv  ()               : Seq[Vector[String]] = readFileCsv(header = true)
-      def readFileCsv  (header: Boolean): Seq[Vector[String]] = readFileLines.thnIf(header)(_.drop(1)).map(_.split(',').toVector)
+      def streamFileLines(): (Iterator[String], Closeable) = utils.FileUtils.streamFileLines(path = str)
+
+    // ===========================================================================
+    def readUrlContent(): Content   = utils.UrlUtils.content(str)
+    def readUrlLines()  : Seq[Line] = utils.UrlUtils.  lines(str)
 
     // ===========================================================================
     def prepend(prefix: String)                      = s"$prefix$str"
@@ -243,6 +250,7 @@ package object aptus
     def join                 = coll.mkString
     def joinln               = coll.mkString("\n")
     def joinlnln             = coll.mkString("\n\n")
+    def jointab              = coll.mkString("\t")
 
     def #@@ = s"#${coll.size}:${coll.mkString("[", ", ", "]")}"
 
@@ -394,11 +402,17 @@ package object aptus
     }
 
   // ===========================================================================
+  implicit class Throwable_(val throwable: Throwable) extends AnyVal {
+    def       stackTrace: Seq[StackTraceElement] = throwable.getStackTrace.toList              	
+    def formatStackTrace: String                  = utils.ThrowableUtils.stackTraceString(throwable)  	
+  }
+
+  // ---------------------------------------------------------------------------
   implicit class Class_[A](val klass: Class[A]) extends AnyVal {
     def fullPath: String = klass.getCanonicalName.replace(".package.", ".") /* TODO */.replaceAll("\\$$", "")
   }
 
-  // ---------------------------------------------------------------------------
+  // ===========================================================================
   implicit class URL_(url: java.net.URL) {
     def smartCloseabledInputStream: Closeabled[java.io.InputStream] = utils.InputStreamUtils.smartCloseabledInputStream(url.openStream())
   }
@@ -409,7 +423,7 @@ package object aptus
     def closeabledBufferedReader(charset: Charset): aptus.Closeabled[java.io.BufferedReader] = utils.InputStreamUtils.closeabledBufferedReader(is, charset)
   }
 
-  // ---------------------------------------------------------------------------
+  // ===========================================================================
   implicit class ResultSet_(val rs: java.sql.ResultSet) extends AnyVal {
     def closeable = new java.io.Closeable { override def close() { rs.close() } }
     def rawRdbmsEntries : Iterator[RawRdbmsEntries] = utils.SqlUtils.rawRdbmsEntries(rs)

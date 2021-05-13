@@ -31,8 +31,12 @@ case class TypeLeaf(
     def unaliased: TypeLeaf = copy(alias = None, fields = fields.map(_.unaliased))
 
     // ===========================================================================
-    def forceDataClass: Cls = dataClassEither.right.get
-    
+    def forceDataClass: Cls =
+      dataClassEither match {
+        case Left (l) => illegalArgument(l)
+        case Right(r) => r }
+
+    // ---------------------------------------------------------------------------
     def dataClassEither: Either[Any, Cls] = // TODO: use Try until determine precise criteria (cc + not Some + valid types...)
       util.Try(InfoUtils.forceNestedClass(this)) match {
         case util.Failure(error)          => Left(s"TODO:t201015102536:${error.toString}")

@@ -9,9 +9,11 @@ private[gallia] object InfoUtils {
   def forceNestedClass(leaf: TypeLeaf): Cls =
      leaf
        .fields
-       .map { field => Fld(
-           field.key.symbol,
-           field.node.forceNonBObjInfo) }
+       .map { field =>
+         Fld(
+             field.key.symbol,
+             field.node.forceNonBObjInfo)
+           .setEnumName(field.node.leaf.name) /* mostly for macros */ }
        .thn(Cls.apply)
        .setName(leaf.name.splitBy(".").last /* TODO: see t210325105833 - need to be in scope for macros */) // mostly for macros
 

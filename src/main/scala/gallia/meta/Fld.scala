@@ -23,6 +23,12 @@ case class Fld(key: Key, info: Info) extends FldLike {
     require(key.name.nonEmpty)// TODO: validation
 
     // ---------------------------------------------------------------------------
+    // mostly for macros
+    private var enumNameOpt: Option[String] = None
+    def setEnumName(enumName: String) = { enumNameOpt = Some(enumName); this }
+    def forceEnumName: String = enumNameOpt.get
+
+    // ---------------------------------------------------------------------------
     protected override val _container: Container = info.container
     protected override val _containee: Containee = info.containee
 

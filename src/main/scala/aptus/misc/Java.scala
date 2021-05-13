@@ -23,7 +23,9 @@ object Java {
 
       // the type ascription is for documentation purposes
       case x: java.math.BigDecimal => (x: scala.math.BigDecimal)
-      case x: java.math.BigInteger => (x: scala.math.BigInt    ) }
+      case x: java.math.BigInteger => (x: scala.math.BigInt    )
+
+      case x: java.sql.Timestamp => x.toLocalDateTime() }
 
 }
 

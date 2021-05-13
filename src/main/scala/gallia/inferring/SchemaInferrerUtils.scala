@@ -18,8 +18,15 @@ private object SchemaInferrerUtils {
         dis
           .fields
           .map { existingField =>
-            that.field_(existingField.key)
+            that
+              .field_(existingField.key)
               .map { newField =>
+    
+//FIXME: t210513091700 - quick hack
+     if (existingField.isOne && newField.isOpt) existingField.toNonRequired
+else if (existingField.isOpt && newField.isOne) existingField
+else
+                
                 if (Fld.isIntAndDouble(existingField, newField)) existingField.toDouble
                 else                                  existingField }
               .getOrElse(existingField) }
@@ -54,6 +61,9 @@ private object SchemaInferrerUtils {
 
           if (newField.info != existingField.info)
             if (Fld.isIntAndDouble(newField, existingField)) None
+//FIXME: t210513091700 - quick hack
+else if (existingField.isOne && newField.isOpt) None
+else if (existingField.isOpt && newField.isOne) None            
             else                                             Some(FldPair(existingField, newField))
           else                                               None }
         .as.noneIf(_.isEmpty)

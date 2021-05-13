@@ -45,14 +45,29 @@ object SchemaInferrer { // mostly for JSON for now...
     @NumberAbstraction
     def containee(value: AnySingleValue): Containee =
       value match {
-        case x: Obj => klass(x)
-
+        case x: Obj => klass(x) 
         case x: String  => _String
         case x: Double  => // 201119115427
-          if (x.isValidInt /* Long? */) _Int
+          if (x.isValidInt /* Long? */) _Int // _Long?
           else                          _Double
         case x: Int     => _Int
-        case x: Boolean => _Boolean }
+        case x: Boolean => _Boolean
+
+        case x: enumeratum.EnumEntry => _Enum
+
+        case x: Byte    => _Byte
+        case x: Short   => _Short
+        case x: Long    => _Long
+        
+        case x: Float   => // 201119115427
+          if (x.isValidInt /* Long? */) _Int
+          else                          _Float
+        
+        case x: BigInt        => _BigInt    
+        case x: BigDecimal    => _BigDecimal
+        
+        case x: LocalDate     => _LocalDate        
+        case x: LocalDateTime => _LocalDateTime }
 
 }
 

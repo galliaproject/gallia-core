@@ -27,6 +27,12 @@ object ActionsZZ {
   @gallia.Distributivity case class Take(n: Int) extends ActionZZd with IdentityVM1 { // TODO: validate n
     def atomzz = _Take(n) }
 
+  // ---------------------------------------------------------------------------
+  @gallia.Distributivity case class AddIndex(key: Key, oneBased: Boolean) extends ActionZZd with IdentityV1 {
+    // TODO: validtte not already present
+    def _meta (c: Cls): Cls = c.add(key.int)  
+    def atomzz              = _AddIndex(key, oneBased) } 
+  
   // ===========================================================================
   import utils.NestedTransform.{parseUU, parseUZ, parseUV}
 

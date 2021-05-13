@@ -1,6 +1,7 @@
 package gallia.atoms
 
 import gallia._
+import scala.util.chaining._
 
 // ===========================================================================
 object AtomsZZ {
@@ -11,9 +12,16 @@ object AtomsZZ {
 
   // ---------------------------------------------------------------------------
   @gallia.Distributivity
-  case class _Take(n: Int) extends AtomZZ { def naive(z: Objs) =
-      if (z.isEmpty) throw new RuntimeError(s"TODO:210114170445:Empty:${n}")
-      else           z.take(n) }
+  case class _Take(n: Int) extends AtomZZ { def naive(z: Objs) = z.take(n) }
+
+  // ---------------------------------------------------------------------------
+  @gallia.Distributivity
+  case class _AddIndex(key: Key, oneBased: Boolean) extends AtomZZ { def naive(z: Objs) =
+      z .toListAndTrash
+        .zipWithIndex
+        .map { case (o, value) => 
+          o.add(key, if (oneBased) value + 1 else value) }
+        .pipe(Objs.from) }
 
   // ===========================================================================
   case object _Distinct extends AtomZZ { def naive(z: Objs) =

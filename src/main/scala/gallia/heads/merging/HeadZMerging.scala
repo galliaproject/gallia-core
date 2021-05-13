@@ -110,7 +110,7 @@ object HeadZPair { // TODO: t201123125604 - why implicit not picked up?
           def  leftCoGroup(on: KeyW, asLeft: KeyW = _left, asRight: KeyW = _right): HeadZ =  leftCoGroup(_.on(on).as(asLeft, asRight))
           def rightCoGroup(on: KeyW, asLeft: KeyW = _left, asRight: KeyW = _right): HeadZ = rightCoGroup(_.on(on).as(asLeft, asRight))
           def innerCoGroup(on: KeyW, asLeft: KeyW = _left, asRight: KeyW = _right): HeadZ = innerCoGroup(_.on(on).as(asLeft, asRight))
-
+         
         // ---------------------------------------------------------------------------
         def join(conf: Join => End) = left.join(right)(conf)
 
@@ -123,6 +123,11 @@ object HeadZPair { // TODO: t201123125604 - why implicit not picked up?
             def  leftJoin(on: KeyW): HeadZ = left.join(right)(_. left.on(on))
             def rightJoin(on: KeyW): HeadZ = left.join(right)(_.right.on(on))
             def innerJoin(on: KeyW): HeadZ = left.join(right)(_.inner.on(on))
+
+              def  fullJoinOnCommonKey: HeadZ = left.join(right)(_. full.onCommonKey)            
+              def  leftJoinOnCommonKey: HeadZ = left.join(right)(_. left.onCommonKey)
+              def rightJoinOnCommonKey: HeadZ = left.join(right)(_.right.onCommonKey)
+              def innerJoinOnCommonKey: HeadZ = left.join(right)(_.inner.onCommonKey)
 
     // ---------------------------------------------------------------------------
     // TODO: more such shorthands

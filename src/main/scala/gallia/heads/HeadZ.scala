@@ -145,6 +145,8 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
     def isEmpty : HeadV[Boolean] = size.mapV(_ == 0)
     def nonEmpty: HeadV[Boolean] = size.mapV(_ >  0)
 
+    def hasSize(value: Int) = size.mapV(_ == value)
+    
     // ---------------------------------------------------------------------------
     def forceSize     = size    .forceValue
     def forceIsEmpty  =  isEmpty.forceValue
@@ -168,6 +170,9 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
       //def randomize        : HeadZ = ???
       //def addIndex  : Self = ??? // adds _index
       //def addRank   : Self = ??? // adds _rank (1-based)
+
+@Distributivity def addIndex: HeadS = zz(AddIndex(key = '_index, oneBased = false))
+@Distributivity def addRank : HeadS = zz(AddIndex(key = '_rank,  oneBased = true ))
 
   // ===========================================================================
   // TODO: t210205122151

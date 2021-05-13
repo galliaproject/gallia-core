@@ -14,13 +14,11 @@ case /* for equality */ class Obj private (protected[data] val data: UData) // T
 
       // TODO: should use Key, Ren, ... directly for performance
       // ---------------------------------------------------------------------------
-      if (data.isEmpty)
-        throw gallia.ObjCantBeEmpty
-
-      if (!keys.isDistinct) // a201026170344
-        throw new gallia.RuntimeError("DuplicateKeys: " + entries.map(_._1).duplicates.#@@)
+      if (data.isEmpty)     gallia.vldt._Error.ObjCantBeEmpty                   .throwRuntimeError()
+      if (!keys.isDistinct) gallia.vldt._Error.ObjDuplicateKeys(keyz.duplicates).throwRuntimeError()
 
       // ---------------------------------------------------------------------------
+      // TODO: to proper errors
       require( // a201104150252
           !data.values.exists(_.isInstanceOf[gallia.Objs]),
           (data.filter(_._2.isInstanceOf[gallia.Objs]).map(_._1).toSeq.#@@, this)

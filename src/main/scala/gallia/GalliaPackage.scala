@@ -127,16 +127,12 @@ package gallia {
   trait HasToObj { def toObj: Obj }
 
   // ---------------------------------------------------------------------------
-  trait ObjUError extends RuntimeException
+  case class MetaError(errors: gallia.run.ResultSchema.Errors) extends RuntimeException(errors.formatExceptionMessage)
 
-    object ObjCantBeEmpty extends ObjUError // a210113121804
+  /** those can't be called until we have the actual data's (eg ensure uniqueness, pivot for new keys, ...) */
+  case class RuntimeError(details: Any) extends RuntimeException(details.toString)
 
-    case class MetaError(errors: gallia.run.ResultSchema.Errors) extends RuntimeException(errors.formatExceptionMessage)
-
-    /** those can't be called until we have the actual data's (eg ensure uniqueness, pivot for new keys, ...) */
-    case class RuntimeError(details: Any) extends RuntimeException(details.toString)
-
-    case class ToBeImplemented(details: Any) extends RuntimeException(details.toString)
+  case class ToBeImplemented(details: Any) extends RuntimeException(details.toString)
 
   // ===========================================================================
   trait Key__

@@ -16,6 +16,8 @@ case class Keyz(values: Seq[Key]) extends Seq[Key] {
 
     def valueSet: Set[Key] = values.toSet
 
+    def duplicates: Keyz = Keyz(values.duplicates)
+
     // ---------------------------------------------------------------------------
     override def toString: String = formatDefault
       def formatDefault: String = values match {

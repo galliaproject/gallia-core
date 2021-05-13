@@ -72,7 +72,7 @@ import gallia.meta._
         val label  : Label )  // eg "SomethingWrong"
 
   // ===========================================================================
-  @deprecated("will be completely rehauled") sealed trait _Error {
+  @deprecated("t210121101206 - will be completely rehauled") /*sealed */trait _Error {
       val errorId: IdValue // eg "201009114800"
       val label  : Label   // eg "SomethingWrong"
 
@@ -87,7 +87,9 @@ import gallia.meta._
       def errIf (test: => Boolean): gallia.Err_ = if (test) err_ else None
       def errsIf(test: => Boolean): gallia.Errs = if (test) errs else Nil
 
-      def throwRuntimeError[A](passThrough: A): A = { runtimeError((errorId, label, formatDetails2)); passThrough; } // TODO: delay throwing?
+      // TODO: delay throwing?
+      def throwRuntimeError[A](passThrough: A): A = { runtimeError((errorId, label, formatDetails2)); passThrough; }
+      def throwRuntimeError   ()                    { runtimeError((errorId, label, formatDetails2)) }
     }
 
     // ---------------------------------------------------------------------------
@@ -99,6 +101,9 @@ import gallia.meta._
     @deprecated("will be completely rehauled") object _Error { // t201120101734 - reformat error(s)
         // TODO: macro annotations to help with boilerplate
 
+      case object ObjCantBeEmpty               extends _Error2 { val errorId = "210113121804"; val label = "ObjCantBeEmpty" }
+      case class  ObjDuplicateKeys(keys: Keyz) extends _Error3 { val errorId = "201026170344"; val label = "ObjCantBeEmpty" }
+      
       case object CantBeNone extends _Error2 { val errorId = "201115104732"; val label = "CantBeNone" }
 
       // ---------------------------------------------------------------------------

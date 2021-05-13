@@ -72,9 +72,9 @@ trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { _: HeadCommon[F] =>
   // numerical ops
 
     @NumberAbstraction
-    def square(key: RPathW): Self2 = transform(_.doublex(key)).using(Math.pow(_, 2))
-    def sqrt  (key: RPathW): Self2 = transform(_.doublex(key)).using(Math.sqrt(_))
-    def log   (key: RPathW): Self2 = transform(_.doublex(key)).using(Math.log (_))
+    def square(key: RPathW): Self2 = transform(_.doublex(key)).using(math.pow(_, 2))
+    def sqrt  (key: RPathW): Self2 = transform(_.doublex(key)).using(math.sqrt(_))
+    def log   (key: RPathW): Self2 = transform(_.doublex(key)).using(math.log (_))
     // ... t210205122644 - provide common ones; multiply, sum, divide, subtract, ...
 
     def maxDecimals(key : RPathW, n: Int): Self2 = transform(_.doublex(key)).using(_.maxDecimals(n)) //TODO: meta check n > 0

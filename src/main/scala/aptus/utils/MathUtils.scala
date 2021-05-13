@@ -10,10 +10,10 @@ object MathUtils {
           .iterator
           .map(num.toDouble)
           .map(_ - mean)
-          .map(Math.pow(_, 2)) // .squared
+          .map(math.pow(_, 2)) // .squared
           .sum) /
         coll.size)
-      .thn(Math.sqrt) // .squareRooted
+      .thn(math.sqrt) // .squareRooted
 
   // ---------------------------------------------------------------------------
   def percentile[A](coll: Seq[A], n: Double)(implicit num: Numeric[A]): Double =

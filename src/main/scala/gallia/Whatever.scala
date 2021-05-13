@@ -127,10 +127,10 @@ class Whatever(private[gallia] val any: Any) extends AnyVal with Serializable { 
   def decrement: TypedWhatever[Int] = _int("210113123521")(_ - 1)
 
   // ---------------------------------------------------------------------------
-  def square     : TypedWhatever[Double] = _number("210113123521")(Math.pow(_, 2))
-  def ln         : TypedWhatever[Double] = _number("210113123521")(Math.log(_))
-  def pow(n: Int): TypedWhatever[Double] = _number("210113123521")(Math.pow(_, n))
-  def sqrt       : TypedWhatever[Double] = _number("210113123521")(Math.sqrt(_))
+  def square     : TypedWhatever[Double] = _number("210113123521")(math.pow(_, 2))
+  def ln         : TypedWhatever[Double] = _number("210113123521")(math.log(_))
+  def pow(n: Int): TypedWhatever[Double] = _number("210113123521")(math.pow(_, n))
+  def sqrt       : TypedWhatever[Double] = _number("210113123521")(math.sqrt(_))
 
   // ===========================================================================
   private def _string[T](id: String)(f: String => T): TypedWhatever[T] = any match {
@@ -324,10 +324,10 @@ class TypedWhatever[T](val either: Either[Seq[T], T]) extends AnyVal with Serial
     def decrement: TypedWhatever[Int] = mapInt(_ - 1)
 
     // ---------------------------------------------------------------------------
-    def square     : TypedWhatever[Double] = mapNumber(Math.pow(_, 2))
-    def ln         : TypedWhatever[Double] = mapNumber(Math.log(_))
-    def pow(n: Int): TypedWhatever[Double] = mapNumber(Math.pow(_, n))
-    def sqrt       : TypedWhatever[Double] = mapNumber(Math.sqrt(_))
+    def square     : TypedWhatever[Double] = mapNumber(math.pow(_, 2))
+    def ln         : TypedWhatever[Double] = mapNumber(math.log(_))
+    def pow(n: Int): TypedWhatever[Double] = mapNumber(math.pow(_, n))
+    def sqrt       : TypedWhatever[Double] = mapNumber(math.sqrt(_))
   }
 
   // ===========================================================================

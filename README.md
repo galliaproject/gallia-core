@@ -734,17 +734,14 @@ I have never dealt with it personally but I imagine the likes of computational p
 - <a name="210223143709"></a>SQL-like:
   - <a name="210224103624"></a>Northwind queries: coming soon
 - <a name="210429153511"></a><a name="web-app-server-logic"></a>Web application server logic:
-  - <a name="210429153512"></a><a name="cbio-studies-summary"></a>cbioportal's "_studies summary_" API call:
-reproducing response to obtain a summary of all studies for [cbioportal](https://www.cbioportal.org/), arguably the most commonly used web portal for cancer data.
-  This is the first API call made upon loading the portal's [main page](https://www.cbioportal.org/), and it is specified on their [swagger page](https://www.cbioportal.org/api/swagger-ui.html#/Studies/getAllStudiesUsingGET]).
-  
+  - <a name="210429153512"></a><a name="cbio-studies-summary"></a>cbioportal's "_studies summary_" API call: reproducing response to obtain a summary of all studies for [cbioportal](https://www.cbioportal.org/), arguably the most commonly used web portal for cancer data.
+  This is the first API call made upon loading the portal's [main page](https://www.cbioportal.org/), and it is specified on their [swagger page](https://www.cbioportal.org/api/swagger-ui.html#/Studies/getAllStudiesUsingGET]).  
     See [dedicated page](https://github.com/galliaproject/gallia-docs/blob/master/examples/cbioportal_cancer_studies.md) for the code.
 - <a name="210223094317"></a><a name="articles-examples">Reproducing random examples encountered in articles on data manipulation:
-  - <a name="210224103606"></a>TPC-DS Sales summary [example query](https://gist.github.com/anthony-cros/f6d82744523349a65bc86598c79cabdc) as discussed in Andrew Ray's [Databricks post](https://databricks.com/blog/2016/02/09/reshaping-data-with-pivot-in-apache-spark.html): _"Reshaping Data with Pivot in Apache Spark"_ (February 2016)
-  - <a name="210224123645"></a>[data manipulation task](https://gist.github.com/anthony-cros/4b5d40014dd52d57bc7dd05c35029066) for the Cars93 dataset (R MASS package), as discussed in Darren Wilkinson's [blog post](https://darrenjw.wordpress.com/2015/08/21/data-frames-and-tables-in-scala/): _"Data frames and tables in Scala"_ (August 2015)
-  - <a name="210224103607"></a>Eurostat census data [example queries](https://gist.github.com/anthony-cros/74811b85f9634f3e5646eed71ad7aa20) as discussed in Mathijs Vogelzang's [Medium article](https://medium.com/@thijser/doing-cool-data-science-in-java-how-3-dataframe-libraries-stack-up-5e6ccb7b437): _"Doing cool data science in Java: how 3 DataFrame libraries stack up"_ (September 2018)
-  - <a name="210224103608"></a>Football premier league data [manipulations](https://gist.github.com/anthony-cros/4a3a9ae9a31881d9fd85c4c67b8a5559) as discussed in Chloe Connor's [Towards Data Science article](https://towardsdatascience.com/stop-using-pandas-and-start-using-spark-with-scala-f7364077c2e0): _"Stop using Pandas and start using Spark with Scala"_ (June 2020)
-  - (more coming soon)
+  - <a name="210224103606"></a>TPC-DS Sales summary [example query](https://gist.github.com/anthony-cros/f6d82744523349a65bc86598c79cabdc) as discussed in Andrew Ray's Databricks post: _["Reshaping Data with Pivot in Apache Spark"]((https://databricks.com/blog/2016/02/09/reshaping-data-with-pivot-in-apache-spark.html))_ (February 2016)
+  - <a name="210224123645"></a>data [manipulation task](https://gist.github.com/anthony-cros/4b5d40014dd52d57bc7dd05c35029066) for the Cars93 dataset (R MASS package), as discussed in Darren Wilkinson's blog post: _["Data frames and tables in Scala"](https://darrenjw.wordpress.com/2015/08/21/data-frames-and-tables-in-scala/)_ (August 2015)
+  - <a name="210224103607"></a>Eurostat census data [example queries](https://gist.github.com/anthony-cros/74811b85f9634f3e5646eed71ad7aa20) as discussed in Mathijs Vogelzang's Medium article: _["Doing cool data science in Java: how 3 DataFrame libraries stack up"]((https://medium.com/@thijser/doing-cool-data-science-in-java-how-3-dataframe-libraries-stack-up-5e6ccb7b437))_ (September 2018)
+  - <a name="210224103608"></a>Football premier league data [manipulations](https://gist.github.com/anthony-cros/4a3a9ae9a31881d9fd85c4c67b8a5559) as discussed in Chloe Connor's Towards Data Science article: _["Stop using Pandas and start using Spark with Scala"](https://towardsdatascience.com/stop-using-pandas-and-start-using-spark-with-scala-f7364077c2e0)_ (June 2020)
 - <a name="210223094353"><a name="bioinformatics-examples"></a>Bioinformatics examples
   - <a name="clinvar-example">re-processing [clinvar VCF file](https://github.com/galliaproject/gallia-clinvar)
   - <a name="snpeff-example">re-processing [SnpEff output](https://github.com/galliaproject/gallia-snpeff)
@@ -879,10 +876,11 @@ and that she told them to keepeth their code (1) _practical_, (2) _readable_, an
 
 ## Contact & Announcements
 
-You may contact the author at: <sub><img src="./images/ct.png"></sub>
+- Contact: <sub><img src="./images/ct.png"></sub>
+- [Twitter (@AnthonyCros)](https://twitter.com/anthony_cros) - for further announcements
+- [Linked In](https://www.linkedin.com/in/anthony-cros-3587b063/)
+- [Blog](http://anthonycros.com/)
 
 See original announcement on the [Scala Users list](https://users.scala-lang.org/t/introducing-gallia-a-library-for-data-manipulation/7112)
-
-For further announcements, follow me on Twitter at [@AnthonyCros](https://twitter.com/anthony_cros)
 
 <p align="center"><img src="./images/logo.png" alt="icon"></p>

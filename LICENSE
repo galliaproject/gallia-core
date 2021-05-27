@@ -24,8 +24,17 @@ Additional Use Grant:   You may make use of the Licensed Work if:
                               as of December 31 at 11:59 PM Eastern Standard Time as of the year immediately preceding the year in
                               which you intend to use the Licensed Work and at the Exchange Rate.
 
+                          By making or submitting Contributions to the Licensed Work, you understand and agree that all 
+                          Contributions must be accompanied by Licensor’s then current Contributor License Agreement.
+
                           An “Approved Organization” means any organization that is organized and operated primarily for research,
                           scientific, medical or educational purposes.
+
+                          A “Contribution” means any work of authorship that is submitted by you to the Licensor in which you own
+                          or assert ownership of the Copyright.
+
+                          A “Copyright” means all rights protecting works of authorship owned or controlled by you, including copyright, 
+                          moral and neighboring rights, as appropriate, for the full term of their existence including any extensions by you.
 
                           A “Non-Profit Organizations” means any educational institution, association, club, or society that is not
                           a Registered Charity and is organized and operated exclusively for social welfare, civic improvement,
@@ -52,12 +61,25 @@ Change Date:          	March 30, 2025
 
 Change License:       	Apache License, Version 2.0
 
+-----------------------------------------------------------------------------
+Alternative Licensing
+
 If you would like to use the Licensed Work in any way that conflicts with the
 terms of the Additional Use Grant, contact the author
 (see https://github.com/galliaproject/gallia-core/blob/master/images/ct.png)
 to obtain the prior written consent of the Licensor for such intended use or
 to obtain an alternative commercial license.
 
+-----------------------------------------------------------------------------
+Contributor Licensing
+
+Contributions to the Licensed Work must be accompanied by Licensor’s then current Contributor License Agreement.
+You (or your employer) retain the copyright to your Contribution, this simply gives us permission to use
+and redistribute your Contributions as part of the Licensed Work.
+If you would like to make Contributions to the Licensed Work, contact the author (see https://github.com/galliaproject/gallia-core/blob/master/images/ct.png) 
+to obtain and submit the then current Contributor License Agreement.
+
+-----------------------------------------------------------------------------
 You may visit us on the web at: https://github.com/galliaproject/gallia-core
 
 -----------------------------------------------------------------------------

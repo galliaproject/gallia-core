@@ -5,8 +5,16 @@
 // ===========================================================================
 lazy val root = (project in file("."))
   .settings(
-    name    := "gallia-core",
-    version := "0.1.0")
+    organizationName     := "Gallia Project",
+    organization         := "io.github.galliaproject", // *must* match groupId for sonatype
+    name                 := "gallia-core",
+    version              := "0.1.0",    
+    homepage             := Some(url("https://github.com/galliaproject/gallia-core")),
+    scmInfo              := Some(ScmInfo(
+        browseUrl  = url("https://github.com/galliaproject/gallia-core"),
+        connection =     "scm:git@github.com:galliaproject/gallia-core.git")),
+    licenses             := Seq("BSL 1.1" -> url("https://github.com/galliaproject/gallia-core/blob/master/LICENSE")),
+    description          := "A Scala library for data manipulation" )
   .settings(GalliaCommonSettings.mainSettings:_*)
 
 // ===========================================================================    
@@ -16,6 +24,12 @@ libraryDependencies += "io.github.aptusproject" %% "aptus-core" % "0.1.0"
 
 // ---------------------------------------------------------------------------
 // tests: see https://github.com/galliaproject/gallia-testing
+
+// ===========================================================================
+sonatypeRepository     := "https://s01.oss.sonatype.org/service/local"
+sonatypeCredentialHost :=         "s01.oss.sonatype.org"        
+publishMavenStyle      := true
+publishTo              := sonatypePublishToBundle.value
 
 // ===========================================================================
 

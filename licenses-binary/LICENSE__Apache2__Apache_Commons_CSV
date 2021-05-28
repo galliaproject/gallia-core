@@ -1,4 +1,4 @@
-Gallia includes the "Jongo" library:
+Gallia includes the "Apache Commons CSV" library:
 
 
                                  Apache License
@@ -189,7 +189,7 @@ Gallia includes the "Jongo" library:
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright 2011 Benoît GUÉROUT <bguerout at gmail dot com> and Yves AMSELLEM <amsellem dot yves at gmail dot com>
+   Copyright [yyyy] [name of copyright owner]
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

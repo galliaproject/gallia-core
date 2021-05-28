@@ -29,12 +29,12 @@ Preliminary notes:
 <a name="210121153147"></a>
 ## Dependencies
 
-The library is written with Scala ([2.13](#210121130711))
+The library is available for both Scala 2.12 and 2.13
 
-<a name="210121153201"></a>
-It requires the following inclusion:
+<a name="sbt"></a><a name="210121153201"></a>
+It requires the following in your `build.sbt` file:
 ```
-libraryDependencies += "org.gallia" %% "gallia-core" % "0.0.1"
+libraryDependencies += "org.gallia" %% "gallia-core" % "0.1.0"
 ```
 <a name="210223095748"></a>
 <ins>__IMPORTANT NOTE__</ins>: no JAR has actually been published yet, license will need to be [finalized first](#210127134031)
@@ -50,18 +50,20 @@ import gallia._
 One can also optionally add the following import for general utilities:
 
 ```scala
-import aptus._ // our utilities library
+// our open-source utilities library,
+//   see https://github.com/aptusproject/aptus-core
+import aptus._
 ```
-
-<a name="210121153149"></a>
-**gallia-core** dependency graph:<br/><br/>
-<div style="text-align:center"><img src="./images/dependencies.png" alt="core dependency graph"></div>
-
- Note that there exists at this time two other modules besides _core_, with additional dependencies of their own: [_gallia-mongodb_](http://github.com/galliaproject/gallia-mongodb) and [_gallia-spark_](http://github.com/galliaproject/gallia-spark) (discussed further down)
 
 ## Preliminary examples
 
-### Process single JSON document
+<a name="shines"></a>
+While Gallia shines with (and makes most sense for) complex data processing such as [this one](https://github.com/galliaproject/gallia-dbnsfp#description),
+it can also cater to the more trivial cases such as the ones presented below as an introduction.
+The same paradigm can therefore handle all (most) of your data manipulation needs.
+
+
+### Process single object (using JSON here)
 ```scala
 """{"foo": "hello", "bar": 1, "baz": true, "qux": "world"}"""
   .read() // will infer schema if none is provided
@@ -106,7 +108,7 @@ Notes:
 * The error mechanisms works at any level of nesting/multiplicity
 * Of course, some errors cannot be caught until the data is actually seen (e.g. `"foo".apply(5)` or _is-distinct_ types of checks)
 
-### Process collection of JSON documents
+### Process collection of objects (as JSON here)
 ```scala
 // INPUT:
 //    {"first": "John", "last": "Johnson", "DOB": "1986-02-04", ...}\n
@@ -136,9 +138,10 @@ Notes:
 ### Process CSV/TSV files
 
 ```scala
-"/data/some.tsv.gz".stream()
-  .retain('_id, 'age, 'gender)
-  .groupBy('age)
+"/data/some.tsv.gz"
+  .stream()
+    .retain('_id, 'age, 'gender)
+    .groupBy('age)
   // ...
 ```
 
@@ -446,6 +449,7 @@ Here are some examples of input consumption:
 (ps:   java.sql.PreparedStatement).stream()
 
 // requires gallia-mongodb module and import gallia.mongodb._
+//   (see https://github.com/galliaproject/gallia-mongodb)
 "mongodb://localhost:27017/test.coll1".stream()
 "mongodb://localhost:27017/test"      .stream(_.query("""{"find":"coll1"}"""))
 ```
@@ -828,7 +832,7 @@ It may still become a reality but I'd rather focus on maturing a Scala version f
 "Aptus" is latin for suitable, appropriate, fitting. It is our utility library to help smooth certain pain points of the Java/Scala ecosystem.
 The plan is to externalize it eventually (Apache 2 license). In fact, the _Aptus_ code included in _Gallia_ is a small subset of the full library, which was embedded for convenience.
 
-<a name="210127134040"></a>
+<a name="210127134040"></a><a name="tests"></a>
 ### Where are the tests?
 They live in a different [repo](https://github.com/galliaproject/gallia-testing#gallia-testing) and are being introduced incrementally (unpublished ones need a lot of cleaning up). They basically take the following form:
 
@@ -848,7 +852,7 @@ aobj( // the "a" in aobj stands for "Annotated"
       obj('p -> obj ('f -> "foo", 'g -> 1), 'z -> true, 'h -> obj('F -> "oof")) ) }
 ```
 
-Where `check` wraps an equality assertion (I have not settled on a definitive [testing library](https://github.com/galliaproject/gallia-docs/blob/master/tasks.md#testing-library) yet).
+Where `check` wraps an equality assertion. I have not settled on a definitive [testing library](https://github.com/galliaproject/gallia-docs/blob/master/tasks.md#testing-library) yet, though considering utest at this point.
 
 <a name="210127134041"></a>
 ### Why so few comments, especially scaladoc?

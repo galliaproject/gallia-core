@@ -26,7 +26,7 @@ Preliminary notes:
 - Some links lead to [documentation](http://github.com/galliaproject/gallia-docs) that is actually to be written.
 - The examples use _JSON_ - despite its [flaws](http://github.com/galliaproject/gallia-docs/blob/init/json.md) - because of its ubiquity as a notation
 
-<a name="210121153147"></a>
+<a name="210121153147"></a><a name="dependencies"></a>
 ## Dependencies
 
 The library is available for both Scala 2.12 and 2.13
@@ -34,10 +34,8 @@ The library is available for both Scala 2.12 and 2.13
 <a name="sbt"></a><a name="210121153201"></a>
 It requires the following in your `build.sbt` file:
 ```
-libraryDependencies += "org.gallia" %% "gallia-core" % "0.1.0"
+libraryDependencies += "io.github.galliaproject" %% "gallia-core" % "0.1.0"
 ```
-<a name="210223095748"></a>
-<ins>__IMPORTANT NOTE__</ins>: no JAR has actually been published yet, license will need to be [finalized first](#210127134031)
 
 <a name="210121153200"></a>
 The client code then requires the following import:

@@ -130,6 +130,18 @@ object ActionsUUFuseFission {
       def  vldt(c: Cls): Errs  = Nil// TODO
       def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c)).remove(from.__kpathz(c))
       def atomuus(c: Cls): AtomUUs = _Transform1to8(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c)) }
+    
+    // ---------------------------------------------------------------------------
+    case class Fission9(from: TtqKPath, to: TtqKPath9, f: _ff19) extends ActionUUb {
+      def  vldt(c: Cls): Errs  = Nil// TODO
+      def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c)).remove(from.__kpathz(c))
+      def atomuus(c: Cls): AtomUUs = _Transform1to9(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c)) }
+    
+    // ---------------------------------------------------------------------------
+    case class Fission10(from: TtqKPath, to: TtqKPath10, f: _ff1A) extends ActionUUb {
+      def  vldt(c: Cls): Errs  = Nil// TODO
+      def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c)).remove(from.__kpathz(c))
+      def atomuus(c: Cls): AtomUUs = _Transform1to10(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c)) }    
 }
 
 // ===========================================================================

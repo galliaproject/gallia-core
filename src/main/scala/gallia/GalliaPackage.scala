@@ -88,6 +88,7 @@ package object gallia
   def cls[T: WTT]                 : Cls = reflect.TypeNode.parse[T].leaf.forceDataClass
   def cls(schemaFilePath: String) : Cls = meta.MetaObj.clsFromFile(schemaFilePath) // TODO: or also detect file vs direct object?
   def cls(field1: Fld, more: Fld*): Cls = meta.Cls(field1 +: more)
+  def cls(fields: Seq[Fld])       : Cls = meta.Cls(fields)
 
   // ---------------------------------------------------------------------------
   def obj(entry1: DataEntry, more: DataEntry*): Obj = ObjIn.from((entry1 +: more).map(_.pair))

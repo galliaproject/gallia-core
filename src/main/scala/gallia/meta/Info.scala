@@ -51,9 +51,9 @@ case class Info(container: Container, containee: Containee) extends InfoLike {
 
     def updateContainer(newValue: Container.type => Container): Info = transformContainer(_ => newValue(Container))
 
-    def updateContainee(newValue: BasicType): Info = transformBasicType(_ => newValue)
-    def updateContainee(newValue: Cls  ): Info = transformNestedClass(_ => newValue)
-    def updateContainee(newValue: Containee): Info = transformContainee      (_ => newValue)
+    def updateContainee(newValue: BasicType): Info = transformContainee(_ => newValue)
+    def updateContainee(newValue: Cls)      : Info = transformContainee(_ => newValue)
+    def updateContainee(newValue: Containee): Info = transformContainee(_ => newValue)
 
     // ---------------------------------------------------------------------------
     def    toRequired: Info = Info(if (isMultiple) _Nes else _One, containee)

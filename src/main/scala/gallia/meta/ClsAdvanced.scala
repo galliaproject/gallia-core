@@ -106,6 +106,23 @@ trait ClsAvanced { self: Cls =>
             .map(Fld(_, Info.one(remaining)))
             .thn(Cls.apply) }
 
+  // ===========================================================================
+  def unpivot(keyz: Keyz): Cls = {
+    val rest   = self.remove(keyz)
+    val target = self.retain(keyz)
+    
+    // ---------------------------------------------------------------------------
+    val value =
+      target
+        .fields
+        .head // validated
+        .thn { field =>                      
+          cls(
+            Fld.oneString(_id),                      
+            field.updateKey(_vle)) }
+
+    rest.add(Fld.nesCls(_group, value))
+  }    
 }
 
 // ===========================================================================

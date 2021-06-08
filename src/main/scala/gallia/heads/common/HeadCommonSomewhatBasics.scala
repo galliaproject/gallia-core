@@ -259,6 +259,11 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { _: HeadCommon[F] =>
             def asNewKeys(keys: KeyWz)             : Self2 = self2 :+
               Untuplify2b(targetKey, arraySplitter, entriesSplitter, entrySplitter, keys.keyz) } }
 
+  // ===========================================================================
+  // this is the bare minimum (fifteen pieces of flair)
+  // TODO: t210608090944 - allow selection + customization
+  def unpivot(key1: KeyW, more: KeyW*): Self2 = self2 :+ actions.ActionsOthers.Unpivot(Keyz.from(key1, more))
+
 }
 
 // ===========================================================================

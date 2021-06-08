@@ -267,11 +267,26 @@ trait ObjOperations { self: Obj =>
       .flatMap { keyKey => opt(keyKey).map(_.str) } /* TODO or expect default values to be set if missing? or ignore collisions? */
       .as.noneIf(_.isEmpty)
       .map(_.join(separator).symbol)
-      
+
+  // ---------------------------------------------------------------------------
   def unarrayCompositeKey2(key: Key): Option[Key] =
     opt(key)
       .flatMap(_.str.as.noneIf(_.isEmpty)) /* TODO or expect default values to be set if missing? or ignore collisions? */      
       .map(_.symbol)      
+
+  // ---------------------------------------------------------------------------
+  def unpivot(keyz: Keyz): Obj = {      
+    val rest   = self.removeOpt(keyz).get
+    val target = self.retainOpt(keyz).get
+    
+    val value =
+      target
+        .entries
+        .map { case (k, v) => 
+          gallia.obj(_id -> k.name, _vle -> v) }
+
+    rest.add(_group, value)        
+  }
 
 }
 

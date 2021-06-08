@@ -43,6 +43,11 @@ object ActionsOthers {
     case class InspectZ(msg: Option[String], abort: Boolean) extends IdentityVM1 with ActionZZd {
       def atomzz = _InspectZ(msg, abort) }
 
+  // ===========================================================================  
+  case class Unpivot(keyz: Keyz) extends ActionUUd with TodoV1 /* origins + check compatible infos */ {
+    def _meta(c: Cls): Cls    = c.unpivot(keyz)        
+    def atomuu       : AtomUU =  _Unpivot(keyz) }
+
   // ===========================================================================
   case object UnionUU extends Action with ActionV2 with ActionM2 with ActionAN {
     def  vldt (in1: Cls, in2: Cls): Errs  = Nil // TODO: eg collisions

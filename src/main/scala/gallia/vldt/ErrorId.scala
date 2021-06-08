@@ -102,7 +102,7 @@ import gallia.meta._
         // TODO: macro annotations to help with boilerplate
 
       case object ObjCantBeEmpty               extends _Error2 { val errorId = "210113121804"; val label = "ObjCantBeEmpty" }
-      case class  ObjDuplicateKeys(keys: Keyz) extends _Error3 { val errorId = "201026170344"; val label = "ObjCantBeEmpty" }
+      case class  ObjDuplicateKeys(keys: Keyz) extends _Error3 { val errorId = "201026170344"; val label = "ObjDuplicateKeys" }
       
       case object CantBeNone extends _Error2 { val errorId = "201115104732"; val label = "CantBeNone" }
 

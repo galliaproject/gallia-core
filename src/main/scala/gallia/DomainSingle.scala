@@ -11,10 +11,11 @@ case class Ren(from: Key, to: Key /* may be the same as from */) { // TODO: t210
     override def toString: String = formatDefault
       def formatDefault: String = if (isActual) s"${from} ~> ${to}" else from.name
 
-    def toOpt: Option[Key] = to.as.someIf(_ != from)
+      def toOpt: Option[Key] = to.as.someIf(_ != from)
     def isActual: Boolean = from != to
 
-    def actualOpt = either.toOption
+    def actualOpt    : Option[ActualRen]  = either.toOption
+    def actualOptPair: Option[(Key, Key)] = if (isActual) Some(from -> to) else None
 
     def either: Either[Key, ActualRen] = if (from == to) Left(from) else Right(ActualRen(from, to))
 

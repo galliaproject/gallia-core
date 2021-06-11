@@ -6,9 +6,11 @@ import gallia.actions._
 
 // ===========================================================================
 sealed trait Atom extends ActionAN {
-    final def atoms(ignored: NodeMetaContext): Atoms = Seq(this)
+    final override def atoms(ignored: NodeMetaContext): Atoms = Seq(this)
 
-    def formatDefault: String = s"ATOM: ${this.getClass.getSimpleName} - ${this.toString}"
+    def className      : String = getClass.getSimpleName
+    def formatDefault  : String = s"ATOM: ${className} - ${this.toString}"
+    def formatSuccinct1: String = className
   }
 
   // ===========================================================================
@@ -25,8 +27,9 @@ sealed trait Atom extends ActionAN {
   trait AtomVO extends Atom { def naive(v: Vle ): Unit } // TODO: used?
 
   // ---------------------------------------------------------------------------
-  trait AtomUU extends Atom { def naive(o: Obj ): Obj  }
-  trait AtomZZ extends Atom { def naive(z: Objs): Objs }
+  trait AtomUorZ[T] { def naive(t: T): T }
+    trait AtomUU extends Atom with AtomUorZ[Obj]  { def naive(o: Obj ): Obj  }
+    trait AtomZZ extends Atom with AtomUorZ[Objs] { def naive(z: Objs): Objs }
 
   // ---------------------------------------------------------------------------
   trait AtomZU extends Atom { def naive(z: Objs): Obj  }

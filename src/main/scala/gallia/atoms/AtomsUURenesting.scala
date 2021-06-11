@@ -60,11 +60,12 @@ object AtomsUUResnesting {
 
           o
             // eg nest(foo_bar_baz ~> bar_baz).as(foo)
-            .rename(formattedKey ~> formattedTail)
-            .nest(formattedTail, headKey.symbol)
+            .nest(formattedKey, headKey.symbol)
             .transformPath(headKey.symbol,
               // best to recurse *after* nesting to avoid key collisions
-              value => dataRec(sep)(value.asInstanceOf[Obj], formattedTail, tailKeyItems) ) }
+              _ .asInstanceOf[Obj]
+                .rename(formattedKey ~> formattedTail)
+                .thn(dataRec(sep)(_, formattedTail, tailKeyItems)) ) }
 
 }
 

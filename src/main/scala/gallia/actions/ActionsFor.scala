@@ -1,10 +1,13 @@
 package gallia.actions
 
+import scala.util.chaining._
 import aptus.Anything_
 
 import gallia._
 import gallia.target._
 import gallia.atoms.AtomsCustom._
+import gallia.plans.AtomPlan
+import gallia.actions.utils.NestedTransform
 
 // ===========================================================================
 object ActionsFor {
@@ -72,59 +75,50 @@ object ActionsFor {
 
   // ===========================================================================
   case class ForPathsUU(target: TqKPathz, f: (HeadU, KPathW) => HeadU) extends ActionUUb {
-      private def resolve(c: Cls): Seq[HeadU => HeadU] = target.resolve(c).map { p => (u: HeadU) => f(u, p) }
+      private def resolveSequence(c: Cls): Seq[HeadU => HeadU] = target.resolve(c).map { p => (u: HeadU) => f(u, p) }
 
       // ---------------------------------------------------------------------------
       def  vldt  (c: Cls): Errs     = Nil//TODO
-      def _meta  (c: Cls): Cls      = resolve(c).foldLeft(c)((curr, g) => parseUU(g)._meta(curr) )
-      def  atomuus(c: Cls): AtomUUs = resolve(c).thn(_dataOOs(c)).map(_CustomOO)
+      def _meta  (c: Cls): Cls      = resolveSequence(c).foldLeft(c)((curr, g) => parseUU(g)._meta(curr) )
+      def  atomuus(c: Cls): AtomUUs = {
+        val nestedTransforms: Seq[NestedTransform] = resolveSequence(c).pipe(_nestedTransforms(c, parseUU))
+        val atomPlans       : Seq[AtomPlan]        = nestedTransforms.map(_.metaToAtomPlan(c))
+        val optimizable     : Boolean              = atomPlans.nonEmpty && atomPlans.forall(_.dag.isChain)
+        
+        if (optimizable) atomPlans.pipe(AtomPlan.stitchAll).chainU   
+        else             nestedTransforms.map(_.dataU2U(c)).map(_CustomOO)        
+      }
     }
 
   // ---------------------------------------------------------------------------
   case class ForPathsZZ(target: TqKPathz, f: (HeadZ, KPathW) => HeadZ) extends ActionZZb {
-      private def resolve(c: Cls): Seq[HeadZ => HeadZ] = target.resolve(c).map { p => (z: HeadZ) => f(z, p) }
+      private def resolveSequence(c: Cls): Seq[HeadZ => HeadZ] = target.resolve(c).map { p => (z: HeadZ) => f(z, p) }
 
       // ---------------------------------------------------------------------------
       def  vldt  (c: Cls): Errs     = Nil//TODO
-      def _meta  (c: Cls): Cls      = resolve(c).foldLeft(c)((curr, g) => parseZZ(g)._meta(curr) )
-      def  atomzzs(c: Cls): AtomZZs = resolve(c).thn(_dataZZs(c)).map(_CustomZZ)
+      def _meta  (c: Cls): Cls      = resolveSequence(c).foldLeft(c)((curr, g) => parseZZ(g)._meta(curr) )
+      def  atomzzs(c: Cls): AtomZZs = {
+        val nestedTransforms: Seq[NestedTransform] = resolveSequence(c).pipe(_nestedTransforms(c, parseZZ))
+        val atomPlans       : Seq[AtomPlan]        = nestedTransforms.map(_.metaToAtomPlan(c))        
+        val optimizable     : Boolean              = atomPlans.nonEmpty && atomPlans.forall(_.dag.isChain)
+        
+        if (optimizable) atomPlans.pipe(AtomPlan.stitchAll).chainZ
+        else             nestedTransforms.map(_.dataZ2Z(c)).map(_CustomZZ)
+      }
     }
 
     // ===========================================================================
-    private def _dataOOs(c: Cls)(x: Seq[HeadU => HeadU]): Seq[Obj => Obj] = {
-        var curr: Cls = c
+    private def _nestedTransforms[$Head](c: Cls, f: Function[$Head, $Head] => NestedTransform)(sequence: Seq[$Head => $Head]): Seq[NestedTransform] = {
+      var currCls: Cls = c
 
-        x
-          // TODO: better functional equivalent?
-          .toList // ensure stricteness
-          .map { g: Function[HeadU, HeadU] =>
-            val tmp = parseUU(g)
-
-            val next: Cls        = tmp._meta  (curr)
-            val h   : Obj => Obj = tmp.dataU2U(curr)
-
-            curr = next
-            h
-          }
-      }
-
-      // ---------------------------------------------------------------------------
-      private def _dataZZs(c: Cls)(x: Seq[HeadZ => HeadZ]): Seq[Objs => Objs] = {
-        var curr: Cls = c
-
-        x
-          // TODO: better functional equivalent?
-          .toList // ensure stricteness
-          .map { g: Function[HeadZ, HeadZ] =>
-            val tmp = parseZZ(g)
-
-            val next: Cls          = tmp._meta  (curr)
-            val h   : Objs => Objs = tmp.dataZ2Z(curr)
-
-            curr = next
-            h
-          }
-      }
+      sequence
+        .toList // ensure stricteness
+        .map(f)
+        .map { nestedTransform => // TODO: better functional equivalent?
+          currCls = nestedTransform._meta(currCls)
+          nestedTransform
+        }
+    }
 
 }
 

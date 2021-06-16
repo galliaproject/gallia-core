@@ -107,6 +107,11 @@ case class AtomPlan(dag: DAG[AtomNode]) {
             .forceZ
             .toListAndTrash }
   }
+  
+  // ===========================================================================
+  // used by forXs
+  def chainU: Seq[AtomUU] = dag.kahnTraverseNodes.map(_.atom).map(_.asInstanceOf[AtomUU])
+  def chainZ: Seq[AtomZZ] = dag.kahnTraverseNodes.map(_.atom).map(_.asInstanceOf[AtomZZ])
 }
 
 // ===========================================================================

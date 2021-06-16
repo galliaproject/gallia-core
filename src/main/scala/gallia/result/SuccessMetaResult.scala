@@ -15,7 +15,7 @@ case class SuccessMetaResult(dag: DAG[SuccessMetaResultNode]) {
   case class SuccessMetaResultNode(id: NodeId, origin: CallSite, action: ActionAN, cls: Cls) extends HasNodeId {
 
     def actionNode(afferents: Seq[Cls]): ActionNode =
-      NodeMetaContext(afferents, cls)
+      NodeMetaContext(afferents, cls, origin)
         .thn { ctx =>
             ActionNode(id, action.atoms(ctx), ctx, origin)}
 

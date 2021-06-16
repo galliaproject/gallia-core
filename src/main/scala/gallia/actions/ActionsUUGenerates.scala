@@ -7,7 +7,6 @@ import gallia.target._
 import gallia.domain.PathPair
 import gallia.FunctionWrappers._
 import gallia.atoms.AtomsUUTransforms._
-import gallia.actions.utils
 
 // ===========================================================================
 object ActionsUUGenerates {

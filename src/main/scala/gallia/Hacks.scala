@@ -8,7 +8,7 @@ object Hacks {
   var LoseOrderOnGrouping = false 
     
   // ---------------------------------------------------------------------------
-  /** removes some runtime checks; TODO: option to remove them all (if confident) */
+  /** removes some runtime checks (beyond -Xdisable-asserts); TODO: option to remove them all (if confident) */
   var DisableRuntimeChecks: Boolean = false // temporary hack... (see t210107094406); performance won't improve much until t210104164036 is done at least
   
   // ---------------------------------------------------------------------------

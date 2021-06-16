@@ -56,7 +56,7 @@ object ActionsUUVeryBasics {
   case class Rename(target: RPathz) extends ActionUUa {
       def  vldt(c: Cls): Errs    = _vldt.fieldsRenaming(c, target)
       def _meta(c: Cls): Cls     = target.foldLeft(c)(_ rename _)
-      def atomuus      : AtomUUs = target.thn(_atoms(_ => _IdentityUU)) //TODO: rejig, too convoluted for just a rename
+      def atomuus      : AtomUUs = target.thn(_atoms(_ => _IdentityUU)) // note: Identities get removed
     }
 
     // ===========================================================================

@@ -8,9 +8,6 @@ import gallia._
 // ===========================================================================
 object AtomsOthers {
 
-  case class _UWrapper(wrappee: AtomUU) extends AtomZZ { def naive(z: Objs) = z.map(wrappee.naive) } // TODO: see t210114111539
-
-  // ===========================================================================
   case class _Nested(parent: KPath, nestee: AtomUU) extends AtomUU { def naive(o: Obj) = {
         // TODO: opt: meta-level info (common combinations)
         val f = (x: Any) =>

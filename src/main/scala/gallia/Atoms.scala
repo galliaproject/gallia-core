@@ -11,9 +11,30 @@ sealed trait Atom extends ActionAN {
     def className      : String = getClass.getSimpleName
     def formatDefault  : String = s"ATOM: ${className} - ${this.toString}"
     def formatSuccinct1: String = className
+    
+    // ===========================================================================
+    // commonly used for optimizations
+
+      // ---------------------------------------------------------------------------
+      def isUWrapper        : Boolean = this.isInstanceOf[gallia.atoms                      ._UWrapper]
+      def isRename          : Boolean = this.isInstanceOf[gallia.atoms.AtomsUUVeryBasics    ._Rename]
+      def isRemoveWhateverIf: Boolean = this.isInstanceOf[gallia.atoms.AtomsUUSomewhatBasics._RemoveWhateverIf]
+
+      // ---------------------------------------------------------------------------
+      def asUWrapper         = this.asInstanceOf[gallia.atoms                      ._UWrapper]
+      def asRename           = this.asInstanceOf[gallia.atoms.AtomsUUVeryBasics    ._Rename]
+      def asRemoveWhateverIf = this.asInstanceOf[gallia.atoms.AtomsUUSomewhatBasics._RemoveWhateverIf]
+
+      // ===========================================================================
+      def isPlaceholder: Boolean = this == NestingDataPlaceholder
+      def isIdentityUU : Boolean = this == gallia.atoms.AtomsOthers._IdentityUU    
+      def isIdentityZZ : Boolean = this == gallia.atoms.AtomsOthers._IdentityZZ
   }
 
   // ===========================================================================
+  trait AtomCombiner[T <: Atom] extends Atom // eg multiple renaming in sequence bundled as one
+
+  // ---------------------------------------------------------------------------
   case object NestingDataPlaceholder extends Atom // data to be provided by runner
 
   // ===========================================================================
@@ -136,6 +157,11 @@ trait AtomsUUd extends AtomsUU {
     final def atomuus(ctx: NodeMetaContext): AtomUUs = atomuus(ctx.forceSingleAfferent)
           def atomuus(afferent: Cls       ): AtomUUs }
 
+  // ===========================================================================
+  trait AtomsUUbb extends AtomsUU { // TODO: see t210616122449
+    final def atomuus(ctx: NodeMetaContext)           : AtomUUs = atomuus(ctx.origin)(ctx.forceSingleAfferent)
+          def atomuus(origin: CallSite)(afferent: Cls): AtomUUs }
+  
 // ---------------------------------------------------------------------------
 trait AtomsZZd extends AtomsZZ {
     final def atomzzs(ignored: NodeMetaContext): AtomZZs = atomzz.as.seq

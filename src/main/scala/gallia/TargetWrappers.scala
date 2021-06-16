@@ -12,8 +12,8 @@ protected trait TargetWrappers[$Wrap] extends Seq[$Wrap] {
 
 // ===========================================================================
 // TODO: use Iterable instead? mostly for Map.values; for mixed (eg Key/SKey, must use explicit type tag)
-case class KeyWz  (values: Seq[KeyW])   extends TargetWrappers[KeyW]   { def keyz   = Keyz  (values.map(_.value)); def keys = keyz.values }
-case class KPathWz(values: Seq[KPathW]) extends TargetWrappers[KPathW] { def kpathz = KPathz(values.map(_.value)) }
+case class KeyWz  (values: Seq[KeyW])   extends TargetWrappers[KeyW]   { def keyz   = Keyz  (values.map(_.value)); def keys : Seq[Key]   = values.map(_.value) }
+case class KPathWz(values: Seq[KPathW]) extends TargetWrappers[KPathW] { def kpathz = KPathz(values.map(_.value)); def paths: Seq[KPath] = values.map(_.value) }
 case class RenWz  (values: Seq[RenW])   extends TargetWrappers[RenW]   {
   def renz  : Renz = Renz(values.map(_.value))
   def fromz : Keyz = Keyz(values.map(_.from))

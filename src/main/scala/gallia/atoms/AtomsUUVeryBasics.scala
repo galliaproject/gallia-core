@@ -1,5 +1,6 @@
 package gallia.atoms
 
+import scala.util.chaining._
 import aptus.Anything_
 
 import gallia._
@@ -20,6 +21,24 @@ object AtomsUUVeryBasics {
     // ---------------------------------------------------------------------------
     case class _Rename(value: ActualRen) extends AtomUU { def naive(o: Obj) =
       o.rename(value) }
+
+    // ---------------------------------------------------------------------------
+    case class _RenameAll(mapping: Map[Key, Key]) extends AtomUU with AtomCombiner[_Rename] {
+        def naive(o: Obj) =  
+            o ._data
+              .map { case (key, value) => mapping.getOrElse(key, key) -> value }
+              .pipe(Obj.build) }
+
+      // ---------------------------------------------------------------------------
+      object _RenameAll {
+
+        def from(values: Seq[_Rename]): _RenameAll =
+          values
+            .map(_.value.pair)
+            .toMap
+            .pipe(_RenameAll.apply)            
+      
+      }
 
   // ===========================================================================
   case class _Remove(key: Key) extends AtomUU { def naive(o: Obj) =

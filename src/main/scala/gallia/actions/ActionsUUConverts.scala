@@ -17,29 +17,29 @@ object ActionsUUConverts {
       def atomuus(c: Cls): AtomUUs = target.resolve(c).thn(_atoms(c)(_ConvertToString)) }
 
   // ---------------------------------------------------------------------------
-  case class ConvertToInt(target: TqRPathz) extends ActionUUb with TodoV1 {
-    def _meta  (c: Cls): Cls     = target.resolve(c).foldLeft(c)(_.toInt(_))
-    def atomuus(c: Cls): AtomUUs = target.resolve(c).thn(_atoms(c)(_ConvertToInt)) }
+  case class ConvertToInt(target: TqRPathz) extends ActionUUbb with TodoV1 {
+    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c)(_.toInt(_))
+    def atomuus(origin: CallSite)(c: Cls): AtomUUs = target.resolve(c).thn(_atoms(c)(_ConvertToInt(origin))) }
 
   // ---------------------------------------------------------------------------
-  case class ConvertToDouble(target: TqRPathz) extends ActionUUb with TodoV1 {
-    def _meta  (c: Cls): Cls     = target.resolve(c).foldLeft(c)(_.toDouble(_))
-    def atomuus(c: Cls): AtomUUs = target.resolve(c).thn(_atoms(c)(_ConvertToDouble)) }
+  case class ConvertToDouble(target: TqRPathz) extends ActionUUbb with TodoV1 {
+    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c)(_.toDouble(_))
+    def atomuus(origin: CallSite)(c: Cls): AtomUUs = target.resolve(c).thn(_atoms(c)(_ConvertToDouble(origin))) }
 
   // ---------------------------------------------------------------------------
-  case class ConvertToFlag[T: WTT](target: TqRPathz, trueValue: T, strict: Boolean) extends ActionUUb with TodoV1 {
-    def _meta  (c: Cls): Cls     = target.resolve(c).foldLeft(c)(_.toOptionalBoolean(_)) // TODO: t210108114447 - support own "flag" type?
-    def atomuus(c: Cls): AtomUUs = target.resolve(c).thn(_atoms(c)(_ConvertToFlag(_, trueValue, strict))) }
+  case class ConvertToFlag[T: WTT](target: TqRPathz, trueValue: T, strict: Boolean) extends ActionUUbb with TodoV1 {
+    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c)(_.toOptionalBoolean(_)) // TODO: t210108114447 - support own "flag" type?
+    def atomuus(origin: CallSite)(c: Cls): AtomUUs = target.resolve(c).thn(_atoms(c)(_ConvertToFlag(origin)(_, trueValue, strict))) }
 
   // ---------------------------------------------------------------------------
-  case class ConvertToBoolean[T: WTT](target: TqRPathz, trueValue: T, falseValue: T) extends ActionUUb with TodoV1 {
-    def _meta  (c: Cls): Cls     = target.resolve(c).foldLeft(c)(_.toBoolean(_))
-    def atomuus(c: Cls): AtomUUs = target.resolve(c).thn(_atoms(c)(_ConvertToBoolean(_, trueValue, falseValue))) }
+  case class ConvertToBoolean[T: WTT](target: TqRPathz, trueValue: T, falseValue: T) extends ActionUUbb with TodoV1 {
+    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c)(_.toBoolean(_))
+    def atomuus(origin: CallSite)(c: Cls): AtomUUs = target.resolve(c).thn(_atoms(c)(_ConvertToBoolean(origin)(_, trueValue, falseValue))) }
 
   // ---------------------------------------------------------------------------
-  case class ConvertToOptionalBoolean[T: WTT](target: TqRPathz, trueValue: T, falseValue: T, nullValue: T) extends ActionUUb with TodoV1 {
-    def _meta  (c: Cls): Cls  = target.resolve(c).foldLeft(c)(_.toOptionalBoolean(_))
-    def atomuus(c: Cls): AtomUUs = target.resolve(c).thn(_atoms(c)(_ConvertToOptionalBoolean(_, trueValue, falseValue, nullValue))) }
+  case class ConvertToOptionalBoolean[T: WTT](target: TqRPathz, trueValue: T, falseValue: T, nullValue: T) extends ActionUUbb with TodoV1 {
+    def _meta                    (c: Cls): Cls  = target.resolve(c).foldLeft(c)(_.toOptionalBoolean(_))
+    def atomuus(origin: CallSite)(c: Cls): AtomUUs = target.resolve(c).thn(_atoms(c)(_ConvertToOptionalBoolean(origin)(_, trueValue, falseValue, nullValue))) }
 
   // ===========================================================================
   case class ToNonRequired(targets: TqRPathz, strict: Boolean) extends ActionUUa with IdentityUUa {

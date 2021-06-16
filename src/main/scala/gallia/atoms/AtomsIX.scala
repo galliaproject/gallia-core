@@ -208,7 +208,9 @@ object AtomsIX {
       // ---------------------------------------------------------------------------
       defaultSchema: Cls)
   extends AtomIZ with HasProjection {
+    override def formatSuccinct1 = s"${className}(${input._inputString})"    
 
+    // ---------------------------------------------------------------------------
     def naive: Option[Objs] =
       aobjs(
            c =                                    projectMeta(defaultSchema).assert(!_.hasNesting),
@@ -229,9 +231,9 @@ object AtomsIX {
       /** 201215141231 - null values are not handled here (see 201231113658 rather) */
       private def datum(nullValues: Seq[String])(keys: Seq[Key])(values: Seq[String]): Obj =
         keys
+           // TODO throw proper error if duplicates
           .zip(values)   // TODO: check same size + charset and so on
-          .force.listMap // TODO throw proper error if duplicates
-          .thn(Obj.build)
+          .thn(Obj.fromIterable)
 
     // ===========================================================================
     private def dataRows: Streamer[List[String]] = // TODO: t210330110804 - separate each as their own atom

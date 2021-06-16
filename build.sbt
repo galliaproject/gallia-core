@@ -27,7 +27,7 @@ lazy val enumeratumVersion = "1.5.13"
 // ---------------------------------------------------------------------------
 libraryDependencies ++=
   Seq(
-    "org.scala-lang"         %% "scala-reflect" % scalaVersion.value, // for scala.reflect.runtime.universe
+    "org.scala-lang"         %  "scala-reflect" % scalaVersion.value, // for scala.reflect.runtime.universe
     "io.github.aptusproject" %% "aptus-core"    % aptusVersion,
     "com.beachape"           %% "enumeratum"    % enumeratumVersion)
 

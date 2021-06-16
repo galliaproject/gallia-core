@@ -32,8 +32,7 @@ object GsonToObj {
           .flatMap { entry =>
             jsonRootToAnyValue(entry.getValue)
               .map(entry.getKey.symbol -> _) }
-          .toListMap //TODO: catch duplicates and so on
-          .thn(Obj.build)
+          .thn(Obj.fromIterable) //TODO: catch duplicates and so on
 
       // ---------------------------------------------------------------------------
       private def jsonRootToAnyValue(value: JsonElement): Option[AnyValue] =

@@ -7,6 +7,7 @@ import gallia._
 import gallia.target._
 import gallia.FunctionWrappers._
 import gallia.data.multiple.Streamer
+import gallia.atoms._UWrapper
 import gallia.atoms.AtomsOthers._
 import gallia.atoms.AtomsUV._
 import gallia.atoms.AtomsZZ._EnsureUniquenessBy

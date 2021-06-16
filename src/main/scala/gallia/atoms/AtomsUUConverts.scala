@@ -14,7 +14,7 @@ object AtomsUUConverts {
         _TransformVV(target, _.toString).naive(o) }
 
     // ===========================================================================
-    case class _ConvertToInt(target: PathPair) extends AtomUU { def naive(o: Obj) =
+    case class _ConvertToInt(origin: CallSite)(target: PathPair) extends AtomUU { def naive(o: Obj) =
         _TransformVV(target, toInt).naive(o)
 
       // ---------------------------------------------------------------------------
@@ -24,12 +24,12 @@ object AtomsUUConverts {
               case x: String => x.stripTrailingZeros.toInt
               case x: Number => x.intValue()
             } (value) }
-        .getOrElse{
-          runtimeError(s"TODO:210106152700:${target}:${value}") }
+        .getOrElse {
+          dataError(s"TODO:210106152700:${target}:${value}:${origin}") }
     }
 
     // ===========================================================================
-    case class _ConvertToDouble(target: PathPair) extends AtomUU { def naive(o: Obj) =
+    case class _ConvertToDouble(origin: CallSite)(target: PathPair) extends AtomUU { def naive(o: Obj) =
         _TransformVV(target, toDouble).naive(o)
 
       // ---------------------------------------------------------------------------
@@ -40,11 +40,11 @@ object AtomsUUConverts {
               case x: Number => x.doubleValue
             }(value) }
         .getOrElse{
-          runtimeError(s"TODO:210106152701:${target}:${value}") }
+          dataError(s"TODO:210106152701:${target}:${value}:${origin}") }
     }
 
   // ===========================================================================
-  case class _ConvertToFlag(target: PathPair, trueValue: Any, strict: Boolean) extends AtomUU { def naive(o: Obj) =
+  case class _ConvertToFlag(origin: CallSite)(target: PathPair, trueValue: Any, strict: Boolean) extends AtomUU { def naive(o: Obj) =
         _TransformVV(target, toFlag(trueValue)).naive(o)
 
       // ---------------------------------------------------------------------------
@@ -52,21 +52,21 @@ object AtomsUUConverts {
         if (target.matching(value, trueValue)) true
         else
                if (value == None) None
-          else if (strict)        runtimeError(s"TODO:210108150541:${target}:${value}")
+          else if (strict)        dataError(s"TODO:210108150541:${target}:${value}:${origin}")
           else                    None }
 
     // ===========================================================================
-    case class _ConvertToBoolean(target: PathPair, trueValue: Any, falseValue: Any) extends AtomUU { def naive(o: Obj) =
+    case class _ConvertToBoolean(origin: CallSite)(target: PathPair, trueValue: Any, falseValue: Any) extends AtomUU { def naive(o: Obj) =
         _TransformVV(target, toBoolean(trueValue, falseValue)).naive(o)
 
       // ---------------------------------------------------------------------------
       private def toBoolean(trueValue: Any, falseValue: Any) = (value: Any) =>
                if (target.matching(value, trueValue )) true
           else if (target.matching(value, falseValue)) false
-          else                                         throw new IllegalArgumentException(s"TODO:210108093025:${value}:${trueValue}:${falseValue}") }
+          else                                         dataError(s"TODO:210108093025:${value}:${trueValue}:${falseValue}:${origin}") }
 
     // ===========================================================================
-    case class _ConvertToOptionalBoolean(target: PathPair, trueValue: Any, falseValue: Any, nullValue: Any) extends AtomUU { def naive(o: Obj) =
+    case class _ConvertToOptionalBoolean(origin: CallSite)(target: PathPair, trueValue: Any, falseValue: Any, nullValue: Any) extends AtomUU { def naive(o: Obj) =
         _TransformVV(target, toOptionalBoolean(trueValue, falseValue, nullValue)).naive(o)
 
       // ---------------------------------------------------------------------------
@@ -75,7 +75,7 @@ object AtomsUUConverts {
                if (target.matching(value, trueValue )) true
           else if (target.matching(value, falseValue)) false
           else if (target.matching(value, nullValue )) None
-          else                                         throw new IllegalArgumentException(s"TODO:210108093026:${value}:${trueValue}:${falseValue}:${nullValue}") }
+          else                                         dataError(s"TODO:210108093026:${value}:${trueValue}:${falseValue}:${nullValue}:${origin}") }
 
 }
 

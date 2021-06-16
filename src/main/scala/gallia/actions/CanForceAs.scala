@@ -3,7 +3,7 @@ package gallia.actions
 import aptus.Anything_
 
 import gallia._
-import gallia.atoms.AtomsOthers._UWrapper
+import gallia.atoms._UWrapper
 
 // ===========================================================================
 trait CanForceAs1[T] { def forceAs(key: Key): T } // TODO: t201208111414 - macro for copy boilerplate...; t210124100009 - better naming

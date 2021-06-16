@@ -1,5 +1,6 @@
 package gallia.atoms
 
+import scala.util.chaining._
 import gallia._
 
 // ===========================================================================
@@ -21,11 +22,31 @@ object AtomsUUSomewhatBasics {
         else                 o }
       .getOrElse(o) }
 
+  // ---------------------------------------------------------------------------
+  case class _RemoveWhateverIfAll(map: Map[Key, AnyValue]) extends AtomUU with AtomCombiner[_RemoveWhateverIf] {
+      def naive(o: Obj) =
+        o ._data
+          .flatMap { case (key, value) =>
+            map.get(key) match {
+              case None              =>                                     Some(key -> value)
+              case Some(targetValue) => if (value == targetValue) None else Some(key -> value) } }
+          .pipe(Obj.build0)
+    }
+  
+    // ---------------------------------------------------------------------------
+    object _RemoveWhateverIfAll {
+
+      def from(values: Seq[_RemoveWhateverIf]): _RemoveWhateverIfAll =
+        values
+          .map { x => x.key -> x.value }
+          .toMap
+          .pipe(_RemoveWhateverIfAll.apply)
+
+    }
+
   // ===========================================================================
   case class _SetDefault(key: Key, value: AnyValue) extends AtomUU { def naive(o: Obj) =
-    o .opt(key) match {
-      case None    => o.put(key, value)
-      case Some(_) => o } }
+    if (o.contains(key)) o else o.add(key, value) }
 
   // ===========================================================================
   case class _Split(key: Key, splitter: StringSplitter) extends AtomUU { def naive(o: Obj) =

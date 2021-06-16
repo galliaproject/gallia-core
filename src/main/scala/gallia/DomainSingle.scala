@@ -4,18 +4,21 @@ import aptus.{Anything_, Seq_}
 import aptus.Option_
 
 // ===========================================================================
-case class ActualRen(from: Key, to: Key) { require(from != to, from) }
+case class ActualRen(from: Key, to: Key) { 
+  require(from != to, from)
+  def pair = from -> to
+}
 
 // ===========================================================================
 case class Ren(from: Key, to: Key /* may be the same as from */) { // TODO: t210115153452 - change so as to use Option for to
     override def toString: String = formatDefault
       def formatDefault: String = if (isActual) s"${from} ~> ${to}" else from.name
 
-      def toOpt: Option[Key] = to.as.someIf(_ != from)
-    def isActual: Boolean = from != to
+    def isActual: Boolean     = from != to
 
-    def actualOpt    : Option[ActualRen]  = either.toOption
+    def toOpt        : Option[Key]        = to.as.someIf(_ != from)
     def actualOptPair: Option[(Key, Key)] = if (isActual) Some(from -> to) else None
+    def actualOpt    : Option[ActualRen]  = either.toOption
 
     def either: Either[Key, ActualRen] = if (from == to) Left(from) else Right(ActualRen(from, to))
 

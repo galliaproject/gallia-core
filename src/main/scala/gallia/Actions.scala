@@ -23,10 +23,10 @@ trait Action
   trait ActionMN  { def _meta(in: Seq[Cls]): Cls }
 
   // ===========================================================================
-  trait ActionAN { def atoms(ctx: NodeMetaContext): Atoms } // TODO: rename to ActionAN?
+  trait ActionAN { def atoms(ctx: NodeMetaContext): Atoms }
 
     // ---------------------------------------------------------------------------
-    case class NodeMetaContext(afferents: Seq[Cls], efferent: Cls) { def forceSingleAfferent: Cls = afferents.force.one }
+    case class NodeMetaContext(afferents: Seq[Cls], efferent: Cls, origin: CallSite) { def forceSingleAfferent: Cls = afferents.force.one }
 
 // ===========================================================================
 trait ActionVM0   extends ActionV0 with ActionM0
@@ -117,6 +117,8 @@ trait ActionUUa extends ActionUU with AtomsUUa
 trait ActionUUd extends ActionUU with AtomsUUd
 trait ActionUUc extends ActionUU with AtomsUUc
 trait ActionUUb extends ActionUU with AtomsUUb
+
+trait ActionUUbb extends ActionUU with AtomsUUbb // provides origin, TODO: t210616122449 - generalize
 
   // ---------------------------------------------------------------------------
   trait ActionZZd extends ActionZZ with AtomsZZd

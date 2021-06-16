@@ -91,8 +91,8 @@ package object gallia
   def cls(fields: Seq[Fld])       : Cls = meta.Cls(fields)
 
   // ---------------------------------------------------------------------------
-  def obj(entry1: DataEntry, more: DataEntry*): Obj = ObjIn.from((entry1 +: more).map(_.pair))
-  def obj(entries: Seq[(Key, AnyValue)])      : Obj = ObjIn.from(entries)
+  def obj(entry1: DataEntry, more: DataEntry*): Obj = Obj.fromIterable((entry1 +: more).map(_.pair))
+  def obj(entries: Seq[(Key, AnyValue)])      : Obj = Obj.fromIterable(entries)
 
   // ---------------------------------------------------------------------------
   def objs(values: Obj*): Objs = Objs.from(values.toList)

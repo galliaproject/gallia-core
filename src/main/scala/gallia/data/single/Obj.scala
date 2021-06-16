@@ -5,11 +5,23 @@ import aptus.json.GsonFormatter
 import gallia.data.json.ObjToGson
 
 // ===========================================================================
-case /* for equality */ class Obj private (protected[data] val data: UData) // TODO: two versions, see t210104164036
+class Obj private ( /* must not expose apply: see 210102140902, mostly so can use .obj(...) accessor */   
+        protected[data] val data: UData) // TODO: two versions, see t210104164036
       extends ObjAccessors
-      with    ObjOperations {
-      // TODO: extends Ordered?
+      with    ObjOperations { // TODO: extends Ordered?
+    @inline @deprecated def _data = data
 
+    // ===========================================================================
+    override def hashCode: Int = data.toList.hashCode() // TODO: costly?
+
+    // ---------------------------------------------------------------------------
+    override def equals(that: Any): Boolean = that match {
+        case that: Obj => { 
+          this.data.toList.sortBy(_._1.name) == // TODO: t210611121237 - not relying on sorting...
+          that.data.toList.sortBy(_._1.name) }
+        case _ => false }
+
+    // ===========================================================================
     if (!gallia.Hacks.DisableRuntimeChecks) { // t210107094406 - possibility to opt out of the checks (for performance) - should opt out by default in prod
 
       // TODO: should use Key, Ren, ... directly for performance
@@ -20,18 +32,18 @@ case /* for equality */ class Obj private (protected[data] val data: UData) // T
       // ---------------------------------------------------------------------------
       // TODO: to proper errors
       require( // a201104150252
-          !data.values.exists(_.isInstanceOf[gallia.Objs]),
-          (data.filter(_._2.isInstanceOf[gallia.Objs]).map(_._1).toSeq.#@@, this)
+          !data.map   (_._2).exists(_.isInstanceOf[gallia.Objs]),
+          (data.filter(_._2          .isInstanceOf[gallia.Objs]).map(_._1).toSeq.#@@, this)
             .str.prepend("can't contain Objz: "))
 
       require( // a201104150253
-          !data.values.exists(_.isInstanceOf[Option[_]]), // TODO: efficiency...
-          (data.filter(_._2    .isInstanceOf[Option[_]]).map(_._1).toSeq.#@@, this)
+          !data.map   (_._2).exists(_.isInstanceOf[Option[_]]), // TODO: efficiency...
+          (data.filter(_._2          .isInstanceOf[Option[_]]).map(_._1).toSeq.#@@, this)
             .str.prepend("can't contain Option: "))
 
       require( // a201104150254
-          !data.values.exists(_ == Seq()), // TODO: efficiency...
-          (data.filter(_._2     == Seq()).map(_._1).toSeq.#@@, this)
+          !data.map   (_._2).exists(_ == Seq()), // TODO: efficiency...
+          (data.filter(_._2           == Seq()).map(_._1).toSeq.#@@, this)
             .str.prepend("can't contain empty Seq: "))
 
       require( // a201113115339
@@ -53,15 +65,19 @@ case /* for equality */ class Obj private (protected[data] val data: UData) // T
     def formatCompactJson : String = ObjToGson(this).thn(GsonFormatter.compact)
 
     // ===========================================================================
-    def keys   : Seq[ Key           ] = data.keys  .toList
-    def values : Seq[      AnyValue ] = data.values.toList
-    def entries: Seq[(Key, AnyValue)] = data       .toList
+    def keys   : Seq[ Key           ] = data.map(_._1).toList
+    def values : Seq[      AnyValue ] = data.map(_._2).toList
+    def entries: Seq[(Key, AnyValue)] = data          .toList
 
     // ---------------------------------------------------------------------------
     final      def  keyz  :      Keyz = Keyz(keys)
     final lazy val  keySet: Set[ Key] = keys.toSet
-    final lazy val skeySet: Set[SKey] = data.keys.map(_.name).toSet
+    final lazy val skeySet: Set[SKey] = data.map(_._1).map(_.name).toSet
 
+    // ---------------------------------------------------------------------------
+    private[single] def attemptKey (key: Key): Option[AnyValue] = data.find  (_._1 == key).map(_._2)    
+    private[single] def containsKey(key: Key):        Boolean   = data.exists(_._1 == key)
+            
     // ===========================================================================
     //TODO: t210110203020 - contains needs to be able to deal with multiplicity in nesting(s)
     //TODO: optimize
@@ -81,15 +97,17 @@ case /* for equality */ class Obj private (protected[data] val data: UData) // T
   }
 
   // ===========================================================================
-  object Obj {
+  object Obj { import ObjIn.normalize
+    
+    // ---------------------------------------------------------------------------
     def content(value: String)  : Obj = gallia.obj(gallia._content -> value)
     def line   (value: String)  : Obj = gallia.obj(gallia._line    -> value)
     def array  (value: Seq[Obj]): Obj = gallia.obj(gallia._array   -> value.toList)
 
     // ---------------------------------------------------------------------------
-    /* must not expose apply: see 210102140902 */
-    private[gallia] def build   (data: UData):        Obj  = new Obj(ObjIn.normalize(data))
-    private[gallia] def buildOpt(data: UData): Option[Obj] = ObjIn.normalize(data).as.noneIf(_.isEmpty).map(new Obj(_))
+    private[gallia] def build0      (data: UData)           : Obj = new Obj(data)
+    private[gallia] def build       (data: UData)           : Obj = build0(normalize(data))
+    private[gallia] def fromIterable(data: Iterable[UEntry]): Obj = build (data.toArray)
   }
 
 // ===========================================================================

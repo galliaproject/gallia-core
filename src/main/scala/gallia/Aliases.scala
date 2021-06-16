@@ -15,7 +15,6 @@ object  ADataAliases extends  ADataAliases
 
     private[gallia] type Vle = Any // as in HeadV's during data phase
 
-    private[gallia] type UData =
       // two versions:
       // - t210104164037 - ListMap[Key, AnyValue] if standalone
       // - t210104164036 - Vector[List[Any]] if has schema
@@ -23,7 +22,8 @@ object  ADataAliases extends  ADataAliases
       //     - t210121095207 - also look into scala-native
       //   - t210110095424 - the inner part (List) - (+ performance cost of having the List?)
       //   - t210110095425 - the Any part: consider an wrapping ADT (cost of wrapping vs pattern matching on Any)
-      collection.immutable.ListMap[Key, AnyValue /* TODO: t210107094213 - ensure if multiple then use List */]
+      private[gallia] type UEntry = (Key, AnyValue) /* TODO: t210107094213 - ensure if multiple then use List */
+      private[gallia] type UData  = Array[UEntry] // formerly: collection.immutable.ListMap[Key, AnyValue]
 
     // ---------------------------------------------------------------------------
     // until sure stick with them

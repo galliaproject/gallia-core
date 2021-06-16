@@ -5,7 +5,7 @@ import gallia.dag.DAG
 
 // ===========================================================================
 case class ActionPlan(dag: DAG[ActionNode]) {
-  def atomPlan: AtomPlan = AtomPlanPopulator(this)
+  def atomPlan: AtomPlan = new AtomPlan(AtomPlanPopulator(dag))
 
   // ---------------------------------------------------------------------------
   override def toString: String = formatDefault

@@ -23,16 +23,15 @@ case class ActionNode(
         case mult      => mult.zipWithRank.map { case (atom, rank) => ??? /*atom.formatDefault*/ }.join(", ") }
 
   // ---------------------------------------------------------------------------
-  def atomNode(newNodeId: NodeId, atom: Atom) = AtomNode(newNodeId, atom, parentId = id, ctx, origin)
-}
+  def atomNode(newNodeId: NodeId, atom: Atom) = 
+    AtomNode(
+        newNodeId,
+        atom,
+        AtomNodeDebugging(
+            parentId = id,
+            ctx,
+            origin))
 
-// ===========================================================================
-case class AtomNode(
-    id      : NodeId,
-    atom    : Atom,
-    parentId: NodeId, // ActionNode's
-    ctx     : NodeMetaContext,
-    origin  : CallSite)
-  extends HasNodeId
+}
 
 // ===========================================================================

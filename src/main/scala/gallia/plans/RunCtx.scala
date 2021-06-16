@@ -1,10 +1,14 @@
 package gallia.plans
 
 import aptus.{Seq_, String_}
+import gallia.dag.NodeId
+import gallia.Atom
 
 // ===========================================================================
 private case class RunCtx[$Data](
-    node     : AtomNode,
+    nodeId   : NodeId,
+    nodeAtom : Atom,    
+    debug    : AtomNodeDebugging,
     throwable: Throwable,
     inputData: InputData) {
 
@@ -16,20 +20,20 @@ private case class RunCtx[$Data](
       Seq(
         // have those twice as the rest can be big
         "message"    .padRight(12, ' ') -> throwable.getMessage,
-        "origin"     .padRight(12, ' ') -> node.origin.formatSuccinct,
+        "origin"     .padRight(12, ' ') -> debug.origin.formatSuccinct,
 
         // ---------------------------------------------------------------------------
-        "node.parent".padRight(12, ' ') -> node.parentId,
-        "node.id"    .padRight(12, ' ') -> node.id,
-        "node.atom"  .padRight(12, ' ') -> node.atom,
-          "afferent schema(s):" -> node.ctx.afferents.map(_.formatShort0.sectionAllOff).joinln.newline,
+        "node.parent".padRight(12, ' ') -> debug.parentId,
+        "node.id"    .padRight(12, ' ') -> nodeId,
+        "node.atom"  .padRight(12, ' ') -> nodeAtom,
+          "afferent schema(s):" -> debug.ctx.afferents.map(_.formatShort0.sectionAllOff).joinln.newline,
             "example input data:" -> inputData.formatDebug.sectionAllOff.newline, // TODO: may not show the relevant object if Objs... (see t210114111539) - hence "example" for now
-          "efferent schema:"    -> node.ctx.efferent.formatShort0.sectionAllOff.newline,
+          "efferent schema:"    -> debug.ctx.efferent.formatShort0.sectionAllOff.newline,
 
         // ---------------------------------------------------------------------------
         // have those twice as the rest can be big
         "message".padRight(12, ' ') -> throwable.getMessage,
-        "origin" .padRight(12, ' ') -> node.origin.formatSuccinct)
+        "origin" .padRight(12, ' ') -> debug.origin.formatSuccinct)
       .map { case (key, value) => s"${key}\t${value}" }
       .joinln
       .sectionAllOff(2)

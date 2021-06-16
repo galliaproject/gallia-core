@@ -7,7 +7,7 @@ import gallia.dag._
 // ===========================================================================
 private[plans] object AtomPlanPopulator {
 
-  def apply(plan: ActionPlan): AtomPlan = { import plan.dag
+  def apply(dag: DAG[ActionNode]): DAG[AtomNode] = {
 
     def atomId(id: NodeId, index: Int): NodeId = id.append(s"-${index}" /* TODO: not if only one? */)
 
@@ -61,7 +61,7 @@ private[plans] object AtomPlanPopulator {
         }
 
     // ---------------------------------------------------------------------------
-    AtomPlan(new DAG[AtomNode](nodes2, edges2, _.id))
+    new DAG[AtomNode](nodes2, edges2, _.id)
   }
 }
 

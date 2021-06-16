@@ -15,7 +15,8 @@ private[plans] trait InputData { def formatDebug: String } // this is a bit of a
       }
 
       // ===========================================================================
-      case object _None extends InputData { def formatDebug = "(no input data)" }
+      case object _None         extends InputData { def formatDebug = "(no input data)" }
+      case object _Undetermined extends InputData { def formatDebug = "(could not determine)" }
 
       case class  _Obj  (value: Obj ) extends InputData { def formatDebug = value.formatPrettyJson }
       case class  _Objs (value: Objs) extends InputData { def formatDebug = formatObjsDebug(value) }

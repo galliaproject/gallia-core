@@ -1,5 +1,6 @@
 package gallia.actions
 
+import scala.util.chaining._
 import aptus.Anything_
 
 import gallia._
@@ -23,16 +24,15 @@ object ActionsUUTransforms {
       // ---------------------------------------------------------------------------
       def  vldt(c: Cls): Errs =
         target.vldtAsOrigin(c) ++
-        target.__qpathz(c).thn {
+        target.__qpathz(c).pipe {
             _trnsf.vldt(c, _) } ++
-        target.__qpathz(c).thn(_.fromz).thn {
+        target.__qpathz(c).pipe(_.fromz).pipe {
               checkUInput(c) }
         // TODO: t210202155459 - verify input is indeed z
 
       // ---------------------------------------------------------------------------
-      def _meta  (c: Cls): Cls     = resolve(c).thn(_trnsf.transformMeta(c, _))
-      def atomuus(c: Cls): AtomUUs = resolve(c).thn(_trnsf.atomuusUU    (c)(_, target.isOptional(c)))
-    }
+      def _meta  (c: Cls): Cls     = resolve(c).pipe   (_trnsf.transformMeta(c, _))
+      def atomuus(c: Cls): AtomUUs = resolve(c).flatMap(_trnsf.transformData(c, multiple = false)) } //TODO: can only be one target actually
 
     // ===========================================================================
     case class TransformZZ(target: TqRPathz, f: HeadZ => HeadZ) extends ActionUUb with HasTqRPathzTarget {
@@ -41,14 +41,14 @@ object ActionsUUTransforms {
       // ---------------------------------------------------------------------------
       def  vldt(c: Cls): Errs =
         target.vldtAsOrigin(c) ++
-        resolve(c).thn {
+        resolve(c).pipe {
             _trnsf.vldt(c, _) } ++
-        target.__qpathz(c).thn(_.fromz).thn {
+        target.__qpathz(c).pipe(_.fromz).pipe {
               checkZInput(c) }
 
       // ---------------------------------------------------------------------------
-      def _meta  (c: Cls): Cls     = resolve(c).thn(_trnsf.transformMeta(c, _))
-      def atomuus(c: Cls): AtomUUs = resolve(c).thn(_trnsf.atomuusZZ    (c)(_, target.isOptional(c)))
+      def _meta  (c: Cls): Cls     = resolve(c).pipe   (_trnsf.transformMeta(c, _))
+      def atomuus(c: Cls): AtomUUs = resolve(c).flatMap(_trnsf.transformData(c, multiple = true)) //TODO: can only be one target actualy               
     }
 
   // ===========================================================================
@@ -58,15 +58,15 @@ object ActionsUUTransforms {
       // ---------------------------------------------------------------------------
       def  vldt(c: Cls): Errs =
         target.vldtAsOrigin(c) ++
-        resolve(c).thn {
+        resolve(c).pipe {
             _trnsf.vldt(c, _) } ++
-        target.__qpathz(c).thn(_.fromz).thn {
+        target.__qpathz(c).pipe(_.fromz).pipe {
               checkUInput(c) }
 
         // TODO: t210202155459 - verify input is indeed z
 
-      def _meta  (c: Cls): Cls     = resolve(c).thn { x => _trnsf.transformMeta(c, x).toMultiple(x.force1FX) }
-      def atomuus(c: Cls): AtomUUs = resolve(c).thn {      _trnsf.atomuusUZ    (c)(_, target.isOptional(c)) }
+      def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).toMultiple(x.force1FX) }
+      def atomuus(c: Cls): AtomUUs = resolve(c).pipe {      _trnsf.atomuusUZ    (c)(_, target.isOptional(c)) }
     }
 
     // ===========================================================================
@@ -77,13 +77,13 @@ object ActionsUUTransforms {
       // ---------------------------------------------------------------------------
       def  vldt(c: Cls): Errs =
         target.vldtAsOrigin(c) ++
-        resolve(c).thn {
+        resolve(c).pipe {
             _trnsf.vldt(c, _) } ++
-        target.__qpathz(c).thn(_.fromz).thn {
+        target.__qpathz(c).pipe(_.fromz).pipe {
               checkZInput(c) }
 
-      def _meta  (c: Cls): Cls     = resolve(c).thn { x => _trnsf.transformMeta(c, x).toNonMultiple(x.force1FX) }
-      def atomuus(c: Cls): AtomUUs = resolve(c).thn {      _trnsf.atomuusZU    (c)(_, target.isOptional(c)) }
+      def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).toNonMultiple(x.force1FX) }
+      def atomuus(c: Cls): AtomUUs = resolve(c).pipe {      _trnsf.atomuusZU    (c)(_, target.isOptional(c)) }
     }
 
   // ===========================================================================
@@ -93,16 +93,16 @@ object ActionsUUTransforms {
       // ---------------------------------------------------------------------------
       def  vldt(c: Cls): Errs =
         target.vldtAsOrigin(c) ++
-        target.__qpathz(c).thn {
+        target.__qpathz(c).pipe {
             _trnsf.vldt(c, _) } ++
-        target.__qpathz(c).thn(_.fromz).thn {
+        target.__qpathz(c).pipe(_.fromz).pipe {
               checkUInput(c) }
         //TODO: t210202155459 - verify input is indeed z
         //TODO: t210202155202 - check dest type is valid
 
       // ---------------------------------------------------------------------------
-      def _meta  (c: Cls): Cls     = resolve(c).thn { x => _trnsf.transformMeta(c, x).transformInfo(x.force1FX)(_ => Info.forceFrom[D1]) }
-      def atomuus(c: Cls): AtomUUs = resolve(c).thn {      _trnsf.atomuusUV    (c)(_, target.isOptional(c)) }
+      def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).transformInfo(x.force1FX)(_ => Info.forceFrom[D1]) }
+      def atomuus(c: Cls): AtomUUs = resolve(c).pipe {      _trnsf.atomuusUV    (c)(_, target.isOptional(c)) }
     }
 
     // ===========================================================================
@@ -112,15 +112,15 @@ object ActionsUUTransforms {
       // ---------------------------------------------------------------------------
       def  vldt(c: Cls): Errs =
         target.vldtAsOrigin(c) ++
-        target.__qpathz(c).thn {
+        target.__qpathz(c).pipe {
             _trnsf.vldt(c, _) } ++
-        target.__qpathz(c).thn(_.fromz).thn {
+        target.__qpathz(c).pipe(_.fromz).pipe {
               checkZInput(c) }
         //TODO: t210202155202 - check dest type is valid
 
       // ---------------------------------------------------------------------------
-      def _meta  (c: Cls): Cls     = resolve(c).thn { x => _trnsf.transformMeta(c, x).transformInfo(x.force1FX)(_ => Info.forceFrom[D1]) }
-      def atomuus(c: Cls): AtomUUs = resolve(c).thn { _trnsf.atomuusZV(c)(_, target.isOptional(c)) }
+      def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).transformInfo(x.force1FX)(_ => Info.forceFrom[D1]) }
+      def atomuus(c: Cls): AtomUUs = resolve(c).pipe { _trnsf.atomuusZV(c)(_, target.isOptional(c)) }
     }
 
   // ===========================================================================
@@ -131,23 +131,29 @@ object ActionsUUTransforms {
       def _meta(c: Cls): Cls  =
         if (b) from.qpathz_(c).foldLeft(c)(_.updateContainee(_, to))
         else   from.qpathz_(c).foldLeft(c)(_.updateType(_, to))
-      def atomuus(c: Cls): AtomUUs = from.qpathz_(c).thn(_atoms(c)(_TransformVV(_, f))) }
+      //FIXME: t210615104657 - if to is Option[T]        
+      def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, f))) }
 
     // ---------------------------------------------------------------------------
     case class TransformVVx(from: TtqRPathz, to: TypeNode, f: _ff11) extends ActionUUb {
       def  vldt(c: Cls): Errs = from.vldtAsOrigin(c, SpecialCardiMode.IgnoreAltogether) ++ Nil //TODO: t210202155202 - check dest type is valid
       def _meta(c: Cls): Cls  = from.qpathz_(c).foldLeft(c)(_.transformInfo(_)(_.updateContainee(to.forceNonBObjInfo.containee)))
-      def atomuus(c: Cls): AtomUUs = from.qpathz_(c).thn(_atoms(c)(_TransformVV(_, from.wrapx(c, f)))) }
+      def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.wrapx(c, f)))) }
 
     // ---------------------------------------------------------------------------
     case class TransformVVc(from: TtqRPathz, to: HT, f: _ff11) extends ActionUUb with TodoV1 {
       def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c)(_.updateType(_, to.node))
-      def atomuus(c: Cls): AtomUUs = from.qpathz_(c).thn(_atoms(c)(_TransformVV(_, from.wrapc(to, f) ))) }
+      def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.wrapc(to, f) ))) }
 
+    // ---------------------------------------------------------------------------
+case class TransformFoo(from: TtqRPathz, to: Cls, f: _ff11) extends ActionUUb with TodoV1 {  
+      def _meta  (c: Cls): Cls     = from.qpathz_(c).pipe(c.transformInfo(_)(_.updateContainee(to)))
+      def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, f))) }
+    
     // ---------------------------------------------------------------------------
     case class TransformVVxc(from: TtqRPathz, to: HT, f: _ff11) extends ActionUUb with TodoV1 {
       def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c)(_.updateContainee(_, to.node))
-      def atomuus(c: Cls): AtomUUs = from.qpathz_(c).thn(_atoms(c)(_TransformVV(_, from.wrapxc(c, to, f) ))) }
+      def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.wrapxc(c, to, f) ))) }
 
     // ===========================================================================
     //TODO: t210111095156 separate all the Whatever and t210111095157 case-class versions...
@@ -155,13 +161,13 @@ object ActionsUUTransforms {
     case class TransformWW1(from: TqRPathz, toMultiple: Boolean, f: _ff11) extends ActionUUb {
       def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) // TODO: t210201164749
       def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c) { (curr, path) => curr.thnIf(toMultiple)(_.toMultiple(path)) }
-      def atomuus(c: Cls): AtomUUs = from.qpathz_(c).thn(_atoms(c)(_TransformVV(_, from.container(c).containerWrap(f)) )) }
+      def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.container(c).containerWrap(f)) )) }
 
     // ---------------------------------------------------------------------------
     case class TransformWW2(from: TtqRPathz, to: TypeNode, multiple: Boolean, f: _ff11) extends ActionUUb {
       def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) ++ _vldt.validType(to) ++ errIf_(multiple && to.isNotOne)(s"TODO:210112155301:${to}")
       def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c) { (curr, path) => curr.updateContainee(path, to).thnIf(multiple)(_.toMultiple(path)) }
-      def atomuus(c: Cls): AtomUUs = from.qpathz_(c).thn(_atoms(c)(_TransformVV(_, from.tq.container(c).containerWrap(f) ))) }
+      def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.tq.container(c).containerWrap(f) ))) }
 
   // ===========================================================================
   // TODO: move these to validations

@@ -48,13 +48,15 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { _: HeadCommon[F] =>
 
     // ===========================================================================
     class _TransformVV[O: WTT](f1: Transform[O]) { val ttq = resolves(f1)
+def using2(c: Cls)(f: O => Objs): Self2 = self2 :+ TransformFoo(ttq, c, wrap(f))
+
       def using[D: WTT](f: O => D): Self2 = self2 :+ { val dest = node[D]
         if (dest.isContainedDataClass)
           if (ttq.ignoreContainer) TransformVVxc(ttq, to = HT.parse[D], wrap(f))
-          else                      TransformVVc (ttq, to = HT.parse[D], wrap(f))
+          else                     TransformVVc (ttq, to = HT.parse[D], wrap(f))
         else
           if (ttq.ignoreContainer) TransformVVx(ttq, dest, wrap(f))
-          else                      TransformVV (ttq, dest, wrap(f), false) } }
+          else                     TransformVV(ttq, dest, wrap(f), false) } }
 
 }
 

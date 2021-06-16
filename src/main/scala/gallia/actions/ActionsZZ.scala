@@ -5,6 +5,7 @@ import aptus.Anything_
 import gallia._
 import gallia.atoms.AtomsZZ._
 import gallia.atoms.AtomsCustom.{_CustomZZ, _CustomZV}
+import gallia.atoms._UWrappers
 
 // ===========================================================================
 object ActionsZZ {
@@ -46,7 +47,11 @@ object ActionsZZ {
     case class MapU2U(f: HeadU => HeadU) extends ActionZZc {
       def  vldt  (c: Cls): Errs   = parseUU(f)._vldt(c)
       def _meta  (c: Cls): Cls    = parseUU(f)._meta(c)
-      def  atomzz(c: Cls): AtomZZ = parseUU(f).dataU2U(c).thn { g => _CustomZZ(_.map(g)) } }
+      def  atomzz(c: Cls): AtomZZ = {
+        val plan = parseUU(f).metaToAtomPlan(c)
+
+        if (plan.dag.isChain) _UWrappers.fromMapU2U(plan)      
+        else                  _CustomZZ(_.map(plan.V1.naiveRunUU)) } }
 
     // ---------------------------------------------------------------------------
     case class FlatMap(f: HeadU => HeadZ) extends ActionZZc {

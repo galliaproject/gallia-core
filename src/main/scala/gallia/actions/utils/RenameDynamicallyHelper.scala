@@ -11,6 +11,16 @@ private[actions] object RenameDynamicallyHelper {
   // ===========================================================================
   class Results(results: Seq[Result]) {
 
+    override def toString: String = formatDefault
+
+      def formatDefault: String =        
+        results
+          .map {
+              case Left ((path, throwable)) => s"${path.formatDebug} (${ throwable.getMessage})" 
+              case Right(rpath)             => rpath.formatDefault }          
+          .mkString("\n")
+          .prepend(s"${results.size}:")
+
     private def either: Either[Seq[(KPath, Throwable)], RPathz] =
       results
         .flatMap(_.left.toOption)

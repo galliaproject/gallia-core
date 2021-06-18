@@ -67,9 +67,9 @@ private[plans] object AtomProcessor {
         case NestingDataPlaceholder => missingInputs(nodeId)
 
         // ---------------------------------------------------------------------------
-        case x: AtomIU => x.naive.map(NDT.to ).getOrElse(missingInputs(nodeId) /* TODO: error message if not found */)
-        case x: AtomIZ => x.naive.map(NDT.to ).getOrElse(missingInputs(nodeId))
-        case x: AtomIV => x.naive.map(NDT.vle).getOrElse(missingInputs(nodeId))
+        case x: AtomIU => x.naive.map(NDT.to ).get // by design
+        case x: AtomIZ => x.naive.map(NDT.to ).get
+        case x: AtomIV => x.naive.map(NDT.vle).get
 
         // ===========================================================================
         case x: AtomUO => obj .sideEffect(x.naive)

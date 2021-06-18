@@ -24,13 +24,13 @@ object ActionsUUNestingRelated {
     }
 
     // ---------------------------------------------------------------------------
-    class NestInto(target: RPathz, destination: Ren) extends ActionUUa {
+    class NestInto(target: RPathz, destination: Ren) extends ActionUUa {      
         def  vldt(c: Cls): Errs = Nil //TODO
         def _meta(c: Cls): Cls  = target.values.map(_.renFX).thn(Renz.apply).thn(c.nest(_, destination.from)).rename(destination)
-        def atomuus = {
-          val from = target.values.map(_.ren.fromFX)
-          _Nest(Keyz(from), destination.from).as.seq
-        }
+        def atomuus =
+          (_Nest(target.fromz.forceKeyz /*FIXME*/, destination.from) +:
+            target.map(_.prepend(destination.from)).flatMap(potentialRenaming).toSeq) ++ 
+            potentialRenaming(destination)          
     }
 
   // ===========================================================================

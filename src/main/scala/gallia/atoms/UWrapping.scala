@@ -20,7 +20,7 @@ case class _UWrappers(wrappees: Seq[AtomUU]) extends AtomZZ with AtomCombiner[_U
       plan
         .dag
         .nodes // TODO: t210614142629 - confirm/enforce guaranteed topologically sorted if chain?
-        .tail
+        .tail  // TODO: confirm always has placeholder
         .pipe(AtomNodes.apply)
         .pruneChain
         .values

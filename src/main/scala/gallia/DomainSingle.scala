@@ -39,6 +39,7 @@ case class KPath(parent: Seq[Key], key: Key) {
     private val all = parent :+ key
 
     def formatDebug = all.map(_.name).join(" |> ")
+    def formatDefault = formatDebug
 
     override def toString = formatDebug
 

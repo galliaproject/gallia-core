@@ -754,7 +754,7 @@ I have never dealt with it personally but I imagine the likes of computational p
   - [ENSDF](https://www.nndc.bnl.gov/ensdf/) data (WIP)
   - WIP (see [forum question](https://www.physicsforums.com/threads/looking-for-large-dataset-of-non-image-centric-physics-data.1000073/))
 - <a name="210223094318"></a><a name="spark-examples"></a>Spark-powered:
-  - WIP: will provide an alternative version of the [genemania example](#genemania-example) above that uses Spark instead of the [poor man's scaling](#poor-man-scaling) approach (_spilling_)
+  - [GeneMania TSV files](https://github.com/galliaproject/gallia-genemania-spark#description) via Spark RDDs
 - (more coming soon)
 
 ## FAQ
@@ -828,7 +828,7 @@ It may still become a reality but I'd rather focus on maturing a Scala version f
 <a name="210129170214"></a>
 ### What is aptus?
 "Aptus" is latin for suitable, appropriate, fitting. It is our utility library to help smooth certain pain points of the Java/Scala ecosystem.
-The plan is to externalize it eventually (Apache 2 license). In fact, the _Aptus_ code included in _Gallia_ is a small subset of the full library, which was embedded for convenience.
+It was originally included in _Gallia_ for convenience, but is now externalized in its [own repo](https://github.com/aptusproject/aptus-core) (Apache 2 licensed)
 
 <a name="210127134040"></a><a name="tests"></a>
 ### Where are the tests?

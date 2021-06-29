@@ -63,7 +63,7 @@ object AtomsUUUntuplify {
       o .strings_ /* req */(targetKey.from)
         .map(_untuplify2z(entrySplitter))
         .map { o2 =>
-          checkNewKeys(newKeys)(o2)
+          checkNewKeys(debug = o)(newKeys)(o2)
 
           o .replace(targetKey.from, o2)
             .rename(targetKey) }
@@ -81,7 +81,7 @@ object AtomsUUUntuplify {
   def untuplify2a(targetKey: Ren)(entriesSplitter: StringSplitter, entrySplitter: StringSplitter)(newKeys: Set[Key])(o: Obj): Obj =
       o._transformRenx(targetKey) { value =>
         _untuplify2a(entriesSplitter, entrySplitter)(value)
-        .sideEffect(checkNewKeys(newKeys)) }
+        .sideEffect(checkNewKeys(debug = o)(newKeys)) }
 
     // ---------------------------------------------------------------------------
     def _untuplify2a(entriesSplitter: StringSplitter, entrySplitter: StringSplitter)(value: AnyValue): Obj =
@@ -96,9 +96,9 @@ object AtomsUUUntuplify {
       .thn(untuplify2a(targetKey)(entriesSplitter, entrySplitter)(newKeys))
 
   // ===========================================================================
-  private def checkNewKeys(newKeys: Set[Key])(o2: Obj) {
+  private def checkNewKeys(debug: Obj)(newKeys: Set[Key])(o2: Obj) {
     if (o2.keySet.diff(newKeys).nonEmpty)
-      runtimeError(s"TODO:210110142505:${o2.keySet.diff(newKeys).map(_.name).toSeq.sorted}:${newKeys.map(_.name).toSeq.sorted}")
+      dataError(s"TODO:NotNewKeys:210110142505:${o2.keys.#@@}:${o2.keySet.diff(newKeys).map(_.name).toSeq.sorted.#@@}:${newKeys.map(_.name).toSeq.sorted.#@@}:${debug.formatCompactJson}")
   }
 
 }

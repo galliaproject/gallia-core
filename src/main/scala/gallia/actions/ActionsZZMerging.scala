@@ -25,8 +25,8 @@ object ActionsZZMerging {
         case bring: BringData    => c1.bring(c2, bring.targetKeys(c1, c2))
 
         // do not need join type
-        case join   : JoinData    => c1.join   (c2)(join   .joinKeys(c1, c2))
-        case coGroup: CoGroupData => c1.coGroup(c2)(coGroup.joinKeys(c1, c2), coGroup.as) }
+        case join   : JoinData    => c1.join   (c2)(join   .joinType, join   .joinKeys(c1, c2))
+        case coGroup: CoGroupData => c1.coGroup(c2)(coGroup.joinType, coGroup.joinKeys(c1, c2), coGroup.as) }
 
     // ---------------------------------------------------------------------------
     def dataz2(c1: Cls , c2: Cls): Atoms =

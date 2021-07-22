@@ -55,9 +55,14 @@ object AtomsOthers {
   // ===========================================================================
   // zu
 
-  case object _ForceOne extends AtomZU { def naive(z: Objs) =
-    if (z.size /* TODO: may be costly */ != 1) throw new RuntimeError(ErrorId.Runtime.NotExactlyOneElement -> z.size.str)
-    else                                       z.force.one }
+  case object _ForceOne extends AtomZU { def naive(z: Objs) = {    
+    val itr = z.consume
+    if (!itr.hasNext) _Error.Runtime.EmptyStream.throwRuntimeError()
+    else {
+      val next = itr.next()      
+      if (itr.hasNext) _Error.Runtime.MoreThanNElements(n = 1).throwRuntimeError()
+      else             next } }
+  }
 
   // ---------------------------------------------------------------------------
   case class _AsArray1(key: Key) extends AtomZU { def naive(z: Objs) =

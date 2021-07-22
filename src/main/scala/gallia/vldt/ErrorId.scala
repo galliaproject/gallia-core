@@ -45,7 +45,6 @@ import gallia.meta._
 
     // ---------------------------------------------------------------------------
     @deprecated object Runtime {
-      @deprecated val NotExactlyOneElement = "201110144608" -> "NotExactlyOneElement" // force.one
       @deprecated val NotUnique            = "201110144609" -> "NotUnique"
       @deprecated val NoKeysLeft           = "201110144610" -> "NoKeysLeft" //TODO: or offer alterative if all missing?
       @deprecated val EmptyKey             = "201110144611" -> "EmptyKey"
@@ -88,8 +87,8 @@ import gallia.meta._
       def errsIf(test: => Boolean): gallia.Errs = if (test) errs else Nil
 
       // TODO: delay throwing?
-      def throwRuntimeError[A](passThrough: A): A = { runtimeError((errorId, label, formatDetails2)); passThrough; }
-      def throwRuntimeError   ()                    { runtimeError((errorId, label, formatDetails2)) }
+      def throwRuntimeError[A](passThrough: A): A       = { dataError((errorId, label, formatDetails2)); passThrough; }
+      def throwRuntimeError   ()              : Nothing = { dataError((errorId, label, formatDetails2)) }
     }
 
     // ---------------------------------------------------------------------------
@@ -148,6 +147,7 @@ import gallia.meta._
 
       // ===========================================================================
       object Runtime {
+
         case class NotDefined(targets: KPathz) extends _Error3 { val errorId = "201016153348"; val label = s"NotDefined"
           def formatDetails = targets.formatDefault }
 
@@ -170,6 +170,11 @@ import gallia.meta._
           def attemptO(o: Obj)(invalid: Obj => Boolean): Obj =
             if (invalid(o)) runtimeError((errorId, label)) else o }
 
+        case object EmptyStream               extends _Error2 { val errorId = "201110144607"; val label = s"EmptyStream" }
+        case class  MoreThanNElements(n: Int) extends _Error3 { val errorId = "201110144606"; val label = s"MoreThanNElements"
+          def formatDetails = s"n:${n}"} // note: actual size could be costly to compute
+        
+        
       }
     }
 

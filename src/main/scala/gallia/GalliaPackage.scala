@@ -2,7 +2,6 @@ import java.lang.IllegalStateException
 
 import gallia.io.in._
 import gallia.domain._
-import gallia.data.single.ObjIn
 
 // ===========================================================================
 package object gallia
@@ -131,8 +130,8 @@ package gallia {
   case class MetaError(errors: gallia.run.ResultSchema.Errors) extends RuntimeException(errors.formatExceptionMessage)
 
   /** those can't be called until we have the actual data's (eg ensure uniqueness, pivot for new keys, ...) */
-  case class RuntimeError(details: Any) extends RuntimeException(details.toString)
-
+  case class RuntimeError   (details: Any) extends RuntimeException(details.toString)
+  
   case class ToBeImplemented(details: Any) extends RuntimeException(details.toString)
 
   // ===========================================================================
@@ -146,7 +145,7 @@ package gallia {
 
       // ---------------------------------------------------------------------------
       def |> (that: KeyW): KPath = KPath.from(_key).appendLevel(that.value)
-      def |> (that: Ren  ): RPath = KPath.from(_key).appendLevel(that.from).qpath(that.to)
+      def |> (that: Ren) : RPath = KPath.from(_key).appendLevel(that.from).qpath(that.to)
 
       // TODO:?
       //def |> (that: KeyWz   ): SPathz = ???

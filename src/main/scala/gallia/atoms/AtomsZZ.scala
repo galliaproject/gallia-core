@@ -39,11 +39,11 @@ object AtomsZZ {
   // grouping
   // TODO: t210114170853 - optimization: separate at least 11/1N/N1/NN?
 
-  case class _Group1N(groupee: Key, groupers: Keyz) extends AtomZZ { def naive(z: Objs) =
+  case class _Group1N(groupee: Ren, groupers: Renz) extends AtomZZ { def naive(z: Objs) =
     z.group1N(groupee, groupers) }
 
   // ---------------------------------------------------------------------------
-  case class _GroupNN(groupees: Keyz, grouper: Keyz, as: Key) extends AtomZZ { def naive(z: Objs) =
+  case class _GroupNN(groupees: Renz, grouper: Renz, as: Key) extends AtomZZ { def naive(z: Objs) =
     z.groupNN(groupees, grouper, as) }
 
 }

@@ -82,7 +82,7 @@ trait HeadZFiltering { _: HeadZ => // pretty messy, need to find a cleaner way t
       class __FilterBy1WV(target: KPathW) {
 
         /** similar to SQL's WHERE X IN Y clause */
-        def in[T:WTT](coll: Seq[T]): Self = matches( { wv => coll.contains(wv.any) })       
+        def in[T:WTT](coll: Seq[T]): Self = matches( { wv => coll.contains(wv.any) }) // TODO: toSet if big enough? use bloom if very big?       
 
         def hasValue(a: WV): Self2 = matches(_ == a)
 

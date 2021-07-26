@@ -33,14 +33,14 @@ object ActionsZZGrouping {
       // ===========================================================================
       def atomzzs(in: Cls): AtomZZs =
         Seq(data match {
-          case data: GroupData1C => data.pair(in).thn { case (groupee , groupers) => _Group1N(groupee.fromFX, groupers.fromsFX) }
+          case data: GroupData1C => data.pair(in).thn { case (groupee , groupers) => _Group1N(groupee, groupers) }
 
-          case data: GroupData1N => data.pair(in).thn { case (groupee , groupers) => _Group1N(groupee.fromFX, groupers.fromsFX) }
+          case data: GroupData1N => data.pair(in).thn { case (groupee , groupers) => _Group1N(groupee, groupers) }
 
-          case data: GroupDataCN => data.pair(in).thn { case (groupees, groupers) => _GroupNN(groupees.fromsFX, groupers.fromsFX, data.as) }
-          case data: GroupDataNC => data.pair(in).thn { case (groupees, groupers) => _GroupNN(groupees.fromsFX, groupers.fromsFX, data.as) }
+          case data: GroupDataCN => data.pair(in).thn { case (groupees, groupers) => _GroupNN(groupees, groupers, data.as) }
+          case data: GroupDataNC => data.pair(in).thn { case (groupees, groupers) => _GroupNN(groupees, groupers, data.as) }
 
-          case data: GroupDataNN => data.pair(in).thn { case (groupees, groupers) => _GroupNN(groupees.fromsFX, groupers.fromsFX, data.as) } })
+          case data: GroupDataNN => data.pair(in).thn { case (groupees, groupers) => _GroupNN(groupees, groupers, data.as) } })
     }
 
 }

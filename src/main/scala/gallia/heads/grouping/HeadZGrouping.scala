@@ -35,7 +35,7 @@ trait HeadZGrouping { self: HeadZ =>
       class _By1(groupee: Groupee1Selection) { // similar to conf's
 
         def by(groupers: RenWz)            : Self = by(_.explicit(groupers))
-        def by(grouper1: RenW, more: RenW*): Self = by(_.explicitFX(grouper1, more))
+        def by(grouper1: RenW, more: RenW*): Self = by(_.explicit(RenWz(grouper1 +: more)))
         def by(groupers: GroupersSelection): Self = grouping(_.field(groupee).by(groupers))
 
         private[heads] def byN(groupers: TQRenz) : Self = grouping(_.field(groupee).byN(groupers))

@@ -2,24 +2,24 @@ package gallia.data.multiple
 
 import aptus.{Anything_, Seq_}
 
-import gallia.obj
+import gallia.{obj, Ren, Renz}
 
 // ===========================================================================
 trait ObjsAggregations { self: Objs =>
   import ObjsAggregations.tmp
 
   // ===========================================================================
-  def group1N(groupee: Key, groupers: Keyz): Objs =
-    flatMapToStreamer { o => o.opt(groupee).map(o.retainOpt(groupers) -> _) }
+  def group1N(groupee: Ren, groupers: Renz): Objs =
+    flatMapToStreamer { o => o.opt(groupee.from).map(o.retainOpt(groupers.froms).map(_.rename(groupers)) -> _) }
       .groupByKey
-      .map { case (keyObjOpt, values) => tmp(keyObjOpt).put(groupee, values) }
+      .map { case (keyObjOpt, values) => tmp(keyObjOpt).put(groupee.to, values) }
       .thn(Objs.build)
 
   // ---------------------------------------------------------------------------
-  def groupNN(groupees: Keyz, grouper: Keyz, as: Key): Objs =
-    flatMapToStreamer { o => o.retainOpt(groupees).map(o.retainOpt(grouper) -> _) }
+  def groupNN(groupees: Renz, groupers: Renz, as: Key): Objs =
+    flatMapToStreamer { o => o.retainOpt(groupees.froms).map(_.rename(groupees)).map(o.retainOpt(groupers.froms) -> _) }
       .groupByKey
-      .map { case (keyObjOpt, values) => tmp(keyObjOpt).put(as, values) }
+      .map { case (keyObjOpt, values) => tmp(keyObjOpt).rename(groupers).put(as, values) }
       .thn(Objs.build)
 
   // ===========================================================================

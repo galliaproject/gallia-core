@@ -1,6 +1,7 @@
 package gallia.io
 package in
 
+import aptus.{TableName, QueryString}
 import aptus.{Anything_, String_}
 import gallia._
 import gallia.heads.Head
@@ -75,5 +76,14 @@ private[io] trait InputBase { val inputString: InputString }
           .thn(Head.inputZ)
   }
 
+  // ===========================================================================
+  trait StreamConnection {
+    val connection: java.sql.Connection
+
+    // ---------------------------------------------------------------------------
+    def streamTable(table: TableName)  : HeadZ = gallia.actions.in.JdbcInputZ2(connection, ReadQuerying.All(table))  .thn(heads.Head.inputZ) 
+    def streamQuery(query: QueryString): HeadZ = gallia.actions.in.JdbcInputZ2(connection, ReadQuerying.Query(query)).thn(heads.Head.inputZ)
+  }
+  
 // ===========================================================================
 

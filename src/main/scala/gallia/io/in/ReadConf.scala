@@ -111,7 +111,7 @@ case class JdbcConf(
         inputString   : InputString,
         queryingOpt   : Option[ReadQuerying] = None)
       extends InputConfZ {
-    def actionZ: ActionIZ = JdbcInputZ(inputString, queryingOpt) }
+    def actionZ: ActionIZ = JdbcInputZ1(inputString, queryingOpt) }
 
   // ---------------------------------------------------------------------------
   case class MongodbConf(

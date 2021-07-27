@@ -1,7 +1,6 @@
 package gallia.atoms
 
 import aptus.{Anything_, String_}
-import aptus.QueryString
 
 import gallia._
 import gallia.io._
@@ -99,30 +98,24 @@ object AtomsIX {
     }
 
   // ===========================================================================
-  case class _JdbcInputZ(inputString: InputString, queryingOpt: Option[ReadQuerying] /* missing if URI-driven */) extends AtomIZ {
-    import aptus.misc.Rdbms.generalize
-    import aptus.ResultSet_
-
-    // ---------------------------------------------------------------------------
-    def naive: Option[Objs] = {
-      val sqlQuery = queryOpt.get// TODO: t210114202848 - validate
-
-      val (rs, cls) = aptus.misc.Rdbms(new java.net.URI(inputString)).query(sqlQuery)
-
-      Streamer
-        .fromIterator((rs.rawRdbmsEntries, cls))
-        .map(generalize).map(gallia.obj)
-        .thn(Objs.build)
-        .as.some
-    }
-
-    // ===========================================================================
-    private def queryOpt: Option[QueryString] =
-      tmp.map {
-         case ReadQuerying.All  (table) => s"SELECT * from ${table}" /* TODO: t210114145431 - safe quoting + injection */
-         case ReadQuerying.Query(query) => query }
-
+  case class _JdbcInputZ1(inputString: InputString, queryingOpt: Option[ReadQuerying] /* missing if URI-driven */) extends AtomIZ {
+      import aptus.misc.Rdbms.generalize
+      import aptus.ResultSet_
+  
       // ---------------------------------------------------------------------------
+      def naive: Option[Objs] = {
+        val sqlQuery = tmp.map(_.query).get// TODO: t210114202848 - validate
+  
+        val (rs, cls) = aptus.misc.Rdbms(new java.net.URI(inputString)).query(sqlQuery)
+  
+        Streamer
+          .fromIterator((rs.rawRdbmsEntries, cls))
+          .map(generalize).map(gallia.obj)
+          .thn(Objs.build)
+          .as.some
+      }
+  
+      // ===========================================================================
       private def tmp: Option[ReadQuerying] =
           queryingOpt
         .orElse {
@@ -134,8 +127,25 @@ object AtomsIX {
           .splitBy("&")
           .find(_.startsWith(s"${param}="))
           .map(_.stripPrefix(s"${param}="))
-
-  }
+    }
+    
+    // ===========================================================================
+    case class _JdbcInputZ2(connection: java.sql.Connection, querying: ReadQuerying) extends AtomIZ {
+      import aptus.misc.Rdbms.generalize
+      import aptus.ResultSet_
+  
+      // ---------------------------------------------------------------------------
+      def naive: Option[Objs] = {
+        val (rs, cls) = aptus.misc.Rdbms(connection/*new java.net.URI(inputString)*/).query(querying.query)
+  
+        Streamer
+          .fromIterator((rs.rawRdbmsEntries, cls))
+          .map(generalize).map(gallia.obj)
+          .thn(Objs.build)
+          .as.some
+      }
+  
+    }  
 
   // ===========================================================================
   case class _MongodbInputZ(

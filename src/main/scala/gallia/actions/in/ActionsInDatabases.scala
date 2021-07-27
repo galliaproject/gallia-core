@@ -7,13 +7,22 @@ import gallia._
 import gallia.atoms.AtomsIX._
 
 // ===========================================================================
-case class JdbcInputZ(
+case class JdbcInputZ1(
       inputString: String,
       queryingOpt: Option[ReadQuerying] /* missing if URI-driven */)
     extends ActionIZd {
   def vldt: Errs = Nil //TODO
   def _meta: Cls = atomiz.naive.force.toListAndTrash.thn(SchemaInferrer.klass) //TODO: t201223092238 - use JDBC meta instead
-  def atomiz = _JdbcInputZ(inputString, queryingOpt) }
+  def atomiz = _JdbcInputZ1(inputString, queryingOpt) }
+
+// ---------------------------------------------------------------------------
+case class JdbcInputZ2(
+      connection: java.sql.Connection,      
+      querying: ReadQuerying)
+    extends ActionIZd {
+  def vldt: Errs = Nil //TODO
+  def _meta: Cls = atomiz.naive.force.toListAndTrash.thn(SchemaInferrer.klass) //TODO: t201223092238 - use JDBC meta instead
+  def atomiz = _JdbcInputZ2(connection, querying) }
 
 // ===========================================================================
 case class MongodbInputZ(

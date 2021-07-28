@@ -1,7 +1,7 @@
 <p align="center"><img src="./images/logo.png" alt="icon"></p>
 
 # Introducing Gallia: a Scala library for data manipulation
-by <a href="https://twitter.com/anthony_cros" target="_blank">Anthony Cros</a> (2021)
+by <a href="http://anthonycros.com/" target="_blank">Anthony Cros</a> (2021)
 
 ## Introduction
 

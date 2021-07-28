@@ -11,7 +11,15 @@ object AtomsUUConverts {
 
   // ===========================================================================
   case class _ConvertToString(target: PathPair) extends AtomUU { def naive(o: Obj) =
-        _TransformVV(target, _.toString).naive(o) }
+        _TransformVV(target, toStr).naive(o)
+
+      // ---------------------------------------------------------------------------
+      private def toStr(value: Any) =
+        util.Try {
+          utils.AtomsUtils.applyx(_.toString)(value) }
+        .getOrElse {
+          dataError(s"TODO:210106152659:${target}:${value}") }
+    }
 
     // ===========================================================================
     case class _ConvertToInt(origin: CallSite)(target: PathPair) extends AtomUU { def naive(o: Obj) =

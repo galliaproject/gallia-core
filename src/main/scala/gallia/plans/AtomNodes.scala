@@ -14,7 +14,7 @@ case class AtomNodes(values: Seq[AtomNode]) extends AnyVal {
     this
       .combine(_.isUWrapper)        (_.asUWrapper)        (_UWrappers          .from)
       .combine(_.isRename)          (_.asRename)          (_RenameAll          .from)
-      .combine(_.isRemoveWhateverIf)(_.asRemoveWhateverIf)(_RemoveWhateverIfAll.from)        
+      .combine(_.isRemoveWhateverIf)(_.asRemoveWhateverIf)(_RemoveWhateverIfAll.from) // FIXME: t210727091024 - only if same level        
         
     // ===========================================================================  
     def combine[$Atom <: Atom](pred: Atom => Boolean)(specifier: Atom => $Atom)(combiner: Seq[$Atom] => AtomCombiner[$Atom]): AtomNodes =

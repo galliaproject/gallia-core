@@ -38,7 +38,7 @@ class HeadU private[gallia]( // TODO: t210121105809 - rename to HeadO and genera
     private[heads] def uo        (action: ActionUO): HeadU    = handler.chainuo(this)(action)
 
   // ===========================================================================
-  // for consistency only, shouldn't really use outside of tests (use .thn instead)
+  // for consistency only, shouldn't really use outside of tests (use .thn/.pipe instead)
   def zen        (f: Self => Self    ): Self     = uu(ZenUU(f))
   def zen        (f: Self => HeadZ   ): HeadZ    = uz(ZenUZ(f))
   def zen[V: WTT](f: Self => HeadV[V]): HeadV[V] = uv(ZenUV(f))

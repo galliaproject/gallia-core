@@ -169,25 +169,38 @@ trait ObjOperations { self: Obj =>
       target.value.tailPair match {
         case (leaf  , None      ) => attemptKey(leaf)
         case (parent, Some(tail)) =>
-          (attemptKey(parent) match {
+          attemptKey(parent) match {
               case None => None
               case Some(value) =>
-                value match { // TODO: could use meta
+                value match { // TODO: could use meta (see t210115095838)
                   case seq: Seq[_] => illegal(s"TODO:CantBeSeq-Opt:210106171801:${target}") // in theory should have been validated against..
-                  case sgl         => sgl.asInstanceOf[Obj].opt(tail) } }) }
+                  case sgl         => sgl.asInstanceOf[Obj].opt(tail) } } }
 
     // ---------------------------------------------------------------------------
     def force(target: KPathW): AnyValue  =
       target.value.tailPair match {
         case (leaf  , None      ) => attemptKey(leaf).get
         case (parent, Some(tail)) =>
-          (attemptKey(parent) match {
+          attemptKey(parent) match {
               case None        => illegal(s"TODO:CantBeNone:210106171759:${target}") // in theory should have been validated against..
               case Some(value) =>
-                value match { // TODO: could use meta
+                value match { // TODO: could use meta (see t210115095838)
                   case seq: Seq[_] => illegal(s"TODO:CantBeSeq-Force:210106171800:${target}") // in theory should have been validated against..
-                  case sgl         => sgl.asInstanceOf[Obj].force(tail) } }) }
+                  case sgl         => sgl.asInstanceOf[Obj].force(tail) } } }
 
+    // ---------------------------------------------------------------------------
+    private[single] def _contains(target: KPathW): Boolean =
+      target.value.tailPair match {
+        case (leaf  , None      ) => containsKey(leaf)
+        case (parent, Some(tail)) =>
+          attemptKey(parent) match {
+              case None        => false
+              case Some(value) =>
+                (value match {
+                    case seq: Seq[_] => seq
+                    case sgl         => Seq(sgl) })
+                  .forall(_.asInstanceOf[Obj]._contains(tail)) } }   
+    
     // ===========================================================================
     // TODO: t210116165405 - benchmark, which is faster?
     @deprecated def seq0(target: KPathW, optional: Boolean, multiple: Boolean): Seq[AnyValue] =

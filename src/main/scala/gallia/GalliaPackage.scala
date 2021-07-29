@@ -101,7 +101,7 @@ package object gallia
   def bobj(entry1: KVE, more: KVE*): BObj = BObj(KVEs(entry1 +: more))
 
     def aobj(c: Cls)                 (u: Obj): AObj = AObj(c, u)
-    def aobj(field1: Fld, more: Fld*)(u: Obj): AObj = AObj(cls(field1, more:_*), u)
+    def aobj(field1: Fld, more: Fld*)(u: Obj): AObj = AObj(cls(field1, more:_*), u) // can't have both meta and data be varargs...
 
   // ---------------------------------------------------------------------------
   def bobjs(value1: BObj, more: BObj*): BObjs = BObjs(value1 +: more)

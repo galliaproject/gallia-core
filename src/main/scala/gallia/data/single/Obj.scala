@@ -79,10 +79,8 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
     private[single] def containsKey(key: Key):        Boolean   = data.exists(_._1 == key)
             
     // ===========================================================================
-    //TODO: t210110203020 - contains needs to be able to deal with multiplicity in nesting(s)
-    //TODO: optimize
-    def contains   (path: KPathW): Boolean = opt(path).isDefined
-    def containsNot(path: KPathW): Boolean = opt(path).isEmpty
+    def contains   (path: KPathW): Boolean =  _contains(path)
+    def containsNot(path: KPathW): Boolean = !_contains(path)
 
     // ===========================================================================
     def potch(key: Key): (Option[AnyValue], Option[Obj]) = opt(key) -> removeOpt(key) // totally a thing. (TODO: t210124100009)

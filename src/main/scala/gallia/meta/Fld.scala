@@ -82,7 +82,7 @@ case class Fld(key: Key, info: Info) extends FldLike {
 
     // ===========================================================================
     @gallia.NumberAbstraction
-    def isIntAndDouble(f1: Fld, f2: Fld): Boolean =
+    def isIntAndDouble(f1: Fld, f2: Fld): Boolean = // TODO: t210802091450 generalize
       (f1.isInt    && f2.isDouble) ||
       (f1.isDouble && f2.isInt   )
   }

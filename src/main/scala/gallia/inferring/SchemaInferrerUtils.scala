@@ -1,7 +1,6 @@
 package gallia.inferring
 
-import aptus.{Anything_, Seq_}
-import aptus.Nes
+import aptus._
 
 import gallia._
 import gallia.meta.{Cls => _, Fld => _, _}
@@ -14,28 +13,35 @@ private object SchemaInferrerUtils {
   // ===========================================================================
   implicit class Cls_(dis: Cls) {
 
-    def combine(that: Cls): Cls =
-        dis
-          .fields
-          .map { existingField =>
-            that
-              .field_(existingField.key)
-              .map { newField =>
+    def combine(that: Cls): Cls = {
+      val conflictingPairs = this.conflictingPairs(that)
+      
+      if (conflictingPairs.nonEmpty) { // 210802094043
+        throw new IncompatibleInfoException(conflictingPairs) }
+
+      dis
+        .fields
+        .map { existingField =>            
+          that
+            .field_(existingField.key)
+            .map { newField =>                      
+              resolve(existingField, newField).force /* else would error at above (see 210802094043) */ }
+            .getOrElse(existingField) }
+        .thn(Cls.apply)
+        .reviseRequirednessBasedOn(that) // not in that
+        .addMissingFieldsFrom     (that) //     in that
+    }
     
-//FIXME: t210513091700 - quick hack
-     if (existingField.isOne && newField.isOpt) existingField.toNonRequired
-else if (existingField.isOpt && newField.isOne) existingField
-else
-                
-                if (Fld.isIntAndDouble(existingField, newField)) existingField.toDouble
-                else                                  existingField }
-              .getOrElse(existingField) }
-          .thn(Cls.apply)
-          .sideEffect {
-            _ .differingInfos(that)
-              .foreach { pairs => throw new IncompatibleInfoException(pairs) } }
-          .reviseRequirednessBasedOn(that) // not in that
-          .addMissingFieldsFrom     (that) //     in that
+    // ---------------------------------------------------------------------------  
+    private def conflictingPairs(that: Cls): Seq[FldPair] =
+      dis
+        .fields
+        .flatMap { existingField =>            
+          that
+            .field_(existingField.key)
+            .flatMap { newField =>
+              resolve(existingField, newField)
+                .swap(FldPair(existingField, newField)) } }
 
     // ===========================================================================
     def reviseRequirednessBasedOn(that: Cls): Cls =
@@ -51,23 +57,20 @@ else
         .map(that.field(_))
         .map(_.toNonRequired) // because not present in this, therefore not required
         .foldLeft(dis)(_ add _)
-
-    // ---------------------------------------------------------------------------
-    def differingInfos(that: Cls): Option[Nes[FldPair]] =
-      dis.keys.intersect(that.keys)
-        .flatMap { key =>
-          val existingField = dis .field(key)
-          val newField      = that.field(key)
-
-          if (newField.info != existingField.info)
-            if (Fld.isIntAndDouble(newField, existingField)) None
-//FIXME: t210513091700 - quick hack
-else if (existingField.isOne && newField.isOpt) None
-else if (existingField.isOpt && newField.isOne) None            
-            else                                             Some(FldPair(existingField, newField))
-          else                                               None }
-        .as.noneIf(_.isEmpty)
   }
+
+  // ===========================================================================
+  private def resolve(existingField: Fld, newField: Fld): Option[Fld] =
+         if (newField.info == existingField.info)                   Some(existingField)
+         
+    // note: not so for multiplicity, as it requires a data change (TODO: t210802090946 - reconsider)
+    else if (existingField.isRequired    && newField.isNotRequired) Some(existingField.toNonRequired)
+    else if (existingField.isNotRequired && newField.isRequired)    Some(existingField)
+
+    // will be generalized (t210802091450)
+    else if (Fld.isIntAndDouble(existingField, newField))           Some(existingField.toDouble)
+
+    else                                                            None  
 
 }
 

@@ -46,8 +46,8 @@ case class TypeNode(
 
         // ---------------------------------------------------------------------------
         // TODO; this == TypeNode.Whatever
-        def isWhatever   : Boolean =                          leaf.name == "gallia.Whatever"
-        def isWhatevers  : Boolean = args.headOption.exists(_.leaf.name == "gallia.Whatever")
+        def isWhatever   : Boolean =                          leaf.name == "gallia.whatever.Whatever"
+        def isWhatevers  : Boolean = args.headOption.exists(_.leaf.name == "gallia.whatever.Whatever")
 
         @deprecated def isWhatever0  : Boolean = isWhatever // TODO: t210204170740 - using "0" in places where need to determine if/when must use ContainedWhatever or if isWhatever legit
 
@@ -59,8 +59,8 @@ case class TypeNode(
 
         // ---------------------------------------------------------------------------
         // TODO; this == TypeNode.TypedWhatever
-        def isWhatever2   : Boolean =                          leaf.name == "gallia.TypedWhatever"
-        def isWhatevers2  : Boolean = args.headOption.exists(_.leaf.name == "gallia.TypedWhatever")
+        def isWhatever2   : Boolean =                          leaf.name == "gallia.whatever.TypedWhatever"
+        def isWhatevers2  : Boolean = args.headOption.exists(_.leaf.name == "gallia.whatever.TypedWhatever")
 
     // ===========================================================================
     def isContainedBObj: Boolean = isBObj || isBObjs

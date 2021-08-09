@@ -25,6 +25,10 @@ package object gallia
   private[gallia] lazy val Fld = meta.Fld
 
   // ---------------------------------------------------------------------------
+  private[gallia] type Whatever = whatever.Whatever
+  private[gallia] val  Whatever = whatever.Whatever
+
+  // ---------------------------------------------------------------------------
   private[gallia] type Err = vldt.Err
   private[gallia] val  Err = vldt.Err
 

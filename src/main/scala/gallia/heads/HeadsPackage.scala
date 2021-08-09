@@ -15,7 +15,7 @@ package object heads extends _heads
       type W  = gallia.Whatever
 
       type WV1    = gallia.Whatever
-      type WV2[T] = gallia.TypedWhatever[T]
+      type WV2[T] = gallia.whatever.TypedWhatever[T]
 
       val _Error = gallia.vldt._Error
 

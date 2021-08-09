@@ -1,5 +1,6 @@
-package gallia
+package gallia.whatever
 
+import gallia._
 import aptus.Seq_
 import aptus.Int_
 import aptus.Double_
@@ -94,11 +95,11 @@ class Whatever(private[gallia] val any: Any) extends AnyVal with Serializable { 
   // ===========================================================================
   // multiplication: "foo" * 3 not allowed for now
 
-  def * (that: Int)   : TypedWhatever[Int]    = applyx(_.int                * that) // limitation... see 210112140145 - TODO: workaround
-  def * (that: Double): TypedWhatever[Double] = applyx(_.number.doubleValue * that)
-
+//  def * (that: Int)   : TypedWhatever[Int]    = applyx(_.int                * that) // limitation... see 210112140145 - TODO: workaround
+//  def * (that: Double): TypedWhatever[Double] = applyx(_.number.doubleValue * that)
+//
   // ---------------------------------------------------------------------------
-  def * (that: Whatever): Whatever = times(this.any, that.any)
+  def * (that: Whatever): Whatever = times(this.any, that.any)  
 
   // ===========================================================================
   //TODO: t210111135617 - add more common operations?
@@ -135,22 +136,22 @@ class Whatever(private[gallia] val any: Any) extends AnyVal with Serializable { 
   // ===========================================================================
   private def _string[T](id: String)(f: String => T): TypedWhatever[T] = any match {
         case x: String => f(x)
-        case x         => runtimeError(matchError(id, x)) }
+        case x         => dataError(matchError(id, x)) }
 
     // ---------------------------------------------------------------------------
     private def _int[T](id: String)(f: Int => T): TypedWhatever[T] = any match {
         case x: Int => f(x)
-        case x      => runtimeError(matchError(id, x)) }
+        case x      => dataError(matchError(id, x)) }
 
     // ---------------------------------------------------------------------------
     private def _boolean[T](id: String)(f: Boolean => T): TypedWhatever[T] = any match {
         case x: Boolean => f(x)
-        case x          => runtimeError(matchError(id, x)) }
+        case x          => dataError(matchError(id, x)) }
 
     // ---------------------------------------------------------------------------
     private def _number[T](id: String)(f: Double => T): TypedWhatever[T] = any match {
         case x: Number => f(x.doubleValue)
-        case x         => runtimeError(matchError(id, x)) }
+        case x         => dataError(matchError(id, x)) }
 
   // ===========================================================================
   private def applyx[T](f: Any => T): TypedWhatever[T] =
@@ -169,24 +170,24 @@ object Whatever {
   // ===========================================================================
   @TypeMatching
   implicit class Any_(u: Any) {
-    def boolean    = u match { case x: Boolean => x; case _ => runtimeError(error(u, "210113130850", classOf[Boolean])) }
-    def string     = u match { case x: String  => x; case _ => runtimeError(error(u, "210113130851", classOf[String]))  }
+    def boolean    = u match { case x: Boolean => x; case _ => dataError(error(u, "210113130850", classOf[Boolean])) }
+    def string     = u match { case x: String  => x; case _ => dataError(error(u, "210113130851", classOf[String]))  }
 
-    def number     = u match { case x: Number  => x; case _ => runtimeError(error(u, "210113130852", classOf[Number])) }
+    def number     = u match { case x: Number  => x; case _ => dataError(error(u, "210113130852", classOf[Number])) }
 
-    def int        = u match { case x: Int     => x; case _ => runtimeError(error(u, "210112140145", classOf[Int]))    }
-    def double     = u match { case x: Double  => x; case _ => runtimeError(error(u, "210113130854", classOf[Double])) }
+    def int        = u match { case x: Int     => x; case _ => dataError(error(u, "210112140145", classOf[Int]))    }
+    def double     = u match { case x: Double  => x; case _ => dataError(error(u, "210113130854", classOf[Double])) }
 
-    def byte       = u match { case x: Byte    => x; case _ => runtimeError(error(u, "210113130855", classOf[Byte]))  }
-    def short      = u match { case x: Short   => x; case _ => runtimeError(error(u, "210113130856", classOf[Short])) }
-    def long       = u match { case x: Long    => x; case _ => runtimeError(error(u, "210113130857", classOf[Long]))  }
-    def float      = u match { case x: Float   => x; case _ => runtimeError(error(u, "210113130858", classOf[Float])) }
+    def byte       = u match { case x: Byte    => x; case _ => dataError(error(u, "210113130855", classOf[Byte]))  }
+    def short      = u match { case x: Short   => x; case _ => dataError(error(u, "210113130856", classOf[Short])) }
+    def long       = u match { case x: Long    => x; case _ => dataError(error(u, "210113130857", classOf[Long]))  }
+    def float      = u match { case x: Float   => x; case _ => dataError(error(u, "210113130858", classOf[Float])) }
 
-    def bigInt     = u match { case x: BigInt     => x; case _ => runtimeError(error(u, "210113130859", classOf[BigInt]))  }
-    def bigDecimal = u match { case x: BigDecimal => x; case _ => runtimeError(error(u, "210113130900", classOf[BigDecimal])) }
+    def bigInt     = u match { case x: BigInt     => x; case _ => dataError(error(u, "210113130859", classOf[BigInt]))  }
+    def bigDecimal = u match { case x: BigDecimal => x; case _ => dataError(error(u, "210113130900", classOf[BigDecimal])) }
 
-    def date       = u match { case x: LocalDate     => x; case _ => runtimeError(error(u, "210113130901", classOf[LocalDate]))  }
-    def dateTime   = u match { case x: LocalDateTime => x; case _ => runtimeError(error(u, "210113130902", classOf[LocalDateTime])) }
+    def date       = u match { case x: LocalDate     => x; case _ => dataError(error(u, "210113130901", classOf[LocalDate]))  }
+    def dateTime   = u match { case x: LocalDateTime => x; case _ => dataError(error(u, "210113130902", classOf[LocalDateTime])) }
 
     // TODO: enum - t210201095414
   }
@@ -199,30 +200,12 @@ object Whatever {
   private def matchError(id: String, value1: Any, value2: Any) = { s"TODO:${id}:${value1}:${value1.getClass}:${value2}:${value2.getClass}" }
 
   // ===========================================================================
+  private[gallia] def times(first: Any, second: Any): Any = whatever.WhateverTimes(first, second)
+
   private[gallia] def plus (first: Any, second: Any): Any =
-      (first, second) match {
-          case (x: Int   , y: Int)    => (x + y): Int
-
-          case (x: Double, y: Int)    => (x + y): Double
-          case (x: Double, y: Double) => (x + y): Double
-
-          case (x: String, y: String) => (x + y): String
-
-          //TODO: t210202160537 - missing combinations
-
-          case (x: Any, y: Any) => runtimeError(matchError("210112184446", x, y)) }
-
-    // ---------------------------------------------------------------------------
-    private[gallia] def times(first: Any, second: Any): Any =
-      (first, second) match {
-        case (x: Int   , y: Int)    => (x * y): Int
-
-        case (x: Double, y: Int)    => (x * y): Double
-        case (x: Double, y: Double) => (x * y): Double
-
-        // TODO: t210202160537 - missing combinations
-
-        case (x: Any, y: Any) => runtimeError(matchError("210112184447", x, y)) }
+    first match {
+      case x: String => x + second.toString
+      case _         => whatever.WhateverPlus(first, second) }
 
   // ===========================================================================
   private[gallia] def size(value: Any): Int =
@@ -286,7 +269,7 @@ class TypedWhatever[T](val either: Either[Seq[T], T]) extends AnyVal with Serial
 
     // ---------------------------------------------------------------------------
     private[gallia] def forceOne: T = either match {
-      case Left (l) => runtimeError(s"TODO:210112155242:${l}")
+      case Left (l) => dataError(s"TODO:210112155242:${l}")
       case Right(r) => r }
 
     // ---------------------------------------------------------------------------

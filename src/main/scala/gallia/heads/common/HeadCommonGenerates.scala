@@ -8,8 +8,10 @@ import gallia.target.utils.TypedTargetQueryUtils._
 // ===========================================================================
 trait HeadCommonGenerates[F <: HeadCommon[F]] { _: HeadCommon[F] =>
   import TSL.Generate1.{resolve, tqkpath}
-  import TSL.Generate2.{resolve => resolve1, _}
+  import TSL.Generate2.{resolve => resolve1, _}  
 
+  import TSL.Generate1.{resolve2 => resolve12}
+  
   // ===========================================================================
   def generateCount(from: RenW, as: KeyW = _count): Self2 = ???//TODO
 
@@ -53,8 +55,16 @@ trait HeadCommonGenerates[F <: HeadCommon[F]] { _: HeadCommon[F] =>
 
         // ---------------------------------------------------------------------------
         class _FromWhatever(f1: Generate1[WV]) {
-          def using[D: WTT](f: WV => WV2[D]): Self2 = self2 :+
-            GenerateWV1(resolve(f1).tqkpath, ttqkpath1[D](newPath), (x: Any) => f(new WV(x)).forceOne) }
+        	  private def wrap[T](f: WV => T) = (x: Any) => f(new WV(x))
+        	  
+            def using(f: WV => WV): Self2 = self2 :+
+              GenerateWV1a(resolve(f1).tqkpath, newPath,               wrap(f)(_).any)
+
+            def using[D: WTT](f: WV => TWV[D]): Self2 = self2 :+
+              GenerateWV1b(resolve(f1).tqkpath, ttqkpath1[D](newPath), wrap(f)(_).forceOne)
+
+            def using[D: WTT](f: WV => D)(implicit di: DI): Self2 = self2 :+
+              GenerateWV1b(resolve(f1).tqkpath, ttqkpath1[D](newPath), wrap(f)(_)) }
 
         // ---------------------------------------------------------------------------
         class _FromV1[O: WTT](f1: Generate1[O]) {
@@ -74,8 +84,16 @@ trait HeadCommonGenerates[F <: HeadCommon[F]] { _: HeadCommon[F] =>
         
           // ---------------------------------------------------------------------------
           class _FromWhatever2(f1: Generate1[WV], f2: Generate1[WV]) {
-            def using[D: WTT](f: (WV, WV) => WV2[D]): Self2 = self2 :+
-              GenerateWV2(TSL.Generate1.resolve2(f1, f2).tqkpath2, ttqkpath1[D](newPath), (x: Any, y: Any) => f(new WV(x), new WV(y)).forceOne) }
+        	  private def wrap[T](f: (WV, WV) => T) = (x: Any, y: Any) => f(new WV(x), new WV(y))            
+
+            def using(f: (WV, WV) => WV): Self2 = self2 :+
+              GenerateWV2a(resolve12(f1, f2).tqkpath2, newPath,               wrap(f)(_, _).any)
+          
+            def using[D: WTT](f: (WV, WV) => TWV[D]): Self2 = self2 :+
+              GenerateWV2b(resolve12(f1, f2).tqkpath2, ttqkpath1[D](newPath), wrap(f)(_, _).forceOne)
+              
+            def using[D: WTT](f: (WV, WV) => D)(implicit di: DI): Self2 = self2 :+
+              GenerateWV2b(resolve12(f1, f2).tqkpath2, ttqkpath1[D](newPath), wrap(f)(_, _)) }
 
         // ---------------------------------------------------------------------------
         class Generate1From3[O1: WTT, O2: WTT, O3: WTT](

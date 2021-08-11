@@ -11,11 +11,14 @@ package object heads extends _heads
       type NodeId  = gallia.dag.NodeId
       type Handler = gallia.env.Handler
 
-      type WV = gallia.Whatever
-      type W  = gallia.Whatever
+      type WV = gallia.whatever.Whatever
+      type W  = gallia.whatever.Whatever
 
-      type WV1    = gallia.Whatever
-      type WV2[T] = gallia.whatever.TypedWhatever[T]
+      @deprecated
+      type WV1    = gallia.whatever.Whatever
+      @deprecated
+      type WV2[T] = gallia.whatever.TypedWhatever[T]      
+      type TWV[T] = gallia.whatever.TypedWhatever[T]
 
       val _Error = gallia.vldt._Error
 

@@ -87,8 +87,8 @@ import gallia.meta._
       def errsIf(test: => Boolean): gallia.Errs = if (test) errs else Nil
 
       // TODO: delay throwing?
-      def throwRuntimeError[A](passThrough: A): A       = { dataError((errorId, label, formatDetails2)); passThrough; }
-      def throwRuntimeError   ()              : Nothing = { dataError((errorId, label, formatDetails2)) }
+      def throwDataError[A](passThrough: A): A       = { dataError((errorId, label, formatDetails2)); passThrough; }
+      def throwDataError   ()              : Nothing = { dataError((errorId, label, formatDetails2)) }
     }
 
     // ---------------------------------------------------------------------------
@@ -158,23 +158,25 @@ import gallia.meta._
         //TODO: delay throwing to accumulate?
         case object DataUnsafeUAssertionFailure extends _Error2 { val errorId = "201014121746"; val label = "DataUnsafeUAssertionFailure"
             def runtimeIfU(o: Obj)(invalid: Obj => Boolean): Obj =
-              if (invalid(o)) runtimeError((errorId, label)) else o }
+              if (invalid(o)) dataError((errorId, label)) else o }
 
           // ---------------------------------------------------------------------------
           case object DataUnsafeZAssertionFailure extends _Error2 { val errorId = "201014121748"; val label = "DataUnsafeZAssertionFailure"
             def runtimeIfZ(z: Objs)(invalid: Objs => Boolean): Objs =
-              if (invalid(z)) runtimeError((errorId, label)) else z }
+              if (invalid(z)) dataError((errorId, label)) else z }
 
         // ---------------------------------------------------------------------------
         case class DataAssertionFailure(path1: Any) extends _Error3 { val errorId = "201014121747"; val label = "DataAssertionFailure"
           def attemptO(o: Obj)(invalid: Obj => Boolean): Obj =
-            if (invalid(o)) runtimeError((errorId, label)) else o }
+            if (invalid(o)) dataError((errorId, label)) else o }
 
+        // ---------------------------------------------------------------------------
         case object EmptyStream               extends _Error2 { val errorId = "201110144607"; val label = s"EmptyStream" }
         case class  MoreThanNElements(n: Int) extends _Error3 { val errorId = "201110144606"; val label = s"MoreThanNElements"
           def formatDetails = s"n:${n}"} // note: actual size could be costly to compute
         
-        
+        // ---------------------------------------------------------------------------
+        case class DifferingRuntimeType(expected: String, actual: String) extends _Error3 { val errorId = "210811104025"; val label = "DifferingRuntimeType" }        
       }
     }
 

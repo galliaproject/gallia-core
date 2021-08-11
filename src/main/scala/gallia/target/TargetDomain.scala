@@ -58,6 +58,7 @@ trait CanValidateQueries { protected /* use do */ def vldtTargetQueries: Seq[Can
       // ---------------------------------------------------------------------------
       // vldt
 
+      // TODO: t210811103604 - move the fieldsRenaming+typeCompatibilities parts of these individuals  
       def vldtAsOrigin(c: Cls): Errs = vldtAsOrigin(c, mode = SpecialCardiMode.Normal)
       def vldtAsOrigin(c: Cls, mode: SpecialCardiMode): Errs =
         super.doVldtTargetQueries(c) ++

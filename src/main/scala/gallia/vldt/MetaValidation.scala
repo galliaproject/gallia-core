@@ -143,6 +143,7 @@ private[gallia] object MetaValidation {
   // ---------------------------------------------------------------------------
   def fieldsAbsence(c: Cls, keys: Seq[Key]): Errs = keys       .flatMap(fieldAbsence(c, _))
   def fieldsAbsence(c: Cls, keys: Keyz    ): Errs = keys.values.flatMap(fieldAbsence(c, _))
+  def fieldsAbsence(c: Cls, keys: KPathz  ): Errs = keys.values.flatMap(fieldAbsence(c, _))
 
   // ===========================================================================
   def validateBObj                    (value: BObj ): Errs = validateKVEs(Location.Root)(value.entries)

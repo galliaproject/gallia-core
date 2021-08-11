@@ -6,6 +6,7 @@ import gallia._
 import gallia.meta._
 import gallia.target.utils.TypedTargetQueryUtils
 import gallia.domain._
+import gallia.vldt.MetaValidation
 
 // ===========================================================================
 // term: t210201151634 - (target) replace "Query" with "Selection" throughout?
@@ -42,6 +43,16 @@ case class TypedTargetQuery[$Target]( // t210110103720 - subclass TargetQuery an
     def wrapxc(c: Cls, to: HasTypeNode, f: Any => Any): Any => Any = tq.container(c).containerWrap(wrapc(to, f))
 
     // ===========================================================================
+    // vldt
+        
+    def vldtAsNewDestination(c: Cls): Errs = 
+      MetaValidation.fieldsAbsence(c, __kpathz(c)) ++        
+      MetaValidation.validType(node)
+
+    def vldtAsAnyDestination(c: Cls): Errs =
+      MetaValidation.validType(node)
+
+      // ===========================================================================
     // meta
 
     def fromOverride(value: HasType)(implicit ev: $Target <:< KPath): TtqKPath = super.ttqkpaths(value).force.one

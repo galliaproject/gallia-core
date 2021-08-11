@@ -26,8 +26,8 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
 
       // TODO: should use Key, Ren, ... directly for performance
       // ---------------------------------------------------------------------------
-      if (data.isEmpty)     gallia.vldt._Error.ObjCantBeEmpty                   .throwRuntimeError()
-      if (!keys.isDistinct) gallia.vldt._Error.ObjDuplicateKeys(keyz.duplicates).throwRuntimeError()
+      if (data.isEmpty)     gallia.vldt._Error.ObjCantBeEmpty                   .throwDataError()
+      if (!keys.isDistinct) gallia.vldt._Error.ObjDuplicateKeys(keyz.duplicates).throwDataError()
 
       // ---------------------------------------------------------------------------
       // TODO: to proper errors

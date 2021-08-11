@@ -31,13 +31,13 @@ object ActionsZZFiltering {
         def atomzz(c: Cls): AtomZZ = target.pathPairT(c).thn(_FilterBy1(_, pred, max)) }
 
     // ===========================================================================
-    case class FilterByWV[T](target: TqKPath, pred: WV => WV2[Boolean], asFind: Boolean = false)
+    case class FilterByWV[T](target: TqKPath, pred: WV => Boolean, asFind: Boolean = false)
       extends ActionZZc with IdentityM1 with HasAsFind {
         def vldt  (c: Cls): Errs   = target.vldtAsOrigin(c)
         def atomzz(c: Cls): AtomZZ = target.pathPairT(c).thn(_FilterBy1(_, wrap, max))
 
         // ---------------------------------------------------------------------------
-        private def wrap: _pp11 = (x: Any) => pred(new WV(x)).forceOne }
+        private def wrap: _pp11 = (x: Any) => pred(new WV(x)) }
 
       // ===========================================================================
       case class FilterByV2[T1, T2](target: TtqKPath2, pred: (T1, T2) => Boolean, asFind: Boolean = false)

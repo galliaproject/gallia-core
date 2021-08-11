@@ -31,11 +31,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { _: HeadCommon[F] =>
 
     // ===========================================================================
     final class _RemoveConditionally[T: WTT] private[HeadCommonSomewhatBasics](target: TtqRPathz) {
-      def is(value: T): Self2 =
-        if (node[T].isWhatever) matches(_ == value.asInstanceOf[WV].any)
-        else                    matches(_ == value)
-
-      // ---------------------------------------------------------------------------
+      def is     (value: Any): Self2 = matches(_ == value)
       def matches(pred: T => Boolean): Self2 = self2 :+ RemoveConditionally(target, pwrap(pred)) }
 
     // ===========================================================================

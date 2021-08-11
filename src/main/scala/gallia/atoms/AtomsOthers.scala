@@ -57,10 +57,10 @@ object AtomsOthers {
 
   case object _ForceOne extends AtomZU { def naive(z: Objs) = {    
     val itr = z.consume
-    if (!itr.hasNext) _Error.Runtime.EmptyStream.throwRuntimeError()
+    if (!itr.hasNext) _Error.Runtime.EmptyStream.throwDataError()
     else {
       val next = itr.next()      
-      if (itr.hasNext) _Error.Runtime.MoreThanNElements(n = 1).throwRuntimeError()
+      if (itr.hasNext) _Error.Runtime.MoreThanNElements(n = 1).throwDataError()
       else             next } }
   }
 

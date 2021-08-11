@@ -2,6 +2,7 @@ package gallia.atoms
 
 import aptus.{Anything_, Seq_}
 import gallia._
+import gallia.domain.PathPair
 
 // ===========================================================================
 object AtomsAsserts {
@@ -17,7 +18,7 @@ object AtomsAsserts {
   case class _AssertIsDefined(paths: KPathz) extends AtomUU { def naive(o: Obj) = {
       val undefined: Seq[KPath] = paths.values.filter(!o.contains(_)) // FIXME: t210110203020 - contains needs to be able to deal with multiplicity in nesting(s)
 
-      if (undefined.nonEmpty) _Error.Runtime.NotDefined(KPathz(undefined)).throwRuntimeError(o)
+      if (undefined.nonEmpty) _Error.Runtime.NotDefined(KPathz(undefined)).throwDataError(o)
       else o
     }
   }
@@ -49,6 +50,19 @@ object AtomsAsserts {
   case class _AssertO3(squasher: AtomsUV._SquashU3) extends AtomUU { def naive(o: Obj) =
     _Error.Runtime.DataAssertionFailure(squasher.ori).attemptO(o){
         !squasher.naive(_).asInstanceOf[Boolean] /* by design */ } }
+
+  // ===========================================================================
+  case class _AssertSameType(from: PathPair, to: KPath) extends AtomUU { def naive(o: Obj) = {
+    	val f = from.lookup(o)
+    	val t = o.force(to) // TODO: t210811143422 - if missing
+    				  
+      val expected = f.getClass().getSimpleName
+      val actual   = t.getClass().getSimpleName
+
+      if (actual != expected) _Error.Runtime.DifferingRuntimeType(expected, actual).throwDataError()
+      else                    o
+    }
+  }
 
 }
 

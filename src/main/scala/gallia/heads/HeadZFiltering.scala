@@ -79,18 +79,22 @@ trait HeadZFiltering { _: HeadZ => // pretty messy, need to find a cleaner way t
       }
 
       // ---------------------------------------------------------------------------
-      class __FilterBy1WV(target: KPathW) {
+      class __FilterBy1WV(target: KPathW) { import gallia.target.utils.TargetQueryUtils.tqkpath
 
         /** similar to SQL's WHERE X IN Y clause */
-        def in[T:WTT](coll: Seq[T]): Self = matches( { wv => coll.contains(wv.any) }) // TODO: toSet if big enough? use bloom if very big?       
+        def in[T:WTT](coll: Seq[T]): Self = matches({ wv => coll.contains(wv.any) }) // TODO: toSet if big enough? use bloom if very big?       
 
-        def hasValue(a: WV): Self2 = matches(_ == a)
+        def hasValue(a: Any): Self2 = matches(_.any == a)
 
         def isPresent      : Self = hasSize(1)
         def isMissing      : Self = hasSize(1)
-        def hasSize(n: Int): Self = matches(Whatever /* may or may not be Whatever */.size(_) == n)
 
-        def matches(f: WV => WV2[Boolean]): Self = zz(FilterByWV(gallia.target.utils.TargetQueryUtils.tqkpath(target.value), f)) //TODO: disallow?
+        /** does not work for String.size (will return 1) */
+        def hasSize(n: Int): Self = matches(Whatever.size(_) == n)
+
+        // ---------------------------------------------------------------------------
+        def matches(f: WV => TWV[Boolean])                 : Self = zz(FilterByWV(tqkpath(target.value), f(_).forceOne))
+        def matches(f: WV =>     Boolean) (implicit di: DI): Self = zz(FilterByWV(tqkpath(target.value), f))
       }
 
       // ---------------------------------------------------------------------------

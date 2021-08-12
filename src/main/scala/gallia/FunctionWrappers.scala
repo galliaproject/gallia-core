@@ -143,12 +143,6 @@ object FunctionWrappers {
 @inline private[gallia]def wwwrap21b(f: (WV, WV) => Any): _ff21 = (v1, v2)     => f(new WV(v1), new WV(v2))            .thn(unwrapWhatever2)
 
     // ---------------------------------------------------------------------------
-    @inline private[gallia]def __wwrap11a(f: WV => WV): _ff11 = x => f(new Whatever(x)).thn(unwrapWhatever)
-    @inline private[gallia]def __wwrap11b(f: WV => Seq[WV]): _ff11 = x => f(new Whatever(x)).thn(unwrapWhatever)
-
-    @inline private[gallia]def __wwrap22a[D](f: WV =>     WV2[D] ): _ff11 = x => f(new Whatever(x)).value
-    @inline private[gallia]def __wwrap22b[D](f: WV => Seq[WV2[D]]): _ff11 = x => f(new Whatever(x)).map(_.forceOne /* checked at 210112155301 */)
-
 @inline private[gallia] def __wwrap21[O1, O2](f: (O1, O2) => Any): _ff21 = (v1, v2) => f(v1.asInstanceOf[O1], v2.asInstanceOf[O2]).thn(_unwrapWhatever1)
 
     // ---------------------------------------------------------------------------

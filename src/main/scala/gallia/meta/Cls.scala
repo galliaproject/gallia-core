@@ -126,7 +126,7 @@ case class Cls(fields: Seq[Fld])
 
     // ===========================================================================
     //TODO: ensure not nested type?
-    def   updateType(target: Key   , node: TypeNode): Cls =                transformField(target)(_.updateInfo(node.forceNonBObjInfo))
+    def   updateType(target: Key   , node: TypeNode): Cls =            transformField(target)(_.updateInfo(node.forceNonBObjInfo))
       def updateType(target: Ren   , node: TypeNode): Cls = rename(target).updateType(target.to, node)
 
       def updateType(target: KPath , node: TypeNode): Cls = transformx(target)(_.updateType(_, node), _.updateType(_, node))
@@ -136,7 +136,7 @@ case class Cls(fields: Seq[Fld])
       def updateType(target: RPathz, node: TypeNode): Cls = target.foldLeft(this)(_.updateType(_, node))
 
     // ---------------------------------------------------------------------------
-    def   updateContainee(target: Key   , node: TypeNode): Cls =                transformField(target)(_.updateContainee(node.forceNonBObjInfo.containee))
+    def   updateContainee(target: Key   , node: TypeNode): Cls =                 transformField(target)(_.updateContainee(node.forceNonBObjInfo.containee))
       def updateContainee(target: Ren   , node: TypeNode): Cls = rename(target).updateContainee(target.to, node)
 
       def updateContainee(target: KPath , node: TypeNode): Cls = transformx(target)(_.updateContainee(_, node), _.updateContainee(_, node))
@@ -146,7 +146,7 @@ case class Cls(fields: Seq[Fld])
       def updateContainee(target: RPathz, node: TypeNode): Cls = target.foldLeft(this)(_.updateContainee(_, node))
 
     // ---------------------------------------------------------------------------
-    def   updateContainer(target: Key   , node: TypeNode): Cls =                transformField(target)(_.updateContainer(node.forceNonBObjInfo.container))
+    def   updateContainer(target: Key   , node: TypeNode): Cls =                 transformField(target)(_.updateContainer(node.forceNonBObjInfo.container))
       def updateContainer(target: Ren   , node: TypeNode): Cls = rename(target).updateContainer(target.to, node)
 
       def updateContainer(target: KPath , node: TypeNode): Cls = transformx(target)(_.updateContainer(_, node), _.updateContainer(_, node))
@@ -154,7 +154,17 @@ case class Cls(fields: Seq[Fld])
 
       def updateContainer(target: KPathz, node: TypeNode): Cls = target.foldLeft(this)(_.updateContainer(_, node))
       def updateContainer(target: RPathz, node: TypeNode): Cls = target.foldLeft(this)(_.updateContainer(_, node))
+      
+    // ---------------------------------------------------------------------------
+    def   updateInfo(target: Key   , info: Info): Cls =            transformField(target)(_.updateInfo(info))
+      def updateInfo(target: Ren   , info: Info): Cls = rename(target).updateInfo(target.to, info)
 
+      def updateInfo(target: KPath , info: Info): Cls = transformx(target)(_.updateInfo(_, info), _.updateInfo(_, info))
+      def updateInfo(target: RPath , info: Info): Cls = transformx(target)(_.updateInfo(_, info), _.updateInfo(_, info))
+
+      def updateInfo(target: KPathz, info: Info): Cls = target.foldLeft(this)(_.updateInfo(_, info))
+      def updateInfo(target: RPathz, info: Info): Cls = target.foldLeft(this)(_.updateInfo(_, info))
+      
     // ===========================================================================
     def transformField(target: Key   )(f: Fld => Fld): Cls =               _transformField(target)(f)
     def transformField(target: Ren   )(f: Fld => Fld): Cls = rename(target).transformField(target.to)(f)

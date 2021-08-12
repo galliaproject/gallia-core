@@ -176,7 +176,9 @@ import gallia.meta._
           def formatDetails = s"n:${n}"} // note: actual size could be costly to compute
         
         // ---------------------------------------------------------------------------
-        case class DifferingRuntimeType(expected: String, actual: String) extends _Error3 { val errorId = "210811104025"; val label = "DifferingRuntimeType" }        
+        case class DifferingRuntimeType(expected: String, actual: String) extends _Error3 { val errorId = "210811104025"; val label = "DifferingRuntimeType" }
+        
+        case class WhateverOperationForbidden(error: String) extends _Error3 { val errorId = "210811145146"; val label = "WhateverOperationForbidden" }        
       }
     }
 

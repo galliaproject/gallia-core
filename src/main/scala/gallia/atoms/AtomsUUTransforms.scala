@@ -8,7 +8,8 @@ import gallia.FunctionWrappers._
 
 // ===========================================================================
 object AtomsUUTransforms {
-  case class _TransformVV(pair: PathPair, f: _ff11) extends AtomUU { def naive(o: Obj): Obj = o.transformPathPair(pair, f) }
+  case class _TransformVV (pair: PathPair, f: _ff11) extends AtomUU { def naive(o: Obj): Obj = o.transformPathPair         (pair, f) }  
+  case class _TransformVVb(pair: PathPair, f: _ff11) extends AtomUU { def naive(o: Obj): Obj = o.transformPathPairWithCheck(pair, f) }
 
   // ---------------------------------------------------------------------------
   case class _Transform1to1 (ori: PathPair1, des: KPaths1,  f: _ff11) extends AtomUU { def naive(o: Obj): Obj = ori.lookup(o).thn(f).thn { v1  => o.put(des, v1) } }

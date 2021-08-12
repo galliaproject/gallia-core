@@ -90,10 +90,10 @@ trait HeadCommonFuseFission[F <: HeadCommon[F]] { _: HeadCommon[F] =>
       // ---------------------------------------------------------------------------
       class _Fuse2WV(o1: KPath,o2: KPath) {
           def as(d: KPathW) = new {
-            def using        (f: (WV, WV) =>     WV1 )                    : Self2 = self2 :+ Fuse2WV(TargetQueryUtils.tqkpath2(o1, o2), Left(d.value), false, wwwrap21a(f))
-            def using        (f: (WV, WV) => Seq[WV1])(implicit di: DI)   : Self2 = self2 :+ Fuse2WV(TargetQueryUtils.tqkpath2(o1, o2), Left(d.value), true , wwwrap21a(f) )
-            def using[D: WTT](f: (WV, WV) =>     WV2[D])                  : Self2 = self2 :+ Fuse2WV(TargetQueryUtils.tqkpath2(o1, o2), Right(ttqkpath1[D](d)), false, wwwrap21b(f) )
-            def using[D: WTT](f: (WV, WV) => Seq[WV2[D]])(implicit di: DI): Self2 = self2 :+ Fuse2WV(TargetQueryUtils.tqkpath2(o1, o2), Right(ttqkpath1[D](d)), true , wwwrap21b(f) )
+            def using        (f: (WV, WV) =>     WV)                      : Self2 = self2 :+ Fuse2WV(TargetQueryUtils.tqkpath2(o1, o2), Left(d.value), false, wwwrap21a(f))
+            def using        (f: (WV, WV) => Seq[WV])(implicit di: DI)    : Self2 = self2 :+ Fuse2WV(TargetQueryUtils.tqkpath2(o1, o2), Left(d.value), true , wwwrap21a(f) )
+            def using[D: WTT](f: (WV, WV) =>     TWV[D])                  : Self2 = self2 :+ Fuse2WV(TargetQueryUtils.tqkpath2(o1, o2), Right(ttqkpath1[D](d)), false, wwwrap21b(f) )
+            def using[D: WTT](f: (WV, WV) => Seq[TWV[D]])(implicit di: DI): Self2 = self2 :+ Fuse2WV(TargetQueryUtils.tqkpath2(o1, o2), Right(ttqkpath1[D](d)), true , wwwrap21b(f) )
       } }
 
     // ---------------------------------------------------------------------------

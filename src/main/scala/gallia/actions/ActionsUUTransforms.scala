@@ -6,6 +6,7 @@ import aptus.Anything_
 import gallia._
 import gallia.target._
 import gallia.FunctionWrappers._
+import gallia.atoms.AtomsUUTransforms._TransformVVb
 
 // ===========================================================================
 object ActionsUUTransforms {
@@ -158,16 +159,16 @@ case class TransformFoo(from: TtqRPathz, to: Cls, f: _ff11) extends ActionUUb wi
     // ===========================================================================
     //TODO: t210111095156 separate all the Whatever and t210111095157 case-class versions...
 
-    case class TransformWW1(from: TqRPathz, toMultiple: Boolean, f: _ff11) extends ActionUUb {
+    case class TransformWW1a(from: TqRPathz, f: _ff11) extends ActionUUb {
       def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) // TODO: t210201164749
-      def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c) { (curr, path) => curr.thnIf(toMultiple)(_.toMultiple(path)) }
-      def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.container(c).containerWrap(f)) )) }
+      def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c) { (curr, path) => curr }
+      def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVVb(_, f))) }
 
     // ---------------------------------------------------------------------------
-    case class TransformWW2(from: TtqRPathz, to: TypeNode, multiple: Boolean, f: _ff11) extends ActionUUb {
-      def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) ++ _vldt.validType(to) ++ errIf_(multiple && to.isNotOne)(s"TODO:210112155301:${to}")
-      def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c) { (curr, path) => curr.updateContainee(path, to).thnIf(multiple)(_.toMultiple(path)) }
-      def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.tq.container(c).containerWrap(f) ))) }
+    case class TransformWW1b(from: TtqRPathz, to: TypeNode, f: _ff11) extends ActionUUb {
+      def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) ++ to.thn(_vldt.validType)
+      def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c) { (curr, path) => curr.updateInfo(path, to.forceNonBObjInfo) }
+      def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, f))) }
 
   // ===========================================================================
   // TODO: move these to validations

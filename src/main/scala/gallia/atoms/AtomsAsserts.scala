@@ -56,11 +56,9 @@ object AtomsAsserts {
     	val f = from.lookup(o)
     	val t = o.force(to) // TODO: t210811143422 - if missing
     				  
-      val expected = f.getClass().getSimpleName
-      val actual   = t.getClass().getSimpleName
+    	gallia.data.single.ObjUtils.checkSameTypes(f, t)
 
-      if (actual != expected) _Error.Runtime.DifferingRuntimeType(expected, actual).throwDataError()
-      else                    o
+      o
     }
   }
 

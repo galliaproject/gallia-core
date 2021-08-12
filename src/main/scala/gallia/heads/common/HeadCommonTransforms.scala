@@ -36,15 +36,11 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { _: HeadCommon[F] =>
       def using[D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI, d2: DI): Self2 = self2 :+ TransformZV[D1](tqqpathz(f1), f) }
 
     // ===========================================================================
-    class _TransformWhatever(f1: Transform[WV]) {
-      def using        (f: WV => WV1)                                   : Self2 = self2 :+ TransformWW1(resolves(f1).tq, toMultiple = false, __wwrap11a(f))
-      def using[D: WTT](f: WV =>     WV2[D] )(implicit di1: DI)         : Self2 = self2 :+ TransformWW2(resolves(f1)     , node[D], false    , __wwrap22a(f))
-
-      def using        (f: WV => String)     (implicit di1: DI, di2: DI): Self2 = self2 :+ TransformWW1(resolves(f1).tq, toMultiple = false, (v: Any) => f(new WV(v)) ) // mostly for s"..."
-
-      // these are probably overkill... TODO: nuke them?
-      def using        (f: WV => Seq[WV1])   (implicit di1: DI, di2: DI, di3: DI)         : Self2 = self2 :+ TransformWW1(resolves(f1).tq, toMultiple = true, __wwrap11b(f))
-      def using[D: WTT](f: WV => Seq[WV2[D]])(implicit di1: DI, di2: DI, di3: DI, di4: DI): Self2 = self2 :+ TransformWW2(resolves(f1)     , node[D], true    , __wwrap22b(f)) }
+    class _TransformWhatever(f1: Transform[WV]) { private def wrap[T](f: WV => T) = (x: Any) => f(new WV(x))
+      def using        (f: WV =>  WV)                   : Self2 = self2 :+ TransformWW1a(resolves(f1).tq,       wrap(f)(_).any)
+      def using[D: WTT](f: WV => TWV[D])                : Self2 = self2 :+ TransformWW1b(resolves(f1), node[D], wrap(f)(_).forceOne)
+      def using[D: WTT](f: WV =>     D)(implicit di: DI): Self2 = self2 :+ TransformWW1b(resolves(f1), node[D], wrap(f)(_))  
+}
 
     // ===========================================================================
     class _TransformVV[O: WTT](f1: Transform[O]) { val ttq = resolves(f1)

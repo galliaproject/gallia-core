@@ -141,6 +141,19 @@ trait ObjOperations { self: Obj =>
                   case seq: Seq[_] => seq.asInstanceOf[Seq[Obj]].map(_.transformPathPair(tail, f))
                   case sgl         => sgl.asInstanceOf[    Obj ]      .transformPathPair(tail, f) }) }) }
 
+    // ---------------------------------------------------------------------------
+    // only for Whatever to Whatever transformation...
+    def transformPathPairWithCheck(target: PathPair, f: AnyValue => AnyValue): Obj =
+      target.path.tailPair match {
+          case (leaf  , None       ) => _transformKeyPairWithCheck(leaf, target.optional)(f)
+          case (parent, Some(tail0)) =>
+            val tail = PathPair(tail0, target.optional)
+            (attemptKey(parent) match {
+              case None        => self
+              case Some(value) => replace(parent, value match { // TODO: could use meta
+                  case seq: Seq[_] => seq.asInstanceOf[Seq[Obj]].map(_.transformPathPairWithCheck(tail, f))
+                  case sgl         => sgl.asInstanceOf[    Obj ]      .transformPathPairWithCheck(tail, f) }) }) }
+    
       // ===========================================================================
       def _transformKey(key: Key, f: AnyValue => AnyValue): Obj = // TODO: phase out
           attemptKey(key)
@@ -163,6 +176,15 @@ trait ObjOperations { self: Obj =>
          else          attemptKey(key).get)
           .thn(f)
           .thn(_put(key, _))
+
+      // ---------------------------------------------------------------------------
+      def _transformKeyPairWithCheck(key: Key, optional: Boolean)(f: AnyValue => AnyValue): Obj =
+        (if (optional) attemptKey(key) // TODO: could use meta
+         else          attemptKey(key).get)          
+          .thn { x =>           
+            val y = f(x)
+            ObjUtils.checkSameTypes(x, y)
+            _put(key, y) }
 
     // ===========================================================================
     def opt(target: KPathW): Option[AnyValue] =

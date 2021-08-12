@@ -1,6 +1,7 @@
 package gallia.whatever
 
 import gallia._
+import gallia.vldt._Error.Runtime.WhateverOperationForbidden
 
 // ===========================================================================
 /**
@@ -184,13 +185,22 @@ object Whatever {
   private def matchError(id: String, value1: Any, value2: Any) = { s"TODO:${id}:${value1}:${value1.getClass}:${value2}:${value2.getClass}" }
 
   // ===========================================================================
-  private[gallia] def times(first: Any, second: Any): Any = whatever.WhateverTimes(first, second)
-
+  private[gallia] def times(first: Any, second: Any): Any =
+    first match {
+      case x: String => WhateverOperationForbidden("string*?").throwDataError()
+      case _         => 
+        second match {
+          case y: String => WhateverOperationForbidden("?*string").throwDataError()
+          case _         => whatever.WhateverTimes(first, second) } }
+  
   // ---------------------------------------------------------------------------
-  private[gallia] def plus (first: Any, second: Any): Any =
+  private[gallia] def plus(first: Any, second: Any): Any =
     first match {
       case x: String => x + second.toString
-      case _         => whatever.WhateverPlus(first, second) }
+      case _         => 
+        second match {
+          case y: String => WhateverOperationForbidden("?+string").throwDataError()
+          case _         => whatever.WhateverPlus(first, second) } }
 
 }
 

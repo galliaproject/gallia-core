@@ -24,9 +24,8 @@ package object actions { // TODO: delegate access to all of AtomsUtils._
   type StringSplitter = gallia.domain.StringSplitter
 
   // ---------------------------------------------------------------------------
+  @deprecated
   type WV     = gallia.heads.WV
-  type WV1    = gallia.heads.WV
-  type WV2[T] = gallia.heads.WV2[T]
 
   // ---------------------------------------------------------------------------
   val  _vldt  = gallia.vldt.MetaValidation

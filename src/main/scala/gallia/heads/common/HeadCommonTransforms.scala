@@ -36,11 +36,15 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { _: HeadCommon[F] =>
       def using[D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI, d2: DI): Self2 = self2 :+ TransformZV[D1](tqqpathz(f1), f) }
 
     // ===========================================================================
-    class _TransformWhatever(f1: Transform[WV]) { private def wrap[T](f: WV => T) = (x: Any) => f(new WV(x))
-      def using        (f: WV =>  WV)                   : Self2 = self2 :+ TransformWW1a(resolves(f1).tq,       wrap(f)(_).any)
-      def using[D: WTT](f: WV => TWV[D])                : Self2 = self2 :+ TransformWW1b(resolves(f1), node[D], wrap(f)(_).forceOne)
-      def using[D: WTT](f: WV =>     D)(implicit di: DI): Self2 = self2 :+ TransformWW1b(resolves(f1), node[D], wrap(f)(_))  
-}
+    class _TransformWhatever(f1: Transform[WV]) {
+      private def wrap[T, D](f: WV => T)(g: T => D) =          
+          (x: Any) => x match {
+            case y: Seq[_] => y.map { z => g(f(new WV(z))) }
+            case y         =>              g(f(new WV(y))) }
+
+      def using        (f: WV =>  WV)                   : Self2 = self2 :+ TransformWW1a(resolves(f1).tq,       wrap(f)(_.any)     (_))
+      def using[D: WTT](f: WV => TWV[D])                : Self2 = self2 :+ TransformWW1b(resolves(f1), node[D], wrap(f)(_.forceOne)(_))
+      def using[D: WTT](f: WV =>     D)(implicit di: DI): Self2 = self2 :+ TransformWW1b(resolves(f1), node[D], wrap(f)(x => x)    (_)) }
 
     // ===========================================================================
     class _TransformVV[O: WTT](f1: Transform[O]) { val ttq = resolves(f1)

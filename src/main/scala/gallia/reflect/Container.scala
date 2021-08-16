@@ -39,6 +39,16 @@ sealed trait Container extends EnumEntry {
         case Container._Pes => ???
       }
     */
+    
+    // ===========================================================================    
+    def containerPairOpt(value: Any): Option[(Container, Any)] =
+      value match {
+        case None    => None // can't distinguish between _Opt and _Pes here
+        case Some(x) => x match {
+          case y: Seq[_] => Some(Container._Pes -> y.head)
+          case y         => Some(Container._Opt -> y) }
+        case x: Seq[_] => Some(Container._Nes -> x.head)
+        case x         => Some(Container._One -> x) }        
 
     // ===========================================================================
     def combine(c1: Container, c2: Container): Container =

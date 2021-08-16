@@ -10,15 +10,6 @@ object ObjUtils {
       case (None   , Some(y)) => Some(y)
       case (Some(x), Some(y)) => Some(x.merge(y)) }
 
-  // ===========================================================================
-  def checkSameTypes(from: Any, to: Any): Unit = {
-    val expected = from.getClass().getSimpleName
-    val actual   = to  .getClass().getSimpleName
-
-    if (actual != expected)
-      gallia.vldt._Error.Runtime.DifferingRuntimeType(expected, actual).throwDataError() // TODO: throw a lower level exception here    
-  }
-  
 }
 
 // ===========================================================================

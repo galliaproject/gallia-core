@@ -4,6 +4,7 @@ import aptus.{Anything_, String_, Seq_}
 import aptus.Separator
 
 import gallia._
+import gallia.data.ValueUtils
 import gallia.reflect.Container
 import gallia.domain.PathPair
 
@@ -143,16 +144,16 @@ trait ObjOperations { self: Obj =>
 
     // ---------------------------------------------------------------------------
     // only for Whatever to Whatever transformation...
-    def transformPathPairWithCheck(target: PathPair, f: AnyValue => AnyValue): Obj =
+    def transformWhateverPathPair(target: PathPair, f: AnyValue => AnyValue, checkType: Boolean): Obj =
       target.path.tailPair match {
-          case (leaf  , None       ) => _transformKeyPairWithCheck(leaf, target.optional)(f)
+          case (leaf  , None       ) => _transformWhateverKeyPair(leaf, target.optional, checkType)(f)
           case (parent, Some(tail0)) =>
             val tail = PathPair(tail0, target.optional)
             (attemptKey(parent) match {
               case None        => self
               case Some(value) => replace(parent, value match { // TODO: could use meta
-                  case seq: Seq[_] => seq.asInstanceOf[Seq[Obj]].map(_.transformPathPairWithCheck(tail, f))
-                  case sgl         => sgl.asInstanceOf[    Obj ]      .transformPathPairWithCheck(tail, f) }) }) }
+                  case seq: Seq[_] => seq.asInstanceOf[Seq[Obj]].map(_.transformWhateverPathPair(tail, f, checkType))
+                  case sgl         => sgl.asInstanceOf[    Obj ]      .transformWhateverPathPair(tail, f, checkType) }) }) }
     
       // ===========================================================================
       def _transformKey(key: Key, f: AnyValue => AnyValue): Obj = // TODO: phase out
@@ -178,13 +179,25 @@ trait ObjOperations { self: Obj =>
           .thn(_put(key, _))
 
       // ---------------------------------------------------------------------------
-      def _transformKeyPairWithCheck(key: Key, optional: Boolean)(f: AnyValue => AnyValue): Obj =
-        (if (optional) attemptKey(key) // TODO: could use meta
-         else          attemptKey(key).get)          
-          .thn { x =>           
-            val y = f(x)
-            ObjUtils.checkSameTypes(x, y)
-            _put(key, y) }
+      // abstracts requiredness + optionally check resulting type
+      def _transformWhateverKeyPair(key: Key, optional: Boolean, checkType: Boolean)(f: AnyValue => AnyValue): Obj =
+          if (optional)
+            attemptKey(key)
+              .map(_computeNewValue(f, checkType))
+              .map(_put(key, _))
+              .getOrElse(self)            
+          else
+            attemptKey(key).get
+              .pipe(_computeNewValue(f, checkType))
+              .pipe(_put(key, _))        
+
+        // ---------------------------------------------------------------------------
+        private def _computeNewValue(f: AnyValue => AnyValue, checkType: Boolean)(value: Any): Any = {
+          val newValue = f(value)
+          if (checkType) ValueUtils.checkSameTypes(value, newValue)
+
+          newValue            
+        }
 
     // ===========================================================================
     def opt(target: KPathW): Option[AnyValue] =

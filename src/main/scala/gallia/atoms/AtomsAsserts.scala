@@ -53,10 +53,9 @@ object AtomsAsserts {
 
   // ===========================================================================
   case class _AssertSameType(from: PathPair, to: KPath) extends AtomUU { def naive(o: Obj) = {
-    	val f = from.lookup(o)
-    	val t = o.force(to) // TODO: t210811143422 - if missing
-    				  
-    	gallia.data.single.ObjUtils.checkSameTypes(f, t)
+    	gallia.data.ValueUtils.checkSameTypes(
+    	    from = from                .lookup(o),
+    	    to   = from.copy(path = to).lookup(o))
 
       o
     }

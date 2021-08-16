@@ -37,18 +37,18 @@ object ActionsUUGenerates {
         def atomuu(c: Cls): AtomUU = _Transform1to1 (from.pathPairT(c), to.tq.resolve(c), f) }
   
     // ===========================================================================    
-    case class GenerateWV2a(from: TqKPath2, to: KPath, ff: _ff21) extends ActionUUb {
+    case class GenerateWV2a(from: TqKPath2, to: KPath, f: _ff21) extends ActionUUb {
         def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c)
         def _meta  (c: Cls): Cls     = c.add(to, from.tq1 /* choosing first arbitrarily */.resolve(c).thn(c.field).info)
         def atomuus(c: Cls): AtomUUs = Seq(
-            _Transform2to1 (from    .pathPairT(c), to, ff(_, _)), 
+            _Transform2to1 (from    .pathPairT(c), to, f(_, _)), 
             _AssertSameType(from.tq1.pathPairT(c), to)) }
 
       // ---------------------------------------------------------------------------
-      case class GenerateWV2b(from: TqKPath2, to: TtqKPath, ff: _ff21) extends ActionUUc {       
+      case class GenerateWV2b(from: TqKPath2, to: TtqKPath, f: _ff21) extends ActionUUc {       
           def  vldt (c: Cls): Errs   = from.vldtAsOrigin(c).orIfEmpty { to.vldtAsNewDestination(c) }
           def _meta (c: Cls): Cls    = c.add(to.tq.resolve(c), to.node.forceNonBObjInfo)
-          def atomuu(c: Cls): AtomUU = _Transform2to1(from.pathPairT(c), to.tq.resolve(c), ff(_, _)) }
+          def atomuu(c: Cls): AtomUU = _Transform2to1(from.pathPairT(c), to.tq.resolve(c), f(_, _)) }
 
     // ===========================================================================
     case class Generate2VtoV(from: TtqKPath2, to: TtqKPath, f: _ff21) extends ActionUUc {

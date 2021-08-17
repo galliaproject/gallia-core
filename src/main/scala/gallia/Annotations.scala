@@ -23,9 +23,10 @@ trait Annotations {
   private[gallia] class Scalability   (val message: String = "") extends StaticAnnotation
 
   /** TODO: t210127173933 - to keep track of restriction, rationale being that if you need more than N, either you can use an intermediate state or you may just be doing something wrong */
-  private[gallia] class Max5          (val message: String = "") extends StaticAnnotation
-  /** TODO: t210127173933 - to keep track of restriction, rationale being that if you need more than N, either you can use an intermediate state or you may just be doing something wrong */
   private[gallia] class Max3          (val message: String = "") extends StaticAnnotation
+  private[gallia] class Max5          (val message: String = "") extends StaticAnnotation
+  private[gallia] class Max8          (val message: String = "") extends StaticAnnotation
+  private[gallia] class Max10         (val message: String = "") extends StaticAnnotation
 }
 
 // ===========================================================================

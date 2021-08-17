@@ -39,7 +39,7 @@ object ActionsUUGenerates {
     // ===========================================================================    
     case class GenerateWV2a(from: TqKPath2, to: KPath, f: _ff21) extends ActionUUb {
         def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c)
-        def _meta  (c: Cls): Cls     = c.add(to, from.tq1 /* choosing first arbitrarily */.resolve(c).thn(c.field).info)
+        def _meta  (c: Cls): Cls     = c.add(to, from.tq1.resolve(c).thn(c.field).info) // choosing first arbitrarily (210817130604)
         def atomuus(c: Cls): AtomUUs = Seq(
             _Transform2to1 (from    .pathPairT(c), to, f(_, _)), 
             _AssertSameType(from.tq1.pathPairT(c), to)) }
@@ -53,7 +53,7 @@ object ActionsUUGenerates {
     // ===========================================================================    
     case class GenerateWV3a(from: TqKPath3, to: KPath, f: _ff31) extends ActionUUb {
         def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c)
-        def _meta  (c: Cls): Cls     = c.add(to, from.tq1 /* choosing first arbitrarily */.resolve(c).thn(c.field).info)
+        def _meta  (c: Cls): Cls     = c.add(to, from.tq1.resolve(c).thn(c.field).info) // choosing first arbitrarily (210817130604)
         def atomuus(c: Cls): AtomUUs = Seq(
             _Transform3to1 (from    .pathPairT(c), to, f(_, _, _)), 
             _AssertSameType(from.tq1.pathPairT(c), to)) }

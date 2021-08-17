@@ -80,6 +80,9 @@ case class TypedTargetQuery[$Target]( // t210110103720 - subclass TargetQuery an
   // ===========================================================================
   case class TypedTargetQuery3[$Target](ttq1: TypedTargetQuery[$Target], ttq2: TypedTargetQuery[$Target], ttq3: TypedTargetQuery[$Target])
         extends HasTypes3 with HasTypedTargetQuerySeq[$Target] with _TypedTargetQuery[$Target] {
+    
+      def tqkpath3(implicit ev: $Target <:< KPath) = new TargetQuery3[$Target](ttq1.tq, ttq2.tq, ttq3.tq)
+
       final override def ttqs: Seq[TypedTargetQuery[$Target]] = Seq(ttq1, ttq2, ttq3)
       def ht1 = ttq1; def ht2 = ttq2; def ht3 = ttq3
 
@@ -94,6 +97,9 @@ case class TypedTargetQuery[$Target]( // t210110103720 - subclass TargetQuery an
   // ===========================================================================
   case class TypedTargetQuery4[$Target](ttq1: TypedTargetQuery[$Target], ttq2: TypedTargetQuery[$Target], ttq3: TypedTargetQuery[$Target], ttq4: TypedTargetQuery[$Target])
         extends HasTypes4 with HasTypedTargetQuerySeq[$Target] with _TypedTargetQuery[$Target] {
+    
+      def tqkpath4(implicit ev: $Target <:< KPath) = new TargetQuery4[$Target](ttq1.tq, ttq2.tq, ttq3.tq, ttq4.tq)
+
       final override def ttqs: Seq[TypedTargetQuery[$Target]] = Seq(ttq1, ttq2, ttq3, ttq4)
       def ht1 = ttq1; def ht2 = ttq2; def ht3 = ttq3; def ht4 = ttq4
 
@@ -108,6 +114,9 @@ case class TypedTargetQuery[$Target]( // t210110103720 - subclass TargetQuery an
   // ===========================================================================
   case class TypedTargetQuery5[$Target](ttq1: TypedTargetQuery[$Target], ttq2: TypedTargetQuery[$Target], ttq3: TypedTargetQuery[$Target], ttq4: TypedTargetQuery[$Target], ttq5: TypedTargetQuery[$Target])
         extends HasTypes5 with HasTypedTargetQuerySeq[$Target] with _TypedTargetQuery[$Target] {
+    
+      def tqkpath5(implicit ev: $Target <:< KPath) = new TargetQuery5[$Target](ttq1.tq, ttq2.tq, ttq3.tq, ttq4.tq, ttq5.tq)
+
       final override def ttqs: Seq[TypedTargetQuery[$Target]] = Seq(ttq1, ttq2, ttq3, ttq4, ttq5)
       def ht1 = ttq1; def ht2 = ttq2; def ht3 = ttq3; def ht4 = ttq4; def ht5 = ttq5
 
@@ -122,6 +131,9 @@ case class TypedTargetQuery[$Target]( // t210110103720 - subclass TargetQuery an
   // ===========================================================================
   case class TypedTargetQuery6[$Target](ttq1: TypedTargetQuery[$Target], ttq2: TypedTargetQuery[$Target], ttq3: TypedTargetQuery[$Target], ttq4: TypedTargetQuery[$Target], ttq5: TypedTargetQuery[$Target], ttq6: TypedTargetQuery[$Target])
         extends HasTypes6 with HasTypedTargetQuerySeq[$Target] with _TypedTargetQuery[$Target] {
+    
+      def tqkpath6(implicit ev: $Target <:< KPath) = new TargetQuery6[$Target](ttq1.tq, ttq2.tq, ttq3.tq, ttq4.tq, ttq5.tq, ttq6.tq)
+
       final override def ttqs: Seq[TypedTargetQuery[$Target]] = Seq(ttq1, ttq2, ttq3, ttq4, ttq5, ttq6)
       def ht1 = ttq1; def ht2 = ttq2; def ht3 = ttq3; def ht4 = ttq4; def ht5 = ttq5; def ht6 = ttq6
 
@@ -136,6 +148,9 @@ case class TypedTargetQuery[$Target]( // t210110103720 - subclass TargetQuery an
   // ===========================================================================
   case class TypedTargetQuery7[$Target](ttq1: TypedTargetQuery[$Target], ttq2: TypedTargetQuery[$Target], ttq3: TypedTargetQuery[$Target], ttq4: TypedTargetQuery[$Target], ttq5: TypedTargetQuery[$Target], ttq6: TypedTargetQuery[$Target], ttq7: TypedTargetQuery[$Target])
         extends HasTypes7 with HasTypedTargetQuerySeq[$Target] with _TypedTargetQuery[$Target] {
+    
+      def tqkpath7(implicit ev: $Target <:< KPath) = new TargetQuery7[$Target](ttq1.tq, ttq2.tq, ttq3.tq, ttq4.tq, ttq5.tq, ttq6.tq, ttq7.tq)
+
       final override def ttqs: Seq[TypedTargetQuery[$Target]] = Seq(ttq1, ttq2, ttq3, ttq4, ttq5, ttq6, ttq7)
       def ht1 = ttq1; def ht2 = ttq2; def ht3 = ttq3; def ht4 = ttq4; def ht5 = ttq5; def ht6 = ttq6; def ht7 = ttq7
 
@@ -150,6 +165,9 @@ case class TypedTargetQuery[$Target]( // t210110103720 - subclass TargetQuery an
   // ===========================================================================
   case class TypedTargetQuery8[$Target](ttq1: TypedTargetQuery[$Target], ttq2: TypedTargetQuery[$Target], ttq3: TypedTargetQuery[$Target], ttq4: TypedTargetQuery[$Target], ttq5: TypedTargetQuery[$Target], ttq6: TypedTargetQuery[$Target], ttq7: TypedTargetQuery[$Target], ttq8: TypedTargetQuery[$Target])
         extends HasTypes8 with HasTypedTargetQuerySeq[$Target] with _TypedTargetQuery[$Target] {
+    
+      def tqkpath8(implicit ev: $Target <:< KPath) = new TargetQuery8[$Target](ttq1.tq, ttq2.tq, ttq3.tq, ttq4.tq, ttq5.tq, ttq6.tq, ttq7.tq, ttq8.tq)
+
       final override def ttqs: Seq[TypedTargetQuery[$Target]] = Seq(ttq1, ttq2, ttq3, ttq4, ttq5, ttq6, ttq7, ttq8)
       def ht1 = ttq1; def ht2 = ttq2; def ht3 = ttq3; def ht4 = ttq4; def ht5 = ttq5; def ht6 = ttq6; def ht7 = ttq7; def ht8 = ttq8
 
@@ -164,6 +182,9 @@ case class TypedTargetQuery[$Target]( // t210110103720 - subclass TargetQuery an
   // ===========================================================================
   case class TypedTargetQuery9[$Target](ttq1: TypedTargetQuery[$Target], ttq2: TypedTargetQuery[$Target], ttq3: TypedTargetQuery[$Target], ttq4: TypedTargetQuery[$Target], ttq5: TypedTargetQuery[$Target], ttq6: TypedTargetQuery[$Target], ttq7: TypedTargetQuery[$Target], ttq8: TypedTargetQuery[$Target], ttq9: TypedTargetQuery[$Target])
         extends HasTypes9 with HasTypedTargetQuerySeq[$Target] with _TypedTargetQuery[$Target] {
+    
+      def tqkpath9(implicit ev: $Target <:< KPath) = new TargetQuery9[$Target](ttq1.tq, ttq2.tq, ttq3.tq, ttq4.tq, ttq5.tq, ttq6.tq, ttq7.tq, ttq8.tq, ttq9.tq)
+
       final override def ttqs: Seq[TypedTargetQuery[$Target]] = Seq(ttq1, ttq2, ttq3, ttq4, ttq5, ttq6, ttq7, ttq8, ttq9)
       def ht1 = ttq1; def ht2 = ttq2; def ht3 = ttq3; def ht4 = ttq4; def ht5 = ttq5; def ht6 = ttq6; def ht7 = ttq7; def ht8 = ttq8; def ht9 = ttq9
 
@@ -178,6 +199,9 @@ case class TypedTargetQuery[$Target]( // t210110103720 - subclass TargetQuery an
   // ===========================================================================
   case class TypedTargetQuery10[$Target](ttq1: TypedTargetQuery[$Target], ttq2: TypedTargetQuery[$Target], ttq3: TypedTargetQuery[$Target], ttq4: TypedTargetQuery[$Target], ttq5: TypedTargetQuery[$Target], ttq6: TypedTargetQuery[$Target], ttq7: TypedTargetQuery[$Target], ttq8: TypedTargetQuery[$Target], ttq9: TypedTargetQuery[$Target], ttq10: TypedTargetQuery[$Target])
         extends HasTypes10 with HasTypedTargetQuerySeq[$Target] with _TypedTargetQuery[$Target] {
+    
+      def tqkpath10(implicit ev: $Target <:< KPath) = new TargetQuery10[$Target](ttq1.tq, ttq2.tq, ttq3.tq, ttq4.tq, ttq5.tq, ttq6.tq, ttq7.tq, ttq8.tq, ttq9.tq, ttq10.tq)
+
       final override def ttqs: Seq[TypedTargetQuery[$Target]] = Seq(ttq1, ttq2, ttq3, ttq4, ttq5, ttq6, ttq7, ttq8, ttq9, ttq10)
       def ht1 = ttq1; def ht2 = ttq2; def ht3 = ttq3; def ht4 = ttq4; def ht5 = ttq5; def ht6 = ttq6; def ht7 = ttq7; def ht8 = ttq8; def ht9 = ttq9; def ht10 = ttq10
 

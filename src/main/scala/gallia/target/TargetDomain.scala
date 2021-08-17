@@ -30,13 +30,20 @@ trait CanValidateQueries { protected /* use do */ def vldtTargetQueries: Seq[Can
 
       // ---------------------------------------------------------------------------
       def targets(c: Cls): Seq[$Target] = tqs.map(_.resolve(c))
+      
+      // TODO: should be private
+      /*private[target] */def __kpathz(c: Cls): KPathz = tqs.flatMap(_.__kpaths(c)).thn(KPathz.apply)
+      /*private[target] */def __qpathz(c: Cls): RPathz = tqs.flatMap(_.__qpaths(c)).thn(RPathz.apply)
+      
+      // ---------------------------------------------------------------------------
+      def pathz(c: Cls)(implicit ev: $Target <:< KPath): KPathz = KPathz(targets(c).asInstanceOf[Seq[KPath]])
 
       // ---------------------------------------------------------------------------
-      def pathz(c: Cls)(implicit ev: $Target <:< KPath) = KPathz(targets(c).asInstanceOf[Seq[KPath]])
-
-      // ---------------------------------------------------------------------------
-      final def doVldtTargetQueries(c: Cls): Errs = vldtTargetQueries.flatMap(_.vldtTargetQuery(c))
-
+      // TODO: t210811103604 - move the fieldsRenaming parts of these individuals  
+      private[target] def _vldtAsOrigin(c: Cls): Errs =
+        tqs.foldLeft(Seq[Err]()) { case (curr, tq) => curr ++ tq.vldtAsOrigin(c) } ++ 
+        MetaValidation.distinctRPathz(__qpathz(c))
+        
       // ---------------------------------------------------------------------------
       protected // use do
         final override def vldtTargetQueries: Seq[CanValidateQuery] = tqs
@@ -50,21 +57,11 @@ trait CanValidateQueries { protected /* use do */ def vldtTargetQueries: Seq[Can
       final override def tqs: Seq[TargetQuery[$Target]] = ttqs.map(_.tq)
 
       // ---------------------------------------------------------------------------
-      def __kpathz(c: Cls): KPathz = ttqs.flatMap(_.tq.__kpaths(c)).thn(KPathz.apply)
-      def __qpathz(c: Cls): RPathz = ttqs.flatMap(_.tq.__qpaths(c)).thn(RPathz.apply)
-
-      final def duos(c: Cls): Seq[Duo[$Target]] = ttqs.map(_.duo(c))
-
-      // ---------------------------------------------------------------------------
       // vldt
 
-      // TODO: t210811103604 - move the fieldsRenaming+typeCompatibilities parts of these individuals  
-      def vldtAsOrigin(c: Cls): Errs = vldtAsOrigin(c, mode = SpecialCardiMode.Normal)
-      def vldtAsOrigin(c: Cls, mode: SpecialCardiMode): Errs =
-        super.doVldtTargetQueries(c) ++
-        MetaValidation.fieldsRenaming     (c, __qpathz(c)) ++
-        MetaValidation.typeCompatibilities(c, duos(c), mode) ++
-        MetaValidation.distinctRPathz     (   __qpathz(c))
+      // TODO: t210811103604 - move the typeCompatibilities parts of these individuals  
+      def vldtAsOrigin(c: Cls)                        : Errs = vldtAsOrigin(c, mode = SpecialCardiMode.Normal)
+      def vldtAsOrigin(c: Cls, mode: SpecialCardiMode): Errs = super._vldtAsOrigin(c) ++ MetaValidation.typeCompatibilities(c, ttqs.map(_.duo(c)), mode)
 
       // ---------------------------------------------------------------------------
       // meta

@@ -10,7 +10,7 @@ trait HeadCommonGenerates[F <: HeadCommon[F]] { _: HeadCommon[F] =>
   import TSL.Generate1.{resolve, tqkpath}
   import TSL.Generate2.{resolve => resolve1, _}  
 
-  import TSL.Generate1.{resolve2 => resolve12}
+  import TSL.Generate1.{resolve2 => resolve12, resolve3 => resolve13}
   
   // ===========================================================================
   def generateCount(from: RenW, as: KeyW = _count): Self2 = ???//TODO
@@ -23,23 +23,24 @@ trait HeadCommonGenerates[F <: HeadCommon[F]] { _: HeadCommon[F] =>
     // ---------------------------------------------------------------------------
     class _Generate1(newPath: KPath)  {
 
-      def from        (f1: Generate1[HeadU])                          : _FromU1    = new _FromU1(f1)
-      def from        (f1: Generate1[HeadZ])(implicit di: DI)         : _FromZ1    = new _FromZ1(f1)
-      def from[O: WTT](f1: Generate1[O])    (implicit di: DI, di2: DI): _FromV1[O] = new _FromV1(f1)
+	    def from        (f1: KPathW)                                    : _FromWhatever = new _FromWhatever(_._explicit(f1.value))
+      def from        (f1: Generate1[HeadU])                          : _FromU1       = new _FromU1(f1)
+      def from        (f1: Generate1[HeadZ])(implicit di: DI)         : _FromZ1       = new _FromZ1(f1)
+      def from[O: WTT](f1: Generate1[O])    (implicit di: DI, di2: DI): _FromV1[O]    = new _FromV1(f1)
 
       // ---------------------------------------------------------------------------
-      //TODO
-      def from (k: KeyW): _FromWhatever = new _FromWhatever(_._explicit(k.value))
+      def from                  (f1: KPathW, f2: KPathW)               = new _FromWhatever2(_._explicit(f1.value), _._explicit(f2.value))
+      def from[O1: WTT, O2: WTT](f1: Generate2[O1], f2: Generate2[O2]) = new Generate1From2(f1, f2)
+	    
+	    def from                           (f1: KPathW, f2: KPathW, f3: KPathW)                      = new _FromWhatever3(_._explicit(f1.value), _._explicit(f2.value), _._explicit(f3.value))
+      def from[O1: WTT, O2: WTT, O3: WTT](f1: Generate2[O1], f2: Generate2[O2], f3: Generate2[O3]) = new Generate1From3(f1, f2, f3)
 
-      //def from         (f1: KPathW)      : _From11[WV] = from(_.explicit(f1.value))
-      //def from[O1: WTT](f1: Generate[O1]): _From11[O1] = new _From11(f1)
-
-      // ---------------------------------------------------------------------------
-      def from(f1: KPathW, f2: KPathW) = new _FromWhatever2(_._explicit(f1.value), _._explicit(f2.value)) // TODO: also add for 3 to 10
-
-      def from[O1: WTT, O2: WTT]                  (f1: Generate2[O1], f2: Generate2[O2])                                       = new Generate1From2(f1, f2)
-      def from[O1: WTT, O2: WTT, O3: WTT]         (f1: Generate2[O1], f2: Generate2[O2], f3: Generate2[O3])                    = new Generate1From3(f1, f2, f3)
-      def from[O1: WTT, O2: WTT, O3: WTT, O4: WTT](f1: Generate2[O1], f2: Generate2[O2], f3: Generate2[O3], f4: Generate2[O4]) = new Generate1From4(f1, f2, f3, f4)
+	    // ---------------------------------------------------------------------------
+      def from[O1: WTT, O2: WTT, O3: WTT, O4: WTT]                                    (f1: Generate2[O1], f2: Generate2[O2], f3: Generate2[O3], f4: Generate2[O4])                                                                             = new Generate1From4(f1, f2, f3, f4)
+      def from[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT]                           (f1: Generate2[O1], f2: Generate2[O2], f3: Generate2[O3], f4: Generate2[O4], f5: Generate2[O5])                                                          = new Generate1From5(f1, f2, f3, f4, f5)
+      def from[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT]                  (f1: Generate2[O1], f2: Generate2[O2], f3: Generate2[O3], f4: Generate2[O4], f5: Generate2[O5], f6: Generate2[O6])                                       = new Generate1From6(f1, f2, f3, f4, f5, f6)
+      def from[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT, O7: WTT]         (f1: Generate2[O1], f2: Generate2[O2], f3: Generate2[O3], f4: Generate2[O4], f5: Generate2[O5], f6: Generate2[O6], f7: Generate2[O7])                    = new Generate1From7(f1, f2, f3, f4, f5, f6, f7)
+      def from[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT, O7: WTT, O8: WTT](f1: Generate2[O1], f2: Generate2[O2], f3: Generate2[O3], f4: Generate2[O4], f5: Generate2[O5], f6: Generate2[O6], f7: Generate2[O7], f8: Generate2[O8]) = new Generate1From8(f1, f2, f3, f4, f5, f6, f7, f8)
 
         // ===========================================================================
         class _FromU1(f1: Generate1[HeadU]) {
@@ -55,8 +56,9 @@ trait HeadCommonGenerates[F <: HeadCommon[F]] { _: HeadCommon[F] =>
 
         // ---------------------------------------------------------------------------
         class _FromWhatever(f1: Generate1[WV]) {
-        	  private def wrap[T](f: WV => T) = (x: Any) => f(new WV(x))
+            private def wrap[T](f: WV => T) = (x: Any) => f(new WV(x)) // TODO: t210816120207 - should this also abstract multiplicity? 
         	  
+            // ---------------------------------------------------------------------------
             def using(f: WV => WV): Self2 = self2 :+
               GenerateWV1a(resolve(f1).tqkpath, newPath,               wrap(f)(_).any)
 
@@ -75,17 +77,14 @@ trait HeadCommonGenerates[F <: HeadCommon[F]] { _: HeadCommon[F] =>
         // ===========================================================================
         //TODO: t210111171545 - validate origins aren't u or z
         class Generate1From2[O1: WTT, O2: WTT](d1: Generate2[O1], d2: Generate2[O2]){
-          def using[D1: WTT](f: (O1, O2) => D1): Self2 = self2 :+
-            {
-              val dest = ttqkpath1[D1](newPath)
-              Generate2VtoV(resolve2(d1, d2), dest, if (dest.node.isWhatever0) __wwrap21(f) else wrap21(f))
-            }
-          }
-        
+            def using[D1: WTT](f: (O1, O2) => D1): Self2 = self2 :+
+              Generate2VtoV(resolve2(d1, d2), ttqkpath1[D1](newPath), wrap21(f)) }
+
           // ---------------------------------------------------------------------------
           class _FromWhatever2(f1: Generate1[WV], f2: Generate1[WV]) {
         	  private def wrap[T](f: (WV, WV) => T) = (x: Any, y: Any) => f(new WV(x), new WV(y))            
 
+            // ---------------------------------------------------------------------------
             def using(f: (WV, WV) => WV): Self2 = self2 :+
               GenerateWV2a(resolve12(f1, f2).tqkpath2, newPath,               wrap(f)(_, _).any)
           
@@ -101,6 +100,19 @@ trait HeadCommonGenerates[F <: HeadCommon[F]] { _: HeadCommon[F] =>
             def using[D1: WTT](f: (O1, O2, O3) => D1): Self2 = self2 :+
               Generate3VtoV(resolve3(d1, d2, d3), ttqkpath1[D1](newPath), wrap31(f)) }
 
+          // ---------------------------------------------------------------------------
+          class _FromWhatever3(f1: Generate1[WV], f2: Generate1[WV], f3: Generate1[WV]) {
+        	  private def wrap[T](f: (WV, WV, WV) => T) = (x: Any, y: Any, z: Any) => f(new WV(x), new WV(y), new WV(z))            
+
+            def using(f: (WV, WV, WV) => WV): Self2 = self2 :+
+              GenerateWV3a(resolve13(f1, f2, f3).tqkpath3, newPath,               wrap(f)(_, _, _).any)
+          
+            def using[D: WTT](f: (WV, WV, WV) => TWV[D]): Self2 = self2 :+
+              GenerateWV3b(resolve13(f1, f2, f3).tqkpath3, ttqkpath1[D](newPath), wrap(f)(_, _, _).forceOne)
+              
+            def using[D: WTT](f: (WV, WV, WV) => D)(implicit di: DI): Self2 = self2 :+
+              GenerateWV3b(resolve13(f1, f2, f3).tqkpath3, ttqkpath1[D](newPath), wrap(f)(_, _, _)) }
+        
         // ---------------------------------------------------------------------------
         class Generate1From4[O1: WTT, O2: WTT, O3: WTT, O4: WTT](
           d1: Generate2[O1], d2: Generate2[O2], d3: Generate2[O3], d4: Generate2[O4]) {

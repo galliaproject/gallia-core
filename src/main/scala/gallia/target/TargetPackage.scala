@@ -12,6 +12,8 @@ package object target { // TODO: t210202090211 - p3 - rename package and homogen
   private[target] type Container = gallia.reflect.Container
   private[target] val  Container = gallia.reflect.Container
 
+  private[target] type TQ[$Target] = TargetQuery[$Target]
+  
   // ===========================================================================
   type TqKey    = TargetQuery[Key]
   type TQRen    = TargetQuery[Ren ]
@@ -28,8 +30,16 @@ package object target { // TODO: t210202090211 - p3 - rename package and homogen
   type TqRPath  = TargetQuery[RPath]
   type TqRPathz = TargetQuery[RPathz]
 
-  // ===========================================================================
-  type TqKPath2 = TargetQuery2[KPath]
+  // ---------------------------------------------------------------------------
+  type TqKPath2  = TargetQuery2 [KPath]
+  type TqKPath3  = TargetQuery3 [KPath]
+  type TqKPath4  = TargetQuery4 [KPath]
+  type TqKPath5  = TargetQuery5 [KPath]
+  type TqKPath6  = TargetQuery6 [KPath]
+  type TqKPath7  = TargetQuery7 [KPath]
+  type TqKPath8  = TargetQuery8 [KPath]
+  type TqKPath9  = TargetQuery9 [KPath]
+  type TqKPath10 = TargetQuery10[KPath]
 
   // ===========================================================================
   // TODO: t210124100009 - find simpler shorthands for these two, pretty common; sigh, naming things...

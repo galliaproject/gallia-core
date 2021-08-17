@@ -30,7 +30,7 @@ object ActionsUUFuseFission {
 
   // ---------------------------------------------------------------------------
   case class Fuse2WV(from: TqKPath2, toEither: Either[KPath, TtqKPath], multiple: Boolean, f: _ff21) extends ActionUUb { // TODO: split up WV1 vs WV2...
-      def  vldt(c: Cls): Errs  = from.doVldtTargetQueries(c) ++ Nil //FIXME: ensure some fields left
+      def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil //FIXME: ensure some fields left
         // TODO: t210111091636 - validate all are whatever and of the same (or compatible) type
 
       // ---------------------------------------------------------------------------

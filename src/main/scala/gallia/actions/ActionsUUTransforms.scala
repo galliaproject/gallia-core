@@ -161,7 +161,6 @@ case class TransformFoo(from: TtqRPathz, to: Cls, f: _ff11) extends ActionUUb wi
 
     case class TransformWW1a(from: TqRPathz, f: _ff11) extends ActionUUb with IdentityM1 {
       def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) // TODO: t210201164749
-//def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c) { (curr, path) => curr }
       def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformWW(_, f, checkType = true))) }
 
     // ---------------------------------------------------------------------------

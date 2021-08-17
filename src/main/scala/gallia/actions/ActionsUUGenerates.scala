@@ -50,6 +50,20 @@ object ActionsUUGenerates {
           def _meta (c: Cls): Cls    = c.add(to.tq.resolve(c), to.node.forceNonBObjInfo)
           def atomuu(c: Cls): AtomUU = _Transform2to1(from.pathPairT(c), to.tq.resolve(c), f(_, _)) }
 
+    // ===========================================================================    
+    case class GenerateWV3a(from: TqKPath3, to: KPath, f: _ff31) extends ActionUUb {
+        def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c)
+        def _meta  (c: Cls): Cls     = c.add(to, from.tq1 /* choosing first arbitrarily */.resolve(c).thn(c.field).info)
+        def atomuus(c: Cls): AtomUUs = Seq(
+            _Transform3to1 (from    .pathPairT(c), to, f(_, _, _)), 
+            _AssertSameType(from.tq1.pathPairT(c), to)) }
+
+      // ---------------------------------------------------------------------------
+      case class GenerateWV3b(from: TqKPath3, to: TtqKPath, f: _ff31) extends ActionUUc {       
+          def  vldt (c: Cls): Errs   = from.vldtAsOrigin(c).orIfEmpty { to.vldtAsNewDestination(c) }
+          def _meta (c: Cls): Cls    = c.add(to.tq.resolve(c), to.node.forceNonBObjInfo)
+          def atomuu(c: Cls): AtomUU = _Transform3to1(from.pathPairT(c), to.tq.resolve(c), f(_, _, _)) }
+      
     // ===========================================================================
     case class Generate2VtoV(from: TtqKPath2, to: TtqKPath, f: _ff21) extends ActionUUc {
         def  vldt (c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO

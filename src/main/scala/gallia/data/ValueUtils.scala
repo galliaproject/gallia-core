@@ -4,8 +4,6 @@ import aptus.Tuple2_ // for toOptionalTuple
 import gallia.reflect.Container
 
 // ===========================================================================
-
-// ===========================================================================
 object ValueUtils {
 
   def checkSameTypes(from: Any, to: Any): Unit = {    

@@ -50,8 +50,10 @@ trait ClsBasics { self: Cls =>
 
   def add(field: Fld): Cls = { requireNewKey(field.key); rewrap(fields :+ field) }
 
-  def add(path: KPath, info: Info): Cls = transformx(path)(_.add(_, info), _.add(_, info))
-  def add(pairs: Seq[(Key, Info)]): Cls = pairs.foldLeft(this)(_ add _)
+  def add(path: KPath, info: Info)             : Cls = transformx(path)(_.add(_, info), _.add(_, info))
+  def add(pair: (KPath, Info))(implicit di: DI): Cls = add(pair._1, pair._2)
+  
+  def add(pairs: Seq[(Key, Info)])             : Cls = pairs.foldLeft(this)(_ add _)
 
   // ===========================================================================
   @deprecated("favor combo retain+rename") def retain(key : Ren) : Cls = { requireRenamingKey(key); rewrap(field(key).as.seq) }

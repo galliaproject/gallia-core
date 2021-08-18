@@ -18,13 +18,14 @@ case class TypedTargetQuery[$Target]( // t210110103720 - subclass TargetQuery an
       extends HasType
          with HasTypedTargetQuerySeq[$Target]
          with _TypedTargetQuery[$Target] {
-
+            
     override def ttqs: Seq[TypedTargetQuery[$Target]] = Seq(this)
 
     def size(c: Cls): Int = tq.size(c)
 
     // ---------------------------------------------------------------------------
-    def duo(c: Cls) = Duo[$Target](node, tq.resolve(c))
+    def duo      (c: Cls): Duo[$Target]    = Duo[$Target](node, tq.resolve(c))
+    def fieldPair(c: Cls): ($Target, Info) = (tq.resolve(c), node.forceNonBObjInfo)
 
     def kpathT (c: Cls)(implicit ev: $Target <:< KPath ): KPath  = kpath_(c)
     def kpath_ (c: Cls)(implicit ev: $Target <:< KPath ): KPath  = tq.resolve(c)
@@ -70,8 +71,8 @@ case class TypedTargetQuery[$Target]( // t210110103720 - subclass TargetQuery an
       def ht1 = ttq1; def ht2 = ttq2
 
       // ---------------------------------------------------------------------------
-      def pathPairT(c: Cls)(implicit ev: $Target <:< KPath): PathPair2 = PathPair2(ttq1.pathPairT(c), ttq2.pathPairT(c))
-      def kpathT   (c: Cls)(implicit ev: $Target <:< KPath): KPaths2   = super.__kpathz(c).values.force.tuple2.thn(KPaths2.tupled)
+def pathPairT(c: Cls)(implicit ev: $Target <:< KPath): PathPair2 = tqkpath2.pathPairT(c)
+def kpathT   (c: Cls)(implicit ev: $Target <:< KPath): KPaths2   = tqkpath2.kpathT(c)
 
       // ---------------------------------------------------------------------------
       def fromOverride(value: HasTypes2)(implicit ev: $Target <:< KPath) = TypedTargetQueryUtils.ttqkpath2(super.ttqkpaths(value).force.tuple2)

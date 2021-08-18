@@ -38,7 +38,7 @@ object ActionsUUGenerates {
   
     // ===========================================================================    
     case class GenerateWV2a(from: TqKPath2, to: KPath, f: _ff21) extends ActionUUb {
-        def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c)
+        def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c).orIfEmpty { gallia.vldt.MetaValidation.fieldAbsence(c, to).toSeq }
         def _meta  (c: Cls): Cls     = c.add(to, from.tq1.resolve(c).thn(c.field).info) // choosing first arbitrarily (210817130604)
         def atomuus(c: Cls): AtomUUs = Seq(
             _Transform2to1 (from    .pathPairT(c), to, f(_, _)), 

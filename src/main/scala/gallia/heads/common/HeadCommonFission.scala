@@ -7,9 +7,32 @@ import gallia.target.utils.TypedTargetQueryUtils._
 
 // ===========================================================================
 trait HeadCommonFission[F <: HeadCommon[F]] { _: HeadCommon[F] =>
-  import TSL.FuseFission._
+  import TSL.FuseFission._ 
+  import TargetQueryUtils.tqkpath2
+  import TypedTargetQueryUtils.{ttqkpath2, ttqkpath3}
 
-  // ---------------------------------------------------------------------------
+  // ===========================================================================
+  def fission(o: KPathW): _FromWhatever = new _FromWhatever(_._explicit(o.value))
+
+    @Max3
+    class _FromWhatever(o: Fission[WV]) {
+  
+      // ---------------------------------------------------------------------------
+      def as(d1: KPathW, d2: KPathW) = new {
+    	  // TODO: t210816120207 - should this also abstract multiplicity?
+        private def wrap[T, U](f: WV => (T, T))(g: T => U)     = (x: Any) => { val (y1, y2)     = f(new WV(x)); (g(y1), g(y2)) }
+        
+        // ---------------------------------------------------------------------------
+        def using(f: WV => (WV, WV)): Self2 = self2 :+ 
+          FissionWV2a(resolve(o).tqkpath, tqkpath2(d1, d2), wrap(f)(_.any))
+          
+        def using[D1: WTT, D2: WTT](f: WV => (TWV[D1], TWV[D2])): Self2 = self2 :+          
+          FissionWV2b(resolve(o).tqkpath, ttqkpath2[D1, D2](d1, d2), wrap(f)(_.forceOne))      
+
+        def using[D1: WTT, D2: WTT](f: WV => (D1, D2))(implicit di: DI): Self2 = self2 :+
+          FissionWV2b(resolve(o).tqkpath, ttqkpath2[D1, D2](d1, d2), wrap(f)(x => x)) } }
+
+  // ===========================================================================
   @Max10
   def fission[O1: WTT](o1: Fission[O1]) = new {
 

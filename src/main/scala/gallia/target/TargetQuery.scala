@@ -75,7 +75,8 @@ class TargetQuery[$Target]( //TODO: t210110103720 - subclass rather, in terms of
       MetaValidation.fieldsRenaming(c, __qpaths(c).thn(RPathz.apply))
 
     // ---------------------------------------------------------------------------
-    def pathPairT(c: Cls)(implicit ev: $Target <:< KPath ): PathPair = kpath_(c).thn { path => PathPair(path, c.isOptional(path)) }
+    def pathPairT(c: Cls)(implicit ev: $Target <:< KPath ):  PathPair = kpath_(c).thn { path => PathPair(path, c.isOptional(path)) }
+    def path     (c: Cls)(implicit ev: $Target <:< KPath ): KPath     = kpath_(c)
   }
 
   // ===========================================================================
@@ -94,7 +95,8 @@ class TargetQuery[$Target]( //TODO: t210110103720 - subclass rather, in terms of
 case class TargetQuery2[$Target](tq1: TQ[$Target], tq2: TQ[$Target]) extends HasTargetQuerySeq[$Target] {
   	override def tqs = Seq(tq1, tq2)
     def pathPairT(c: Cls)(implicit ev: $Target <:< KPath): PathPair2 = PathPair2(tq1.pathPairT(c), tq2.pathPairT(c))  
-    def vldtAsOrigin(c: Cls): Errs = super._vldtAsOrigin(c)   	
+    def kpathT   (c: Cls)(implicit ev: $Target <:< KPath): KPaths2   = KPaths2  (tq1.path(c),      tq2.path(c))
+    def vldtAsOrigin(c: Cls): Errs = super._vldtAsOrigin(c)
   }
   
   // ---------------------------------------------------------------------------

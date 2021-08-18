@@ -49,6 +49,7 @@ class TypedWhatever[T](val either: Either[Seq[T], T]) extends AnyVal with Serial
   def >= (that: Whatever): TypedWhatever[Boolean] = map(_.any.number.doubleValue >= that.any.number.doubleValue)
 
   // ---------------------------------------------------------------------------
+def - (value: Whatever): TypedWhatever[T] = ???//map(x => plus (x.any, value.any).asInstanceOf[T])  
   def + (value: Whatever): TypedWhatever[T] = map(x => plus (x.any, value.any).asInstanceOf[T])
   def * (value: Whatever): TypedWhatever[T] = map(x => times(x.any, value.any).asInstanceOf[T])
 

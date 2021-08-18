@@ -13,7 +13,8 @@ object TargetQueryUtils {
   def tqqpathz(value: RPathW) = new TqRPathz(_ => Nil, _ => value.qpathz)
 
   // ---------------------------------------------------------------------------
-  def tqkpath2(k1: KPathW, k2: KPathW) = new TqKPath2(tqkpath(k1.value), tqkpath(k2.value))
+  def tqkpath2(k1: KPathW, k2: KPathW)             = new TqKPath2(tqkpath(k1.value), tqkpath(k2.value))
+  def tqkpath3(k1: KPathW, k2: KPathW, k3: KPathW) = new TqKPath3(tqkpath(k1.value), tqkpath(k2.value), tqkpath(k3.value))
 }
 
 // ===========================================================================

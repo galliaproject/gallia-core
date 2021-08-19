@@ -70,9 +70,8 @@ class TargetQuery[$Target]( //TODO: t210110103720 - subclass rather, in terms of
     // ===========================================================================
     // vldt
 
-    def vldtAsOrigin(c: Cls): Errs =
-      vldtTargetQuery(c) ++
-      MetaValidation.fieldsRenaming(c, __qpaths(c).thn(RPathz.apply))
+    def vldtAsOrigin        (c: Cls): Errs = vldtTargetQuery(c) ++ MetaValidation.fieldsRenaming(c, __qpaths(c).thn(RPathz.apply))
+    def vldtAsNewDestination(c: Cls): Errs = vldtTargetQuery(c) ++ MetaValidation.fieldsAbsence (c, __kpathz(c))
 
     // ---------------------------------------------------------------------------
     def pathPairT(c: Cls)(implicit ev: $Target <:< KPath ):  PathPair = kpath_(c).thn { path => PathPair(path, c.isOptional(path)) }
@@ -94,33 +93,45 @@ class TargetQuery[$Target]( //TODO: t210110103720 - subclass rather, in terms of
 // ===========================================================================
 case class TargetQuery2[$Target](tq1: TQ[$Target], tq2: TQ[$Target]) extends HasTargetQuerySeq[$Target] {
   	override def tqs = Seq(tq1, tq2)
+  	
     def pathPairT(c: Cls)(implicit ev: $Target <:< KPath): PathPair2 = PathPair2(tq1.pathPairT(c), tq2.pathPairT(c))  
     def kpathT   (c: Cls)(implicit ev: $Target <:< KPath): KPaths2   = KPaths2  (tq1.path(c),      tq2.path(c))
-    def vldtAsOrigin(c: Cls): Errs = super._vldtAsOrigin(c)
+    
+    def vldtAsOrigin        (c: Cls): Errs = super._vldtAsOrigin(c)
+    def vldtAsNewDestination(c: Cls): Errs = super._vldtAsNewDestination(c)
   }
   
   // ---------------------------------------------------------------------------
   case class TargetQuery3[$Target](tq1: TQ[$Target], tq2: TQ[$Target], tq3: TQ[$Target]) extends HasTargetQuerySeq[$Target] {
 	  override def tqs = Seq(tq1, tq2, tq3)
+	  
     def pathPairT(c: Cls)(implicit ev: $Target <:< KPath): PathPair3 = PathPair3(tq1.pathPairT(c), tq2.pathPairT(c), tq3.pathPairT(c))  
     def kpathT   (c: Cls)(implicit ev: $Target <:< KPath): KPaths3   = KPaths3  (tq1.path(c),      tq2.path(c),      tq3.path(c))
-    def vldtAsOrigin(c: Cls): Errs = super._vldtAsOrigin(c)
+    
+    def vldtAsOrigin        (c: Cls): Errs = super._vldtAsOrigin(c)
+    def vldtAsNewDestination(c: Cls): Errs = super._vldtAsNewDestination(c)
   }
 
   // ---------------------------------------------------------------------------
   case class TargetQuery4[$Target](tq1: TQ[$Target], tq2: TQ[$Target], tq3: TQ[$Target], tq4: TQ[$Target]) extends HasTargetQuerySeq[$Target] {
 	  override def tqs = Seq(tq1, tq2, tq3, tq4)
+	  
     def pathPairT(c: Cls)(implicit ev: $Target <:< KPath): PathPair4 = PathPair4(tq1.pathPairT(c), tq2.pathPairT(c), tq3.pathPairT(c), tq4.pathPairT(c))  
     def kpathT   (c: Cls)(implicit ev: $Target <:< KPath): KPaths4   = KPaths4  (tq1.path(c),      tq2.path(c),      tq3.path(c),      tq4.path(c))
-    def vldtAsOrigin(c: Cls): Errs = super._vldtAsOrigin(c)
+    
+    def vldtAsOrigin        (c: Cls): Errs = super._vldtAsOrigin(c)
+    def vldtAsNewDestination(c: Cls): Errs = super._vldtAsNewDestination(c)
   }
   
   // ---------------------------------------------------------------------------
   case class TargetQuery5[$Target](tq1: TQ[$Target], tq2: TQ[$Target], tq3: TQ[$Target], tq4: TQ[$Target], tq5: TQ[$Target]) extends HasTargetQuerySeq[$Target] {
 	  override def tqs = Seq(tq1, tq2, tq3, tq4, tq5)
+	  
     def pathPairT(c: Cls)(implicit ev: $Target <:< KPath): PathPair5 = PathPair5(tq1.pathPairT(c), tq2.pathPairT(c), tq3.pathPairT(c), tq4.pathPairT(c), tq5.pathPairT(c))  
     def kpathT   (c: Cls)(implicit ev: $Target <:< KPath): KPaths5   = KPaths5  (tq1.path(c),      tq2.path(c),      tq3.path(c),      tq4.path(c),      tq5.path(c))
-    def vldtAsOrigin(c: Cls): Errs = super._vldtAsOrigin(c)
+    
+    def vldtAsOrigin        (c: Cls): Errs = super._vldtAsOrigin(c)
+    def vldtAsNewDestination(c: Cls): Errs = super._vldtAsNewDestination(c)
   }
   
   // ---------------------------------------------------------------------------
@@ -128,39 +139,53 @@ case class TargetQuery2[$Target](tq1: TQ[$Target], tq2: TQ[$Target]) extends Has
 	  override def tqs = Seq(tq1, tq2, tq3, tq4, tq5, tq6)
     def pathPairT(c: Cls)(implicit ev: $Target <:< KPath): PathPair6 = PathPair6(tq1.pathPairT(c), tq2.pathPairT(c), tq3.pathPairT(c), tq4.pathPairT(c), tq5.pathPairT(c), tq6.pathPairT(c))  
     def kpathT   (c: Cls)(implicit ev: $Target <:< KPath): KPaths6   = KPaths6  (tq1.path(c),      tq2.path(c),      tq3.path(c),      tq4.path(c),      tq5.path(c),      tq6.path(c))
-    def vldtAsOrigin(c: Cls): Errs = super._vldtAsOrigin(c)
+    
+    def vldtAsOrigin        (c: Cls): Errs = super._vldtAsOrigin(c)
+    def vldtAsNewDestination(c: Cls): Errs = super._vldtAsNewDestination(c)
   }
   
   // ---------------------------------------------------------------------------
   case class TargetQuery7[$Target](tq1: TQ[$Target], tq2: TQ[$Target], tq3: TQ[$Target], tq4: TQ[$Target], tq5: TQ[$Target], tq6: TQ[$Target], tq7: TQ[$Target]) extends HasTargetQuerySeq[$Target] {
 	  override def tqs = Seq(tq1, tq2, tq3, tq4, tq5, tq6, tq7)
+	  
     def pathPairT(c: Cls)(implicit ev: $Target <:< KPath): PathPair7 = PathPair7(tq1.pathPairT(c), tq2.pathPairT(c), tq3.pathPairT(c), tq4.pathPairT(c), tq5.pathPairT(c), tq6.pathPairT(c), tq7.pathPairT(c))  
     def kpathT   (c: Cls)(implicit ev: $Target <:< KPath): KPaths7   = KPaths7  (tq1.path(c),      tq2.path(c),      tq3.path(c),      tq4.path(c),      tq5.path(c),      tq6.path(c),      tq7.path(c))
-    def vldtAsOrigin(c: Cls): Errs = super._vldtAsOrigin(c)
+    
+    def vldtAsOrigin        (c: Cls): Errs = super._vldtAsOrigin(c)
+    def vldtAsNewDestination(c: Cls): Errs = super._vldtAsNewDestination(c)
   }
   
   // ---------------------------------------------------------------------------
   case class TargetQuery8[$Target](tq1: TQ[$Target], tq2: TQ[$Target], tq3: TQ[$Target], tq4: TQ[$Target], tq5: TQ[$Target], tq6: TQ[$Target], tq7: TQ[$Target], tq8: TQ[$Target]) extends HasTargetQuerySeq[$Target] {
 	  override def tqs = Seq(tq1, tq2, tq3, tq4, tq5, tq6, tq7, tq8)
+	  
     def pathPairT(c: Cls)(implicit ev: $Target <:< KPath): PathPair8 = PathPair8(tq1.pathPairT(c), tq2.pathPairT(c), tq3.pathPairT(c), tq4.pathPairT(c), tq5.pathPairT(c), tq6.pathPairT(c), tq7.pathPairT(c), tq8.pathPairT(c))  
     def kpathT   (c: Cls)(implicit ev: $Target <:< KPath): KPaths8   = KPaths8  (tq1.path(c),      tq2.path(c),      tq3.path(c),      tq4.path(c),      tq5.path(c),      tq6.path(c),      tq7.path(c),      tq8.path(c))
-    def vldtAsOrigin(c: Cls): Errs = super._vldtAsOrigin(c)
+    
+    def vldtAsOrigin        (c: Cls): Errs = super._vldtAsOrigin(c)
+    def vldtAsNewDestination(c: Cls): Errs = super._vldtAsNewDestination(c)
   }
   
   // ---------------------------------------------------------------------------
   case class TargetQuery9[$Target](tq1: TQ[$Target], tq2: TQ[$Target], tq3: TQ[$Target], tq4: TQ[$Target], tq5: TQ[$Target], tq6: TQ[$Target], tq7: TQ[$Target], tq8: TQ[$Target], tq9: TQ[$Target]) extends HasTargetQuerySeq[$Target] {
 	  override def tqs = Seq(tq1, tq2, tq3, tq4, tq5, tq6, tq7, tq8, tq9)
+	  
     def pathPairT(c: Cls)(implicit ev: $Target <:< KPath): PathPair9 = PathPair9(tq1.pathPairT(c), tq2.pathPairT(c), tq3.pathPairT(c), tq4.pathPairT(c), tq5.pathPairT(c), tq6.pathPairT(c), tq7.pathPairT(c), tq8.pathPairT(c), tq9.pathPairT(c))  
     def kpathT   (c: Cls)(implicit ev: $Target <:< KPath): KPaths9   = KPaths9  (tq1.path(c),      tq2.path(c),      tq3.path(c),      tq4.path(c),      tq5.path(c),      tq6.path(c),      tq7.path(c),      tq8.path(c),      tq9.path(c))
-    def vldtAsOrigin(c: Cls): Errs = super._vldtAsOrigin(c) 
+    
+    def vldtAsOrigin        (c: Cls): Errs = super._vldtAsOrigin(c)
+    def vldtAsNewDestination(c: Cls): Errs = super._vldtAsNewDestination(c)
   }
   
   // ---------------------------------------------------------------------------
   case class TargetQuery10[$Target](tq1: TQ[$Target], tq2: TQ[$Target], tq3: TQ[$Target], tq4: TQ[$Target], tq5: TQ[$Target], tq6: TQ[$Target], tq7: TQ[$Target], tq8: TQ[$Target], tq9: TQ[$Target], tq10: TQ[$Target]) extends HasTargetQuerySeq[$Target] {
 	  override def tqs = Seq(tq1, tq2, tq3, tq4, tq5, tq6, tq7, tq8, tq9, tq10)
+	  
     def pathPairT(c: Cls)(implicit ev: $Target <:< KPath): PathPair10 = PathPair10(tq1.pathPairT(c), tq2.pathPairT(c), tq3.pathPairT(c), tq4.pathPairT(c), tq5.pathPairT(c), tq6.pathPairT(c), tq7.pathPairT(c), tq8.pathPairT(c), tq9.pathPairT(c), tq10.pathPairT(c))  
     def kpathT   (c: Cls)(implicit ev: $Target <:< KPath): KPaths10   = KPaths10  (tq1.path(c),      tq2.path(c),      tq3.path(c),      tq4.path(c),      tq5.path(c),      tq6.path(c),      tq7.path(c),      tq8.path(c),      tq9.path(c),      tq10.path(c))
-    def vldtAsOrigin(c: Cls): Errs = super._vldtAsOrigin(c)
+    
+    def vldtAsOrigin        (c: Cls): Errs = super._vldtAsOrigin(c)
+    def vldtAsNewDestination(c: Cls): Errs = super._vldtAsNewDestination(c)
   }
 
 // ===========================================================================

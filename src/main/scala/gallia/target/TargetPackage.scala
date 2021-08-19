@@ -75,7 +75,19 @@ package object target { // TODO: t210202090211 - p3 - rename package and homogen
     type TtqRPathz9 = TypedTargetQuery9[RPathz]
     
     type TtqKPath10  = TypedTargetQuery10[KPath]
-    type TtqRPathz10 = TypedTargetQuery10[RPathz]  
+    type TtqRPathz10 = TypedTargetQuery10[RPathz]
+  
+  // ===========================================================================
+  case class Duo[$Target](node: TypeNode, target: $Target) extends HasTypeNode // TODO: rename
+  
+  // ===========================================================================
+  trait CanResolve[$Target] { val resolve: Cls => $Target } // for TargetQuery
+  
+  // ---------------------------------------------------------------------------
+  trait CanValidateQuery { val vldtTargetQuery : Cls => Errs    }
+  
+  // ---------------------------------------------------------------------------
+  trait HasTypeSeq { def hts: Seq[HasType] } 
 }
 
 // ===========================================================================

@@ -26,6 +26,7 @@ private[gallia] object MetaValidation {
   def validType(pair: (Location, TypeNode)): Errs = validType(pair._1, pair._2)
 
   // ---------------------------------------------------------------------------
+  def validType (c: Cls, ht :     HasType ): Errs =                   validType(Location.Root, ht.node)
   def validTypes(c: Cls, hts: Seq[HasType]): Errs = hts.flatMap(ht => validType(Location.Root, ht.node))
 
   // ---------------------------------------------------------------------------
@@ -35,11 +36,7 @@ private[gallia] object MetaValidation {
   // ===========================================================================
   // type compability: check type validity too but not presence
 
-  def typeCompatibilities [$Target](c: Cls, duos: Seq[Duo[$Target]], mode: SpecialCardiMode): Errs =
-      duos.flatMap(_helper.typeCompatibility(c, _, mode))
-
-    // ---------------------------------------------------------------------------
-    def typeCompatibility[$Target](c: Cls, duo: Duo[$Target], mode: SpecialCardiMode): Errs =
+  def typeCompatibility[$Target](c: Cls, duo: Duo[$Target], mode: SpecialCardiMode): Errs =
       _helper.typeCompatibility(c, duo, mode)
 
     // ---------------------------------------------------------------------------

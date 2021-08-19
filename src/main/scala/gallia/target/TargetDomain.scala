@@ -9,24 +9,11 @@ import gallia.vldt.SpecialCardiMode
 import gallia.meta.Containee
 
 // ===========================================================================
-case class Duo[$Target](node: TypeNode, target: $Target) extends HasTypeNode // TODO: rename
+  trait HasTargetQuerySeq[$Target] {
+      def tqs: Seq[TargetQuery[$Target]]
 
-// ===========================================================================
-trait CanResolve[$Target] { val resolve: Cls => $Target } // for TargetQuery
-
-// ---------------------------------------------------------------------------
-trait CanValidateQuery { val vldtTargetQuery : Cls => Errs    }
-
-// ---------------------------------------------------------------------------
-trait HasTypeSeq { def hts: Seq[HasType] }
-
-// ===========================================================================
-trait CanValidateQueries { protected /* use do */ def vldtTargetQueries: Seq[CanValidateQuery] }
-
-  // ===========================================================================
-  trait HasTargetQuerySeq[$Target] extends CanValidateQueries {
-            def tqs                                     : Seq[TargetQuery[$Target]]
-      final def tqkpaths(implicit ev: $Target <:< KPath): Seq[TqKPath] = tqs.map(_.asInstanceOf[TqKPath])
+      final def  tqkpaths                   (implicit ev: $Target <:< KPath): Seq[TqKPath]  = tqs                    .map(_.asInstanceOf[TqKPath])
+      final def ttqkpaths(value: HasTypeSeq)(implicit ev: $Target <:< KPath): Seq[TtqKPath] = tqkpaths.zip(value.hts).map(x => TypedTargetQueryUtils.ttqkpath1(x._1, x._2))
 
       // ---------------------------------------------------------------------------
       def targets(c: Cls): Seq[$Target] = tqs.map(_.resolve(c))
@@ -38,15 +25,16 @@ trait CanValidateQueries { protected /* use do */ def vldtTargetQueries: Seq[Can
       // ---------------------------------------------------------------------------
       def pathz(c: Cls)(implicit ev: $Target <:< KPath): KPathz = KPathz(targets(c).asInstanceOf[Seq[KPath]])
 
-      // ---------------------------------------------------------------------------
-      // TODO: t210811103604 - move the fieldsRenaming parts of these individuals  
+      // ===========================================================================
+      // vldt
+  
       private[target] def _vldtAsOrigin(c: Cls): Errs =
-        tqs.foldLeft(Seq[Err]()) { case (curr, tq) => curr ++ tq.vldtAsOrigin(c) } ++ 
+          tqs.foldLeft(Seq[Err]())(_ ++ _.vldtAsOrigin(c)) ++ 
+          MetaValidation.distinctRPathz(__qpathz(c))
+  
+      private[target] def _vldtAsNewDestination(c: Cls): Errs =
+        tqs.foldLeft(Seq[Err]())(_ ++ _.vldtAsNewDestination(c)) ++ 
         MetaValidation.distinctRPathz(__qpathz(c))
-        
-      // ---------------------------------------------------------------------------
-      protected // use do
-        final override def vldtTargetQueries: Seq[CanValidateQuery] = tqs
     }
 
     // ===========================================================================
@@ -56,19 +44,26 @@ trait CanValidateQueries { protected /* use do */ def vldtTargetQueries: Seq[Can
       // ---------------------------------------------------------------------------
       final override def tqs: Seq[TargetQuery[$Target]] = ttqs.map(_.tq)
 
-      // ---------------------------------------------------------------------------
+      // ===========================================================================
       // vldt
-
-      // TODO: t210811103604 - move the typeCompatibilities parts of these individuals  
-      def vldtAsOrigin(c: Cls)                        : Errs = vldtAsOrigin(c, mode = SpecialCardiMode.Normal)
-      def vldtAsOrigin(c: Cls, mode: SpecialCardiMode): Errs = super._vldtAsOrigin(c) ++ MetaValidation.typeCompatibilities(c, ttqs.map(_.duo(c)), mode)
+  
+      def vldtAsOrigin        (c: Cls)                        : Errs = vldtAsOrigin(c, mode = SpecialCardiMode.Normal)
+      def vldtAsOrigin        (c: Cls, mode: SpecialCardiMode): Errs = ttqs.foldLeft(Seq[Err]())(_ ++ _.vldtAsOrigin(c))         ++ MetaValidation.distinctRPathz(__qpathz(c))      
+      def vldtAsNewDestination(c: Cls)                        : Errs = ttqs.foldLeft(Seq[Err]())(_ ++ _.vldtAsNewDestination(c)) ++ MetaValidation.distinctRPathz(__qpathz(c))
+      def vldtAsAnyDestination(c: Cls)                        : Errs = ttqs.foldLeft(Seq[Err]())(_ ++ _.vldtAsAnyDestination(c)) ++ MetaValidation.distinctRPathz(__qpathz(c))
 
       // ---------------------------------------------------------------------------
+      def vldtAsCotransformDestination(c: Cls, from: KPath) (implicit ev: $Target <:< gallia.KPath): Errs = vldtAsCotransformDestination(c, KPathz(Seq(from)))        
+      def vldtAsCotransformDestination(c: Cls, from: KPathz)(implicit ev: $Target <:< gallia.KPath): Errs =
+        ttqs.foldLeft(Seq[Err]())(_ ++ _.vldtAsCotransformDestination(c, from)) ++ MetaValidation.distinctRPathz(__qpathz(c))
+
+      // ===========================================================================
       // meta
 
       def containees(c:Cls)(implicit ev: $Target <:< KPath): Seq[Containee] = tqs.map(_.kpath_(c)).map(c.field(_).info.containee)
 
       // ---------------------------------------------------------------------------
+      @deprecated("see 210111095156") def puts0(c: Cls, from:  Containee)                    (implicit ev: $Target <:< KPath): Cls = puts0(c, Seq(from))
       @deprecated("see 210111095156") def puts0(c: Cls, froms: Seq[Containee] /* distinct */)(implicit ev: $Target <:< KPath): Cls =
           ttqs
             .map { ttq =>
@@ -102,26 +97,5 @@ trait CanValidateQueries { protected /* use do */ def vldtTargetQueries: Seq[Can
               ttq.node.containerType,
               soleContainee )
     }
-
-// ===========================================================================
-trait HasTtqKPaths[$Target] { self: HasTypeSeq with HasTargetQuerySeq[$Target] =>
-
-  def ttqkpaths(value: HasTypeSeq)(implicit ev: $Target <:< KPath): Seq[TtqKPath] =
-    tqkpaths.zip(value.hts).map(x => TypedTargetQueryUtils.ttqkpath1(x._1, x._2))
-
-}
-
-// ===========================================================================
-// TODO: rename...
-trait _TypedTargetQuery[$Target] extends HasTtqKPaths[$Target] { self: HasTypeSeq with HasTypedTargetQuerySeq[$Target] => // only need hts and __kpathz...
-
-  def vldtAsCotransformDestination(c: Cls, from: KPathz): Errs =
-    self.hts.thn(MetaValidation.validTypes(c, _)) ++
-    self.__kpathz(c).values // only authorize overwrite of origins
-      .filterNot(from.values.contains)
-      .flatMap { kpath =>
-        MetaValidation.fieldAbsence(c, kpath) }
-
-}
 
 // ===========================================================================

@@ -65,13 +65,13 @@ object ActionsUUSomewhatBasics {
 
       // ---------------------------------------------------------------------------
       def _meta(c: Cls): Cls =
-        target.__qpathz(c).thn { qpathz =>
+        target.qpathz_(c).thn { qpathz =>
           toOpt match {
             case None     => c.rename    (qpathz)
             case Some(to) => c.updateType(qpathz, to) } }
 
       // ---------------------------------------------------------------------------
-      def atomuus(c: Cls): AtomUUs = target.__qpathz(c).thn(_atoms(c)(_TransformVV(_, _helper.Translate.wrap(mapping, toOpt))))
+      def atomuus(c: Cls): AtomUUs = target.qpathz_(c).thn(_atoms(c)(_TransformVV(_, _helper.Translate.wrap(mapping, toOpt))))
     }
 
   // ===========================================================================

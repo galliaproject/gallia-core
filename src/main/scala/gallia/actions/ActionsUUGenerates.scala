@@ -19,7 +19,7 @@ object ActionsUUGenerates {
 
   case class Generate1VtoV(from: TtqKPath, to: TtqKPath, f: _ff11) extends ActionUUc {
         def  vldt (c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
-        def _meta (c: Cls): Cls   = to.puts0(c, from.containees(c))
+        def _meta (c: Cls): Cls   = to.puts0(c, from.containee(c))
         def atomuu(c: Cls): AtomUU = _Transform1to1(from.pathPairT(c), to.kpath_(c), from.wrapc(to, f) ) }
 
     // ===========================================================================
@@ -109,43 +109,43 @@ object ActionsUUGenerates {
     // ===========================================================================
     case class GenerateVto2V(from: TtqKPath, to: TtqKPath2, f: _ff12) extends ActionUUc {
         def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
-        def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c))
+        def _meta(c: Cls): Cls   = to.puts0(c, from.containee(c))
         def atomuu(c: Cls): AtomUU = _Transform1to2(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) }
 
       // ---------------------------------------------------------------------------
       case class GenerateVto3V(from: TtqKPath, to: TtqKPath3, f: _ff13) extends ActionUUc {
         def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
-        def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c))
+        def _meta(c: Cls): Cls   = to.puts0(c, from.containee(c))
         def atomuu(c: Cls): AtomUU = _Transform1to3(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) }
 
       // ---------------------------------------------------------------------------
       case class GenerateVto4V(from: TtqKPath, to: TtqKPath4, f: _ff14) extends ActionUUc {
         def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
-        def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c))
+        def _meta(c: Cls): Cls   = to.puts0(c, from.containee(c))
         def atomuu(c: Cls): AtomUU = _Transform1to4(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) }
 
       // ---------------------------------------------------------------------------
       case class GenerateVto5V(from: TtqKPath, to: TtqKPath5, f: _ff15) extends ActionUUc {
         def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
-        def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c))
+        def _meta(c: Cls): Cls   = to.puts0(c, from.containee(c))
         def atomuu(c: Cls): AtomUU = _Transform1to5(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) }
 
       // ---------------------------------------------------------------------------
       case class GenerateVto6V(from: TtqKPath, to: TtqKPath6, f: _ff16) extends ActionUUc {
         def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
-        def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c))
+        def _meta(c: Cls): Cls   = to.puts0(c, from.containee(c))
         def atomuu(c: Cls): AtomUU = _Transform1to6(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) }
 
       // ---------------------------------------------------------------------------
       case class GenerateVto7V(from: TtqKPath, to: TtqKPath7, f: _ff17) extends ActionUUc {
         def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
-        def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c))
+        def _meta(c: Cls): Cls   = to.puts0(c, from.containee(c))
         def atomuu(c: Cls): AtomUU = _Transform1to7(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) }
 
       // ---------------------------------------------------------------------------
       case class GenerateVto8V(from: TtqKPath, to: TtqKPath8, f: _ff18) extends ActionUUc {
         def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil//TODO
-        def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c))
+        def _meta(c: Cls): Cls   = to.puts0(c, from.containee(c))
         def atomuu(c: Cls): AtomUU = _Transform1to8(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) }
 
   // ===========================================================================

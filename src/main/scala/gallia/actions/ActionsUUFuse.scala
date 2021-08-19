@@ -79,6 +79,7 @@ object ActionsUUFuse {
         def atomuus(c: Cls): AtomUUs = _Transform8to1(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c)) }
 
   // ===========================================================================
+  @deprecated private[actions] def removals0(value : KPath) : Seq[AtomUU] = removals0(KPathz(Seq(value)))
   @deprecated private[actions] def removals0(values: KPathz): Seq[AtomUU] = // TODO: t210115175745
       values.toSeq.map(potentiallyNested(_Remove))
 

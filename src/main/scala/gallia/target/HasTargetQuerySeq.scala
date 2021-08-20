@@ -26,11 +26,11 @@ trait HasTargetQuerySeq[$Target] {
   // ===========================================================================
   // vldt
 
-  private[target] def _vldtAsOrigin(c: Cls): Errs =
-      tqs.foldLeft(Seq[Err]())(_ ++ _.vldtAsOrigin(c)) ++ 
-      MetaValidation.distinctRPathz(__qpathz(c))
+  def vldtAsOrigin(c: Cls): Errs =
+    tqs.foldLeft(Seq[Err]())(_ ++ _.vldtAsOrigin(c)) ++ 
+    MetaValidation.distinctRPathz(__qpathz(c))
 
-  private[target] def _vldtAsNewDestination(c: Cls): Errs =
+  def vldtAsNewDestination(c: Cls): Errs =
     tqs.foldLeft(Seq[Err]())(_ ++ _.vldtAsNewDestination(c)) ++ 
     MetaValidation.distinctRPathz(__qpathz(c))
 }

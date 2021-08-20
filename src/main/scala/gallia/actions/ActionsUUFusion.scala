@@ -9,9 +9,10 @@ import gallia.atoms.AtomsUUVeryBasics._
 import gallia.atoms.AtomsUUTransforms._
 
 // ===========================================================================
-object ActionsUUFuse {
+object ActionsUUFusion {
   //TODO: t210111095156 separate all the Whatever and t210111095157 case-class versions...
 
+  // ===========================================================================
   case class Fuse2(from: TtqKPath2, to: TtqKPath, f: _ff21) extends ActionUUb {
       def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil //FIXME: ensure some fields left + no whatevers
       def _meta(c: Cls): Cls   = to.puts1(c).remove(from.__kpathz(c))

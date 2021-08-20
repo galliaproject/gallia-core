@@ -2,11 +2,11 @@ package gallia.heads.common
 
 import gallia._
 import gallia.FunctionWrappers._
-import gallia.actions.ActionsUUFuse._
+import gallia.actions.ActionsUUFusion._
 import gallia.target.utils.TypedTargetQueryUtils._
 
 // ===========================================================================
-trait HeadCommonFuse[F <: HeadCommon[F]] { _: HeadCommon[F] =>
+trait HeadCommonFusion[F <: HeadCommon[F]] { _: HeadCommon[F] =>
   import TSL.FuseFission._
 
   // ---------------------------------------------------------------------------

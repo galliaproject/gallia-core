@@ -14,7 +14,7 @@ trait HeadCommon[F <: HeadCommon[F]]
       with    HeadCommonNestingRelated     [F]
       with    HeadCommonTransforms         [F]
       with    HeadCommonCotransforms       [F]
-      with    HeadCommonFuse               [F]
+      with    HeadCommonFusion             [F]
       with    HeadCommonFission            [F]
       with    HeadCommonGenerates          [F]
       with    HeadCommonMiscTransformations[F] {

@@ -7,7 +7,7 @@ import gallia.atoms.AtomsUUTransforms._
 import gallia.atoms.AtomsAsserts._AssertSameType
 
 // ===========================================================================
-object ActionsUUFission { import ActionsUUFuse.removals0
+object ActionsUUFission { import ActionsUUFusion.removals0
   //TODO: t210111095156 separate all the Whatever and t210111095157 case-class versions...
 
   // ===========================================================================

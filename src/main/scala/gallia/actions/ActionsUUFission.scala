@@ -2,6 +2,7 @@ package gallia.actions
 
 import gallia._
 import gallia.target._
+import gallia.domain._
 import gallia.FunctionWrappers._
 import gallia.atoms.AtomsUUTransforms._
 import gallia.atoms.AtomsAsserts._AssertSameType
@@ -83,7 +84,7 @@ object ActionsUUFission { import ActionsUUFusion.removals0
         removals0(from.kpathT(c)) }
     
   // ===========================================================================    
-  case class FissionWV2a(from: TqKPath, to: TqKPath2, f: _ff12) extends ActionUUb {
+  case class FissionWV2a(from: TqKPath, to: KPaths2, f: _ff12) extends ActionUUb {
       def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c)
 
       // ---------------------------------------------------------------------------
@@ -91,76 +92,72 @@ object ActionsUUFission { import ActionsUUFusion.removals0
         val fromPath = from.resolve(c)
         val info     = c.field(fromPath).info
 
-        c .add(to.tq1.resolve(c), info)
-          .add(to.tq2.resolve(c), info)
+        to.paths.foldLeft(c) { _.add(_, info) }
           .remove(fromPath)
       }
       
       // ---------------------------------------------------------------------------
       def atomuus(c: Cls): AtomUUs = {
         val fromPathPair = from. pathPairT(c)
-        val toPath       = to  .kpathT(c)
-        Seq(_Transform1to2(fromPathPair, toPath, f)) ++           
-        toPath.paths.map { toPath => _AssertSameType(fromPathPair, toPath) } ++
+        
+        Seq(_Transform1to2(fromPathPair, to, f)) ++           
+        to.paths.map { toPath => _AssertSameType(fromPathPair, toPath) } ++
         removals0(from.__kpathz(c))
       }
     }
 
-    // ---------------------------------------------------------------------------
-    case class FissionWV3a(from: TqKPath, to: TqKPath3, f: _ff13) extends ActionUUb {
+    // ===========================================================================
+    case class FissionWV3a(from: TqKPath, to: KPaths3, f: _ff13) extends ActionUUb {
         def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c)
 
         // ---------------------------------------------------------------------------
         def _meta  (c: Cls): Cls = {
           val fromPath = from.resolve(c)
           val info     = c.field(fromPath).info
-
-          c .add(to.tq1.resolve(c), info)
-            .add(to.tq2.resolve(c), info)
-            .add(to.tq3.resolve(c), info)
+  
+          to.paths.foldLeft(c) { _.add(_, info) }
             .remove(fromPath)
-        }        
+        }
       
         // ---------------------------------------------------------------------------
         def atomuus(c: Cls): AtomUUs = {
           val fromPathPair = from. pathPairT(c)
-          val toPath       = to  .kpathT(c)
-          Seq(_Transform1to3(fromPathPair, toPath, f)) ++           
-          toPath.paths.map { toPath => _AssertSameType(fromPathPair, toPath) } ++
+
+          Seq(_Transform1to3(fromPathPair, to, f)) ++           
+          to.paths.map { toPath => _AssertSameType(fromPathPair, toPath) } ++
           removals0(from.__kpathz(c))
         }        
     }
     
     // ===========================================================================
-    case class FissionWV2b(from: TqKPath, to: TtqKPath2, f: _ff12) extends ActionUUb {       
+    case class FissionWV2b(from: TqKPath, to: TKPaths2, f: _ff12) extends ActionUUb {       
         def vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c)
 
         // ---------------------------------------------------------------------------
-        def _meta(c: Cls): Cls    =          
-          c .add   (to.ttq1.fieldPair(c))
-            .add   (to.ttq2.fieldPair(c))
+        def _meta(c: Cls): Cls    =  
+          to
+            .values.map(_.fieldPair(c)).foldLeft(c)(_ add _)
             .remove(from.resolve(c))
 
         def atomuus(c: Cls): AtomUUs = Seq(               
-          _Transform1to2(from.pathPairT(c), to.kpathT(c), f )) ++ 
+          _Transform1to2(from.pathPairT(c), to.kpathT, f )) ++ 
           removals0(from.__kpathz(c))          
     }
 
     // ---------------------------------------------------------------------------
-    case class FissionWV3b(from: TqKPath, to: TtqKPath3, f: _ff13) extends ActionUUb {       
+    case class FissionWV3b(from: TqKPath, to: TKPaths3, f: _ff13) extends ActionUUb {       
         def vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c)
 
         // ---------------------------------------------------------------------------
         def _meta(c: Cls): Cls    =          
-          c .add   (to.ttq1.fieldPair(c))
-            .add   (to.ttq2.fieldPair(c))
-            .add   (to.ttq3.fieldPair(c))
+          to
+            .values.map(_.fieldPair(c)).foldLeft(c)(_ add _)
             .remove(from.resolve(c))
 
         // ---------------------------------------------------------------------------
         def atomuus(c: Cls): AtomUUs = Seq(               
-          _Transform1to3(from.pathPairT(c), to.kpathT(c), f )) ++ 
-          removals0(from.__kpathz(c))          
+          _Transform1to3(from.pathPairT(c), to.kpathT, f )) ++ 
+          removals0(from.__kpathz(c))
     }
 
 }

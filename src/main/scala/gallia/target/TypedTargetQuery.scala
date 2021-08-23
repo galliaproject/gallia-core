@@ -11,7 +11,7 @@ import gallia.vldt.SpecialCardiMode
 
 // ===========================================================================
 // term: t210201151634 - (target) replace "Query" with "Selection" throughout?
-case class TypedTargetQuery[$Target]( // t210110103720 - subclass TargetQuery and TypedTargetQuery rather than using (ev <:<
+case class TypedTargetQuery[$Target /* TODO: t210823111030 - ungenerify */]( // t210110103720 - subclass TargetQuery and TypedTargetQuery rather than using (ev <:<
         tq             : TargetQuery[$Target],
         node           : TypeNode,
         instantiator   : Instantiator,

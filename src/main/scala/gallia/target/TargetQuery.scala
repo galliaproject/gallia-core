@@ -8,7 +8,8 @@ import gallia.selection.untyped.processors.RPathzSelection
 import gallia.vldt.MetaValidation
 
 // ===========================================================================
-class TargetQuery[$Target]( //TODO: t210110103720 - subclass rather, in terms of $Target + pass actual selection when possible (especially for explicit)?
+class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](
+    //TODO: t210110103720 - subclass rather, in terms of $Target + pass actual selection when possible (especially for explicit)?
         val vldtTargetQuery : Cls => Errs,
         val resolve         : Cls => $Target /* 201005113232 - consistently same cardi/type by design */)
        extends CanValidateQuery

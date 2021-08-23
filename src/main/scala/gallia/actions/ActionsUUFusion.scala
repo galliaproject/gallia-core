@@ -7,6 +7,7 @@ import gallia.target._
 import gallia.FunctionWrappers._
 import gallia.atoms.AtomsUUVeryBasics._
 import gallia.atoms.AtomsUUTransforms._
+import gallia.atoms.AtomsAsserts._AssertSameType
 
 // ===========================================================================
 object ActionsUUFusion {
@@ -79,6 +80,87 @@ object ActionsUUFusion {
         def _meta(c: Cls): Cls   = to.puts0(c, from.containees(c)).remove(from.__kpathz(c))
         def atomuus(c: Cls): AtomUUs = _Transform8to1(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c)) }
 
+  // ===========================================================================    
+  case class FusionWV2a(from: TqKPath2, to: KPath, f: _ff21) extends ActionUUb {
+      def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c)
+
+      // ---------------------------------------------------------------------------
+      def _meta(c: Cls): Cls = {
+        val fromPath1 = from.tq1.resolve(c)
+        val fromPath2 = from.tq2.resolve(c)
+
+        c .add(to, fromPath1.thn(c.field).info) // choosing first arbitrarily (210817130604)
+          .remove (fromPath1)
+          .remove (fromPath2)
+      }
+
+      // ---------------------------------------------------------------------------
+      def atomuus(c: Cls): AtomUUs = {
+        val fromPathPair = from.pathPairT(c)
+
+        Seq(
+            _Transform2to1 (fromPathPair,       to, f),           
+            _AssertSameType(fromPathPair.pair1, to)) ++ // choosing first arbitrarily (210817130604)
+        removals0(from.__kpathz(c))
+      }
+    }
+
+    // ---------------------------------------------------------------------------    
+    case class FusionWV3a(from: TqKPath3, to: KPath, f: _ff31) extends ActionUUb {
+        def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c)
+  
+        // ---------------------------------------------------------------------------
+        def _meta(c: Cls): Cls = {
+          val fromPath1 = from.tq1.resolve(c)
+          val fromPath2 = from.tq2.resolve(c)
+          val fromPath3 = from.tq3.resolve(c)
+  
+          c .add(to, fromPath1.thn(c.field).info) // choosing first arbitrarily (210817130604)
+            .remove (fromPath1)
+            .remove (fromPath2)
+            .remove (fromPath3)
+        }
+  
+        // ---------------------------------------------------------------------------
+        def atomuus(c: Cls): AtomUUs = {
+          val fromPathPair = from.pathPairT(c)
+  
+          Seq(
+              _Transform3to1 (fromPathPair,       to, f),           
+              _AssertSameType(fromPathPair.pair1, to)) ++ // choosing first arbitrarily (210817130604)
+          removals0(from.__kpathz(c))
+        }
+      }  
+      
+  // ===========================================================================
+  case class FusionWV2b(from: TqKPath2, to: KPath, toType: TypeNode, f: _ff21) extends ActionUUb {       
+      def vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c) ++ _vldt.validType(toType)
+
+      def _meta(c: Cls): Cls    =          
+        c .add   (to, toType.forceNonBObjInfo)
+          .remove(from.tq1.resolve(c))
+          .remove(from.tq2.resolve(c))
+
+      def atomuus(c: Cls): AtomUUs =
+        _Transform2to1(from.pathPairT(c), to, f) +: // choosing first arbitrarily (210817130604)
+        removals0(from.__kpathz(c))                          
+    }
+    
+    // ---------------------------------------------------------------------------
+    case class FusionWV3b(from: TqKPath3, to: KPath, toType: TypeNode, f: _ff31) extends ActionUUb {       
+      def vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c) ++ _vldt.validType(toType)
+
+      def _meta(c: Cls): Cls    =          
+        c .add   (to, toType.forceNonBObjInfo)
+          .remove(from.tq1.resolve(c))
+          .remove(from.tq2.resolve(c))
+          .remove(from.tq3.resolve(c))
+
+      def atomuus(c: Cls): AtomUUs =
+        _Transform3to1(from.pathPairT(c), to, f) +: // choosing first arbitrarily (210817130604)
+        removals0(from.__kpathz(c))                          
+    }    
+    
   // ===========================================================================
   @deprecated private[actions] def removals0(value : KPath) : Seq[AtomUU] = removals0(KPathz(Seq(value)))
   @deprecated private[actions] def removals0(values: KPathz): Seq[AtomUU] = // TODO: t210115175745

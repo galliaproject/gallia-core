@@ -71,10 +71,16 @@ package object actions { // TODO: delegate access to all of AtomsUtils._
   type _TransformVV = gallia.atoms.AtomsUUTransforms._TransformVV
   val  _TransformVV = gallia.atoms.AtomsUUTransforms._TransformVV
   
-  // ---------------------------------------------------------------------------
+  // ===========================================================================
   implicit class Seq__[A](values: Seq[A]) {
     def orIfEmpty(generator: => Seq[A]): Seq[A] = if (values.isEmpty) generator else values // convenient for validations
   }
+  
+  // ---------------------------------------------------------------------------
+  implicit class KPath_(path: KPath) {
+    def vldtAsNewDestination(c: Cls) = _vldt.fieldAbsence(c, path)
+  }
+  
 }
 
 // ===========================================================================

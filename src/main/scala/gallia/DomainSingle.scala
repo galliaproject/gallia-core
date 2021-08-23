@@ -160,6 +160,11 @@ case class RPath(parent: Seq[Key], ren: Ren) {
   }
 
 // ===========================================================================
+case class TKPath (path: KPath, tipe: gallia.reflect.TypeNode) {    
+  def fieldPair(c: Cls): (KPath, gallia.meta.Info) = (path, tipe.forceNonBObjInfo)  
+}
+  
+// ===========================================================================
 case class OptionalKPath(value: Option[KPath]) {
     def appendLevel(key: Key): OptionalKPath =
       value

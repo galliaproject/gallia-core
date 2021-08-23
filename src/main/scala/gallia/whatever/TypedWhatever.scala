@@ -53,6 +53,8 @@ def - (value: Whatever): TypedWhatever[T] = ???//map(x => plus (x.any, value.any
   def + (value: Whatever): TypedWhatever[T] = map(x => plus (x.any, value.any).asInstanceOf[T])
   def * (value: Whatever): TypedWhatever[T] = map(x => times(x.any, value.any).asInstanceOf[T])
 
+def + (value: TypedWhatever[T]): TypedWhatever[T] = map(x => plus (x.any, value.forceOne/*FIXME*/.any).asInstanceOf[T])
+
   // ---------------------------------------------------------------------------
   @IntSize
   def  sizeString   : TypedWhatever[Int]     = mapString(_.size)

@@ -26,7 +26,7 @@ trait HeadCommonFission[F <: HeadCommon[F]] { _: HeadCommon[F] =>
           FissionWV2a(resolve(o).tqkpath, kpaths2(d1, d2),           wrap(f)(_.any))
 
         def using[D1: WTT, D2: WTT](f: WV => (TWV[D1], TWV[D2])): Self2 = self2 :+          
-          FissionWV2b(resolve(o).tqkpath, tkpaths2[D1, D2](d1, d2), wrap(f)(_.forceOne))      
+          FissionWV2b(resolve(o).tqkpath, tkpaths2[D1, D2](d1, d2), wrap(f)(_.typed))      
 
         def using[D1: WTT, D2: WTT](f: WV => (D1, D2))(implicit di: DI): Self2 = self2 :+
           FissionWV2b(resolve(o).tqkpath, tkpaths2[D1, D2](d1, d2), wrap(f)(x => x)) }
@@ -41,7 +41,7 @@ trait HeadCommonFission[F <: HeadCommon[F]] { _: HeadCommon[F] =>
           FissionWV3a(resolve(o).tqkpath, kpaths3(d1, d2, d3), wrap(f)(_.any))
           
         def using[D1: WTT, D2: WTT, D3: WTT](f: WV => (TWV[D1], TWV[D2], TWV[D3])): Self2 = self2 :+          
-          FissionWV3b(resolve(o).tqkpath, tkpaths3[D1, D2, D3](d1, d2, d3), wrap(f)(_.forceOne))      
+          FissionWV3b(resolve(o).tqkpath, tkpaths3[D1, D2, D3](d1, d2, d3), wrap(f)(_.typed))      
 
         def using[D1: WTT, D2: WTT, D3: WTT](f: WV => (D1, D2, D3))(implicit di: DI): Self2 = self2 :+
           FissionWV3b(resolve(o).tqkpath, tkpaths3[D1, D2, D3](d1, d2, d3), wrap(f)(x => x)) }

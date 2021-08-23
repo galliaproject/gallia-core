@@ -63,7 +63,7 @@ trait HeadCommonGenerates[F <: HeadCommon[F]] { _: HeadCommon[F] =>
               GenerateWV1a(resolve(f1).tqkpath, newPath,               wrap(f)(_).any)
 
             def using[D: WTT](f: WV => TWV[D]): Self2 = self2 :+
-              GenerateWV1b(resolve(f1).tqkpath, ttqkpath1[D](newPath), wrap(f)(_).forceOne)
+              GenerateWV1b(resolve(f1).tqkpath, ttqkpath1[D](newPath), wrap(f)(_).typed)
 
             def using[D: WTT](f: WV => D)(implicit di: DI): Self2 = self2 :+
               GenerateWV1b(resolve(f1).tqkpath, ttqkpath1[D](newPath), wrap(f)(_)) }
@@ -89,7 +89,7 @@ trait HeadCommonGenerates[F <: HeadCommon[F]] { _: HeadCommon[F] =>
               GenerateWV2a(resolve12(f1, f2).tqkpath2, newPath,               wrap(f)(_, _).any)
           
             def using[D: WTT](f: (WV, WV) => TWV[D]): Self2 = self2 :+
-              GenerateWV2b(resolve12(f1, f2).tqkpath2, ttqkpath1[D](newPath), wrap(f)(_, _).forceOne)
+              GenerateWV2b(resolve12(f1, f2).tqkpath2, ttqkpath1[D](newPath), wrap(f)(_, _).typed)
               
             def using[D: WTT](f: (WV, WV) => D)(implicit di: DI): Self2 = self2 :+
               GenerateWV2b(resolve12(f1, f2).tqkpath2, ttqkpath1[D](newPath), wrap(f)(_, _)) }
@@ -108,7 +108,7 @@ trait HeadCommonGenerates[F <: HeadCommon[F]] { _: HeadCommon[F] =>
               GenerateWV3a(resolve13(f1, f2, f3).tqkpath3, newPath,               wrap(f)(_, _, _).any)
           
             def using[D: WTT](f: (WV, WV, WV) => TWV[D]): Self2 = self2 :+
-              GenerateWV3b(resolve13(f1, f2, f3).tqkpath3, ttqkpath1[D](newPath), wrap(f)(_, _, _).forceOne)
+              GenerateWV3b(resolve13(f1, f2, f3).tqkpath3, ttqkpath1[D](newPath), wrap(f)(_, _, _).typed)
               
             def using[D: WTT](f: (WV, WV, WV) => D)(implicit di: DI): Self2 = self2 :+
               GenerateWV3b(resolve13(f1, f2, f3).tqkpath3, ttqkpath1[D](newPath), wrap(f)(_, _, _)) }

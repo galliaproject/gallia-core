@@ -84,15 +84,33 @@ class Whatever(private[gallia] val any: Any) extends AnyVal with Serializable { 
   // ===========================================================================
   def + (that: Any): Whatever =
     that match {
-    case x: Whatever => plus(this.any, x.any)
-    case _           => plus(this.any, that) }
+      case x: Whatever => plus(this.any, x.any)
+      case _           => plus(this.any, that) }
 
   // ---------------------------------------------------------------------------
   def * (that: Any): Whatever = // "foo" * 3 not allowed for now 
     that match {
-    case x: Whatever => times(this.any, x.any)
-    case _           => times(this.any, that) }
+      case x: Whatever => times(this.any, x.any)
+      case _           => times(this.any, that) }
 
+  // ---------------------------------------------------------------------------
+  def - (that: Any): Whatever = 
+    that match {
+      case x: Whatever => minus(this.any, x.any)
+      case _           => minus(this.any, that) }
+
+  // ---------------------------------------------------------------------------
+  def / (that: Any): Whatever = 
+    that match {
+      case x: Whatever => dividedBy(this.any, x.any)
+      case _           => dividedBy(this.any, that) }
+  
+  // ---------------------------------------------------------------------------
+  def % (that: Any): Whatever = 
+    that match {
+      case x: Whatever => modulo(this.any, x.any)
+      case _           => modulo(this.any, that) }
+  
   // ===========================================================================
   //TODO: t210111135617 - add more common operations?
   //TODO: t210113124437 - cardinality (will need to adapt mechanism to obtain 0 when missing)
@@ -113,8 +131,9 @@ class Whatever(private[gallia] val any: Any) extends AnyVal with Serializable { 
   //TODO: replace, remove, stripPrefix, ...
 
   // ---------------------------------------------------------------------------
-  def flip: TypedWhatever[Boolean] = _boolean(!_)
-
+  def flip    : TypedWhatever[Boolean] = _boolean(!_)
+  def unary_! : TypedWhatever[Boolean] = _boolean(!_)
+  
   // ---------------------------------------------------------------------------
   def increment: TypedWhatever[Int] = _int(_ + 1)
   def decrement: TypedWhatever[Int] = _int(_ - 1)
@@ -148,20 +167,12 @@ class Whatever(private[gallia] val any: Any) extends AnyVal with Serializable { 
         case x: Number => f(x.doubleValue)
         case x         => dataError(matchError("210113123521", x)) }
 
-  // ===========================================================================
-  private def applyx[T](f: Any => T): TypedWhatever[T] =
-    any match {
-      case seq: Seq[_]   => new TypedWhatever[T](Left (seq.map(f)))
-      case Some(x) => x match {
-        case seq: Seq[_] => new TypedWhatever[T](Left (seq.map(f)))
-        case sgl         => new TypedWhatever[T](Right(f(sgl))) }
-      case sgl           => new TypedWhatever[T](Right(f(sgl))) }
 }
 
 // ===========================================================================
 object Whatever {
   private[whatever] implicit def to   (value: Any):      Whatever    = new      Whatever         (value)
-  private           implicit def to[T](value: T)  : TypedWhatever[T] = new TypedWhatever[T](Right(value))
+  private           implicit def to[T](value: T)  : TypedWhatever[T] = new TypedWhatever[T](/*Right(*/value)//)
 
   // ---------------------------------------------------------------------------
   private[gallia] def formatDefault(value: Any): String = WhateverUtils.formatDefault(value)
@@ -191,7 +202,7 @@ object Whatever {
       case _         => 
         second match {
           case y: String => WhateverOperationForbidden("?*string").throwDataError()
-          case _         => whatever.WhateverTimes(first, second) } }
+          case _         => boilerplate.WhateverTimes(first, second) } }
   
   // ---------------------------------------------------------------------------
   private[gallia] def plus(first: Any, second: Any): Any =
@@ -200,8 +211,35 @@ object Whatever {
       case _         => 
         second match {
           case y: String => WhateverOperationForbidden("?+string").throwDataError()
-          case _         => whatever.WhateverPlus(first, second) } }
+          case _         => boilerplate.WhateverPlus(first, second) } }
 
+  // ---------------------------------------------------------------------------
+  private[gallia] def minus(first: Any, second: Any): Any =
+    first match {
+      case x: String => WhateverOperationForbidden("string-?").throwDataError()
+      case _         => 
+        second match {
+          case y: String => WhateverOperationForbidden("?-string").throwDataError()
+          case _         => boilerplate.WhateverMinus(first, second) } }
+
+  // ---------------------------------------------------------------------------
+  private[gallia] def dividedBy(first: Any, second: Any): Any =
+    first match {
+      case x: String => WhateverOperationForbidden("string/?").throwDataError()
+      case _         => 
+        second match {
+          case y: String => WhateverOperationForbidden("?/string").throwDataError()
+          case _         => boilerplate.WhateverDividedBy(first, second) } } // comes with all the warts of java's  division
+
+  // ---------------------------------------------------------------------------
+  private[gallia] def modulo(first: Any, second: Any): Any =
+    first match {
+      case x: String => WhateverOperationForbidden("string/?").throwDataError()
+      case _         => 
+        second match {
+          case y: String => WhateverOperationForbidden("?/string").throwDataError()
+          case _         => boilerplate.WhateverModulo(first, second) } } // comes with all the warts of java's  division
+  
 }
 
 // ===========================================================================

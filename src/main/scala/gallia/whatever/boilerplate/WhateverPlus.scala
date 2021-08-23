@@ -1,9 +1,9 @@
-package gallia.whatever
+package gallia.whatever.boilerplate
 
 // ===========================================================================
 object WhateverPlus {
 
-  /* keep in sync with WhateverTimes and vice versa (replacement: " * " <-> " + ") */
+  /* keep in sync with other boilerplate's Whatever{Plus,Times,...} */
   @gallia.NumberAbstraction 
   private[gallia] def apply(first: Any, second: Any): Any = {     
     first match { 

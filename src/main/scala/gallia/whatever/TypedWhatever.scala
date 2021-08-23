@@ -4,41 +4,30 @@ import gallia._
 
 // ===========================================================================
 /** when type is known (eg _.size will always result in a Int) but we need to remain in "whatever" land */
-class TypedWhatever[T](val either: Either[Seq[T], T]) extends AnyVal with Serializable {
+class TypedWhatever[T](val typed: T) extends Serializable { // can't be AnyVal since Whatever already is
   import Whatever._
   import WhateverImplicits._
-  
+
   // ---------------------------------------------------------------------------
   override def toString: String = formatDefault
-    def formatDefault: String = WhateverUtils.formatDefault(either.fold(identity, identity))
+
+    def formatDefault: String = WhateverUtils.formatDefault(typed)
 
   // ---------------------------------------------------------------------------
-  def unary_!                      (implicit ev: T =:= Boolean): TypedWhatever[Boolean] = map { !_.boolean }
-
-  def &&(y: TypedWhatever[Boolean])(implicit ev: T =:= Boolean): TypedWhatever[Boolean] = map { _.boolean && y.boolean }
-  def ||(y: TypedWhatever[Boolean])(implicit ev: T =:= Boolean): TypedWhatever[Boolean] = map { _.boolean || y.boolean }
-  def ^ (y: TypedWhatever[Boolean])(implicit ev: T =:= Boolean): TypedWhatever[Boolean] = map { _.boolean ^  y.boolean }
-  // TODO: also do | and &?
-
-  // ---------------------------------------------------------------------------
-  private[gallia] def map[T2](f: T => T2): TypedWhatever[T2] = new TypedWhatever[T2](either match {
-      case Left (l) => Left (l.map(f))
-      case Right(r) => Right(f(r)) })
+  private[gallia] def map[T2](f: T => T2): TypedWhatever[T2] = new TypedWhatever[T2](f(typed))
 
     private[gallia] def mapNumber [T2](f: Double  => T2): TypedWhatever[T2] = map { x => f(x.number.doubleValue) }
     private[gallia] def mapInt    [T2](f: Int     => T2): TypedWhatever[T2] = map { x => f(x.int) }
     private[gallia] def mapBoolean[T2](f: Boolean => T2): TypedWhatever[T2] = map { x => f(x.boolean) }
     private[gallia] def mapString [T2](f: String  => T2): TypedWhatever[T2] = map { x => f(x.string) }
-
-  // ---------------------------------------------------------------------------
-  private[gallia] def forceOne: T = either match {
-    case Left (l) => dataError(s"TODO:210112155242:${l}")
-    case Right(r) => r }
-
-  // ---------------------------------------------------------------------------
-  private[gallia] def value: Any = either.fold(identity, identity)
-
+  
   // ===========================================================================
+  def unary_!                      (implicit ev: T =:= Boolean): TypedWhatever[Boolean] = mapBoolean { !_ }
+
+  def &&(y: TypedWhatever[Boolean])(implicit ev: T =:= Boolean): TypedWhatever[Boolean] = mapBoolean { _ && y.boolean }
+  def ||(y: TypedWhatever[Boolean])(implicit ev: T =:= Boolean): TypedWhatever[Boolean] = mapBoolean { _ || y.boolean }
+
+  // ---------------------------------------------------------------------------
   def == (that: Whatever): TypedWhatever[Boolean] = map(_.any == that.any)
   def != (that: Whatever): TypedWhatever[Boolean] = map(_.any != that.any)
 
@@ -49,11 +38,22 @@ class TypedWhatever[T](val either: Either[Seq[T], T]) extends AnyVal with Serial
   def >= (that: Whatever): TypedWhatever[Boolean] = map(_.any.number.doubleValue >= that.any.number.doubleValue)
 
   // ---------------------------------------------------------------------------
-def - (value: Whatever): TypedWhatever[T] = ???//map(x => plus (x.any, value.any).asInstanceOf[T])  
-  def + (value: Whatever): TypedWhatever[T] = map(x => plus (x.any, value.any).asInstanceOf[T])
-  def * (value: Whatever): TypedWhatever[T] = map(x => times(x.any, value.any).asInstanceOf[T])
+  def + (value: Whatever): TypedWhatever[T] = map(x => plus     (x.any, value.any).asInstanceOf[T])
+  def * (value: Whatever): TypedWhatever[T] = map(x => times    (x.any, value.any).asInstanceOf[T])
+  
+  def - (value: Whatever): TypedWhatever[T] = map(x => minus    (x.any, value.any).asInstanceOf[T])
+  def / (value: Whatever): TypedWhatever[T] = map(x => dividedBy(x.any, value.any).asInstanceOf[T])
+  
+  def % (value: Whatever): TypedWhatever[T] = map(x => modulo   (x.any, value.any).asInstanceOf[T])
+  
+    // ---------------------------------------------------------------------------
+    def + (value: TypedWhatever[T]): TypedWhatever[T] = this.+(value.typed) // will cause issues with eg int/double (t210823164459)
+    def * (value: TypedWhatever[T]): TypedWhatever[T] = this.*(value.typed)
 
-def + (value: TypedWhatever[T]): TypedWhatever[T] = map(x => plus (x.any, value.forceOne/*FIXME*/.any).asInstanceOf[T])
+    def - (value: TypedWhatever[T]): TypedWhatever[T] = this.-(value.typed)
+    def / (value: TypedWhatever[T]): TypedWhatever[T] = this./(value.typed)
+
+    def % (value: TypedWhatever[T]): TypedWhatever[T] = this.%(value.typed)  
 
   // ---------------------------------------------------------------------------
   @IntSize

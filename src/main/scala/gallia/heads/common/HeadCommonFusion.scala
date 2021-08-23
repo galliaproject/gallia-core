@@ -83,7 +83,7 @@ trait HeadCommonFusion[F <: HeadCommon[F]] { _: HeadCommon[F] =>
           FusionWV2a(resolve2(o1, o2).tqkpath2, d.value, wrap(f)(_.any))
          
         def using[D: WTT](f: (WV, WV) => TWV[D]): Self2 = self2 :+          
-          FusionWV2b(resolve2(o1, o2).tqkpath2, d.value, node[D], wrap(f)(_.forceOne))      
+          FusionWV2b(resolve2(o1, o2).tqkpath2, d.value, node[D], wrap(f)(_.typed))      
 
         def using[D: WTT](f: (WV, WV) => D)(implicit di: DI): Self2 = self2 :+
           FusionWV2b(resolve2(o1, o2).tqkpath2, d.value, node[D], wrap(f)(x => x)) } }
@@ -99,7 +99,7 @@ trait HeadCommonFusion[F <: HeadCommon[F]] { _: HeadCommon[F] =>
           FusionWV3a(resolve3(o1, o2, o3).tqkpath3, d.value, wrap(f)(_.any))
          
         def using[D: WTT](f: (WV, WV, WV) => TWV[D]): Self2 = self2 :+          
-          FusionWV3b(resolve3(o1, o2, o3).tqkpath3, d.value, node[D], wrap(f)(_.forceOne))      
+          FusionWV3b(resolve3(o1, o2, o3).tqkpath3, d.value, node[D], wrap(f)(_.typed))      
 
         def using[D: WTT](f: (WV, WV, WV) => D)(implicit di: DI): Self2 = self2 :+
           FusionWV3b(resolve3(o1, o2, o3).tqkpath3, d.value, node[D], wrap(f)(x => x)) } }

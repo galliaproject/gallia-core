@@ -158,8 +158,8 @@ object FunctionWrappers {
             case sgl          => _unwrapWhatever2(sgl) }
 
       // ---------------------------------------------------------------------------
-      private def _unwrapWhatever1(value: Any): Any = value.asInstanceOf[Whatever].any
-      private def _unwrapWhatever2(value: Any): Any = value.asInstanceOf[whatever.TypedWhatever[_]].value
+      private def _unwrapWhatever1(value: Any): Any = value.asInstanceOf[              Whatever]   .any
+      private def _unwrapWhatever2(value: Any): Any = value.asInstanceOf[whatever.TypedWhatever[_]].typed
 
 }
 

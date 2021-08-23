@@ -42,9 +42,9 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { _: HeadCommon[F] =>
             case y: Seq[_] => y.map { z => g(f(new WV(z))) }
             case y         =>              g(f(new WV(y))) }
 
-      def using        (f: WV =>  WV)                   : Self2 = self2 :+ TransformWW1a(resolves(f1).tq,       wrap(f)(_.any)     (_))
-      def using[D: WTT](f: WV => TWV[D])                : Self2 = self2 :+ TransformWW1b(resolves(f1), node[D], wrap(f)(_.forceOne)(_))
-      def using[D: WTT](f: WV =>     D)(implicit di: DI): Self2 = self2 :+ TransformWW1b(resolves(f1), node[D], wrap(f)(x => x)    (_)) }
+      def using        (f: WV =>  WV)                   : Self2 = self2 :+ TransformWW1a(resolves(f1).tq,       wrap(f)(_.any)  (_))
+      def using[D: WTT](f: WV => TWV[D])                : Self2 = self2 :+ TransformWW1b(resolves(f1), node[D], wrap(f)(_.typed)(_))
+      def using[D: WTT](f: WV =>     D)(implicit di: DI): Self2 = self2 :+ TransformWW1b(resolves(f1), node[D], wrap(f)(x => x) (_)) }
 
     // ===========================================================================
     class _TransformVV[O: WTT](f1: Transform[O]) { val ttq = resolves(f1)

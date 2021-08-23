@@ -93,7 +93,7 @@ trait HeadZFiltering { _: HeadZ => // pretty messy, need to find a cleaner way t
         def hasSize(n: Int): Self = matches(Whatever.size(_) == n)
 
         // ---------------------------------------------------------------------------
-        def matches(f: WV => TWV[Boolean])                 : Self = zz(FilterByWV(tqkpath(target.value), f(_).forceOne))
+        def matches(f: WV => TWV[Boolean])                 : Self = zz(FilterByWV(tqkpath(target.value), f(_).typed))
         def matches(f: WV =>     Boolean) (implicit di: DI): Self = zz(FilterByWV(tqkpath(target.value), f))
       }
 

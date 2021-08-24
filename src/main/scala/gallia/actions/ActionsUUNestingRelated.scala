@@ -10,7 +10,7 @@ import gallia.atoms.AtomsUUResnesting
 
 // ===========================================================================
 object ActionsUUNestingRelated {
-  import gallia.actions.utils.ActionsUUUtils.potentialRenaming
+  import gallia.actions.utils.ActionsUtils.potentialRenaming
 
   // ===========================================================================
   class NestUnder(target: RPathz, destination: Key) extends ActionUUa {

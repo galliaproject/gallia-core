@@ -10,7 +10,7 @@ import gallia.atoms.AtomsUUSomewhatBasics._
 // ===========================================================================
 object ActionsUUSomewhatBasics {
   import gallia.actions.utils.{ActionsUUHelper => _helper}
-  import gallia.actions.utils.ActionsUUUtils._
+  import gallia.actions.utils.ActionsUtils._
 
   // ===========================================================================
   case class RemoveConditionally(target: TtqRPathz, pred: Any => Boolean) extends ActionUUb {

@@ -11,7 +11,7 @@ import gallia.atoms.AtomsUUTransforms._TransformWW
 // ===========================================================================
 object ActionsUUTransforms {
   import gallia.actions.utils
-  import utils.ActionsUUUtils._
+  import utils.ActionsUtils._
 
   // ===========================================================================
   private[actions] trait HasTqRPathzTarget { // TODO

@@ -7,7 +7,7 @@ import gallia.atoms.AtomsOthers._Nested
 import gallia.atoms.AtomsUUVeryBasics._Rename
 
 // ===========================================================================
-private[actions] object ActionsUUUtils {
+private[actions] object ActionsUtils {
 
   def _atoms(f: Key => AtomUU)(values: RPathz): Seq[AtomUU] = _atoms(values.values, f)
 

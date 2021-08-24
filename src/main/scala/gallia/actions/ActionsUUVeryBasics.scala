@@ -12,7 +12,7 @@ import gallia.actions.utils
 
 // ===========================================================================
 object ActionsUUVeryBasics {
-  import utils.ActionsUUUtils._
+  import utils.ActionsUtils._
 
   // ===========================================================================
   case object IdentityUU extends IdentityVM1 with IdentityUUa

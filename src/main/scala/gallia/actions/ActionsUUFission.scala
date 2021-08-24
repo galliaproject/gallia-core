@@ -8,7 +8,7 @@ import gallia.atoms.AtomsUUTransforms._
 import gallia.atoms.AtomsAsserts._AssertSameType
 
 // ===========================================================================
-object ActionsUUFission { import ActionsUUFusion.removals0
+object ActionsUUFission { import utils.ActionsUtils.{remove, removeAll}
   //TODO: t210111095156 separate all the Whatever and t210111095157 case-class versions...
 
   // ===========================================================================
@@ -17,7 +17,7 @@ object ActionsUUFission { import ActionsUUFusion.removals0
       def _meta(c: Cls): Cls   = to.puts0(c, from.containee(c)).remove(from.kpath_(c))
       def atomuus(c: Cls): AtomUUs = 
         _Transform1to2(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +:
-        removals0(from.kpathT(c)) }
+        remove(from.kpathT(c)) }
 
     // ---------------------------------------------------------------------------
     case class Fission3(from: TtqKPath, to: TtqKPath3, f: _ff13) extends ActionUUb {
@@ -25,7 +25,7 @@ object ActionsUUFission { import ActionsUUFusion.removals0
       def _meta(c: Cls): Cls   = to.puts0(c, from.containee(c)).remove(from.kpath_(c))
       def atomuus(c: Cls): AtomUUs = 
         _Transform1to3(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +:
-        removals0(from.kpathT(c)) }
+        remove(from.kpathT(c)) }
 
     // ---------------------------------------------------------------------------
     case class Fission4(from: TtqKPath, to: TtqKPath4, f: _ff14) extends ActionUUb {
@@ -33,7 +33,7 @@ object ActionsUUFission { import ActionsUUFusion.removals0
       def _meta(c: Cls): Cls   = to.puts0(c, from.containee(c)).remove(from.kpath_(c))
       def atomuus(c: Cls): AtomUUs = 
         _Transform1to4(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +:
-        removals0(from.kpathT(c)) }
+        remove(from.kpathT(c)) }
 
     // ---------------------------------------------------------------------------
     case class Fission5(from: TtqKPath, to: TtqKPath5, f: _ff15) extends ActionUUb {
@@ -41,7 +41,7 @@ object ActionsUUFission { import ActionsUUFusion.removals0
       def _meta(c: Cls): Cls   = to.puts0(c, from.containee(c)).remove(from.kpath_(c))
       def atomuus(c: Cls): AtomUUs = 
         _Transform1to5(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +:
-        removals0(from.kpathT(c)) }
+        remove(from.kpathT(c)) }
 
     // ---------------------------------------------------------------------------
     case class Fission6(from: TtqKPath, to: TtqKPath6, f: _ff16) extends ActionUUb {
@@ -49,7 +49,7 @@ object ActionsUUFission { import ActionsUUFusion.removals0
       def _meta(c: Cls): Cls   = to.puts0(c, from.containee(c)).remove(from.kpath_(c))
       def atomuus(c: Cls): AtomUUs = 
         _Transform1to6(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +:
-        removals0(from.kpathT(c)) }
+        remove(from.kpathT(c)) }
 
     // ---------------------------------------------------------------------------
     case class Fission7(from: TtqKPath, to: TtqKPath7, f: _ff17) extends ActionUUb {
@@ -57,7 +57,7 @@ object ActionsUUFission { import ActionsUUFusion.removals0
       def _meta(c: Cls): Cls   = to.puts0(c, from.containee(c)).remove(from.kpath_(c))
       def atomuus(c: Cls): AtomUUs = 
         _Transform1to7(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +:
-        removals0(from.kpathT(c)) }
+        remove(from.kpathT(c)) }
 
     // ---------------------------------------------------------------------------
     case class Fission8(from: TtqKPath, to: TtqKPath8, f: _ff18) extends ActionUUb {
@@ -65,7 +65,7 @@ object ActionsUUFission { import ActionsUUFusion.removals0
       def _meta(c: Cls): Cls   = to.puts0(c, from.containee(c)).remove(from.kpath_(c))
       def atomuus(c: Cls): AtomUUs = 
         _Transform1to8(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +:
-        removals0(from.kpathT(c)) }
+        remove(from.kpathT(c)) }
     
     // ---------------------------------------------------------------------------
     case class Fission9(from: TtqKPath, to: TtqKPath9, f: _ff19) extends ActionUUb {
@@ -73,7 +73,7 @@ object ActionsUUFission { import ActionsUUFusion.removals0
       def _meta(c: Cls): Cls   = to.puts0(c, from.containee(c)).remove(from.kpath_(c))
       def atomuus(c: Cls): AtomUUs = 
         _Transform1to9(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +:
-        removals0(from.kpathT(c)) }
+        remove(from.kpathT(c)) }
     
     // ---------------------------------------------------------------------------
     case class Fission10(from: TtqKPath, to: TtqKPath10, f: _ff1A) extends ActionUUb {
@@ -81,7 +81,7 @@ object ActionsUUFission { import ActionsUUFusion.removals0
       def _meta(c: Cls): Cls   = to.puts0(c, from.containee(c)).remove(from.kpath_(c))
       def atomuus(c: Cls): AtomUUs = 
         _Transform1to10(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +:
-        removals0(from.kpathT(c)) }
+        remove(from.kpathT(c)) }
     
   // ===========================================================================    
   case class FissionWV2a(from: TqKPath, to: KPaths2, f: _ff12) extends ActionUUb {
@@ -102,7 +102,7 @@ object ActionsUUFission { import ActionsUUFusion.removals0
         
         Seq(_Transform1to2(fromPathPair, to, f)) ++           
         to.paths.map { toPath => _AssertSameType(fromPathPair, toPath) } ++
-        removals0(from.__kpathz(c))
+        removeAll(from.__kpathz(c))
       }
     }
 
@@ -125,7 +125,7 @@ object ActionsUUFission { import ActionsUUFusion.removals0
 
           Seq(_Transform1to3(fromPathPair, to, f)) ++           
           to.paths.map { toPath => _AssertSameType(fromPathPair, toPath) } ++
-          removals0(from.__kpathz(c))
+          removeAll(from.__kpathz(c))
         }        
     }
     
@@ -141,7 +141,7 @@ object ActionsUUFission { import ActionsUUFusion.removals0
 
         def atomuus(c: Cls): AtomUUs = Seq(               
           _Transform1to2(from.pathPairT(c), to.kpathT, f )) ++ 
-          removals0(from.__kpathz(c))          
+          removeAll(from.__kpathz(c))          
     }
 
     // ---------------------------------------------------------------------------
@@ -157,7 +157,7 @@ object ActionsUUFission { import ActionsUUFusion.removals0
         // ---------------------------------------------------------------------------
         def atomuus(c: Cls): AtomUUs = Seq(               
           _Transform1to3(from.pathPairT(c), to.kpathT, f )) ++ 
-          removals0(from.__kpathz(c))
+          removeAll(from.__kpathz(c))
     }
 
 }

@@ -5,6 +5,7 @@ import gallia._
 import gallia.domain.PathPair
 import gallia.atoms.AtomsOthers._Nested
 import gallia.atoms.AtomsUUVeryBasics._Rename
+import gallia.atoms.AtomsUUVeryBasics._Remove
 
 // ===========================================================================
 private[actions] object ActionsUtils {
@@ -32,8 +33,8 @@ private[actions] object ActionsUtils {
         potentialRenaming(qpath).toSeq :+ f(PathPair(qpath.to, c.isOptional(qpath.from))) }
 
   // ===========================================================================
-  /*private */def potentialRenaming(value: Ren  ): Option[AtomUU] = value.actualOpt.map(_Rename)  
-  /*private */def potentialRenaming(value: RPath): Option[AtomUU] =
+  def potentialRenaming(value: Ren  ): Option[AtomUU] = value.actualOpt.map(_Rename)  
+  def potentialRenaming(value: RPath): Option[AtomUU] =
     value
       .initPair
       .mapSecond(_.actualOpt)
@@ -42,6 +43,18 @@ private[actions] object ActionsUtils {
           case (None        , Some(actualRen)) => Some(                _Rename(actualRen))
           case (Some(parent), Some(actualRen)) => Some(_Nested(parent, _Rename(actualRen))) }
 
+    
+  // ===========================================================================
+  def remove   (value : KPath)     : Seq[AtomUU] = removeAll(KPathz(Seq(value)))
+  def removeAll(values: KPathz)    : Seq[AtomUU] = removeAll(values.values)
+  def removeAll(values: Seq[KPath]): Seq[AtomUU] = values.toSeq.map(potentiallyNested(_Remove))      
+
+    // ---------------------------------------------------------------------------
+    private def potentiallyNested(nestee: Key => AtomUU)(path: KPath): AtomUU =
+      path.initPair match {
+        case (None      , leaf) =>                        nestee(leaf)
+        case (Some(tail), leaf) => _Nested(parent = tail, nestee(leaf)) }
+        
 }
 
 // ===========================================================================

@@ -1,5 +1,6 @@
 package gallia.actions.utils
 
+import aptus.Tuple2_
 import gallia._
 import gallia.domain.PathPair
 import gallia.atoms.AtomsOthers._Nested
@@ -17,7 +18,7 @@ private[actions] object ActionsUUUtils {
         .flatMap { qpath =>
           val (parentOpt, ren) = qpath.initPair
 
-          val roots = potentialRenaming(ren) :+ f(ren.to)
+          val roots = potentialRenaming(ren).toSeq :+ f(ren.to)
 
           parentOpt
             .map { parent => roots.map(_Nested(parent, _)) }
@@ -28,20 +29,18 @@ private[actions] object ActionsUUUtils {
   def _atoms(c: Cls)(f: PathPair => AtomUU)(values: Seq[RPath]): Seq[AtomUU] =
     values
       .flatMap { qpath =>
-        potentialRenaming(qpath) :+ f(PathPair(qpath.to, c.isOptional(qpath.from))) }
+        potentialRenaming(qpath).toSeq :+ f(PathPair(qpath.to, c.isOptional(qpath.from))) }
 
   // ===========================================================================
-  /*private */def potentialRenaming(ren : Ren  ): Seq[AtomUU] = ren.actualOpt.map(_Rename).toList
-  /*private */def potentialRenaming(path: RPath): Seq[AtomUU] = {
-    val (parentOpt, ren) = path.initPair
-
-    ren.actualOpt match {
-      case None                 => Nil
-      case Some(actualRenaming) =>
-        Seq(parentOpt match {
-          case None         =>                 _Rename(actualRenaming )
-          case Some(parent) => _Nested(parent, _Rename(actualRenaming)) }) }
-  }
+  /*private */def potentialRenaming(value: Ren  ): Option[AtomUU] = value.actualOpt.map(_Rename)  
+  /*private */def potentialRenaming(value: RPath): Option[AtomUU] =
+    value
+      .initPair
+      .mapSecond(_.actualOpt)
+        match {
+          case (_           , None           ) => None
+          case (None        , Some(actualRen)) => Some(                _Rename(actualRen))
+          case (Some(parent), Some(actualRen)) => Some(_Nested(parent, _Rename(actualRen))) }
 
 }
 

@@ -20,7 +20,7 @@ object ActionsUUNestingRelated {
         def _meta(c: Cls): Cls  = target.values.map(_.renFX).thn(Renz.apply).thn(c.nest(_, destination))
         def atomuus =
           _Nest(target.fromz.forceKeyz /*FIXME*/, destination) +:
-            target.map(_.prepend(destination)).flatMap(potentialRenaming).toSeq
+            target.map(_.prepend(destination)).flatMap(potentialRenaming(_).toSeq).toSeq
     }
 
     // ---------------------------------------------------------------------------
@@ -29,7 +29,7 @@ object ActionsUUNestingRelated {
         def _meta(c: Cls): Cls  = target.values.map(_.renFX).thn(Renz.apply).thn(c.nest(_, destination.from)).rename(destination)
         def atomuus =
           (_Nest(target.fromz.forceKeyz /*FIXME*/, destination.from) +:
-            target.map(_.prepend(destination.from)).flatMap(potentialRenaming).toSeq) ++ 
+            target.map(_.prepend(destination.from)).flatMap(potentialRenaming(_).toSeq).toSeq) ++ 
             potentialRenaming(destination)          
     }
 

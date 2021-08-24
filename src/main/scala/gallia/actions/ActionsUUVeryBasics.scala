@@ -101,8 +101,8 @@ object ActionsUUVeryBasics {
 
     // ---------------------------------------------------------------------------
     def atomuus(c: Cls): AtomUUs =
-        target.qpathz_(c).fromz.thn( targets => _Retain(targets, RetainMapping(targets.mapping))) +:
-        target.qpathz_(c)      .flatMap(_Nested.potentialRenaming)
+        target.qpathz_(c).fromz.thn { targets => _Retain(targets, RetainMapping(targets.mapping)) } +:
+        target.qpathz_(c)      .flatMap(potentialRenaming(_).toSeq)
   }
 
   // ===========================================================================
@@ -128,7 +128,7 @@ object ActionsUUVeryBasics {
         entries
           .forceDataEntries
           .flatMap { case (ren, value) =>
-            potentialRenaming(ren) :+
+            potentialRenaming(ren).toSeq :+
             _Add(ren.to, value) }
     }
 

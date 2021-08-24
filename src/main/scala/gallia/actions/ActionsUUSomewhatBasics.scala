@@ -79,8 +79,8 @@ object ActionsUUSomewhatBasics {
       def _meta(c: Cls): Cls  = c.swapFields(parentOpt, target1, target2)
       def atomuus =
         parentOpt match {
-          case None         =>                                            Seq(                   _Swap(target1, target2) )
-          case Some(parent) => _Nested.potentialRenaming(parent).toSeq ++ Seq(_Nested(parent.to, _Swap(target1, target2))) }
+          case None         =>                                    Seq(                   _Swap(target1, target2) )
+          case Some(parent) => potentialRenaming(parent).toSeq ++ Seq(_Nested(parent.to, _Swap(target1, target2))) }
     }
 
     // ---------------------------------------------------------------------------

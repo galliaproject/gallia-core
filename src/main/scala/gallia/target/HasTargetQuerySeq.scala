@@ -14,14 +14,14 @@ trait HasTargetQuerySeq[$Target] {
   final def ttqkpaths(value: HasTypeSeq)(implicit ev: $Target <:< KPath): Seq[TtqKPath] = tqkpaths.zip(value.hts).map(x => TypedTargetQueryUtils.ttqkpath1(x._1, x._2))
 
   // ---------------------------------------------------------------------------
-  def targets(c: Cls): Seq[$Target] = tqs.map(_.resolve(c))
+  def resolve(c: Cls): Seq[$Target] = tqs.map(_.resolve(c))
   
   // TODO: should be private
   /*private[target] */def __kpathz(c: Cls): KPathz = tqs.flatMap(_.__kpaths(c)).thn(KPathz.apply)
   /*private[target] */def __qpathz(c: Cls): RPathz = tqs.flatMap(_.__qpaths(c)).thn(RPathz.apply)
   
   // ---------------------------------------------------------------------------
-  def pathz(c: Cls)(implicit ev: $Target <:< KPath): KPathz = KPathz(targets(c).asInstanceOf[Seq[KPath]])
+  def pathz(c: Cls)(implicit ev: $Target <:< KPath): KPathz = KPathz(resolve(c).asInstanceOf[Seq[KPath]])
 
   // ===========================================================================
   // vldt

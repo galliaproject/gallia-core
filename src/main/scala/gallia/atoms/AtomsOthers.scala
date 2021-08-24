@@ -9,20 +9,15 @@ import gallia._
 object AtomsOthers {
 
   case class _Nested(parent: KPath, nestee: AtomUU) extends AtomUU { def naive(o: Obj) = {
-        // TODO: opt: meta-level info (common combinations)
-        val f = (x: Any) =>
-          x match {
-            case y: Seq[_] => y.map(_.asInstanceOf[Obj]).map(nestee.naive)
-            case y         => y      .asInstanceOf[Obj] .thn(nestee.naive) }
+      // TODO: opt: meta-level info (common combinations)
+      val f = (x: Any) =>
+        x match {
+          case y: Seq[_] => y.map(_.asInstanceOf[Obj]).map(nestee.naive)
+          case y         => y      .asInstanceOf[Obj] .thn(nestee.naive) }
 
-        o.transformPath(parent, f)
-      }
+      o.transformPath(parent, f)
     }
-
-    // ---------------------------------------------------------------------------
-    object _Nested {
-      def potentialRenaming(value: RPath): Option[AtomUU] = utils.AtomsUtils.potentialRenaming (value)
-    }
+  }
 
   // ===========================================================================
   case class _Unpivot(keyz: Keyz) extends AtomUU { def naive(u: Obj) = 

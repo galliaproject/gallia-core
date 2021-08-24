@@ -17,7 +17,7 @@ object ActionsUUFusion {
   case class Fuse2(from: TtqKPath2, to: TtqKPath, f: _ff21) extends ActionUUb {
       def  vldt(c: Cls): Errs  = from.vldtAsOrigin(c) ++ Nil //FIXME: ensure some fields left + no whatevers
       def _meta(c: Cls): Cls   = to.puts1(c).remove(from.__kpathz(c))
-      def atomuus(c: Cls): AtomUUs = _Transform2to1(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.__kpathz(c)) }
+      def atomuus(c: Cls): AtomUUs = _Transform2to1(from.pathPairT(c), to.kpathT(c), from.wrapc(to, f) ) +: removals0(from.resolve(c)) }
 
   // ---------------------------------------------------------------------------
   case class Fuse2WV(from: TqKPath2, toEither: Either[KPath, TtqKPath], multiple: Boolean, f: _ff21) extends ActionUUb { // TODO: split up WV1 vs WV2...
@@ -162,9 +162,9 @@ object ActionsUUFusion {
     }    
     
   // ===========================================================================
-  @deprecated private[actions] def removals0(value : KPath) : Seq[AtomUU] = removals0(KPathz(Seq(value)))
-  @deprecated private[actions] def removals0(values: KPathz): Seq[AtomUU] = // TODO: t210115175745
-      values.toSeq.map(potentiallyNested(_Remove))
+  @deprecated private[actions] def removals0(value : KPath)     : Seq[AtomUU] = removals0(KPathz(Seq(value)))
+  @deprecated private[actions] def removals0(values: KPathz)    : Seq[AtomUU] = removals0(values.values)
+  @deprecated private[actions] def removals0(values: Seq[KPath]): Seq[AtomUU] = values.toSeq.map(potentiallyNested(_Remove))// TODO: t210115175745      
 
     // ---------------------------------------------------------------------------
     private def potentiallyNested(nestee: Key => AtomUU)(path: KPath): AtomUU =

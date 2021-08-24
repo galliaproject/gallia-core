@@ -67,7 +67,7 @@ class NestedTransform(adag: MetaPlan, val rootId: RootId) { // TODO: as a peer o
         else          plan.V2.naiveRunZZ
 
     val pair = PathPair(path.to, optional)        
-    potentialRenaming(path) :+ _Transform1to1(pair, pair.path, f)
+    potentialRenaming(path).toSeq :+ _Transform1to1(pair, pair.path, f)
   }  
   
   // ---------------------------------------------------------------------------

@@ -8,13 +8,12 @@ import gallia.atoms.AtomsOthers._
 import gallia.atoms.AtomsUUVeryBasics._
 import gallia.target._
 import gallia.vldt.ErrorId
-import gallia.actions.utils
+import gallia.actions.utils.RenameDynamicallyHelper
+import gallia.actions.utils.ActionsUtils._
 
 // ===========================================================================
 object ActionsUUVeryBasics {
-  import utils.ActionsUtils._
 
-  // ===========================================================================
   case object IdentityUU extends IdentityVM1 with IdentityUUa
 
   // ---------------------------------------------------------------------------
@@ -61,7 +60,7 @@ object ActionsUUVeryBasics {
 
     // ===========================================================================
     case class RenameDynamically(modifier: SKey => SKey, recursively: Boolean) extends ActionUUb { // TODO: move to somewhat basics
-      private def results(c: Cls) = utils.RenameDynamicallyHelper.Results.parse(modifier, recursively)(c)
+      private def results(c: Cls) = RenameDynamicallyHelper.Results.parse(modifier, recursively)(c)
 
       // ---------------------------------------------------------------------------
       def  vldt(c: Cls): Errs =

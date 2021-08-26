@@ -16,7 +16,8 @@ trait HeadCommon[F <: HeadCommon[F]]
       with    HeadCommonCotransforms       [F] // TODO: t210826102833 - rework co-transforms
       with    HeadCommonFusion             [F]
       with    HeadCommonFission            [F]
-      with    HeadCommonGenerates          [F]
+      with    HeadCommonGenerusion         [F]
+      with    HeadCommonGenerission        [F]
       with    HeadCommonMiscTransformations[F] {
 
     def fullDag: ActionDag = gallia.env.Env.retrieveDagFromNode(nodeId)

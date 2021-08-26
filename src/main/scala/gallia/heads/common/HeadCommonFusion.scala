@@ -3,7 +3,6 @@ package gallia.heads.common
 import gallia._
 import gallia.FunctionWrappers._
 import gallia.actions.ActionsUUFusion._
-import gallia.target.utils.TypedTargetQueryUtils._
 
 // ===========================================================================
 trait HeadCommonFusion[F <: HeadCommon[F]] { _: HeadCommon[F] =>

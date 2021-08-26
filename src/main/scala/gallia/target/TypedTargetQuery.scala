@@ -64,14 +64,7 @@ case class TypedTargetQuery[$Target /* TODO: t210823111030 - ungenerify */]( // 
 
     def fromOverride(value: HasType)(implicit ev: $Target <:< KPath): TtqKPath = TypedTargetQueryUtils.ttqkpath1(tqkpath, this)
 
-    def forceData(c: Cls): $Target = tq.resolve(c)
-    
-    // ===========================================================================
-    // temporarily
-    private def asMultiple = new HasTypedTargetQuerySeq[$Target] { override def ttqs: Seq[TypedTargetQuery[$Target]] = Seq(self) }
-      @deprecated("see 210111095156") def puts0(c: Cls, from:  Containee)                    (implicit ev: $Target <:< KPath): Cls = puts0(c, Seq(from))
-      @deprecated("see 210111095156") def puts0(c: Cls, froms: Seq[Containee] /* distinct */)(implicit ev: $Target <:< KPath): Cls = asMultiple.puts0(c, froms)
-                                      def puts1(c: Cls)                                      (implicit ev: $Target <:< KPath): Cls = asMultiple.puts1(c)
+    def forceData(c: Cls): $Target = tq.resolve(c)    
   }
 
   // ===========================================================================
@@ -88,7 +81,7 @@ case class TypedTargetQuery[$Target /* TODO: t210823111030 - ungenerify */]( // 
       def pathPairT(c: Cls)(implicit ev: $Target <:< KPath): PathPair2 = tqkpath2.pathPairT(c)
 
       // ---------------------------------------------------------------------------
-      def fromOverride(value: HasTypes2)(implicit ev: $Target <:< KPath) = TypedTargetQueryUtils.ttqkpath2(ttqkpaths(value).force.tuple2)
+      def fromOverride(value: HasTypes2)(implicit ev: $Target <:< KPath) = TypedTargetQueryUtils.ttqkpath2(ttqkpaths(value).force.tuple2) // TODO: t210826102833 - rework co-transforms
     }
 
   // ===========================================================================
@@ -105,7 +98,7 @@ case class TypedTargetQuery[$Target /* TODO: t210823111030 - ungenerify */]( // 
       def pathPairT(c: Cls)(implicit ev: $Target <:< KPath): PathPair3 = tqkpath3.pathPairT(c)
 
       // ---------------------------------------------------------------------------
-      def fromOverride(value: HasTypes3)(implicit ev: $Target <:< KPath) = TypedTargetQueryUtils.ttqkpath3(ttqkpaths(value).force.tuple3)     
+      def fromOverride(value: HasTypes3)(implicit ev: $Target <:< KPath) = TypedTargetQueryUtils.ttqkpath3(ttqkpaths(value).force.tuple3) // TODO: t210826102833 - rework co-transforms     
     }
 
   // ===========================================================================

@@ -9,7 +9,7 @@ import gallia.FunctionWrappers._
 import gallia.actions.ActionsUUCotransforms._
 
 // ===========================================================================
-trait HeadCommonCotransforms[F <: HeadCommon[F]] { _: HeadCommon[F] =>
+trait HeadCommonCotransforms[F <: HeadCommon[F]] { _: HeadCommon[F] => // TODO: t210826102833 - rework co-transforms
 
   def cotransform[O1: WTT](f1: Cotransform[O1]) = new { import TSL.Cotransform._
       private val tmp = resolve(f1)

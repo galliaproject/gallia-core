@@ -2,6 +2,7 @@ package gallia
 
 import aptus.{Anything_, Seq_}
 import aptus.Option_
+import gallia.target.HasType
 
 // ===========================================================================
 case class ActualRen(from: Key, to: Key) { 
@@ -160,7 +161,9 @@ case class RPath(parent: Seq[Key], ren: Ren) {
   }
 
 // ===========================================================================
-case class TKPath (path: KPath, tipe: gallia.reflect.TypeNode) {    
+case class TKPath(path: KPath, tipe: gallia.reflect.TypeNode) extends gallia.target.HasTypeNode with HasType {
+  lazy val instantiator = null // FIXME: t210826103357
+  override val node = tipe
   def fieldPair(c: Cls): (KPath, gallia.meta.Info) = (path, tipe.forceNonBObjInfo)  
 }
   

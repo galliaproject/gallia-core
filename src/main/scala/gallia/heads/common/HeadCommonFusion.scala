@@ -28,50 +28,64 @@ trait HeadCommonFusion[F <: HeadCommon[F]] { _: HeadCommon[F] =>
     class _Fuse2[O1: WTT, O2: WTT](o1: Fusion[O1], o2: Fusion[O2]) {
         def as(d: KPathW) = new {
           def using[D1: WTT](f: (O1, O2) => D1): Self2 = self2 :+ 
-            Fuse2(resolve2(o1, o2), ttqkpath1[D1](d), wrap21(f)) } }
+            Fuse2(resolve2(o1, o2), tkpath[D1](d), wrap21(f)) } }
   
     // ---------------------------------------------------------------------------
     class _Fuse3[O1: WTT, O2: WTT, O3: WTT](
       o1: Fusion[O1], o2: Fusion[O2], o3: Fusion[O3]) {
         def as(d: KPathW) = new {
           def using[D1: WTT](f: (O1, O2, O3) => D1): Self2 = self2 :+
-            Fuse3(resolve3(o1, o2, o3), ttqkpath1[D1](d), wrap31(f)) } }
+            Fuse3(resolve3(o1, o2, o3), tkpath[D1](d), wrap31(f)) } }
 
     // ---------------------------------------------------------------------------
     class _Fuse4[O1: WTT, O2: WTT, O3: WTT, O4: WTT](
       o1: Fusion[O1], o2: Fusion[O2], o3: Fusion[O3], o4: Fusion[O4]) {
         def as(d: KPathW) = new {
           def using[D1: WTT](f: (O1, O2, O3, O4) => D1): Self2 = self2 :+
-            Fuse4(resolve4(o1, o2, o3, o4), ttqkpath1[D1](d), wrap41(f)) } }
+            Fuse4(resolve4(o1, o2, o3, o4), tkpath[D1](d), wrap41(f)) } }
 
     // ---------------------------------------------------------------------------
     class _Fuse5[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT](
       o1: Fusion[O1], o2: Fusion[O2], o3: Fusion[O3], o4: Fusion[O4], o5: Fusion[O5]) {
         def as(d: KPathW) = new {
           def using[D1: WTT](f: (O1, O2, O3, O4, O5) => D1): Self2 = self2 :+
-            Fuse5(resolve5(o1, o2, o3, o4, o5), ttqkpath1[D1](d), wrap51(f)) } }
+            Fuse5(resolve5(o1, o2, o3, o4, o5), tkpath[D1](d), wrap51(f)) } }
 
     // ---------------------------------------------------------------------------
     class _Fuse6[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT](
       o1: Fusion[O1], o2: Fusion[O2], o3: Fusion[O3], o4: Fusion[O4], o5: Fusion[O5], o6: Fusion[O6]) {
         def as(d: KPathW) = new {
           def using[D1: WTT](f: (O1, O2, O3, O4, O5, O6) => D1): Self2 = self2 :+
-            Fuse6(resolve6(o1, o2, o3, o4, o5, o6), ttqkpath1[D1](d), wrap61(f)) } }
+            Fuse6(resolve6(o1, o2, o3, o4, o5, o6), tkpath[D1](d), wrap61(f)) } }
 
     // ---------------------------------------------------------------------------
     class _Fuse7[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT, O7: WTT](
       o1: Fusion[O1], o2: Fusion[O2], o3: Fusion[O3], o4: Fusion[O4], o5: Fusion[O5], o6: Fusion[O6], o7: Fusion[O7]) {
         def as(d: KPathW) = new {
           def using[D1: WTT](f: (O1, O2, O3, O4, O5, O6, O7) => D1): Self2 = self2 :+
-            Fuse7(resolve7(o1, o2, o3, o4, o5, o6, o7), ttqkpath1[D1](d), wrap71(f)) } }
+            Fuse7(resolve7(o1, o2, o3, o4, o5, o6, o7), tkpath[D1](d), wrap71(f)) } }
 
     // ---------------------------------------------------------------------------
     class _Fuse8[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT, O7: WTT, O8: WTT](
       o1: Fusion[O1], o2: Fusion[O2], o3: Fusion[O3], o4: Fusion[O4], o5: Fusion[O5], o6: Fusion[O6], o7: Fusion[O7], o8: Fusion[O8]) {
         def as(d: KPathW) = new {
           def using[D1: WTT](f: (O1, O2, O3, O4, O5, O6, O7, O8) => D1): Self2 = self2 :+
-            Fuse8(resolve8(o1, o2, o3, o4, o5, o6, o7, o8), ttqkpath1[D1](d), wrap81(f)) } }
+            Fuse8(resolve8(o1, o2, o3, o4, o5, o6, o7, o8), tkpath[D1](d), wrap81(f)) } }
 
+    // ---------------------------------------------------------------------------
+    class _Fuse9[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT, O7: WTT, O8: WTT, O9: WTT](
+      o1: Fusion[O1], o2: Fusion[O2], o3: Fusion[O3], o4: Fusion[O4], o5: Fusion[O5], o6: Fusion[O6], o7: Fusion[O7], o8: Fusion[O8], o9: Fusion[O9]) {
+        def as(d: KPathW) = new {
+          def using[D1: WTT](f: (O1, O2, O3, O4, O5, O6, O7, O8, O9) => D1): Self2 = self2 :+
+            Fuse9(resolve9(o1, o2, o3, o4, o5, o6, o7, o8, o9), tkpath[D1](d), wrap91(f)) } }
+    
+    // ---------------------------------------------------------------------------
+    class _Fuse10[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT, O7: WTT, O8: WTT, O9: WTT, O10: WTT](
+      o1: Fusion[O1], o2: Fusion[O2], o3: Fusion[O3], o4: Fusion[O4], o5: Fusion[O5], o6: Fusion[O6], o7: Fusion[O7], o8: Fusion[O8], o9: Fusion[O9], o10: Fusion[O10]) {
+        def as(d: KPathW) = new {
+          def using[D1: WTT](f: (O1, O2, O3, O4, O5, O6, O7, O8, O9, O10) => D1): Self2 = self2 :+
+            Fuse10(resolve10(o1, o2, o3, o4, o5, o6, o7, o8, o9, o10), tkpath[D1](d), wrapA1(f)) } }
+    
   // ===========================================================================  
   class _Whatever2(o1: Fusion[WV], o2: Fusion[WV]) {
       def as(d: KPathW) = new {

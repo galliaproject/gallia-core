@@ -77,10 +77,15 @@ package object actions { // TODO: delegate access to all of AtomsUtils._
   }
   
   // ---------------------------------------------------------------------------
-  implicit class KPath_(path: KPath) {
-    def vldtAsNewDestination(c: Cls) = _vldt.fieldAbsence(c, path)
+  implicit class KPath__(value: KPath) {
+    def vldtAsNewDestination(c: Cls) = _vldt.fieldAbsence(c, value)   
   }
-  
+
+  // ---------------------------------------------------------------------------
+  implicit class TKPath__(value: TKPath) {
+    def vldtAsNewDestination(c: Cls) = value.path.vldtAsNewDestination(c) ++ _vldt.validType(value.tipe)
+  }
+
 }
 
 // ===========================================================================

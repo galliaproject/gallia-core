@@ -171,8 +171,8 @@ class Whatever(private[gallia] val any: Any) extends AnyVal with Serializable { 
 
 // ===========================================================================
 object Whatever {
-  private[whatever] implicit def to   (value: Any):      Whatever    = new      Whatever         (value)
-  private           implicit def to[T](value: T)  : TypedWhatever[T] = new TypedWhatever[T](/*Right(*/value)//)
+  private[whatever] implicit def to   (value: Any):      Whatever    = new      Whatever   (value)
+  private           implicit def to[T](value: T)  : TypedWhatever[T] = new TypedWhatever[T](value)
 
   // ---------------------------------------------------------------------------
   private[gallia] def formatDefault(value: Any): String = WhateverUtils.formatDefault(value)

@@ -13,7 +13,7 @@ trait HeadCommon[F <: HeadCommon[F]]
       with    HeadCommonAsserts            [F]
       with    HeadCommonNestingRelated     [F]
       with    HeadCommonTransforms         [F]
-      with    HeadCommonCotransforms       [F]
+      with    HeadCommonCotransforms       [F] // TODO: t210826102833 - rework co-transforms
       with    HeadCommonFusion             [F]
       with    HeadCommonFission            [F]
       with    HeadCommonGenerates          [F]

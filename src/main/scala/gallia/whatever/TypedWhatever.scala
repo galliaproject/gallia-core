@@ -4,7 +4,7 @@ import gallia._
 
 // ===========================================================================
 /** when type is known (eg _.size will always result in a Int) but we need to remain in "whatever" land */
-class TypedWhatever[T](val typed: T) extends Serializable { // can't be AnyVal since Whatever already is
+class TypedWhatever[+T](val typed: T) extends Serializable { // can't be AnyVal since Whatever already is
   import Whatever._
   import WhateverImplicits._
 
@@ -22,10 +22,10 @@ class TypedWhatever[T](val typed: T) extends Serializable { // can't be AnyVal s
     private[gallia] def mapString [T2](f: String  => T2): TypedWhatever[T2] = map { x => f(x.string) }
   
   // ===========================================================================
-  def unary_!                      (implicit ev: T =:= Boolean): TypedWhatever[Boolean] = mapBoolean { !_ }
+  def unary_!                      (implicit ev: T <:< Boolean): TypedWhatever[Boolean] = mapBoolean { !_ }
 
-  def &&(y: TypedWhatever[Boolean])(implicit ev: T =:= Boolean): TypedWhatever[Boolean] = mapBoolean { _ && y.boolean }
-  def ||(y: TypedWhatever[Boolean])(implicit ev: T =:= Boolean): TypedWhatever[Boolean] = mapBoolean { _ || y.boolean }
+  def &&(y: TypedWhatever[Boolean])(implicit ev: T <:< Boolean): TypedWhatever[Boolean] = mapBoolean { _ && y.boolean }
+  def ||(y: TypedWhatever[Boolean])(implicit ev: T <:< Boolean): TypedWhatever[Boolean] = mapBoolean { _ || y.boolean }
 
   // ---------------------------------------------------------------------------
   def == (that: Whatever): TypedWhatever[Boolean] = map(_.any == that.any)
@@ -47,13 +47,22 @@ class TypedWhatever[T](val typed: T) extends Serializable { // can't be AnyVal s
   def % (value: Whatever): TypedWhatever[T] = map(x => modulo   (x.any, value.any).asInstanceOf[T])
   
     // ---------------------------------------------------------------------------
-    def + (value: TypedWhatever[T]): TypedWhatever[T] = this.+(value.typed) // will cause issues with eg int/double (t210823164459)
-    def * (value: TypedWhatever[T]): TypedWhatever[T] = this.*(value.typed)
+    def + (value: TypedWhatever[_ >: Number]): TypedWhatever[T] = this.+(new Whatever(value.typed))
+    def * (value: TypedWhatever[_ >: Number]): TypedWhatever[T] = this.*(new Whatever(value.typed))
 
-    def - (value: TypedWhatever[T]): TypedWhatever[T] = this.-(value.typed)
-    def / (value: TypedWhatever[T]): TypedWhatever[T] = this./(value.typed)
+    def - (value: TypedWhatever[_ >: Number]): TypedWhatever[T] = this.-(new Whatever(value.typed))
+    def / (value: TypedWhatever[_ >: Number]): TypedWhatever[T] = this./(new Whatever(value.typed))
 
-    def % (value: TypedWhatever[T]): TypedWhatever[T] = this.%(value.typed)  
+    def % (value: TypedWhatever[_ >: Number]): TypedWhatever[T] = this.%(new Whatever(value.typed))
+
+      // ---------------------------------------------------------------------------
+      def + (value: Number): TypedWhatever[T] = this.+(new Whatever(value))
+      def * (value: Number): TypedWhatever[T] = this.*(new Whatever(value))
+  
+      def - (value: Number): TypedWhatever[T] = this.-(new Whatever(value))
+      def / (value: Number): TypedWhatever[T] = this./(new Whatever(value))
+  
+      def % (value: Number): TypedWhatever[T] = this.%(new Whatever(value))
 
   // ---------------------------------------------------------------------------
   @IntSize

@@ -27,7 +27,7 @@ private object SchemaInferrerUtils {
             .map { newField =>                      
               resolve(existingField, newField).force /* else would error at above (see 210802094043) */ }
             .getOrElse(existingField) }
-        .thn(Cls.apply)
+        .pipe(Cls.apply)
         .reviseRequirednessBasedOn(that) // not in that
         .addMissingFieldsFrom     (that) //     in that
     }

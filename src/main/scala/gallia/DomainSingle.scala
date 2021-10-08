@@ -173,7 +173,7 @@ case class OptionalKPath(value: Option[KPath]) {
       value
           .map(_.appendLevel(key))
           .orElse(Some(KPath.from(key)))
-        .thn(OptionalKPath.apply)
+        .pipe(OptionalKPath.apply)
 
     def forcePath: KPath = value.force
   }

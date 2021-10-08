@@ -134,7 +134,7 @@ trait AtomsUU extends ActionAN {
 
   // ===========================================================================
   trait AtomsZzToZ extends ActionAN {
-    final def atoms(ctx: NodeMetaContext): Atoms = ctx.afferents.force.tuple2.thn((dataz2 _).tupled)
+    final def atoms(ctx: NodeMetaContext): Atoms = ctx.afferents.force.tuple2.pipe((dataz2 _).tupled)
           def dataz2(c1: Cls , c2: Cls)  : Atoms }
 
 // ===========================================================================

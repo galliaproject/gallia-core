@@ -32,7 +32,7 @@ object ActionsZZMerging {
     def dataz2(c1: Cls , c2: Cls): Atoms =
       data
         .joinKeys(c1, c2)
-        .thn { joinKeys =>
+        .pipe { joinKeys =>
           data match {
             case bring  : BringData   => _Bring  (bring.targetKeys(c1, c2), joinKeys)
             case join   : JoinData    => _Join   (join   .joinType        , joinKeys)

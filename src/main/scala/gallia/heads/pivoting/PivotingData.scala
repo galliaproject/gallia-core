@@ -21,7 +21,7 @@ private[pivoting] case class PivotingData[O1: WTT, D: WTT](
     input.zu(ActionsOthers.Pivone(
         newKeys,
         column,
-        valueKey = target.thn(Squash.resolve(_)).tq))
+        valueKey = target.pipe(Squash.resolve(_)).tq))
 
   // ===========================================================================
   def pivot[O1: WTT, D: WTT](input: HeadZ): HeadZ =
@@ -30,7 +30,7 @@ private[pivoting] case class PivotingData[O1: WTT, D: WTT](
       .transform(_.objz(_tmp1)).using {
         _ .groupBy(column).as(_tmp2) // 200930125015 - this flattens, so must set defaults ahead of time if needed
 
-          .thn { headZ =>            
+          .pipe { headZ =>            
             aggOpt match {
               case None      => headZ.unnestOOO(_tmp2)
               case Some(agg) =>

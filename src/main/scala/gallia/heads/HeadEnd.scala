@@ -17,7 +17,7 @@ case class HeadEnd private (leafId : LeafId) {
       adagm
         .run().either
         .map(SuccessResultM.tupled)
-        .thn(RunResultM)
+        .pipe(RunResultM)
 
     // ===========================================================================
     private[gallia] def run[$Data](): RunResult[SuccessResult[$Data], $Data] =
@@ -25,7 +25,7 @@ case class HeadEnd private (leafId : LeafId) {
           .run().either
           .map(_.mapSecond(_.atomPlan.naiveRun().value.asInstanceOf[$Data]))
           .map(x => new SuccessResult(x._1, x._2))
-          .thn(new RunResult(_))
+          .pipe(new RunResult(_))
   
       // ---------------------------------------------------------------------------
       def runu(): RunResultU =
@@ -33,7 +33,7 @@ case class HeadEnd private (leafId : LeafId) {
           .run().either
           .map(_.mapSecond(_.atomPlan.naiveRun().forceO))
           .map(SuccessResultU.tupled)
-          .thn(RunResultU)
+          .pipe(RunResultU)
   
       // ---------------------------------------------------------------------------
       def runz(): RunResultZ =
@@ -41,7 +41,7 @@ case class HeadEnd private (leafId : LeafId) {
           .run().either
           .map(_.mapSecond(_.atomPlan.naiveRun().forceZ))
           .map(SuccessResultZ.tupled)
-          .thn(RunResultZ)
+          .pipe(RunResultZ)
   
       // ---------------------------------------------------------------------------
       def runv[T](): RunResultV[T] =
@@ -49,14 +49,14 @@ case class HeadEnd private (leafId : LeafId) {
           .run().either
           .map(_.mapSecond(_.atomPlan.naiveRun().forceT[T]))
           .map(x => SuccessResultV[T](x._1, x._2)) // TODO: t210117104246 - can use .tupled?
-          .thn(RunResultV[T])
+          .pipe(RunResultV[T])
 
     // ===========================================================================
     private def adagm: IntermediatePlan =
       Env
         .retrieveDagFromNode(leafId)
         .afferentSubGraph   (leafId)
-        .thn(IntermediatePlanPopulator.apply)
+        .pipe(IntermediatePlanPopulator.apply)
 
   }
 

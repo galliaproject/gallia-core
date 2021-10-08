@@ -18,17 +18,17 @@ sealed trait ReadProjection {
 
     // ---------------------------------------------------------------------------
     case class Removees1 (targets: KPathz) extends ReadProjection {
-      def resolve(allKeys: Keyz): Renz = targets.forceKeyzFX.values.thn(allKeys.values.diff).thn(Keyz.apply).renz
+      def resolve(allKeys: Keyz): Renz = targets.forceKeyzFX.values.pipe(allKeys.values.diff).pipe(Keyz.apply).renz
     }
 
     // ---------------------------------------------------------------------------
     case class Retainees2(targets: MIndexEntries) extends ReadProjection {
-      def resolve(allKeys: Keyz): Renz = targets.values.map(_.resolve(allKeys)).thn(Renz.apply)
+      def resolve(allKeys: Keyz): Renz = targets.values.map(_.resolve(allKeys)).pipe(Renz.apply)
     }
 
     // ---------------------------------------------------------------------------
     case class Removees2 (targets: Seq[MirrorIndex]) extends ReadProjection {
-      def resolve(allKeys: Keyz): Renz = targets.map(allKeys.values.apply).thn(allKeys.values.diff).thn(Keyz.apply).renz
+      def resolve(allKeys: Keyz): Renz = targets.map(allKeys.values.apply).pipe(allKeys.values.diff).pipe(Keyz.apply).renz
     }
   }
 

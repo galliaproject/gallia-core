@@ -24,7 +24,7 @@ object SchemaInferrer { // mostly for JSON for now...
     o .entries
       .map { case (key, value) =>
         Fld(key, info(value)) }
-      .thn(Cls.apply)
+      .pipe(Cls.apply)
 
   // ===========================================================================
   def info(value: AnyValue): Info =
@@ -35,7 +35,7 @@ object SchemaInferrer { // mostly for JSON for now...
               // a201113123227 - no heterogenous arrays
               _Nes -> //FIXME: pes/nes issue?
                 (seq.head match {
-                  case _: Obj => seq.map(_.asInstanceOf[Obj]).thn(klass)
+                  case _: Obj => seq.map(_.asInstanceOf[Obj]).pipe(klass)
                   case leaf   => containee(leaf) })
             case sgl => _One -> containee(value)
           })

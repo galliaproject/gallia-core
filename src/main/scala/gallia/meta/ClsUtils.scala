@@ -13,7 +13,7 @@ object ClsUtils {
         field.key ->
           field.info.potentiallyProcessNesting(
             value = itr.next()) }
-      .thn(gallia.obj)
+      .pipe(gallia.obj)
       .sideEffect(_ => assert(itr.isEmpty, dis /* TODO: pass original value? */))
 
 }

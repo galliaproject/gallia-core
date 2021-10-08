@@ -27,16 +27,16 @@ object ObjToGson {
       value match {
         case o: Obj                  => apply(o)
 
-        case e: enumeratum.EnumEntry => e.entryName.thn(Gson.toJsonTree)
+        case e: enumeratum.EnumEntry => e.entryName.pipe(Gson.toJsonTree)
         //TODO: t210110095228 - scala enum
 
         // can't seem to get JsonSerializer to work
         // TODO: t210116162405 - don't use timestamp?
-        case x: LocalDate     => x                            .toEpochDay   .thn(Gson.toJsonTree) // or rely on gson's default serialization?
-        case x: LocalDateTime => x.atZone(SystemDefaultZoneId).toEpochSecond.thn(Gson.toJsonTree)
+        case x: LocalDate     => x                            .toEpochDay   .pipe(Gson.toJsonTree) // or rely on gson's default serialization?
+        case x: LocalDateTime => x.atZone(SystemDefaultZoneId).toEpochSecond.pipe(Gson.toJsonTree)
 
-        case x: BigInt     => x.toString /* TODO: ok? */.thn(Gson.toJsonTree) // or rely on gson's default serialization?
-        case x: BigDecimal => x.toString /* TODO: ok? */.thn(Gson.toJsonTree)
+        case x: BigInt     => x.toString /* TODO: ok? */.pipe(Gson.toJsonTree) // or rely on gson's default serialization?
+        case x: BigDecimal => x.toString /* TODO: ok? */.pipe(Gson.toJsonTree)
 
         case b => Gson.toJsonTree(b) }
 

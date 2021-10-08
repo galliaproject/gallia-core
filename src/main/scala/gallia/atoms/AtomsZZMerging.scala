@@ -15,7 +15,7 @@ object AtomsZZMerging {
   case class _Bring(targetKeys: Keyz, joinKeys: JoinKey) extends AtomZZtoZ { def naive(z1: Objs, z2: Objs) =
       z2.flatMap {
           _.retainOpt(targetKeys.prepend(joinKeys.right)) }
-        .thn(z1.join(JoinType.left, joinKeys)) }
+        .pipe(z1.join(JoinType.left, joinKeys)) }
 
     // ---------------------------------------------------------------------------
     case class _Join(joinType: JoinType, joinKeys: JoinKey) extends AtomZZtoZ { def naive(z1: Objs, z2: Objs) =

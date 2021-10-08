@@ -17,7 +17,7 @@ object AtomsUUZip {
       .froms
       .map { key => _Split(key, _.splitBy(sep)) }
         .foldLeft(o)((curr, atom) => atom.naive(curr))
-      .thn { splitted =>
+      .pipe { splitted =>
         splitted.add(
           newNestingKey,
           objs(splitted, keys)) }
@@ -26,7 +26,7 @@ object AtomsUUZip {
   // ===========================================================================
   private def objs(splitted: Obj, keys: Renz): Seq[Obj] =
     valuess(splitted, keys.froms)
-      .thn(preTranspose)
+      .pipe(preTranspose)
       .transpose
       .map(keys.tos.values.zip(_))
       .map(obj)

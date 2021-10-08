@@ -20,8 +20,8 @@ trait CanSetSchemaFluency[Fluency] { _: HasSelf[Fluency] =>
   // ---------------------------------------------------------------------------
   // TODO: separate validation...
   // TODO: t210128103821 - generalize schema i/o for any format schema-like that can be (reasonnably) parsed, may be useful and limit code duplication (JSON schema, ...)
-  final def schema[T: WTT]                 : Fluency = cls[T]             .thn(explicitSchema)
-  final def schema(schemaFilePath: String) : Fluency = cls(schemaFilePath).thn(explicitSchema)
+  final def schema[T: WTT]                 : Fluency = cls[T]             .pipe(explicitSchema)
+  final def schema(schemaFilePath: String) : Fluency = cls(schemaFilePath).pipe(explicitSchema)
   final def schema(field1: Fld, more: Fld*): Fluency = explicitSchema(Cls(field1 +: more))
   final def schema(c: Cls)                 : Fluency = explicitSchema(c)
 

@@ -17,8 +17,8 @@ trait HasTargetQuerySeq[$Target] {
   def resolve(c: Cls): Seq[$Target] = tqs.map(_.resolve(c))
   
   // TODO: should be private
-  /*private[target] */def __kpathz(c: Cls): KPathz = tqs.flatMap(_.__kpaths(c)).thn(KPathz.apply)
-  /*private[target] */def __qpathz(c: Cls): RPathz = tqs.flatMap(_.__qpaths(c)).thn(RPathz.apply)
+  /*private[target] */def __kpathz(c: Cls): KPathz = tqs.flatMap(_.__kpaths(c)).pipe(KPathz.apply)
+  /*private[target] */def __qpathz(c: Cls): RPathz = tqs.flatMap(_.__qpaths(c)).pipe(RPathz.apply)
   
   // ---------------------------------------------------------------------------
   def pathz(c: Cls)(implicit ev: $Target <:< KPath): KPathz = KPathz(resolve(c).asInstanceOf[Seq[KPath]])

@@ -57,7 +57,7 @@ trait ClsBasics { self: Cls =>
 
   // ===========================================================================
   @deprecated("favor combo retain+rename") def retain(key : Ren) : Cls = { requireRenamingKey(key); rewrap(field(key).in.seq) }
-  @deprecated("favor combo retain+rename") def retain(keys: Renz): Cls = retain(keys.froms).thn { x => keys.foldLeft(x)(_ rename _) }
+  @deprecated("favor combo retain+rename") def retain(keys: Renz): Cls = retain(keys.froms).pipe { x => keys.foldLeft(x)(_ rename _) }
 
   def retain(value: Key  ): Cls = rewrap(field(value).in.seq)
   def retain(value: KeyW): Cls = retain(value.value)
@@ -71,7 +71,7 @@ trait ClsBasics { self: Cls =>
         mapping.get(key).map {
           case None              => field(key)
           case Some(nestedPaths) => field(key).transformInfo(_.transformNestedClass(_.retain(nestedPaths))) } }
-      .thn(Cls.apply)
+      .pipe(Cls.apply)
   }
 
   // ===========================================================================

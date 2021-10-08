@@ -12,7 +12,7 @@ case class JdbcInputZ1(
       queryingOpt: Option[ReadQuerying] /* missing if URI-driven */)
     extends ActionIZd {
   def vldt: Errs = Nil //TODO
-  def _meta: Cls = atomiz.naive.force.toListAndTrash.thn(SchemaInferrer.klass) //TODO: t201223092238 - use JDBC meta instead
+  def _meta: Cls = atomiz.naive.force.toListAndTrash.pipe(SchemaInferrer.klass) //TODO: t201223092238 - use JDBC meta instead
   def atomiz = _JdbcInputZ1(inputString, queryingOpt) }
 
 // ---------------------------------------------------------------------------
@@ -21,7 +21,7 @@ case class JdbcInputZ2(
       querying: ReadQuerying)
     extends ActionIZd {
   def vldt: Errs = Nil //TODO
-  def _meta: Cls = atomiz.naive.force.toListAndTrash.thn(SchemaInferrer.klass) //TODO: t201223092238 - use JDBC meta instead
+  def _meta: Cls = atomiz.naive.force.toListAndTrash.pipe(SchemaInferrer.klass) //TODO: t201223092238 - use JDBC meta instead
   def atomiz = _JdbcInputZ2(connection, querying) }
 
 // ===========================================================================

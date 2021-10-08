@@ -48,14 +48,14 @@ object ActionsUUVeryBasics {
         else             _ReorderKeys           (tmp)
 
       // ---------------------------------------------------------------------------
-      private def tmp: Seq[Key] => Seq[Key] = _.map(_.name).thn(f).map(_.symbol)
+      private def tmp: Seq[Key] => Seq[Key] = _.map(_.name).pipe(f).map(_.symbol)
     }
 
   // ===========================================================================
   case class Rename(target: RPathz) extends ActionUUa {
       def  vldt(c: Cls): Errs    = _vldt.fieldsRenaming(c, target)
       def _meta(c: Cls): Cls     = target.foldLeft(c)(_ rename _)
-      def atomuus      : AtomUUs = target.thn(_atoms(_ => _IdentityUU)) // note: Identities get removed
+      def atomuus      : AtomUUs = target.pipe(_atoms(_ => _IdentityUU)) // note: Identities get removed
     }
 
     // ===========================================================================
@@ -69,7 +69,7 @@ object ActionsUUVeryBasics {
           qpathz            => _vldt.fieldsRenaming(c, qpathz))
 
       def _meta  (c: Cls): Cls   =   results(c).forceRPathz.foldLeft(c)(_ rename _)
-      def atomuus(c: Cls): AtomUUs = results(c).forceRPathz.thn(_atoms(_, _ => _IdentityUU))
+      def atomuus(c: Cls): AtomUUs = results(c).forceRPathz.pipe(_atoms(_, _ => _IdentityUU))
     }
 
   // ===========================================================================
@@ -78,7 +78,7 @@ object ActionsUUVeryBasics {
 
     //FIXME: if nesting?
     def _meta  (c: Cls): Cls     = target.qpathz_(c).forceKPathz.foldLeft(c)(_ remove _)
-    def atomuus(c: Cls): AtomUUs = target.qpathz_(c).forceKPathz.thn(_atoms(_, _Remove))
+    def atomuus(c: Cls): AtomUUs = target.qpathz_(c).forceKPathz.pipe(_atoms(_, _Remove))
   }
 
   // ===========================================================================
@@ -93,14 +93,14 @@ object ActionsUUVeryBasics {
     def _meta(c: Cls): Cls =
       target
         .qpathz_(c)
-        .thn { targets =>
+        .pipe { targets =>
           targets
-            .fromz.thn(c.retain)
-            .thn(_.rename(targets)) }
+            .fromz.pipe(c.retain)
+            .pipe(_.rename(targets)) }
 
     // ---------------------------------------------------------------------------
     def atomuus(c: Cls): AtomUUs =
-        target.qpathz_(c).fromz.thn { targets => _Retain(targets, RetainMapping(targets.mapping)) } +:
+        target.qpathz_(c).fromz.pipe { targets => _Retain(targets, RetainMapping(targets.mapping)) } +:
         target.qpathz_(c)      .flatMap(potentialRenaming(_).toSeq)
   }
 

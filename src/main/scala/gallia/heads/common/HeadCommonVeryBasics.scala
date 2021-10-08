@@ -22,7 +22,7 @@ trait HeadCommonVeryBasics[F <: HeadCommon[F]] { _: HeadCommon[F] =>
 
     // ---------------------------------------------------------------------------
     class _Rename (x: KPathW) {
-      def using(f: SKey => SKey): Self2 = rename(x).to(x.value.skey.thn(f).symbol)
+      def using(f: SKey => SKey): Self2 = rename(x).to(x.value.skey.pipe(f).symbol)
       def to   (y: KeyW)        : Self2 = self2 :+ new Rename(RPathz(Seq(x.qpath(y)))) }
 
   // ---------------------------------------------------------------------------

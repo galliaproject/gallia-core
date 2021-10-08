@@ -23,14 +23,14 @@ sealed trait MergingData {
     def joinKeys(c1: Cls, c2: Cls): JoinKey =
       joinKeysOpt match {
         case Some(joinKeys) => joinKeys
-        case None           => c1.keys.intersect(c2.keys).force.one.thn(JoinKey.common) } // already validated by here
+        case None           => c1.keys.intersect(c2.keys).force.one.pipe(JoinKey.common) } // already validated by here
   }
 
   // ===========================================================================
   object MergingData {
     //TODO: 210117143536 - also handle union in here?
 
-    def from(conf: Start => End): MergingData = new Start().thn(conf).data
+    def from(conf: Start => End): MergingData = new Start().pipe(conf).data
 
     // ===========================================================================
     case class CoGroupData(
@@ -56,8 +56,8 @@ sealed trait MergingData {
         super
           .joinKeys(c1, c2)
           .right
-          .thn { rightJoinKey => targets.resolve(c2).filterNot(_ == rightJoinKey) }
-          .thn(Keyz.apply)
+          .pipe { rightJoinKey => targets.resolve(c2).filterNot(_ == rightJoinKey) }
+          .pipe(Keyz.apply)
 
   }
 

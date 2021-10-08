@@ -10,7 +10,7 @@ trait HeadUOut { _: HeadU =>
 
   def write()                                         : HeadU = write(x => x)
   def write(uri: UriString)                           : HeadU = write(_.entirelyUriDriven(uri))
-  def write(f: StartWriteUFluency => EndWriteUFluency): HeadU = StartU.thn(f).conf.actionU.thn(uo)
+  def write(f: StartWriteUFluency => EndWriteUFluency): HeadU = StartU.pipe(f).conf.actionU.pipe(uo)
     .sideEffect/*If(_.underlyingDagHasOnlyOutputLeaves /* 210205063004 */) - FIXME: t210122140324 */ {
       _.end.runu().either match {
           case Left (errors)  => throw errors.metaErrorOpt.get
@@ -45,7 +45,7 @@ trait HeadZOut { _: HeadZ =>
   def write()                                         : HeadZ = write(x => x)
   def write(uri: UriString)                           : HeadZ = write(_.entirelyUriDriven(uri))
   def write(uri: UriString, container: String)        : HeadZ = ??? // TODO: t201230105232
-  def write(f: StartWriteZFluency => EndWriteZFluency): HeadZ = StartZ.thn(f).conf.actionZ.thn(zo)
+  def write(f: StartWriteZFluency => EndWriteZFluency): HeadZ = StartZ.pipe(f).conf.actionZ.pipe(zo)
     .sideEffect/*If(_.underlyingDagHasOnlyOutputLeaves /* 210205063004 */) - FIXME: t210122140324 */ {
       _.end.runz().either match {
           case Left (errors)  => throw errors.metaErrorOpt.get

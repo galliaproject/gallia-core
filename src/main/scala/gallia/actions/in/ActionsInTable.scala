@@ -40,34 +40,34 @@ case class TableInputZ( // TODO: t210101150123 - split up?
         input
           .firstLine()
           .splitXsv(sep)
-          .thn { cells =>
-            if (hasHeader && !indexKeysMode) cells.map(_.thnIf(_.isEmpty)(_ => "_missing").symbol)
-            else                             cells.size.thn(sizeToKeys) }
-          .thn(Cls.from)
+          .pipe { cells =>
+            if (hasHeader && !indexKeysMode) cells.map(_.pipeIf(_.isEmpty)(_ => "_missing").symbol)
+            else                             cells.size.pipe(sizeToKeys) }
+          .pipe(Cls.from)
 
       // ---------------------------------------------------------------------------
       def inferFully(keys: Seq[Key]) =
           atomiz // will ignore uninitialised defaultCls2 (see t201214105653 and t210106120036)
             .stringObjs(keys)
-            /*.thn(projectData(cc)) TODO: data projection (wasteful)...*/
-            .thn(TableSchemaInferrer.fullInferring(cellConf, keys))
+            /*.pipe(projectData(cc)) TODO: data projection (wasteful)...*/
+            .pipe(TableSchemaInferrer.fullInferring(cellConf, keys))
 
         // ---------------------------------------------------------------------------
         def inferStringsOnly(keys: Seq[Key]) =
           atomiz // will ignore uninitialised defaultCls2 (see t201214105653 and t210106120036)
             .stringObjs(keys)
-            /*.thn(projectData(cc)) TODO: data projection (wasteful)...*/
-            .thn(TableSchemaInferrer.stringsOnly(cellConf, keys))
+            /*.pipe(projectData(cc)) TODO: data projection (wasteful)...*/
+            .pipe(TableSchemaInferrer.stringsOnly(cellConf, keys))
 
       // ---------------------------------------------------------------------------
       (schemaProvider match {
             case Tsp.NoInferring        => default
             case Tsp.StringsOnly        => inferStringsOnly(default.keys)
             case Tsp.InferSchema        => inferFully(default.keys)
-            case Tsp.ExplicitKeys(keyz) => inferFully(default.keys).thn(renameKeys(keyz))
+            case Tsp.ExplicitKeys(keyz) => inferFully(default.keys).pipe(renameKeys(keyz))
             case Tsp.ExplicitSchema(c)  => c /* TODO: allow contradictions even in field names vs header? */ })
         .sideEffect(defaultCls2 = _)
-        .thn(projectMeta) // note: must come after sideEffect because for now it's not a proper retain (we still read it all first) - see t210106120036
+        .pipe(projectMeta) // note: must come after sideEffect because for now it's not a proper retain (we still read it all first) - see t210106120036
     }
 
     // ===========================================================================
@@ -81,7 +81,7 @@ case class TableInputZ( // TODO: t210101150123 - split up?
       c .fields
         .zip(keyz.values) // TODO: check same size
         .map { case (field, newKey) => field.copy(key = newKey) }
-        .thn(Cls.apply)
+        .pipe(Cls.apply)
 
    // ===========================================================================
    def atomiz =

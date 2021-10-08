@@ -51,7 +51,7 @@ object ActionsCustoms {
         def from(meta: Cls => Cls, data: Seq[Obj] => Seq[Obj]): CustomZZ =
           new CustomZZ(
               meta,
-              _.toListAndTrash.thn(data).thn(Objs.from))
+              _.toListAndTrash.pipe(data).pipe(Objs.from))
       }
 
 }

@@ -1,9 +1,6 @@
-package gallia.actions
+package gallia
+package actions
 
-import scala.util.chaining._
-import aptus.Anything_
-
-import gallia._
 import gallia.target._
 import gallia.atoms.AtomsCustom._
 import gallia.plans.AtomPlan
@@ -15,62 +12,62 @@ object ActionsFor {
 
   // ===========================================================================
   case class ForPathUU(target: TqKPath, f: (HeadU, KPath) => HeadU) extends ActionUUc {
-      protected def resolve(c: Cls): HeadU => HeadU = target.resolve(c).thn(p => u => f(u, p))
+      protected def resolve(c: Cls): HeadU => HeadU = target.resolve(c).pipe(p => u => f(u, p))
 
       // ---------------------------------------------------------------------------
-      def  vldt  (c: Cls): Errs   = resolve(c).thn(parseUU)._vldt(c) //TODO: validate target too
-      def _meta  (c: Cls): Cls    = resolve(c).thn(parseUU)._meta(c)
-      def  atomuu(c: Cls): AtomUU = resolve(c).thn(parseUU).dataU2U(c).thn(_CustomOO)
+      def  vldt  (c: Cls): Errs   = resolve(c).pipe(parseUU)._vldt(c) //TODO: validate target too
+      def _meta  (c: Cls): Cls    = resolve(c).pipe(parseUU)._meta(c)
+      def  atomuu(c: Cls): AtomUU = resolve(c).pipe(parseUU).dataU2U(c).pipe(_CustomOO)
     }
 
     // ---------------------------------------------------------------------------
     case class ForPathZZ(target: TqKPath, f: (HeadZ, KPath) => HeadZ) extends ActionZZc {
-      private def resolve(c: Cls): HeadZ => HeadZ = target.resolve(c).thn { p => z => f(z, p) }
+      private def resolve(c: Cls): HeadZ => HeadZ = target.resolve(c).pipe { p => z => f(z, p) }
 
       // ---------------------------------------------------------------------------
-      def  vldt  (c: Cls): Errs   = resolve(c).thn(parseZZ)._vldt(c)
-      def _meta  (c: Cls): Cls    = resolve(c).thn(parseZZ)._meta(c)
-      def  atomzz(c: Cls): AtomZZ = resolve(c).thn(parseZZ).dataZ2Z(c).thn(_CustomZZ)
+      def  vldt  (c: Cls): Errs   = resolve(c).pipe(parseZZ)._vldt(c)
+      def _meta  (c: Cls): Cls    = resolve(c).pipe(parseZZ)._meta(c)
+      def  atomzz(c: Cls): AtomZZ = resolve(c).pipe(parseZZ).dataZ2Z(c).pipe(_CustomZZ)
     }
 
     // ===========================================================================
     case class ForPathUZ(target: TqKPath, f: (HeadU, KPath) => HeadZ) extends ActionUZc {
-      protected def resolve(c: Cls): HeadU => HeadZ = target.resolve(c).thn(p => u => f(u, p))
+      protected def resolve(c: Cls): HeadU => HeadZ = target.resolve(c).pipe(p => u => f(u, p))
 
       // ---------------------------------------------------------------------------
-      def  vldt  (c: Cls): Errs   = resolve(c).thn(parseUZ)._vldt(c)
-      def _meta  (c: Cls): Cls    = resolve(c).thn(parseUZ)._meta(c)
-      def  atomuz(c: Cls): AtomUZ = resolve(c).thn(parseUZ).dataU2Z(c).thn(_CustomOZ)
+      def  vldt  (c: Cls): Errs   = resolve(c).pipe(parseUZ)._vldt(c)
+      def _meta  (c: Cls): Cls    = resolve(c).pipe(parseUZ)._meta(c)
+      def  atomuz(c: Cls): AtomUZ = resolve(c).pipe(parseUZ).dataU2Z(c).pipe(_CustomOZ)
     }
 
     // ---------------------------------------------------------------------------
     case class ForPathZU(target: TqKPath, f: (HeadZ, KPath) => HeadU) extends ActionZUc {
-      protected def resolve(c: Cls): HeadZ => HeadU = target.resolve(c).thn(p => z => f(z, p))
+      protected def resolve(c: Cls): HeadZ => HeadU = target.resolve(c).pipe(p => z => f(z, p))
 
       // ---------------------------------------------------------------------------
-      def  vldt  (c: Cls): Errs   = resolve(c).thn(parseZU)._vldt(c)
-      def _meta  (c: Cls): Cls    = resolve(c).thn(parseZU)._meta(c)
-      def  atomzu(c: Cls): AtomZU = resolve(c).thn(parseZU).dataZ2U(c).thn(_CustomZO)
+      def  vldt  (c: Cls): Errs   = resolve(c).pipe(parseZU)._vldt(c)
+      def _meta  (c: Cls): Cls    = resolve(c).pipe(parseZU)._meta(c)
+      def  atomzu(c: Cls): AtomZU = resolve(c).pipe(parseZU).dataZ2U(c).pipe(_CustomZO)
     }
 
     // ===========================================================================
     case class ForPathUV[V: WTT](target: TqKPath, f: (HeadU, KPath) => HeadV[V]) extends ActionUVc2 {
-      private def resolve(c: Cls): HeadU => HeadV[V] = target.resolve(c).thn(k => u => f(u, k))
+      private def resolve(c: Cls): HeadU => HeadV[V] = target.resolve(c).pipe(k => u => f(u, k))
 
       // ---------------------------------------------------------------------------
-      def  vldt  (c: Cls): Errs   = resolve(c).thn(parseUV)._vldt(c)
-      def _meta  (c: Cls): Cls    = resolve(c).thn(parseUV)._meta(c)
-      def  atomuv(c: Cls): AtomUV = resolve(c).thn(parseUV).dataU2V(c).thn(_CustomOV)
+      def  vldt  (c: Cls): Errs   = resolve(c).pipe(parseUV)._vldt(c)
+      def _meta  (c: Cls): Cls    = resolve(c).pipe(parseUV)._meta(c)
+      def  atomuv(c: Cls): AtomUV = resolve(c).pipe(parseUV).dataU2V(c).pipe(_CustomOV)
     }
 
     // ---------------------------------------------------------------------------
     case class ForPathZV[V: WTT](target: TqKPath, f: (HeadZ, KPath) => HeadV[V]) extends ActionZVc2 {
-      private def resolve(c: Cls): HeadZ => HeadV[V] = target.resolve(c).thn(k => x => f(x, k))
+      private def resolve(c: Cls): HeadZ => HeadV[V] = target.resolve(c).pipe(k => x => f(x, k))
 
       // ---------------------------------------------------------------------------
-      def  vldt  (c: Cls): Errs   = resolve(c).thn(parseZV)._vldt(c)
-      def _meta  (c: Cls): Cls    = resolve(c).thn(parseZV)._meta(c)
-      def  atomzv(c: Cls): AtomZV = resolve(c).thn(parseZV).dataZ2V(c).thn(_CustomZV)
+      def  vldt  (c: Cls): Errs   = resolve(c).pipe(parseZV)._vldt(c)
+      def _meta  (c: Cls): Cls    = resolve(c).pipe(parseZV)._meta(c)
+      def  atomzv(c: Cls): AtomZV = resolve(c).pipe(parseZV).dataZ2V(c).pipe(_CustomZV)
     }
 
   // ===========================================================================

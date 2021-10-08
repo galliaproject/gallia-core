@@ -23,7 +23,7 @@ trait ObjsOperations { self: Objs =>
   def distinct: Objs = self._modifyUnderlyingStreamer(_.distinct)
 
   // ---------------------------------------------------------------------------
-  def union(that: Objs): Objs = self.values.union(that.values).thn(Objs.build)
+  def union(that: Objs): Objs = self.values.union(that.values).pipe(Objs.build)
 
   // ---------------------------------------------------------------------------
   def sortBy(c: Cls, pair: SortingPair): Objs =

@@ -14,7 +14,7 @@ object ActionPlanPopulator {
         val afferents: Seq[Cls] = asg.afferentNodes(node.id).map(_.cls)
 
         node.actionNode(afferents) }
-      .thn(ActionPlan.apply)
+      .pipe(ActionPlan.apply)
 
 }
 

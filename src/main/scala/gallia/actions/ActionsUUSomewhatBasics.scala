@@ -19,14 +19,14 @@ object ActionsUUSomewhatBasics {
         else                    target.vldtAsOrigin(c, mode = SpecialCardiMode.IgnoreRequiredness)
 
       def _meta  (c: Cls): Cls     = target.tq.qpathz_(c).foldLeft(c)(_ toNonRequired _)
-      def atomuus(c: Cls): AtomUUs = target.tq.qpathz_(c).thn(_atoms(_RemoveIf(_, pred ))) }
+      def atomuus(c: Cls): AtomUUs = target.tq.qpathz_(c).pipe(_atoms(_RemoveIf(_, pred ))) }
 
     // ===========================================================================
     case class RemoveConditionallyWhatever(target: TqRPathz, value: Any) extends ActionUUb {
       def  vldt(c: Cls): Errs = target.vldtAsOrigin(c) // TODO: no need to check if some fields are left
 
       def _meta  (c: Cls): Cls     = target.qpathz_(c).foldLeft(c)(_ toNonRequired _)
-      def atomuus(c: Cls): AtomUUs = target.qpathz_(c).thn(_atoms(_RemoveWhateverIf(_, value))) }
+      def atomuus(c: Cls): AtomUUs = target.qpathz_(c).pipe(_atoms(_RemoveWhateverIf(_, value))) }
 
   // ===========================================================================
   case class SetDefault(target: TtqRPathz, value: AnyValue) extends ActionUUb {
@@ -36,7 +36,7 @@ object ActionsUUSomewhatBasics {
       //TODO: check was opt? what about multiple?
 
     def _meta(c: Cls): Cls   = target.qpathz_(c).foldLeft(c)(_ toRequired _)
-    def atomuus(c: Cls): AtomUUs = target.qpathz_(c).thn(_atoms(_SetDefault(_, value)))
+    def atomuus(c: Cls): AtomUUs = target.qpathz_(c).pipe(_atoms(_SetDefault(_, value)))
   }
 
   // ===========================================================================
@@ -65,13 +65,13 @@ object ActionsUUSomewhatBasics {
 
       // ---------------------------------------------------------------------------
       def _meta(c: Cls): Cls =
-        target.qpathz_(c).thn { qpathz =>
+        target.qpathz_(c).pipe { qpathz =>
           toOpt match {
             case None     => c.rename    (qpathz)
             case Some(to) => c.updateType(qpathz, to) } }
 
       // ---------------------------------------------------------------------------
-      def atomuus(c: Cls): AtomUUs = target.qpathz_(c).thn(_atoms(c)(_TransformVV(_, _helper.Translate.wrap(mapping, toOpt))))
+      def atomuus(c: Cls): AtomUUs = target.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, _helper.Translate.wrap(mapping, toOpt))))
     }
 
   // ===========================================================================

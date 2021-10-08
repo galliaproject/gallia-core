@@ -36,7 +36,7 @@ object AtomsHelper {
                 case y: Seq[_] => ???//TODO: can't happen throw illegal
                 case y         => y }
             case x => x }) }
-      .thn(gallia.obj)
+      .pipe(gallia.obj)
 
   // ===========================================================================
   def unnestOOO (o: Obj, parent: KPath, key: Key  ): Obj = AtomsUtils.nestingx(o, parent)(unnestOOO (_, _, key ))(unnestOOO (_, _, key ))

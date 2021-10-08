@@ -1,4 +1,5 @@
-package gallia.inferring.table
+package gallia
+package inferring.table
 
 import aptus.Anything_
 
@@ -22,7 +23,7 @@ object BooleanDetector {
 
   // ===========================================================================
   def isLikelyBoolean(values: Set[String]): Boolean =
-    values.map(_.toLowerCase /* likely better heuristic than not */).thn { y =>
+    values.map(_.toLowerCase /* likely better heuristic than not */).pipe { y =>
         BooleanValues.exists(_           == y) ||
         FlagValues   .exists(x => Set(x) == y) }
 

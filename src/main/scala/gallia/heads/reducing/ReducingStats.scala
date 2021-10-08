@@ -22,7 +22,7 @@ private[reducing] object ReducingStats { // 210118083814
       cls(
           _count    .int,
           _distinct .int)
-        .thnIf(optional) {
+        .pipeIf(optional) {
           _.add(_present  .int) }
 
     // ---------------------------------------------------------------------------
@@ -85,7 +85,7 @@ private[reducing] object ReducingStats { // 210118083814
       obj(
           _count    -> values         .size,
           _distinct -> values.distinct.size)
-        .thnIf(optional) {
+        .pipeIf(optional) {
           _.add(_present, values.flatten.size) }
 
     // ---------------------------------------------------------------------------

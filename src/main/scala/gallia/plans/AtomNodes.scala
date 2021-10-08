@@ -1,7 +1,5 @@
 package gallia.plans
 
-import scala.util.chaining._
-
 import gallia._
 import gallia.atoms.AtomsUUVeryBasics    ._RenameAll
 import gallia.atoms.AtomsUUSomewhatBasics._RemoveWhateverIfAll

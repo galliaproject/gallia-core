@@ -36,7 +36,7 @@ object TypeNodeUtils {
       // ---------------------------------------------------------------------------
       containerTypeOpt match {
         case Some(container) =>
-          val leaf = args.head.leaf.thn(tmp)
+          val leaf = args.head.leaf.pipe(tmp)
 
           "succinct".colon(container match {
               case Container._Opt => leaf.surroundWith(    "Option[", "]")

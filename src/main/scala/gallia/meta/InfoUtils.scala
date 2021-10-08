@@ -14,14 +14,14 @@ private[gallia] object InfoUtils {
              field.key.symbol,
              field.node.forceNonBObjInfo)
            .setEnumName(field.node.leaf.name) /* mostly for macros */ }
-       .thn(Cls.apply)
+       .pipe(Cls.apply)
        .setName(leaf.name.splitBy(".").last /* TODO: see t210325105833 - need to be in scope for macros */) // mostly for macros
 
   // ---------------------------------------------------------------------------
   def forceNonBObjInfo(node: TypeNode): Info =
      Info(
          node.containerType,
-         node.forceValidContainer.thn(containee(node.isContainedDataClass)))
+         node.forceValidContainer.pipe(containee(node.isContainedDataClass)))
 
   // ---------------------------------------------------------------------------
     def containee(isContainedDataClass: Boolean)(leaf: TypeLeaf): Containee =

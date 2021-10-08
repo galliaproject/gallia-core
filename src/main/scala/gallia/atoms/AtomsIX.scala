@@ -35,11 +35,11 @@ object AtomsIX {
 
   // ===========================================================================
   case class _RawContentU(input: InputUrlLike) extends AtomIU {
-      def naive: Option[Obj] = Some(input.content.thn(Obj.content)) }
+      def naive: Option[Obj] = Some(input.content.pipe(Obj.content)) }
 
     // ---------------------------------------------------------------------------
     case class _RawLinesZ(input: InputUrlLike, inMemoryMode: Boolean) extends AtomIZ {
-      def naive: Option[Objs] = Some(input.streamLines(inMemoryMode).map(Obj.line).thn(Objs.build)) }
+      def naive: Option[Objs] = Some(input.streamLines(inMemoryMode).map(Obj.line).pipe(Objs.build)) }
 
   // ===========================================================================
   trait HasCommonObj  extends AtomIU { def commonObj : Obj  }
@@ -48,17 +48,17 @@ object AtomsIX {
   // ===========================================================================
   case class _JsonObjectString(inputString: InputString, schemaProvider: OtherSchemaProvider, c: Cls) extends HasCommonObj {
     def commonObj: Obj = JsonParsing.parseObject(inputString)
-      def naive: Option[Obj] = Some(commonObj.thn(JsonNumberTax.payUp(c))) }
+      def naive: Option[Obj] = Some(commonObj.pipe(JsonNumberTax.payUp(c))) }
 
   // ---------------------------------------------------------------------------
   case class _JsonArrayString(inputString: InputString, schemaProvider: OtherSchemaProvider, c: Cls) extends HasCommonObjs {
-    def commonObjs: Objs = JsonParsing.parseArray(inputString).thn(Objs.from)
+    def commonObjs: Objs = JsonParsing.parseArray(inputString).pipe(Objs.from)
       def naive: Option[Objs] = commonObjs.map(JsonNumberTax.payUp(c)).in.some }
 
   // ===========================================================================
   case class _JsonObjectFileInputU(input: InputUrlLike, c: Cls) extends HasCommonObj {
-    def commonObj: Obj = input.content.thn(JsonParsing.parseObject)
-      def naive: Option[Obj] = commonObj.thn(JsonNumberTax.payUp(c)).in.some
+    def commonObj: Obj = input.content.pipe(JsonParsing.parseObject)
+      def naive: Option[Obj] = commonObj.pipe(JsonNumberTax.payUp(c)).in.some
   }
 
   // ===========================================================================
@@ -74,10 +74,10 @@ object AtomsIX {
             .streamLines(inMemoryMode)
             .filterNot(_.trim.isEmpty) //TODO or only if last one?
             .map(JsonParsing.parseObject)
-            .thn(Objs.build)
+            .pipe(Objs.build)
 
       // ---------------------------------------------------------------------------
-      def naive: Option[Objs] = Some(commonObjs.map(JsonNumberTax.payUp(schema)).thn(projectData(schema)) )
+      def naive: Option[Objs] = Some(commonObjs.map(JsonNumberTax.payUp(schema)).pipe(projectData(schema)) )
     }
 
     // ===========================================================================
@@ -90,11 +90,11 @@ object AtomsIX {
       def commonObjs: Objs =
           input
             .streamLines(inMemoryMode)
-.toList.mkString.thn(JsonParsing.parseArray) // TODO: t201221175254 - actually stream array...
-            .thn(Objs.from)
+.toList.mkString.pipe(JsonParsing.parseArray) // TODO: t201221175254 - actually stream array...
+            .pipe(Objs.from)
 
       // ---------------------------------------------------------------------------
-      def naive: Option[Objs] = Some(commonObjs.map(JsonNumberTax.payUp(schema)).thn(projectData(schema)) )
+      def naive: Option[Objs] = Some(commonObjs.map(JsonNumberTax.payUp(schema)).pipe(projectData(schema)) )
     }
 
   // ===========================================================================
@@ -111,7 +111,7 @@ object AtomsIX {
         Streamer
           .fromIterator((rs.rawRdbmsEntries, cls))
           .map(generalize).map(gallia.obj)
-          .thn(Objs.build)
+          .pipe(Objs.build)
           .in.some
       }
   
@@ -141,7 +141,7 @@ object AtomsIX {
         Streamer
           .fromIterator((rs.rawRdbmsEntries, cls))
           .map(generalize).map(gallia.obj)
-          .thn(Objs.build)
+          .pipe(Objs.build)
           .in.some
       }
   
@@ -167,10 +167,10 @@ object AtomsIX {
 
           mongoDb
             .query(new java.net.URI(inputString), None)(cmd)
-            .thn { case (iter, cls) =>
+            .pipe { case (iter, cls) =>
               Streamer.fromIterator((iter, cls)) }
             .map(gallia.obj)
-            .thn(Objs.build)
+            .pipe(Objs.build)
         }
 
         // ===========================================================================
@@ -224,8 +224,8 @@ object AtomsIX {
     def naive: Option[Objs] =
       aobjs(
            c =                                    projectMeta(defaultSchema).assert(!_.hasNesting),
-           z = stringObjs(defaultSchema.keys).thn(projectData(defaultSchema)) ) // see t210106120036 (project ealier)
-        .thn { x =>
+           z = stringObjs(defaultSchema.keys).pipe(projectData(defaultSchema)) ) // see t210106120036 (project ealier)
+        .pipe { x =>
           schemaProvider match {
             case TableSchemaProvider.NoInferring => x.z // nothing to do
             case _                               => new ModifyTableData(cellConf).modify(x) }}
@@ -234,8 +234,8 @@ object AtomsIX {
     // ---------------------------------------------------------------------------
     def stringObjs(keys: Seq[Key]): Objs =
         dataRows
-          .thn(_.map(datum(cellConf.nullValues)(keys)))
-          .thn(Objs.build)
+          .pipe(_.map(datum(cellConf.nullValues)(keys)))
+          .pipe(Objs.build)
 
       // ---------------------------------------------------------------------------
       /** 201215141231 - null values are not handled here (see 201231113658 rather) */
@@ -243,13 +243,13 @@ object AtomsIX {
         keys
            // TODO throw proper error if duplicates
           .zip(values)   // TODO: check same size + charset and so on
-          .thn(Obj.fromIterable)
+          .pipe(Obj.fromIterable)
 
     // ===========================================================================
     private def dataRows: Streamer[List[String]] = // TODO: t210330110804 - separate each as their own atom
       input
         .streamLines(inMemoryMode)
-        .thnIf(hasHeader)(_.drop(1)) // TODO: t210116110159 for n >= 1?
+        .pipeIf(hasHeader)(_.drop(1)) // TODO: t210116110159 for n >= 1?
         .map(_.splitXsv(sep))
   }
 

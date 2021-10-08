@@ -22,7 +22,7 @@ object GsonToObj {
   // ---------------------------------------------------------------------------
   def fromGsonObject  (value: JsonObject)      : Obj = jsonObjectToObj(value)
   def fromObjectString(value: JsonObjectString): Obj = jsonObjectToObj(GsonParser.stringToJsonObject(value))
-  def fromArrayString (value: JsonArrayString) : Objs = GsonParser.stringToJsonObjects(value).map(jsonObjectToObj).toList.thn(Objs.from) // TODO: from iterator
+  def fromArrayString (value: JsonArrayString) : Objs = GsonParser.stringToJsonObjects(value).map(jsonObjectToObj).toList.pipe(Objs.from) // TODO: from iterator
 
   // ===========================================================================
   private[json] def jsonObjectToObj(value: JsonObject): Obj =
@@ -32,7 +32,7 @@ object GsonToObj {
           .flatMap { entry =>
             jsonRootToAnyValue(entry.getValue)
               .map(entry.getKey.symbol -> _) }
-          .thn(Obj.fromIterable) //TODO: catch duplicates and so on
+          .pipe(Obj.fromIterable) //TODO: catch duplicates and so on
 
       // ---------------------------------------------------------------------------
       private def jsonRootToAnyValue(value: JsonElement): Option[AnyValue] =

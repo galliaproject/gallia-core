@@ -13,17 +13,17 @@ trait HeadZMerging { self: HeadZ =>
   // ---------------------------------------------------------------------------
   // TODO: t210117143536 - move to .merging(that)(_.union)?
   @Distributivity // TODO: prepend/append if not distributed
-  def union(that: HeadU): HeadZ = that.convertToZ.thn(union)
+  def union(that: HeadU): HeadZ = that.convertToZ.pipe(union)
   def union(that: HeadZ): HeadZ = zzToz(that)(UnionZ)
 
   // ===========================================================================
-  def merging(that: HeadZ)(conf: Start => End): HeadZ = zzToz(that)(MergingData.from(conf).thn(Merging))
+  def merging(that: HeadZ)(conf: Start => End): HeadZ = zzToz(that)(MergingData.from(conf).pipe(Merging))
 
     // ---------------------------------------------------------------------------
     //TODO:
     // - t201124153838: a bring "guaranteed" (no missing); or by default?
     // - t201124153839: likewise a join guaranteed? when not inner?
-    def bring(that: HeadZ)(conf: Bring => End): HeadZ = merging(that)(_.bring.thn(conf))
+    def bring(that: HeadZ)(conf: Bring => End): HeadZ = merging(that)(_.bring.pipe(conf))
 
       def bring   (that: HeadZ, target: KeyW, via: KeyW)   : HeadZ = bring(that)(_.fields(target).via(via))
       def bring   (that: HeadZ, target: KeyW, via: JoinKey): HeadZ = bring(that)(_.fields(target).via(via))
@@ -37,12 +37,12 @@ trait HeadZMerging { self: HeadZ =>
     // ===========================================================================
     // - t210128130124 - p2 - allow explicit use of partially in-memory join if one side is small enough ("hash" join)
 
-    def coGroup(that: HeadZ)(conf: CoGroup => End): HeadZ = merging(that)(_.coGroup.thn(conf))
+    def coGroup(that: HeadZ)(conf: CoGroup => End): HeadZ = merging(that)(_.coGroup.pipe(conf))
 
-      def  fullCoGroup(that: HeadZ)(conf: CoGroupOn => End): HeadZ = coGroup(that)(_.full .thn(conf))
-      def  leftCoGroup(that: HeadZ)(conf: CoGroupOn => End): HeadZ = coGroup(that)(_.left .thn(conf))
-      def rightCoGroup(that: HeadZ)(conf: CoGroupOn => End): HeadZ = coGroup(that)(_.right.thn(conf))
-      def innerCoGroup(that: HeadZ)(conf: CoGroupOn => End): HeadZ = coGroup(that)(_.inner.thn(conf))
+      def  fullCoGroup(that: HeadZ)(conf: CoGroupOn => End): HeadZ = coGroup(that)(_.full .pipe(conf))
+      def  leftCoGroup(that: HeadZ)(conf: CoGroupOn => End): HeadZ = coGroup(that)(_.left .pipe(conf))
+      def rightCoGroup(that: HeadZ)(conf: CoGroupOn => End): HeadZ = coGroup(that)(_.right.pipe(conf))
+      def innerCoGroup(that: HeadZ)(conf: CoGroupOn => End): HeadZ = coGroup(that)(_.inner.pipe(conf))
 
         def  fullCoGroup(that: HeadZ, on: KeyW, asLeft: KeyW = _left, asRight: KeyW = _right): HeadZ =  fullCoGroup(that)(_.on(on).as(asLeft, asRight))
         def  leftCoGroup(that: HeadZ, on: KeyW, asLeft: KeyW = _left, asRight: KeyW = _right): HeadZ =  leftCoGroup(that)(_.on(on).as(asLeft, asRight))
@@ -50,7 +50,7 @@ trait HeadZMerging { self: HeadZ =>
         def innerCoGroup(that: HeadZ, on: KeyW, asLeft: KeyW = _left, asRight: KeyW = _right): HeadZ = innerCoGroup(that)(_.on(on).as(asLeft, asRight))
 
       // ===========================================================================
-      def join(that: HeadZ)(conf: Join => End) = merging(that)(_.join.thn(conf))
+      def join(that: HeadZ)(conf: Join => End) = merging(that)(_.join.pipe(conf))
 
         def  fullJoin(that: HeadZ): HeadZ =  join(that)(_. full.onCommonKey)
         def  leftJoin(that: HeadZ): HeadZ =  join(that)(_. left.onCommonKey)
@@ -99,12 +99,12 @@ object HeadZPair { // TODO: t201123125604 - why implicit not picked up?
       def union: HeadZ = left.union(right)
 
       // ---------------------------------------------------------------------------
-      def coGroup(conf: CoGroup => End): HeadZ = merging(_.coGroup.thn(conf))
+      def coGroup(conf: CoGroup => End): HeadZ = merging(_.coGroup.pipe(conf))
 
-        def  fullCoGroup(conf: CoGroupOn => End): HeadZ = coGroup(_.full .thn(conf))
-        def  leftCoGroup(conf: CoGroupOn => End): HeadZ = coGroup(_.left .thn(conf))
-        def rightCoGroup(conf: CoGroupOn => End): HeadZ = coGroup(_.right.thn(conf))
-        def innerCoGroup(conf: CoGroupOn => End): HeadZ = coGroup(_.inner.thn(conf))
+        def  fullCoGroup(conf: CoGroupOn => End): HeadZ = coGroup(_.full .pipe(conf))
+        def  leftCoGroup(conf: CoGroupOn => End): HeadZ = coGroup(_.left .pipe(conf))
+        def rightCoGroup(conf: CoGroupOn => End): HeadZ = coGroup(_.right.pipe(conf))
+        def innerCoGroup(conf: CoGroupOn => End): HeadZ = coGroup(_.inner.pipe(conf))
 
           def  fullCoGroup(on: KeyW, asLeft: KeyW = _left, asRight: KeyW = _right): HeadZ =  fullCoGroup(_.on(on).as(asLeft, asRight))
           def  leftCoGroup(on: KeyW, asLeft: KeyW = _left, asRight: KeyW = _right): HeadZ =  leftCoGroup(_.on(on).as(asLeft, asRight))
@@ -114,10 +114,10 @@ object HeadZPair { // TODO: t201123125604 - why implicit not picked up?
         // ---------------------------------------------------------------------------
         def join(conf: Join => End) = left.join(right)(conf)
 
-          def  fullJoin(conf: JoinOn => End): HeadZ = left.join(right)(_. full.thn(conf))
-          def  leftJoin(conf: JoinOn => End): HeadZ = left.join(right)(_. left.thn(conf))
-          def rightJoin(conf: JoinOn => End): HeadZ = left.join(right)(_.right.thn(conf))
-          def innerJoin(conf: JoinOn => End): HeadZ = left.join(right)(_.inner.thn(conf))
+          def  fullJoin(conf: JoinOn => End): HeadZ = left.join(right)(_. full.pipe(conf))
+          def  leftJoin(conf: JoinOn => End): HeadZ = left.join(right)(_. left.pipe(conf))
+          def rightJoin(conf: JoinOn => End): HeadZ = left.join(right)(_.right.pipe(conf))
+          def innerJoin(conf: JoinOn => End): HeadZ = left.join(right)(_.inner.pipe(conf))
 
             def  fullJoin(on: KeyW): HeadZ = left.join(right)(_. full.on(on))
             def  leftJoin(on: KeyW): HeadZ = left.join(right)(_. left.on(on))

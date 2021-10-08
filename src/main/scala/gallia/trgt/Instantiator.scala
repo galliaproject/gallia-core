@@ -22,7 +22,7 @@ class Instantiator private (
     def instantiateRecursively(c: Cls, o: Obj): Any =
         c .fields // for order
           .map(processField(o))
-          .thn { args => klass.newInstance(args:_*) }
+          .pipe { args => klass.newInstance(args:_*) }
 
       // ---------------------------------------------------------------------------
       private def processField(o: Obj)(field: Fld): AnyRef =
@@ -38,7 +38,7 @@ class Instantiator private (
           field.info.container match { // TODO: use Container.wrap now?
             case Container._Opt => o.opt  (field.key)                           .map(processObj(c2, field))
             case Container._Pes => o.opt  (field.key).map(_.asInstanceOf[Seq[_]].map(processObj(c2, field)))
-            case Container._One => o.force(field.key)                           .thn(processObj(c2, field))
+            case Container._One => o.force(field.key)                           .pipe(processObj(c2, field))
             case Container._Nes => o.force(field.key)      .asInstanceOf[Seq[_]].map(processObj(c2, field)) }
 
           // ---------------------------------------------------------------------------
@@ -56,19 +56,19 @@ class Instantiator private (
     def fromFirstTypeArgFirstTypeArg[T: WTT]: Instantiator =
         scala.reflect.runtime.universe
           .weakTypeTag[T]
-          .thn { tag => rec(tag.mirror)(tag.tpe.typeArgs.head.typeArgs.head) }
+          .pipe { tag => rec(tag.mirror)(tag.tpe.typeArgs.head.typeArgs.head) }
 
     // ---------------------------------------------------------------------------
     def fromFirstTypeArg[T: WTT]: Instantiator =
         scala.reflect.runtime.universe
           .weakTypeTag[T]
-          .thn { tag => rec(tag.mirror)(tag.tpe.typeArgs.head) }
+          .pipe { tag => rec(tag.mirror)(tag.tpe.typeArgs.head) }
 
     // ---------------------------------------------------------------------------
     def fromType[T: WTT]: Instantiator =
         scala.reflect.runtime.universe
           .weakTypeTag[T]
-          .thn { tag => rec(tag.mirror)(tag.tpe) }
+          .pipe { tag => rec(tag.mirror)(tag.tpe) }
 
       // ===========================================================================
       private def rec(mirror: universe.Mirror)(tpe: universe.Type): Instantiator = {
@@ -93,8 +93,8 @@ class Instantiator private (
                 methodSymbol
                   .typeSignature
                   .resultType
-                  .thn(subInstantiator(mirror, f.node.containerType, _))
-                  .thn(instantiator => Some(f.key.symbol -> instantiator)) }
+                  .pipe(subInstantiator(mirror, f.node.containerType, _))
+                  .pipe(instantiator => Some(f.key.symbol -> instantiator)) }
             .force.map
 
         // ---------------------------------------------------------------------------

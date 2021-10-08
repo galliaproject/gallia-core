@@ -1,6 +1,5 @@
 package gallia.plans
 
-import scala.util.chaining._
 import aptus._
 
 import gallia._

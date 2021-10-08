@@ -1,6 +1,6 @@
-package gallia.reflect
+package gallia
+package reflect
 
-import scala.util.chaining._
 import scala.reflect.runtime.{universe => RuntimeUniverse}
 import scala.reflect.internal.Symbols
 

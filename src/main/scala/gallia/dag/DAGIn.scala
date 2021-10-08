@@ -1,4 +1,5 @@
-package gallia.dag
+package gallia
+package dag
 
 import aptus.{Anything_, Seq_}
 
@@ -13,7 +14,7 @@ object DAGIn {
           .map(_.force.tuple2)
           .flatMap { case (a, b) =>
             a.expand(b) } }
-      .thn(DAG.from(_:_*))
+      .pipe(DAG.from(_:_*))
 
   // ---------------------------------------------------------------------------
   def idDag0(nodes: Seq[NodeId]*): IdDAG = // TODO: still needed?
@@ -22,7 +23,7 @@ object DAGIn {
         _ .sliding(2)
           .toSeq
           .map(_.force.tuple2) }
-      .thn(DAG.from(_:_*))
+      .pipe(DAG.from(_:_*))
 
   // ---------------------------------------------------------------------------
   def chain(nodes: Seq[NodeId]): IdDAG =
@@ -30,7 +31,7 @@ object DAGIn {
       .sliding(2)
       .toSeq
       .map(_.force.tuple2)
-      .thn(DAG.from)
+      .pipe(DAG.from)
 
   // ===========================================================================
   case class DagTmp private (values: Seq[NodeId]) {

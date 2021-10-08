@@ -245,7 +245,7 @@ import DataN._
       .groupBy(rows).as( _tmp1)
       .transform(_.objz(_tmp1)).using {
         _ .groupBy(columns).as(_tmp2) // 200930125015 - this flattens, so must set defaults ahead of time if needed
-          .thn(agg(            _tmp2))
+          .pipe(agg(            _tmp2))
           .unarrayEntries(columns)
             .asNewKeys(newKeys.values)
                 .withKeySeparator(keySeparator)

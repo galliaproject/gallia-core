@@ -135,15 +135,15 @@ object FunctionWrappers {
   // ===========================================================================
   import gallia.heads.common._
 
-    @inline private[gallia]def wwrap11(f: _ff11): _ff11 =  v1          => f(new WV(v1))                        .thn(unwrapWhatever)
-    @inline private[gallia]def wwrap21(f: _ff21): _ff21 = (v1, v2)     => f(new WV(v1), new WV(v2))            .thn(unwrapWhatever)
-    @inline private[gallia]def wwrap31(f: _ff31): _ff31 = (v1, v2, v3) => f(new WV(v1), new WV(v2), new WV(v3)).thn(unwrapWhatever)
+    @inline private[gallia]def wwrap11(f: _ff11): _ff11 =  v1          => f(new WV(v1))                        .pipe(unwrapWhatever)
+    @inline private[gallia]def wwrap21(f: _ff21): _ff21 = (v1, v2)     => f(new WV(v1), new WV(v2))            .pipe(unwrapWhatever)
+    @inline private[gallia]def wwrap31(f: _ff31): _ff31 = (v1, v2, v3) => f(new WV(v1), new WV(v2), new WV(v3)).pipe(unwrapWhatever)
 
-@inline private[gallia]def wwwrap21a(f: (WV, WV) => Any): _ff21 = (v1, v2)     => f(new WV(v1), new WV(v2))            .thn(unwrapWhatever)
-@inline private[gallia]def wwwrap21b(f: (WV, WV) => Any): _ff21 = (v1, v2)     => f(new WV(v1), new WV(v2))            .thn(unwrapWhatever2)
+@inline private[gallia]def wwwrap21a(f: (WV, WV) => Any): _ff21 = (v1, v2)     => f(new WV(v1), new WV(v2))            .pipe(unwrapWhatever)
+@inline private[gallia]def wwwrap21b(f: (WV, WV) => Any): _ff21 = (v1, v2)     => f(new WV(v1), new WV(v2))            .pipe(unwrapWhatever2)
 
     // ---------------------------------------------------------------------------
-@inline private[gallia] def __wwrap21[O1, O2](f: (O1, O2) => Any): _ff21 = (v1, v2) => f(v1.asInstanceOf[O1], v2.asInstanceOf[O2]).thn(_unwrapWhatever1)
+@inline private[gallia] def __wwrap21[O1, O2](f: (O1, O2) => Any): _ff21 = (v1, v2) => f(v1.asInstanceOf[O1], v2.asInstanceOf[O2]).pipe(_unwrapWhatever1)
 
     // ---------------------------------------------------------------------------
     /*private */def unwrapWhatever(value: Any): Any = value match {

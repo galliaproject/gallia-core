@@ -10,10 +10,6 @@ package object atoms {
   val _Error = gallia.vldt._Error
 
   // ---------------------------------------------------------------------------
-  type Obj  = gallia.data.single  .Obj
-  type Objs = gallia.data.multiple.Objs
-
-  // ---------------------------------------------------------------------------
   type Key  = gallia.Key
   type AnyValue = gallia.AnyValue
 

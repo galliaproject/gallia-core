@@ -17,7 +17,7 @@ object IntermediateMetaResultNodeCreator {
               action = actionAN(action),
               result = data(id)) }(
         newIdResolver = _.id)
-      .thn(IntermediateMetaResult.apply)
+      .pipe(IntermediateMetaResult.apply)
 
   // ===========================================================================
   private[gallia] def actionAN(action: ActionVMN): ActionAN = // 210205060908

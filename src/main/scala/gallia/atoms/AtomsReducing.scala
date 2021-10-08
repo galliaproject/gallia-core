@@ -10,13 +10,13 @@ object AtomsReducing {
 
   @Scalability case class _Reduce(triplets: Seq[ReducingDataTriplet]) extends AtomZU { def naive(z: Objs) = {
       z .toListAndTrash
-        .thn { list =>
+        .pipe { list =>
           triplets
             .map { triplet =>
               list
                .map(_.opt(triplet.key))
-               .thn(triplet.dataEntry ) }
-          .thn(gallia.obj) } } }
+               .pipe(triplet.dataEntry ) }
+          .pipe(gallia.obj) } } }
 
   // ===========================================================================
   case class _Agg1(groupee: ReducingDataTriplet1, groupers: Keyz, as: Key) extends AtomZZ { def naive(z: Objs) =
@@ -26,8 +26,8 @@ object AtomsReducing {
     case class _AggN(groupees: ReducingDataTriplet1s, groupers: Keyz, as: Key) extends AtomZZ { def naive(z: Objs) =
       z.aggregateNumbersN(groupees.keys, groupers, as) {
         _ .asInstanceOf[Seq[Obj]]
-          .thn(Objs.from)
-          .thn(_Reduce(groupees.values).naive) } }
+          .pipe(Objs.from)
+          .pipe(_Reduce(groupees.values).naive) } }
 
   // ===========================================================================
   case class _CountBy(groupees: Keyz, ctipe: CountLikeType, groupers: Keyz, as: Key) extends AtomZZ { def naive(z: Objs) = {

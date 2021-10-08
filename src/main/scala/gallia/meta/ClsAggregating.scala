@@ -10,13 +10,13 @@ trait ClsAggregating { self: Cls =>
 
   def group1N(groupee: Ren, groupers: Renz): Cls =
       (retain(groupers), field(groupee))
-        .thn { case (a, b) => a.fields :+ b.toMultiple }
-        .thn(Cls.apply)
+        .pipe { case (a, b) => a.fields :+ b.toMultiple }
+        .pipe(Cls.apply)
 
     def groupNN(groupees: Renz, groupers: Renz, as: Key): Cls =
       (retain(groupers), retain(groupees))
-        .thn { case (a, b) => a.fields :+ Fld.nesCls(as, b) }
-        .thn(Cls.apply)
+        .pipe { case (a, b) => a.fields :+ Fld.nesCls(as, b) }
+        .pipe(Cls.apply)
 
   // ===========================================================================
   @gallia.IntSize

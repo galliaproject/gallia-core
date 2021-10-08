@@ -62,7 +62,7 @@ case class CallSite(
               elem.getClassName,
               elem.getLineNumber,
               filePathOpt(elem)) }
-            .thn(CallSite(_, elems))
+            .pipe(CallSite(_, elems))
       }
 
       // ---------------------------------------------------------------------------
@@ -71,8 +71,8 @@ case class CallSite(
           .getClassName
           .replace(".", "/")
           .append(".class")
-          .thn(SystemClassLoader.getResource)
-          .thn(Option.apply)
+          .pipe(SystemClassLoader.getResource)
+          .pipe(Option.apply)
           .map(_.toExternalForm.replaceAll("^file:", ""))
 
   }

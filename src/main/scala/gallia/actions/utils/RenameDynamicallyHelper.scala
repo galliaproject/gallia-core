@@ -36,7 +36,7 @@ private[actions] object RenameDynamicallyHelper {
           case Right(qpathz)     => pathsHandler(qpathz) }
 
     // ---------------------------------------------------------------------------
-    def forceRPathz: RPathz = results.map(_.right.get).thn(RPathz.apply)
+    def forceRPathz: RPathz = results.map(_.right.get).pipe(RPathz.apply)
   }
 
   // ===========================================================================

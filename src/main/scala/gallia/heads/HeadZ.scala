@@ -82,7 +82,7 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
 
   // TODO: t201016114103 - or as "toList"?
   def collectObjects: List[Obj] = end.runz().forceData2(_.data.toListAndTrash)
-  def collectObjectz:      Objs = collectObjects.thn(Objs.from)
+  def collectObjectz:      Objs = collectObjects.pipe(Objs.from)
 
   // ===========================================================================
   def      populateDataClasses[DC: WTT] = ??? // TODO: t210117105638 - see 210117105638@v

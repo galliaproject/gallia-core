@@ -16,7 +16,7 @@ case class SuccessMetaResult(dag: DAG[SuccessMetaResultNode]) {
 
     def actionNode(afferents: Seq[Cls]): ActionNode =
       NodeMetaContext(afferents, cls, origin)
-        .thn { ctx =>
+        .pipe { ctx =>
             ActionNode(id, action.atoms(ctx), ctx, origin)}
 
   }

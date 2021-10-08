@@ -123,7 +123,7 @@ private[gallia] object MetaValidation {
   // ---------------------------------------------------------------------------
   def fieldsPresence(c: Cls, paths: KPathz): Errs =
     paths.values.flatMap(fieldPresence(c, _)) ++
-    paths.values.thn    (distinctKPaths)
+    paths.values.pipe    (distinctKPaths)
 
   // ---------------------------------------------------------------------------
   def fieldPresence(c: Cls, path: KPath) = errIf_(!c.contains(path)    )(s"${ErrorId.NoSuchField}", path, c)

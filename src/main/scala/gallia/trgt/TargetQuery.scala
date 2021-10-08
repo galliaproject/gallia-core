@@ -15,12 +15,12 @@ class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](
        extends CanValidateQuery
           with CanResolve[$Target] {
 
-    def apply[A](c: Cls)(f: $Target => A): A = resolve(c).thn(f)
+    def apply[A](c: Cls)(f: $Target => A): A = resolve(c).pipe(f)
 
     def size(c: Cls): Int = __qpaths(c).size
 
     // ---------------------------------------------------------------------------
-    def filterByKeys (c: Cls)(implicit ev: $Target <:< Keyz  ): Cls = resolve(c).thn { x => c.filterFields(field => x.contains(field.key)) }
+    def filterByKeys (c: Cls)(implicit ev: $Target <:< Keyz  ): Cls = resolve(c).pipe { x => c.filterFields(field => x.contains(field.key)) }
     def filterByPaths(c: Cls)(implicit ev: $Target <:< KPathz): Cls = ???
 
     // ---------------------------------------------------------------------------
@@ -33,14 +33,14 @@ class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](
       private def _is(c: Cls, pred: Fld => Boolean)   : Boolean =
         __qpaths(c)
           .headOption /* since all supposed to be the same: 201005113232 */
-          .map(_.from.thn(c.field(_)))
+          .map(_.from.pipe(c.field(_)))
           .exists(pred)
 
     // ---------------------------------------------------------------------------
     def container(c: Cls): Container =
         __qpaths(c)
           .head /* since all supposed to be the same: 201005113232 */
-          .from.thn(c.field(_))
+          .from.pipe(c.field(_))
           .info.container
 
     // ---------------------------------------------------------------------------
@@ -68,16 +68,16 @@ class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](
         case x: RPathz => x.values }
 
     // ---------------------------------------------------------------------------
-    def checkErrors(c: Cls)(f: Cls => KPathz => Errs): Errs = __qpathz(c).thn(_.fromz).thn { f(c) }
+    def checkErrors(c: Cls)(f: Cls => KPathz => Errs): Errs = __qpathz(c).pipe(_.fromz).pipe { f(c) }
 
     // ===========================================================================
     // vldt
 
-    def vldtAsOrigin        (c: Cls): Errs = vldtTargetQuery(c) ++ MetaValidation.fieldsRenaming(c, __qpaths(c).thn(RPathz.apply))
+    def vldtAsOrigin        (c: Cls): Errs = vldtTargetQuery(c) ++ MetaValidation.fieldsRenaming(c, __qpaths(c).pipe(RPathz.apply))
     def vldtAsNewDestination(c: Cls): Errs = vldtTargetQuery(c) ++ MetaValidation.fieldsAbsence (c, __kpathz(c))
 
     // ---------------------------------------------------------------------------
-    def pathPairT(c: Cls)(implicit ev: $Target <:< KPath ):  PathPair = kpath_(c).thn { path => PathPair(path, c.isOptional(path)) }
+    def pathPairT(c: Cls)(implicit ev: $Target <:< KPath ):  PathPair = kpath_(c).pipe { path => PathPair(path, c.isOptional(path)) }
     def path     (c: Cls)(implicit ev: $Target <:< KPath ): KPath     = kpath_(c)
   }
 

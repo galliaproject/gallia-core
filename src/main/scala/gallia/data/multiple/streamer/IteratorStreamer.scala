@@ -1,9 +1,9 @@
-package gallia.data.multiple.streamer
+package gallia
+package data.multiple.streamer
 
 import scala.reflect.{ClassTag => CT}
 
 import aptus.Anything_
-import gallia.Aliases.Coll
 import gallia.heads.merging.MergingData._
 import gallia.data.multiple.streamer.{IteratorStreamerUtils => _utils}
 
@@ -31,17 +31,17 @@ class IteratorStreamer[A](itr: Iterator[A]) extends Streamer[A] {
   def toView  : ViewRepr[A] = itr.toSeq.view
   def toList  : List    [A] = itr.toList
 
-  def     map[B: CT](f: A =>      B ): Streamer[B] = IteratorParHack.    map(itr)(f).thn(_rewrap)
-  def flatMap[B: CT](f: A => Coll[B]): Streamer[B] = IteratorParHack.flatMap(itr)(f).thn(_rewrap)
+  def     map[B: CT](f: A =>      B ): Streamer[B] = IteratorParHack.    map(itr)(f).pipe(_rewrap)
+  def flatMap[B: CT](f: A => Coll[B]): Streamer[B] = IteratorParHack.flatMap(itr)(f).pipe(_rewrap)
 
-  def filter(p: A => Boolean): Streamer[A] = itr.filter(p).thn(_rewrap)
+  def filter(p: A => Boolean): Streamer[A] = itr.filter(p).pipe(_rewrap)
 
   def size: Int = itr.size
 
   def isEmpty: Boolean = itr.isEmpty
 
-  def take(n: Int): Streamer[A] = itr.take(n).thn(_rewrap)
-  def drop(n: Int): Streamer[A] = itr.drop(n).thn(_rewrap)
+  def take(n: Int): Streamer[A] = itr.take(n).pipe(_rewrap)
+  def drop(n: Int): Streamer[A] = itr.drop(n).pipe(_rewrap)
 
   // ===========================================================================
   def reduce(op: (A, A) => A): A = itr.reduce(op)
@@ -54,7 +54,7 @@ class IteratorStreamer[A](itr: Iterator[A]) extends Streamer[A] {
 
   // ---------------------------------------------------------------------------
   def groupByKey[K: CT, V: CT](implicit ev: A <:< (K, V)): Streamer[(K, List[V])] =
-     itr.asInstanceOf[Iterator[(K, V)]].thn(_utils.groupByKey).thn(_rewrap)  
+     itr.asInstanceOf[Iterator[(K, V)]].pipe(_utils.groupByKey).pipe(_rewrap)  
 
   // ===========================================================================
   def union[B >: A : CT](that: Streamer[B]): Streamer[B] = _rewrap(_utils.union(this.asInstanceOf[IteratorStreamer[B]], that))
@@ -65,7 +65,7 @@ class IteratorStreamer[A](itr: Iterator[A]) extends Streamer[A] {
 
   // ---------------------------------------------------------------------------
   override def join[K: CT, V: CT](joinType: JoinType, combine: (V, V) => V)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[V] =
-    _utils.join(joinType, combine)(this.asInstanceOf[Streamer[(K, V)]], that).thn(_rewrap)
+    _utils.join(joinType, combine)(this.asInstanceOf[Streamer[(K, V)]], that).pipe(_rewrap)
 
 }
 

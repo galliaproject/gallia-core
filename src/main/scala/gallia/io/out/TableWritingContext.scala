@@ -1,4 +1,5 @@
-package gallia.io.out
+package gallia
+package io.out
 
 import scala.collection.JavaConverters._
 import org.apache.commons.csv._
@@ -33,7 +34,7 @@ case class TableWritingContext(
             o .opt(key)
               .map(formatValue)
               .getOrElse(nullValue) }
-          .thn(formatLine(Format))
+          .pipe(formatLine(Format))
 
     // ===========================================================================
     private def formatValue(value: Any): String = // TODO: use schema rather than pattern match (see t210115095838)

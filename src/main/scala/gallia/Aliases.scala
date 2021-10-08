@@ -3,7 +3,7 @@ package gallia
 // ===========================================================================
 object       Aliases extends       Aliases
 object DomainAliases extends DomainAliases
-object   HeadAliases extends   HeadAliases
+//object   HeadAliases2 extends   HeadAliases2
 object   DataAliases extends   DataAliases
 object  ADataAliases extends  ADataAliases
 
@@ -66,7 +66,7 @@ object  ADataAliases extends  ADataAliases
   }
 
   // ===========================================================================
-  trait HeadAliases {
+  trait HeadAliases2 {
     type HeadU = gallia.heads.HeadU
     val  HeadU = gallia.heads.HeadU
 

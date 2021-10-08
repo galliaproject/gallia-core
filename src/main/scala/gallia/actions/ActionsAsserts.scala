@@ -57,19 +57,19 @@ object ActionsAsserts {
       def atomuu(c: Cls): AtomUU =
         from
           .tq.resolve(c)
-          .thn { path =>
+          .pipe { path =>
             if (from.tq.isRequired(c)) _AssertO1a(path, pwrap11(pred))
             else                       _AssertO1b(path, pwrap11(pred)) } }
 
     // ---------------------------------------------------------------------------
     @Max5 case class AssertDataU2[I1, I2](from: TtqKPath2, pred: (I1, I2) => Boolean) extends ActionUUc with IdentityM1 {
         def  vldt (c: Cls): Errs   = from.vldtAsOrigin(c)
-        def atomuu(c: Cls): AtomUU = _SquashU2(from.pathPairT(c), pwrap21(pred)).thn(_AssertO2) }
+        def atomuu(c: Cls): AtomUU = _SquashU2(from.pathPairT(c), pwrap21(pred)).pipe(_AssertO2) }
 
       // ---------------------------------------------------------------------------
       case class AssertDataU3[I1, I2, I3](from: TtqKPath3, pred: (I1, I2, I3) => Boolean) extends ActionUUc with IdentityM1 {
         def  vldt (c: Cls): Errs   = from.vldtAsOrigin(c)
-        def atomuu(c: Cls): AtomUU = _SquashU3(from.pathPairT(c), pwrap31(pred)).thn(_AssertO3) }
+        def atomuu(c: Cls): AtomUU = _SquashU3(from.pathPairT(c), pwrap31(pred)).pipe(_AssertO3) }
 
 }
 

@@ -1,7 +1,6 @@
 package gallia.atoms
 
 import gallia._
-import scala.util.chaining._
 
 // ===========================================================================
 object AtomsZZ {

@@ -32,7 +32,7 @@ trait InputStringDrivenConfHelper[InputAction, IoType] {
           case util.Failure(f) => ???// TODO
           case util.Success(uri) =>
             Option(uri.getScheme)
-              .thn(SupportedUriScheme.parse)
+              .pipe(SupportedUriScheme.parse)
                match {
                 case SupportedUriScheme.file | SupportedUriScheme.http | SupportedUriScheme.https | SupportedUriScheme.ftp | SupportedUriScheme.sftp =>
                   Option(uri.getPath) match {

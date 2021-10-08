@@ -30,7 +30,7 @@ trait ClsHelper { _: Cls =>
       fields
         .flatMap { f =>
           (parent :+ f.key)
-            .thn { current =>
+            .pipe { current =>
               f.nestedClassOpt
                 .map(_._leafPaths(current))
                 .getOrElse(current.in.seq) } }
@@ -40,7 +40,7 @@ trait ClsHelper { _: Cls =>
       fields
         .flatMap { f =>
           (parent :+ f.key)
-            .thn { current =>
+            .pipe { current =>
               f.nestedClassOpt
                 .map(_._allPaths(current))
                 .getOrElse(Nil) ++
@@ -51,7 +51,7 @@ trait ClsHelper { _: Cls =>
       fields
         .flatMap { f =>
           (parent :+ f.key)
-            .thn { current =>
+            .pipe { current =>
               f.nestedClassOpt match {
                 case None    => if (pred(f)) Seq(current) else Nil
                 case Some(c) => c._filter(current, pred) } } }
@@ -61,7 +61,7 @@ trait ClsHelper { _: Cls =>
       fields
         .flatMap { f =>
           (parent :+ f.key)
-            .thn { current =>
+            .pipe { current =>
               f.nestedClassOpt match {
                 case None    => if (pred(f.toPNF(parent))) Seq(current) else Nil
                 case Some(c) => c._filterPNF(current, pred) } } }
@@ -72,7 +72,7 @@ trait ClsHelper { _: Cls =>
 
     fields
       .mapIf(_.key == from) { _.updateKey(to) } // not worth checking if they're different (TODO: unless keeping track of actualy changes?)
-      .thn(rewrap)
+      .pipe(rewrap)
   }
 
   // ---------------------------------------------------------------------------
@@ -83,7 +83,7 @@ trait ClsHelper { _: Cls =>
       .map { field =>
         if (field.key == key.from) Fld(key.to, info)
         else                       field }
-      .thn(rewrap)
+      .pipe(rewrap)
   }
 
   // ---------------------------------------------------------------------------
@@ -94,7 +94,7 @@ trait ClsHelper { _: Cls =>
       .map { field =>
         if (field.key == key.from) f(field)
         else                       field }
-      .thn(rewrap)
+      .pipe(rewrap)
   }
 
 }

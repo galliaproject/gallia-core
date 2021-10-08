@@ -47,12 +47,12 @@ object AtomsZZSorting {
 
   // ===========================================================================
   case class _CustomSort1[T](ori: PathPair1, f: _ff11, ctag: ClassTag[T], ord: Ordering[T]) extends AtomZZ { def naive(z: Objs) = {
-      val g: Obj => T = ori.lookup(_).thn(f).asInstanceOf[T]
+      val g: Obj => T = ori.lookup(_).pipe(f).asInstanceOf[T]
       implicit val x = ctag; z._modifyUnderlyingStreamer(_.sortBy(ctag, ord)(g)) } }
 
     // ---------------------------------------------------------------------------
     case class _CustomSort2[T](ori: PathPair2, f: _ff21, ctag: ClassTag[T], ord: Ordering[T]) extends AtomZZ { def naive(z: Objs) = {
-      val g: Obj => T = ori.lookup(_).thn(f.tupled).asInstanceOf[T]
+      val g: Obj => T = ori.lookup(_).pipe(f.tupled).asInstanceOf[T]
       z._modifyUnderlyingStreamer(_.sortBy(ctag, ord)(g)) } }
 
 }

@@ -17,10 +17,10 @@ object TableSchemaInferrer {
             keySet  = keys.toSet,
             mutable = new MutableValuesSubset(keys, max = 3 /* enough for boolean detection at least */))(
           z)
-        .thn { lookup =>
+        .pipe { lookup =>
           keys
             .map { key => Fld(key, lookup(key)) }
-            .thn(Cls.apply) }
+            .pipe(Cls.apply) }
 
     // ---------------------------------------------------------------------------
     private def infoLookup(conf: CellConf)(keySet: Set[Key], mutable: MutableValuesSubset)(z: Objs): Map[Key, Info] =
@@ -33,7 +33,7 @@ object TableSchemaInferrer {
                   .sideEffect {
                     conf
                       .valueSet(_)
-                      .thn(mutable.addValues(key, _)) }
+                      .pipe(mutable.addValues(key, _)) }
 
                 key -> conf.inferInfo(value)
               } }
@@ -47,10 +47,10 @@ object TableSchemaInferrer {
   // ===========================================================================
   def stringsOnly(conf: CellConf, keys: Seq[Key])(z: Objs): Cls =
       stringsOnlyInfoLookup(conf)(keys.toSet)(z)
-        .thn { lookup =>
+        .pipe { lookup =>
           keys
             .map { key => Fld(key, lookup(key)) }
-            .thn(Cls.apply) }
+            .pipe(Cls.apply) }
 
     // ---------------------------------------------------------------------------
     private def stringsOnlyInfoLookup(conf: CellConf)(keySet: Set[Key])(z: Objs): Map[Key, Info] =
@@ -70,7 +70,7 @@ object TableSchemaInferrer {
   private def combineInfos(values: Seq[Info]): Info =
       Info(
         values.map(_.container)     .reduceLeft(Container.combine),
-        values.map(_.forceBasicType).thn       (BasicType.combine) )
+        values.map(_.forceBasicType).pipe       (BasicType.combine) )
 
   // ---------------------------------------------------------------------------
   private def combineContainers(values: Seq[Info]): Info =

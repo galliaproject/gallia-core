@@ -15,13 +15,13 @@ trait HasProjection {
 
   // ---------------------------------------------------------------------------
   def projectMeta(c: Cls): Cls =
-    c .thn(resolve)
-      .thn { keyz => c.retain(keyz.froms).rename(keyz) }
+    c .pipe(resolve)
+      .pipe { keyz => c.retain(keyz.froms).rename(keyz) }
 
   // ---------------------------------------------------------------------------
   def projectData(c: Cls)(z: Objs): Objs =
     resolve(c)
-      .thn { retainees =>
+      .pipe { retainees =>
         z.map(
           _ .retain(retainees.froms.values)
             .rename(retainees)) } // TODO: t210106120036 - pointless as it is, point will be to do that before creating obj

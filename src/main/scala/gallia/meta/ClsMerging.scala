@@ -12,7 +12,7 @@ trait ClsMerging { self: Cls =>
     that
       .retain(keys /* already excludes join key if was selected */)
       .mapFields(_.toNonRequired) // TODO: feature: t201124153838, bring "guaranteed" 
-      .thn(mergeDisjoint)
+      .pipe(mergeDisjoint)
 
   // ---------------------------------------------------------------------------
   def coGroup(that: Cls)(joinType: JoinType, joinKeys: JoinKey, as: AsKeys): Cls =
@@ -35,9 +35,9 @@ trait ClsMerging { self: Cls =>
     val that2 = that.remove(joinKeys.right)
     
     joinType match {
-      case JoinType.full  => Cls(this.mapFields(_.thnIf(_.key != joinKeys.left)(_.toNonRequired)).fields ++ that2.mapFields(_.toNonRequired ).fields)                        
+      case JoinType.full  => Cls(this.mapFields(_.pipeIf(_.key != joinKeys.left)(_.toNonRequired)).fields ++ that2.mapFields(_.toNonRequired ).fields)                        
       case JoinType.left  => Cls(this.fields                                                             ++ that2.mapFields(_.toNonRequired ).fields)                        
-      case JoinType.right => Cls(this.mapFields(_.thnIf(_.key != joinKeys.left)(_.toNonRequired)).fields ++ that2.fields)
+      case JoinType.right => Cls(this.mapFields(_.pipeIf(_.key != joinKeys.left)(_.toNonRequired)).fields ++ that2.fields)
       case JoinType.inner => Cls(this.fields                                                             ++ that2.fields) }
   }
 

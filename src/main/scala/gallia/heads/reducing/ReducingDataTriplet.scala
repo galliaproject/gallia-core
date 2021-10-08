@@ -20,11 +20,11 @@ sealed trait ReducingDataTriplet {
     def data(values: Values): AnyValue = rtipe.data(optional, ntipeOpt)(values) }
 
   case class ReducingDataTripletN(key: Key, rtipes: Seq[ReducingType], optional: Boolean, ntipeOpt: Option[NumericalType]) extends ReducingDataTriplet {
-    final def data(values: Values): AnyValue = rtipes.map { rtipe => rtipe.defaultKey -> rtipe.data(optional, ntipeOpt)(values) }.thn(gallia.obj) }
+    final def data(values: Values): AnyValue = rtipes.map { rtipe => rtipe.defaultKey -> rtipe.data(optional, ntipeOpt)(values) }.pipe(gallia.obj) }
 
   // ===========================================================================
   case class ReducingDataTriplet1s(values: Seq[ReducingDataTriplet1]) {
-    def keys = values.map(_.key).thn(Keyz.apply)
+    def keys = values.map(_.key).pipe(Keyz.apply)
   }
 
 // ===========================================================================

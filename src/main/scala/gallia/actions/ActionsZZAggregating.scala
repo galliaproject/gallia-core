@@ -17,7 +17,7 @@ object ActionsZZAggregating {
   case class CountBy(groupers: TQRenz, ctipe: CountLikeType, asOpt: Option[Key]) extends ActionZZc with TodoV1
       /* "as" boilerplate: */ with CanForceAs2[CountBy] { override val defaultKey: Key = ctipe.defaultKey; def forceAs(key: Key) = copy(asOpt = Some(key))
 
-    def _meta(in: Cls ): Cls    = groupers.resolve(in).thn(in.countAll(_, as))
+    def _meta(in: Cls ): Cls    = groupers.resolve(in).pipe(in.countAll(_, as))
 
     // ---------------------------------------------------------------------------
     def atomzz(in: Cls): AtomZZ = {
@@ -61,7 +61,7 @@ object ActionsZZAggregating {
         val e = groupees.resolve(in)
         val r = groupers.resolve(in)
 
-        _AggN(e.fromsFX.thn(dataTriplet1s(in, rtipe)), r.fromsFX, as)
+        _AggN(e.fromsFX.pipe(dataTriplet1s(in, rtipe)), r.fromsFX, as)
     }
   }
 
@@ -69,7 +69,7 @@ object ActionsZZAggregating {
   private def dataTriplet1s(c: Cls, rtipe: ReducingType)(groupees: Keyz): ReducingDataTriplet1s =
       groupees
         .map(dataTriplet1(c, rtipe))
-        .thn(ReducingDataTriplet1s)
+        .pipe(ReducingDataTriplet1s)
 
     // ---------------------------------------------------------------------------
     private def dataTriplet1(c: Cls, rtipe: ReducingType)(groupee: Key): ReducingDataTriplet1 =

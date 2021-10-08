@@ -29,7 +29,7 @@ trait ClsNestingRelated { self: Cls =>
   // ===========================================================================
   def unnestObject(key: Key): Cls = //TODO: add req
     potch0(key)
-      .thn { case (in, out) =>
+      .pipe { case (in, out) =>
         out.mergeDisjoint(
           in
             .fields.force.one
@@ -38,7 +38,7 @@ trait ClsNestingRelated { self: Cls =>
     // ---------------------------------------------------------------------------
     def unnestOOO(key: Key): Cls = //TODO: add req
       potch0(key)
-        .thn { case (in, out) =>
+        .pipe { case (in, out) =>
           out.mergeDisjoint(
             in
               .fields.force.one
@@ -61,7 +61,7 @@ trait ClsNestingRelated { self: Cls =>
 
         val (nestedField, remainingNestedClassOpt) = nestedClass.potchSingle(leaf)
 
-        add(nestedField).thn { x =>
+        add(nestedField).pipe { x =>
           remainingNestedClassOpt match {
             case None                       => x.remove(parentKey)
             case Some(remainingNestedClass) =>
@@ -85,7 +85,7 @@ trait ClsNestingRelated { self: Cls =>
       existingNestingFieldInfo
         .updateContainee(updatedNestedClass)
         //FIXME: t210122162650 - p1 - meta nest into: handle optional like nest under
-        //.thn { info =>
+        //.pipe { info =>
         //  val nestedKeys: Keyz = combineNestedKeys(targetKeys, existingNestedFields)
         //  if (c.areAllNonRequired(nestedKeys)) info.toNonRequired
         //  else                                 info }
@@ -97,13 +97,13 @@ trait ClsNestingRelated { self: Cls =>
           .union {
         existingNestedFields
           .map(_.key)
-          .thn(Keyz.apply) }
+          .pipe(Keyz.apply) }
 
   // ===========================================================================
   def newNestingFieldInfo(c: Cls, targetKeys: Renz): Info = // for nest under
       nestingFields(c, targetKeys)
-        .thn(Cls.apply)
-        .thn { nestedClass =>
+        .pipe(Cls.apply)
+        .pipe { nestedClass =>
           if (c.areAllNonRequired(targetKeys.froms)) Info.opt(nestedClass)
           else                                       Info.one(nestedClass) }
 

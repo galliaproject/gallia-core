@@ -17,7 +17,7 @@ case class TypeLeaf(
 
       fields     : Seq[Field] = Nil) {
 
-    def keyz: Keyz = fields.map(_.key.symbol).thn(Keyz.apply)
+    def keyz: Keyz = fields.map(_.key.symbol).pipe(Keyz.apply)
 
     def isSeq   : Boolean = inheritsSeq
 

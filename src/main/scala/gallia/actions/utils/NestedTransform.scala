@@ -23,7 +23,7 @@ class NestedTransform(adag: MetaPlan, val rootId: RootId) { // TODO: as a peer o
     // ---------------------------------------------------------------------------
     def vldt(c: Cls, kpath: KPath): Errs =
       kpath
-        .thn(c.field_(_))
+        .pipe(c.field_(_))
         .flatMap(_.info.nestingTypeOpt) //FIXME: check nesting field instead
         .toSeq
         .flatMap(_vldt)
@@ -90,8 +90,8 @@ class NestedTransform(adag: MetaPlan, val rootId: RootId) { // TODO: as a peer o
   
     // ---------------------------------------------------------------------------
     // eg as used in generate
-    def uu(c: Cls, optional: Boolean): _ff11 = metaToAtomPlan(c).thn(new NestedPlan(_)).nestedRunneru2u(optional)
-    def zz(c: Cls, optional: Boolean): _ff11 = metaToAtomPlan(c).thn(new NestedPlan(_)).nestedRunnerz2z(optional)
+    def uu(c: Cls, optional: Boolean): _ff11 = metaToAtomPlan(c).pipe(new NestedPlan(_)).nestedRunneru2u(optional)
+    def zz(c: Cls, optional: Boolean): _ff11 = metaToAtomPlan(c).pipe(new NestedPlan(_)).nestedRunnerz2z(optional)
   
     // ---------------------------------------------------------------------------
     // used in zen/for-key

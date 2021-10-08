@@ -24,7 +24,7 @@ object JsonNumberTax extends gallia.atoms.utils.ModifyObj { // because of 201119
     (qualifyingField.isMultiple, qualifyingField.nestedClassOpt) match {
       case (false, None)     => _.asInstanceOf[    Double ]      .toInt
       case (true , None)     => _.asInstanceOf[Seq[Double]].map(_.toInt)
-      case (false, Some(c2)) => _.asInstanceOf[    Obj    ].thn(payUp(c2))
+      case (false, Some(c2)) => _.asInstanceOf[    Obj    ].pipe(payUp(c2))
       case (true , Some(c2)) => _.asInstanceOf[Seq[Obj   ]].map(payUp(c2)) }
 
 }

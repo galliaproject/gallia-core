@@ -14,14 +14,14 @@ trait HasSchemaProviderAndProjectionU extends HasSchemaProvider with HasProjecti
     def __meta: Cls =
       schemaProvider
         .resolve(default = infer())
-        .thn(projectMeta)
+        .pipe(projectMeta)
 
       // ---------------------------------------------------------------------------
       // TODO: t210115194646 - check if file size > x
       private def infer(): Cls =
         hasCommonObj
           .commonObj
-          .thn(SchemaInferrer.klass)
+          .pipe(SchemaInferrer.klass)
 
     // ===========================================================================
     protected def hasCommonObj: HasCommonObj
@@ -36,7 +36,7 @@ trait HasSchemaProviderAndProjectionU extends HasSchemaProvider with HasProjecti
     def __meta: Cls =
       schemaProvider
         .resolve(default = infer())
-        .thn(projectMeta)
+        .pipe(projectMeta)
 
       // ---------------------------------------------------------------------------
       // TODO: t210115194646: check if file size > x
@@ -44,7 +44,7 @@ trait HasSchemaProviderAndProjectionU extends HasSchemaProvider with HasProjecti
         hasCommonObjs
           .commonObjs
           .toListAndTrash // because of c201104121618
-          .thn(SchemaInferrer.klass)
+          .pipe(SchemaInferrer.klass)
 
     // ===========================================================================
     protected def hasCommonObjs: HasCommonObjs

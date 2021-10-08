@@ -1,4 +1,5 @@
-package gallia.io.in
+package gallia
+package io.in
 
 import aptus.Anything_
 
@@ -21,7 +22,7 @@ sealed trait InputStringType {
         inputString
           .dropWhile(_.isWhitespace)
           .headOption
-          .thn(_parse)
+          .pipe(_parse)
 
       // ---------------------------------------------------------------------------
       private def _parse(firstOpt: Option[Char]): InputStringType =

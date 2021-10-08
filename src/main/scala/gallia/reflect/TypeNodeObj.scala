@@ -24,7 +24,7 @@ object TypeNodeObj {
       def field(value: Field): Obj =
         obj(
           'key -> value.key,
-          'node -> value.node.thn(typeNode))
+          'node -> value.node.pipe(typeNode))
 
 }
 

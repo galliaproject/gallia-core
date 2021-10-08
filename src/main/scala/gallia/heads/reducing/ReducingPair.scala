@@ -23,7 +23,7 @@ trait ReducingPair {
           tipe  : ReducingType)
         extends ReducingPair {
 
-      def field(in: Cls): Fld = in.field(target.value).thn(tipe.field(target.value, _))
+      def field(in: Cls): Fld = in.field(target.value).pipe(tipe.field(target.value, _))
 
       def dataTriplet(in: Cls) = ReducingDataTriplet1(target.value, tipe, optional(in), ntipeOpt(in))
     }
@@ -63,8 +63,8 @@ trait ReducingPair {
       def field(in: Cls): Fld =
         in
           .field(target.value)
-          .thn { field => tipes.map(_.field(field)).thn(Cls.apply) }
-          .thn(Fld.one(target.value, _))
+          .pipe { field => tipes.map(_.field(field)).pipe(Cls.apply) }
+          .pipe(Fld.one(target.value, _))
 
       def dataTriplet(in: Cls) = ReducingDataTripletN(target.value, tipes, optional(in), ntipeOpt(in))
     }

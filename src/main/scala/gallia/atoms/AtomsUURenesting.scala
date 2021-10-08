@@ -33,8 +33,8 @@ object AtomsUUResnesting {
               info =>
                 info
                   .forceNestedClass // since we just nested it
-                  .thn(metaRec(sep)(_, formattedTail, tailKeyItems))
-                  .thn(info.updateContainee) } }
+                  .pipe(metaRec(sep)(_, formattedTail, tailKeyItems))
+                  .pipe(info.updateContainee) } }
 
   // ===========================================================================
   def data(targetKeys: Keyz, sep: Separator)(value: Obj): Obj =
@@ -65,7 +65,7 @@ object AtomsUUResnesting {
               // best to recurse *after* nesting to avoid key collisions
               _ .asInstanceOf[Obj]
                 .rename(formattedKey ~> formattedTail)
-                .thn(dataRec(sep)(_, formattedTail, tailKeyItems)) ) }
+                .pipe(dataRec(sep)(_, formattedTail, tailKeyItems)) ) }
 
 }
 

@@ -24,7 +24,7 @@ case class AObj(c: Cls, u: Obj) { // TODO: tt210124100009 - initially stood for 
     implicit def toHead(value: AObj): HeadU =
       new gallia.actions.in
         .InMemoryInputUa(value)
-        .thn(Head.inputU)
+        .pipe(Head.inputU)
   }
 
 // ===========================================================================
@@ -44,15 +44,15 @@ case class AObjs(c: Cls, z: Objs) {
     implicit def toHead(value: AObjs): HeadZ =
       new gallia.actions.in
         .InMemoryInputZa(value)
-        .thn(Head.inputZ)
+        .pipe(Head.inputZ)
 
     // ---------------------------------------------------------------------------
     def combineCls(values: Seq[Cls]): Cls = values.reduceLeft(_ unionCompatible _)
 
     def from(values: Seq[AObj]): AObjs =
       AObjs(
-        c = values.map(_.c).thn(combineCls),
-        z = values.map(_.u).thn(Objs.from))
+        c = values.map(_.c).pipe(combineCls),
+        z = values.map(_.u).pipe(Objs.from))
   }
 
 

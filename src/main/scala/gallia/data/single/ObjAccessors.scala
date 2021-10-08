@@ -1,4 +1,5 @@
-package gallia.data.single
+package gallia
+package data.single
 
 import aptus.Anything_
 import aptus.{Opt, Pes}
@@ -78,19 +79,19 @@ trait ObjAccessors { _: Obj => // id210326140514
   // ===========================================================================
   private def _enum[T <: enumeratum.EnumEntry: WTT](name: String): T  = gallia.reflect.CompanionReflection[T](methodName = "withName")(/* args */ name)
 
-    def enum  [T <: enumeratum.EnumEntry: WTT](key: KPathW):     T  = text  (key)      .thn(_enum[T])
+    def enum  [T <: enumeratum.EnumEntry: WTT](key: KPathW):     T  = text  (key)      .pipe(_enum[T])
     def enum_ [T <: enumeratum.EnumEntry: WTT](key: KPathW): Opt[T] = text_ (key)      .map(_enum[T])
     def enums [T <: enumeratum.EnumEntry: WTT](key: KPathW): Seq[T] = texts (key)      .map(_enum[T])
     def enums_[T <: enumeratum.EnumEntry: WTT](key: KPathW): Pes[T] = texts_(key).map(_.map(_enum[T]))
 
   // ---------------------------------------------------------------------------
-  def text  (key: KPathW):     String  = force(key).thn(format)
+  def text  (key: KPathW):     String  = force(key).pipe(format)
   def text_ (key: KPathW): Opt[String] = opt  (key).map(format)
   def texts (key: KPathW): Seq[String] = force(key)      .asSeq.map(format)
   def texts_(key: KPathW): Pes[String] = opt  (key).map(_.asSeq.map(format))
 
   @gallia.NumberAbstraction
-  def nmbr  (key: KPathW):     Double  = force(key).thn(_nmbr)
+  def nmbr  (key: KPathW):     Double  = force(key).pipe(_nmbr)
   def nmbr_ (key: KPathW): Opt[Double] = opt  (key).map(_nmbr)
   def nmbrs (key: KPathW): Seq[Double] = force(key)      .asSeq.map(_nmbr)
   def nmbrs_(key: KPathW): Pes[Double] = opt  (key).map(_.asSeq.map(_nmbr))

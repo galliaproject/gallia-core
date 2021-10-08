@@ -26,7 +26,7 @@ object UtsBase {
       type Target = Targets.ForKey
       val origin = new Origin {}
 
-      def resolve(sel: Selector) = sel(origin).thn(tqkpath)
+      def resolve(sel: Selector) = sel(origin).pipe(tqkpath)
     }
 
     // ---------------------------------------------------------------------------
@@ -35,7 +35,7 @@ object UtsBase {
       type Target = Targets.ForPath
       val origin = new Origin {}
 
-      def resolve(sel: Selector) = sel(origin).thn(tqkpath)
+      def resolve(sel: Selector) = sel(origin).pipe(tqkpath)
     }
 
     // ---------------------------------------------------------------------------
@@ -44,7 +44,7 @@ object UtsBase {
       type Target = Targets.ForEachKey
       val origin = new Origin {}
 
-      def resolve(sel: Selector) = sel(origin).thn(tqkpathz)
+      def resolve(sel: Selector) = sel(origin).pipe(tqkpathz)
     }
 
     // ---------------------------------------------------------------------------
@@ -53,7 +53,7 @@ object UtsBase {
       type Target = Targets.ForEachPath
       val origin = new Origin {}
 
-      def resolve(sel: Selector) = sel(origin).thn(tqkpathz)
+      def resolve(sel: Selector) = sel(origin).pipe(tqkpathz)
     }
 
   // ===========================================================================
@@ -124,37 +124,37 @@ object UtsBase {
     // ===========================================================================
     trait QpathzBase extends UtsBase { val origin: Origin
       type Target = RPathzSelection
-      def resolve(sel: Selector): TqRPathz = sel(origin).thn(tqqpathz) }
+      def resolve(sel: Selector): TqRPathz = sel(origin).pipe(tqqpathz) }
 
     // ---------------------------------------------------------------------------
     trait KpathzBase extends UtsBase { val origin: Origin
       type Target = KPathzSelection
-      def resolve(sel: Selector): TqKPathz = sel(origin).thn(tqkpathz) }
+      def resolve(sel: Selector): TqKPathz = sel(origin).pipe(tqkpathz) }
 
     // ---------------------------------------------------------------------------
     trait KPathBase extends UtsBase { val origin: Origin
       type Target = KPathSelection
-      def resolve(sel: Selector): TqKPath = sel(origin).thn(tqkpath) }
+      def resolve(sel: Selector): TqKPath = sel(origin).pipe(tqkpath) }
 
     // ---------------------------------------------------------------------------
     trait KeyzBase extends UtsBase { val origin: Origin
       type Target = KeyzSelection
-      def resolve(sel: Selector): TqKeyz = sel(origin).thn(tqkeyz) }
+      def resolve(sel: Selector): TqKeyz = sel(origin).pipe(tqkeyz) }
 
     // ---------------------------------------------------------------------------
     trait RenzBase extends UtsBase { val origin: Origin
       type Target = RenzSelection
-      def resolve(sel: Selector): TQRenz = sel(origin).thn(tqrenz) }
+      def resolve(sel: Selector): TQRenz = sel(origin).pipe(tqrenz) }
 
     // ---------------------------------------------------------------------------
     trait RenBase extends UtsBase { val origin: Origin
       type Target = RenSelection
-      def resolve(sel: Selector): TQRen = sel(origin).thn(tqren) }
+      def resolve(sel: Selector): TQRen = sel(origin).pipe(tqren) }
 
     // ---------------------------------------------------------------------------
     trait KeyBase extends UtsBase { val origin: Origin
       type Target = KeySelection
-      def resolve(sel: Selector): TQKey = sel(origin).thn(tqkey) }
+      def resolve(sel: Selector): TQKey = sel(origin).pipe(tqkey) }
     
 }
 

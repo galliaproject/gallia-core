@@ -10,7 +10,7 @@ case class MIndexEntry(mindex: MirrorIndex, keyOpt: Option[Key]) { // TODO: t210
 
       def resolve(allKeys: Keyz): Ren =
         allKeys.values.apply(mindex)
-          .thn { fromKey =>
+          .pipe { fromKey =>
             keyOpt match {
               case None        => Ren(fromKey, fromKey)
               case Some(toKey) => Ren(fromKey,   toKey) } }
@@ -34,14 +34,14 @@ case class MIndexEntry(mindex: MirrorIndex, keyOpt: Option[Key]) { // TODO: t210
 
     // ---------------------------------------------------------------------------
     object MIndexEntries {
-      implicit def toI(values: Seq[MirrorIndex]): MIndexEntries = values.map(MIndexEntry.toI).thn(MIndexEntries.apply)
+      implicit def toI(values: Seq[MirrorIndex]): MIndexEntries = values.map(MIndexEntry.toI).pipe(MIndexEntries.apply)
 
-      implicit def toK(values: Seq[(MirrorIndex,   Key)]): MIndexEntries = values.map(MIndexEntry.toK).thn(MIndexEntries.apply)
-      implicit def toS(values: Seq[(MirrorIndex,  SKey)]): MIndexEntries = values.map(MIndexEntry.toS).thn(MIndexEntries.apply)
-      implicit def toU(values: Seq[(MirrorIndex,  UKey)]): MIndexEntries = values.map(MIndexEntry.toU).thn(MIndexEntries.apply)
-      implicit def toE(values: Seq[(MirrorIndex,  EKey)]): MIndexEntries = values.map(MIndexEntry.toE).thn(MIndexEntries.apply)
+      implicit def toK(values: Seq[(MirrorIndex,   Key)]): MIndexEntries = values.map(MIndexEntry.toK).pipe(MIndexEntries.apply)
+      implicit def toS(values: Seq[(MirrorIndex,  SKey)]): MIndexEntries = values.map(MIndexEntry.toS).pipe(MIndexEntries.apply)
+      implicit def toU(values: Seq[(MirrorIndex,  UKey)]): MIndexEntries = values.map(MIndexEntry.toU).pipe(MIndexEntries.apply)
+      implicit def toE(values: Seq[(MirrorIndex,  EKey)]): MIndexEntries = values.map(MIndexEntry.toE).pipe(MIndexEntries.apply)
 
-      implicit def toW(values: Seq[(MirrorIndex, KeyW)]): MIndexEntries = values.map(MIndexEntry.toW).thn(MIndexEntries.apply)
+      implicit def toW(values: Seq[(MirrorIndex, KeyW)]): MIndexEntries = values.map(MIndexEntry.toW).pipe(MIndexEntries.apply)
     }
 
 // ===========================================================================

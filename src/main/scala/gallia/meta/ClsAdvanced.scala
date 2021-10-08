@@ -51,7 +51,7 @@ trait ClsAvanced { self: Cls =>
              if (field.key == key1) field.updateKey(key2)
         else if (field.key == key2) field.updateKey(key1)
         else                        field }
-      .thn(rewrap)
+      .pipe(rewrap)
 
   // ---------------------------------------------------------------------------
   def copyField(key: Key, newKey: Key): Cls = rewrap(fields :+ field(key).updateKey(newKey))
@@ -71,7 +71,7 @@ trait ClsAvanced { self: Cls =>
             .updateKey(entry.to)
             .toNonMultiple
             .toNonRequired // TODO: t210108203819 offer a strict version
-        }.thn(Cls.apply)
+        }.pipe(Cls.apply)
 
   // ===========================================================================
   def untuplifyz(targetKey: Ren, newKeys: Keyz): Cls = untuplify(targetKey, newKeys, _ => Container._One) //  TODO: add check one string;
@@ -85,26 +85,26 @@ trait ClsAvanced { self: Cls =>
             f(info.container),
             newKeys
               .map(Fld(_, Info.oneString))
-              .thn(Cls.apply)) }
+              .pipe(Cls.apply)) }
 
   // ===========================================================================
   def unarrayEntries(newKeys: Keyz, valueKey: Key): Cls = // TODO: rename to include "pivot"
       field(valueKey)
-        .thn { valueField =>
+        .pipe { valueField =>
           newKeys
             .values
             .map(valueField.updateKey)
             .map(_.toNonRequired) // pivot keys can't be required unless explicitly set so
-            .thn(Cls.apply) }
+            .pipe(Cls.apply) }
 
     // ---------------------------------------------------------------------------
     @deprecated("see 210303104417") def unarrayBy0(keys: Keyz, newKeys: Keyz): Cls =
       remove(keys)
-        .thn { remaining =>
+        .pipe { remaining =>
           newKeys
             .values
             .map(Fld(_, Info.one(remaining)))
-            .thn(Cls.apply) }
+            .pipe(Cls.apply) }
 
   // ===========================================================================
   def unpivot(keyz: Keyz): Cls = {
@@ -116,7 +116,7 @@ trait ClsAvanced { self: Cls =>
       target
         .fields
         .head // validated
-        .thn { field =>                      
+        .pipe { field =>                      
           cls(
             Fld.oneString(_id),                      
             field.updateKey(_vle)) }

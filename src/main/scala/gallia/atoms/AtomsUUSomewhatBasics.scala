@@ -1,6 +1,5 @@
 package gallia.atoms
 
-import scala.util.chaining._
 import gallia._
 
 // ===========================================================================

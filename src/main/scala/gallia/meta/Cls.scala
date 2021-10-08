@@ -113,16 +113,16 @@ case class Cls(fields: Seq[Fld])
     def writeFull (out: String) { formatFull .writeFileContent(out); () }
 
     // ===========================================================================
-    def valueFromObj  (instantiator: Instantiator)(value: Any): Any = value.asInstanceOf[              Obj  ]      .thn(instantiator.instantiateRecursively(this, _))
+    def valueFromObj  (instantiator: Instantiator)(value: Any): Any = value.asInstanceOf[              Obj  ]      .pipe(instantiator.instantiateRecursively(this, _))
     def valueFromObjs (instantiator: Instantiator)(value: Any): Any = value.asInstanceOf[       Seq   [Obj] ]      .map(instantiator.instantiateRecursively(this, _))
     def valueFromObj_ (instantiator: Instantiator)(value: Any): Any = value.asInstanceOf[       Option[Obj] ]      .map(instantiator.instantiateRecursively(this, _))
     def valueFromObjs_(instantiator: Instantiator)(value: Any): Any = value.asInstanceOf[Option[Seq   [Obj]]].map(_.map(instantiator.instantiateRecursively(this, _)))
 
     // ---------------------------------------------------------------------------
-    def valueToObj  (value: Any): Any = value.asInstanceOf[              Product  ]            .productIterator.thn(ClsUtils.valuesToObj(this))
-    def valueToObjs (value: Any): Any = value.asInstanceOf[       Seq   [Product] ]      .map(_.productIterator.thn(ClsUtils.valuesToObj(this)))
-    def valueToObj_ (value: Any): Any = value.asInstanceOf[       Option[Product] ]      .map(_.productIterator.thn(ClsUtils.valuesToObj(this)))
-    def valueToObjs_(value: Any): Any = value.asInstanceOf[Option[Seq   [Product]]].map(_.map(_.productIterator.thn(ClsUtils.valuesToObj(this))))
+    def valueToObj  (value: Any): Any = value.asInstanceOf[              Product  ]            .productIterator.pipe(ClsUtils.valuesToObj(this))
+    def valueToObjs (value: Any): Any = value.asInstanceOf[       Seq   [Product] ]      .map(_.productIterator.pipe(ClsUtils.valuesToObj(this)))
+    def valueToObj_ (value: Any): Any = value.asInstanceOf[       Option[Product] ]      .map(_.productIterator.pipe(ClsUtils.valuesToObj(this)))
+    def valueToObjs_(value: Any): Any = value.asInstanceOf[Option[Seq   [Product]]].map(_.map(_.productIterator.pipe(ClsUtils.valuesToObj(this))))
 
     // ===========================================================================
     //TODO: ensure not nested type?
@@ -236,7 +236,7 @@ object Cls {
   def from(keys: Seq[SKey])(implicit di: DI): Cls =
     keys
       .map(skey => Fld(skey.symbol, Info.string))
-      .thn(Cls.apply)
+      .pipe(Cls.apply)
 
 }
 

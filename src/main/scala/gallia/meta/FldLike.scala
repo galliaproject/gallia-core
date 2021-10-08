@@ -29,7 +29,7 @@ trait FldLike extends HasKey with InfoLike
           node
             .assert(!_.isContainedBObj) // has already been validated by here (see 201014103336)
             .forceNonBObjInfo
-            .thn { that =>
+            .pipe { that =>
               (this._container, this._containee) ==
               (that. container, that. containee) }
 

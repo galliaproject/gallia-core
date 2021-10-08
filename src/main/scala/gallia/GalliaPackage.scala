@@ -1,5 +1,3 @@
-import java.lang.IllegalStateException
-
 import gallia.io.in._
 import gallia.domain._
 
@@ -8,9 +6,14 @@ package object gallia
     extends Reserved
     with    Aliases
     with    Annotations
-    with    HeadAliases
+    with    HeadAliases2
     with    DataAliases
     with   ADataAliases {
+
+  private[gallia] implicit class GalliaAnything_[A](u: A) { // so as to not import chaining._ everywhere
+    def pipe[B](f: A => B)   : B    = f(u)
+    def tap [B](f: A => Unit): Unit = f(u)
+  }
 
   // ===========================================================================
   // TODO: t210121105809 - rename to HeadU->HeadO and HeadZ->HeadS (historical names)

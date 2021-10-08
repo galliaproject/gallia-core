@@ -1,13 +1,12 @@
-package gallia.data.multiple.streamer
+package gallia
+package data.multiple.streamer
 
 import scala.reflect.{ClassTag => CT}
 import java.io.Closeable
 
-import aptus.Anything_
 import aptus.aptutils.IteratorUtils
 
 import gallia.heads.merging.MergingData._
-import gallia.Aliases.Coll
 
 // ===========================================================================
 trait Streamer[A] { // note: not necessarily bothering with genericity (in the general sense) at this point, mostly on abstracting relevant scala/spark collections
@@ -72,7 +71,7 @@ trait Streamer[A] { // note: not necessarily bothering with genericity (in the g
     @aptus.nonfinl private[streamer] def asMeBased[B >: A : CT](that: Streamer[B]): Streamer[B] =
       that.asListBased // overriden for RDD
 
-    final def asListBased: Streamer[A] = toList.thn(Streamer.fromList)
+    final def asListBased: Streamer[A] = toList.pipe(Streamer.fromList)
 
     // ===========================================================================
     // TODO: t210116154010 - ideally would need to curry type args...

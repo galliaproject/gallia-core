@@ -81,13 +81,13 @@ object ActionsUUGenerusion { //TODO: t210111095156 separate all the Whatever and
      // ---------------------------------------------------------------------------
     case class GenerateWV1b(from: TqKPath, to: TKPath, f: _ff11) extends ActionUUc {
         def  vldt (c: Cls): Errs   = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c)
-        def _meta (c: Cls): Cls    = to.fieldPair(c).thn(c.add)
+        def _meta (c: Cls): Cls    = to.fieldPair(c).pipe(c.add)
         def atomuu(c: Cls): AtomUU = _Transform1to1 (from.pathPairT(c), to.path, f) }
     
     // ===========================================================================    
     case class GenerateWV2a(from: TqKPath2, to: KPath, f: _ff21) extends ActionUUb {
         def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c)
-        def _meta  (c: Cls): Cls     = c.add(to, from.tq1.resolve(c).thn(c.field).info) // choosing first arbitrarily (210817130604)
+        def _meta  (c: Cls): Cls     = c.add(to, from.tq1.resolve(c).pipe(c.field).info) // choosing first arbitrarily (210817130604)
         def atomuus(c: Cls): AtomUUs = Seq(
             _Transform2to1 (from    .pathPairT(c), to, f(_, _)), 
             _AssertSameType(from.tq1.pathPairT(c), to)) }
@@ -101,7 +101,7 @@ object ActionsUUGenerusion { //TODO: t210111095156 separate all the Whatever and
     // ===========================================================================    
     case class GenerateWV3a(from: TqKPath3, to: KPath, f: _ff31) extends ActionUUb {
         def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c)
-        def _meta  (c: Cls): Cls     = c.add(to, from.tq1.resolve(c).thn(c.field).info) // choosing first arbitrarily (210817130604)
+        def _meta  (c: Cls): Cls     = c.add(to, from.tq1.resolve(c).pipe(c.field).info) // choosing first arbitrarily (210817130604)
         def atomuus(c: Cls): AtomUUs = Seq(
             _Transform3to1 (from    .pathPairT(c), to, f(_, _, _)), 
             _AssertSameType(from.tq1.pathPairT(c), to)) }

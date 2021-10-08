@@ -32,12 +32,12 @@ object ActionsUUGenerationOther { //TODO: t210111095156 separate all the Whateve
       def protoValidate(c: Cls): Errs =
         target.vldtAsOrigin(c) ++
         _vldt.fieldAbsence(c, newPath) ++
-        target.kpath_(c).thn {
+        target.kpath_(c).pipe {
           _trnsf.vldt(c, _) }
 
       // ---------------------------------------------------------------------------
-      def _meta (c: Cls): Cls    = target.pathPairT(c).thn { pair => _trnsf.generateMeta(c, pair.path).thn(metaF(pair.optional)).thn(c.add(newPath, _)) }
-      def atomuu(c: Cls): AtomUU = target.pathPairT(c).thn { pair => _Transform1to1(pair, newPath, dataF(c, pair)) }
+      def _meta (c: Cls): Cls    = target.pathPairT(c).pipe { pair => _trnsf.generateMeta(c, pair.path).pipe(metaF(pair.optional)).pipe(c.add(newPath, _)) }
+      def atomuu(c: Cls): AtomUU = target.pathPairT(c).pipe { pair => _Transform1to1(pair, newPath, dataF(c, pair)) }
     }
 
     // ===========================================================================

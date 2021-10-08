@@ -26,7 +26,7 @@ case class IntermediateMetaResult(dag: gallia.dag.DAG[IntermediateMetaResultNode
         private def _successMetaResult =
           dag
             .transform(_.successOpt.force)(_.id)
-            .thn(SuccessMetaResult.apply)
+            .pipe(SuccessMetaResult.apply)
 
       // ---------------------------------------------------------------------------
       def either: Either[MetaErrorResult, (SuccessMetaResult, ActionPlan)] =

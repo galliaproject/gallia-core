@@ -47,7 +47,7 @@ trait SelectionValidation { def vldt(c: Cls): Errs }
         // ---------------------------------------------------------------------------
         trait RenzSelection extends RPathzSelection {
                   def renz  (c: Cls): Renz
-            @finl def qpathz(c: Cls): RPathz = renz(c).values.map(_.qpath).thn(RPathz.apply) }
+            @finl def qpathz(c: Cls): RPathz = renz(c).values.map(_.qpath).pipe(RPathz.apply) }
 
           // ---------------------------------------------------------------------------
           trait KeyzSelection extends RenzSelection with KPathzSelection {

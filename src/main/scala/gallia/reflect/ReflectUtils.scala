@@ -1,4 +1,5 @@
-package gallia.reflect
+package gallia
+package reflect
 
 import aptus.Anything_
 import aptus.Name
@@ -11,7 +12,7 @@ private object ReflectUtils {
     tpe
       .toString
       .takeWhile(_ != '[') /* TODO: cleaner way? */
-      .thn(simplify)
+      .pipe(simplify)
 
   // ---------------------------------------------------------------------------
   def simplify(value: FullName): Alias =

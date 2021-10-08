@@ -1,4 +1,5 @@
-package gallia.io.out
+package gallia
+package io.out
 
 import aptus.Anything_
 
@@ -10,7 +11,7 @@ object OutputStringDrivenConf {
       case util.Failure(f) => ???// TODO
       case util.Success(uri) =>
         Option(uri.getScheme)
-          .thn(SupportedUriScheme.parse)
+          .pipe(SupportedUriScheme.parse)
            match {
             case SupportedUriScheme.file | SupportedUriScheme.http | SupportedUriScheme.https | SupportedUriScheme.ftp | SupportedUriScheme.sftp =>
               Option(uri.getPath) match {
@@ -36,7 +37,7 @@ object OutputStringDrivenConf {
       case util.Failure(f) => ???// TODO
       case util.Success(uri) =>
         Option(uri.getScheme)
-          .thn(SupportedUriScheme.parse)
+          .pipe(SupportedUriScheme.parse)
            match {
             case SupportedUriScheme.file | SupportedUriScheme.http | SupportedUriScheme.https | SupportedUriScheme.ftp | SupportedUriScheme.sftp =>
               Option(uri.getPath) match {

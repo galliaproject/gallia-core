@@ -63,8 +63,8 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
 
       def formatDefault: String = formatCompactJson
 
-    def formatPrettyJson  : String = ObjToGson(this).thn(GsonFormatter.pretty)
-    def formatCompactJson : String = ObjToGson(this).thn(GsonFormatter.compact)
+    def formatPrettyJson  : String = ObjToGson(this).pipe(GsonFormatter.pretty)
+    def formatCompactJson : String = ObjToGson(this).pipe(GsonFormatter.compact)
 
     // ===========================================================================
     def size                          = data.size

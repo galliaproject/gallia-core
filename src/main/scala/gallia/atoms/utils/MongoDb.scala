@@ -1,4 +1,5 @@
-package gallia.atoms.utils
+package gallia
+package atoms.utils
 
 
 import java.io.Closeable
@@ -24,7 +25,7 @@ trait MongoDb {
   def query(uri: java.net.URI, dbOpt: Option[String])(cmd: MongoDbCmd): (Iterator[List[(Symbol, Any)]], Closeable)
 
   final def closeableQuery(uri: java.net.URI, dbOpt: Option[String])(cmd: MongoDbCmd): Closeabled[Iterator[List[(Symbol, Any)]]] =
-    query(uri, dbOpt)(cmd).thn(Closeabled.fromPair)
+    query(uri, dbOpt)(cmd).pipe(Closeabled.fromPair)
 }
 
 // ===========================================================================

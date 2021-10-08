@@ -1,6 +1,6 @@
-package gallia.data.multiple.streamer
+package gallia
+package data.multiple.streamer
 
-import scala.util.chaining.scalaUtilChainingOps // trying it out
 import scala.reflect.{ClassTag => CT}
 
 import aptus.Iterator_

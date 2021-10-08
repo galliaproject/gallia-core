@@ -15,7 +15,7 @@ trait CanForceAs1[T] { def forceAs(key: Key): T } // TODO: t201208111414 - macro
 
     // ---------------------------------------------------------------------------
     def  vldt(c: Cls): Errs    = Nil//TODO
-    def _meta(c: Cls): Cls     = c.thnIf(target.isActual)(_.rename(target))
+    def _meta(c: Cls): Cls     = c.pipeIf(target.isActual)(_.rename(target))
     def atomzzs      : AtomZZs = target.actualOpt.map(_Rename).map(_UWrapper).toSeq
   }
 

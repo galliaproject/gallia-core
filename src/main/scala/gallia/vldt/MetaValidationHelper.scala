@@ -17,8 +17,8 @@ object MetaValidationHelper {
     paths.froms.flatMap(fieldPresence(c, _)) ++
     paths.  tos.flatMap(fieldAbsence (c, _)) ++
     //
-    paths.froms.thn(distinctKPaths) ++
-    paths.  tos.thn(distinctKPaths) ++
+    paths.froms.pipe(distinctKPaths) ++
+    paths.  tos.pipe(distinctKPaths) ++
     //
     disjointPathss(paths.froms, paths.tos)
 
@@ -26,14 +26,14 @@ object MetaValidationHelper {
   def isValidTypePair(tipe: TypeNode): (NodeDesc, Boolean) =
     tipe
       .nodeDesc
-      .thn { desc =>
+      .pipe { desc =>
         (desc, NodeDescUtils.isValid(desc)) }
 
   // ---------------------------------------------------------------------------
   /** if not BObj(s)/cc(s) */
   def validType(location: Location, tipe: TypeNode): Errs =
       isValidTypePair(tipe)
-        .thn { case (desc, valid) =>
+        .pipe { case (desc, valid) =>
           if (valid) Nil
           else       NodeDescUtils.errorMessages(desc).map(_.prepend(location.formatDefault.space) /* TODO: t201114160635 */).map(err) }
 
@@ -60,7 +60,7 @@ object MetaValidationHelper {
 
     tmp ++
       (if (tmp.nonEmpty) Nil // shortcut validation
-       else              value.values.map(_.forceCls).thn(validateCompatibility))
+       else              value.values.map(_.forceCls).pipe(validateCompatibility))
   }
 
   // ---------------------------------------------------------------------------
@@ -71,7 +71,7 @@ object MetaValidationHelper {
       .flatMap { entry =>
         location
           .addKey(entry.key)
-          .thn(entry.vldt) }
+          .pipe(entry.vldt) }
 
   // ===========================================================================
   def validateCaseClass(location: Location)(leaf: TypeLeaf): Errs =
@@ -80,7 +80,7 @@ object MetaValidationHelper {
       .fields
       .flatMap { field =>
         validType(
-          field.key.thn(location.addKey),
+          field.key.pipe(location.addKey),
           field.node) }
 
 }

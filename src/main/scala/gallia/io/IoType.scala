@@ -80,7 +80,7 @@ sealed trait IoTypeZ { // TODO: t210118103012 - proper handling
 
     // ===========================================================================
     case object RawLines extends UrlLikeIoTypeZ {
-      def defaultRead   = (start, conf) => start.lines.thnIf(!conf.inMemoryMode)(_.iteratorMode)
+      def defaultRead   = (start, conf) => start.lines.pipeIf(!conf.inMemoryMode)(_.iteratorMode)
       def defaultFormat = _.consume.map(_.text(gallia._line)) }
 
     // ===========================================================================
@@ -92,17 +92,17 @@ sealed trait IoTypeZ { // TODO: t210118103012 - proper handling
 
       // ---------------------------------------------------------------------------
       case object JsonLines extends UrlLikeIoTypeZ {
-        def defaultRead   = (start, conf) => start.jsonLinesFile.thnIf(!conf.inMemoryMode)(_.iteratorMode).schemaProvider(conf.schemaProvider).project(conf.projectionOpt)
+        def defaultRead   = (start, conf) => start.jsonLinesFile.pipeIf(!conf.inMemoryMode)(_.iteratorMode).schemaProvider(conf.schemaProvider).project(conf.projectionOpt)
         def defaultFormat = _.consume.map(_.formatCompactJson) }
 
       // ---------------------------------------------------------------------------
       case object JsonArray extends UrlLikeIoTypeZ {
-        def defaultRead   = (start, conf) => start.jsonArrayFile.thnIf(!conf.inMemoryMode)(_.iteratorMode).schemaProvider(conf.schemaProvider).project(conf.projectionOpt)
+        def defaultRead   = (start, conf) => start.jsonArrayFile.pipeIf(!conf.inMemoryMode)(_.iteratorMode).schemaProvider(conf.schemaProvider).project(conf.projectionOpt)
         def defaultFormat = _.naiveFormatArrayLines }
 
     // ===========================================================================
     case object Table extends IoTypeZ {
-      def defaultRead   = (start, conf) => start.table.thnIf(!conf.inMemoryMode)(_.iteratorMode).schemaProvider(conf.schemaProvider).project(conf.projectionOpt)
+      def defaultRead   = (start, conf) => start.table.pipeIf(!conf.inMemoryMode)(_.iteratorMode).schemaProvider(conf.schemaProvider).project(conf.projectionOpt)
       def defaultFormat = aptus.illegalState("TODO:210118103012")
       def outputConf(path: String) = UrlLikeTableConf(path, gallia.io.UrlLike.Default, gallia.io.FormatConf.Default)
     }

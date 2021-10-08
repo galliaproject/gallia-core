@@ -1,4 +1,5 @@
-package gallia.io
+package gallia
+package io
 
 import aptus.{Anything_, String_}
 import enumeratum.{Enum, EnumEntry}
@@ -33,7 +34,7 @@ sealed trait SupportedExtensions extends EnumEntry {
         .splitBy(".")
         .last
         .toLowerCase
-        .thn(SupportedExtensions.withNameOption)
+        .pipe(SupportedExtensions.withNameOption)
 
     // ===========================================================================
     case object gz    extends CompressionExtensions { def compression = SupportedCompression.Gzip  }

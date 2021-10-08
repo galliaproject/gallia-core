@@ -18,7 +18,7 @@ private[io] trait InputBase { val inputString: InputString }
         .parse(inputString)
          match {
           case InputStringType.JsonObject => JsonParsing.parseObject(inputString)
-          case _                          => inputString.readFileContent.thn(JsonParsing.parseObject) } }
+          case _                          => inputString.readFileContent.pipe(JsonParsing.parseObject) } }
 
   // ---------------------------------------------------------------------------
   trait StreamObjs extends InputBase {
@@ -26,13 +26,13 @@ private[io] trait InputBase { val inputString: InputString }
       InputStringType
         .parse(inputString)
          match {
-          case InputStringType.JsonObject  => inputString.splitBy("\n").filterNot(_.trim.isEmpty).map(JsonParsing.parseObject).thn(Objs.from)
-          case InputStringType.JsonArray   => JsonParsing.parseArray(inputString).thn(Objs.from)
+          case InputStringType.JsonObject  => inputString.splitBy("\n").filterNot(_.trim.isEmpty).map(JsonParsing.parseObject).pipe(Objs.from)
+          case InputStringType.JsonArray   => JsonParsing.parseArray(inputString).pipe(Objs.from)
           case InputStringType.Indirection =>
             val content = inputString.readFileContent
 
-           (if (InputStringType.parse(content).isJsonObject) JsonParsing.parseObject(content).thn(Objs.splat(_))
-            else                                             JsonParsing.parseArray (content).thn(Objs.from))
+           (if (InputStringType.parse(content).isJsonObject) JsonParsing.parseObject(content).pipe(Objs.splat(_))
+            else                                             JsonParsing.parseArray (content).pipe(Objs.from))
           }
   }
 
@@ -49,15 +49,15 @@ private[io] trait InputBase { val inputString: InputString }
 
     def read(f: StartReadUFluency => EndReadUFluency): HeadU =
       in.startU(inputString)
-        .thn(f)
+        .pipe(f)
         .conf
         .actionU
-        .thn(Head.inputU)
+        .pipe(Head.inputU)
   }
 
   // ===========================================================================
   trait StreamHead extends InputBase {
-    def streamLines(): HeadZ = inputString.splitBy("\n").thn(lines => gallia.domain.BObjs(lines.map(line => bobj(_line -> line))))
+    def streamLines(): HeadZ = inputString.splitBy("\n").pipe(lines => gallia.domain.BObjs(lines.map(line => bobj(_line -> line))))
 
     // ---------------------------------------------------------------------------
     def stream()                                       : HeadZ = stream(_.inputDriven) // TODO: nicer error due to invoking .read.
@@ -69,11 +69,11 @@ private[io] trait InputBase { val inputString: InputString }
 
     def stream(f: StartReadZFluency => EndReadZFluency): HeadZ =
         inputString
-          .thn(in.startZ)
-          .thn(f)
+          .pipe(in.startZ)
+          .pipe(f)
           .conf
           .actionZ
-          .thn(Head.inputZ)
+          .pipe(Head.inputZ)
   }
 
   // ===========================================================================
@@ -81,8 +81,8 @@ private[io] trait InputBase { val inputString: InputString }
     val connection: java.sql.Connection
 
     // ---------------------------------------------------------------------------
-    def streamTable(table: TableName)  : HeadZ = gallia.actions.in.JdbcInputZ2(connection, ReadQuerying.All(table))  .thn(heads.Head.inputZ) 
-    def streamQuery(query: QueryString): HeadZ = gallia.actions.in.JdbcInputZ2(connection, ReadQuerying.Query(query)).thn(heads.Head.inputZ)
+    def streamTable(table: TableName)  : HeadZ = gallia.actions.in.JdbcInputZ2(connection, ReadQuerying.All(table))  .pipe(heads.Head.inputZ) 
+    def streamQuery(query: QueryString): HeadZ = gallia.actions.in.JdbcInputZ2(connection, ReadQuerying.Query(query)).pipe(heads.Head.inputZ)
   }
   
 // ===========================================================================

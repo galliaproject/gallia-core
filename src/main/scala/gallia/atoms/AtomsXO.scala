@@ -23,27 +23,27 @@ object AtomsXO {
 
   // ===========================================================================
   case class _UrlLikeOutputU(ioType: IoTypeU, uriString: String, urlLike: UrlLike) extends AtomUO {
-      def naive(o: Obj) { ioType.defaultFormat(o).thn(urlLike.writeFileContent(uriString)) } }
+      def naive(o: Obj) { ioType.defaultFormat(o).pipe(urlLike.writeFileContent(uriString)) } }
 
     // ---------------------------------------------------------------------------
     case class _UrlLikeOutputZ(ioType: IoTypeZ, uriString: String, urlLike: UrlLike) extends AtomZO {
-      def naive(z: Objs) { ioType.defaultFormat(z).thn(urlLike.writeFileLines(uriString)) } }
+      def naive(z: Objs) { ioType.defaultFormat(z).pipe(urlLike.writeFileLines(uriString)) } }
 
   // ===========================================================================
   case class _OtherOutputU(ioType: IoTypeU, outlet: OutletType) extends AtomUO {
-      def naive(o: Obj) { ioType.defaultFormat(o).thn(outlet.writeLine) } }
+      def naive(o: Obj) { ioType.defaultFormat(o).pipe(outlet.writeLine) } }
 
     // ---------------------------------------------------------------------------
     case class _OtherOutputZ(ioType: IoTypeZ, outlet: OutletType) extends AtomZO {
-      def naive(z: Objs) { ioType.defaultFormat(z).thn(outlet.writeLines) } }
+      def naive(z: Objs) { ioType.defaultFormat(z).pipe(outlet.writeLines) } }
 
   // ===========================================================================
   case class _UrlLikeTableOutput(skeys: Seq[SKey], uriString : String, urlLike: UrlLike, twc: TableWritingContext) extends AtomZO {
-      def naive(z: Objs) { twc.formatTable(skeys)(z).thn(urlLike.writeFileLines(uriString)) } }
+      def naive(z: Objs) { twc.formatTable(skeys)(z).pipe(urlLike.writeFileLines(uriString)) } }
 
     // ---------------------------------------------------------------------------
     case class _OtherTableOutput(skeys: Seq[SKey], outlet: OutletType, twc: TableWritingContext) extends AtomZO {
-      def naive(z: Objs) { twc.formatTable(skeys)(z).thn(outlet.writeLines) } }
+      def naive(z: Objs) { twc.formatTable(skeys)(z).pipe(outlet.writeLines) } }
 
 }
 

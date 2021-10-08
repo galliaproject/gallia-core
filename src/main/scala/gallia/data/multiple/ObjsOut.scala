@@ -6,7 +6,7 @@ import aptus.{Anything_, String_, Seq_}
 trait ObjsOut { self: Objs =>
 
   @gallia.Scalability
-  def formatDefault: String = toListAndTrash.thn { list => list.map(_.formatDefault).section(s"#${list.size}") }
+  def formatDefault: String = toListAndTrash.pipe { list => list.map(_.formatDefault).section(s"#${list.size}") }
 
   // ---------------------------------------------------------------------------
   @gallia.Scalability // TODO: use Writer

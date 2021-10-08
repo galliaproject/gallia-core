@@ -1,9 +1,8 @@
-package gallia.actions
+package gallia
+package actions
 
-import scala.util.chaining._
 import aptus.Anything_
 
-import gallia._
 import gallia.target._
 import gallia.FunctionWrappers._
 import gallia.atoms.AtomsUUTransforms._TransformWW
@@ -165,7 +164,7 @@ case class TransformFoo(from: TtqRPathz, to: Cls, f: _ff11) extends ActionUUb wi
 
     // ---------------------------------------------------------------------------
     case class TransformWW1b(from: TtqRPathz, to: TypeNode, f: _ff11) extends ActionUUb {
-      def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) ++ to.thn(_vldt.validType)
+      def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) ++ to.pipe(_vldt.validType)
       def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c) { (curr, path) => curr.updateContainee(path, to) }
       def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformWW(_, f, checkType = false))) }
 

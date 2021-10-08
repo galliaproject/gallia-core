@@ -13,14 +13,14 @@ trait ObjsAggregations { self: Objs =>
     flatMapToStreamer { o => o.opt(groupee.from).map(o.retainOpt(groupers.froms).map(_.rename(groupers)) -> _) }
       .groupByKey
       .map { case (keyObjOpt, values) => tmp(keyObjOpt).put(groupee.to, values) }
-      .thn(Objs.build)
+      .pipe(Objs.build)
 
   // ---------------------------------------------------------------------------
   def groupNN(groupees: Renz, groupers: Renz, as: Key): Objs =
     flatMapToStreamer { o => o.retainOpt(groupees.froms).map(_.rename(groupees)).map(o.retainOpt(groupers.froms) -> _) }
       .groupByKey
       .map { case (keyObjOpt, values) => tmp(keyObjOpt).rename(groupers).put(as, values) }
-      .thn(Objs.build)
+      .pipe(Objs.build)
 
   // ===========================================================================
   def aggregateNumbers1(groupee: Key, grouper: Keyz, as: Key)(f: List[Option[Any]] => Any): Objs =
@@ -28,21 +28,21 @@ trait ObjsAggregations { self: Objs =>
        // TODO: if empty? wrap runtime error
       .groupByKey
       .map { case (k, values) => tmp(k).put(as, f(values))}
-      .thn(Objs.build)
+      .pipe(Objs.build)
 
   // ---------------------------------------------------------------------------
   def aggregateNumbersN(groupees: Keyz, grouper: Keyz, as: Key)(f: Seq[Any] => Any): Objs =
     flatMapToStreamer { o => o.retainOpt(groupees).map(o.retainOpt(grouper) -> _) }
       .groupByKey
       .map { case (k, values) => tmp(k).put(as, f(values)) }
-      .thn(Objs.build)
+      .pipe(Objs.build)
 
   // ===========================================================================
   def countLike(groupees: Keyz, grouper: Keyz, as: Key)(f: List[Option[Obj]] => Any): Objs =
     mapToStreamer { o => o.retainOpt(grouper) -> o.retainOpt(groupees) }
       .groupByKey
       .map { case (keyObjOpt, values) => tmp(keyObjOpt).put(as, f(values)) }
-      .thn(Objs.build)
+      .pipe(Objs.build)
 
   // ===========================================================================
   @deprecated("see 210118083814 for new version") def numberStats(groupee: Key, grouper: Keyz, as: Key): Objs =
@@ -58,7 +58,7 @@ trait ObjsAggregations { self: Objs =>
               gallia._mean   -> nums.mean,
               gallia._stdev  -> nums.stdev)
         tmp(keyObjOpt).put(as, stats) }
-      .thn(Objs.build)
+      .pipe(Objs.build)
 }
 
 // ---------------------------------------------------------------------------

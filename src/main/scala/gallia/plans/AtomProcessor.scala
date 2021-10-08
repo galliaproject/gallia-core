@@ -74,7 +74,7 @@ private[plans] object AtomProcessor {
         // ===========================================================================
         case x: AtomUO => obj .sideEffect(x.naive)
         case x: AtomZO => objs.sideEffect(x.naive)
-        case x: AtomVO => vle .sideEffect(x.naive).thn(NDT.vle) // TODO: keep? instead of "grab"?
+        case x: AtomVO => vle .sideEffect(x.naive).pipe(NDT.vle) // TODO: keep? instead of "grab"?
         
         // ===========================================================================
         // less common
@@ -87,9 +87,9 @@ private[plans] object AtomProcessor {
         case x: AtomZZtoZ => (x.naive _).tupled(objs2)
 
         // ---------------------------------------------------------------------------
-        case x: AtomVV => x.naive(vle ).thn(NDT.vle)
-        case x: AtomUV => x.naive(obj ).thn(NDT.vle)
-        case x: AtomZV => x.naive(objs).thn(NDT.vle)
+        case x: AtomVV => x.naive(vle ).pipe(NDT.vle)
+        case x: AtomUV => x.naive(obj ).pipe(NDT.vle)
+        case x: AtomZV => x.naive(objs).pipe(NDT.vle)
 
       }): NDT
 

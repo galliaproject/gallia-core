@@ -1,4 +1,5 @@
-package gallia.io.in
+package gallia
+package io.in
 
 import java.io.Closeable
 import java.net.URL
@@ -19,7 +20,7 @@ case class InputUrlLike( // TODO: t210115193904 - check URI, regular file vs sym
   val _inputString = InputUrlLike.normalize(inputString) // TODO: validation
 
   // ===========================================================================
-  def content(): Content = _inputString.thn(new URL(_)).thn(_content())
+  def content(): Content = _inputString.pipe(new URL(_)).pipe(_content())
 
   // ---------------------------------------------------------------------------
   @gallia.Distributivity
@@ -29,7 +30,7 @@ case class InputUrlLike( // TODO: t210115193904 - check URI, regular file vs sym
     val streamer =
       Streamer
         .fromIterator(itr)
-        .thnOpt(linesPreprocessing)(f => _.thn(f))
+        .pipeOpt(linesPreprocessing)(f => _.pipe(f))
 
     val first: Line =
       if (streamer.nonEmpty) streamer.iterator.next()
@@ -47,13 +48,13 @@ case class InputUrlLike( // TODO: t210115193904 - check URI, regular file vs sym
       .map(_.apply(this))
       .getOrElse {
         linesPair()
-          .thn { x =>
+          .pipe { x =>
             if (inMemoryMode) Streamer.fromList(Closeabled.fromPair(x).consume(_.toList))
             else              Streamer.fromIterator(x) } }
-      .thnOpt(linesPreprocessing)(f => _.thn(f))
+      .pipeOpt(linesPreprocessing)(f => _.pipe(f))
 
   // ===========================================================================
-  private def linesPair(): (Iterator[Line], Closeable) = _inputString.thn(new URL(_)).thn(_linesPair())
+  private def linesPair(): (Iterator[Line], Closeable) = _inputString.pipe(new URL(_)).pipe(_linesPair())
 
   // ===========================================================================
   private def _content()(url: URL): Content =
@@ -63,7 +64,7 @@ case class InputUrlLike( // TODO: t210115193904 - check URI, regular file vs sym
         InputStreamUtils.content(url, charset.charset)
 
       case SupportedCompression.Zip =>
-        url.toExternalForm().stripPrefix("file:") /* FIXME? */.thn(aptus.aptmisc.Zip.content) }
+        url.toExternalForm().stripPrefix("file:") /* FIXME? */.pipe(aptus.aptmisc.Zip.content) }
 
   // ===========================================================================
   private def _linesPair()(url: URL): (Iterator[Line], Closeable) =

@@ -30,13 +30,13 @@ case class BObj private[gallia](entries: gallia.domain.KVEs) { // TODO: t2101241
     implicit def toHead(value: BObj): HeadU =
       new gallia.actions.in
         .InMemoryInputUb(value)
-        .thn(Head.inputU)
+        .pipe(Head.inputU)
   }
 
 // ===========================================================================
 case class BObjs(values: Seq[BObj]) {
-    def forceCls : Cls  = values.map(_.forceCls).thn(AObjs.combineCls)
-    def forceObjs: Objs = values.map(_.forceObj).thn(Objs.from)
+    def forceCls : Cls  = values.map(_.forceCls).pipe(AObjs.combineCls)
+    def forceObjs: Objs = values.map(_.forceObj).pipe(Objs.from)
     def forceAObjs: AObjs = AObjs.from(values.map(_.forceAObj))
   }
 
@@ -45,7 +45,7 @@ case class BObjs(values: Seq[BObj]) {
     implicit def toHead(value: BObjs): HeadZ =
       new gallia.actions.in
         .InMemoryInputZb(value)
-        .thn(Head.inputZ)
+        .pipe(Head.inputZ)
   }
 
 // ===========================================================================

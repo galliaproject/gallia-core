@@ -1,4 +1,5 @@
-package gallia.heads.reducing
+package gallia
+package heads.reducing
 
 import aptus.Anything_
 
@@ -29,8 +30,8 @@ private object ReducingTypeUtils {
   def baseData(f: List[Int   ] => Any, g: List[Double] => Any)(ignored: Boolean, numTypeOpt: Option[NumericalType]): Values => Any =
     numTypeOpt
       .map {
-        case BasicType._Int    => x: Values => _flattenedInts   (x).thn(f)
-        case BasicType._Double => x: Values => _flattenedDoubles(x).thn(g)
+        case BasicType._Int    => x: Values => _flattenedInts   (x).pipe(f)
+        case BasicType._Double => x: Values => _flattenedDoubles(x).pipe(g)
         case x => x.p; ??? }
       .getOrElse { ??? }//FIXME: t210118084833 - dates, strings...
 

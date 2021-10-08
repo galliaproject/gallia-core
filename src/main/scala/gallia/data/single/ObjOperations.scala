@@ -8,8 +8,6 @@ import gallia.data.ValueUtils
 import gallia.reflect.Container
 import gallia.domain.PathPair
 
-import scala.util.chaining._
-
 // ===========================================================================
 trait ObjOperations { self: Obj =>
   import ValueWrapper.to
@@ -71,7 +69,7 @@ trait ObjOperations { self: Obj =>
                       case o2 : Obj    => o2                         ._retainPaths(nestedPaths)
                       case o2s: Seq[_] => o2s.map(_.asInstanceOf[Obj]._retainPaths(nestedPaths)) } }
                 .map(key -> _) }
-          .thn(Obj.build)
+          .pipe(Obj.build)
 
   // ===========================================================================
   private def _put(key: Key, value: AnyValue) : Obj = // TODO: distinction only necessary until t201208103121 is done (Seq vs Map for Obj)
@@ -175,8 +173,8 @@ trait ObjOperations { self: Obj =>
       def _transformKeyPair(key: Key, optional: Boolean)(f: AnyValue => AnyValue): Obj =
         (if (optional) attemptKey(key) // TODO: could use meta
          else          attemptKey(key).get)
-          .thn(f)
-          .thn(_put(key, _))
+          .pipe(f)
+          .pipe(_put(key, _))
 
       // ---------------------------------------------------------------------------
       // abstracts requiredness + optionally check resulting type
@@ -258,16 +256,16 @@ trait ObjOperations { self: Obj =>
   //TODO: more... (see t210104164037)
 
   // ===========================================================================
-  def transformString (key: Key, f: String      => Any): Obj = transformPath(key, _.asString             .thn(f))
-  def transformInts   (key: Key, f: Seq[Int   ] => Any): Obj = transformPath(key, _.asSeq.map(_.asInt   ).thn(f))
-  def transformDoubles(key: Key, f: Seq[Double] => Any): Obj = transformPath(key, _.asSeq.map(_.asDouble).thn(f))
+  def transformString (key: Key, f: String      => Any): Obj = transformPath(key, _.asString             .pipe(f))
+  def transformInts   (key: Key, f: Seq[Int   ] => Any): Obj = transformPath(key, _.asSeq.map(_.asInt   ).pipe(f))
+  def transformDoubles(key: Key, f: Seq[Double] => Any): Obj = transformPath(key, _.asSeq.map(_.asDouble).pipe(f))
 
   // ---------------------------------------------------------------------------
-  def transformObj   (key: Key, f: Obj    => Any): Obj = transformPath(key, _.asObj   .thn(f))
+  def transformObj   (key: Key, f: Obj    => Any): Obj = transformPath(key, _.asObj   .pipe(f))
   def transformObjx  (key: Key, f: Obj    => Any): Obj = transformPath(key,
       _ match {
-        case x: Seq[_] => x.map(_.asObj.thn(f))
-        case x         => x      .asObj.thn(f) } )
+        case x: Seq[_] => x.map(_.asObj.pipe(f))
+        case x         => x      .asObj.pipe(f) } )
 
   // ===========================================================================
   // ===========================================================================
@@ -307,7 +305,7 @@ trait ObjOperations { self: Obj =>
             case Some(existing)         => rest.put(nestingKey, existing.asObj.merge(target)) } }
 
   // ---------------------------------------------------------------------------
-  def split(key: Key, splitter: String => Seq[String]): Obj = _transformKey(key, _.toString.thn(splitter.apply))
+  def split(key: Key, splitter: String => Seq[String]): Obj = _transformKey(key, _.toString.pipe(splitter.apply))
 
   // ---------------------------------------------------------------------------
   @deprecated("still needed after 210303101932?") def unarrayCompositeKey(keys: Seq[Key], separator: Separator): Option[Key] =

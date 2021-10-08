@@ -19,7 +19,7 @@ case class Objs private (  // TODO: two versions, see t210104164036
     // ===========================================================================
     private[gallia] def _modifyUnderlyingStreamer(f: Streamer[Obj] => Streamer[Obj]): Objs = _rewrap(f(values)) // eg to modify spark RDD
 
-    private[gallia] def _asListBased: Objs = values.asListBased.thn(_rewrap)
+    private[gallia] def _asListBased: Objs = values.asListBased.pipe(_rewrap)
 
     // ===========================================================================
     def     mapToStreamer[A: ClassTag](f: Obj =>      A ): Streamer[A] = values.    map(f)
@@ -35,10 +35,10 @@ case class Objs private (  // TODO: two versions, see t210104164036
 
     // ===========================================================================
     /*@Narrow */
-    def map      (f: Obj =>      Obj ): Objs = values.    map(f).thn(_rewrap)
-    def flatMap  (f: Obj => Coll[Obj]): Objs = values.flatMap(f).thn(_rewrap)
+    def map      (f: Obj =>      Obj ): Objs = values.    map(f).pipe(_rewrap)
+    def flatMap  (f: Obj => Coll[Obj]): Objs = values.flatMap(f).pipe(_rewrap)
 
-    def filter(p: Obj => Boolean):        Objs = values.filter(p).thn(_rewrap)
+    def filter(p: Obj => Boolean):        Objs = values.filter(p).pipe(_rewrap)
   //def find  (p: Obj => Boolean): Option[Obj] = values.find  (p) // TODO: t210204105730 - offer streamer find?
 
     // ===========================================================================
@@ -49,7 +49,7 @@ case class Objs private (  // TODO: two versions, see t210104164036
 
     def size: Int = values.size
 
-    def take(n: Option[Int]): Objs = n.map(values.take).getOrElse(values).thn(_rewrap)
+    def take(n: Option[Int]): Objs = n.map(values.take).getOrElse(values).pipe(_rewrap)
 
     final def take(n: Int): Objs = take(Some(n))
   }
@@ -61,7 +61,7 @@ case class Objs private (  // TODO: two versions, see t210104164036
     // ---------------------------------------------------------------------------
     def splat(value1: Obj, more: Obj*): Objs = from(value1 +: more.toList)
     def from(values: Seq [Obj])       : Objs = from(values.toList)
-    def from(values: List[Obj])       : Objs = Streamer.fromList(values).thn(Objs.build)
+    def from(values: List[Obj])       : Objs = Streamer.fromList(values).pipe(Objs.build)
   }
 
 // ===========================================================================

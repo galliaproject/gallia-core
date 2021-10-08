@@ -29,7 +29,7 @@ case class IntermediatePlan private (dag: ActionDag) {
       // ---------------------------------------------------------------------------
       mut
         .toMap
-        .thn(IntermediateMetaResultNodeCreator(dag))
+        .pipe(IntermediateMetaResultNodeCreator(dag))
     }
 
   }

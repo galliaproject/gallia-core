@@ -42,8 +42,8 @@ object UtsProcessors {
   case class ExplicitIndex(value: MIndex, special: Option[ExplicitIndex.Special]) extends KeySelection {
       private def resolve(c: Cls) = _utils.unmirror(c.size)(value)
 
-      def vldt(c: Cls): Errs = resolve(c).thn { resolved => if (c.size <= resolved) _Error.OutOfBoundKey(c.size, Seq(resolved)).errs else Nil }
-      def key (c: Cls): Key  = resolve(c).thn(c.keys) }
+      def vldt(c: Cls): Errs = resolve(c).pipe { resolved => if (c.size <= resolved) _Error.OutOfBoundKey(c.size, Seq(resolved)).errs else Nil }
+      def key (c: Cls): Key  = resolve(c).pipe(c.keys) }
 
     // ---------------------------------------------------------------------------
     object ExplicitIndex {
@@ -97,10 +97,10 @@ object UtsProcessors {
 
     // ---------------------------------------------------------------------------
     case class ExplicitIndices(values: Seq[MIndex]) extends ExplicitIndicesBase {
-      def keys(c: Cls): Keys = validUnmirroredIndices(c).thn(_.map(c.keyVector.apply)) }
+      def keys(c: Cls): Keys = validUnmirroredIndices(c).pipe(_.map(c.keyVector.apply)) }
 
     case class AllButIndices(values: Seq[MIndex]) extends ExplicitIndicesBase {
-      def keys(c: Cls): Keys = validUnmirroredIndices(c).thn { x => Range(0, c.size).diff(x).map(c.keyVector.apply) } }
+      def keys(c: Cls): Keys = validUnmirroredIndices(c).pipe { x => Range(0, c.size).diff(x).map(c.keyVector.apply) } }
 
   // ===========================================================================
   case class AllButKeys(values: Keyz) extends KeyzSelection { //TODO: specials: allbut first/last

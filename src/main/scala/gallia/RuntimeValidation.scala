@@ -30,7 +30,7 @@ object RuntimeValidation { // 210115153346 - POC
       val unknownFieldErrors: Seq[ValErr] =
         keySet
           .diff(c.keySet)
-          .thn { unknownKeys =>
+          .pipe { unknownKeys =>
             if (unknownKeys.isEmpty) Nil
             else
               o .entries
@@ -41,7 +41,7 @@ object RuntimeValidation { // 210115153346 - POC
       // ---------------------------------------------------------------------------
       val missingRequiredFieldErrors: Seq[ValErr] =
         c.requiredKeySet.diff(keySet)
-          .thn { missingKeySet =>
+          .pipe { missingKeySet =>
             if (missingKeySet.isEmpty) Nil
             else
               c ._filterByKey(missingKeySet.contains)

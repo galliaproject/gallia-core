@@ -105,7 +105,7 @@ case class TypeNode(
       else                    None
 
     // ===========================================================================
-    def forceNonBObjInfo: Info = this.assert(!_.isContainedBObj).thn(InfoUtils.forceNonBObjInfo)   
+    def forceNonBObjInfo: Info = this.assert(!_.isContainedBObj).pipe(InfoUtils.forceNonBObjInfo)   
   }
 
   // ===========================================================================

@@ -13,7 +13,7 @@ object AtomsOthers {
       val f = (x: Any) =>
         x match {
           case y: Seq[_] => y.map(_.asInstanceOf[Obj]).map(nestee.naive)
-          case y         => y      .asInstanceOf[Obj] .thn(nestee.naive) }
+          case y         => y      .asInstanceOf[Obj] .pipe(nestee.naive) }
 
       o.transformPath(parent, f)
     }
@@ -69,7 +69,7 @@ object AtomsOthers {
 
   // ---------------------------------------------------------------------------
   case object _MergeAll extends AtomZU { def naive(z: Objs) =
-    z.toListAndTrash.reduceLeft(_ merge _) } //z.toList.map(_.data).reduceLeft(_ ++ _).thn(obj)
+    z.toListAndTrash.reduceLeft(_ merge _) } //z.toList.map(_.data).reduceLeft(_ ++ _).pipe(obj)
 
   // ===========================================================================
   @gallia.Scalability case class _Pivone(keyKey: Key, valueKey: Key) extends AtomZU { def naive(z: Objs) =
@@ -80,7 +80,7 @@ object AtomsOthers {
               .getOrElse(dataError(ErrorId.Runtime.EmptyKey))
   
           o.opt(valueKey).map(newKey -> _) }
-       .thn(obj) }
+       .pipe(obj) }
        // t201122154119 - if in is empty...
       
     // ---------------------------------------------------------------------------
@@ -92,7 +92,7 @@ object AtomsOthers {
                 .getOrElse(dataError(ErrorId.Runtime.NoKeysLeft)) //TODO: or offer alterative if all missing?
     
             o.opt(valueKey).map(newKey -> _) }
-         .thn(obj) }
+         .pipe(obj) }
          // t201122154119 - if in is empty...
     
     // ---------------------------------------------------------------------------
@@ -105,7 +105,7 @@ object AtomsOthers {
                 .getOrElse(dataError(ErrorId.Runtime.NoKeysLeft)) //TODO: or offer alterative if all missing?
   
             o.removeOpt(keys).map(newKey -> _) }
-          .thn(obj(_)) }
+          .pipe(obj(_)) }
 
   // ===========================================================================
   // uz
@@ -114,7 +114,7 @@ object AtomsOthers {
 
   // ---------------------------------------------------------------------------
   case class _FlattenByU(target: KPath) extends AtomUZ { def naive(u: Obj) =
-      _FlattenBy(target)(u).thn(Objs.from) }
+      _FlattenBy(target)(u).pipe(Objs.from) }
 
     // ---------------------------------------------------------------------------
     // actually zz

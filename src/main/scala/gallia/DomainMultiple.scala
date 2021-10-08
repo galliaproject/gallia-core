@@ -30,9 +30,9 @@ case class Keyz(values: Seq[Key]) extends Seq[Key] {
     def  append(key : Key ): Keyz = Keyz(       values :+ key)
 
     // ---------------------------------------------------------------------------
-    def renz  : Renz   = values.map(Ren  .from(_)).thn(Renz  .apply)
-    def kpathz: KPathz = values.map(KPath.from(_)).thn(KPathz.apply)
-    def qpathz: RPathz = values.map(RPath.from(_)).thn(RPathz.apply)
+    def renz  : Renz   = values.map(Ren  .from(_)).pipe(Renz  .apply)
+    def kpathz: KPathz = values.map(KPath.from(_)).pipe(KPathz.apply)
+    def qpathz: RPathz = values.map(RPath.from(_)).pipe(RPathz.apply)
   }
 
   // ===========================================================================
@@ -63,10 +63,10 @@ case class Renz(values: Seq[Ren]) extends Seq[Ren] {
     def  append(key : Ren ): Renz = Renz(       values :+ key)
 
     // ---------------------------------------------------------------------------
-    def froms = values.map(_.from).thn(Keyz.apply)
-    def tos   = values.map(_.to  ).thn(Keyz.apply)
+    def froms = values.map(_.from).pipe(Keyz.apply)
+    def tos   = values.map(_.to  ).pipe(Keyz.apply)
 
-    @deprecated def fromsFX = values.map(_.from).thn(Keyz.apply) // FIXME: see t210110104437
+    @deprecated def fromsFX = values.map(_.from).pipe(Keyz.apply) // FIXME: see t210110104437
 
     // ---------------------------------------------------------------------------
     def qpathz: RPathz = RPathz(values.map(_.qpath))
@@ -97,10 +97,10 @@ case class KPathz(values: Seq[KPath]) extends Seq[KPath] {
     def  append(path : KPath ): KPathz = KPathz(        values :+ path)
 
     // ---------------------------------------------------------------------------
-    def qpathz: RPathz = values.map(_.qpath).thn(RPathz.apply)
+    def qpathz: RPathz = values.map(_.qpath).pipe(RPathz.apply)
 
-                def forceKeyz  : Keyz = values.map(_.forceLeaf).thn(Keyz.apply)
-    @deprecated def forceKeyzFX: Keyz = values.map(_.forceLeaf).thn(Keyz.apply) // FIXME: see t210110104437
+                def forceKeyz  : Keyz = values.map(_.forceLeaf).pipe(Keyz.apply)
+    @deprecated def forceKeyzFX: Keyz = values.map(_.forceLeaf).pipe(Keyz.apply) // FIXME: see t210110104437
 
     def isDisjointWith(that: KPathz): Boolean = this.values.intersect(that.values).isEmpty
 
@@ -145,10 +145,10 @@ case class RPathz(values: Seq[RPath]) extends Seq[RPath] {
 
     // ---------------------------------------------------------------------------
     def froms: Seq[KPath] = values.map(_.from)
-    def fromz:     KPathz = values.map(_.from).thn(KPathz.apply)
+    def fromz:     KPathz = values.map(_.from).pipe(KPathz.apply)
 
     def   tos: Seq[KPath] = values.flatMap(_.toOpt)
-    def   toz:     KPathz = values.flatMap(_.toOpt).thn(KPathz.apply)
+    def   toz:     KPathz = values.flatMap(_.toOpt).pipe(KPathz.apply)
 
     // ---------------------------------------------------------------------------
     //FIXME: see t210110104437
@@ -159,10 +159,10 @@ case class RPathz(values: Seq[RPath]) extends Seq[RPath] {
     @deprecated def fromzFX : KPathz     = fromz
 
     // ---------------------------------------------------------------------------
-    def forceKPathz: KPathz = values.map(_.forceKPath).thn(KPathz.apply)
-    def forceRenz  : Renz   = values.map(_.forceLeaf).thn(Renz.apply)
+    def forceKPathz: KPathz = values.map(_.forceKPath).pipe(KPathz.apply)
+    def forceRenz  : Renz   = values.map(_.forceLeaf).pipe(Renz.apply)
     @deprecated
-    def forceRenzFX: Renz   = values.map(_.forceLeaf).thn(Renz.apply) // FIXME (t210110104437)
+    def forceRenzFX: Renz   = values.map(_.forceLeaf).pipe(Renz.apply) // FIXME (t210110104437)
   }
 
   // ===========================================================================

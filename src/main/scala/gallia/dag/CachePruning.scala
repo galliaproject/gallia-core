@@ -1,4 +1,5 @@
-package gallia.dag
+package gallia
+package dag
 
 import aptus.{Anything_, Seq_}
 
@@ -31,15 +32,15 @@ private object CachePruning {
             else
               currDag
                 .prependNode(asg.lookup(afferentNodeId), currentNodeId)
-                .thn(rec)
+                .pipe(rec)
           }
     }
 
     // ---------------------------------------------------------------------------
     asg
       .leaves.force.one
-      .thn(DAG.trivial(asg.idResolver))
-      .thn(rec)
+      .pipe(DAG.trivial(asg.idResolver))
+      .pipe(rec)
   }
 
 }

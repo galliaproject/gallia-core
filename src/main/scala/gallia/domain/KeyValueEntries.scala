@@ -22,7 +22,7 @@ sealed trait KVE { // Key-Value Entry
   // ===========================================================================
   case class BObjKVE(key: Key, bobj: BObj) extends KVE {
       def vldt(nextLocation: Location): Errs = MetaValidation.validateBObj(nextLocation)(bobj)
-      def metaEntry: (Key, Info)     = key -> bobj.forceCls.thn(Info.one)
+      def metaEntry: (Key, Info)     = key -> bobj.forceCls.pipe(Info.one)
       def dataEntry: (Key, AnyValue) = key -> bobj.forceObj
     }
 
@@ -36,7 +36,7 @@ sealed trait KVE { // Key-Value Entry
                 nextLocation.addIndex(index))(value) }
 
       @gallia.NumberAbstraction
-      def metaEntry: (Key, Info)     = key -> bobjs.map(_.forceCls).distinct.force.one.thn(Info.nes)
+      def metaEntry: (Key, Info)     = key -> bobjs.map(_.forceCls).distinct.force.one.pipe(Info.nes)
 
       def dataEntry: (Key, AnyValue) = key -> bobjs.map(_.forceObj)
     }
@@ -128,8 +128,8 @@ case class KVEs(values: Seq[KVE]) {
     def forceDataEntries: Seq[(Key, AnyValue)] = values.map(_.dataEntry)
 
     // ---------------------------------------------------------------------------
-    def forceCls: Cls = forceMetaEntries.map((Fld.apply _).tupled).thn(gallia.meta.Cls(_))
-    def forceObj: Obj = forceDataEntries.thn(gallia.obj)
+    def forceCls: Cls = forceMetaEntries.map((Fld.apply _).tupled).pipe(gallia.meta.Cls(_))
+    def forceObj: Obj = forceDataEntries.pipe(gallia.obj)
 
   }
 
@@ -151,7 +151,7 @@ case class RVEs(values: Seq[RVE]) {
     // ---------------------------------------------------------------------------
     def kves = KVEs(values.map(_.underlying))
 
-    def renz: Renz = values.map(_.ren).thn(Renz.apply)
+    def renz: Renz = values.map(_.ren).pipe(Renz.apply)
 
     // ---------------------------------------------------------------------------
     def forceMetaEntries: Seq[(Ren, Info    )] = values.map(_.metaEntry)

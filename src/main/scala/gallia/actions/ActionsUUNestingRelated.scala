@@ -17,7 +17,7 @@ object ActionsUUNestingRelated {
         def  vldt(c: Cls): Errs = Nil //TODO
            // TODO: t210128155944 - validate new key names
            // TODO: check target is distinct
-        def _meta(c: Cls): Cls  = target.values.map(_.renFX).thn(Renz.apply).thn(c.nest(_, destination))
+        def _meta(c: Cls): Cls  = target.values.map(_.renFX).pipe(Renz.apply).pipe(c.nest(_, destination))
         def atomuus =
           _Nest(target.fromz.forceKeyz /*FIXME*/, destination) +:
             target.map(_.prepend(destination)).flatMap(potentialRenaming(_).toSeq).toSeq
@@ -26,7 +26,7 @@ object ActionsUUNestingRelated {
     // ---------------------------------------------------------------------------
     class NestInto(target: RPathz, destination: Ren) extends ActionUUa {      
         def  vldt(c: Cls): Errs = Nil //TODO
-        def _meta(c: Cls): Cls  = target.values.map(_.renFX).thn(Renz.apply).thn(c.nest(_, destination.from)).rename(destination)
+        def _meta(c: Cls): Cls  = target.values.map(_.renFX).pipe(Renz.apply).pipe(c.nest(_, destination.from)).rename(destination)
         def atomuus =
           (_Nest(target.fromz.forceKeyz /*FIXME*/, destination.from) +:
             target.map(_.prepend(destination.from)).flatMap(potentialRenaming(_).toSeq).toSeq) ++ 
@@ -56,7 +56,7 @@ object ActionsUUNestingRelated {
       if (c.field(parent).isMultiple)
         keyz(nc)
           .force.one
-          .thn { sole =>
+          .pipe { sole =>
             c .unnestField(parent, sole)
               .toMultiple(sole) }
       else
@@ -80,8 +80,8 @@ object ActionsUUNestingRelated {
   // ===========================================================================
   case class Renest(targets: TqKeyz, sep: Separator) extends ActionUUc with TodoV1 {
       // TODO: check for potential resulting conflicts
-      def _meta (c: Cls): Cls = targets.resolve(c).thn(AtomsUUResnesting.meta(_, sep)(c))
-      def atomuu(c: Cls)      = targets.resolve(c).thn(_Renest(_, sep)) }
+      def _meta (c: Cls): Cls = targets.resolve(c).pipe(AtomsUUResnesting.meta(_, sep)(c))
+      def atomuu(c: Cls)      = targets.resolve(c).pipe(_Renest(_, sep)) }
 
     // ---------------------------------------------------------------------------
     case class _Renest(targetKeys: Keyz, sep: Separator) extends AtomUU { def naive(o: Obj) =
@@ -93,7 +93,7 @@ object ActionsUUNestingRelated {
       def _meta(c: Cls): Cls  = ???
       def atomuus = {
 
-        val from = target.values.map(_.from).thn(KPathz.apply)
+        val from = target.values.map(_.from).pipe(KPathz.apply)
         _Move(
             from.values.force.one,
             destinationOpt.map(_.forceKPath)

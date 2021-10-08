@@ -14,7 +14,7 @@ class HT(
     object HT {
 
       def parse[T: WTT]: HT =
-        node[T].thn { node =>
+        node[T].pipe { node =>
           new HT(node, instantiator[T](node)) }
 
       // ---------------------------------------------------------------------------

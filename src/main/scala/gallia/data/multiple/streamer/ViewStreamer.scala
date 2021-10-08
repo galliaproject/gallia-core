@@ -1,10 +1,8 @@
-package gallia.data.multiple.streamer
+package gallia
+package data.multiple.streamer
 
 import scala.reflect.{ClassTag => CT}
 
-import aptus.Anything_
-
-import gallia.Aliases.Coll
 import gallia.heads.merging.MergingData._
 import gallia.data.multiple.streamer.{ViewStreamerUtils => _utils}
 
@@ -24,30 +22,30 @@ class ViewStreamer[A](view: ViewRepr[A]) extends Streamer[A] {
   def toList  : List    [A] = view.force.toList
   def toView  : ViewRepr[A] = view
 
-  def     map[B: CT](f: A =>      B ): Streamer[B] = view.    map(f).toSeq.view.thn(_rewrap)
-  def flatMap[B: CT](f: A => Coll[B]): Streamer[B] = view.flatMap(f).toSeq.view.thn(_rewrap)
+  def     map[B: CT](f: A =>      B ): Streamer[B] = view.    map(f).toSeq.view.pipe(_rewrap)
+  def flatMap[B: CT](f: A => Coll[B]): Streamer[B] = view.flatMap(f).toSeq.view.pipe(_rewrap)
 
-  def filter(p: A => Boolean): Streamer[A] = view.filter(p).toSeq.view.thn(_rewrap)
+  def filter(p: A => Boolean): Streamer[A] = view.filter(p).toSeq.view.pipe(_rewrap)
 
   def size: Int = view.force.size
 
   def isEmpty: Boolean = view.isEmpty
 
-  def take(n: Int): Streamer[A] = view.take(n).thn(_rewrap)
-  def drop(n: Int): Streamer[A] = view.drop(n).thn(_rewrap)
+  def take(n: Int): Streamer[A] = view.take(n).pipe(_rewrap)
+  def drop(n: Int): Streamer[A] = view.drop(n).pipe(_rewrap)
 
   // ===========================================================================
   def reduce(op: (A, A) => A): A = view.reduce(op)
 
   // ===========================================================================
-  def sortBy[K](ignored: CT[K], ord: Ordering[K])(f: A => K): Streamer[A] = view.sortBy(f)(ord).toSeq.view.thn(_rewrap)
+  def sortBy[K](ignored: CT[K], ord: Ordering[K])(f: A => K): Streamer[A] = view.sortBy(f)(ord).toSeq.view.pipe(_rewrap)
 
   // ---------------------------------------------------------------------------
-  def distinct: Streamer[A] = view.distinct.toSeq.view.thn(_rewrap)
+  def distinct: Streamer[A] = view.distinct.toSeq.view.pipe(_rewrap)
 
   // ---------------------------------------------------------------------------
   def groupByKey[K: CT, V: CT](implicit ev: A <:< (K, V)): Streamer[(K, List[V])] =
-    view.asInstanceOf[ViewRepr[(K, V)]].thn(_utils.groupByKey).thn(_rewrap)
+    view.asInstanceOf[ViewRepr[(K, V)]].pipe(_utils.groupByKey).pipe(_rewrap)
 
   // ===========================================================================
   def union[B >: A : CT](that: Streamer[B]): Streamer[B] = _utils.union(this.asInstanceOf[ViewStreamer[B]], that)

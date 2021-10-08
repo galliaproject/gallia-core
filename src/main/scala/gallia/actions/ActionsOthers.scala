@@ -64,7 +64,7 @@ object ActionsOthers {
   // ---------------------------------------------------------------------------
   abstract class FlattenBy(target: RPath) extends ActionUZ {
       def vldt (in: Cls): Errs = Nil//TODO; check was seq?; ensure only one level of multiplicity
-      def _meta(in: Cls): Cls = in.rename(target).toNonMultiple(target.to).thnIf(in.isOptional(target.from))(_.toNonRequired(target.to)) }
+      def _meta(in: Cls): Cls = in.rename(target).toNonMultiple(target.to).pipeIf(in.isOptional(target.from))(_.toNonRequired(target.to)) }
 
     // ---------------------------------------------------------------------------
     case class FlattenByU(target: RPath) extends FlattenBy(target) with ActionUZ {
@@ -82,8 +82,8 @@ object ActionsOthers {
 
   // ---------------------------------------------------------------------------
   case object AsArray1 extends ActionZU with TodoV1 { // TODO: key sole + not array
-      def _meta(in: Cls): Cls =  in.soleField.key.thn(in.toMultiple(_))
-      def atoms(ctx: NodeMetaContext): Atoms = ctx.forceSingleAfferent.soleField.key.thn(_AsArray1).in.seq }
+      def _meta(in: Cls): Cls =  in.soleField.key.pipe(in.toMultiple(_))
+      def atoms(ctx: NodeMetaContext): Atoms = ctx.forceSingleAfferent.soleField.key.pipe(_AsArray1).in.seq }
 
     // ---------------------------------------------------------------------------
     case class AsArray2(newKey: Key) extends ActionZU with TodoV1 {
@@ -107,8 +107,8 @@ object ActionsOthers {
       
       // ---------------------------------------------------------------------------
       def vldt (in: Cls)             : Errs  = Nil //TODO: t210303101704 - check reasonnably "to-textable" value
-      def _meta(in: Cls)             : Cls   = resolveTargetKey(in)                     .thn(in.unarrayEntries(newKeys, _))
-      def atoms(ctx: NodeMetaContext): Atoms = resolveTargetKey(ctx.forceSingleAfferent).thn { key =>
+      def _meta(in: Cls)             : Cls   = resolveTargetKey(in)                     .pipe(in.unarrayEntries(newKeys, _))
+      def atoms(ctx: NodeMetaContext): Atoms = resolveTargetKey(ctx.forceSingleAfferent).pipe { key =>
         Seq(
           _EnsureUniquenessBy(Keyz.from(keyKey)),
           _Pivone(keyKey, key)) } }
@@ -121,7 +121,7 @@ object ActionsOthers {
             valueKey : Key)
           extends ActionZU {
         def vldt (in: Cls): Errs = Nil //TODO; consistency of key separator; reasonnable separator; check "textable" value; check separator availble if more than 1 keykey
-        def _meta(in: Cls): Cls = valueKey.thn(in.unarrayEntries(newKeys, _))
+        def _meta(in: Cls): Cls = valueKey.pipe(in.unarrayEntries(newKeys, _))
   
         def atoms(ignored: NodeMetaContext): Atoms = Seq(
             _EnsureUniquenessBy(keyKeys),
@@ -198,8 +198,8 @@ object ActionsOthers {
 
     def atoms(ctx: NodeMetaContext): Atoms =
       ctx.afferents.force.one
-        .thn(from.pathPairT)
-        .thn { pair =>
+        .pipe(from.pathPairT)
+        .pipe { pair =>
           if (pair.optional) _GrabZOpt(pair.path)
           else               _GrabZOne(pair.path)  }
         .in.seq }

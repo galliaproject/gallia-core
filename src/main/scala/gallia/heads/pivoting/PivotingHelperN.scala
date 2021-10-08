@@ -1,6 +1,5 @@
 package gallia.heads.pivoting
 
-import aptus.Anything_
 import aptus.Separator
 import gallia._
 import DataN._

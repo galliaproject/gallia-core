@@ -1,6 +1,5 @@
 package gallia.heads
 
-import aptus.Anything_
 import aptus.Tuple2_
 
 import gallia.env._

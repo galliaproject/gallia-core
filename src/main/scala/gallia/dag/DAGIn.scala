@@ -1,7 +1,7 @@
 package gallia
 package dag
 
-import aptus.{Anything_, Seq_}
+import aptus.Seq_
 
 // ===========================================================================
 object DAGIn {

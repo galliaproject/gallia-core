@@ -1,7 +1,5 @@
 package gallia.domain
 
-import aptus.Anything_
-
 import gallia._
 import gallia.heads.Head
 

@@ -1,8 +1,9 @@
 package gallia.io
 package in
 
+import aptus.String_
 import aptus.{TableName, QueryString}
-import aptus.{Anything_, String_}
+
 import gallia._
 import gallia.heads.Head
 import gallia.data.json.JsonParsing

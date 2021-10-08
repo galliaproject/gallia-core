@@ -1,6 +1,5 @@
 package gallia.io.in
 
-import aptus.Anything_
 import aptus.MirrorIndex
 
 import gallia._

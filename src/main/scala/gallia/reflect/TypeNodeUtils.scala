@@ -1,6 +1,6 @@
 package gallia.reflect
 
-import aptus.{Anything_, String_}
+import aptus.String_
 
 // ===========================================================================
 object TypeNodeUtils {

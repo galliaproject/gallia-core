@@ -1,7 +1,5 @@
 package gallia.heads.merging
 
-import aptus.Anything_
-
 import gallia._
 import gallia.actions.ActionsZZMerging._
 

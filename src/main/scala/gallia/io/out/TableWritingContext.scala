@@ -3,8 +3,8 @@ package io.out
 
 import scala.collection.JavaConverters._
 import org.apache.commons.csv._
-import aptus.Anything_
-import gallia.data.DataFormatting.formatBasicValue
+
+import data.DataFormatting.formatBasicValue
 
 // ===========================================================================
 case class TableWritingContext(

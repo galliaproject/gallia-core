@@ -1,7 +1,5 @@
 package gallia.actions.utils
 
-import aptus.Anything_
-
 import gallia._
 import gallia.domain.PathPair
 import gallia.plans._

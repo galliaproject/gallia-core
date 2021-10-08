@@ -1,7 +1,5 @@
 package gallia.reflect
 
-import aptus.Anything_
-
 import gallia._
 
 // ===========================================================================

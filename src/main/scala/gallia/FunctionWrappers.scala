@@ -1,7 +1,5 @@
 package gallia
 
-import aptus.Anything_
-
 // ===========================================================================
 object FunctionWrappers {
   type _ff11 = Any =>  Any

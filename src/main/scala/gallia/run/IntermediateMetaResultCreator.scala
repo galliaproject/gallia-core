@@ -1,7 +1,5 @@
 package gallia.run
 
-import aptus.Anything_
-
 import gallia._
 import gallia.actions.in.InMemoryMetaInput
 

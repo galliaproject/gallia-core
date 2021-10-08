@@ -1,7 +1,5 @@
 package gallia.actions
 
-import aptus.Anything_
-
 import gallia._
 import gallia.atoms.AtomsZZ._
 import gallia.atoms.AtomsCustom.{_CustomZZ, _CustomZV}

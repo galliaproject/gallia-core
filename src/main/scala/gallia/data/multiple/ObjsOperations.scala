@@ -1,7 +1,6 @@
 package gallia.data.multiple
 
 import scala.reflect.classTag
-import aptus.Anything_
 
 import gallia._
 import gallia.domain.SortingPair

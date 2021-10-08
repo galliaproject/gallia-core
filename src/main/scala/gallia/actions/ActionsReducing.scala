@@ -1,7 +1,5 @@
 package gallia.actions
 
-import aptus.Anything_
-
 import gallia._
 import gallia.atoms.AtomsReducing._
 import gallia.heads.reducing._

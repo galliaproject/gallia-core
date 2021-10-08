@@ -1,6 +1,6 @@
 package gallia.heads.common
 
-import aptus.{Anything_, String_}
+import aptus.String_
 
 import gallia._
 import gallia.actions.ActionsUUVeryBasics._

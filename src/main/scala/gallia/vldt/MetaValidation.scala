@@ -1,6 +1,6 @@
 package gallia.vldt
 
-import aptus.{Anything_, Seq_}
+import aptus.Seq_
 
 import gallia._
 import gallia.meta._

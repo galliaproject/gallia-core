@@ -1,7 +1,5 @@
 package gallia.heads.pivoting
 
-import aptus.Anything_
-
 import gallia._
 import gallia.heads.TSL.Squash
 import gallia.actions.ActionsOthers  

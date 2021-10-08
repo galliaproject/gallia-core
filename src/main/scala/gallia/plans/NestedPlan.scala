@@ -1,7 +1,5 @@
 package gallia.plans
 
-import aptus.Anything_
-
 import gallia._
 import gallia.FunctionWrappers._
 

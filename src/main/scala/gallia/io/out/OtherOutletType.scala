@@ -2,7 +2,7 @@ package gallia
 package io.out
 
 import enumeratum.{Enum, EnumEntry}
-import aptus.{Anything_, String_}
+import aptus.String_
 
 // ===========================================================================
 sealed trait OutletType extends EnumEntry { // TODO: rename to *Other*OutletType

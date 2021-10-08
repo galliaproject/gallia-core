@@ -1,6 +1,6 @@
 package gallia.result
 
-import aptus.{Anything_, Seq_}
+import aptus.Seq_
 
 import gallia._
 import gallia.dag._

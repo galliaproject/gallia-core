@@ -1,7 +1,5 @@
 package gallia.target
 
-import aptus.Anything_
-
 import gallia._
 
 // ===========================================================================

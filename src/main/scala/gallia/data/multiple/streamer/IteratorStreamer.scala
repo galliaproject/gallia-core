@@ -3,7 +3,6 @@ package data.multiple.streamer
 
 import scala.reflect.{ClassTag => CT}
 
-import aptus.Anything_
 import gallia.heads.merging.MergingData._
 import gallia.data.multiple.streamer.{IteratorStreamerUtils => _utils}
 

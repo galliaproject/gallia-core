@@ -1,7 +1,6 @@
 package gallia.actions.utils
 
-import aptus.{Anything_, String_}
-import aptus.Option_
+import aptus.{String_, Option_}
 import gallia._
 
 // ===========================================================================

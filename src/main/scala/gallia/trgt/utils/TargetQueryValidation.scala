@@ -1,7 +1,5 @@
 package gallia.target.utils
 
-import aptus.Anything_
-
 import gallia.target._
 import gallia.selection.untyped.processors._
 

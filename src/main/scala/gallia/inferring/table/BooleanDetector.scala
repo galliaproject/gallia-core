@@ -1,8 +1,6 @@
 package gallia
 package inferring.table
 
-import aptus.Anything_
-
 // ===========================================================================
 object BooleanDetector {
 

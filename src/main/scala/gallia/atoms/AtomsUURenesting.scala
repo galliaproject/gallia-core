@@ -1,6 +1,6 @@
 package gallia.atoms
 
-import aptus.{Anything_, String_, Seq_}
+import aptus.{String_, Seq_}
 import aptus.Separator
 
 import gallia._

@@ -1,6 +1,5 @@
 package gallia.actions.in
 
-import aptus.Anything_
 import aptus.Option_
 
 import gallia._

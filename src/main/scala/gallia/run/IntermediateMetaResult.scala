@@ -1,7 +1,6 @@
 package gallia.run
 
-import aptus.{Anything_, String_, Seq_}
-import aptus.Option_
+import aptus.{String_, Seq_, Option_}
 
 import gallia._
 import gallia.plans._

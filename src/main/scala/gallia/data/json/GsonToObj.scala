@@ -1,10 +1,6 @@
 package gallia.data.json
 
-import aptus.{Anything_, String_, Seq_}
-
-import aptus.JsonObjectString
-import aptus.JsonArrayString
-
+import aptus._
 import aptus.aptmisc.Java
 import aptus.aptjson.GsonParser
 

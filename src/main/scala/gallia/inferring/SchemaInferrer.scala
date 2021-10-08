@@ -1,7 +1,5 @@
 package gallia.inferring
 
-import aptus.Anything_
-
 import gallia._
 import gallia.reflect.Container._
 import gallia.reflect.BasicType._

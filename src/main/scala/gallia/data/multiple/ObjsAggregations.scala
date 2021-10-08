@@ -1,6 +1,6 @@
 package gallia.data.multiple
 
-import aptus.{Anything_, Seq_}
+import aptus.Seq_
 
 import gallia.{obj, Ren, Renz}
 

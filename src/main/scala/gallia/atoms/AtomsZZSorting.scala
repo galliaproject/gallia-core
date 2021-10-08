@@ -1,7 +1,6 @@
 package gallia.atoms
 
 import scala.reflect.ClassTag
-import aptus.Anything_
 
 import gallia._
 import gallia.domain._

@@ -2,7 +2,7 @@ package gallia.target
 
 import scala.reflect.runtime.universe
 
-import aptus.{Anything_, String_, Seq_}
+import aptus.{String_, Seq_}
 
 import gallia._
 import gallia.meta._

@@ -1,6 +1,5 @@
 package gallia.data.multiple
 
-import aptus.Anything_
 import gallia.heads.merging.MergingData._
 import gallia.obj
 

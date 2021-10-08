@@ -1,7 +1,5 @@
 package gallia.selection.untyped
 
-import aptus.Anything_
-
 import gallia.target._
 import gallia.target.utils.TargetQueryValidation._
 import gallia.selection.typed._

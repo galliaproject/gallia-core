@@ -1,6 +1,5 @@
 package gallia.atoms.utils
 
-import aptus.Anything_
 import aptus.Int_
 
 import gallia.obj

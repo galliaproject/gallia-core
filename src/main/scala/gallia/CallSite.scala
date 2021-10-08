@@ -1,8 +1,6 @@
 package gallia
 
-import aptus.{Anything_, Seq_, String_}
-import aptus.Unit_
-import aptus.FileName
+import aptus._
 
 // ===========================================================================
 case class CallSite(

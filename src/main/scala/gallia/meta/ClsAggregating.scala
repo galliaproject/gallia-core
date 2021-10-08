@@ -1,7 +1,5 @@
 package gallia.meta
 
-import aptus.Anything_
-
 import gallia._
 import gallia.heads.reducing.ReducingType
 

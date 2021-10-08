@@ -1,7 +1,6 @@
 package gallia
 package reflect
 
-import aptus.Anything_
 import aptus.Name
 
 // ===========================================================================

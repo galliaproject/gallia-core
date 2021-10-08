@@ -1,7 +1,5 @@
 package gallia.atoms
 
-import aptus.Anything_
-
 import gallia._
 import gallia.domain._
 import gallia.FunctionWrappers._

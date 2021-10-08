@@ -1,7 +1,5 @@
 package gallia.heads
 
-import aptus.Anything_
-
 import gallia._
 import gallia.heads.grouping.HasAs
 import gallia.data.multiple.Streamer

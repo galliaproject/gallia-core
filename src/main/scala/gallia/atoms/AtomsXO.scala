@@ -1,6 +1,6 @@
 package gallia.atoms
 
-import aptus.{Anything_, String_}
+import aptus.String_
 
 import gallia._
 import gallia.io.out._

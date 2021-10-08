@@ -1,7 +1,5 @@
 package gallia.heads.reducing
 
-import aptus.Anything_
-
 import gallia._
 
 // ===========================================================================

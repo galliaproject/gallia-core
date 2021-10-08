@@ -1,6 +1,5 @@
 package gallia.actions.in
 
-import aptus.Anything_
 import gallia._
 import gallia.atoms.AtomsIX._
 

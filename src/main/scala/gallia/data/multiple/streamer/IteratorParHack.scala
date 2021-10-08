@@ -1,7 +1,5 @@
-package gallia.data.multiple.streamer
-
-import scala.collection.parallel.CollectionConverters._
-import gallia._
+package gallia
+package data.multiple.streamer
 
 // ===========================================================================
 object IteratorParHack { // 210303141926; off by default

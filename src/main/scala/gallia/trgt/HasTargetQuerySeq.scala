@@ -1,7 +1,5 @@
 package gallia.target
 
-import aptus.Anything_
-
 import gallia._
 import gallia.target.utils.TypedTargetQueryUtils
 import gallia.vldt.MetaValidation

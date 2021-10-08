@@ -1,6 +1,5 @@
 package gallia.heads.grouping
 
-import aptus.Anything_
 import gallia._
 import gallia.target._
 

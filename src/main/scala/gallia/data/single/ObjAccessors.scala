@@ -1,7 +1,6 @@
 package gallia
 package data.single
 
-import aptus.Anything_
 import aptus.{Opt, Pes}
 
 import gallia.data.DataFormatting.{formatBasicValue => format}

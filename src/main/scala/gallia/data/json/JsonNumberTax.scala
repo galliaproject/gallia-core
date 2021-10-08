@@ -1,6 +1,5 @@
 package gallia.data.json
 
-import aptus.Anything_
 import gallia.meta._
 import gallia.Obj
 

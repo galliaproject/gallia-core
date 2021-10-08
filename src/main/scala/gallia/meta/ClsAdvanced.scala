@@ -1,6 +1,6 @@
 package gallia.meta
 
-import aptus.{Anything_, Seq_}
+import aptus.Seq_
 
 import gallia._
 

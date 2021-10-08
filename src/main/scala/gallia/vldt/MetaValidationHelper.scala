@@ -1,7 +1,6 @@
 package gallia.vldt
 
-import aptus.{Anything_, String_}
-import aptus.Tuple2_
+import aptus.{String_, Tuple2_}
 
 import gallia._
 import gallia.reflect._

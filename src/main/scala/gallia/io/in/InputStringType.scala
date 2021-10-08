@@ -1,8 +1,6 @@
 package gallia
 package io.in
 
-import aptus.Anything_
-
 // ===========================================================================
 sealed trait InputStringType {
     val isJsonObject: Boolean = this == InputStringType.JsonObject

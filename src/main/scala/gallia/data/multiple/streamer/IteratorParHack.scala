@@ -1,6 +1,8 @@
 package gallia
 package data.multiple.streamer
 
+import scala.collection.parallel.CollectionConverters._ // for 2.13 only
+
 // ===========================================================================
 object IteratorParHack { // 210303141926; off by default
   val Cpus: Int = Runtime.getRuntime().availableProcessors() // TODO: logical threads or actual cores (former in my case)?    

@@ -1,7 +1,7 @@
-package gallia.atoms
+package gallia
+package atoms
 
 import aptus.{Anything_, Seq_}
-import gallia._
 import gallia.domain.PathPair
 
 // ===========================================================================

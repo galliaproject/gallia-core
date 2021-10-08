@@ -6,13 +6,9 @@ package object atoms {
   type _ff21 = gallia.FunctionWrappers._ff21
 
   // ---------------------------------------------------------------------------
-  val ErrorId       = gallia.vldt.ErrorId
-  val _Error = gallia.vldt._Error
-
-  // ---------------------------------------------------------------------------
-  type Key  = gallia.Key
-  type AnyValue = gallia.AnyValue
-
+  val  ErrorId = gallia.vldt. ErrorId
+  val _Error   = gallia.vldt._Error
+  
   // ---------------------------------------------------------------------------
   type StringSplitter = gallia.domain.StringSplitter
 

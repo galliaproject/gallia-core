@@ -47,10 +47,10 @@ class IteratorStreamer[A](itr: Iterator[A]) extends Streamer[A] {
   def reduce(op: (A, A) => A): A = itr.reduce(op)
 
   // ===========================================================================
-  def sortBy[K](ignored: CT[K], ord: Ordering[K])(f: A => K): Streamer[A] = gallia.illegal("TODO:210115103131:NotImplemented") // TODO: see spilling hack
+  def sortBy[K](ignored: CT[K], ord: Ordering[K])(f: A => K): Streamer[A] = aptus.illegalState("TODO:210115103131:NotImplemented") // TODO: see spilling hack
 
   // ---------------------------------------------------------------------------
-  def distinct: Streamer[A] = gallia.illegal("TODO:210115103132:NotImplemented") // TODO: see spilling hack
+  def distinct: Streamer[A] = aptus.illegalState("TODO:210115103132:NotImplemented") // TODO: see spilling hack
 
   // ---------------------------------------------------------------------------
   def groupByKey[K: CT, V: CT](implicit ev: A <:< (K, V)): Streamer[(K, List[V])] =
@@ -61,7 +61,7 @@ class IteratorStreamer[A](itr: Iterator[A]) extends Streamer[A] {
 
   // ===========================================================================
   override def coGroup[K: CT, V: CT](joinType: JoinType)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[(K, (Iterable[V], Iterable[V]))] =
-    gallia.illegal("TODO:210115103134:NotImplemented") // TODO: see spilling hack
+    aptus.illegalState("TODO:210115103134:NotImplemented") // TODO: see spilling hack
 
   // ---------------------------------------------------------------------------
   override def join[K: CT, V: CT](joinType: JoinType, combine: (V, V) => V)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[V] =

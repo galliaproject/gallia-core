@@ -17,7 +17,7 @@ case class Ren(from: Key, to: Key /* may be the same as from */) { // TODO: t210
 
     def isActual: Boolean     = from != to
 
-    def toOpt        : Option[Key]        = to.as.someIf(_ != from)
+    def toOpt        : Option[Key]        = to.in.someIf(_ != from)
     def actualOptPair: Option[(Key, Key)] = if (isActual) Some(from -> to) else None
     def actualOpt    : Option[ActualRen]  = either.toOption
 
@@ -57,8 +57,8 @@ case class KPath(parent: Seq[Key], key: Key) {
     def first : Key = all.head
     def last  : Key = all.last
 
-    def tail: Option[KPath] = parent.as.noneIf(_.isEmpty).map { x => KPath(x.tail, key) }
-    def init: Option[KPath] = parent.as.noneIf(_.isEmpty).map { x => KPath(x.init, x.last) }
+    def tail: Option[KPath] = parent.in.noneIf(_.isEmpty).map { x => KPath(x.tail, key) }
+    def init: Option[KPath] = parent.in.noneIf(_.isEmpty).map { x => KPath(x.init, x.last) }
 
 
     // ---------------------------------------------------------------------------
@@ -96,7 +96,7 @@ case class KPath(parent: Seq[Key], key: Key) {
   object KPath {
     def from(key: KeyW): KPath = KPath(Nil, key.value)
 
-    def opt(values: Seq[Key]): Option[KPath] = values.as.noneIf(_.isEmpty).map(x => KPath(x.init, x.last))
+    def opt(values: Seq[Key]): Option[KPath] = values.in.noneIf(_.isEmpty).map(x => KPath(x.init, x.last))
   }
 
 // ===========================================================================
@@ -129,11 +129,11 @@ case class RPath(parent: Seq[Key], ren: Ren) {
 
     // ---------------------------------------------------------------------------
     def initPair: (Option[KPath], Ren) = (
-      parent.as.noneIf(_.isEmpty).map(x => KPath(x.init, x.last)),
+      parent.in.noneIf(_.isEmpty).map(x => KPath(x.init, x.last)),
       ren)
 
     def initPair2: (Option[KPath], Either[Key, ActualRen]) = (
-      parent.as.noneIf(_.isEmpty).map(x => KPath(x.init, x.last)),
+      parent.in.noneIf(_.isEmpty).map(x => KPath(x.init, x.last)),
       ren.either)
 
     // ---------------------------------------------------------------------------

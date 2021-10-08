@@ -31,7 +31,7 @@ case class Cls(fields: Seq[Fld])
     protected override val _fields: Seq[Fld]  = fields // see ClsLike
 
     // ---------------------------------------------------------------------------
-    override val lookup: Map[Key, Fld] = fields.force.mapLeft(_.key)
+    override val lookup: Map[Key, Fld] = fields.map(_.associateLeft(_.key)).force.map
 
     override val keySet    : Set   [Key] = keys.toSet
     override val keyVector : Vector[Key] = keys.toVector
@@ -86,10 +86,10 @@ case class Cls(fields: Seq[Fld])
 
     // ===========================================================================
     private[meta /*cls*/] def requireNewKey   (target : Key ) { requireNewKeys(Keyz.from(target)) }
-    private[meta /*cls*/] def requireNewKeys  (targets: Keyz) { targets.values.intersect(this.keys).as.someIf(!_.isEmpty).foreach(x => illegal(s"201124171037:${x.#@@}(${keys.#@@})") /*TODO*/) }
+    private[meta /*cls*/] def requireNewKeys  (targets: Keyz) { targets.values.intersect(this.keys).in.someIf(!_.isEmpty).foreach(x => aptus.illegalState(s"201124171037:${x.#@@}(${keys.#@@})") /*TODO*/) }
 
     private[meta /*cls*/] def requireKnownKey (target : Key ) { requireKnownKeys(Keyz.from(target)) }
-    private[meta /*cls*/] def requireKnownKeys(targets: Keyz) { targets.values.diff(this.keys).as.someIf(!_.isEmpty).foreach(x => illegal(s"201124171038:${x.#@@}(${keys.#@@})") /*TODO*/) }
+    private[meta /*cls*/] def requireKnownKeys(targets: Keyz) { targets.values.diff(this.keys).in.someIf(!_.isEmpty).foreach(x => aptus.illegalState(s"201124171038:${x.#@@}(${keys.#@@})") /*TODO*/) }
 
     // ---------------------------------------------------------------------------
     private[meta /*cls*/] def requireRenamingKey (target : RenW ) { requireRenamingKeys(Renz.from(target)) }

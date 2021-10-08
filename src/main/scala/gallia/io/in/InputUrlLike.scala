@@ -3,11 +3,8 @@ package gallia.io.in
 import java.io.Closeable
 import java.net.URL
 
-import aptus.Anything_
-import aptus.{Content, Line}
-import aptus.utils.InputStreamUtils
-import aptus.Closeabled
-
+import aptus._
+import aptus.aptutils.InputStreamUtils
 import gallia.data.multiple.streamer.Streamer
 
 // ===========================================================================
@@ -66,14 +63,14 @@ case class InputUrlLike( // TODO: t210115193904 - check URI, regular file vs sym
         InputStreamUtils.content(url, charset.charset)
 
       case SupportedCompression.Zip =>
-        url.toExternalForm().stripPrefix("file:") /* FIXME? */.thn(aptus.misc.Zip.content) }
+        url.toExternalForm().stripPrefix("file:") /* FIXME? */.thn(aptus.aptmisc.Zip.content) }
 
   // ===========================================================================
   private def _linesPair()(url: URL): (Iterator[Line], Closeable) =
     compression match {
       case SupportedCompression.NoCompression | SupportedCompression.Gzip | SupportedCompression.Bzip2 =>
         val x = InputStreamUtils.lines(url, charset.charset)
-        x.u -> x
+        x.underlying -> x
 
       case SupportedCompression.Zip => ??? /* TODO */ }
 }

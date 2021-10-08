@@ -20,14 +20,14 @@ object ActionsUUVeryBasics {
   class ValidateBObj(value: BObj) extends ActionUUa {
         def  vldt(ignored: Cls): Errs  = _vldt.validateBObj(value)
         def _meta(ignored: Cls): Cls   = value.forceCls
-        def atomuus              : AtomUUs = Nil//_IdentityUU.as.seq
+        def atomuus              : AtomUUs = Nil//_IdentityUU.in.seq
       }
 
     // ---------------------------------------------------------------------------
     class ValidateBObjs(value: BObjs) extends ActionUUa {
         def  vldt(ignored: Cls): Errs  = _vldt.validateBObjs(value)
         def _meta(ignored: Cls): Cls   = value.forceCls
-        def atomuus              : AtomUUs = Nil//_IdentityZZ.as.seq
+        def atomuus              : AtomUUs = Nil//_IdentityZZ.in.seq
       }
 
   // ---------------------------------------------------------------------------

@@ -12,7 +12,7 @@ object ActionsZZMerging {
 
   case object UnionZ extends ActionZzToZ {
     def _meta(c1: Cls , c2: Cls ): Cls  = c1.unionCompatible(c2) //TODO: val
-    def dataz2(c1: Cls , c2: Cls ): Atoms = _UnionZZ.as.seq
+    def dataz2(c1: Cls , c2: Cls ): Atoms = _UnionZZ.in.seq
   }
 
   // ===========================================================================
@@ -37,7 +37,7 @@ object ActionsZZMerging {
             case bring  : BringData   => _Bring  (bring.targetKeys(c1, c2), joinKeys)
             case join   : JoinData    => _Join   (join   .joinType        , joinKeys)
             case coGroup: CoGroupData => _CoGroup(coGroup.joinType        , joinKeys, coGroup.as) } }
-        .as.seq }
+        .in.seq }
 
 }
 

@@ -53,12 +53,12 @@ object AtomsIX {
   // ---------------------------------------------------------------------------
   case class _JsonArrayString(inputString: InputString, schemaProvider: OtherSchemaProvider, c: Cls) extends HasCommonObjs {
     def commonObjs: Objs = JsonParsing.parseArray(inputString).thn(Objs.from)
-      def naive: Option[Objs] = commonObjs.map(JsonNumberTax.payUp(c)).as.some }
+      def naive: Option[Objs] = commonObjs.map(JsonNumberTax.payUp(c)).in.some }
 
   // ===========================================================================
   case class _JsonObjectFileInputU(input: InputUrlLike, c: Cls) extends HasCommonObj {
     def commonObj: Obj = input.content.thn(JsonParsing.parseObject)
-      def naive: Option[Obj] = commonObj.thn(JsonNumberTax.payUp(c)).as.some
+      def naive: Option[Obj] = commonObj.thn(JsonNumberTax.payUp(c)).in.some
   }
 
   // ===========================================================================
@@ -99,20 +99,20 @@ object AtomsIX {
 
   // ===========================================================================
   case class _JdbcInputZ1(inputString: InputString, queryingOpt: Option[ReadQuerying] /* missing if URI-driven */) extends AtomIZ {
-      import aptus.misc.Rdbms.generalize
+      import aptus.aptmisc.Rdbms.generalize
       import aptus.ResultSet_
   
       // ---------------------------------------------------------------------------
       def naive: Option[Objs] = {
         val sqlQuery = tmp.map(_.query).get// TODO: t210114202848 - validate
   
-        val (rs, cls) = aptus.misc.Rdbms(new java.net.URI(inputString)).query(sqlQuery)
+        val (rs, cls) = aptus.aptmisc.Rdbms(new java.net.URI(inputString)).query(sqlQuery)
   
         Streamer
           .fromIterator((rs.rawRdbmsEntries, cls))
           .map(generalize).map(gallia.obj)
           .thn(Objs.build)
-          .as.some
+          .in.some
       }
   
       // ===========================================================================
@@ -131,18 +131,18 @@ object AtomsIX {
     
     // ===========================================================================
     case class _JdbcInputZ2(connection: java.sql.Connection, querying: ReadQuerying) extends AtomIZ {
-      import aptus.misc.Rdbms.generalize
+      import aptus.aptmisc.Rdbms.generalize
       import aptus.ResultSet_
   
       // ---------------------------------------------------------------------------
       def naive: Option[Objs] = {
-        val (rs, cls) = aptus.misc.Rdbms(connection/*new java.net.URI(inputString)*/).query(querying.query)
+        val (rs, cls) = aptus.aptmisc.Rdbms(connection/*new java.net.URI(inputString)*/).query(querying.query)
   
         Streamer
           .fromIterator((rs.rawRdbmsEntries, cls))
           .map(generalize).map(gallia.obj)
           .thn(Objs.build)
-          .as.some
+          .in.some
       }
   
     }  
@@ -156,7 +156,7 @@ object AtomsIX {
       extends HasCommonObjs { import _MongodbInputZ._
       mongoDb()
 
-      def naive: Option[Objs] = commonObjs.map(JsonNumberTax.payUp(c)).as.some // TODO: confirm need to pay tax here
+      def naive: Option[Objs] = commonObjs.map(JsonNumberTax.payUp(c)).in.some // TODO: confirm need to pay tax here
 
       // ===========================================================================
       // t210114153517 - must use jongo+find until figure out
@@ -176,7 +176,7 @@ object AtomsIX {
         // ===========================================================================
         private def cmdOpt =
           tmp.flatMap {
-             case ReadQuerying.All  (collection) => mongoDb.allFrom(collection).as.some
+             case ReadQuerying.All  (collection) => mongoDb.allFrom(collection).in.some
              case ReadQuerying.Query(query)      => mongoDb.query(query) }
 
         // ---------------------------------------------------------------------------
@@ -196,7 +196,7 @@ object AtomsIX {
         // ---------------------------------------------------------------------------
         def mongoDb(): utils.MongoDb =
           mongoDbOpt match {
-            case None        => illegal("requires gallia.mongodb.injectMongoDb") // TODO: t201223101425 prettify
+            case None        => aptus.illegalState("requires gallia.mongodb.injectMongoDb") // TODO: t201223101425 prettify
             case Some(value) => value }
     }
 
@@ -229,7 +229,7 @@ object AtomsIX {
           schemaProvider match {
             case TableSchemaProvider.NoInferring => x.z // nothing to do
             case _                               => new ModifyTableData(cellConf).modify(x) }}
-        .as.some
+        .in.some
 
     // ---------------------------------------------------------------------------
     def stringObjs(keys: Seq[Key]): Objs =

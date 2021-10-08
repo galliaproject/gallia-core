@@ -4,7 +4,7 @@ import scala.util.chaining._
 import scala.reflect.{ClassTag => CT}
 
 import aptus._
-import aptus.utils.IteratorUtils
+import aptus.aptutils.IteratorUtils
 
 import spilling.SpillingHackSerialization._
 import spilling.SpillingHackDeserialization._

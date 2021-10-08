@@ -21,7 +21,7 @@ object AtomsUV {
       z.mapToStreamer(_.force(ori)).toList }
 
     case class _GrabZOpt(ori: KPath) extends AtomZV { def naive(z: Objs) =
-      z.flatMapToStreamer(_.opt(ori)).toList.as.noneIf(_.isEmpty) }
+      z.flatMapToStreamer(_.opt(ori)).toList.in.noneIf(_.isEmpty) }
 
   // ===========================================================================
   case class _SquashU1(ori: PathPair1, f: _ff11) extends AtomUV { def naive(o: Obj) =

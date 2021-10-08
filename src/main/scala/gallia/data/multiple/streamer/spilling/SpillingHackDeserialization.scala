@@ -23,7 +23,7 @@ object SpillingHackDeserialization { // see https://github.com/galliaproject/gal
   // ===========================================================================
   private def deserializeSortingKey(formatted: String): Any =
     formatted
-      .as.noneIf(_ == "")
+      .in.noneIf(_ == "")
       .map(_.asInstanceOf[String])
       .map { s =>
         // no other way until homogenize classtag/typetag (see https://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210116153713)
@@ -37,7 +37,7 @@ object SpillingHackDeserialization { // see https://github.com/galliaproject/gal
   // ---------------------------------------------------------------------------
   private def deserializeJoiningValue(formatted: String): Any =
     formatted
-      .as.noneIf(_.isEmpty)
+      .in.noneIf(_.isEmpty)
       .map(GsonToObj.fromObjectString)
 
 }

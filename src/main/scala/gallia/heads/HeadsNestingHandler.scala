@@ -10,8 +10,8 @@ object HeadsNestingHandler { // TODO: move thse to handler/handler helper
   /** typically for nesting, whereby input schema will be provided when parent gets processed */
   trait NestingMetaPlaceholder extends ActionVM0 {
       // can't happen by design (replaced by actual input first, see ?)
-      def  vldt: Errs = illegal("bug:201110144401")
-      def _meta: Cls  = illegal("bug:201110144402") }
+      def  vldt: Errs = aptus.illegalState("bug:201110144401")
+      def _meta: Cls  = aptus.illegalState("bug:201110144402") }
 
     // ---------------------------------------------------------------------------
     object NestingMetaPlaceholderU extends NestingMetaPlaceholder with ActionIUa { def atomius = Nil }

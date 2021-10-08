@@ -28,8 +28,8 @@ object AtomsAsserts {
   case class _ForceOneB(ori: Key) extends AtomUU { def naive(o: Obj) = o.opt(ori).map(_.asInstanceOf[Seq[_]].force.one.thn { v => o.put(ori, v) }).getOrElse(o) }
 
   // ---------------------------------------------------------------------------
-  case class _ForceSeqA(ori: Key) extends AtomUU { def naive(o: Obj) = o.force(ori)    .as.list.thn { v => o.put(ori, v) } }
-  case class _ForceSeqB(ori: Key) extends AtomUU { def naive(o: Obj) = o.opt(ori).map(_.as.list.thn { v => o.put(ori, v) }).getOrElse(o) }
+  case class _ForceSeqA(ori: Key) extends AtomUU { def naive(o: Obj) = o.force(ori)    .in.list.thn { v => o.put(ori, v) } }
+  case class _ForceSeqB(ori: Key) extends AtomUU { def naive(o: Obj) = o.opt(ori).map(_.in.list.thn { v => o.put(ori, v) }).getOrElse(o) }
 
   // ===========================================================================
   @Max5

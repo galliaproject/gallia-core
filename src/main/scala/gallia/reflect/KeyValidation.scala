@@ -2,7 +2,7 @@ package gallia.reflect
 
 // ===========================================================================
 object KeyValidation { // TODO: t210127133546 - move (also used by meta validation)
-  private val ValidKeyChars = aptus.utils.CharUtils.AlphaNumericalSet ++ Set('-', '_', '@', ':', '.')
+  private val ValidKeyChars = aptus.aptutils.CharUtils.AlphaNumericalSet ++ Set('-', '_', '@', ':', '.')
   private val MaxKeySize = 100
 
   // ---------------------------------------------------------------------------

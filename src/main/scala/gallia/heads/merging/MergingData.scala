@@ -16,7 +16,7 @@ sealed trait MergingData {
     def vldtJoinKeys(c1: Cls, c2: Cls): Option[Any] =
       joinKeysOpt match {
         case Some(_) => None
-        case None    => c1.keys.intersect(c2.keys).as.someIf(_.size != 1) }
+        case None    => c1.keys.intersect(c2.keys).in.someIf(_.size != 1) }
 
     // ---------------------------------------------------------------------------
     // TODO: consider case-insentivity? (arbitrarily favor left)

@@ -5,8 +5,8 @@ import aptus.{Anything_, String_, Seq_}
 import aptus.JsonObjectString
 import aptus.JsonArrayString
 
-import aptus.misc.Java
-import aptus.json.GsonParser
+import aptus.aptmisc.Java
+import aptus.aptjson.GsonParser
 
 import scala.collection.JavaConverters._
 import com.google.gson._
@@ -39,7 +39,7 @@ object GsonToObj {
           value match {
             case x: JsonPrimitive              => Some(primitiveValue(x))
             case x: JsonObject if (x.size > 0) => Some(jsonObjectToObj(x)) //FIXME: t210116150154 - must remove nulls prior to size
-            case x: JsonArray                  => x.iterator().asScala.toList.flatMap(jsonRootToAnyValue).as.noneIf(_.isEmpty)
+            case x: JsonArray                  => x.iterator().asScala.toList.flatMap(jsonRootToAnyValue).in.noneIf(_.isEmpty)
             case _: JsonObject                 => None
             case _: JsonNull                   => None }
 

@@ -42,7 +42,7 @@ private object ChainUtils {
     visitedNodes ++
     nextDag
       .rootIds
-      .as.noneIf(_.isEmpty)
+      .in.noneIf(_.isEmpty)
       .toSeq.flatMap(
         chainTraversal(nextDag))
   }

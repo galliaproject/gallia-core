@@ -208,7 +208,7 @@ trait ObjOperations { self: Obj =>
               case None => None
               case Some(value) =>
                 value match { // TODO: could use meta (see t210115095838)
-                  case seq: Seq[_] => illegal(s"TODO:CantBeSeq-Opt:210106171801:${target}") // in theory should have been validated against..
+                  case seq: Seq[_] => dataError(s"TODO:CantBeSeq-Opt:210106171801:${target}") // in theory should have been validated against..
                   case sgl         => sgl.asInstanceOf[Obj].opt(tail) } } }
 
     // ---------------------------------------------------------------------------
@@ -217,10 +217,10 @@ trait ObjOperations { self: Obj =>
         case (leaf  , None      ) => attemptKey(leaf).get
         case (parent, Some(tail)) =>
           attemptKey(parent) match {
-              case None        => illegal(s"TODO:CantBeNone:210106171759:${target}") // in theory should have been validated against..
+              case None        => dataError(s"TODO:CantBeNone:210106171759:${target}") // in theory should have been validated against..
               case Some(value) =>
                 value match { // TODO: could use meta (see t210115095838)
-                  case seq: Seq[_] => illegal(s"TODO:CantBeSeq-Force:210106171800:${target}") // in theory should have been validated against..
+                  case seq: Seq[_] => dataError(s"TODO:CantBeSeq-Force:210106171800:${target}") // in theory should have been validated against..
                   case sgl         => sgl.asInstanceOf[Obj].force(tail) } } }
 
     // ---------------------------------------------------------------------------
@@ -243,12 +243,12 @@ trait ObjOperations { self: Obj =>
           case (true , true ) => opt  (target).toSeq.flatMap(_.asSeq)
           case (true , false) => opt  (target).toSeq
           case (false, true ) => force(target)                .asSeq
-          case (false, false) => force(target).as.seq }
+          case (false, false) => force(target).in.seq }
 
       // ===========================================================================
       def seq(target: KPathW, container: Container): Seq[AnyValue] =
         container match {
-          case Container._One => force(target).as.seq // TODO: see t210116165559 - rename to "in"?
+          case Container._One => force(target).in.seq // TODO: see t210116165559 - rename to "in"?
           case Container._Opt => opt  (target).toSeq
           case Container._Nes => force(target)                .asSeq
           case Container._Pes => opt  (target).toSeq.flatMap(_.asSeq) }
@@ -313,13 +313,13 @@ trait ObjOperations { self: Obj =>
   @deprecated("still needed after 210303101932?") def unarrayCompositeKey(keys: Seq[Key], separator: Separator): Option[Key] =
     keys
       .flatMap { keyKey => opt(keyKey).map(_.str) } /* TODO or expect default values to be set if missing? or ignore collisions? */
-      .as.noneIf(_.isEmpty)
+      .in.noneIf(_.isEmpty)
       .map(_.join(separator).symbol)
 
   // ---------------------------------------------------------------------------
   def unarrayCompositeKey2(key: Key): Option[Key] =
     opt(key)
-      .flatMap(_.str.as.noneIf(_.isEmpty)) /* TODO or expect default values to be set if missing? or ignore collisions? */      
+      .flatMap(_.str.in.noneIf(_.isEmpty)) /* TODO or expect default values to be set if missing? or ignore collisions? */      
       .map(_.symbol)      
 
   // ---------------------------------------------------------------------------

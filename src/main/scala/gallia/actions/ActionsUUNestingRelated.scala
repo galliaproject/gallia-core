@@ -42,7 +42,7 @@ object ActionsUUNestingRelated {
     // ---------------------------------------------------------------------------
     def  vldt (c: Cls): Errs = {
       _vldt.checkNotNesting(c, parent) match {
-        case Some(shortcutting) => shortcutting.as.seq
+        case Some(shortcutting) => shortcutting.in.seq
         case None =>
           val nc = c.forceNestedClass(parent)
 
@@ -97,7 +97,7 @@ object ActionsUUNestingRelated {
         _Move(
             from.values.force.one,
             destinationOpt.map(_.forceKPath)
-          ).as.seq
+          ).in.seq
       }
   }
 

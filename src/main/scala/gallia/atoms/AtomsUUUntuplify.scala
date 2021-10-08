@@ -20,7 +20,7 @@ object AtomsUUUntuplify {
     // ---------------------------------------------------------------------------
     private def _untuplify1z(keys: Keyz)(values: Seq[Any]): Obj = {
       if (keys.size != values.size) {
-        runtimeError(("210108211925", keys.size, values.size, keys.values.zipAll(values, null, null).joinln.sectionAllOff(2))) } // TODO
+        dataError(("210108211925", keys.size, values.size, keys.values.zipAll(values, null, null).joinln.sectionAllOff(2))) } // TODO
 
       keys.values.zip(values).thn(obj)
     }
@@ -43,7 +43,7 @@ object AtomsUUUntuplify {
         .thn(splitter.apply)
         .thn { values =>
           if (keys.size != values.size) {
-            runtimeError("210108212537", keys.size, values.size, value, keys.values.zipAll(values, null, null).joinln.sectionAllOff(2))  }
+            dataError("210108212537", keys.size, values.size, value, keys.values.zipAll(values, null, null).joinln.sectionAllOff(2))  }
 
           keys.values.zip(values).thn(obj) } }
 

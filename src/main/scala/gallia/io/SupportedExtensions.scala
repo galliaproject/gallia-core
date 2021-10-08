@@ -6,8 +6,8 @@ import enumeratum.{Enum, EnumEntry}
 // ===========================================================================
 sealed trait SupportedExtensions extends EnumEntry {
     // t210118103259 - proper handling
-    @aptus.nonfinl def ztype: IoTypeZ = gallia.illegal("TODO:210118103259")
-    @aptus.nonfinl def utype: IoTypeU = gallia.illegal("TODO:210118103259")
+    @aptus.nonfinl def ztype: IoTypeZ = aptus.illegalState("TODO:210118103259")
+    @aptus.nonfinl def utype: IoTypeU = aptus.illegalState("TODO:210118103259")
   }
 
   // ---------------------------------------------------------------------------
@@ -23,7 +23,7 @@ sealed trait SupportedExtensions extends EnumEntry {
           .stripSuffix(".bz2")
           .stripSuffix(".zip")
         .splitBy(".")
-        .as.noneIf(_.size == 1)
+        .in.noneIf(_.size == 1)
         .map(_.last.toLowerCase)
         .flatMap(withNameOption)
 

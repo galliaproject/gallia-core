@@ -87,8 +87,8 @@ trait FldLike extends HasKey with InfoLike
         // ---------------------------------------------------------------------------
         @gallia.NumberAbstraction
         def numericalTypeOpt: Option[NumericalType] =
-               if (isInt)    BasicType._Int   .as.some
-          else if (isDouble) BasicType._Double.as.some
+               if (isInt)    BasicType._Int   .in.some
+          else if (isDouble) BasicType._Double.in.some
           else               None
 
         // ---------------------------------------------------------------------------

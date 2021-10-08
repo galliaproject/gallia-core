@@ -53,7 +53,7 @@ object ActionsOthers {
   case object UnionUU extends Action with ActionV2 with ActionM2 with ActionAN {
     def  vldt (in1: Cls, in2: Cls): Errs  = Nil // TODO: eg collisions
     def _meta (in1: Cls, in2: Cls): Cls   = in1.mergeDisjoint(in2)
-    def atoms(ignored: NodeMetaContext): Atoms = _Merge.as.seq }
+    def atoms(ignored: NodeMetaContext): Atoms = _Merge.in.seq }
 
   // ===========================================================================
   // uz
@@ -68,33 +68,33 @@ object ActionsOthers {
 
     // ---------------------------------------------------------------------------
     case class FlattenByU(target: RPath) extends FlattenBy(target) with ActionUZ {
-      def atoms(ignored: NodeMetaContext): Atoms = _FlattenByU(target.fromFX).as.seq } //TODO: + rename
+      def atoms(ignored: NodeMetaContext): Atoms = _FlattenByU(target.fromFX).in.seq } //TODO: + rename
 
     case class FlattenByZ(target: RPath) extends FlattenBy(target) with ActionZZ {
-      def atomzzs(ignored: NodeMetaContext): AtomZZs = _FlattenByZ(target.fromFX).as.seq } //TODO: + rename
+      def atomzzs(ignored: NodeMetaContext): AtomZZs = _FlattenByZ(target.fromFX).in.seq } //TODO: + rename
 
   // ===========================================================================
   // zu
 
   case object MergeAll extends ActionZU with TodoV1 {
     def _meta(in: Cls): Cls = ???//in.reduceLeft(_ mergeDisjoint _) - FIXME:?
-    def atoms(ctx: NodeMetaContext): Atoms = ??? } //_MergeAll.as.seq
+    def atoms(ctx: NodeMetaContext): Atoms = ??? } //_MergeAll.in.seq
 
   // ---------------------------------------------------------------------------
   case object AsArray1 extends ActionZU with TodoV1 { // TODO: key sole + not array
       def _meta(in: Cls): Cls =  in.soleField.key.thn(in.toMultiple(_))
-      def atoms(ctx: NodeMetaContext): Atoms = ctx.forceSingleAfferent.soleField.key.thn(_AsArray1).as.seq }
+      def atoms(ctx: NodeMetaContext): Atoms = ctx.forceSingleAfferent.soleField.key.thn(_AsArray1).in.seq }
 
     // ---------------------------------------------------------------------------
     case class AsArray2(newKey: Key) extends ActionZU with TodoV1 {
       def _meta(in: Cls): Cls =  in.nest(in.keyz.renz, newKey).toMultiple(newKey)
-      def atoms(ctx: NodeMetaContext): Atoms = _AsArray2(newKey).as.seq }
+      def atoms(ctx: NodeMetaContext): Atoms = _AsArray2(newKey).in.seq }
 
   // ---------------------------------------------------------------------------
   case object ForceOne extends ActionZU {
     def vldt (in: Cls): Errs = Nil
     def _meta(in: Cls): Cls = in
-    def atoms(ignored: NodeMetaContext): Atoms = _ForceOne.as.seq }
+    def atoms(ignored: NodeMetaContext): Atoms = _ForceOne.in.seq }
 
   // ===========================================================================
   //FIXME t210115175242 - runtime validation of newKeys for these
@@ -145,7 +145,7 @@ object ActionsOthers {
   case class MapV2V(to: TypeNode, f: _ff11) extends ActionVV {
     def vldt(in: Seq[Cls] ) = Nil // TODO
     def _meta(in: Seq[Cls] ) = in.force.one//TODO: ok?
-    def atoms (ignored: gallia.NodeMetaContext): Atoms = _MapV2V(f).as.seq }
+    def atoms (ignored: gallia.NodeMetaContext): Atoms = _MapV2V(f).in.seq }
 
   // ===========================================================================
   // uv
@@ -153,7 +153,7 @@ object ActionsOthers {
   case class GrabU(from: TtqKPath1) extends ActionUV {
     def vldt (in: Seq[Cls]): Errs = from.vldtAsOrigin(in.force.one) //TODO: more
     def _meta(ignored: Seq[Cls]): Cls = Cls.vle(from.node)
-    def atoms(ctx: NodeMetaContext): Atoms = { val c = ctx.afferents.force.one; _GrabU(from.pathPairT(c)).as.seq } }
+    def atoms(ctx: NodeMetaContext): Atoms = { val c = ctx.afferents.force.one; _GrabU(from.pathPairT(c)).in.seq } }
 
   // ---------------------------------------------------------------------------
   case class PopulateDataClass(node: TypeNode) extends ActionUV {
@@ -165,7 +165,7 @@ object ActionsOthers {
   case class SquashUUnsafe(to: TypeNode, f: Obj => Any) extends ActionUV {
       def vldt (in: Seq[Cls]): Errs = Nil//TODO
       def _meta(ignored: Seq[Cls]): Cls = Cls.vle(to)
-      def atoms(ignored: NodeMetaContext): Atoms = _SquashUUnsafe(f).as.seq }
+      def atoms(ignored: NodeMetaContext): Atoms = _SquashUUnsafe(f).in.seq }
 
     // ---------------------------------------------------------------------------
     case class SquashU1(from: TtqKPath1, to: TypeNode, f: _ff11) extends ActionUV with SquashXN { // == Grab1
@@ -189,7 +189,7 @@ object ActionsOthers {
   case object Size extends ActionZV {
     def vldt (ignored: Seq[Cls]): Errs = Nil// TODO
     def _meta(ignored: Seq[Cls]): Cls  = Cls.vleInt
-    def atoms(ctx: NodeMetaContext): Atoms = _Size.as.seq }
+    def atoms(ctx: NodeMetaContext): Atoms = _Size.in.seq }
 
   // ---------------------------------------------------------------------------
   case class GrabZ(from: TtqKPath1 /* does not specify the surrounding Seq */) extends ActionZV {
@@ -202,13 +202,13 @@ object ActionsOthers {
         .thn { pair =>
           if (pair.optional) _GrabZOpt(pair.path)
           else               _GrabZOne(pair.path)  }
-        .as.seq }
+        .in.seq }
 
   // ---------------------------------------------------------------------------
   case class SquashZUnsafe(to: TypeNode, f: Seq[Obj] => Any) extends ActionZV {
       def vldt (in: Seq[Cls]): Errs = Nil//TODO
       def _meta(ignored: Seq[Cls]): Cls = Cls.vle(to)
-      def atoms(ignored: NodeMetaContext): Atoms = _SquashZUnsafe(f).as.seq }
+      def atoms(ignored: NodeMetaContext): Atoms = _SquashZUnsafe(f).in.seq }
 
     // ---------------------------------------------------------------------------
     case class SquashZ1(from: TtqKPath, to: TypeNode, f: _agg1) extends ActionZV with SquashXN {

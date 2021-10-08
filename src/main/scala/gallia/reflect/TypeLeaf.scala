@@ -33,7 +33,7 @@ case class TypeLeaf(
     // ===========================================================================
     def forceDataClass: Cls =
       dataClassEither match {
-        case Left (l) => illegalArgument(l)
+        case Left (l) => aptus.illegalArgument(l)
         case Right(r) => r }
 
     // ---------------------------------------------------------------------------

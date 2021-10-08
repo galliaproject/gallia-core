@@ -40,7 +40,7 @@ case class IntermediatePlan private (dag: ActionDag) {
     private def node(inputs: Seq[ResultSchema])(actionm: ActionVMN): ResultSchema =
       inputs
         .map(_.successOpt)
-        .as.noneIf(_.exists(_.isEmpty)) // = none if any failure
+        .in.noneIf(_.exists(_.isEmpty)) // = none if any failure
         .map(_.flatten)
          match {
           case None       => ResultSchema.UpstreamError

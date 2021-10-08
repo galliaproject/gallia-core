@@ -37,7 +37,7 @@ trait SelectionValidation { def vldt(c: Cls): Errs }
                 def kpath(c: Cls): KPath
 
           @finl def qpath (c: Cls): RPath      = kpath(c).qpath
-          @finl def kpaths(c: Cls): Seq[KPath] = kpath(c).as.seq
+          @finl def kpaths(c: Cls): Seq[KPath] = kpath(c).in.seq
 
           @finl override def qpathz(c: Cls): RPathz = super[RPathSelection].qpathz(c)
 

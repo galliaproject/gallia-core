@@ -41,8 +41,8 @@ case class CellConf(
 
   // ===========================================================================
   def transformValue(multiple: Boolean)(value: String): Either[Option[String], Seq[String]] =
-    if (!multiple) Left (value.as.noneIf(isNull))
-    else           Right(value.as.noneIf(isNull).toSeq.flatMap(splitArray))
+    if (!multiple) Left (value.in.noneIf(isNull))
+    else           Right(value.in.noneIf(isNull).toSeq.flatMap(splitArray))
 
   // ---------------------------------------------------------------------------
   def valueSet(value: String): Set[String] =

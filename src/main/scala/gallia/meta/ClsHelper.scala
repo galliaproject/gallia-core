@@ -5,10 +5,10 @@ import gallia._
 
 // ===========================================================================
 trait ClsHelper { _: Cls =>
-  def field (ren  : Ren  ): Fld = field_(ren ).getOrElse(illegal(ren             , keys.#@@))
-  def field (path : RPath): Fld = field_(path).getOrElse(illegal(path            , keys.#@@))
-  def field (key  : Key  ): Fld = field_(key ).getOrElse(illegal(key.name        , keys.#@@))
-  def field (path : KPath): Fld = field_(path).getOrElse(illegal(path.formatDebug, keys.#@@))
+  def field (ren  : Ren  ): Fld = field_(ren ).getOrElse(aptus.illegalState(ren             , keys.#@@))
+  def field (path : RPath): Fld = field_(path).getOrElse(aptus.illegalState(path            , keys.#@@))
+  def field (key  : Key  ): Fld = field_(key ).getOrElse(aptus.illegalState(key.name        , keys.#@@))
+  def field (path : KPath): Fld = field_(path).getOrElse(aptus.illegalState(path.formatDebug, keys.#@@))
 
   // ---------------------------------------------------------------------------
   def field_(key  : Key  ): Option[Fld] = fields.find(_.key == key)
@@ -33,7 +33,7 @@ trait ClsHelper { _: Cls =>
             .thn { current =>
               f.nestedClassOpt
                 .map(_._leafPaths(current))
-                .getOrElse(current.as.seq) } }
+                .getOrElse(current.in.seq) } }
 
     // ---------------------------------------------------------------------------
     def _allPaths(parent: Seq[Key]): Seq[Seq[Key]] =

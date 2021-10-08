@@ -77,7 +77,7 @@ object AtomsOthers {
         .flatMap { o =>
           val newKey =
             o .unarrayCompositeKey2(keyKey)
-              .getOrElse(runtimeError(ErrorId.Runtime.EmptyKey))
+              .getOrElse(dataError(ErrorId.Runtime.EmptyKey))
   
           o.opt(valueKey).map(newKey -> _) }
        .thn(obj) }
@@ -89,7 +89,7 @@ object AtomsOthers {
           .flatMap { o =>
             val newKey =
               o .unarrayCompositeKey(keyKeys.values, separator)
-                .getOrElse(runtimeError(ErrorId.Runtime.NoKeysLeft)) //TODO: or offer alterative if all missing?
+                .getOrElse(dataError(ErrorId.Runtime.NoKeysLeft)) //TODO: or offer alterative if all missing?
     
             o.opt(valueKey).map(newKey -> _) }
          .thn(obj) }
@@ -102,7 +102,7 @@ object AtomsOthers {
           .flatMap { o =>
             val newKey =
               o .unarrayCompositeKey(keys.values, sep)
-                .getOrElse(runtimeError(ErrorId.Runtime.NoKeysLeft)) //TODO: or offer alterative if all missing?
+                .getOrElse(dataError(ErrorId.Runtime.NoKeysLeft)) //TODO: or offer alterative if all missing?
   
             o.removeOpt(keys).map(newKey -> _) }
           .thn(obj(_)) }

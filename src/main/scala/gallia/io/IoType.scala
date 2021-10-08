@@ -86,8 +86,8 @@ sealed trait IoTypeZ { // TODO: t210118103012 - proper handling
     // ===========================================================================
     case object DirectJsonArray  extends IoTypeZ {
         def defaultRead = (start, conf) => start.jsonArrayString.schemaProvider(conf.schemaProvider)
-        def defaultFormat            = gallia.illegal("TODO:210118103012")
-        def outputConf(path: String) = gallia.illegal("TODO:210118103013")
+        def defaultFormat            = aptus.illegalState("TODO:210118103012")
+        def outputConf(path: String) = aptus.illegalState("TODO:210118103013")
       }
 
       // ---------------------------------------------------------------------------
@@ -103,22 +103,22 @@ sealed trait IoTypeZ { // TODO: t210118103012 - proper handling
     // ===========================================================================
     case object Table extends IoTypeZ {
       def defaultRead   = (start, conf) => start.table.thnIf(!conf.inMemoryMode)(_.iteratorMode).schemaProvider(conf.schemaProvider).project(conf.projectionOpt)
-      def defaultFormat = gallia.illegal("TODO:210118103012")
+      def defaultFormat = aptus.illegalState("TODO:210118103012")
       def outputConf(path: String) = UrlLikeTableConf(path, gallia.io.UrlLike.Default, gallia.io.FormatConf.Default)
     }
 
     // ===========================================================================
     case object Jdbc extends IoTypeZ {
-      def defaultRead   = gallia.illegal("TODO:210118103012")
-      def defaultFormat = gallia.illegal("TODO:210118103012")
-      def outputConf(path: String) = gallia.illegal("TODO:210118103012")
+      def defaultRead   = aptus.illegalState("TODO:210118103012")
+      def defaultFormat = aptus.illegalState("TODO:210118103012")
+      def outputConf(path: String) = aptus.illegalState("TODO:210118103012")
     }
 
     // ---------------------------------------------------------------------------
     case object MongoDb2 extends IoTypeZ {
-      def defaultRead   = gallia.illegal("TODO:210118103012")
-      def defaultFormat = gallia.illegal("TODO:210118103012")
-      def outputConf(path: String) = gallia.illegal("TODO:210118103012")
+      def defaultRead   = aptus.illegalState("TODO:210118103012")
+      def defaultFormat = aptus.illegalState("TODO:210118103012")
+      def outputConf(path: String) = aptus.illegalState("TODO:210118103012")
     }
   }
 

@@ -48,7 +48,7 @@ object ActionsUUSomewhatBasics {
   // ===========================================================================
   /** strict = all values are translated, therefore type can change */
   case class Translate(target: TtqRPathz, to: TypeNode, strict: Boolean, mapping: Seq[(_, _)]) extends ActionUUb {
-      @deprecated val toOpt = to.as.someIf(_ != target.node)
+      @deprecated val toOpt = to.in.someIf(_ != target.node)
 
       def  vldt(c: Cls): Errs =
         target.vldtAsOrigin(c, SpecialCardiMode.IgnoreRequiredness /* TODO: check no Some/None provided */) ++

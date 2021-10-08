@@ -47,7 +47,7 @@ sealed trait KVE { // Key-Value Entry
       def vldt(nextLocation: Location): Errs =
         node
           .validContainerOpt
-          .flatMap(_.as.someIf(_.dataClass))
+          .flatMap(_.in.someIf(_.dataClass))
            match {
             case None     => MetaValidation.validType        (nextLocation, node)
             case Some(cc) => MetaValidation.validateCaseClass(nextLocation)(cc) }

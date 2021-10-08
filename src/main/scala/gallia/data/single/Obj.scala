@@ -1,7 +1,9 @@
-package gallia.data.single
+package gallia
+package data
+package single
 
-import aptus.{Anything_, String_, Seq_}
-import aptus.json.GsonFormatter
+import aptus._
+import aptus.aptjson.GsonFormatter
 import gallia.data.json.ObjToGson
 
 // ===========================================================================
@@ -65,6 +67,7 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
     def formatCompactJson : String = ObjToGson(this).thn(GsonFormatter.compact)
 
     // ===========================================================================
+    def size                          = data.size
     def keys   : Seq[ Key           ] = data.map(_._1).toList
     def values : Seq[      AnyValue ] = data.map(_._2).toList
     def entries: Seq[(Key, AnyValue)] = data          .toList
@@ -86,12 +89,12 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
     def potch(key: Key): (Option[AnyValue], Option[Obj]) = opt(key) -> removeOpt(key) // totally a thing. (TODO: t210124100009)
 
       // ---------------------------------------------------------------------------
-      def retainOpt(target : Key)  : Option[Obj] = data.filter   (_._1 == target).as.noneIf(_.isEmpty).map(Obj.build)
-      def removeOpt(target : Key)  : Option[Obj] = data.filterNot(_._1 == target).as.noneIf(_.isEmpty).map(Obj.build)
+      def retainOpt(target : Key)  : Option[Obj] = data.filter   (_._1 == target).in.noneIf(_.isEmpty).map(Obj.build)
+      def removeOpt(target : Key)  : Option[Obj] = data.filterNot(_._1 == target).in.noneIf(_.isEmpty).map(Obj.build)
 
       // ---------------------------------------------------------------------------
-      def retainOpt(targets: Keyz): Option[Obj] = data.filter   (_._1.containedIn(targets)).as.noneIf(_.isEmpty).map(Obj.build)
-      def removeOpt(targets: Keyz): Option[Obj] = data.filterNot(_._1.containedIn(targets)).as.noneIf(_.isEmpty).map(Obj.build)
+      def retainOpt(targets: Keyz): Option[Obj] = data.filter   (_._1.containedIn(targets)).in.noneIf(_.isEmpty).map(Obj.build)
+      def removeOpt(targets: Keyz): Option[Obj] = data.filterNot(_._1.containedIn(targets)).in.noneIf(_.isEmpty).map(Obj.build)
   }
 
   // ===========================================================================

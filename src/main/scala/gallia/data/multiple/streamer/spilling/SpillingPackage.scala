@@ -3,7 +3,7 @@ package gallia.data.multiple.streamer
 // ===========================================================================
 package object spilling { 
   val IsWindows: Boolean = Option(System.getProperty("os.name")).exists(_.toLowerCase.startsWith("windows")) // should cover most cases?  
-    def windowsError() { gallia.illegal("210304095421 - cannot use Windows in hack at the moment (see t210304095420)") } //TODO: t210304095419 - confirm mac ok; same options for sort/join?        
+    def windowsError() { aptus.illegalState("210304095421 - cannot use Windows in hack at the moment (see t210304095420)") } //TODO: t210304095419 - confirm mac ok; same options for sort/join?        
 
   // ---------------------------------------------------------------------------
   type Line = String

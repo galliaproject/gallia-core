@@ -17,7 +17,7 @@ case class IntermediateMetaResult(dag: gallia.dag.DAG[IntermediateMetaResultNode
 
       // ===========================================================================
       def forceActionPlan = successOpt match {
-          case None          => illegalArgument(allErrors.joinln.prepend("TODO:210114174456"))
+          case None          => aptus.illegalArgument(allErrors.joinln.prepend("TODO:210114174456"))
           case Some(success) => ActionPlanPopulator(success.dag) }
 
       // ---------------------------------------------------------------------------
@@ -50,8 +50,8 @@ case class IntermediateMetaResult(dag: gallia.dag.DAG[IntermediateMetaResultNode
 
       // ---------------------------------------------------------------------------
       def forceLeafClass: Cls  = leafNode.result match {
-          case ResultSchema.UpstreamError          => illegal("UpstreamError:201006134638") //TODO
-          case ResultSchema.Errors(values, origin) => illegal(s"Errors:201006134639:${values}:${origin}") //TODO
+          case ResultSchema.UpstreamError          => aptus.illegalState("UpstreamError:201006134638") //TODO
+          case ResultSchema.Errors(values, origin) => aptus.illegalState(s"Errors:201006134639:${values}:${origin}") //TODO
           case ResultSchema.Success(value)         => value }
 
       // ===========================================================================

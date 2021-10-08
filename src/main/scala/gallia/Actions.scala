@@ -201,7 +201,7 @@ trait SquashXN extends Action with TodoV1 {
 
     // ---------------------------------------------------------------------------
     final def _meta(ignored: Seq[Cls])   : Cls = Cls.Dummy //TODO?
-    final def atoms(ctx: NodeMetaContext): Atoms = ctx.forceSingleAfferent.thn(atom).as.seq
+    final def atoms(ctx: NodeMetaContext): Atoms = ctx.forceSingleAfferent.thn(atom).in.seq
   }
 
 // ===========================================================================

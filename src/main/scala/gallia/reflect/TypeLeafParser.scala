@@ -13,7 +13,7 @@ private object TypeLeafParser {
     val alias: Option[String] =
       ReflectUtils
         .alias(tpe)
-        .as.noneIf(_ == fullName) // eg "String" instead of "java.lang.String", but None for "foo.bar.Baz"
+        .in.noneIf(_ == fullName) // eg "String" instead of "java.lang.String", but None for "foo.bar.Baz"
 
     val isCaseClass: Boolean =
       symbol.isClass &&

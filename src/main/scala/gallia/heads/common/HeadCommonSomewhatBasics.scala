@@ -154,7 +154,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { _: HeadCommon[F] =>
   // swap
 
   def swapEntries(                key1: KeyW, key2: KeyW): Self2 = self2 :+ new SingleSwap(None                , key1.value, key2.value)
-  def swapEntries(parent: RPathW)(key1: KeyW, key2: KeyW): Self2 = self2 :+ new SingleSwap(parent.value.as.some, key1.value, key2.value)
+  def swapEntries(parent: RPathW)(key1: KeyW, key2: KeyW): Self2 = self2 :+ new SingleSwap(parent.value.in.some, key1.value, key2.value)
 
   def swapEntries(pair1: KeyWPair, more: KeyWPair*): Self2 = self2 :+ new MultiSwap(pair1 +: more)
   def swapEntries(pairs: Seq[KeyWPair])            : Self2 = self2 :+ new MultiSwap(pairs)
@@ -166,7 +166,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { _: HeadCommon[F] =>
 
     // ---------------------------------------------------------------------------
     class _Copy(target: RPath) {
-      def as(newKey : KeyW)             : Self2 = self2 :+ new CopyEntries(target,  newKey.value.as.seq)
+      def as(newKey : KeyW)             : Self2 = self2 :+ new CopyEntries(target,  newKey.value.in.seq)
       def as(newKey1: KeyW, more: KeyW*): Self2 = self2 :+ new CopyEntries(target, (newKey1 +: more).map(_.value)) }
 
   // ===========================================================================

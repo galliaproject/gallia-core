@@ -28,7 +28,7 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
     def isString : Boolean = this == BasicType._String
 
     // ===========================================================================
-    final lazy val alias: Option[Alias] = ReflectUtils.simplify(fullName).as.noneIf(_ == fullName)
+    final lazy val alias: Option[Alias] = ReflectUtils.simplify(fullName).in.noneIf(_ == fullName)
 
     final lazy val node: TypeNode = TypeNode(TypeLeaf(fullName, fullName.split("\\.").last, alias) , Nil)
 
@@ -75,7 +75,7 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
 
     private def lookup(value: FullName): BasicType = _lookup.getOrElse(
         value,
-        gallia.illegal(s"TODO:CantFindType:201013093225:${value}"))
+        aptus.illegalState(s"TODO:CantFindType:201013093225:${value}"))
 
     // ---------------------------------------------------------------------------
     def fromFullNameOpt(value: FullName): Option[BasicType] = _lookup.get(value)

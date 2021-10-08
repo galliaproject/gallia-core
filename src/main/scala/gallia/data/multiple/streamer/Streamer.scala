@@ -4,7 +4,7 @@ import scala.reflect.{ClassTag => CT}
 import java.io.Closeable
 
 import aptus.Anything_
-import aptus.utils.IteratorUtils
+import aptus.aptutils.IteratorUtils
 
 import gallia.heads.merging.MergingData._
 import gallia.Aliases.Coll

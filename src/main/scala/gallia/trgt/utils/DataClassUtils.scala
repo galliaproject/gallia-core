@@ -9,7 +9,7 @@ private[target] object DataClassUtils {
   // wouldn't need to recompute info if we had result cls (TODO)
 
   // ===========================================================================
-  def in(node: TypeNode, instantiator: Instantiator)(value: Any): Any =
+  def in2(node: TypeNode, instantiator: Instantiator)(value: Any): Any =
       if (!node.isContainedDataClass) value
       else                            in(node.forceNonBObjInfo, instantiator)(value)
 

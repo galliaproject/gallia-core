@@ -39,16 +39,7 @@ package object gallia
   private[gallia] type ActionVMN = ActionVN with ActionMN
 
   // ===========================================================================
-  @deprecated
-  private[gallia] def illegal        (anys: Any*): Nothing = throw new IllegalArgumentException(anys.mkString(","))
-  private[gallia] def illegalArgument(anys: Any*): Nothing = throw new IllegalArgumentException(anys.mkString(","))
-  private[gallia] def illegalState   (anys: Any*): Nothing = throw new IllegalStateException   (anys.mkString(","))
-  
-  @deprecated
-  private[gallia] def runtimeError   (anys: Any*): Nothing = throw new RuntimeError(anys.mkString(","))  
-  private[gallia] def dataError      (anys: Any*): Nothing = throw new RuntimeError(anys.mkString(","))
-
-  private[gallia] def toBeImplemented(anys: Any*): Nothing = throw new ToBeImplemented(anys.mkString(","))
+  private[gallia] def dataError(anys: Any*): Nothing = throw new RuntimeError(anys.mkString(","))
 
   // ---------------------------------------------------------------------------
   private[gallia] def errIf_(test: Boolean)(a: Any): Err_ = if (test) Some(Err(a)) else None
@@ -57,7 +48,9 @@ package object gallia
   private[gallia] def errs  (any: Any)             : Errs = Seq(Err(any))
 
   // ---------------------------------------------------------------------------
-  private[gallia] def node[T: WTT] = gallia.reflect.TypeNode.parse[T]
+  @deprecated
+  private[gallia] def     node[T: WTT] = gallia.reflect.TypeNode.parse[T]
+  private[gallia] def typeNode[T: WTT] = gallia.reflect.TypeNode.parse[T]
 
   // ===========================================================================
   /** until/unless sure what we'll use - only to be used in non-object arrays/matrices/tensors */

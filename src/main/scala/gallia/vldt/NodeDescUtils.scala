@@ -63,10 +63,10 @@ object NodeDescUtils {
     def errorMessages                : Seq[ErrorMsg] = errorMessages(Parent.Root)
     def errorMessages(parent: Parent): Seq[ErrorMsg] =
       u match {
-        case Node(node)       => s"${ErrorId.InvalidTypeNode} - ${parent} ${node.formatDefault}".as.seq
+        case Node(node)       => s"${ErrorId.InvalidTypeNode} - ${parent} ${node.formatDefault}".in.seq
         case Other(name)    =>
           if (BasicType.isKnown(name)) Nil
-          else                         s"${ErrorId.UnsupportedTlSubtype} - ${parent} - ${name}".as.seq
+          else                         s"${ErrorId.UnsupportedTlSubtype} - ${parent} - ${name}".in.seq
         case Nesting(nesting) => nesting.errorMessages(parent) }
 
   }

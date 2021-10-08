@@ -16,7 +16,7 @@ object UtsProcessors {
 
     // ---------------------------------------------------------------------------
              def key (c: Cls): Key         = c.keys.head
-    override def key_(c: Cls): Option[Key] = if (vldt(c).nonEmpty) None else c.keys.force.one.as.some }
+    override def key_(c: Cls): Option[Key] = if (vldt(c).nonEmpty) None else c.keys.force.one.in.some }
 
   // ===========================================================================
   case class ExplicitKey(value: Key) extends KeySelection {
@@ -85,7 +85,7 @@ object UtsProcessors {
       def vldt(c: Cls): Errs = // note: duplicates are handled in actions
         _utils
           .outOfBounds(c.size)(values)
-          .as.noneIf(_.isEmpty).toSeq
+          .in.noneIf(_.isEmpty).toSeq
           .map(_Error.OutOfBoundKey(c.size, _)).map(_.err)
 
       // ---------------------------------------------------------------------------

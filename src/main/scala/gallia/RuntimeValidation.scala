@@ -20,7 +20,7 @@ object RuntimeValidation { // 210115153346 - POC
   }
 
   // ===========================================================================
-  def validate(c: Cls)(o: Obj): Pes[ValErr] = rec(c)(o).as.noneIf(_.isEmpty)
+  def validate(c: Cls)(o: Obj): Pes[ValErr] = rec(c)(o).in.noneIf(_.isEmpty)
 
     // ---------------------------------------------------------------------------
     def rec(c: Cls)(o: Obj): Seq[ValErr] = {
@@ -102,10 +102,10 @@ object RuntimeValidation { // 210115153346 - POC
                 .zipWithIndex
                 .flatMap { case (nestedErrorsOpt, index) =>
                   nestedErrorsOpt
-                    .as.noneIf(_.isEmpty)
+                    .in.noneIf(_.isEmpty)
                     .map(nestedErrors =>
                       ValErr(15, key, Some(index), (s"nested errors", nestedErrors))) }
-                .as.noneIf(_.isEmpty)
+                .in.noneIf(_.isEmpty)
                 .map{ nestedErrorss => ValErr(16, key, None, (s"nested errors", nestedErrorss)) }
           }
 

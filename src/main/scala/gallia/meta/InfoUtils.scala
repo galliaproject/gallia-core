@@ -30,7 +30,7 @@ private[gallia] object InfoUtils {
 
     // ---------------------------------------------------------------------------
     def containeeOpt(leaf: TypeLeaf): Option[Containee] =
-       if (leaf.enum) BasicType._Enum.as.some
+       if (leaf.enum) BasicType._Enum.in.some
        else           BasicType.fromFullNameOpt(leaf.name)
 
 }

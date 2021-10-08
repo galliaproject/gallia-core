@@ -119,7 +119,7 @@ trait ClsNestingRelated { self: Cls =>
   @deprecated /*private */def potchSingle(key: RenW): (Fld, Option[Cls]) = field(key.value) -> removeOpt(key.from)
 
   // ---------------------------------------------------------------------------
-  @deprecated private def removeOpt(target : Key ): Option[Cls] = { requireKnownKey (target ); fields.filterNot(_.key == target).as.noneIf(_.isEmpty).map(rewrap) }
+  @deprecated private def removeOpt(target : Key ): Option[Cls] = { requireKnownKey (target ); fields.filterNot(_.key == target).in.noneIf(_.isEmpty).map(rewrap) }
 }
 
 // ===========================================================================

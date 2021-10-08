@@ -182,7 +182,7 @@ case class TransformFoo(from: TtqRPathz, to: Cls, f: _ff11) extends ActionUUb wi
           (!multiple && c.isScalar  (path) ||
             multiple && c.isMultiple(path)) &&
           c.isNesting(path))
-        .as.noneIf(_.isEmpty).toSeq
+        .in.noneIf(_.isEmpty).toSeq
         .flatMap { invalidPaths =>
           if (multiple) errs(s"210110194028:NotObjsOrObjs_:${KPathz(invalidPaths)}")
           else          errs(s"210110194029:NotObjOrObj_:${  KPathz(invalidPaths)}") }

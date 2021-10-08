@@ -62,7 +62,7 @@ class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](
     def __qpathz(c: Cls): RPathz     = RPathz(__qpaths(c))
     def __qpaths(c: Cls): Seq[RPath] =
       resolve(c) match {
-        case x: KPath  => x.qpath.as.seq
+        case x: KPath  => x.qpath.in.seq
         case x: Keyz   => x.qpathz.values
         case x: Renz   => x.qpathz.values
         case x: RPathz => x.values }

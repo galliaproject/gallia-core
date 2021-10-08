@@ -67,7 +67,7 @@ object MetaObj { // 201222111332
         // ---------------------------------------------------------------------------
         private def formatContainerDebug(container: Container): String =
           container
-            .as.noneIf(_.isOne)
+            .in.noneIf(_.isOne)
              match {
               case None            => ""
               case Some(container) => s" (${container})" }

@@ -1,7 +1,7 @@
 package gallia.data.multiple.streamer.spilling
 
-import aptus.utils.SystemUtils
-import aptus.utils.JavaStreamUtils._
+import aptus.aptutils.SystemUtils
+import aptus.aptutils.JavaStreamUtils._
 
 // ===========================================================================
 object GnuSortByFirstFieldHack { // see https://github.com/galliaproject/gallia-core#poor-mans-scaling-spilling

@@ -17,7 +17,7 @@ object TypeGuessing {
       else                           BasicType._String
 
     // ---------------------------------------------------------------------------
-    implicit class String___(u: String) { // TODO: very inefficient
+    implicit class _tmp(u: String) { // TODO: very inefficient
       def _isValidInt   : Boolean = util.Try(u.toInt   ).isSuccess
       def _isValidDouble: Boolean = util.Try(u.toDouble).isSuccess
     }

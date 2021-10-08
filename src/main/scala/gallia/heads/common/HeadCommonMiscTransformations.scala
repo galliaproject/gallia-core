@@ -59,10 +59,10 @@ trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { _: HeadCommon[F] =>
 
     // TODO: def concatenate(x: KeyW, y: KeyW) = new def { asNewKey(nk: KeyW) = fuse(x, y).as(nk).using(_ + _) } - validate strings or seq of same types only?
 
-    def unquoteValueIfApplicable(x: RPathW): Self2 = transform(_.stringx(x)).using(_.unquoteIfApplicable)
-    def toUpperCase             (x: RPathW): Self2 = transform(_.stringx(x)).using(_.toUpperCase)
-    def toLowerCase             (x: RPathW): Self2 = transform(_.stringx(x)).using(_.toLowerCase)
-    def reverseString           (x: RPathW): Self2 = transform(_.stringx(x)).using(_.reverse)
+    def unquote      (x: RPathW): Self2 = transform(_.stringx(x)).using(_.unquote)
+    def toUpperCase  (x: RPathW): Self2 = transform(_.stringx(x)).using(_.toUpperCase)
+    def toLowerCase  (x: RPathW): Self2 = transform(_.stringx(x)).using(_.toLowerCase)
+    def reverseString(x: RPathW): Self2 = transform(_.stringx(x)).using(_.reverse)
     //  TODO: t210205122644 - see String and StringOps, ...
 
     // ---------------------------------------------------------------------------

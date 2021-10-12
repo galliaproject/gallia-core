@@ -10,7 +10,7 @@ trait HasTypeNode {
       else                 None
 
     // ---------------------------------------------------------------------------
-    def out(value: Any): Any = DataClassUtils.out(node)(value)
+    def _out(value: Any): Any = DataClassUtils._out(node)(value)
   }
 
   // ===========================================================================

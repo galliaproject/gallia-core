@@ -1,12 +1,12 @@
-package gallia.actions
+package gallia
+package actions
 
-import gallia._
-import gallia.target._
-import gallia.FunctionWrappers._
-import gallia.atoms.AtomsZZSorting._
-import gallia.atoms.AtomsOthers._IdentityZZ
-import gallia.atoms.utils.SuperMetaPair
-import gallia.domain.{Sorter, SortingPair}
+import target._
+import FunctionWrappers._
+import atoms.AtomsZZSorting._
+import atoms.AtomsOthers._IdentityZZ
+import atoms.utils.SuperMetaPair
+import domain.{Sorter, SortingPair}
 
 // ===========================================================================
 object ActionsZZSorting {

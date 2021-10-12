@@ -1,8 +1,7 @@
-package gallia.actions
+package gallia
+package actions
 
-import gallia._
-import gallia.target.TQRenz
-import gallia.target.TQRen
+import target.{TQRenz, TQRen}
 
 // ===========================================================================
 object ActionsZZAggregating {

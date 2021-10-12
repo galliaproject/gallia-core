@@ -1,6 +1,5 @@
-package gallia.actions.in
-
-import gallia._
+package gallia
+package actions.in
 
 // ===========================================================================
 trait HasProjection {

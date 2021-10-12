@@ -1,11 +1,10 @@
-package gallia.actions.out
+package gallia
+package actions.out
 
-import gallia._
-
-import gallia.io.out._
-import gallia.atoms.AtomsXO._
-import gallia.actions.AtomUOs
-import gallia.actions.AtomZOs
+import io.out._
+import atoms.AtomsXO._
+import actions.AtomUOs
+import actions.AtomZOs
 
 // ===========================================================================
 //TODO:

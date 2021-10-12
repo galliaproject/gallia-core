@@ -1,9 +1,9 @@
-package gallia.actions
+package gallia
+package actions
 
-import gallia._
-import gallia.atoms.AtomsZZ._
-import gallia.atoms.AtomsCustom.{_CustomZZ, _CustomZV}
-import gallia.atoms._UWrappers
+import atoms._UWrappers
+import atoms.AtomsZZ._
+import atoms.AtomsCustom.{_CustomZZ, _CustomZV}
 
 // ===========================================================================
 object ActionsZZ {

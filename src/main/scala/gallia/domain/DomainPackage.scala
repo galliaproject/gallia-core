@@ -1,9 +1,7 @@
 package gallia
 
 import aptus.String_
-import aptus.Separator
-import aptus.Nes
-import aptus.StringValue
+import aptus.{Separator, Nes, StringValue}
 
 // ===========================================================================
 package object domain {

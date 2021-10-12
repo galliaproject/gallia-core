@@ -1,9 +1,9 @@
-package gallia.actions
+package gallia
+package actions
 
-import gallia._
-import gallia.selection.typed.TqRPathz
-import gallia.atoms.AtomsUUConverts._
-import gallia.atoms.AtomsAsserts._
+import selection.typed.TqRPathz
+import atoms.AtomsUUConverts._
+import atoms.AtomsAsserts._
 
 // ===========================================================================
 object ActionsUUConverts {

@@ -1,11 +1,11 @@
-package gallia.actions
+package gallia
+package actions
 
 import aptus.Anything_
 
-import gallia._
-import gallia.heads.merging.MergingData
-import gallia.heads.merging.MergingData._
-import gallia.atoms.AtomsZZMerging._
+import heads.merging.MergingData
+import heads.merging.MergingData._
+import atoms.AtomsZZMerging._
 
 // ===========================================================================
 object ActionsZZMerging {

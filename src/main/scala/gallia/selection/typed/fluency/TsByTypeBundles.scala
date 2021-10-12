@@ -1,4 +1,5 @@
-package gallia.selection.typed.fluency
+package gallia
+package selection.typed.fluency
 
 // ===========================================================================
 @gallia.TypeMatching

@@ -1,11 +1,11 @@
-package gallia.actions
+package gallia
+package actions
 
 import aptus.Anything_
 import aptus.Separator
 
-import gallia._
-import gallia.target._
-import gallia.atoms.AtomsUUSomewhatBasics._
+import target._
+import atoms.AtomsUUSomewhatBasics._
 
 // ===========================================================================
 object ActionsUUSomewhatBasics {

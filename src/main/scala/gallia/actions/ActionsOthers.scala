@@ -1,17 +1,17 @@
-package gallia.actions
+package gallia
+package actions
 
 import aptus.{Anything_, Seq_}
 import aptus.Separator
 
-import gallia._
-import gallia.target._
-import gallia.FunctionWrappers._
-import gallia.data.multiple.Streamer
-import gallia.atoms._UWrapper
-import gallia.atoms.AtomsOthers._
-import gallia.atoms.AtomsUV._
-import gallia.atoms.AtomsZZ._EnsureUniquenessBy
-import gallia.atoms.AtomsCustom._CustomZZ
+import target._
+import FunctionWrappers._
+import data.multiple.Streamer
+import atoms._UWrapper
+import atoms.AtomsOthers._
+import atoms.AtomsUV._
+import atoms.AtomsZZ._EnsureUniquenessBy
+import atoms.AtomsCustom._CustomZZ
 
 // ===========================================================================
 object ActionsOthers {
@@ -145,7 +145,7 @@ object ActionsOthers {
   case class MapV2V(to: TypeNode, f: _ff11) extends ActionVV {
     def vldt(in: Seq[Cls] ) = Nil // TODO
     def _meta(in: Seq[Cls] ) = in.force.one//TODO: ok?
-    def atoms (ignored: gallia.NodeMetaContext): Atoms = _MapV2V(f).in.seq }
+    def atoms (ignored: NodeMetaContext): Atoms = _MapV2V(f).in.seq }
 
   // ===========================================================================
   // uv

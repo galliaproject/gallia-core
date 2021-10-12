@@ -1,7 +1,7 @@
-package gallia.actions
+package gallia
+package actions
 
-import gallia._
-import gallia.atoms.AtomsCustom._
+import atoms.AtomsCustom._
 
 // ===========================================================================
 object ActionsZens {

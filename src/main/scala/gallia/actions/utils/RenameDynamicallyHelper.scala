@@ -1,7 +1,7 @@
-package gallia.actions.utils
+package gallia
+package actions.utils
 
 import aptus.{String_, Option_}
-import gallia._
 
 // ===========================================================================
 private[actions] object RenameDynamicallyHelper {

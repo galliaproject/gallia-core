@@ -1,15 +1,15 @@
-package gallia.actions
+package gallia
+package actions
 
 import aptus.{Anything_, String_}
 
-import gallia._
-import gallia.domain._
-import gallia.atoms.AtomsOthers._
-import gallia.atoms.AtomsUUVeryBasics._
-import gallia.target._
-import gallia.vldt.ErrorId
-import gallia.actions.utils.RenameDynamicallyHelper
-import gallia.actions.utils.ActionsUtils._
+import target._
+import vldt.ErrorId
+import domain.{KVEs, RVEs}
+import atoms.AtomsOthers._
+import atoms.AtomsUUVeryBasics._
+import actions.utils.RenameDynamicallyHelper
+import actions.utils.ActionsUtils._
 
 // ===========================================================================
 object ActionsUUVeryBasics {

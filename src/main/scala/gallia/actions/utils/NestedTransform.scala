@@ -1,13 +1,13 @@
-package gallia.actions.utils
+package gallia
+package actions.utils
 
-import gallia._
-import gallia.domain.PathPair
-import gallia.plans._
-import gallia.actions._
-import gallia.FunctionWrappers._
-import gallia.dag.RootId
-import gallia.heads.HeadsNestingHandler
-import gallia.atoms.AtomsUUTransforms._Transform1to1
+import plans._
+import actions._
+import FunctionWrappers._
+import dag.RootId
+import domain.PathPair
+import atoms.AtomsUUTransforms._Transform1to1
+import heads.HeadsNestingHandler
 
 // ===========================================================================
 class NestedTransform(adag: MetaPlan, val rootId: RootId) { // TODO: as a peer of MetaPlan rather?

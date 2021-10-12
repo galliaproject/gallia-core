@@ -1,4 +1,5 @@
-package gallia.selection.typed
+package gallia
+package selection.typed
 
 // ===========================================================================
 package object fluency {

@@ -1,6 +1,5 @@
-package gallia.selection.typed.fluency
-
-import gallia._
+package gallia
+package selection.typed.fluency
 
 // ===========================================================================
 @gallia.TypeMatching // very boilerplatey; TODO: t210124092716 - codegen (very boilerplaty)

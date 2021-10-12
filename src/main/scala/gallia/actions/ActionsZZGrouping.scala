@@ -1,7 +1,7 @@
-package gallia.actions
+package gallia
+package actions
 
-import gallia._
-import gallia.atoms.AtomsZZ._
+import atoms.AtomsZZ._
 
 // ===========================================================================
 object ActionsZZGrouping {

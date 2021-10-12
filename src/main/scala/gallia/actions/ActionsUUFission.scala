@@ -1,12 +1,12 @@
-package gallia.actions
+package gallia
+package actions
 
-import gallia._
-import gallia.target._
-import gallia.domain._
-import gallia.FunctionWrappers._
-import gallia.atoms.AtomsUUTransforms._
-import gallia.atoms.AtomsAsserts._AssertSameType
-import gallia.actions.utils.ActionsUtils
+import target._
+import domain._
+import FunctionWrappers._
+import atoms.AtomsUUTransforms._
+import atoms.AtomsAsserts._AssertSameType
+import actions.utils.ActionsUtils
 
 // ===========================================================================
 object ActionsUUFission { import ActionsUtils.{remove, removeAll}

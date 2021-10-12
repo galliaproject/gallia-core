@@ -1,14 +1,14 @@
 package gallia
 package actions
 
-import gallia.target._
-import gallia.atoms.AtomsCustom._
-import gallia.plans.AtomPlan
-import gallia.actions.utils.NestedTransform
+import target._
+import atoms.AtomsCustom._
+import plans.AtomPlan
+import actions.utils.NestedTransform
 
 // ===========================================================================
 object ActionsFor {
-  import gallia.actions.utils.NestedTransform.{parseUU, parseZZ, parseUZ, parseZU, parseUV, parseZV}
+  import actions.utils.NestedTransform.{parseUU, parseZZ, parseUZ, parseZU, parseUV, parseZV}
 
   // ===========================================================================
   case class ForPathUU(target: TqKPath, f: (HeadU, KPath) => HeadU) extends ActionUUc {

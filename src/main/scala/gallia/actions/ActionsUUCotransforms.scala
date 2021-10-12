@@ -1,11 +1,11 @@
-package gallia.actions
+package gallia
+package actions
 
-import gallia._
-import gallia.target._
-import gallia.FunctionWrappers._
-import gallia.atoms.AtomsUUTransforms._
+import target._
+import FunctionWrappers._
+import atoms.AtomsUUTransforms._
+import meta.Containee
 
-import gallia.meta.Containee
 
 // ===========================================================================
 object ActionsUUCotransforms { // TODO: t210826102833 - rework co-transforms

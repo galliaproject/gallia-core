@@ -1,7 +1,7 @@
-package gallia.actions.in
+package gallia
+package actions.in
 
-import gallia._
-import gallia.atoms.AtomsIX._
+import atoms.AtomsIX._
 
 // ===========================================================================
 trait HasSchemaProviderU extends HasSchemaProviderAndProjectionU { val projectionOpt: Option[ReadProjection] = None }

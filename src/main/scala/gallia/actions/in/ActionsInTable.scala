@@ -1,11 +1,11 @@
-package gallia.actions.in
+package gallia
+package actions.in
 
 import aptus.{Anything_, String_}
 import aptus.Size
 
-import gallia._
-import gallia.io.in._
-import gallia.inferring.table.TableSchemaInferrer
+import io.in._
+import inferring.table.TableSchemaInferrer
 
 // ===========================================================================
 case class TableInputZ( // TODO: t210101150123 - split up?

@@ -1,9 +1,9 @@
-package gallia.actions
+package gallia
+package actions
 
-import gallia._
-import gallia.target._
-import gallia.FunctionWrappers._pp11
-import gallia.atoms.AtomsZZFiltering._
+import target._
+import FunctionWrappers._pp11
+import atoms.AtomsZZFiltering._
 
 // ===========================================================================
 object ActionsZZFiltering {

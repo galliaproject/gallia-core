@@ -1,10 +1,10 @@
-package gallia.actions
+package gallia
+package actions
 
-import gallia._
-import gallia.target._
-import gallia.FunctionWrappers._
-import gallia.atoms.AtomsUUTransforms._
-import gallia.atoms.AtomsAsserts._AssertSameType
+import target._
+import FunctionWrappers._
+import atoms.AtomsUUTransforms._
+import atoms.AtomsAsserts._AssertSameType
 
 // ===========================================================================
 object ActionsUUGenerusion { //TODO: t210111095156 separate all the Whatever and t210111095157 case-class versions...

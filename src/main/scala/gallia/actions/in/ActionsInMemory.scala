@@ -1,9 +1,8 @@
-package gallia.actions.in
+package gallia
+package actions.in
 
-import gallia._
-import gallia.vldt.Location
-import gallia.atoms.AtomsIX._
-import gallia.vldt.{MetaValidation => _vldt}
+import atoms.AtomsIX._
+import vldt.{Location, MetaValidation => _vldt}
 
 // ===========================================================================
 case class InMemoryMetaInput(c: Cls) extends ActionVM0 with IdentityV0 {

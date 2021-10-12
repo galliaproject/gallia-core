@@ -1,11 +1,12 @@
-package gallia.actions.utils
+package gallia
+package actions.utils
 
 import aptus.Tuple2_
-import gallia._
-import gallia.domain.PathPair
-import gallia.atoms.AtomsOthers._Nested
-import gallia.atoms.AtomsUUVeryBasics._Rename
-import gallia.atoms.AtomsUUVeryBasics._Remove
+
+import domain.PathPair
+import atoms.AtomsOthers._Nested
+import atoms.AtomsUUVeryBasics._Rename
+import atoms.AtomsUUVeryBasics._Remove
 
 // ===========================================================================
 private[actions] object ActionsUtils {

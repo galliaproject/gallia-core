@@ -1,8 +1,8 @@
-package gallia.actions
+package gallia
+package actions
 
-import gallia._
-import gallia.target._
-import gallia.atoms.AtomsUUReducer0._
+import target._
+import atoms.AtomsUUReducer0._
 
 // ===========================================================================
 @NumberAbstraction

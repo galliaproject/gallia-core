@@ -1,11 +1,11 @@
-package gallia.actions
+package gallia
+package actions
 
-import gallia._
-import gallia.target._
-import gallia.FunctionWrappers._
-import gallia.meta.InfoLike
-import gallia.atoms.AtomsUV._
-import gallia.atoms.AtomsAsserts._
+import target._
+import FunctionWrappers._
+import meta.InfoLike
+import atoms.AtomsUV._
+import atoms.AtomsAsserts._
 
 // ===========================================================================
 object ActionsAsserts {

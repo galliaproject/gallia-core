@@ -1,9 +1,9 @@
-package gallia.actions.in
+package gallia
+package actions.in
 
 import aptus.Option_
 
-import gallia._
-import gallia.atoms.AtomsIX._
+import atoms.AtomsIX._
 
 // ===========================================================================
 case class JdbcInputZ1(

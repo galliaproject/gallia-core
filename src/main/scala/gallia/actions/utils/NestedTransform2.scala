@@ -1,11 +1,11 @@
-package gallia.actions.utils
+package gallia
+package actions.utils
 
 import aptus.Tuple2_
 
-import gallia._
-import gallia.plans._
-import gallia.dag.RootId
-import gallia.heads.HeadsNestingHandler
+import plans._
+import dag.RootId
+import heads.HeadsNestingHandler
 
 // ===========================================================================
 class NestedTransform2(adag: MetaPlan, val rootId1: RootId, val rootId2: RootId) { // TODO: as a peer of MetaPlan rather?

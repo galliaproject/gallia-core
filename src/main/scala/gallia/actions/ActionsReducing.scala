@@ -1,9 +1,9 @@
-package gallia.actions
+package gallia
+package actions
 
-import gallia._
-import gallia.atoms.AtomsReducing._
-import gallia.heads.reducing._
-import gallia.heads.reducing.ReducingPair
+import atoms.AtomsReducing._
+import heads.reducing._
+import heads.reducing.ReducingPair
 
 // ===========================================================================
 @gallia.NumberAbstraction

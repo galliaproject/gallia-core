@@ -1,7 +1,7 @@
-package gallia.actions
+package gallia
+package actions
 
-import gallia._
-import gallia.atoms.AtomsUUUntuplify._
+import atoms.AtomsUUUntuplify._
 
 // ===========================================================================
 object ActionsUUUntuplify {

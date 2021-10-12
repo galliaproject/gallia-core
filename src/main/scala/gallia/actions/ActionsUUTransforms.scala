@@ -3,9 +3,9 @@ package actions
 
 import aptus.Anything_
 
-import gallia.target._
-import gallia.FunctionWrappers._
-import gallia.atoms.AtomsUUTransforms._TransformWW
+import target._
+import FunctionWrappers._
+import atoms.AtomsUUTransforms._TransformWW
 
 // ===========================================================================
 object ActionsUUTransforms {

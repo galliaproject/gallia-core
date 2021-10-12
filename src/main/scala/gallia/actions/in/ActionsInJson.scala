@@ -1,8 +1,8 @@
-package gallia.actions.in
+package gallia
+package actions.in
 
-import gallia._
-import gallia.io.in._
-import gallia.atoms.AtomsIX._
+import io.in._
+import atoms.AtomsIX._
 
 // ===========================================================================
 case class JsonObjectString(inputString: InputString, schemaProvider: OtherSchemaProvider) extends ActionIUd with TodoV0 with HasSchemaProviderU {

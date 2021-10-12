@@ -1,4 +1,5 @@
-package gallia.actions.utils
+package gallia
+package actions.utils
 
 // ===========================================================================
 private[actions] object ActionsUUHelper {

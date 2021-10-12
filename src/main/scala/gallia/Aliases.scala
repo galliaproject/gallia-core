@@ -36,9 +36,6 @@ trait Aliases {
   type SKey = String
   type EKey = Enumeration#Value    // dotty will hopefully help with this
   type UKey = enumeratum.EnumEntry // dotty will hopefully help with this
-
-  // ---------------------------------------------------------------------------
-  
 }
 
 // ===========================================================================
@@ -54,25 +51,6 @@ trait DomainAliases {
 
   type ActualRen = gallia.ActualRen
   val  ActualRen = gallia.ActualRen
-}
-
-// ===========================================================================
-trait HeadAliases {
-
-}
-
-// ===========================================================================
-trait DataAliases {
-//  type Obj  = gallia.data.single  .Obj
-//  val  Obj  = gallia.data.single  .Obj
-
-//  type Objs = gallia.data.multiple.Objs
-//  val  Objs = gallia.data.multiple.Objs
-}
-
-// ===========================================================================
-trait ADataAliases {
-  
 }
 
 // ===========================================================================

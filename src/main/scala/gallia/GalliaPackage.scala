@@ -5,10 +5,7 @@ import gallia.domain._
 package object gallia
     extends Reserved
     with    Aliases
-    with    Annotations
-    with    HeadAliases
-    with    DataAliases
-    with   ADataAliases {
+    with    Annotations {
 
   private[gallia] implicit class GalliaAnything_[A](u: A) { // so as to not import chaining._ everywhere
     def pipe[B](f: A => B)   : B =   f(u)
@@ -29,14 +26,7 @@ package object gallia
   type HeadV[T] = heads.HeadV[T]
 
   // ---------------------------------------------------------------------------
-type Obj  = gallia.data.single  .Obj
-val  Obj  = gallia.data.single  .Obj
-
-  type Objs = gallia.data.multiple.Objs
-  val  Objs = gallia.data.multiple.Objs
-
-  // ---------------------------------------------------------------------------
-type AObj  = gallia.domain.AObj
+  type AObj  = gallia.domain.AObj
   val  AObj  = gallia.domain.AObj
   type BObj  = gallia.domain.BObj
   val  BObj  = gallia.domain.BObj
@@ -46,18 +36,26 @@ type AObj  = gallia.domain.AObj
   type BObjs = gallia.domain.BObjs
   val  BObjs = gallia.domain.BObjs
 
-// ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  type Obj  = gallia.data.single  .Obj
+  val  Obj  = gallia.data.single  .Obj
+
+  type Objs = gallia.data.multiple.Objs
+  val  Objs = gallia.data.multiple.Objs
+  
+  // ---------------------------------------------------------------------------
   type     Cls = meta.Cls
   lazy val Cls = meta.Cls
 
   type     Fld = meta.Fld
   lazy val Fld = meta.Fld
 
-private[gallia] type AnyValue = Any
+  // ===========================================================================
+  private[gallia] type AnyValue = Any
   private[gallia] type LocalDate     = java.time.LocalDate
   private[gallia] type LocalDateTime = java.time.LocalDateTime
 
-  // ===========================================================================
+  // ---------------------------------------------------------------------------
   private[gallia] type Whatever = whatever.Whatever
   private[gallia] val  Whatever = whatever.Whatever
 

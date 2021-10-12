@@ -12,8 +12,8 @@ case class TypeNode(
 
     override def toString: String = formatDefault
 
-    def formatDefault: String  = obj.formatPrettyJson
-    def obj          : gallia.Obj = TypeNodeObj.typeNode(this)
+    def formatDefault: String = obj.formatPrettyJson
+    def obj          : Obj    = TypeNodeObj.typeNode(this)
 
     // eg for translate type mismatch
     def formatSuccinct: String = TypeNodeUtils.formatSuccinct(this)

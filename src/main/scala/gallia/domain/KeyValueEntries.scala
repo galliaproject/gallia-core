@@ -35,7 +35,7 @@ sealed trait KVE { // Key-Value Entry
             MetaValidation.validateBObj(
                 nextLocation.addIndex(index))(value) }
 
-      @gallia.NumberAbstraction
+      @NumberAbstraction
       def metaEntry: (Key, Info)     = key -> bobjs.map(_.forceCls).distinct.force.one.pipe(Info.nes)
 
       def dataEntry: (Key, AnyValue) = key -> bobjs.map(_.forceObj)
@@ -128,8 +128,8 @@ case class KVEs(values: Seq[KVE]) {
     def forceDataEntries: Seq[(Key, AnyValue)] = values.map(_.dataEntry)
 
     // ---------------------------------------------------------------------------
-    def forceCls: Cls = forceMetaEntries.map((Fld.apply _).tupled).pipe(gallia.meta.Cls(_))
-    def forceObj: Obj = forceDataEntries.pipe(gallia.obj)
+    def forceCls: Cls = forceMetaEntries.map((Fld.apply _).tupled).pipe(Cls(_))
+    def forceObj: Obj = forceDataEntries.pipe(obj)
 
   }
 

@@ -2,7 +2,7 @@ package gallia
 package data.single
 
 // ===========================================================================
-@gallia.TypeMatching
+@TypeMatching
 class ValueWrapper(val underlying: AnyValue) extends AnyVal {
     //TODO: missing types
     def asTyped[T]: T = underlying.asInstanceOf[T]

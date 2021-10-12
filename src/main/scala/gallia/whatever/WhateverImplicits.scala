@@ -6,7 +6,7 @@ import java.time.{LocalDate, LocalDateTime}
 // ===========================================================================
 object WhateverImplicits {
 
-  @gallia.TypeMatching
+  @TypeMatching
   private[gallia] implicit class Any_(u: Any) {    
     def number     = u match { case x: Number        => x; case _ => dataError(error(u, "210113130852", classOf[Number])) }
 

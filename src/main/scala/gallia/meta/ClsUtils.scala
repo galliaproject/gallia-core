@@ -10,7 +10,7 @@ object ClsUtils {
         field.key ->
           field.info.potentiallyProcessNesting(
             value = itr.next()) }
-      .pipe(gallia.obj)
+      .pipe(obj)
       .tap(_ => assert(itr.isEmpty, dis /* TODO: pass original value? */))
 
 }

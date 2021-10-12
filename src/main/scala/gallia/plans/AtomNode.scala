@@ -1,7 +1,7 @@
 package gallia
 package plans
 
-import dag.{HasNodeId, NodeId}
+import dag.HasNodeId
 
 // ===========================================================================
 case class AtomNode(

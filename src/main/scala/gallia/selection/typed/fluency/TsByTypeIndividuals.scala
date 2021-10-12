@@ -3,7 +3,7 @@ package selection
 package typed.fluency
 
 // ===========================================================================
-@gallia.TypeMatching // very boilerplatey; TODO: t210124092716 - codegen (very boilerplaty)
+@TypeMatching // very boilerplatey; TODO: t210124092716 - codegen (very boilerplaty)
 object TsByTypeIndividuals {
   import untyped.fluency.UtsIndividuals.{HasIfType, HasIfTypeRecursively}
 

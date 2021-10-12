@@ -5,7 +5,7 @@ package single
 import aptus.{Opt, Pes}
 
 // ===========================================================================
-@gallia.TypeMatching
+@TypeMatching
 trait ObjAccessors { _: Obj => // id210326140514
   import ObjAccessors._nmbr
   import ValueWrapper.to
@@ -89,7 +89,7 @@ trait ObjAccessors { _: Obj => // id210326140514
   def texts (key: KPathW): Seq[String] = force(key)      .asSeq.map(format)
   def texts_(key: KPathW): Pes[String] = opt  (key).map(_.asSeq.map(format))
 
-  @gallia.NumberAbstraction
+  @NumberAbstraction
   def nmbr  (key: KPathW):     Double  = force(key).pipe(_nmbr)
   def nmbr_ (key: KPathW): Opt[Double] = opt  (key).map(_nmbr)
   def nmbrs (key: KPathW): Seq[Double] = force(key)      .asSeq.map(_nmbr)
@@ -120,7 +120,7 @@ trait ObjAccessors { _: Obj => // id210326140514
 object ObjAccessors {
 
   // TODO: t201017102332
-  @gallia.NumberAbstraction
+  @NumberAbstraction
   private def _nmbr(x: Any): Double = // TODO: or bigdecimal?
     x match {
       case x: Number => x.doubleValue

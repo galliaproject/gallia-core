@@ -7,7 +7,7 @@ import reflect.Container._
 import reflect.BasicType._
 
 // ===========================================================================
-@gallia.TypeMatching
+@TypeMatching
 trait FldCreator {
   protected val _key: Key
 

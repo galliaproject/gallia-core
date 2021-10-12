@@ -3,7 +3,7 @@ package plans
 
 import aptus.Seq_
 
-import dag.{HasNodeId, NodeId}
+import dag.HasNodeId
 
 // ===========================================================================
 case class ActionNode(

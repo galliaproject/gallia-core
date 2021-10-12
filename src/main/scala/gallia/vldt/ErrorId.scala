@@ -81,8 +81,8 @@ import meta._
       def errs = Seq(err)
       def err_ = Some(err)
 
-      def errIf (test: => Boolean): gallia.Err_ = if (test) err_ else None
-      def errsIf(test: => Boolean): gallia.Errs = if (test) errs else Nil
+      def errIf (test: => Boolean): Err_ = if (test) err_ else None
+      def errsIf(test: => Boolean): Errs = if (test) errs else Nil
 
       // TODO: delay throwing?
       def throwDataError[A](passThrough: A): A       = { dataError((errorId, label, formatDetails2)); passThrough; }
@@ -139,7 +139,7 @@ import meta._
           def formatDetails = offendingIndices.#@@.append(s"(${maxSize})") }
 
       // ---------------------------------------------------------------------------
-      case class MoreThanOneKey(keys: Seq[gallia.Key]) extends _Error1 {
+      case class MoreThanOneKey(keys: Seq[Key]) extends _Error1 {
         val errorId = "201110091500"; val label = "MoreThanOneKey"
           def formatDetails = keys.#@@ }
 

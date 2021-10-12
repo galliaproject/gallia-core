@@ -1,6 +1,5 @@
-package gallia.actions
-
-import gallia._
+package gallia
+package actions
 
 // ===========================================================================
 @deprecated("see 210118083814 for new version") object ActionsZZStats0 {
@@ -10,7 +9,7 @@ import gallia._
   @deprecated case class _Tmp(groupee : Key , grouper: Keyz, as: Key) { def triplet = (groupee , grouper, as) }
 
   // ---------------------------------------------------------------------------
-  @gallia.NumberAbstraction
+  @NumberAbstraction
   @deprecated("see 210118083814 for new version") case class Stats0(groupee: Ren, groupers: Renz, asOpt: Option[Key]) extends ActionZZc with CanForceAs2[Stats0] {
         /* "as" boilerplate: */ override val defaultKey = _stats; override def forceAs(key: Key) = copy(asOpt = Some(key))
 

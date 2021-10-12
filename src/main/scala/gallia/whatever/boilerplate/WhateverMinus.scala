@@ -5,7 +5,7 @@ package whatever.boilerplate
 object WhateverMinus {
 
   /* keep in sync with other boilerplate's Whatever{Plus,Times,...} */
-  @gallia.NumberAbstraction 
+  @NumberAbstraction 
   private[gallia] def apply(first: Any, second: Any): Any = {     
     first match { 
       

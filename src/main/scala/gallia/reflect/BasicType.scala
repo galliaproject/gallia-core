@@ -67,7 +67,7 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
   }
 
   // ===========================================================================
-  @gallia.TypeMatching object BasicType extends Enum[BasicType] {
+  @TypeMatching object BasicType extends Enum[BasicType] {
     val values = findValues
 
     // ---------------------------------------------------------------------------

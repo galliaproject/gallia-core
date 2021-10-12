@@ -6,7 +6,7 @@ import heads.reducing._
 import heads.reducing.ReducingPair
 
 // ===========================================================================
-@gallia.NumberAbstraction
+@NumberAbstraction
 object ActionsReducing {
 
   case class Reduce(pairs: Seq[ReducingPair]) extends ActionZUc {

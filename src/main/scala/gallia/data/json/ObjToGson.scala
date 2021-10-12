@@ -20,7 +20,7 @@ object ObjToGson {
                 case sgl         => element(sgl) }) } }
 
     // ===========================================================================
-    @gallia.TypeMatching
+    @TypeMatching
     private def element(value: Any): JsonElement =
       value match {
         case o: Obj                  => apply(o)

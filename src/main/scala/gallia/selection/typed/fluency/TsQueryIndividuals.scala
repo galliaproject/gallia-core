@@ -2,7 +2,7 @@ package gallia
 package selection.typed.fluency
 
 // ===========================================================================
-@gallia.TypeMatching // very boilerplatey; TODO: t210124092716 - codegen (very boilerplaty)
+@TypeMatching // very boilerplatey; TODO: t210124092716 - codegen (very boilerplaty)
 object TsQueryIndividuals {
 
   trait HasOneTypedSel [A, _] { def typed[T: WTT](sel: A => Any) = new One_[T](sel(allSelections[A])) }

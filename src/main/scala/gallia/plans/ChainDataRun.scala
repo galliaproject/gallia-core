@@ -1,6 +1,7 @@
-package gallia.plans
+package gallia
+package plans
 
-import gallia.dag._
+import dag._
 
 // ===========================================================================
 object ChainDataRun {

@@ -4,7 +4,7 @@ package vldt
 import meta._
 
 // ===========================================================================
-@gallia.NumberAbstraction
+@NumberAbstraction
 object MetaValidationCompatibility {
 
   // TODO: handle some aliases, eg Nes,...

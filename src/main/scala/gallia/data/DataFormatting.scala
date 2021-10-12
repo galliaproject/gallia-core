@@ -7,7 +7,7 @@ import enumeratum.EnumEntry
 import aptus.{String_, Double_}
 
 // ===========================================================================
-@gallia.TypeMatching object DataFormatting {
+@TypeMatching object DataFormatting {
 
   def formatBasicValue: PartialFunction[Any, String] = formatString.orElse(formatNumber).orElse(formatOther)
 

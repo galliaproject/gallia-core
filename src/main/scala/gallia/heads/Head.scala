@@ -1,7 +1,7 @@
-package gallia.heads
+package gallia
+package heads
 
-import gallia._
-import gallia.env._
+import env._
 
 // ===========================================================================
 @aptus.pseudosealed trait Head[F <: Head[_]] { // useful restrict eg f: HeadZ => $Head such that $Head <: Head

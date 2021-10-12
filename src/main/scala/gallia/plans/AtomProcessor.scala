@@ -1,15 +1,13 @@
-package gallia.plans
+package gallia
+package plans
 
-import aptus.{Anything_, Seq_, Tuple2_}
-
-import gallia._
-import gallia.dag._
+import aptus.{Seq_, Tuple2_}
 
 // ===========================================================================
 private[plans] object AtomProcessor {
 
   def apply
-        (input: Either[Seq[NDT], NDT], missingInputs: RootId => NDT)
+        (input: Either[Seq[NDT], NDT], missingInputs: dag.RootId => NDT)
         (nodeId: NodeId, nodeAtom: Atom, debug: AtomNodeDebugging)
       : NDT = {
     def obj  :  Obj         = input.right.get.forceO

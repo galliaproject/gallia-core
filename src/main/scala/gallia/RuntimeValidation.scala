@@ -64,7 +64,7 @@ object RuntimeValidation { // 210115153346 - POC
     }
 
   // ===========================================================================
-  @gallia.NumberAbstraction
+  @NumberAbstraction
   def validateField(field: Fld, key: Key, value: AnyValue): Seq[ValErr] = {
 
     val (isMultiple: Boolean, types: DistinctSeq[Option[Either[Unit, BasicType]]]) =

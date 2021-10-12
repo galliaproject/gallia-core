@@ -2,7 +2,7 @@ package gallia
 package io
 
 // ===========================================================================
-package object out extends gallia._io with gallia.__io {
+package object out extends _io with __io {
   trait EndWriteUFluency { protected[gallia] val conf: OutputConfU }
   trait EndWriteZFluency { protected[gallia] val conf: OutputConfZ }
 

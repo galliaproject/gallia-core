@@ -3,8 +3,6 @@ package plans
 
 import aptus.{Seq_, String_}
 
-import dag.NodeId
-
 // ===========================================================================
 private case class RunCtx[$Data](
     nodeId   : NodeId,

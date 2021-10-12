@@ -1,9 +1,8 @@
-package gallia.heads
+package gallia
+package heads
 
-import gallia._
-import gallia.KPath
-import gallia.actions.ActionsFor._
-import gallia.selection.untyped.UtsBoilerplate._
+import actions.ActionsFor._
+import selection.untyped.UtsBoilerplate._
 
 // ===========================================================================
 trait HeadUFors { _: HeadU =>

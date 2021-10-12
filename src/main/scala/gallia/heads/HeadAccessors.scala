@@ -1,7 +1,7 @@
-package gallia.heads
+package gallia
+package heads
 
 import aptus.{One, Opt, Pes, Nes}
-import gallia._
 
 // ===========================================================================
 @TypeMatching

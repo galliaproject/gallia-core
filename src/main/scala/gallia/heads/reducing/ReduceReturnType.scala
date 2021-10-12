@@ -4,7 +4,7 @@ package heads.reducing
 import enumeratum.{Enum, EnumEntry}
 
 // ===========================================================================
-@gallia.NumberAbstraction
+@NumberAbstraction
 sealed trait ReduceReturnType extends EnumEntry { // 210123095857
 
   def newBasicTypeOpt: Option[BasicType] = this match {

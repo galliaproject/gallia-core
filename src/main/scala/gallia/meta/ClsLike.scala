@@ -66,7 +66,7 @@ trait ClsLike { // read-only part
     def isOptional(path: KPathW): Boolean = !isRequired(path)
 
     // ===========================================================================
-    @gallia.PartialTypeMatching
+    @PartialTypeMatching
     def isString (path: KPathW): Boolean = _field(path.value).isString
 
     def isInt    (path: KPathW): Boolean = _field(path.value).isInt

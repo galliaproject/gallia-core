@@ -2,7 +2,7 @@ package gallia
 package io
 
 // ===========================================================================
-package object in extends gallia._io with gallia.__io {
+package object in extends _io with __io {
 
   /** can be either content or uri, eg """{"foo": 1}""" or "http://foo", ... */
   type InputString = String

@@ -17,7 +17,7 @@ trait ClsAggregating { self: Cls =>
         .pipe(Cls.apply)
 
   // ===========================================================================
-  @gallia.IntSize
+  @IntSize
   def countAll(groupers: Renz, as: Key): Cls = // independent of groupee
       Cls(
         retain(groupers).fields :+

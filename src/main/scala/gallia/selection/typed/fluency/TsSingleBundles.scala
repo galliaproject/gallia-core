@@ -2,7 +2,7 @@ package gallia
 package selection.typed.fluency
 
 // ===========================================================================
-@gallia.TypeMatching
+@TypeMatching
 private[gallia] object TsSingleBundles {
 
   trait HasSingleRequiredBasic[$Wrap] extends

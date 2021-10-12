@@ -6,8 +6,8 @@ import aptus.Anything_
 import meta._
 
 // ===========================================================================
-@gallia.NumberAbstraction
-@gallia.TypeMatching
+@NumberAbstraction
+@TypeMatching
 private object ReducingTypeUtils {
 
   private[reducing] def _flattenedInts   (values: Values): List[Int   ] = values.flatten.map(_.asInstanceOf[Number].intValue   )

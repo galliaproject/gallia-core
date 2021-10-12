@@ -34,7 +34,7 @@ trait FldLike extends HasKey with InfoLike
               (that. container, that. containee) }
 
       // ---------------------------------------------------------------------------
-      @gallia.PartialTypeMatching
+      @PartialTypeMatching
         def isOneString  : Boolean = isOne && isString
         def isOneInt     : Boolean = isOne && isInt
         def isOneDouble  : Boolean = isOne && isDouble
@@ -85,7 +85,7 @@ trait FldLike extends HasKey with InfoLike
         def forceNumericalType: NumericalType = numericalTypeOpt.force
 
         // ---------------------------------------------------------------------------
-        @gallia.NumberAbstraction
+        @NumberAbstraction
         def numericalTypeOpt: Option[NumericalType] =
                if (isInt)    BasicType._Int   .in.some
           else if (isDouble) BasicType._Double.in.some

@@ -1,11 +1,10 @@
 package gallia.data.json
 
-import com.google.gson._
-import aptus.Anything_
 import gallia._
 
 // ===========================================================================
 object ObjToGson {
+	import com.google.gson._
 
   private lazy val Gson = new GsonBuilder().create()
   private lazy val SystemDefaultZoneId = java.time.ZoneId.systemDefault
@@ -14,7 +13,7 @@ object ObjToGson {
   // TODO: t210115095838 - optimization: use schema (no need to pattern match seq/nesting, can use addElement, ...)!
   def apply(o: Obj): JsonObject = // TODO: t201230140315 - hopefully there's a more efficient way (no access to "members"?)...
       new JsonObject()
-        .sideEffect { mut =>
+        .tap { mut =>
           o.data.foreach { case (k, v) =>
             mut.add(k.name, // note: underlying map "uses insertion order for iteration order"
               v match {
@@ -45,8 +44,7 @@ object ObjToGson {
       val elements: Seq[JsonElement] = seq.map(element)
 
       new JsonArray(/*elements.size; FIXME: t210315113950 - causes issues with EMR: look into more*/)
-        .sideEffect { array =>
-          elements.foreach(array.add) }
+        .tap { array => elements.foreach(array.add) }
     }
 
 }

@@ -66,8 +66,8 @@ case class TableInputZ( // TODO: t210101150123 - split up?
             case Tsp.InferSchema        => inferFully(default.keys)
             case Tsp.ExplicitKeys(keyz) => inferFully(default.keys).pipe(renameKeys(keyz))
             case Tsp.ExplicitSchema(c)  => c /* TODO: allow contradictions even in field names vs header? */ })
-        .sideEffect(defaultCls2 = _)
-        .pipe(projectMeta) // note: must come after sideEffect because for now it's not a proper retain (we still read it all first) - see t210106120036
+        .tap(defaultCls2 = _)
+        .pipe(projectMeta) // note: must come after tap because for now it's not a proper retain (we still read it all first) - see t210106120036
     }
 
     // ===========================================================================

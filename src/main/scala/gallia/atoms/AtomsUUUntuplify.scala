@@ -1,7 +1,6 @@
 package gallia.atoms
 
-import aptus.{Anything_, String_, Seq_}
-import aptus.Tuple2_
+import aptus.{String_, Seq_, Tuple2_}
 
 import gallia._
 
@@ -81,7 +80,7 @@ object AtomsUUUntuplify {
   def untuplify2a(targetKey: Ren)(entriesSplitter: StringSplitter, entrySplitter: StringSplitter)(newKeys: Set[Key])(o: Obj): Obj =
       o._transformRenx(targetKey) { value =>
         _untuplify2a(entriesSplitter, entrySplitter)(value)
-        .sideEffect(checkNewKeys(debug = o)(newKeys)) }
+        .tap(checkNewKeys(debug = o)(newKeys)) }
 
     // ---------------------------------------------------------------------------
     def _untuplify2a(entriesSplitter: StringSplitter, entrySplitter: StringSplitter)(value: AnyValue): Obj =

@@ -1,6 +1,6 @@
 package gallia.inferring.table
 
-import aptus.{Anything_, Seq_}
+import aptus.Seq_
 import gallia._
 
 import gallia.reflect.BasicType
@@ -30,7 +30,7 @@ object TableSchemaInferrer {
             keySet
               .map { key =>
                 val value = o.string(key) // guaranteed present by 201215141231
-                  .sideEffect {
+                  .tap {
                     conf
                       .valueSet(_)
                       .pipe(mutable.addValues(key, _)) }

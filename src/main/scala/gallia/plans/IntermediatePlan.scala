@@ -46,7 +46,7 @@ case class IntermediatePlan private (dag: ActionDag) {
           case None       => ResultSchema.UpstreamError
           case Some(clss) =>
             actionm.vldt(clss) match {
-              case Nil    => ResultSchema.Success(actionm._meta(clss).sideEffect { actionm.resultCls = _ /* TODO: relates to t201214105653 hack */ })
+              case Nil    => ResultSchema.Success(actionm._meta(clss).tap { actionm.resultCls = _ /* TODO: relates to t201214105653 hack */ })
               case errors => ResultSchema.Errors(errors, actionm.callSite) } }
 
   }

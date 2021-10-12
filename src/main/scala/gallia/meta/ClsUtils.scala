@@ -1,7 +1,5 @@
 package gallia.meta
 
-import aptus.Anything_
-
 import gallia._
 
 // ===========================================================================
@@ -14,7 +12,7 @@ object ClsUtils {
           field.info.potentiallyProcessNesting(
             value = itr.next()) }
       .pipe(gallia.obj)
-      .sideEffect(_ => assert(itr.isEmpty, dis /* TODO: pass original value? */))
+      .tap(_ => assert(itr.isEmpty, dis /* TODO: pass original value? */))
 
 }
 

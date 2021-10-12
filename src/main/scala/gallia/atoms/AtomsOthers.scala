@@ -32,12 +32,12 @@ object AtomsOthers {
 
   // ---------------------------------------------------------------------------
   case class _InspectU(msg: Option[String], abort: Boolean) extends AtomUU { def naive(u: Obj) =
-      { msg.foreach(println); u.pp.sideEffectIf(_ => abort) { x => x.__exit; () } } }
+      { msg.foreach(println); u.pp.tapIf(_ => abort) { x => x.__exit; () } } }
 
     // ---------------------------------------------------------------------------
     @gallia.Distributivity
     case class _InspectZ(msg: Option[String], abort: Boolean) extends AtomZZ { def naive(z: Objs) =
-      { msg.foreach(println); z.pp.sideEffectIf(_ => abort) { x => x.__exit; () } } }
+      { msg.foreach(println); z.pp.tapIf(_ => abort) { x => x.__exit; () } } }
 
   // ===========================================================================
   case object _Merge extends AtomUUtoU { def naive(o1: Obj, o2: Obj): Obj =

@@ -72,9 +72,9 @@ private[plans] object AtomProcessor {
         case x: AtomIV => x.naive.map(NDT.vle).get
 
         // ===========================================================================
-        case x: AtomUO => obj .sideEffect(x.naive)
-        case x: AtomZO => objs.sideEffect(x.naive)
-        case x: AtomVO => vle .sideEffect(x.naive).pipe(NDT.vle) // TODO: keep? instead of "grab"?
+        case x: AtomUO => obj .tap(x.naive)
+        case x: AtomZO => objs.tap(x.naive)
+        case x: AtomVO => vle .tap(x.naive).pipe(NDT.vle) // TODO: keep? instead of "grab"?
         
         // ===========================================================================
         // less common

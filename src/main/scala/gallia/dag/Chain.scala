@@ -1,4 +1,5 @@
-package gallia.dag
+package gallia
+package dag
 
 import aptus.{Anything_, Seq_}
 import aptus.Nes

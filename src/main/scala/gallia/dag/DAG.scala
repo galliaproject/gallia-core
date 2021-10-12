@@ -1,7 +1,7 @@
-package gallia.dag
+package gallia
+package dag
 
 import aptus.{Anything_, Seq_, String_}
-
 import aptus.Nes
 import aptus.Count
 

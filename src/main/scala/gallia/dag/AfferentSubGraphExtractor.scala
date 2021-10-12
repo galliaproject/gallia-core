@@ -1,4 +1,5 @@
-package gallia.dag
+package gallia
+package dag
 
 // ===========================================================================
 private object AfferentSubGraphExtractor {

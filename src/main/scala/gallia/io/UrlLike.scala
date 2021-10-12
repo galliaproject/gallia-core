@@ -1,6 +1,7 @@
-package gallia.io
+package gallia
+package io
 
-import gallia.io.out.OutletType
+import io.out.OutletType
 
 // ===========================================================================
 case class UrlLike(

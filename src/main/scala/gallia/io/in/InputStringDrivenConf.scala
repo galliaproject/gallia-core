@@ -1,8 +1,8 @@
-package gallia.io.in
+package gallia
+package io.in
 
 import aptus.Anything_
 import aptus.UriString
-import gallia._
 
 // ===========================================================================
 trait InputStringDrivenConfHelper[InputAction, IoType] {

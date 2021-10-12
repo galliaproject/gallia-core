@@ -1,8 +1,7 @@
-package gallia.io.in
+package gallia
+package io.in
 
 import aptus.MirrorIndex
-
-import gallia._
 
 // ===========================================================================
 case class MIndexEntry(mindex: MirrorIndex, keyOpt: Option[Key]) { // TODO: t210122135629 - implement mirror index

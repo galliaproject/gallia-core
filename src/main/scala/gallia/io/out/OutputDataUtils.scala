@@ -1,4 +1,5 @@
-package gallia.io.out
+package gallia
+package io.out
 
 import aptus.String_
 

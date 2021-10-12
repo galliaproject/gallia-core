@@ -1,7 +1,6 @@
-package gallia.io
+package gallia
+package io
 package in
-
-import gallia._
 
 // ===========================================================================
 // TODO: t201222094823 - improve boilerplate throughout, macro maybe (we know the copy() methods are available)?

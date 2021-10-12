@@ -1,7 +1,7 @@
-package gallia.io.in
+package gallia
+package io.in
 
-import gallia._
-import gallia.actions.in._
+import actions.in._
 
 // ===========================================================================
 sealed trait InputConfU { def actionU: ActionIU }

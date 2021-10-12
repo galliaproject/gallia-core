@@ -1,4 +1,5 @@
-package gallia.io
+package gallia
+package io
 
 // ===========================================================================
 trait HasSelf[T] { protected[io] val self: T }

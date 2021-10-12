@@ -1,10 +1,11 @@
-package gallia.io
+package gallia
+package io
 
 import aptus.{Anything_, String_}
-import gallia.reflect.Container
-import gallia.reflect.BasicType
-import gallia.meta.Info
-import gallia.inferring.table.TypeGuessing
+
+import meta.Info
+import inferring.table.TypeGuessing
+import reflect.{Container, BasicType}
 
 // ===========================================================================
 case class CellConf(

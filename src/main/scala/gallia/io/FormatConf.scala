@@ -1,4 +1,5 @@
-package gallia.io
+package gallia
+package io
 
 // ===========================================================================
 case class FormatConf(

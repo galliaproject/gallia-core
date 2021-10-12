@@ -1,7 +1,6 @@
-package gallia.io
+package gallia
+package io
 package in
-
-import gallia._
 
 // ===========================================================================
 class StartReadUFluency(val inputString: InputString) // note: no querying

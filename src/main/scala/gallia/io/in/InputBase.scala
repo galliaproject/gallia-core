@@ -1,12 +1,12 @@
-package gallia.io
+package gallia
+package io
 package in
 
 import aptus.String_
 import aptus.{TableName, QueryString}
 
-import gallia._
-import gallia.heads.Head
-import gallia.data.json.JsonParsing
+import heads.Head
+import data.json.JsonParsing
 
 // ===========================================================================
 private[io] trait InputBase { val inputString: InputString }

@@ -1,15 +1,12 @@
-package gallia.io.in
+package gallia
+package io.in
 
 import aptus.MirrorIndex
 
-import gallia._
-
 // ===========================================================================
-sealed trait ReadProjection {
-    def resolve(allKeys: Keyz): Renz
-  }
+sealed trait ReadProjection { def resolve(allKeys: Keyz): Renz }
 
-  // ---------------------------------------------------------------------------
+  // ===========================================================================
   object ReadProjection {
     case class Retainees1(targets: RPathz) extends ReadProjection {
       def resolve(ignored: Keyz): Renz = targets.forceRenzFX

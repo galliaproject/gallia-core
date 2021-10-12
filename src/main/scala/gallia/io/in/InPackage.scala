@@ -1,4 +1,5 @@
-package gallia.io
+package gallia
+package io
 
 // ===========================================================================
 package object in extends gallia._io with gallia.__io {

@@ -1,10 +1,10 @@
-package gallia.io.in
+package gallia
+package io
+package in
 
 import aptus.MirrorIndex
 
-import gallia._
-import gallia.io.in.ReadProjection._
-import gallia.io.HasSelf
+import ReadProjection._
 
 // ===========================================================================
 trait CanSetMemoryModeFluency[Fluency] { self: HasSelf[Fluency] => // TODO: t210114145059 - generalize: inMemory, iterator, RDD (StreamerType)

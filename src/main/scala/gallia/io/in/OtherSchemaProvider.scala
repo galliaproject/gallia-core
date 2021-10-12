@@ -1,6 +1,5 @@
-package gallia.io.in
-
-import gallia._
+package gallia
+package io.in
 
 // ===========================================================================
 sealed trait OtherSchemaProvider {

@@ -1,9 +1,8 @@
-package gallia.io
+package gallia
+package io
 
-import aptus.String_
 import enumeratum.{Enum, EnumEntry}
-import aptus.Option_
-import aptus.Unit_
+import aptus.{String_, Option_, Unit_}
 
 // ===========================================================================
 sealed trait SupportedUriScheme extends EnumEntry

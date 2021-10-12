@@ -1,8 +1,10 @@
-package gallia.io
+package gallia
+package io
 
 import aptus.Anything_
-import gallia.io.in._
-import gallia.io.out._
+
+import in._
+import out._
 
 // ===========================================================================
 sealed trait IoTypeU {

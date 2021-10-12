@@ -1,7 +1,7 @@
-package gallia.io.out
+package gallia
+package io.out
 
-import gallia._
-import gallia.actions.out._
+import actions.out._
 
 // ===========================================================================
 sealed trait OutputConfU { private[gallia] def actionU: ActionUO }

@@ -1,7 +1,7 @@
-package gallia.io.in
+package gallia
+package io.in
 
-import aptus.Name
-import aptus.QueryString
+import aptus.{Name, QueryString}
 
 // ===========================================================================
 sealed trait ReadQuerying { def query: QueryString } // TODO: t210114202848 - validate

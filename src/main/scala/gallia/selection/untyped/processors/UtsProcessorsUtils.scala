@@ -1,6 +1,5 @@
-package gallia.selection.untyped.processors
-
-import gallia._
+package gallia
+package selection.untyped.processors
 
 // ===========================================================================
 private object UtsProcessorsUtils {

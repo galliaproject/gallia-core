@@ -1,6 +1,5 @@
-package gallia.selection
-
-import gallia._
+package gallia
+package selection
 
 // ===========================================================================
 package object untyped {

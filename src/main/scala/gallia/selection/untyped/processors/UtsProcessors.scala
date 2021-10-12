@@ -1,10 +1,10 @@
-package gallia.selection.untyped.processors
+package gallia
+package selection.untyped.processors
 
 import aptus.{Anything_, String_, Seq_}
 import aptus.Option_
 
-import gallia._
-import gallia.vldt._Error
+import vldt._Error
 
 // ===========================================================================
 object UtsProcessors {

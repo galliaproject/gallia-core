@@ -1,9 +1,7 @@
-package gallia.selection.typed
+package gallia
+package selection.typed
 
-import gallia.WTT
-import gallia.KPath
-import gallia.RPathz
-import gallia.target._
+import target._
 
 // ===========================================================================
 private[typed] trait TsBase {

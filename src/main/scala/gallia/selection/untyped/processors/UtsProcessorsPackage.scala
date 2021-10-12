@@ -1,6 +1,5 @@
-package gallia.selection.untyped
-
-import gallia._
+package gallia
+package selection.untyped
 
 // ===========================================================================
 package object processors { // TODO: rename...

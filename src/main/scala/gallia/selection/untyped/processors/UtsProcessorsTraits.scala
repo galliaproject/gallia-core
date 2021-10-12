@@ -1,10 +1,10 @@
-package gallia.selection.untyped.processors
+package gallia
+package selection.untyped.processors
 
 import aptus.Anything_
 import aptus.finl
 
-import gallia._
-import gallia.target._
+import target._
 
 // ===========================================================================
 trait SelectionValidation { def vldt(c: Cls): Errs }

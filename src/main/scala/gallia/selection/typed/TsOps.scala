@@ -1,7 +1,7 @@
-package gallia.selection.typed
+package gallia
+package selection.typed
 
-import gallia._
-import gallia.selection.untyped.{UtsBoilerplate => Untyped}
+import selection.untyped.{UtsBoilerplate => Untyped}
 
 // ===========================================================================
 object TsOps { // this is a big mess... TODO: t210107203932

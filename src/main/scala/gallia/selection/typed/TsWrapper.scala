@@ -1,7 +1,7 @@
-package gallia.selection.typed
+package gallia
+package selection.typed
 
-import gallia._
-import gallia.selection.untyped.processors._
+import selection.untyped.processors._
 
 // ===========================================================================
 class TsWrapper[T] private[gallia] (

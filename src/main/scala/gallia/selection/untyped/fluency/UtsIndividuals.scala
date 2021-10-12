@@ -1,9 +1,9 @@
-package gallia.selection.untyped.fluency
+package gallia
+package selection.untyped.fluency
 
-import gallia._
-import gallia.meta.ClsLike
-import gallia.selection.untyped.processors._
-import gallia.selection.untyped.processors.UtsProcessors._
+import meta.ClsLike
+import selection.untyped.processors._
+import selection.untyped.processors.UtsProcessors._
 
 // ===========================================================================
 object UtsIndividuals { // mostly meant to convey intent
@@ -81,7 +81,7 @@ object UtsIndividuals { // mostly meant to convey intent
   trait HasPathMatchesN { def filterPaths(pred: KPath => Boolean): KPathzSelection = PathPredicateN(pred) }
 
   // ---------------------------------------------------------------------------
-  trait HasAllButKeys { import gallia._
+  trait HasAllButKeys {
     def allBut(w: KeyW )                       : KeyzSelection = AllButKeys(w.keyz)
     def allBut(w: KeyWz)                       : KeyzSelection = AllButKeys(w.keyz)
     def allBut(w1: KeyW, w2: KeyW, more: KeyW*): KeyzSelection = allBut(KeyWz(Seq(w1, w2) ++ more)) }
@@ -94,7 +94,7 @@ object UtsIndividuals { // mostly meant to convey intent
     def allButLast  = allBut(-1) }
 
   // ---------------------------------------------------------------------------
-  @gallia.PartialTypeMatching
+  @PartialTypeMatching
   trait HasIfType {
     def ifType[T: WTT ]: KeyzSelection = new IfType[T]
 
@@ -128,7 +128,7 @@ object UtsIndividuals { // mostly meant to convey intent
   trait HasAdvancedCustomPaths   { def fullCustomPaths    (f: ClsLike    => Seq[KPath]): KPathzSelection = new CustomAdvancedToPathsFunction(f) }
 
   // ---------------------------------------------------------------------------
-  @gallia.PartialTypeMatching
+  @PartialTypeMatching
   trait HasIfTypeRecursively {
     def ifTypeRecursively[T: WTT]: KPathzSelection = new IfTypeRecursively[T]
 

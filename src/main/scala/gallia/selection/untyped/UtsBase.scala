@@ -1,14 +1,15 @@
-package gallia.selection.untyped
+package gallia
+package selection.untyped
 
-import gallia.target._
-import gallia.target.utils.TargetQueryValidation._
-import gallia.selection.typed._
-import gallia.selection.typed.fluency.TsQueryIndividuals
-import gallia.selection.untyped.processors._
+import target._
+import target.utils.TargetQueryValidation._
+import selection.typed._
+import selection.typed.fluency.TsQueryIndividuals
+import selection.untyped.processors._
 
 // ===========================================================================
 object UtsBase {
-  import gallia.selection.untyped.{UtsOps => Origins}
+  import selection.untyped.{UtsOps => Origins}
 
   // ---------------------------------------------------------------------------
   object Targets {
@@ -103,7 +104,7 @@ object UtsBase {
             extends HasOneSels
 
           // ---------------------------------------------------------------------------
-          @gallia.TypeMatching
+          @TypeMatching
           trait HasOneSels
             //TODO: bundles
             extends TsQueryIndividuals.HasOneStringSel [Origin, Target]

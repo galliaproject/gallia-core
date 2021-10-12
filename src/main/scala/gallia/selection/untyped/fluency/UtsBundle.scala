@@ -1,4 +1,5 @@
-package gallia.selection.untyped.fluency
+package gallia
+package selection.untyped.fluency
 
 // ===========================================================================
 object UtsBundle {

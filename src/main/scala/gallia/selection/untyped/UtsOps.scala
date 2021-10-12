@@ -1,6 +1,5 @@
-package gallia.selection.untyped
-
-import gallia.KPathW
+package gallia
+package selection.untyped
 
 // ===========================================================================
 /** must repeat for object else error "class type required but X with Y found" (TODO:?) */

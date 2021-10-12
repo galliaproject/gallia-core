@@ -1,4 +1,5 @@
-package gallia.data.multiple.streamer.spilling
+package gallia
+package data.multiple.streamer.spilling
 
 import scala.language.postfixOps
 import aptus.aptutils.SystemUtils

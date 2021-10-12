@@ -1,7 +1,7 @@
-package gallia.data.json
+package gallia
+package data.json
 
-import gallia.meta._
-import gallia.Obj
+import meta._
 
 // ===========================================================================
 object JsonNumberTax extends gallia.atoms.utils.ModifyObj { // because of 201119115427

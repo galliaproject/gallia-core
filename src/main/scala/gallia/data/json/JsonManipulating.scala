@@ -1,4 +1,5 @@
-package gallia.data.json
+package gallia
+package data.json
 
 // ===========================================================================
 object JsonManipulating {

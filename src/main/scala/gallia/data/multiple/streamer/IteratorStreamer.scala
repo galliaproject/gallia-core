@@ -3,8 +3,8 @@ package data.multiple.streamer
 
 import scala.reflect.{ClassTag => CT}
 
-import gallia.heads.merging.MergingData._
-import gallia.data.multiple.streamer.{IteratorStreamerUtils => _utils}
+import heads.merging.MergingData._
+import data.multiple.streamer.{IteratorStreamerUtils => _utils}
 
 // ===========================================================================
 class IteratorStreamer[A](itr: Iterator[A]) extends Streamer[A] {

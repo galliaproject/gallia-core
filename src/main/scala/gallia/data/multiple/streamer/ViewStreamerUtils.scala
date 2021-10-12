@@ -5,7 +5,7 @@ import scala.reflect.{ClassTag => CT}
 
 import aptus.Iterator_
 
-import gallia.heads.merging.MergingData._
+import heads.merging.MergingData._
 
 // ===========================================================================
 object ViewStreamerUtils {

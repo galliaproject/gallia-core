@@ -1,12 +1,12 @@
-package gallia.data.single
+package gallia
+package data.single
 
 import aptus.{Anything_, String_, Seq_}
 import aptus.Separator
 
-import gallia._
-import gallia.data.ValueUtils
-import gallia.reflect.Container
-import gallia.domain.PathPair
+import data.ValueUtils
+import reflect.Container
+import domain.PathPair
 
 // ===========================================================================
 trait ObjOperations { self: Obj =>

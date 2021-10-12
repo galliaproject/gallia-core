@@ -6,7 +6,7 @@ import java.io.Closeable
 
 import aptus.aptutils.IteratorUtils
 
-import gallia.heads.merging.MergingData._
+import heads.merging.MergingData._
 
 // ===========================================================================
 trait Streamer[A] { // note: not necessarily bothering with genericity (in the general sense) at this point, mostly on abstracting relevant scala/spark collections

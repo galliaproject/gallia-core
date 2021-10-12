@@ -1,4 +1,5 @@
-package gallia.data.single
+package gallia
+package data.single
 
 // ===========================================================================
 object ObjUtils {

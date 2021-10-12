@@ -1,4 +1,5 @@
-package gallia.data.multiple.streamer.spilling
+package gallia
+package data.multiple.streamer.spilling
 
 import aptus.aptutils.SystemUtils
 import aptus.aptutils.JavaStreamUtils._

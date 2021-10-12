@@ -1,4 +1,5 @@
-package gallia.data.json
+package gallia
+package data.json
 
 import aptus._
 import aptus.aptmisc.Java
@@ -6,8 +7,6 @@ import aptus.aptjson.GsonParser
 
 import scala.collection.JavaConverters._
 import com.google.gson._
-
-import gallia._
 
 // ===========================================================================
 /* important note: 201117103600 - JsonObject maintains its entries in a com.google.gson.internal.LinkedTreeMap

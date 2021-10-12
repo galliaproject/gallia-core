@@ -1,9 +1,9 @@
-package gallia.data
+package gallia
+package data
 
-import gallia._
-import gallia.meta.Fld
-import gallia.reflect.BasicType
-import gallia.io.CellConf
+import meta.Fld
+import reflect.BasicType
+import io.CellConf
 
 // ===========================================================================
 class ModifyTableData(conf: CellConf) extends gallia.atoms.utils.ModifyObj { // 201231113658

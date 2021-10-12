@@ -1,8 +1,7 @@
-package gallia.data.multiple
+package gallia
+package data.multiple
 
 import aptus.Seq_
-
-import gallia.{obj, Ren, Renz}
 
 // ===========================================================================
 trait ObjsAggregations { self: Objs =>

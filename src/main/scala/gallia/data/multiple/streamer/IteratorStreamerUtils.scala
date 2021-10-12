@@ -11,7 +11,7 @@ import spilling.SpillingHackDeserialization._
 import spilling.GnuSortByFirstFieldHack
 import spilling.GnuJoinByFirstFieldHack
 
-import gallia.heads.merging.MergingData._
+import heads.merging.MergingData._
 
 // ===========================================================================
 object IteratorStreamerUtils {
@@ -39,7 +39,7 @@ object IteratorStreamerUtils {
   private[streamer] def groupByKey[K: CT, V: CT](itr: Iterator[(K, V)]): Iterator[(K, List[V])] = { // spilling hack            
       // typically groupXN (as opposed to groupX1)
       //   for now can't do the same for key because of Option (see https://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210116153713)
-      val valueIsObj: Boolean = scala.reflect.classTag[V].runtimeClass == classOf[gallia.data.single.Obj]
+      val valueIsObj: Boolean = scala.reflect.classTag[V].runtimeClass == classOf[gallia.Obj]
 
       // ---------------------------------------------------------------------------
       // see https://github.com/galliaproject/gallia-core#poor-mans-scaling-spilling

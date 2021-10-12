@@ -3,8 +3,8 @@ package data.multiple.streamer
 
 import scala.reflect.{ClassTag => CT}
 
-import gallia.heads.merging.MergingData._
-import gallia.data.multiple.streamer.{ViewStreamerUtils => _utils}
+import heads.merging.MergingData._
+import data.multiple.streamer.{ViewStreamerUtils => _utils}
 
 // ===========================================================================
 class ViewStreamer[A](view: ViewRepr[A]) extends Streamer[A] {

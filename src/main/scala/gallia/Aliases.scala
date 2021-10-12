@@ -71,11 +71,11 @@ trait HeadAliases {
 
 // ===========================================================================
 trait DataAliases {
-  type Obj  = gallia.data.single  .Obj
-  val  Obj  = gallia.data.single  .Obj
+//  type Obj  = gallia.data.single  .Obj
+//  val  Obj  = gallia.data.single  .Obj
 
-  type Objs = gallia.data.multiple.Objs
-  val  Objs = gallia.data.multiple.Objs
+//  type Objs = gallia.data.multiple.Objs
+//  val  Objs = gallia.data.multiple.Objs
 }
 
 // ===========================================================================

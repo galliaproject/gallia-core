@@ -20,14 +20,21 @@ package object gallia
   type HeadO = heads.HeadU
   type HeadS = heads.HeadZ
 
-  // ===========================================================================
-  private[gallia] type     Cls = meta.Cls
-  private[gallia] lazy val Cls = meta.Cls
-
-  private[gallia] type     Fld = meta.Fld
-  private[gallia] lazy val Fld = meta.Fld
-
   // ---------------------------------------------------------------------------
+type Obj  = gallia.data.single  .Obj
+val  Obj  = gallia.data.single  .Obj
+
+  type Objs = gallia.data.multiple.Objs
+  val  Objs = gallia.data.multiple.Objs
+
+// ---------------------------------------------------------------------------
+  type     Cls = meta.Cls
+  lazy val Cls = meta.Cls
+
+  type     Fld = meta.Fld
+  lazy val Fld = meta.Fld
+
+  // ===========================================================================
   private[gallia] type Whatever = whatever.Whatever
   private[gallia] val  Whatever = whatever.Whatever
 

@@ -4,7 +4,8 @@ package single
 
 import aptus._
 import aptus.aptjson.GsonFormatter
-import gallia.data.json.ObjToGson
+
+import data.json.ObjToGson
 
 // ===========================================================================
 class Obj private ( /* must not expose apply: see 210102140902, mostly so can use .obj(...) accessor */   

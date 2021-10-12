@@ -1,11 +1,10 @@
-package gallia.data
+package gallia
+package data
 
-import java.time._
 import java.time.format._
 import enumeratum.EnumEntry
 
-import aptus.String_
-import aptus.Double_
+import aptus.{String_, Double_}
 
 // ===========================================================================
 @gallia.TypeMatching object DataFormatting {

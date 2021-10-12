@@ -1,7 +1,7 @@
-package gallia.data.multiple
+package gallia
+package data.multiple
 
-import gallia.heads.merging.MergingData._
-import gallia.obj
+import heads.merging.MergingData._
 
 // ===========================================================================
 trait ObjsMerging { self: Objs =>

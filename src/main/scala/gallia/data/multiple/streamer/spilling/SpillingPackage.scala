@@ -1,4 +1,5 @@
-package gallia.data.multiple.streamer
+package gallia
+package data.multiple.streamer
 
 // ===========================================================================
 package object spilling { 
@@ -9,7 +10,7 @@ package object spilling {
   type Line = String
 
   // ---------------------------------------------------------------------------
-  type Obj       = gallia.data.single.Obj
+  type Obj       = gallia.Obj
   val  GsonToObj = gallia.data.json.GsonToObj
   
   // ---------------------------------------------------------------------------  

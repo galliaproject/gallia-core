@@ -1,9 +1,9 @@
-package gallia.data.single
+package gallia
+package data.single
 
-import gallia._
-import gallia.reflect.BasicType
-import gallia.domain.PathPair
-import gallia.domain.SortingPair
+import reflect.BasicType
+import domain.PathPair
+import domain.SortingPair
 
 // ===========================================================================
 object ObjOrdering {

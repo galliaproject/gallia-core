@@ -1,11 +1,10 @@
-package gallia.data.json
+package gallia
+package data.json
 
 import com.google.gson.{JsonObject, JsonArray}
 import scala.collection.JavaConverters._
 
-import aptus.JsonObjectString
-import aptus.JsonArrayString
-import gallia.data.single.Obj
+import aptus.{JsonObjectString, JsonArrayString}
 
 // ===========================================================================
 object JsonParsing {

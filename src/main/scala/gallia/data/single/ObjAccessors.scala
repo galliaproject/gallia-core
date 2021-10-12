@@ -2,17 +2,15 @@ package gallia
 package data
 package single
 
-import gallia.{Obj => Obj2} // because of 2.13...
 import aptus.{Opt, Pes}
-
-import gallia.data.DataFormatting.{formatBasicValue => format}
 
 // ===========================================================================
 @gallia.TypeMatching
-trait ObjAccessors { _: Obj2 => // id210326140514
+trait ObjAccessors { _: Obj => // id210326140514
   import ObjAccessors._nmbr
   import ValueWrapper.to
-
+  import DataFormatting.{formatBasicValue => format}
+  
   // ---------------------------------------------------------------------------
   def string  (key: KPathW):     String  = force(key)      .asString
   def string_ (key: KPathW): Opt[String] = opt  (key).map(_.asString)
@@ -98,10 +96,10 @@ trait ObjAccessors { _: Obj2 => // id210326140514
   def nmbrs_(key: KPathW): Pes[Double] = opt  (key).map(_.asSeq.map(_nmbr))
 
   // ---------------------------------------------------------------------------
-  def obj  (key: KPathW):     Obj2  = force(key)      .asObj
-  def obj_ (key: KPathW): Opt[Obj2] = opt  (key).map(_.asObj)
-  def objs (key: KPathW): Seq[Obj2] = force(key)      .asSeq.map(_.asObj)
-  def objs_(key: KPathW): Pes[Obj2] = opt  (key).map(_.asSeq.map(_.asObj))
+  def obj  (key: KPathW):     Obj  = force(key)      .asObj
+  def obj_ (key: KPathW): Opt[Obj] = opt  (key).map(_.asObj)
+  def objs (key: KPathW): Seq[Obj] = force(key)      .asSeq.map(_.asObj)
+  def objs_(key: KPathW): Pes[Obj] = opt  (key).map(_.asSeq.map(_.asObj))
 
   // ---------------------------------------------------------------------------
   def typed  [T: WTT](key: KPathW):     T  = force(key)                .asTyped[T]

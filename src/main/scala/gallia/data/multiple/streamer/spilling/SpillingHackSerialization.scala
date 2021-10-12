@@ -1,4 +1,5 @@
-package gallia.data.multiple.streamer.spilling
+package gallia
+package data.multiple.streamer.spilling
 
 // ===========================================================================
 object SpillingHackSerialization { // see https://github.com/galliaproject/gallia-core#poor-mans-scaling-spilling
@@ -17,7 +18,7 @@ object SpillingHackSerialization { // see https://github.com/galliaproject/galli
 
   // ---------------------------------------------------------------------------
   def serializeSideSortingLine(entry: (Any, Any)): Line = {         
-      val formattedKey  : String = serializeSortingKey2  (entry._1).getOrElse("")
+      val formattedKey  : String = serializeSortingKey2     (entry._1).getOrElse("")
       val formattedValue: String = serializeSideSortingValue(entry._2).getOrElse("")
 
       // ---------------------------------------------------------------------------

@@ -1,12 +1,10 @@
-package gallia.data
+package gallia
+package data
 
 // ===========================================================================
 package object multiple
-    extends gallia.Aliases
-    with    gallia.DomainAliases {
-
-  type Obj = gallia.data.single.Obj
-
+    extends       Aliases
+    with    DomainAliases { 
   type Streamer[A] = streamer.Streamer[A]
   val  Streamer    = streamer.Streamer
 }

@@ -1,7 +1,8 @@
-package gallia.data.multiple
+package gallia
+package data.multiple
 
-import aptus.Seq_
 import scala.reflect.ClassTag
+import aptus.Seq_
 
 // ===========================================================================
 case class Objs private (  // TODO: two versions, see t210104164036

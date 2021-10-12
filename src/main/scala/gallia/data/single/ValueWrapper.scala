@@ -1,4 +1,5 @@
-package gallia.data.single
+package gallia
+package data.single
 
 // ===========================================================================
 @gallia.TypeMatching
@@ -27,7 +28,7 @@ class ValueWrapper(val underlying: AnyValue) extends AnyVal {
     def asLocalDateTime: LocalDateTime = asTyped[LocalDateTime]
 
     // ---------------------------------------------------------------------------
-    def asObj    : Obj     = asTyped[Obj]
+    def asObj    : gallia.Obj     = asTyped[gallia.Obj]
   }
 
   // ===========================================================================

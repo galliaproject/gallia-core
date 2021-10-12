@@ -1,10 +1,11 @@
-package gallia.data.multiple
+package gallia
+package data.multiple
 
 import scala.reflect.classTag
 
-import gallia._
-import gallia.domain.SortingPair
-import gallia.data.single.ObjOrdering
+import meta._
+import domain.SortingPair
+import data.single.ObjOrdering
 
 // ===========================================================================
 trait ObjsOperations { self: Objs =>

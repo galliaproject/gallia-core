@@ -1,4 +1,5 @@
-package gallia.data.multiple.streamer
+package gallia
+package data.multiple.streamer
 
 import enumeratum.{Enum, EnumEntry}
 

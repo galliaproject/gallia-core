@@ -1,6 +1,5 @@
-package gallia.data.json
-
-import gallia._
+package gallia
+package data.json
 
 // ===========================================================================
 object ObjToGson {

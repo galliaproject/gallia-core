@@ -1,7 +1,9 @@
-package gallia.data
+package gallia
+package data
 
 import aptus.Tuple2_ // for toOptionalTuple
-import gallia.reflect.Container
+
+import reflect.Container
 
 // ===========================================================================
 object ValueUtils {

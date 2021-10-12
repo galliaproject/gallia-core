@@ -1,101 +1,94 @@
 package gallia
 
 // ===========================================================================
-object       Aliases extends       Aliases
-object DomainAliases extends DomainAliases
-//object   HeadAliases2 extends   HeadAliases2
-object   DataAliases extends   DataAliases
-object  ADataAliases extends  ADataAliases
+trait Aliases {
+
+  private[gallia] type DI     = DummyImplicit
+  private[gallia] type WTT[A] = scala.reflect.runtime.universe.WeakTypeTag[A]
+
+  private[gallia] type Vle = Any // as in HeadV's during data phase
+
+    // two versions:
+    // - t210104164037 - ListMap[Key, AnyValue] if standalone
+    // - t210104164036 - Vector[List[Any]] if has schema
+    //   - t210110095423 - the outer part (Vector) - rely on Cls' fields order synchrony
+    //     - t210121095207 - also look into scala-native
+    //   - t210110095424 - the inner part (List) - (+ performance cost of having the List?)
+    //   - t210110095425 - the Any part: consider an wrapping ADT (cost of wrapping vs pattern matching on Any)
+    private[gallia] type UEntry = (Key, AnyValue) /* TODO: t210107094213 - ensure if multiple then use List */
+    private[gallia] type UData  = Array[UEntry] // formerly: collection.immutable.ListMap[Key, AnyValue]
+
+  // ---------------------------------------------------------------------------
+  // until sure stick with them
+  private[gallia] type      Coll[A] = collection.GenTraversable    [A]
+  private[gallia] type SparkColl[A] = collection.   TraversableOnce[A]
 
   // ===========================================================================
-  trait Aliases {
+  type LocalDate     = java.time.LocalDate
+  type LocalDateTime = java.time.LocalDateTime
 
-    private[gallia] type DI     = DummyImplicit
-    private[gallia] type WTT[A] = scala.reflect.runtime.universe.WeakTypeTag[A]
+  type Regex   = scala.util.matching.Regex
+  type Pattern = java.util.regex.Pattern
 
-    private[gallia] type Vle = Any // as in HeadV's during data phase
+  type UFunction = HeadU => HeadU
+  type ZFunction = HeadZ => HeadZ
 
-      // two versions:
-      // - t210104164037 - ListMap[Key, AnyValue] if standalone
-      // - t210104164036 - Vector[List[Any]] if has schema
-      //   - t210110095423 - the outer part (Vector) - rely on Cls' fields order synchrony
-      //     - t210121095207 - also look into scala-native
-      //   - t210110095424 - the inner part (List) - (+ performance cost of having the List?)
-      //   - t210110095425 - the Any part: consider an wrapping ADT (cost of wrapping vs pattern matching on Any)
-      private[gallia] type UEntry = (Key, AnyValue) /* TODO: t210107094213 - ensure if multiple then use List */
-      private[gallia] type UData  = Array[UEntry] // formerly: collection.immutable.ListMap[Key, AnyValue]
+  // ---------------------------------------------------------------------------
+  type  Key = Symbol
+  type SKey = String
+  type EKey = Enumeration#Value    // dotty will hopefully help with this
+  type UKey = enumeratum.EnumEntry // dotty will hopefully help with this
 
-    // ---------------------------------------------------------------------------
-    // until sure stick with them
-    private[gallia] type      Coll[A] = collection.GenTraversable    [A]
-    private[gallia] type SparkColl[A] = collection.   TraversableOnce[A]
+  // ---------------------------------------------------------------------------
+  type AnyValue = Any
+}
 
-    // ===========================================================================
-    type LocalDate     = java.time.LocalDate
-    type LocalDateTime = java.time.LocalDateTime
+// ===========================================================================
+trait DomainAliases {
+  type KPath  = gallia.KPath
+  type Keyz   = gallia.Keyz
+  val  Keyz   = gallia.Keyz
 
-    type Regex   = scala.util.matching.Regex
-    type Pattern = java.util.regex.Pattern
+  type KeyW   = gallia.KeyW
+  type KPathW = gallia.KPathW
 
-    type UFunction = HeadU => HeadU
-    type ZFunction = HeadZ => HeadZ
+  type KeyWz  = gallia.KeyWz
 
-    // ---------------------------------------------------------------------------
-    type  Key = Symbol
-    type SKey = String
-    type EKey = Enumeration#Value    // dotty will hopefully help with this
-    type UKey = enumeratum.EnumEntry // dotty will hopefully help with this
+  type ActualRen = gallia.ActualRen
+  val  ActualRen = gallia.ActualRen
+}
 
-    // ---------------------------------------------------------------------------
-    type AnyValue = Any
-  }
+// ===========================================================================
+trait HeadAliases {
+  type HeadU = gallia.heads.HeadU
+  val  HeadU = gallia.heads.HeadU
 
-  // ===========================================================================
-  trait DomainAliases {
-    type KPath  = gallia.KPath
-    type Keyz   = gallia.Keyz
-    val  Keyz   = gallia.Keyz
+  type HeadZ = gallia.heads.HeadZ
+  val  HeadZ = gallia.heads.HeadZ
 
-    type KeyW   = gallia.KeyW
-    type KPathW = gallia.KPathW
+  type HeadV[T] = heads.HeadV[T]
+}
 
-    type KeyWz  = gallia.KeyWz
+// ===========================================================================
+trait DataAliases {
+  type Obj  = gallia.data.single  .Obj
+  val  Obj  = gallia.data.single  .Obj
 
-    type ActualRen = gallia.ActualRen
-    val  ActualRen = gallia.ActualRen
-  }
+  type Objs = gallia.data.multiple.Objs
+  val  Objs = gallia.data.multiple.Objs
+}
 
-  // ===========================================================================
-  trait HeadAliases2 {
-    type HeadU = gallia.heads.HeadU
-    val  HeadU = gallia.heads.HeadU
+// ===========================================================================
+trait ADataAliases {
+  type AObj  = gallia.domain.AObj
+  val  AObj  = gallia.domain.AObj
+  type BObj  = gallia.domain.BObj
+  val  BObj  = gallia.domain.BObj
 
-    type HeadZ = gallia.heads.HeadZ
-    val  HeadZ = gallia.heads.HeadZ
-
-    type HeadV[T] = heads.HeadV[T]
-  }
-
-  // ===========================================================================
-  trait DataAliases {
-    type Obj  = gallia.data.single  .Obj
-    val  Obj  = gallia.data.single  .Obj
-
-    type Objs = gallia.data.multiple.Objs
-    val  Objs = gallia.data.multiple.Objs
-  }
-
-  // ===========================================================================
-  trait ADataAliases {
-    type AObj  = gallia.domain.AObj
-    val  AObj  = gallia.domain.AObj
-    type BObj  = gallia.domain.BObj
-    val  BObj  = gallia.domain.BObj
-
-    type AObjs = gallia.domain.AObjs
-    val  AObjs = gallia.domain.AObjs
-    type BObjs = gallia.domain.BObjs
-    val  BObjs = gallia.domain.BObjs
-  }
+  type AObjs = gallia.domain.AObjs
+  val  AObjs = gallia.domain.AObjs
+  type BObjs = gallia.domain.BObjs
+  val  BObjs = gallia.domain.BObjs
+}
 
 // ===========================================================================

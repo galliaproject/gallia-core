@@ -34,7 +34,6 @@ private[target] object DataClassUtils {
       else if (info.isPes) { val c2 = info.forceNestedClass; c2.valueToObjs_(value) }
       else ???  // TODO: (match rather)
 
-
 }
 
 // ===========================================================================

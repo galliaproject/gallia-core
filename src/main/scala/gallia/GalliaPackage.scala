@@ -6,7 +6,7 @@ package object gallia
     extends Reserved
     with    Aliases
     with    Annotations
-    with    HeadAliases2
+    with    HeadAliases
     with    DataAliases
     with   ADataAliases {
 

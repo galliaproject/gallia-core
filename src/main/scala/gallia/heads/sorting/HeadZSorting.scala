@@ -1,11 +1,11 @@
-package gallia.heads.sorting
+package gallia
+package heads.sorting
 
 import scala.reflect.ClassTag
 
-import gallia._
-import gallia.FunctionWrappers._
-import gallia.actions.ActionsZZSorting._
-import gallia.domain.{Sorter, SortingPair}
+import FunctionWrappers._
+import actions.ActionsZZSorting._
+import domain.{Sorter, SortingPair}
 
 // ===========================================================================
 @Max5

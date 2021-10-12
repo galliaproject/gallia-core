@@ -1,9 +1,9 @@
-package gallia.heads.pivoting
+package gallia
+package heads.pivoting
 
 import aptus.Separator
 
-import gallia._
-import gallia.actions.ActionsOthers._
+import actions.ActionsOthers._
 
 // ===========================================================================
 @deprecated trait HeadZUnarraying /* "pivone" */ { self: HeadZ =>

@@ -1,7 +1,7 @@
-package gallia.heads.merging
+package gallia
+package heads.merging
 
-import gallia._
-import gallia.actions.ActionsZZMerging._
+import actions.ActionsZZMerging._
 
 // ===========================================================================
 trait HeadZMerging { self: HeadZ =>

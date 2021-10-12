@@ -1,10 +1,10 @@
-package gallia.heads.grouping
+package gallia
+package heads.grouping
 
-import gallia._
-import gallia.target._
-import gallia.actions.ActionsZZAggregating._
-import gallia.actions.ActionsZZStats0.Stats0
-import gallia.heads.reducing.CountLikeType
+import target._
+import actions.ActionsZZAggregating._
+import actions.ActionsZZStats0.Stats0
+import heads.reducing.CountLikeType
 
 // ===========================================================================
 trait HeadZAggregations { self: HeadZ =>

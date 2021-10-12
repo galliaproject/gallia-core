@@ -1,7 +1,7 @@
-package gallia.heads.grouping
+package gallia
+package heads.grouping
 
-import gallia._
-import gallia.target._
+import target._
 
 // ===========================================================================
 sealed trait GroupData {

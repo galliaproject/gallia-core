@@ -3,7 +3,7 @@ package heads.reducing
 
 import aptus.Anything_
 
-import gallia.meta._
+import meta._
 
 // ===========================================================================
 @gallia.NumberAbstraction

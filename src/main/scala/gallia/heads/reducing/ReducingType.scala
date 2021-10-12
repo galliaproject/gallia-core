@@ -1,12 +1,12 @@
-package gallia.heads.reducing
+package gallia
+package heads.reducing
 
 import aptus.{String_, Seq_}
 
 import enumeratum.{Enum, EnumEntry}
 
-import gallia.{Fld => _, _}
-import gallia.meta._
-import gallia.reflect.Container
+import meta._
+import reflect.Container
 
 // ===========================================================================
 sealed trait ReducingType extends EnumEntry {

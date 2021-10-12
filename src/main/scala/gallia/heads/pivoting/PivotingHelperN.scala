@@ -1,7 +1,8 @@
-package gallia.heads.pivoting
+package gallia
+package heads.pivoting
 
 import aptus.Separator
-import gallia._
+
 import DataN._
 
 // ===========================================================================

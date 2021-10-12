@@ -1,7 +1,7 @@
-package gallia.heads.reducing
+package gallia
+package heads.reducing
 
-import gallia._
-import gallia.actions.ActionsReducing._
+import actions.ActionsReducing._
 
 // ===========================================================================
 trait HeadZReducing { _: HeadZ =>

@@ -1,6 +1,5 @@
-package gallia.heads.merging
-
-import gallia._
+package gallia
+package heads.merging
 
 // ===========================================================================
 object MergingFluency {

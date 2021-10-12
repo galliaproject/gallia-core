@@ -1,10 +1,10 @@
-package gallia.heads.common
+package gallia
+package heads.common
 
 import aptus.String_
 
-import gallia._
-import gallia.actions.ActionsUUVeryBasics._
-import gallia.domain._
+import domain._
+import actions.ActionsUUVeryBasics._
 
 // ===========================================================================
 trait HeadCommonVeryBasics[F <: HeadCommon[F]] { _: HeadCommon[F] =>

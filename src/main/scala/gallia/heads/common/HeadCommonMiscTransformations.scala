@@ -1,10 +1,9 @@
-package gallia.heads.common
+package gallia
+package heads.common
 
-import aptus.String_
-import aptus.Double_
+import aptus.{String_, Double_}
 
-import gallia._
-import gallia.actions.ActionsUUReducer0._
+import actions.ActionsUUReducer0._
 
 // ===========================================================================
 trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { _: HeadCommon[F] =>

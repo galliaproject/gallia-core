@@ -1,9 +1,9 @@
-package gallia.heads.pivoting
+package gallia
+package heads.pivoting
 
-import gallia._
-import gallia.heads.TSL.Squash
-import gallia.actions.ActionsOthers  
-import gallia.selection.typed.TsBoilerplate.Squash
+import heads.TSL.Squash
+import actions.ActionsOthers  
+import selection.typed.TsBoilerplate.Squash
 
 // ===========================================================================
 private[pivoting] case class PivotingData[O1: WTT, D: WTT](

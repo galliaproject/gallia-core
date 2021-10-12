@@ -1,13 +1,13 @@
-package gallia.heads
+package gallia
+package heads
 
-import gallia._
-import gallia.heads.grouping.HasAs
-import gallia.data.multiple.Streamer
-import gallia.actions._
-import gallia.actions.ActionsOthers._
-import gallia.actions.ActionsZZ._
-import gallia.actions.ActionsZens._
-import gallia.actions.ActionsCustoms.CustomZZ
+import heads.grouping.HasAs
+import data.multiple.Streamer
+import actions._
+import actions.ActionsOthers._
+import actions.ActionsZZ._
+import actions.ActionsZens._
+import actions.ActionsCustoms.CustomZZ
 
 // ===========================================================================
 class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and generally change occurrences of "z" into "s"
@@ -99,7 +99,7 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
 
   // ---------------------------------------------------------------------------
   def assertDataUnsafeZ(pred: Objs => Boolean): Self = self ::+
-    gallia.actions.ActionsAsserts.AssertDataUnsafeZ(pred) // beware costly operation (distribution), eg size
+    actions.ActionsAsserts.AssertDataUnsafeZ(pred) // beware costly operation (distribution), eg size
 
   // ===========================================================================
   def logProgress                                         : Self = logProgress(n = 1000, _ => "")

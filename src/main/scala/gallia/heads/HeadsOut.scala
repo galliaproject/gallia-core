@@ -1,8 +1,9 @@
-package gallia.heads
+package gallia
+package heads
 
 import aptus.UriString
 
-import gallia.io.out._
+import io.out._
 
 // ===========================================================================
 trait HeadUOut { _: HeadU =>

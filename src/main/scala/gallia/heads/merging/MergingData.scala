@@ -1,10 +1,10 @@
-package gallia.heads.merging
+package gallia
+package heads.merging
 
 import enumeratum.{Enum, EnumEntry}
 
 import aptus.{Anything_, Seq_}
 
-import gallia._
 import MergingData._
 import MergingFluency._
 

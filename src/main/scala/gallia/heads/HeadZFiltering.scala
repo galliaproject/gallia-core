@@ -1,7 +1,7 @@
-package gallia.heads
+package gallia
+package heads
 
-import gallia._
-import gallia.actions.ActionsZZFiltering._
+import actions.ActionsZZFiltering._
 
 // ===========================================================================
 trait HeadZFiltering { _: HeadZ => // pretty messy, need to find a cleaner way to keep find and filter more in sync

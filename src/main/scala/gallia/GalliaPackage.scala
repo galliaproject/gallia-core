@@ -20,6 +20,14 @@ package object gallia
   type HeadO = heads.HeadU
   type HeadS = heads.HeadZ
 
+  type HeadU = gallia.heads.HeadU
+  val  HeadU = gallia.heads.HeadU
+
+  type HeadZ = gallia.heads.HeadZ
+  val  HeadZ = gallia.heads.HeadZ
+
+  type HeadV[T] = heads.HeadV[T]
+
   // ---------------------------------------------------------------------------
 type Obj  = gallia.data.single  .Obj
 val  Obj  = gallia.data.single  .Obj

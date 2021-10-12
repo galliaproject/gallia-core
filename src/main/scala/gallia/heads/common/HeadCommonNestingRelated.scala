@@ -1,9 +1,9 @@
-package gallia.heads.common
+package gallia
+package heads.common
 
 import aptus.Separator
 
-import gallia._
-import gallia.actions.ActionsUUNestingRelated._
+import actions.ActionsUUNestingRelated._
 
 // ===========================================================================
 trait HeadCommonNestingRelated[F <: HeadCommon[F]] { _: HeadCommon[F] =>

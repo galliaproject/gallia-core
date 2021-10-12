@@ -1,8 +1,8 @@
-package gallia.heads
+package gallia
+package heads
 
-import gallia._
-import gallia.actions.ActionsOthers._
-import gallia.actions.ActionsZens._
+import actions.ActionsOthers._
+import actions.ActionsZens._
 
 // ===========================================================================
 class HeadU private[gallia]( // TODO: t210121105809 - rename to HeadO and generally change occurrences of "u" into "o"; "u" was historical

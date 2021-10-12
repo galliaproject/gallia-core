@@ -1,12 +1,13 @@
-package gallia.heads
+package gallia
+package heads
 
 import aptus.{One, Opt, Pes, Nes}
 
-import gallia._
-import gallia.FunctionWrappers._
-import gallia.actions.ActionsOthers._
-import gallia.heads.common.{Grab, Squash}
-import gallia.target.utils.TypedTargetQueryUtils
+
+import FunctionWrappers._
+import actions.ActionsOthers._
+import heads.common.{Grab, Squash}
+import target.utils.TypedTargetQueryUtils
 
 // ===========================================================================
 trait HeadUSquashing { _: HeadU => // TODO: t210122161652 - favor AtomsVO now?

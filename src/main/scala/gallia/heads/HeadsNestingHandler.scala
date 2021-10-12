@@ -1,8 +1,8 @@
-package gallia.heads
+package gallia
+package heads
 
-import gallia._
-import gallia.env._
-import gallia.dag._
+import env._
+import dag._
 
 // ===========================================================================
 object HeadsNestingHandler { // TODO: move thse to handler/handler helper

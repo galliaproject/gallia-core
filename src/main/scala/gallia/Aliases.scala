@@ -60,13 +60,7 @@ trait DomainAliases {
 
 // ===========================================================================
 trait HeadAliases {
-  type HeadU = gallia.heads.HeadU
-  val  HeadU = gallia.heads.HeadU
 
-  type HeadZ = gallia.heads.HeadZ
-  val  HeadZ = gallia.heads.HeadZ
-
-  type HeadV[T] = heads.HeadV[T]
 }
 
 // ===========================================================================

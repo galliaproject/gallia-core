@@ -1,9 +1,9 @@
-package gallia.heads.common
+package gallia
+package heads.common
 
-import gallia._
-import gallia.target.HT
-import gallia.FunctionWrappers._
-import gallia.actions.ActionsUUTransforms._
+import target.HT
+import FunctionWrappers._
+import actions.ActionsUUTransforms._
 
 // ===========================================================================
 trait HeadCommonTransforms[F <: HeadCommon[F]] { _: HeadCommon[F] =>

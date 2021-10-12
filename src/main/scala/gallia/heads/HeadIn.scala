@@ -1,8 +1,8 @@
-package gallia.heads
+package gallia
+package heads
 
 import aptus.Nes
 import aptus.Separator
-import gallia._
 
 // ===========================================================================
 trait HeadUIn { // TODO: t210114201159 - implement missing convenience creation methods below

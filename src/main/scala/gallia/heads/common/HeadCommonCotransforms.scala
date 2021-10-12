@@ -1,12 +1,12 @@
-package gallia.heads.common
+package gallia
+package heads.common
 
 import aptus.Anything_
 
-import gallia._
-import gallia.target.{HT,HT2}
-import gallia.target.utils.TypedTargetQueryUtils._
-import gallia.FunctionWrappers._
-import gallia.actions.ActionsUUCotransforms._
+import target.{HT,HT2}
+import target.utils.TypedTargetQueryUtils._
+import FunctionWrappers._
+import actions.ActionsUUCotransforms._
 
 // ===========================================================================
 trait HeadCommonCotransforms[F <: HeadCommon[F]] { _: HeadCommon[F] => // TODO: t210826102833 - rework co-transforms

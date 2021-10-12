@@ -1,6 +1,5 @@
-package gallia.heads
-
-import gallia.KPathW
+package gallia
+package heads
 
 // ===========================================================================
 package object common extends _heads {

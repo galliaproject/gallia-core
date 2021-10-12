@@ -1,7 +1,7 @@
-package gallia.heads
+package gallia
+package heads
 
-import gallia._
-import gallia.actions.ActionsOthers.MapV2V
+import actions.ActionsOthers.MapV2V
 
 // ===========================================================================
 class HeadV[T: WTT /* will be Vle (Any) for data phase */] private[gallia] (

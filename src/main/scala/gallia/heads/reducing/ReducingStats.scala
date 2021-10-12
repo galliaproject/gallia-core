@@ -1,9 +1,9 @@
-package gallia.heads.reducing
+package gallia
+package heads.reducing
 
 import aptus.{Anything_, Seq_}
 
-import gallia._
-import gallia.meta._
+import meta._
 
 // ===========================================================================
 private[reducing] object ReducingStats { // 210118083814

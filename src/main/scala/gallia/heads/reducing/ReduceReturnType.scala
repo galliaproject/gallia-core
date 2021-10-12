@@ -1,4 +1,5 @@
-package gallia.heads.reducing
+package gallia
+package heads.reducing
 
 import enumeratum.{Enum, EnumEntry}
 

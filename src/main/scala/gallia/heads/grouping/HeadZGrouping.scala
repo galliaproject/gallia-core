@@ -1,8 +1,8 @@
-package gallia.heads.grouping
+package gallia
+package heads.grouping
 
-import gallia._
-import gallia.target._
-import gallia.actions.ActionsZZGrouping._
+import target._
+import actions.ActionsZZGrouping._
 
 // ===========================================================================
 trait HeadZGrouping { self: HeadZ =>

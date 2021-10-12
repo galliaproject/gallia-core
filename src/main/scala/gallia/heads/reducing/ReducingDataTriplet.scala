@@ -1,6 +1,5 @@
-package gallia.heads.reducing
-
-import gallia._
+package gallia
+package heads.reducing
 
 // ===========================================================================
 sealed trait ReducingDataTriplet {

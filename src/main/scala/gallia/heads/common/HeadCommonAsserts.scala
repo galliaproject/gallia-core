@@ -1,10 +1,10 @@
-package gallia.heads.common
+package gallia
+package heads.common
 
-import gallia._
-import gallia.meta._
-import gallia.reflect.{BasicType, Container}
-import gallia.actions.ActionsAsserts._
-import gallia.actions.ActionsCustoms._
+import meta._
+import reflect.{BasicType, Container}
+import actions.ActionsAsserts._
+import actions.ActionsCustoms._
 
 // ===========================================================================
 trait HeadCommonAsserts[F <: HeadCommon[F]] { _: HeadCommon[F] =>
@@ -61,7 +61,7 @@ trait HeadCommonAsserts[F <: HeadCommon[F]] { _: HeadCommon[F] =>
 
   // ---------------------------------------------------------------------------
   // additional validation
-  /*protected[gallia] */def ensureNumerical0(key: KeyW) = self2 :+ gallia.actions.ActionsUUSomewhatBasics.EnsureNumeric(TargetQueryUtils.tqkpathz(key)) // TODO: keep? expand?
+  /*protected[gallia] */def ensureNumerical0(key: KeyW) = self2 :+ actions.ActionsUUSomewhatBasics.EnsureNumeric(TargetQueryUtils.tqkpathz(key)) // TODO: keep? expand?
 }
 
 // ===========================================================================

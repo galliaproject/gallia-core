@@ -1,10 +1,10 @@
-package gallia.heads.common
+package gallia
+package heads.common
 
-import gallia._
-import gallia.FunctionWrappers._
-import gallia.actions.ActionsUUGenerationOther
-import gallia.actions.ActionsUUGenerusion._
-import gallia.target.utils.TypedTargetQueryUtils._
+import FunctionWrappers._
+import target.utils.TypedTargetQueryUtils._
+import actions.ActionsUUGenerationOther
+import actions.ActionsUUGenerusion._
 
 // ===========================================================================
 trait HeadCommonGenerusion[F <: HeadCommon[F]] { _: HeadCommon[F] =>

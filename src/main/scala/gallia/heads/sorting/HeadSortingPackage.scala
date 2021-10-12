@@ -1,4 +1,5 @@
-package gallia.heads
+package gallia
+package heads
 
 import scala.reflect.runtime.universe._
 

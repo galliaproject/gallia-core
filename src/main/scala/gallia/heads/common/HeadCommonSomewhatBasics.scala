@@ -1,16 +1,16 @@
-package gallia.heads.common
+package gallia
+package heads.common
 
 import aptus.{Anything_, String_}
 
 import aptus.Separator
 
-import gallia._
-import gallia.actions.ActionsUUSomewhatBasics._
-import gallia.actions.ActionsUUConverts._
-import gallia.actions.ActionsUUUntuplify._
-import gallia.domain._
-import gallia.target._
-import gallia.target.utils.TypedTargetQueryUtils._
+import actions.ActionsUUSomewhatBasics._
+import actions.ActionsUUConverts._
+import actions.ActionsUUUntuplify._
+import domain._
+import target._
+import target.utils.TypedTargetQueryUtils._
 
 // ===========================================================================
 trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { _: HeadCommon[F] =>

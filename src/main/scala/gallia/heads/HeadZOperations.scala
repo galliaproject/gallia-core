@@ -1,8 +1,8 @@
-package gallia.heads
+package gallia
+package heads
 
-import gallia._
-import gallia.actions.ActionsZZ._
-import gallia.actions.ActionsOthers._
+import actions.ActionsZZ._
+import actions.ActionsOthers._
 
 // ===========================================================================
 trait HeadZOperations { self: HeadZ =>

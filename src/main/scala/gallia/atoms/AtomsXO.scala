@@ -1,9 +1,8 @@
-package gallia.atoms
+package gallia
+package atoms
 
 import aptus.String_
-
-import gallia._
-import gallia.io.out._
+import io.out._
 
 // ===========================================================================
 object AtomsXO {

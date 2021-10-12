@@ -1,6 +1,5 @@
-package gallia.atoms
-
-import gallia._
+package gallia
+package atoms
 
 // ===========================================================================
 object AtomsZZ {

@@ -1,8 +1,7 @@
-package gallia.atoms
+package gallia
+package atoms
 
 import aptus.Seq_
-
-import gallia._
 
 // ===========================================================================
 object AtomsUUReducer0 {

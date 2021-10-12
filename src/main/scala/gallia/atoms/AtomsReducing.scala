@@ -1,7 +1,7 @@
-package gallia.atoms
+package gallia
+package atoms
 
-import gallia._
-import gallia.heads.reducing._
+import heads.reducing._
 
 // ===========================================================================
 object AtomsReducing {

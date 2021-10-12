@@ -1,9 +1,9 @@
-package gallia.atoms
+package gallia
+package atoms
 
 import scala.reflect.ClassTag
 
-import gallia._
-import gallia.domain._
+import domain._
 
 // ===========================================================================
 @gallia.Max5

@@ -1,9 +1,9 @@
-package gallia.atoms
+package gallia
+package atoms
 
 import aptus.String_
 
-import gallia._
-import gallia.domain._
+import domain._
 
 // ===========================================================================
 object AtomsUUConverts {

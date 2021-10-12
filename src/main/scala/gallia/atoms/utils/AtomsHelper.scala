@@ -1,9 +1,7 @@
-package gallia.atoms.utils
+package gallia
+package atoms.utils
 
 import aptus.Int_
-
-import gallia.obj
-import gallia._
 
 // ===========================================================================
 /** to help declutter the dedicated ones */

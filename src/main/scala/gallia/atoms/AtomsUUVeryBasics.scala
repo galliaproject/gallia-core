@@ -2,7 +2,7 @@ package gallia
 package atoms
 
 import aptus.Anything_
-import gallia.data.single.RetainMapping
+import data.single.RetainMapping
 
 // ===========================================================================
 object AtomsUUVeryBasics {

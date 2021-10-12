@@ -1,7 +1,7 @@
-package gallia.atoms
+package gallia
+package atoms
 
-import gallia._
-import gallia.domain._
+import domain._
 
 // ===========================================================================
 object AtomsZZFiltering {

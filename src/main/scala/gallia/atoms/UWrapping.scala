@@ -1,7 +1,7 @@
-package gallia.atoms
+package gallia
+package atoms
 
-import gallia._
-import gallia.plans._
+import plans._
 
 // ===========================================================================
 case class _UWrapper(wrappee: AtomUU) extends AtomZZ { def naive(z: Objs) = z.map(wrappee.naive) } // TODO: see t210114111539

@@ -1,8 +1,8 @@
-package gallia.atoms.utils
+package gallia
+package atoms.utils
 
-import gallia._
 import scala.reflect.ClassTag
-import gallia.domain.SortingPair
+import domain.SortingPair
 
 // ===========================================================================
 case class SuperMetaPair[T](

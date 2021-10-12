@@ -1,9 +1,8 @@
-package gallia.atoms
+package gallia
+package atoms
 
 import aptus.{String_, Seq_}
 import aptus.Separator
-
-import gallia._
 
 // ===========================================================================
 object AtomsUUResnesting {

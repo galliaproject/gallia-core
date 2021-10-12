@@ -1,6 +1,5 @@
-package gallia.atoms.utils
-
-import gallia._
+package gallia
+package atoms.utils
 
 // ===========================================================================
 private[atoms] object AtomsUtils {

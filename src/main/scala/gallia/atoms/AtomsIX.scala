@@ -1,15 +1,15 @@
-package gallia.atoms
+package gallia
+package atoms
 
 import aptus.{Anything_, String_}
 
-import gallia._
-import gallia.io._
-import gallia.io.in._
-import gallia.actions.in.HasProjection
-import gallia.data.json.JsonParsing
-import gallia.data.json.JsonNumberTax
-import gallia.data.ModifyTableData
-import gallia.data.multiple.streamer.Streamer
+import io._
+import io.in._
+import actions.in.HasProjection
+import data.json.JsonParsing
+import data.json.JsonNumberTax
+import data.ModifyTableData
+import data.multiple.streamer.Streamer
 
 // ===========================================================================
 object AtomsIX {
@@ -110,7 +110,7 @@ object AtomsIX {
   
         Streamer
           .fromIterator((rs.rawRdbmsEntries, cls))
-          .map(generalize).map(gallia.obj)
+          .map(generalize).map(obj)
           .pipe(Objs.build)
           .in.some
       }
@@ -140,7 +140,7 @@ object AtomsIX {
   
         Streamer
           .fromIterator((rs.rawRdbmsEntries, cls))
-          .map(generalize).map(gallia.obj)
+          .map(generalize).map(obj)
           .pipe(Objs.build)
           .in.some
       }
@@ -169,7 +169,7 @@ object AtomsIX {
             .query(new java.net.URI(inputString), None)(cmd)
             .pipe { case (iter, cls) =>
               Streamer.fromIterator((iter, cls)) }
-            .map(gallia.obj)
+            .map(obj)
             .pipe(Objs.build)
         }
 

@@ -1,7 +1,7 @@
-package gallia.atoms.utils
+package gallia
+package atoms.utils
 
-import gallia.Obj
-import gallia.meta._
+import meta._
 
 // ===========================================================================
 trait ModifyObj {

@@ -1,10 +1,10 @@
-package gallia.atoms
+package gallia
+package atoms
 
 import aptus.Anything_
 
-import gallia._
-import gallia.domain._
-import gallia.FunctionWrappers._
+import domain._
+import FunctionWrappers._
 
 // ===========================================================================
 object AtomsUV {

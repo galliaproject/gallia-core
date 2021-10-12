@@ -1,8 +1,7 @@
-package gallia.atoms
+package gallia
+package atoms
 
 import aptus.{String_, Seq_, Tuple2_}
-
-import gallia._
 
 // ===========================================================================
 object AtomsUUUntuplify {

@@ -1,7 +1,6 @@
 package gallia
 package atoms.utils
 
-
 import java.io.Closeable
 import aptus._
 

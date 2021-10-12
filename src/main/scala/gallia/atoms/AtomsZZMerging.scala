@@ -1,7 +1,7 @@
-package gallia.atoms
+package gallia
+package atoms
 
-import gallia._
-import gallia.heads.merging.MergingData._
+import heads.merging.MergingData._
 
 // ===========================================================================
 object AtomsZZMerging {

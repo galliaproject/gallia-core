@@ -2,7 +2,7 @@ package gallia
 package atoms
 
 import aptus.{Anything_, Seq_}
-import gallia.domain.PathPair
+import domain.PathPair
 
 // ===========================================================================
 object AtomsAsserts {

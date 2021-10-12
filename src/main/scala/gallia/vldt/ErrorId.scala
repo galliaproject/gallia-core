@@ -1,12 +1,10 @@
-package gallia.vldt
+package gallia
+package vldt
 
 import aptus.{String_, Seq_}
+import aptus.{IdValue, Label}
 
-import aptus.IdValue
-import aptus.Label
-
-import gallia._
-import gallia.meta._
+import meta._
 
 // ===========================================================================
 @deprecated("TODO: t210121101206 - will be completely rehauled") object ErrorId {

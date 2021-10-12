@@ -1,8 +1,8 @@
-package gallia.target.utils
+package gallia
+package target.utils
 
-import gallia._
-import gallia.target._
-import gallia.selection.typed._
+import target._
+import selection.typed._
 
 // ===========================================================================
 object TypedTargetQueryUtils {

@@ -1,4 +1,5 @@
-package gallia.target
+package gallia
+package target
 
 // ===========================================================================
 trait HasTypeNode {

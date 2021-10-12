@@ -1,6 +1,7 @@
-package gallia.vldt
+package gallia
+package vldt
 
-import gallia.meta._
+import meta._
 
 // ===========================================================================
 @gallia.NumberAbstraction

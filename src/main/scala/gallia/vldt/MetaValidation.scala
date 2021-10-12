@@ -1,12 +1,12 @@
-package gallia.vldt
+package gallia
+package vldt
 
 import aptus.Seq_
 
-import gallia._
-import gallia.meta._
-import gallia.reflect._
-import gallia.target._
-import gallia.domain._
+import meta._
+import reflect._
+import target._
+import domain._
 
 // ===========================================================================
 private[gallia] object MetaValidation {

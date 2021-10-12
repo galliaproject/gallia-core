@@ -1,6 +1,7 @@
-package gallia.target
+package gallia
+package target
 
-import gallia.FunctionWrappers._
+import FunctionWrappers._
 
 // ===========================================================================
 trait HasType extends HasTypeNode with HasTypeSeq {

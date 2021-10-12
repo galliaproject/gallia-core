@@ -1,10 +1,7 @@
-package gallia.target
+package gallia
+package target
 
-//import aptus.Seq_
-//
-import gallia._
-import gallia.vldt.MetaValidation
-import gallia.vldt.SpecialCardiMode
+import vldt.{MetaValidation, SpecialCardiMode}
 
 // ===========================================================================
 trait HasTypedTargetQuerySeq[$Target] extends HasTargetQuerySeq[$Target] {

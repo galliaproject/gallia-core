@@ -1,8 +1,8 @@
-package gallia.target
+package gallia
+package target
 
-import gallia._
-import gallia.target.utils.TypedTargetQueryUtils
-import gallia.vldt.MetaValidation
+import target.utils.TypedTargetQueryUtils
+import vldt.MetaValidation
 
 // ===========================================================================
 trait HasTargetQuerySeq[$Target] {

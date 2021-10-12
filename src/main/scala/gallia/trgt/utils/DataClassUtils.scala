@@ -1,8 +1,9 @@
-package gallia.target.utils
+package gallia
+package target.utils
 
-import gallia.meta.Info
-import gallia.reflect.TypeNode
-import gallia.target.Instantiator
+import meta.Info
+import reflect.TypeNode
+import target.Instantiator
 
 // ===========================================================================
 private[target] object DataClassUtils {

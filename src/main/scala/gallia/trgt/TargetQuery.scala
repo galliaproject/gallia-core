@@ -1,11 +1,11 @@
-package gallia.target
+package gallia
+package target
 
 import aptus.Anything_
 
-import gallia._
-import gallia.domain._
-import gallia.selection.untyped.processors.RPathzSelection
-import gallia.vldt.MetaValidation
+import domain._
+import vldt.MetaValidation
+import selection.untyped.processors.RPathzSelection
 
 // ===========================================================================
 class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](

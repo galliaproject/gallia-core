@@ -1,12 +1,12 @@
-package gallia.target
+package gallia
+package target
 
 import scala.reflect.runtime.universe
 
 import aptus.{String_, Seq_}
-
-import gallia._
-import gallia.meta._
 import aptus.DebugString
+
+import meta._
 
 // ===========================================================================
 class Instantiator private (

@@ -1,6 +1,5 @@
-package gallia.target
-
-import gallia._
+package gallia
+package target
 
 // ===========================================================================
 class HT(

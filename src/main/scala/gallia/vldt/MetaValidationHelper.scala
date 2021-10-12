@@ -1,11 +1,11 @@
-package gallia.vldt
+package gallia
+package vldt
 
 import aptus.{String_, Tuple2_}
 
-import gallia._
-import gallia.reflect._
-import gallia.domain.KVEs
-import gallia.target._
+import reflect._
+import target._
+import domain.KVEs
 
 // ===========================================================================
 object MetaValidationHelper {

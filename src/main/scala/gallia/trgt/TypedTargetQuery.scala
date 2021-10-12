@@ -1,13 +1,12 @@
-package gallia.target
+package gallia
+package target
 
 import aptus.{Anything_, Seq_}
 
-import gallia._
-import gallia.meta._
-import gallia.target.utils.TypedTargetQueryUtils
-import gallia.domain._
-import gallia.vldt.MetaValidation
-import gallia.vldt.SpecialCardiMode
+import meta._
+import domain._
+import target.utils.TypedTargetQueryUtils
+import vldt.{MetaValidation, SpecialCardiMode}
 
 // ===========================================================================
 // term: t210201151634 - (target) replace "Query" with "Selection" throughout?
@@ -54,8 +53,8 @@ case class TypedTargetQuery[$Target /* TODO: t210823111030 - ungenerify */]( // 
     def vldtAsAnyDestination(c: Cls): Errs =                               MetaValidation.validType(node)
 
     // ---------------------------------------------------------------------------
-    def vldtAsCotransformDestination(c: Cls, from: KPath) (implicit ev: $Target <:< gallia.KPath): Errs = vldtAsCotransformDestination(c, KPathz(Seq(from)))
-    def vldtAsCotransformDestination(c: Cls, from: KPathz)(implicit ev: $Target <:< gallia.KPath): Errs =                
+    def vldtAsCotransformDestination(c: Cls, from: KPath) (implicit ev: $Target <:< KPath): Errs = vldtAsCotransformDestination(c, KPathz(Seq(from)))
+    def vldtAsCotransformDestination(c: Cls, from: KPathz)(implicit ev: $Target <:< KPath): Errs =                
       MetaValidation.validType(c, this) ++
       tq.kpath_(c).in.noneIf(from.values.contains).flatMap(MetaValidation.fieldAbsence(c, _)) // only authorize overwrite of origins
 

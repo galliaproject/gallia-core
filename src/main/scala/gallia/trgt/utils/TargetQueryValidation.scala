@@ -1,7 +1,8 @@
-package gallia.target.utils
+package gallia
+package target.utils
 
-import gallia.target._
-import gallia.selection.untyped.processors._
+import target._
+import selection.untyped.processors._
 
 // ===========================================================================
 object TargetQueryValidation { //TODO: move

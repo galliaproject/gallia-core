@@ -1,4 +1,5 @@
-package gallia.vldt
+package gallia
+package vldt
 
 import enumeratum.{Enum, EnumEntry}
 

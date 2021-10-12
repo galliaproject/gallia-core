@@ -1,9 +1,10 @@
-package gallia.vldt
+package gallia
+package vldt
 
 import aptus.{Anything_, Seq_}
 import aptus.ErrorMsg
 
-import gallia.reflect._
+import reflect._
 
 // ===========================================================================
 object NodeDescUtils {

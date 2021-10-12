@@ -1,7 +1,7 @@
-package gallia.target.utils
+package gallia
+package target.utils
 
-import gallia._
-import gallia.target._
+import target._
 
 // ===========================================================================
 object TargetQueryUtils {

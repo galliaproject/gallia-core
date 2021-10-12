@@ -1,7 +1,7 @@
-package gallia.vldt
+package gallia
+package vldt
 
 import aptus.{Anything_, String_, Seq_}
-import gallia._
 
 // ===========================================================================
 case class Parent(values: Seq[String]) { // TODO: use location with 0-index?

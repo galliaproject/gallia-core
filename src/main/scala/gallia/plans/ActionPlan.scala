@@ -1,7 +1,8 @@
-package gallia.plans
+package gallia
+package plans
 
 import aptus.Seq_
-import gallia.dag.DAG
+import dag.DAG
 
 // ===========================================================================
 case class ActionPlan(dag: DAG[ActionNode]) {

@@ -53,6 +53,10 @@ type AObj  = gallia.domain.AObj
   type     Fld = meta.Fld
   lazy val Fld = meta.Fld
 
+private[gallia] type AnyValue = Any
+  private[gallia] type LocalDate     = java.time.LocalDate
+  private[gallia] type LocalDateTime = java.time.LocalDateTime
+
   // ===========================================================================
   private[gallia] type Whatever = whatever.Whatever
   private[gallia] val  Whatever = whatever.Whatever

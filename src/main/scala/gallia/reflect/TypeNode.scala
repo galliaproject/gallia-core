@@ -1,10 +1,9 @@
-package gallia.reflect
+package gallia
+package reflect
 
-import aptus.Anything_
-import aptus.Option_
+import aptus.{Anything_, Option_}
 
-import gallia._
-import gallia.meta._
+import meta._
 
 // ===========================================================================
 case class TypeNode(

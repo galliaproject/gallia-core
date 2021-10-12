@@ -1,11 +1,11 @@
-package gallia.meta
+package gallia
+package meta
 
 import aptus.String_
 
-import gallia._
-import gallia.reflect.Container._
-import gallia.domain.SortingPair
-import gallia.vldt.SpecialCardiMode
+import reflect.Container._
+import domain.SortingPair
+import vldt.SpecialCardiMode
 
 // ===========================================================================
 case class Info(container: Container, containee: Containee) extends InfoLike {

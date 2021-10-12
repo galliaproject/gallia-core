@@ -1,9 +1,9 @@
-package gallia.meta
+package gallia
+package meta
 
-import aptus.Anything_
-import aptus.Option_
-import gallia._
-import gallia.reflect.Container._
+import aptus.{Anything_, Option_}
+
+import reflect.Container._
 
 // ===========================================================================
 trait FldLike extends HasKey with InfoLike

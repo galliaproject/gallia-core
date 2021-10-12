@@ -24,8 +24,6 @@ trait Aliases {
   private[gallia] type SparkColl[A] = collection.   TraversableOnce[A]
 
   // ===========================================================================
-  type LocalDate     = java.time.LocalDate
-  type LocalDateTime = java.time.LocalDateTime
 
   type Regex   = scala.util.matching.Regex
   type Pattern = java.util.regex.Pattern
@@ -40,7 +38,7 @@ trait Aliases {
   type UKey = enumeratum.EnumEntry // dotty will hopefully help with this
 
   // ---------------------------------------------------------------------------
-  type AnyValue = Any
+  
 }
 
 // ===========================================================================

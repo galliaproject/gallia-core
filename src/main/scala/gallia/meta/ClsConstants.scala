@@ -1,6 +1,5 @@
-package gallia.meta
-
-import gallia._
+package gallia
+package meta
 
 // ===========================================================================
 private object ClsConstants { // TODO: revamp, see t210118084355

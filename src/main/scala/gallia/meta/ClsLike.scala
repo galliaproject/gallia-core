@@ -1,7 +1,7 @@
-package gallia.meta
+package gallia
+package meta
 
 import aptus.{Seq_, Option_}
-import gallia._
 
 // ===========================================================================
 trait ClsLike { // read-only part

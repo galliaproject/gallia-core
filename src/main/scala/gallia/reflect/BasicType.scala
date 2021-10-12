@@ -1,4 +1,5 @@
-package gallia.reflect
+package gallia
+package reflect
 
 import scala.reflect.{classTag, ClassTag}
 import enumeratum.{Enum, EnumEntry}
@@ -6,8 +7,7 @@ import java.time._
 
 import aptus.{Anything_, Seq_}
 
-import gallia.AnyValue
-import gallia.meta.Containee
+import meta.Containee
 
 // ===========================================================================
 sealed trait NumericalType extends BasicType

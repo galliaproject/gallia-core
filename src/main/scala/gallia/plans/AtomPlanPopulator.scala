@@ -1,8 +1,9 @@
-package gallia.plans
+package gallia
+package plans
 
 import aptus.{Anything_, String_, Seq_}
 
-import gallia.dag._
+import dag._
 
 // ===========================================================================
 private[plans] object AtomPlanPopulator {

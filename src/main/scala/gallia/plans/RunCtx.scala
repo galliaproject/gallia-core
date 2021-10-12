@@ -1,8 +1,9 @@
-package gallia.plans
+package gallia
+package plans
 
 import aptus.{Seq_, String_}
-import gallia.dag.NodeId
-import gallia.Atom
+
+import dag.NodeId
 
 // ===========================================================================
 private case class RunCtx[$Data](

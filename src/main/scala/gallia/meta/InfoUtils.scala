@@ -1,7 +1,9 @@
-package gallia.meta
+package gallia
+package meta
 
 import aptus.{Anything_, String_}
-import gallia.reflect.TypeLeaf
+
+import reflect.TypeLeaf
 
 // ===========================================================================
 private[gallia] object InfoUtils {

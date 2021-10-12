@@ -1,7 +1,5 @@
-package gallia.plans
-
-import gallia._
-import gallia.Vle
+package gallia
+package plans
 
 // ===========================================================================
 /** NDT = NodeDataType */

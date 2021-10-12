@@ -1,9 +1,9 @@
-package gallia.meta
+package gallia
+package meta
 
 import aptus.{Anything_, String_, Seq_}
 
-import gallia._
-import gallia.target._
+import target._
 
 // ===========================================================================
 case class Cls(fields: Seq[Fld])

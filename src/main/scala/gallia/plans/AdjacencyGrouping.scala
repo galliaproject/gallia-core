@@ -1,4 +1,5 @@
-package gallia.plans
+package gallia
+package plans
 
 // ===========================================================================
 object AdjacencyGrouping {

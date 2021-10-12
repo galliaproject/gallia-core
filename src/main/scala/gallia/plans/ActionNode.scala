@@ -1,10 +1,9 @@
-package gallia.plans
+package gallia
+package plans
 
 import aptus.Seq_
 
-import gallia.dag.HasNodeId
-import gallia.dag.NodeId
-import gallia._
+import dag.{HasNodeId, NodeId}
 
 // ===========================================================================
 case class ActionNode(

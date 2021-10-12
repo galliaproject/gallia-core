@@ -1,11 +1,11 @@
-package gallia.plans
+package gallia
+package plans
 
 import aptus.Anything_
 
-import gallia._
-import gallia.run._
-import gallia.dag._
-import gallia.env.ActionDag
+import run._
+import dag._
+import env.ActionDag
 
 // ===========================================================================
 case class IntermediatePlan private (dag: ActionDag) {

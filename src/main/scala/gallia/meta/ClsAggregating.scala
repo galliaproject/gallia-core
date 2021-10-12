@@ -1,7 +1,7 @@
-package gallia.meta
+package gallia
+package meta
 
-import gallia._
-import gallia.heads.reducing.ReducingType
+import heads.reducing.ReducingType
 
 // ===========================================================================
 trait ClsAggregating { self: Cls =>

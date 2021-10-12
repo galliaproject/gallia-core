@@ -1,7 +1,7 @@
-package gallia.reflect
+package gallia
+package reflect
 
-import gallia.AnyValue
-import gallia.atoms.utils.SuperMetaPair
+import atoms.utils.SuperMetaPair
 
 // ===========================================================================
 private[reflect] trait BasicTypeHelper { _: BasicType =>

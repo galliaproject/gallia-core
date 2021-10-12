@@ -1,4 +1,5 @@
-package gallia.reflect
+package gallia
+package reflect
 
 // ===========================================================================
 object KeyValidation { // TODO: t210127133546 - move (also used by meta validation)

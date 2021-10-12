@@ -1,6 +1,5 @@
-package gallia.plans
-
-import gallia._
+package gallia
+package plans
 
 // ===========================================================================
 private[plans] trait InputData { def formatDebug: String } // this is a bit of an afterthought... TODO: t210114125607 - improve

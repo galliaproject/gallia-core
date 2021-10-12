@@ -1,8 +1,8 @@
-package gallia.plans
+package gallia
+package plans
 
-import gallia._
-import gallia.dag.DAG
-import gallia.result.SuccessMetaResultNode
+import dag.DAG
+import result.SuccessMetaResultNode
 
 // ===========================================================================
 object ActionPlanPopulator {

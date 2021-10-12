@@ -1,4 +1,5 @@
-package gallia.reflect
+package gallia
+package reflect
 
 import enumeratum.{Enum, EnumEntry}
 

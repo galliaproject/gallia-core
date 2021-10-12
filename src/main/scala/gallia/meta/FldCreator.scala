@@ -1,10 +1,10 @@
-package gallia.meta
+package gallia
+package meta
 
 import aptus.Nes
 
-import gallia._
-import gallia.reflect.Container._
-import gallia.reflect.BasicType._
+import reflect.Container._
+import reflect.BasicType._
 
 // ===========================================================================
 @gallia.TypeMatching

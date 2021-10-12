@@ -1,9 +1,9 @@
-package gallia.reflect
+package gallia
+package reflect
 
 import aptus.{String_, Seq_}
 
-import gallia._
-import gallia.meta.InfoUtils
+import meta.InfoUtils
 
 // ===========================================================================
 case class TypeLeaf(

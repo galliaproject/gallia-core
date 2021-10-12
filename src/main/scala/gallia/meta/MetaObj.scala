@@ -1,10 +1,10 @@
-package gallia.meta
+package gallia
+package meta
 
 import aptus.{Anything_, String_, Seq_}
 import aptus.DebugString
 
-import gallia._
-import gallia.data.json.JsonParsing
+import data.json.JsonParsing
 
 // ===========================================================================
 object MetaObj { // 201222111332

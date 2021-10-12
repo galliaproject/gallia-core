@@ -1,7 +1,7 @@
-package gallia.plans
+package gallia
+package plans
 
-import gallia._
-import gallia.FunctionWrappers._
+import FunctionWrappers._
 
 // ===========================================================================
 // note: to be phased out

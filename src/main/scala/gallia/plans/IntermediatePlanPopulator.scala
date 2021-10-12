@@ -1,9 +1,10 @@
-package gallia.plans
+package gallia
+package plans
 
 import aptus.Anything_
 
-import gallia.env.ActionDag
-import gallia.heads.HeadsNestingHandler.NestingMetaPlaceholder
+import env.ActionDag
+import heads.HeadsNestingHandler.NestingMetaPlaceholder
 
 // ===========================================================================
 object IntermediatePlanPopulator {

@@ -1,9 +1,9 @@
-package gallia.plans
+package gallia
+package plans
 
 import aptus._
 
-import gallia._
-import gallia.dag._
+import dag._
 
 // ===========================================================================
 case class AtomPlan(dag: DAG[AtomNode]) {

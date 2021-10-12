@@ -1,7 +1,7 @@
-package gallia.reflect
+package gallia
+package reflect
 
 import aptus.String_
-import gallia.WTT
 
 // ===========================================================================
 case class Field(key: String, node: TypeNode) {

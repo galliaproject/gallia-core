@@ -1,4 +1,5 @@
-package gallia.meta
+package gallia
+package meta
 
 // ===========================================================================
 @aptus.pseudosealed /* only two: BasicType and Cls (nesting) */ trait Containee {

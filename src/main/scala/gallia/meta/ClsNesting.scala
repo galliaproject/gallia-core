@@ -1,6 +1,5 @@
-package gallia.meta
-
-import gallia._
+package gallia
+package meta
 
 // ===========================================================================
 trait ClsNesting { dis: Cls =>

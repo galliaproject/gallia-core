@@ -1,8 +1,7 @@
-package gallia.meta
+package gallia
+package meta
 
 import aptus.{Anything_, Seq_}
-
-import gallia._
 
 // ===========================================================================
 trait ClsNestingRelated { self: Cls =>

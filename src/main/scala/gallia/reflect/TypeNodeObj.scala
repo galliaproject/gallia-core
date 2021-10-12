@@ -1,6 +1,5 @@
-package gallia.reflect
-
-import gallia._
+package gallia
+package reflect
 
 // ===========================================================================
 object TypeNodeObj {

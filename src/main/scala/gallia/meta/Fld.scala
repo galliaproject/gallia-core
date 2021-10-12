@@ -1,7 +1,7 @@
-package gallia.meta
+package gallia
+package meta
 
 import aptus.{Seq_, String_}
-import gallia._
 
 // ===========================================================================
 case class FldPair(field1: Fld, field2: Fld) {

@@ -1,13 +1,13 @@
-package gallia.plans
+package gallia
+package plans
 
 import aptus.Anything_
 
-import gallia._
-import gallia.run._
-import gallia.dag._
-import gallia.env.ActionDag
-import gallia.actions.in.InMemoryMetaInput
-import gallia.heads.HeadsNestingHandler.NestingMetaPlaceholder
+import run._
+import dag._
+import env.ActionDag
+import actions.in.InMemoryMetaInput
+import heads.HeadsNestingHandler.NestingMetaPlaceholder
 
 // ===========================================================================
 case class MetaPlan(dag: ActionDag) { // requires slightly larger glasses

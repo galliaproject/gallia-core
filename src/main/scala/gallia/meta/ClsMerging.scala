@@ -1,9 +1,9 @@
-package gallia.meta
+package gallia
+package meta
 
 import aptus.Anything_
 
-import gallia._
-import gallia.heads.merging.MergingData._
+import heads.merging.MergingData._
 
 // ===========================================================================
 trait ClsMerging { self: Cls =>

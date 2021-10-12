@@ -1,8 +1,7 @@
-package gallia.meta
+package gallia
+package meta
 
 import aptus.Anything_
-
-import gallia._
 
 // ===========================================================================
 trait ClsBasics { self: Cls =>

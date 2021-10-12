@@ -1,12 +1,12 @@
-package gallia.domain
+package gallia
+package domain
 
 import aptus.{Anything_, Seq_}
 import aptus.Tuple2_
 
-import gallia._
-import gallia.vldt._
-import gallia.reflect.TypeNode
-import gallia.meta.{Fld => _, _}
+import vldt._
+import reflect.TypeNode
+import meta.{Fld => _, _}
 
 // ===========================================================================
 sealed trait KVE { // Key-Value Entry

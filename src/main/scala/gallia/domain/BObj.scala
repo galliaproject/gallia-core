@@ -1,7 +1,7 @@
-package gallia.domain
+package gallia
+package domain
 
-import gallia._
-import gallia.heads.Head
+import heads.Head
 
 // ===========================================================================
 case class BObj private[gallia](entries: gallia.domain.KVEs) { // TODO: t210124100009 - no proper rationale for "B" prefix

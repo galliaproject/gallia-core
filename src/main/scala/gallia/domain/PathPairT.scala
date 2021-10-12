@@ -1,6 +1,5 @@
-package gallia.domain
-
-import gallia._
+package gallia
+package domain
 
 // ===========================================================================
 case class PathPair(path: KPath, optional: Boolean) {

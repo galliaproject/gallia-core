@@ -1,13 +1,13 @@
-package gallia.inferring.table
+package gallia
+package inferring.table
 
 import aptus.Seq_
-import gallia._
 
-import gallia.reflect.BasicType
-import gallia.meta.Fld
-import gallia.meta.Info
-import gallia.reflect.Container
-import gallia.io.CellConf
+import reflect.BasicType
+import meta.Fld
+import meta.Info
+import reflect.Container
+import io.CellConf
 
 // ===========================================================================
 object TableSchemaInferrer {

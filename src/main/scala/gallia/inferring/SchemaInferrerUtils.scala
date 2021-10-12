@@ -1,9 +1,9 @@
-package gallia.inferring
+package gallia
+package inferring
 
 import aptus._
 
-import gallia._
-import gallia.meta.{Cls => _, Fld => _, _}
+import meta.{Cls => _, Fld => _, _}
 
 // ===========================================================================
 private object SchemaInferrerUtils {

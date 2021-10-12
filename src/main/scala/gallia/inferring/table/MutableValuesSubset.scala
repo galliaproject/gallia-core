@@ -1,12 +1,12 @@
-package gallia.inferring.table
+package gallia
+package inferring.table
 
 import scala.collection.mutable
 
 import aptus.{Seq_, String_}
 
-import gallia._
-import gallia.reflect.BasicType
-import gallia.meta.Info
+import reflect.BasicType
+import meta.Info
 
 // ===========================================================================
 class MutableValuesSubset(keys: Seq[Key], max: Int) {

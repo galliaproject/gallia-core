@@ -1,10 +1,10 @@
-package gallia.env
+package gallia
+package env
 
-import gallia._
-import gallia.dag.NodeId
-import gallia.actions.ActionsOthers
-import gallia.heads.HeadEnd
-import gallia.heads.grouping.HasAs
+import dag.NodeId
+import actions.ActionsOthers
+import heads.HeadEnd
+import heads.grouping.HasAs
 
 // ===========================================================================
 class Handler() { // TODO: t210128152949 - add missing cycle detection

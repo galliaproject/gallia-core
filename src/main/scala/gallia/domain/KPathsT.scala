@@ -1,7 +1,7 @@
-package gallia.domain
+package gallia
+package domain
 
-import gallia._
-import gallia.vldt.MetaValidation
+import vldt.MetaValidation
 
 // ===========================================================================
 trait KPathSeq {

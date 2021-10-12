@@ -1,9 +1,9 @@
-package gallia.domain
+package gallia
+package domain
 
 import aptus.Anything_
 
-import gallia._
-import gallia.heads.Head
+import heads.Head
 
 // ===========================================================================
 case class AObj(c: Cls, u: Obj) { // TODO: tt210124100009 - initially stood for "Annotated Object"...

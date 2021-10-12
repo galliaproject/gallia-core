@@ -1,9 +1,9 @@
-package gallia.inferring
+package gallia
+package inferring
 
-import gallia._
-import gallia.reflect.Container._
-import gallia.reflect.BasicType._
-import gallia.meta.{Cls => _, Fld => _, _}
+import reflect.Container._
+import reflect.BasicType._
+import meta.{Cls => _, Fld => _, _}
 
 // ===========================================================================
 object SchemaInferrer { // mostly for JSON for now...

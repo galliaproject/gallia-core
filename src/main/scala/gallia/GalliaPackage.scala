@@ -27,6 +27,17 @@ val  Obj  = gallia.data.single  .Obj
   type Objs = gallia.data.multiple.Objs
   val  Objs = gallia.data.multiple.Objs
 
+  // ---------------------------------------------------------------------------
+type AObj  = gallia.domain.AObj
+  val  AObj  = gallia.domain.AObj
+  type BObj  = gallia.domain.BObj
+  val  BObj  = gallia.domain.BObj
+
+  type AObjs = gallia.domain.AObjs
+  val  AObjs = gallia.domain.AObjs
+  type BObjs = gallia.domain.BObjs
+  val  BObjs = gallia.domain.BObjs
+
 // ---------------------------------------------------------------------------
   type     Cls = meta.Cls
   lazy val Cls = meta.Cls

@@ -1,6 +1,7 @@
-package gallia.inferring.table
+package gallia
+package inferring.table
 
-import gallia.reflect.BasicType
+import reflect.BasicType
 
 // ===========================================================================
 object TypeGuessing {

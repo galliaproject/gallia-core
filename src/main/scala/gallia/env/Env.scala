@@ -1,7 +1,8 @@
-package gallia.env
+package gallia
+package env
 
 import aptus.String_
-import gallia.dag._
+import dag._
 
 // ===========================================================================
 private[gallia] object Env extends Env

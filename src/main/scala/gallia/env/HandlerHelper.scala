@@ -1,7 +1,7 @@
-package gallia.env
+package gallia
+package env
 
-import gallia._
-import gallia.dag._
+import dag._
 
 // ===========================================================================
 class HandlerHelper() {

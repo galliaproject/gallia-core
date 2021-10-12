@@ -1,8 +1,8 @@
-package gallia.domain
+package gallia
+package domain
 
-import gallia._
-import gallia.target.utils.TargetQueryUtils.tqkpath
-import gallia.target.TqKPath
+import target.utils.TargetQueryUtils.tqkpath
+import target.TqKPath
 
 // ===========================================================================
 case class Sorter(

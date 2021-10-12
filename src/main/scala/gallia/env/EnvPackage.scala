@@ -1,6 +1,6 @@
 package gallia
 
-import gallia.dag._
+import dag._
 
 // ===========================================================================
 package object env {

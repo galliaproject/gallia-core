@@ -1,9 +1,10 @@
-package gallia.domain
+package gallia
+package domain
 
 import aptus._
-import gallia._
-import gallia.target._
-import gallia.vldt.MetaValidation
+
+import target._
+import vldt.MetaValidation
 
 // ===========================================================================
 trait TKPathSeq extends KPathSeq {

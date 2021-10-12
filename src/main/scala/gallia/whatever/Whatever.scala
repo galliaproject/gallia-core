@@ -1,7 +1,7 @@
-package gallia.whatever
+package gallia
+package whatever
 
-import gallia._
-import gallia.vldt._Error.Runtime.WhateverOperationForbidden
+import vldt._Error.Runtime.WhateverOperationForbidden
 
 // ===========================================================================
 /**

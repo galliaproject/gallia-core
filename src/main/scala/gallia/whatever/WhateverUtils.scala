@@ -1,8 +1,7 @@
-package gallia.whatever
+package gallia
+package whatever
 
-import aptus.Seq_
-import aptus.Int_
-import aptus.Double_
+import aptus.{Seq_, Int_, Double_}
 
 // ===========================================================================
 object WhateverUtils {

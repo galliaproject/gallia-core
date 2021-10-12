@@ -1,7 +1,7 @@
-package gallia.whatever
+package gallia
+package whatever
 
 import java.time.{LocalDate, LocalDateTime}
-import gallia.dataError
 
 // ===========================================================================
 object WhateverImplicits {

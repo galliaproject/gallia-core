@@ -1,4 +1,5 @@
-package gallia.whatever.boilerplate
+package gallia
+package whatever.boilerplate
 
 // ===========================================================================
 object WhateverDividedBy {

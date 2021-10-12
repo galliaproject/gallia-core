@@ -1,7 +1,5 @@
-package gallia.result
-
-import gallia._
-import gallia.domain.{AObj, AObjs}
+package gallia
+package result
 
 // ===========================================================================
 class SuccessResult[$Data](

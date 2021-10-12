@@ -1,7 +1,7 @@
-package gallia.run
+package gallia
+package run
 
 import aptus.{String_, Seq_}
-import gallia._
 
 // ===========================================================================
 sealed trait ResultSchema {

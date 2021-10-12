@@ -1,6 +1,5 @@
-package gallia.whatever
-
-import gallia._
+package gallia
+package whatever
 
 // ===========================================================================
 /** when type is known (eg _.size will always result in a Int) but we need to remain in "whatever" land */

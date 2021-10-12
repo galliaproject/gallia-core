@@ -1,9 +1,9 @@
-package gallia.result
+package gallia
+package result
 
 import aptus.Seq_
 
-import gallia._
-
+// ===========================================================================
 class RunResult[$SuccessResult <: SuccessResult[$Data], $Data](val either: Either[MetaErrorResult, $SuccessResult]) {
 
     override def toString: String = formatDefault

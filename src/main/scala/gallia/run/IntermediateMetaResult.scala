@@ -1,10 +1,10 @@
-package gallia.run
+package gallia
+package run
 
 import aptus.{String_, Seq_, Option_}
 
-import gallia._
-import gallia.plans._
-import gallia.result._
+import plans._
+import result._
 
 // ===========================================================================
 case class IntermediateMetaResult(dag: gallia.dag.DAG[IntermediateMetaResultNode]) {

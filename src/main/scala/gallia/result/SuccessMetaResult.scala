@@ -1,10 +1,10 @@
-package gallia.result
+package gallia
+package result
 
 import aptus.Seq_
 
-import gallia._
-import gallia.dag._
-import gallia.plans.ActionNode
+import dag._
+import plans.ActionNode
 
 // ===========================================================================
 case class SuccessMetaResult(dag: DAG[SuccessMetaResultNode]) {

@@ -1,7 +1,7 @@
-package gallia.run
+package gallia
+package run
 
-import gallia._
-import gallia.actions.in.InMemoryMetaInput
+import actions.in.InMemoryMetaInput
 
 // ===========================================================================
 object IntermediateMetaResultNodeCreator {

@@ -22,16 +22,16 @@ case class CellConf(
   private val soleArraySeparator: Option[String] = if (arraySeparators.size == 1) Some(arraySeparators.head) else None
 
   // ===========================================================================
-  def inferContainerOnly(value: String): Container =
+  def inferContainerOnly(value: String): Container = {
            if (isNull (value)) Container._Opt
       else if (isArray(value)) Container._Nes
-      else                     Container._One
+      else                     Container._One }
 
   // ---------------------------------------------------------------------------
-  def inferInfo(value: String): Info =
+  def inferInfo(value: String): Info = {
            if (isNull (value)) Info(Container._Opt, BasicType._String)
       else if (isArray(value)) Info(Container._Nes, arrayType(splitArray(value)))
-      else                     Info(Container._One, TypeGuessing(value))
+      else                     Info(Container._One, TypeGuessing(value)) }
 
     // ---------------------------------------------------------------------------
     private def arrayType(values: Seq[String]): BasicType =

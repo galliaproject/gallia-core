@@ -4,7 +4,7 @@ package meta
 import aptus.{Anything_, Seq_}
 
 // ===========================================================================
-trait ClsHelper { _: Cls =>
+trait ClsHelper { ignored: Cls =>
   def field (ren  : Ren  ): Fld = field_(ren ).getOrElse(aptus.illegalState(ren             , keys.#@@))
   def field (path : RPath): Fld = field_(path).getOrElse(aptus.illegalState(path            , keys.#@@))
   def field (key  : Key  ): Fld = field_(key ).getOrElse(aptus.illegalState(key.name        , keys.#@@))

@@ -4,7 +4,7 @@ package heads
 import actions.ActionsZZFiltering._
 
 // ===========================================================================
-trait HeadZFiltering { _: HeadZ => // pretty messy, need to find a cleaner way to keep find and filter more in sync
+trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner way to keep find and filter more in sync
 
   // TODO: t201023083923 - add find/filter to HeadU as well, to make it an "option" (relates to t201021120753 - HeadOptionU)
 

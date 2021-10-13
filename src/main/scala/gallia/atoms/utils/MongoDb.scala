@@ -42,7 +42,7 @@ object MongoDb {
     // ===========================================================================
     object MongoDbCmd {
 
-      private val Supported = Set('find, 'filter, 'projection, 'sort, 'limit)
+      private val Supported = Set("find", "filter", "projection", "sort", "limit")
 
       // ---------------------------------------------------------------------------
       val Dummy =
@@ -67,30 +67,30 @@ object MongoDb {
         val c = gallia.data.json.JsonParsing.parseObject(command) // TODO: wrap...
 
         // TODO: a basic gson version?
-        c.string_('find)
+        c.string_("find")
           .map { collection =>
             // TODO: convenient/lightweight cc-based validation out there?
 
-            if (!c.keySet.forall(Supported.contains)) ??? // TODO
+            if (!c.skeySet.forall(Supported.contains)) ??? // TODO
 
-            val filterOpt = c.opt('filter).map {
+            val filterOpt = c.opt("filter").map {
                 case x: gallia.Obj => x.formatCompactJson
                 case x => ???
               }
 
-            val projectionOpt = c.opt('projection).map {
+            val projectionOpt = c.opt("projection").map {
                 case x: gallia.Obj => x.formatCompactJson
                 case x => ???
               }
 
-            val sortOpt = c.opt('sort).map {
+            val sortOpt = c.opt("sort").map {
                 case x: gallia.Obj => x.formatCompactJson
                 case x => ???
               }
 
             val limitOpt =
               c
-                .text_('limit)
+                .text_("limit")
                 .map { x => if (!x.isValidInt) x.toInt else ??? } // TODO
 
             MongoDbCmd(

@@ -7,9 +7,9 @@ import meta._
 
 // ===========================================================================
 private[reducing] object ReducingStats { // 210118083814
-  private val _present  = '_present
-  private val _distinct = '_distinct
-  private val _value    = '_value
+  private val _present  = Symbol("_present")
+  private val _distinct = Symbol("_distinct")
+  private val _value    = Symbol("_value")
 
   // ---------------------------------------------------------------------------
   //TODO:

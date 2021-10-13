@@ -30,8 +30,8 @@ private object ReducingTypeUtils {
   def baseData(f: List[Int   ] => Any, g: List[Double] => Any)(ignored: Boolean, numTypeOpt: Option[NumericalType]): Values => Any =
     numTypeOpt
       .map {
-        case BasicType._Int    => x: Values => _flattenedInts   (x).pipe(f)
-        case BasicType._Double => x: Values => _flattenedDoubles(x).pipe(g)
+        case BasicType._Int    => (x: Values) => _flattenedInts   (x).pipe(f)
+        case BasicType._Double => (x: Values) => _flattenedDoubles(x).pipe(g)
         case x => x.p; ??? }
       .getOrElse { ??? }//FIXME: t210118084833 - dates, strings...
 
@@ -39,11 +39,11 @@ private object ReducingTypeUtils {
   def statsData(optional: Boolean, numTypeOpt: Option[NumericalType]) =
     numTypeOpt
       .map {
-        case BasicType._Int    => x: Values => ReducingStats.Data.ints   (optional)(x)
-        case BasicType._Double => x: Values => ReducingStats.Data.doubles(optional)(x)
+        case BasicType._Int    => (x: Values) => ReducingStats.Data.ints   (optional)(x)
+        case BasicType._Double => (x: Values) => ReducingStats.Data.doubles(optional)(x)
         case x => x.p; ??? }
       .getOrElse {
-        x: Values => ReducingStats.Data.strings(optional)(x)
+        (x: Values) => ReducingStats.Data.strings(optional)(x)
         //TODO: dates, ...
       }
 

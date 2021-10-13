@@ -24,7 +24,6 @@ trait Aliases {
   private[gallia] type SparkColl[A] = collection.   TraversableOnce[A]
 
   // ===========================================================================
-
   type Regex   = scala.util.matching.Regex
   type Pattern = java.util.regex.Pattern
 

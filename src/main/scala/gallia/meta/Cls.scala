@@ -85,15 +85,15 @@ case class Cls(fields: Seq[Fld])
     private[meta /*cls*/] def rewrap(fields: Seq[Fld]) = Cls(fields)
 
     // ===========================================================================
-    private[meta /*cls*/] def requireNewKey   (target : Key ) { requireNewKeys(Keyz.from(target)) }
-    private[meta /*cls*/] def requireNewKeys  (targets: Keyz) { targets.values.intersect(this.keys).in.someIf(!_.isEmpty).foreach(x => aptus.illegalState(s"201124171037:${x.#@@}(${keys.#@@})") /*TODO*/) }
+    private[meta /*cls*/] def requireNewKey   (target : Key ) = { requireNewKeys(Keyz.from(target)) }
+    private[meta /*cls*/] def requireNewKeys  (targets: Keyz) = { targets.values.intersect(this.keys).in.someIf(!_.isEmpty).foreach(x => aptus.illegalState(s"201124171037:${x.#@@}(${keys.#@@})") /*TODO*/) }
 
-    private[meta /*cls*/] def requireKnownKey (target : Key ) { requireKnownKeys(Keyz.from(target)) }
-    private[meta /*cls*/] def requireKnownKeys(targets: Keyz) { targets.values.diff(this.keys).in.someIf(!_.isEmpty).foreach(x => aptus.illegalState(s"201124171038:${x.#@@}(${keys.#@@})") /*TODO*/) }
+    private[meta /*cls*/] def requireKnownKey (target : Key ) = { requireKnownKeys(Keyz.from(target)) }
+    private[meta /*cls*/] def requireKnownKeys(targets: Keyz) = { targets.values.diff(this.keys).in.someIf(!_.isEmpty).foreach(x => aptus.illegalState(s"201124171038:${x.#@@}(${keys.#@@})") /*TODO*/) }
 
     // ---------------------------------------------------------------------------
-    private[meta /*cls*/] def requireRenamingKey (target : RenW ) { requireRenamingKeys(Renz.from(target)) }
-    private[meta /*cls*/] def requireRenamingKeys(targets: RenWz) { requireKnownKeys(targets.fromz); requireNewKeys  (targets.toz) }
+    private[meta /*cls*/] def requireRenamingKey (target : RenW ) = { requireRenamingKeys(Renz.from(target)) }
+    private[meta /*cls*/] def requireRenamingKeys(targets: RenWz) = { requireKnownKeys(targets.fromz); requireNewKeys  (targets.toz) }
 
     // ===========================================================================
     def toObj2 = MetaObj.cls(this)
@@ -106,11 +106,11 @@ case class Cls(fields: Seq[Fld])
     def formatShort : String = MetaObj.formatClassDebug(this).sectionAllOff("<root>")
     def formatFull  : String = ???//MetaObj.cls (this)
 
-    def printShort() { formatShort.p; () }
-    def printFull () { formatFull .p; () }
+    def printShort() = { formatShort.p; () }
+    def printFull () = { formatFull .p; () }
 
-    def writeShort(out: String) { formatShort.writeFileContent(out); () }
-    def writeFull (out: String) { formatFull .writeFileContent(out); () }
+    def writeShort(out: String) = { formatShort.writeFileContent(out); () }
+    def writeFull (out: String) = { formatFull .writeFileContent(out); () }
 
     // ===========================================================================
     def valueFromObj  (instantiator: Instantiator)(value: Any): Any = value.asInstanceOf[              Obj  ]      .pipe(instantiator.instantiateRecursively(this, _))

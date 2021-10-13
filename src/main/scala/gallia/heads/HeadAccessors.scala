@@ -5,7 +5,7 @@ import aptus.{One, Opt, Pes, Nes}
 
 // ===========================================================================
 @TypeMatching
-private[gallia] trait HeadUAccessors { _: HeadU =>
+private[gallia] trait HeadUAccessors { ignored: HeadU =>
 
   def string    (key: KPathW): HeadV[One[String]] = typed  [String](key)
   def string_   (key: KPathW): HeadV[Opt[String]] = typed_ [String](key)
@@ -138,7 +138,7 @@ private[gallia] trait HeadUAccessors { _: HeadU =>
 
 // ===========================================================================
 @TypeMatching
-private[gallia] trait HeadZAccessors { _: HeadZ => // TODO: t210202101142 - keep "accessor"?
+private[gallia] trait HeadZAccessors { ignored: HeadZ => // TODO: t210202101142 - keep "accessor"?
 
   def strings   (key: KPathW): HeadV[Nes[String]] = typeds [String](key)
   def strings_  (key: KPathW): HeadV[Pes[String]] = typeds_[String](key)

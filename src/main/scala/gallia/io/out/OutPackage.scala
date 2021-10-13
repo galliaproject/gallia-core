@@ -31,7 +31,7 @@ package object out extends _io with __io {
 
       def flushModulo = flushModuloOpt.getOrElse(FileLikeWriteContext.DefaultFlushModulo)
 
-      def log(counter: Long) { logModuloOpt.foreach(_.apply(counter)) }
+      def log(counter: Long) = { logModuloOpt.foreach(_.apply(counter)) }
     }
 
     // ===========================================================================

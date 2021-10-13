@@ -5,7 +5,7 @@ import actions.ActionsFor._
 import selection.untyped.UtsBoilerplate._
 
 // ===========================================================================
-trait HeadUFors { _: HeadU =>
+trait HeadUFors { ignored: HeadU =>
     /* TODO: t201007093053 - forKeyPair, for group(_.firstKey).by(_.lastKey) */
 
     // ---------------------------------------------------------------------------
@@ -57,7 +57,7 @@ trait HeadUFors { _: HeadU =>
   }
 
   // ===========================================================================
-  trait HeadZFors { _: HeadZ =>
+  trait HeadZFors { ignored: HeadZ =>
     /* TODO: t201007093053 - forKeyPair, for group(_.firstKey).by(_.lastKey) */
 
     // ---------------------------------------------------------------------------

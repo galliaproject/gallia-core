@@ -5,7 +5,7 @@ import FunctionWrappers._
 import actions.ActionsUUFusion._
 
 // ===========================================================================
-trait HeadCommonFusion[F <: HeadCommon[F]] { _: HeadCommon[F] =>
+trait HeadCommonFusion[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   import TSL.FuseFission._
 
   // ---------------------------------------------------------------------------

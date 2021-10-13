@@ -67,7 +67,7 @@ case class Fld(key: Key, info: Info) extends FldLike {
 
   // ===========================================================================
   object Fld {
-    val Dummy = Fld('_dummy, Info.oneString)
+    val Dummy = Fld(Symbol("_dummy"), Info.oneString)
 
     // ---------------------------------------------------------------------------
     def one(key: Key, containee: Containee) = Fld(key, Info(Container._One, containee))

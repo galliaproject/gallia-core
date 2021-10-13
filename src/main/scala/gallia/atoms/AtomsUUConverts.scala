@@ -56,34 +56,33 @@ object AtomsUUConverts {
         _TransformVV(target, toFlag(trueValue)).naive(o)
 
       // ---------------------------------------------------------------------------
-      private def toFlag(trueValue: Any) = (value: Any) =>
+      private def toFlag(trueValue: Any) = { (value: Any) =>
         if (target.matching(value, trueValue)) true
-        else
+        else {
                if (value == None) None
           else if (strict)        dataError(s"TODO:210108150541:${target}:${value}:${origin}")
-          else                    None }
+          else                    None } } }
 
     // ===========================================================================
     case class _ConvertToBoolean(origin: CallSite)(target: PathPair, trueValue: Any, falseValue: Any) extends AtomUU { def naive(o: Obj) =
         _TransformVV(target, toBoolean(trueValue, falseValue)).naive(o)
 
       // ---------------------------------------------------------------------------
-      private def toBoolean(trueValue: Any, falseValue: Any) = (value: Any) =>
+      private def toBoolean(trueValue: Any, falseValue: Any) = { (value: Any) =>
                if (target.matching(value, trueValue )) true
           else if (target.matching(value, falseValue)) false
-          else                                         dataError(s"TODO:210108093025:${value}:${trueValue}:${falseValue}:${origin}") }
+          else                                         dataError(s"TODO:210108093025:${value}:${trueValue}:${falseValue}:${origin}") } }
 
     // ===========================================================================
     case class _ConvertToOptionalBoolean(origin: CallSite)(target: PathPair, trueValue: Any, falseValue: Any, nullValue: Any) extends AtomUU { def naive(o: Obj) =
         _TransformVV(target, toOptionalBoolean(trueValue, falseValue, nullValue)).naive(o)
 
       // ---------------------------------------------------------------------------
-      private def toOptionalBoolean(trueValue: Any, falseValue: Any, nullValue: Any) =
-        (value: Any) =>
-               if (target.matching(value, trueValue )) true
-          else if (target.matching(value, falseValue)) false
-          else if (target.matching(value, nullValue )) None
-          else                                         dataError(s"TODO:210108093026:${value}:${trueValue}:${falseValue}:${nullValue}:${origin}") }
+      private def toOptionalBoolean(trueValue: Any, falseValue: Any, nullValue: Any) = { (value: Any) =>
+             if (target.matching(value, trueValue )) true
+        else if (target.matching(value, falseValue)) false
+        else if (target.matching(value, nullValue )) None
+        else                                         dataError(s"TODO:210108093026:${value}:${trueValue}:${falseValue}:${nullValue}:${origin}") } }
 
 }
 

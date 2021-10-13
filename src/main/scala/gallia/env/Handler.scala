@@ -23,7 +23,7 @@ class Handler() { // TODO: t210128152949 - add missing cycle detection
   // ---------------------------------------------------------------------------
   // TODO: t210116192032 - generalize mechanism
   def chainzzWithAs(head: HeadZ)(action: ActionZZ): HeadZ with HasAs = head.rewrapWithAs(_helper.chain(head.nodeId, action))
-    def updateAs(nodeId: NodeId, key: Key) { _helper.updateAs(nodeId, key) }
+    def updateAs(nodeId: NodeId, key: Key) = { _helper.updateAs(nodeId, key) }
 
   // ---------------------------------------------------------------------------
   def chainzu         (head: HeadZ)(action: ActionZU): HeadU     = head.headU(_helper.chain(head.nodeId, action))

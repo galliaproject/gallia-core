@@ -39,7 +39,7 @@ object GsonToObj {
             case _: JsonNull                   => None }
 
         // ---------------------------------------------------------------------------
-        private def primitiveValue(x: JsonPrimitive): AnyPrimitiveValue =
+        private def primitiveValue(x: JsonPrimitive): AnyPrimitiveValue = {
           // unfortunately no access to underlying Object value; TODO: t201103154749 - look into cost of reflection setAccessible(true)
                if (x.isString ) x.getAsString.asInstanceOf[String]
           else if (x.isBoolean) x.getAsBoolean
@@ -49,7 +49,8 @@ object GsonToObj {
              * - AtomicInteger, AtomicLong,
              * - DoubleAccumulator, DoubleAdder,
              * - LongAccumulator, LongAdder */
-            toScalaGson(x.getAsNumber) // TODO: in which case will "value: Object" actually already be a Number (aot a LazilyParsedNumber)?
+            toScalaGson(x.getAsNumber) } // TODO: in which case will "value: Object" actually already be a Number (aot a LazilyParsedNumber)?
+
   // ===========================================================================
   private def toScalaGson: PartialFunction[Number, Any] =
       Java.toScalaNumber

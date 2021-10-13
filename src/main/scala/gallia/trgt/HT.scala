@@ -11,17 +11,17 @@ class HT(
     object HT {
 
       def parse[T: WTT]: HT =
-        node[T].pipe { node =>
+        typeNode[T].pipe { node =>
           new HT(node, instantiator[T](node)) }
 
       // ---------------------------------------------------------------------------
-              def instantiator[T: WTT]              : Instantiator = instantiator[T](node[T]) //TODO:to private
-      private def instantiator[T: WTT](to: TypeNode): Instantiator =
+              def instantiator[T: WTT]              : Instantiator = instantiator[T](typeNode[T]) //TODO:to private
+      private def instantiator[T: WTT](to: TypeNode): Instantiator = {
         if (!to.isContainedDataClass) null // TODO
-        else
-               if (to.isOptionOfSeq)        Instantiator.fromFirstTypeArgFirstTypeArg[T] // eg Option[Seq[MyCc]]
-          else if (to.isSeq || to.isOption) Instantiator.fromFirstTypeArg            [T] // eg Option[    MyCc ]
-          else                              Instantiator.fromType                    [T] // eg            MyCc
+        else {
+               if (to.isOptionOfSeq)        Instantiator.fromFirstTypeArgFirstTypeArg[T]     // eg Option[Seq[MyCc]]
+          else if (to.isSeq || to.isOption) Instantiator.fromFirstTypeArg            [T]     // eg Option[    MyCc ]
+          else                              Instantiator.fromType                    [T] } } // eg            MyCc
     }
 
   // ===========================================================================
@@ -31,8 +31,8 @@ class HT(
     object HT2 {
       def from[T1: WTT, T2: WTT] =
         new HT2(
-          new HT(node[T1], HT.instantiator[T1]),
-          new HT(node[T2], HT.instantiator[T2]) )
+          new HT(typeNode[T1], HT.instantiator[T1]),
+          new HT(typeNode[T2], HT.instantiator[T2]) )
     }
 
 // ===========================================================================

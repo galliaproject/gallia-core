@@ -7,12 +7,12 @@ import aptus.MirrorIndex
 import ReadProjection._
 
 // ===========================================================================
-trait CanSetMemoryModeFluency[Fluency] { self: HasSelf[Fluency] => // TODO: t210114145059 - generalize: inMemory, iterator, RDD (StreamerType)
+trait CanSetMemoryModeFluency[Fluency] { ignored: HasSelf[Fluency] => // TODO: t210114145059 - generalize: inMemory, iterator, RDD (StreamerType)
   def iteratorMode: Fluency
 }
 
 // ===========================================================================
-trait CanSetSchemaFluency[Fluency] { _: HasSelf[Fluency] =>
+trait CanSetSchemaFluency[Fluency] { ignored: HasSelf[Fluency] =>
   def explicitSchema(c: Cls): Fluency
   def inferSchema           : Fluency
 

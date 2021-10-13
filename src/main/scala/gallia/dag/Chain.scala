@@ -35,10 +35,10 @@ case class Chain[$NodeType](
   def last = nodes.last
 
   // ---------------------------------------------------------------------------
-  def pair =
+  def pair = {
          if (size == 1) (head, None)
     else if (size == 2) (head, Some(Nil            , last))
-    else                (head, Some(nodes.tail.init, last))
+    else                (head, Some(nodes.tail.init, last)) }
 }
 
 // ===========================================================================

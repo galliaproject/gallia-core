@@ -10,7 +10,7 @@ import heads.common.{Grab, Squash}
 import target.utils.TypedTargetQueryUtils
 
 // ===========================================================================
-trait HeadUSquashing { _: HeadU => // TODO: t210122161652 - favor AtomsVO now?
+trait HeadUSquashing { ignored: HeadU => // TODO: t210122161652 - favor AtomsVO now?
   import TSL.Squash._
 
   // ---------------------------------------------------------------------------
@@ -44,7 +44,7 @@ trait HeadUSquashing { _: HeadU => // TODO: t210122161652 - favor AtomsVO now?
 }
 
 // ===========================================================================
-trait HeadZSquashing { _: HeadZ =>
+trait HeadZSquashing { ignored: HeadZ =>
   import TSL.Squash._
 
   // ---------------------------------------------------------------------------

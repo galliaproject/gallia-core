@@ -21,11 +21,11 @@ class ModifyTableData(conf: CellConf) extends gallia.atoms.utils.ModifyObj { // 
           _.map /* seq   's */(convert(qualifyingField.forceBasicType)) )
 
       // ===========================================================================
-      private def convert(tipe: BasicType)(value: String): Any =
+      private def convert(tipe: BasicType)(value: String): Any = {
              if (tipe.isInt    ) value.toInt
         else if (tipe.isDouble ) value.toDouble
         else if (tipe.isBoolean) gallia.inferring.table.BooleanDetector.forceBoolean(value)
-        else                     value
+        else                     value }
 }
 
 // ===========================================================================

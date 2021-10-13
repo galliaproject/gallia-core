@@ -12,7 +12,7 @@ case class TypeLeaf(
       alias      : Option[FullName] = None, // eg String
 
       dataClass  : Boolean = false, // eg "case class Foo(a: String, b: Int)", but not necessarily all case classes (eg not scala.Some)
-      enum       : Boolean = false,
+      enm        : Boolean = false, // "enum" is reserved in scala 3
       inheritsSeq: Boolean = false,
 
       fields     : Seq[Field] = Nil) {
@@ -49,7 +49,7 @@ case class TypeLeaf(
         else                s"${_formatDefault}${fields.map(_.formatDefault).section2}"
 
       // ---------------------------------------------------------------------------
-      private def _formatDefault: String = s"${name}\t${alias}\t${dataClass}\t${enum}\t${inheritsSeq}"
+      private def _formatDefault: String = s"${name}\t${alias}\t${dataClass}\t${enm}\t${inheritsSeq}"
   }
 
 // ===========================================================================

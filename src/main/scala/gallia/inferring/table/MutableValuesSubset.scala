@@ -15,13 +15,13 @@ class MutableValuesSubset(keys: Seq[Key], max: Int) {
   init()
 
   // ---------------------------------------------------------------------------
-  private def init() {
+  private def init() = {
     keys
       .foreach { key =>
         subsets += key -> mutable.Set[String]() } }
 
   // ===========================================================================
-  def addValues(key: Key, values: Set[String]) {
+  def addValues(key: Key, values: Set[String]) = {
     val _values = subsets(key)
 
     if (_values.size <= max) {

@@ -86,10 +86,10 @@ trait FldLike extends HasKey with InfoLike
 
         // ---------------------------------------------------------------------------
         @NumberAbstraction
-        def numericalTypeOpt: Option[NumericalType] =
+        def numericalTypeOpt: Option[NumericalType] = {
                if (isInt)    BasicType._Int   .in.some
           else if (isDouble) BasicType._Double.in.some
-          else               None
+          else               None }
 
         // ---------------------------------------------------------------------------
         def isNumerical : Boolean = isInt || isDouble // eg for sum-by - FIXME: more allowed types

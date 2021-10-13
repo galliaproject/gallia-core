@@ -5,35 +5,35 @@ package meta
 private object ClsConstants { // TODO: revamp, see t210118084355
 
   val FullPercentiles = cls(
-      'p01        .double,
-      'p05        .double,
-      'p25        .double,
+      Symbol("p01")        .double,
+      Symbol("p05")        .double,
+      Symbol("p25")        .double,
 
-      'p50        .double,
+      Symbol("p50")        .double,
 
-      'p75        .double,
-      'p95        .double,
-      'p99        .double)    
+      Symbol("p75")        .double,
+      Symbol("p95")        .double,
+      Symbol("p99")        .double)    
 
   // ===========================================================================
   val FullDescriptiveStats = cls(
-      'size       .long,
-      'uniq       .long,
+      Symbol("size")       .long,
+      Symbol("uniq")       .long,
 
       // ---------------------------------------------------------------------------
-      'mean       .double,
-      'sd         .double,
+      Symbol("mean")       .double,
+      Symbol("sd")         .double,
 
       // ---------------------------------------------------------------------------
-      'skewness   .double_,
-      'kurtosis   .double_,
+      Symbol("skewness")   .double_,
+      Symbol("kurtosis")   .double_,
 
       // ---------------------------------------------------------------------------
-      'min        .double,
-      'max        .double,
+      Symbol("min")        .double,
+      Symbol("max")        .double,
 
       // ---------------------------------------------------------------------------
-      'percentiles.cls(FullPercentiles))
+      Symbol("percentiles").cls(FullPercentiles))
 
 }
 

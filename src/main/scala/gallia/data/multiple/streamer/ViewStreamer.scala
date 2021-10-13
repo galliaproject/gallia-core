@@ -16,7 +16,7 @@ class ViewStreamer[A](view: ViewRepr[A]) extends Streamer[A] {
   protected def egal(that: Streamer[A]): Boolean = this.toList == that.toList
 
   // ===========================================================================
-  def iteratorAndCloseable: (Iterator[A], java.io.Closeable) = (iterator, new java.io.Closeable { def close() {} })
+  def iteratorAndCloseable: (Iterator[A], java.io.Closeable) = (iterator, new java.io.Closeable { def close() = {} })
 
   def iterator: Iterator[A] = view.iterator
   def toList  : List    [A] = view.force.toList

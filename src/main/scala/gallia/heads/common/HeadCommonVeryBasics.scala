@@ -7,7 +7,7 @@ import domain._
 import actions.ActionsUUVeryBasics._
 
 // ===========================================================================
-trait HeadCommonVeryBasics[F <: HeadCommon[F]] { _: HeadCommon[F] =>
+trait HeadCommonVeryBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
   def reorderKeys           (f: Seq[SKey] => Seq[SKey]): Self2 = self2 :+ ReorderKeys(f, recursively = false)
   def reorderKeysRecursively(f: Seq[SKey] => Seq[SKey]): Self2 = self2 :+ ReorderKeys(f, recursively = true )

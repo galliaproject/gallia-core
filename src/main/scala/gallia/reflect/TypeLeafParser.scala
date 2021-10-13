@@ -31,7 +31,7 @@ private object TypeLeafParser {
       inScopeName = symbol.name.encodedName.toString,      
       alias       = alias,
       dataClass   = isCaseClass && !fullName.startsWith("scala."),
-      enum        = baseClassNames.contains(_EnumEntry),
+      enm         = baseClassNames.contains(_EnumEntry),
       inheritsSeq = baseClassNames.contains(_Seq),
       fields      =
         if (isCaseClass) Field.parseAll(tpe) // may in theory be empty

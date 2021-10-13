@@ -25,9 +25,9 @@ private[gallia] object Env extends Env
     def retrieveDag  (dagId : NodeId): ActionDag  = _dags(dagId)
   
     // ---------------------------------------------------------------------------
-    def associateNode(pair: (NodeId, DagId))     { _nodes += pair }
-    def associateDag (pair: (DagId , ActionDag)) { _dags  += pair }
-    def dissociateDag(dagId: DagId)              { _dags  -= dagId }
+    def associateNode(pair: (NodeId, DagId))     = { _nodes += pair }
+    def associateDag (pair: (DagId , ActionDag)) = { _dags  += pair }
+    def dissociateDag(dagId: DagId)              = { _dags  -= dagId }
   
     // ---------------------------------------------------------------------------
     def retrieveDagFromNode(nodeId: NodeId):         ActionDag  =  retrieveDag(retrieveDagId(nodeId))

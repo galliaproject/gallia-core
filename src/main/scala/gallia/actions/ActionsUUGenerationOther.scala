@@ -9,9 +9,9 @@ import actions.utils.NestedTransform
 
 // ===========================================================================
 object ActionsUUGenerationOther { //TODO: t210111095156 separate all the Whatever and t210111095157 case-class versions...
-	import ActionsUUTransforms.{checkUInput, checkZInput}
-	
-	// ---------------------------------------------------------------------------
+  import ActionsUUTransforms.{checkUInput, checkZInput}
+  
+  // ---------------------------------------------------------------------------
   private val ValuePlaceholder: AnyValue = null // when only need meta
 
   // ---------------------------------------------------------------------------

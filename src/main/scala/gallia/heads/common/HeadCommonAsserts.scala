@@ -7,7 +7,7 @@ import actions.ActionsAsserts._
 import actions.ActionsCustoms._
 
 // ===========================================================================
-trait HeadCommonAsserts[F <: HeadCommon[F]] { _: HeadCommon[F] =>
+trait HeadCommonAsserts[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
   def assertMeta(f: ClsLike => Boolean): Self2 = self2 :+ AssertMeta(f)
 

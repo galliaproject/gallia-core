@@ -12,7 +12,7 @@ object AdjacencyGrouping {
       while (idx < size) {
         val curr = nodes(idx)
         if (grouperPred(curr)) {          
-        	var cont = true
+          var cont = true
           var idx2 = idx          
           while (idx2 < size && cont) {
             val curr2 = nodes(idx2)            

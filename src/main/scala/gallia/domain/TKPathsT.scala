@@ -8,8 +8,8 @@ import vldt.MetaValidation
 
 // ===========================================================================
 trait TKPathSeq extends KPathSeq {
-	  def values: Seq[TKPath]
-	  final def paths : Seq[KPath] = values.map(_.path)
+    def values: Seq[TKPath]
+    final def paths : Seq[KPath] = values.map(_.path)
 
     // ---------------------------------------------------------------------------
     // vldt
@@ -25,7 +25,7 @@ trait TKPathSeq extends KPathSeq {
   // ===========================================================================
   case class TKPaths2(path1: TKPath, path2: TKPath) extends TKPathSeq with HasTypes2 {
     val ht1 = path1; val ht2 = path2
-	  def values = Seq(path1, path2)	  
+    def values = Seq(path1, path2)    
     def kpathT: KPaths2 = paths.force.tuple2.pipe(KPaths2.tupled)    
   }
   

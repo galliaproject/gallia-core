@@ -7,10 +7,10 @@ import dag._
 object NaiveGraphDataRun {
 
   def apply(missingInputs: Map[RootId, NDT])(dag: DAG[AtomNode]) = {
-  	var latest: NDT = null
+    var latest: NDT = null
     val forkJoinData = collection.mutable.Map[NodeId, NDT]() // TODO: t210611140539 - value as queue based on # of consumers
 
-  	// ---------------------------------------------------------------------------      
+    // ---------------------------------------------------------------------------      
     dag
       .chainTraverseNodes // TODO: change to a chain-first kahn-like traversal
       .foreach { node =>  
@@ -34,7 +34,7 @@ object NaiveGraphDataRun {
       }
 
     // ---------------------------------------------------------------------------
-  	latest
+    latest
    }
   
 }

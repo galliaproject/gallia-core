@@ -169,8 +169,8 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
       //def addIndex  : Self = ??? // adds _index
       //def addRank   : Self = ??? // adds _rank (1-based)
 
-@Distributivity def addIndex: HeadS = zz(AddIndex(key = '_index, oneBased = false))
-@Distributivity def addRank : HeadS = zz(AddIndex(key = '_rank,  oneBased = true ))
+@Distributivity def addIndex: HeadS = zz(AddIndex(key = _index, oneBased = false))
+@Distributivity def addRank : HeadS = zz(AddIndex(key = _rank,  oneBased = true ))
 
   // ===========================================================================
   // TODO: t210205122151

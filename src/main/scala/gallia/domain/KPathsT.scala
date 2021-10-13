@@ -14,7 +14,7 @@ trait KPathSeq {
 
   // ---------------------------------------------------------------------------
   case class KPaths2(path1: KPath, path2: KPath) extends KPathSeq {
-	  override val paths: Seq[KPath] = Seq(path1, path2)
+    override val paths: Seq[KPath] = Seq(path1, path2)
     def entries(v1: AnyValue, v2: AnyValue) = Seq(path1 -> v1, path2 -> v2)
   }
 

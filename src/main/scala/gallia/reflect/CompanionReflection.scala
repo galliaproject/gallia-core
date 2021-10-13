@@ -7,10 +7,10 @@ import scala.reflect.internal.Symbols
 // ===========================================================================
 object CompanionReflection {
   
-	private val RuntimeMirror  = RuntimeUniverse.runtimeMirror(getClass.getClassLoader)
-	private val RuntimeMirror2 = RuntimeMirror.asInstanceOf[{ def methodToJava(sym: Symbols#MethodSymbol): java.lang.reflect.Method }] // see https://stackoverflow.com/a/16791962/4228079
+  private val RuntimeMirror  = RuntimeUniverse.runtimeMirror(getClass.getClassLoader)
+  private val RuntimeMirror2 = RuntimeMirror.asInstanceOf[{ def methodToJava(sym: Symbols#MethodSymbol): java.lang.reflect.Method }] // see https://stackoverflow.com/a/16791962/4228079
 
-	// ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
   def apply[T : RuntimeUniverse.WeakTypeTag](methodName: String)(args: Object*): T = {
     val tpe = RuntimeUniverse.weakTypeTag[T].tpe
 
@@ -23,7 +23,7 @@ object CompanionReflection {
           companionObjectInstance[T](tpe),
             args:_*)
       .asInstanceOf[T]
-	}
+  }
   
   // ===========================================================================
   // inspired by https://stackoverflow.com/a/17473794/4228079

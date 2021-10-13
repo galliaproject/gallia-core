@@ -180,16 +180,16 @@ object Whatever {
 
   // ===========================================================================
   import WhateverImplicits._
-    implicit def toBoolean   (value: Whatever) = value.any.boolean
-    implicit def toInt       (value: Whatever) = value.any.int    
-    implicit def toDouble    (value: Whatever) = value.any.double 
-    implicit def toString    (value: Whatever) = value.any.string   
+    implicit def _toBoolean   (value: Whatever): Boolean    = value.any.boolean
+    implicit def _toInt       (value: Whatever): Int        = value.any.int    
+    implicit def _toDouble    (value: Whatever): Double     = value.any.double 
+    implicit def _toString    (value: Whatever): String     = value.any.string   
     
-    implicit def toBigInt    (value: Whatever) = value.any.bigInt 
-    implicit def toBigDecimal(value: Whatever) = value.any.bigDecimal
+    implicit def _toBigInt    (value: Whatever): BigInt     = value.any.bigInt 
+    implicit def _toBigDecimal(value: Whatever): BigDecimal = value.any.bigDecimal
     
-    implicit def toDate      (value: Whatever) = value.any.date    
-    implicit def toDateTime  (value: Whatever) = value.any.dateTime
+    implicit def _toDate      (value: Whatever): LocalDate     = value.any.date    
+    implicit def _toDateTime  (value: Whatever): LocalDateTime = value.any.dateTime
 
   // ===========================================================================
   private def matchError(id: String, value : Any)              = { s"TODO:${id}:${value}:${value.getClass}" }

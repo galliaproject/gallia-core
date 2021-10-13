@@ -26,10 +26,10 @@ sealed trait SupportedUriScheme extends EnumEntry
       lazy val Home = ().fs.homeDirectoryPath()
 
       // ---------------------------------------------------------------------------
-      def normalizeOpt(value: String): Option[String] =
+      def normalizeOpt(value: String): Option[String] = {
              if (value.startsWith( "/")) Some(value                   .prepend("file://"))
         else if (value.startsWith("~/")) Some(value.tail.prepend(Home).prepend("file://"))
-        else                             None
+        else                             None }
     }
 
     // ---------------------------------------------------------------------------

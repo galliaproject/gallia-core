@@ -6,7 +6,7 @@ import aptus.{String_, Double_}
 import actions.ActionsUUReducer0._
 
 // ===========================================================================
-trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { _: HeadCommon[F] =>
+trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
   def transformString (k: RPathW) = transform(_.stringx (k.value))
   def transformInt    (k: RPathW) = transform(_.intx    (k.value))

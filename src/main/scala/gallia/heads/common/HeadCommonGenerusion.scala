@@ -7,7 +7,7 @@ import actions.ActionsUUGenerationOther
 import actions.ActionsUUGenerusion._
 
 // ===========================================================================
-trait HeadCommonGenerusion[F <: HeadCommon[F]] { _: HeadCommon[F] =>
+trait HeadCommonGenerusion[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   import TSL.Generate1.{resolve, tqkpath, resolve2 => resolve2w, resolve3 => resolve3w}
   import TSL.Generate2._
 
@@ -51,7 +51,7 @@ trait HeadCommonGenerusion[F <: HeadCommon[F]] { _: HeadCommon[F] =>
       // ---------------------------------------------------------------------------
       class _FromWhatever(f1: Generate1[WV]) {
           private def wrap[T](f: WV => T) = (x: Any) => f(new WV(x)) // TODO: t210816120207 - should this also abstract multiplicity? 
-      	  
+
           // ---------------------------------------------------------------------------
           def using(f: WV => WV): Self2 = self2 :+
             GenerateWV1a(resolve(f1).tqkpath, d,               wrap(f)(_).any)
@@ -70,7 +70,7 @@ trait HeadCommonGenerusion[F <: HeadCommon[F]] { _: HeadCommon[F] =>
 
       // ===========================================================================
       class _FromWhatever2(f1: Generate1[WV], f2: Generate1[WV]) {
-      	  private def wrap[T](f: (WV, WV) => T) = (x: Any, y: Any) => f(new WV(x), new WV(y))            
+          private def wrap[T](f: (WV, WV) => T) = (x: Any, y: Any) => f(new WV(x), new WV(y))            
 
           // ---------------------------------------------------------------------------
           def using(f: (WV, WV) => WV): Self2 = self2 :+
@@ -84,7 +84,7 @@ trait HeadCommonGenerusion[F <: HeadCommon[F]] { _: HeadCommon[F] =>
 
         // ---------------------------------------------------------------------------
         class _FromWhatever3(f1: Generate1[WV], f2: Generate1[WV], f3: Generate1[WV]) {
-      	  private def wrap[T](f: (WV, WV, WV) => T) = (x: Any, y: Any, z: Any) => f(new WV(x), new WV(y), new WV(z))            
+          private def wrap[T](f: (WV, WV, WV) => T) = (x: Any, y: Any, z: Any) => f(new WV(x), new WV(y), new WV(z))            
 
           def using(f: (WV, WV, WV) => WV): Self2 = self2 :+
             GenerateWV3a(resolve3w(f1, f2, f3).tqkpath3, d,               wrap(f)(_, _, _).any)

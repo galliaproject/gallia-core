@@ -6,7 +6,7 @@ import aptus.Separator
 import actions.ActionsUUNestingRelated._
 
 // ===========================================================================
-trait HeadCommonNestingRelated[F <: HeadCommon[F]] { _: HeadCommon[F] =>
+trait HeadCommonNestingRelated[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   // TODO: see t210109144926 - generalize nest/unnest as "move"
 
   // ---------------------------------------------------------------------------

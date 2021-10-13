@@ -19,28 +19,28 @@ object MetaObj { // 201222111332
       .pipe(cls)
 
   // ===========================================================================
-  def cls(value: Obj): Cls = Cls(value.objs('fields).map(fld))
-  def cls(value: Cls): Obj = obj('fields -> value.fields.map(fld))
+  def cls(value: Obj): Cls = Cls(value.objs("fields").map(fld))
+  def cls(value: Cls): Obj = obj("fields" -> value.fields.map(fld))
 
     // ---------------------------------------------------------------------------
-    def fld(value: Obj): Fld = Fld(value.string('key).symbol, value.obj('info).pipe(info))
-    def fld(value: Fld): Obj = obj('key -> value.key.name, 'info -> value.info.pipe(info))
+    def fld(value: Obj): Fld = Fld(value.string("key").symbol, value.obj("info").pipe(info))
+    def fld(value: Fld): Obj = obj("key" -> value.key.name, "info" -> value.info.pipe(info))
 
       // ---------------------------------------------------------------------------
       // TODO: check enums ok?
 
         def info(value: Obj): Info =
           Info.apply(
-             value.string('container).pipe(Container.withName),
-            (value.force ('containee) match { // see 210118133408
+             value.string("container").pipe(Container.withName),
+            (value.force ("containee") match { // see 210118133408
               case s: String => BasicType.withName(s)
               case o: Obj    => cls(o) }))
 
         // ---------------------------------------------------------------------------
         def info(value: Info): Obj =
           obj(
-              'container -> value.container.entryName,
-              'containee ->
+              "container" -> value.container.entryName,
+              "containee" ->
             (value.containee match {
               case tipe   : BasicType => tipe.entryName
               case nesting: Cls       => cls(nesting) }))

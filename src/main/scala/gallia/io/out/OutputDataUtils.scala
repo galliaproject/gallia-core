@@ -6,7 +6,7 @@ import aptus.String_
 // ===========================================================================
 private[gallia] object OutputDataUtils {
 
-  def writeFileContent(flwc: FileLikeWriteContext)(content: String) {
+  def writeFileContent(flwc: FileLikeWriteContext)(content: String) = {
     val writer = flwc.outputStreamWriter()
     writer.write(content)
     writer.close() // TODO: confirm closes underlyings?
@@ -15,7 +15,7 @@ private[gallia] object OutputDataUtils {
   // ===========================================================================
   // TODO: move to context?
   // TODO; use streamer
-  def writeFileLines(flwc: FileLikeWriteContext)(lines: Iterator[String]) { // TODO: t210202112204 - linesPostprocessing: Option[LinesPostprocessing]
+  def writeFileLines(flwc: FileLikeWriteContext)(lines: Iterator[String]) = { // TODO: t210202112204 - linesPostprocessing: Option[LinesPostprocessing]
     val writer = flwc.outputStreamWriter()
 
     var counter: Long = 0

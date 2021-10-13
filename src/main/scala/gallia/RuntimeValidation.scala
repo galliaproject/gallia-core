@@ -74,10 +74,10 @@ object RuntimeValidation { // 210115153346 - POC
       }
 
     // ---------------------------------------------------------------------------
-    val multiplicityErrors: Option[ValErr] =
+    val multiplicityErrors: Option[ValErr] = {
            if (field.info.   isMultiple && !isMultiple) Some(ValErr(12, key, None, s"should be mult"))
       else if (field.info.isNotMultiple &&  isMultiple) Some(ValErr(13, key, None, s"shouldn't be mult"))
-      else                                              None
+      else                                              None }
 
     // ---------------------------------------------------------------------------
     val typeErrors: Iterable[ValErr] =

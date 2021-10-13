@@ -4,7 +4,7 @@ package reflect
 import atoms.utils.SuperMetaPair
 
 // ===========================================================================
-private[reflect] trait BasicTypeHelper { _: BasicType =>
+private[reflect] trait BasicTypeHelper { ignored: BasicType =>
 
   def _superPair(container: Container, descending: Boolean, missingLast: Boolean) =
       container match {

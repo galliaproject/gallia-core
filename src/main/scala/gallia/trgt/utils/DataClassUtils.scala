@@ -20,20 +20,20 @@ private[target] object DataClassUtils {
       else                            __out(node.forceNonBObjInfo)(value)
 
   // ===========================================================================
-  private def __in(info: Info, instantiator: Instantiator)(value: Any): Any =
+  private def __in(info: Info, instantiator: Instantiator)(value: Any): Any = {
            if (info.isOne) { val c2 = info.forceNestedClass; c2.valueFromObj  (instantiator)(value) }
       else if (info.isOpt) { val c2 = info.forceNestedClass; c2.valueFromObj_ (instantiator)(value) }
       else if (info.isNes) { val c2 = info.forceNestedClass; c2.valueFromObjs (instantiator)(value) }
       else if (info.isPes) { val c2 = info.forceNestedClass; c2.valueFromObjs_(instantiator)(value) }
-      else ???  // TODO: as match rather
+      else ??? } // TODO: as match rather
 
     // ---------------------------------------------------------------------------
-    private def __out(info: Info)(value: Any): Any =
+    private def __out(info: Info)(value: Any): Any = {
            if (info.isOne) { val c2 = info.forceNestedClass; c2.valueToObj  (value) }
       else if (info.isOpt) { val c2 = info.forceNestedClass; c2.valueToObj_ (value) }
       else if (info.isNes) { val c2 = info.forceNestedClass; c2.valueToObjs (value) }
       else if (info.isPes) { val c2 = info.forceNestedClass; c2.valueToObjs_(value) }
-      else ???  // TODO: (match rather)
+      else ??? } // TODO: (match rather)
 
 }
 

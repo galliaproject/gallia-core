@@ -3,7 +3,7 @@ package data.json
 
 // ===========================================================================
 object ObjToGson {
-	import com.google.gson._
+  import com.google.gson._
 
   private lazy val Gson = new GsonBuilder().create()
   private lazy val SystemDefaultZoneId = java.time.ZoneId.systemDefault

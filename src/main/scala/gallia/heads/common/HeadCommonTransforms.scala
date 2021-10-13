@@ -6,7 +6,7 @@ import FunctionWrappers._
 import actions.ActionsUUTransforms._
 
 // ===========================================================================
-trait HeadCommonTransforms[F <: HeadCommon[F]] { _: HeadCommon[F] =>
+trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   import TSL.Transform._
 
   // TODO: t201124094119 - how to allow using(identity)?

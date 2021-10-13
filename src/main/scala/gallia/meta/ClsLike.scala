@@ -5,7 +5,7 @@ import aptus.{Seq_, Option_}
 
 // ===========================================================================
 trait ClsLike { // read-only part
-      _: ClsHelper =>
+      ignored: ClsHelper =>
     protected val _fields: Seq[Fld]
 
     // ---------------------------------------------------------------------------

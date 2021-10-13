@@ -97,11 +97,11 @@ case class TypeNode(
     def containerType: Container = containerTypeOpt.getOrElse(Container._One)
 
     // ---------------------------------------------------------------------------
-    def containerTypeOpt: Option[Container] =
+    def containerTypeOpt: Option[Container] = {
            if (isSeq        ) Some(Container._Nes)
       else if (isOptionOfSeq) Some(Container._Pes)
       else if (isOption     ) Some(Container._Opt)
-      else                    None
+      else                    None }
 
     // ===========================================================================
     def forceNonBObjInfo: Info = this.assert(!_.isContainedBObj).pipe(InfoUtils.forceNonBObjInfo)   

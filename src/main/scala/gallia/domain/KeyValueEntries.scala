@@ -81,11 +81,11 @@ sealed trait KVE { // Key-Value Entry
 
     // ---------------------------------------------------------------------------
     implicit def toValueEntry[T: WTT](key: KeyW, value: T): KVE = {
-      val _node = node[T]
+      val _node = typeNode[T]
 
-           if (node.isBObj ) BObjKVE (key.value, value.asInstanceOf[    BObj ])
-      else if (node.isBObjs) BObjsKVE(key.value, value.asInstanceOf[Seq[BObj]])
-      else                   VleKVE  (key.value, _node, value)
+           if (typeNode.isBObj ) BObjKVE (key.value, value.asInstanceOf[    BObj ])
+      else if (typeNode.isBObjs) BObjsKVE(key.value, value.asInstanceOf[Seq[BObj]])
+      else                       VleKVE  (key.value, _node, value)
     }
 
   }
@@ -135,12 +135,12 @@ case class KVEs(values: Seq[KVE]) {
 
   // ===========================================================================
   object KVEs {
-    implicit def from[T1: WTT](e1: KVE) = KVEs(Seq(e1))
+    implicit def from[T1: WTT](e1: KVE): KVEs = KVEs(Seq(e1))
 
-      implicit def from[T1: WTT, T2: WTT                           ](t: (KVE, KVE               )) = KVEs(Seq(t._1, t._2))
-      implicit def from[T1: WTT, T2: WTT, T3: WTT                  ](t: (KVE, KVE, KVE          )) = KVEs(Seq(t._1, t._2, t._3))
-      implicit def from[T1: WTT, T2: WTT, T3: WTT, T4: WTT         ](t: (KVE, KVE, KVE, KVE     )) = KVEs(Seq(t._1, t._2, t._3, t._4))
-      implicit def from[T1: WTT, T2: WTT, T3: WTT, T4: WTT, T5: WTT](t: (KVE, KVE, KVE, KVE, KVE)) = KVEs(Seq(t._1, t._2, t._3, t._4, t._5))
+      implicit def from[T1: WTT, T2: WTT                           ](t: (KVE, KVE               )): KVEs = KVEs(Seq(t._1, t._2))
+      implicit def from[T1: WTT, T2: WTT, T3: WTT                  ](t: (KVE, KVE, KVE          )): KVEs = KVEs(Seq(t._1, t._2, t._3))
+      implicit def from[T1: WTT, T2: WTT, T3: WTT, T4: WTT         ](t: (KVE, KVE, KVE, KVE     )): KVEs = KVEs(Seq(t._1, t._2, t._3, t._4))
+      implicit def from[T1: WTT, T2: WTT, T3: WTT, T4: WTT, T5: WTT](t: (KVE, KVE, KVE, KVE, KVE)): KVEs = KVEs(Seq(t._1, t._2, t._3, t._4, t._5))
   }
 
 // ===========================================================================
@@ -160,12 +160,12 @@ case class RVEs(values: Seq[RVE]) {
 
   // ===========================================================================
   object RVEs {
-    implicit def from[T1: WTT](e1: RVE) = RVEs(Seq(e1))
+    implicit def from[T1: WTT](e1: RVE): RVEs = RVEs(Seq(e1))
 
-      implicit def from[T1: WTT, T2: WTT                           ](t: (RVE, RVE               )) = RVEs(Seq(t._1, t._2))
-      implicit def from[T1: WTT, T2: WTT, T3: WTT                  ](t: (RVE, RVE, RVE          )) = RVEs(Seq(t._1, t._2, t._3))
-      implicit def from[T1: WTT, T2: WTT, T3: WTT, T4: WTT         ](t: (RVE, RVE, RVE, RVE     )) = RVEs(Seq(t._1, t._2, t._3, t._4))
-      implicit def from[T1: WTT, T2: WTT, T3: WTT, T4: WTT, T5: WTT](t: (RVE, RVE, RVE, RVE, RVE)) = RVEs(Seq(t._1, t._2, t._3, t._4, t._5))
+      implicit def from[T1: WTT, T2: WTT                           ](t: (RVE, RVE               )): RVEs = RVEs(Seq(t._1, t._2))
+      implicit def from[T1: WTT, T2: WTT, T3: WTT                  ](t: (RVE, RVE, RVE          )): RVEs = RVEs(Seq(t._1, t._2, t._3))
+      implicit def from[T1: WTT, T2: WTT, T3: WTT, T4: WTT         ](t: (RVE, RVE, RVE, RVE     )): RVEs = RVEs(Seq(t._1, t._2, t._3, t._4))
+      implicit def from[T1: WTT, T2: WTT, T3: WTT, T4: WTT, T5: WTT](t: (RVE, RVE, RVE, RVE, RVE)): RVEs = RVEs(Seq(t._1, t._2, t._3, t._4, t._5))
   }
 
 // ===========================================================================

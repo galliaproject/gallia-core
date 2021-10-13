@@ -5,7 +5,7 @@ import FunctionWrappers._
 import actions.ActionsUUGenerission._
 
 // ===========================================================================
-trait HeadCommonGenerission[F <: HeadCommon[F]] { _: HeadCommon[F] =>
+trait HeadCommonGenerission[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   import TSL.Generate2.resolve  
 
   // ===========================================================================

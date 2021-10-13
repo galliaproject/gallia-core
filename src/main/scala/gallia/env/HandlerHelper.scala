@@ -60,7 +60,7 @@ class HandlerHelper() {
   import gallia.actions.CanForceAs1
 
   // ---------------------------------------------------------------------------
-  def updateAs(nodeId: NodeId, key: Key) { // TODO: t210116192032 - generalize
+  def updateAs(nodeId: NodeId, key: Key) = { // TODO: t210116192032 - generalize
       val (dagId, dag) = Env.retrieveDagPair(nodeId)
 
       val updatedDag: ActionDag =
@@ -70,6 +70,8 @@ class HandlerHelper() {
             .asInstanceOf[Node] }
 
       Env.associateDag(dagId -> updatedDag)
+      
+      ()
     }
 
 }

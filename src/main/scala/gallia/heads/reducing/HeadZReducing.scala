@@ -4,7 +4,7 @@ package heads.reducing
 import actions.ActionsReducing._
 
 // ===========================================================================
-trait HeadZReducing { _: HeadZ =>
+trait HeadZReducing { ignored: HeadZ =>
   type Selection      = SEL.Reducing.Selector
   private val resolve = SEL.Reducing.resolve _
 

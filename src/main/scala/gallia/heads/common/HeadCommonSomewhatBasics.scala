@@ -13,7 +13,7 @@ import target._
 import target.utils.TypedTargetQueryUtils._
 
 // ===========================================================================
-trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { _: HeadCommon[F] =>
+trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
   // ---------------------------------------------------------------------------
   // remove conditionally

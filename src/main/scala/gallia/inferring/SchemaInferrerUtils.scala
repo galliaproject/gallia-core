@@ -60,7 +60,7 @@ private object SchemaInferrerUtils {
   }
 
   // ===========================================================================
-  private def resolve(existingField: Fld, newField: Fld): Option[Fld] =
+  private def resolve(existingField: Fld, newField: Fld): Option[Fld] = {
          if (newField.info == existingField.info)                   Some(existingField)
          
     // note: not so for multiplicity, as it requires a data change (TODO: t210802090946 - reconsider)
@@ -70,7 +70,7 @@ private object SchemaInferrerUtils {
     // will be generalized (t210802091450)
     else if (Fld.isIntAndDouble(existingField, newField))           Some(existingField.toDouble)
 
-    else                                                            None  
+    else                                                            None }  
 
 }
 

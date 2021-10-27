@@ -23,7 +23,7 @@ case class InputUrlLike( // TODO: t210115193904 - check URI, regular file vs sym
   def content(): Content = _inputString.pipe(new URL(_)).pipe(_content())
 
   // ---------------------------------------------------------------------------
-  @gallia.Distributivity
+  @Distributivity
   def firstLine(): Line = { // TODO: t210114154924 - generalize to n lines + make optional + cache
     val (itr, cls) = linesPair()
 

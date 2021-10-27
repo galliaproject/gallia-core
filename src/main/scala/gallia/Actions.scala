@@ -2,7 +2,7 @@ package gallia
 
 import aptus.{Anything_, Seq_}
 
-import gallia.actions._
+import actions._
 
 // ===========================================================================
 trait Action
@@ -178,7 +178,7 @@ trait ActionUUbb extends ActionUU with AtomsUUbb // provides origin, TODO: t2106
   @deprecated trait ActionZVc2 extends ActionZV with AtomsZVc with ActionV1 with ActionM1
 
 // ===========================================================================
-import gallia.target.{TypedTargetQuery, TypedTargetQuery2, TypedTargetQuery3}
+import target.{TypedTargetQuery, TypedTargetQuery2, TypedTargetQuery3}
 
 // TODO: generalize + TargetQuery counterpart
 trait UsesSimpleTypedTargetQuery1Target[$Target] { // TODO: mixin action?
@@ -196,7 +196,7 @@ trait UsesSimpleTypedTargetQuery1Target[$Target] { // TODO: mixin action?
 
 // ===========================================================================
 trait SquashXN extends Action with TodoV1 {
-    val to: gallia.reflect.TypeNode
+    val to: reflect.TypeNode
     def atom(c: Cls): Atom
 
     // ---------------------------------------------------------------------------

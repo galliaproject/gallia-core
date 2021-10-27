@@ -6,11 +6,11 @@ import aptus.{String_, Seq_}
 // ===========================================================================
 trait ObjsOut { self: Objs =>
 
-  @gallia.Scalability
+  @Scalability
   def formatDefault: String = toListAndTrash.pipe { list => list.map(_.formatDefault).section(s"#${list.size}") }
 
   // ---------------------------------------------------------------------------
-  @gallia.Scalability // TODO: use Writer
+  @Scalability // TODO: use Writer
   def formatPrettyJson : String = toListAndTrash.map(_.formatPrettyJson .sectionAllOff).mkString("[\n", ",", "\n]")
   def formatCompactJson: String = toListAndTrash.map(_.formatCompactJson)              .mkString("["  , ",",   "]")
 

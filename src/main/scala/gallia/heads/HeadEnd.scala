@@ -1,11 +1,12 @@
-package gallia.heads
+package gallia
+package heads
 
 import aptus.Tuple2_
 
-import gallia.env._
-import gallia.plans._
-import gallia.result._
-import gallia.dag.LeafId
+import env._
+import plans._
+import result._
+import dag.LeafId
 
 // ===========================================================================
 case class HeadEnd private (leafId : LeafId) {

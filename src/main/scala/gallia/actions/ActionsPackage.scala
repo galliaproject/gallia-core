@@ -6,35 +6,35 @@ package object actions { // TODO: delegate access to all of AtomsUtils._
   type ClassTag[T]            = scala.reflect.ClassTag[T]
 
   // ---------------------------------------------------------------------------
-  type TypeNode  = gallia.reflect.TypeNode
+  type TypeNode  = reflect.TypeNode
 
-  type BasicType = gallia.reflect.BasicType
-  val  BasicType = gallia.reflect.BasicType
+  type BasicType = reflect.BasicType
+  val  BasicType = reflect.BasicType
 
-  type Container = gallia.reflect.Container
-  val  Container = gallia.reflect.Container
-
-  // ---------------------------------------------------------------------------
-  type Info = gallia.meta.Info
-  val  Info = gallia.meta.Info
-
-  val  Cls  = gallia.meta.Cls
+  type Container = reflect.Container
+  val  Container = reflect.Container
 
   // ---------------------------------------------------------------------------
-  type StringSplitter = gallia.domain.StringSplitter
+  type Info = meta.Info
+  val  Info = meta.Info
+
+  val  Cls  = meta.Cls
+
+  // ---------------------------------------------------------------------------
+  type StringSplitter = domain.StringSplitter
 
   // ---------------------------------------------------------------------------
   @deprecated
-  type WV     = gallia.heads.WV
+  type WV     = heads.WV
 
   // ---------------------------------------------------------------------------
-  val  _vldt  = gallia.vldt.MetaValidation
+  val  _vldt  = vldt.MetaValidation
 
-  type SpecialCardiMode = gallia.vldt.SpecialCardiMode
-  val  SpecialCardiMode = gallia.vldt.SpecialCardiMode
+  type SpecialCardiMode = vldt.SpecialCardiMode
+  val  SpecialCardiMode = vldt.SpecialCardiMode
 
-  type _Error = gallia.vldt._Error
-  val  _Error = gallia.vldt._Error
+  type _Error = vldt._Error
+  val  _Error = vldt._Error
 
   // ---------------------------------------------------------------------------
   type Atoms   = Seq[Atom]
@@ -62,14 +62,14 @@ package object actions { // TODO: delegate access to all of AtomsUtils._
     type AtomVOs = Seq[AtomVO]
 
   // ---------------------------------------------------------------------------
-  type _Nested = gallia.atoms.AtomsOthers._Nested
-  val  _Nested = gallia.atoms.AtomsOthers._Nested
+  type _Nested = atoms.AtomsOthers._Nested
+  val  _Nested = atoms.AtomsOthers._Nested
 
-  type _Rename = gallia.atoms.AtomsUUVeryBasics._Rename
-  val  _Rename = gallia.atoms.AtomsUUVeryBasics._Rename
+  type _Rename = atoms.AtomsUUVeryBasics._Rename
+  val  _Rename = atoms.AtomsUUVeryBasics._Rename
 
-  type _TransformVV = gallia.atoms.AtomsUUTransforms._TransformVV
-  val  _TransformVV = gallia.atoms.AtomsUUTransforms._TransformVV
+  type _TransformVV = atoms.AtomsUUTransforms._TransformVV
+  val  _TransformVV = atoms.AtomsUUTransforms._TransformVV
   
   // ===========================================================================
   implicit class Seq__[A](values: Seq[A]) {

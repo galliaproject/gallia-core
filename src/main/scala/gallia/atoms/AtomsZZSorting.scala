@@ -6,7 +6,7 @@ import scala.reflect.ClassTag
 import domain._
 
 // ===========================================================================
-@gallia.Max5
+@Max5
 object AtomsZZSorting {
   import gallia.atoms.utils.SuperMetaPair
 

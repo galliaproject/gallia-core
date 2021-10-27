@@ -22,7 +22,7 @@ case class AObj(c: Cls, u: Obj) { // TODO: tt210124100009 - initially stood for 
   // ---------------------------------------------------------------------------
   object AObj {
     implicit def toHead(value: AObj): HeadU =
-      new gallia.actions.in
+      new actions.in
         .InMemoryInputUa(value)
         .pipe(Head.inputU)
   }
@@ -42,7 +42,7 @@ case class AObjs(c: Cls, z: Objs) {
   // ===========================================================================
   object AObjs {
     implicit def toHead(value: AObjs): HeadZ =
-      new gallia.actions.in
+      new actions.in
         .InMemoryInputZa(value)
         .pipe(Head.inputZ)
 

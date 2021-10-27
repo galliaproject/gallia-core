@@ -40,7 +40,7 @@ trait Streamer[A] { // note: not necessarily bothering with genericity (in the g
 
     def  isEmpty: Boolean
 
-    @gallia.Distributivity // TODO: t210117112314 - maybe sample?
+    @Distributivity // TODO: t210117112314 - maybe sample?
     def take(n: Int): Streamer[A]
     def drop(n: Int): Streamer[A]
 

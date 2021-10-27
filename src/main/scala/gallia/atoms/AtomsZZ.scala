@@ -4,16 +4,16 @@ package atoms
 // ===========================================================================
 object AtomsZZ {
 
-  @gallia.Distributivity
+  @Distributivity
   case class _LogProgress(nOpt: Option[Int], debug: Obj => String) extends AtomZZ { def naive(z: Objs) =
     utils.AtomsHelper.logProgress(z, nOpt, debug) }
 
   // ---------------------------------------------------------------------------
-  @gallia.Distributivity
+  @Distributivity
   case class _Take(n: Int) extends AtomZZ { def naive(z: Objs) = z.take(n) }
 
   // ---------------------------------------------------------------------------
-  @gallia.Distributivity
+  @Distributivity
   case class _AddIndex(key: Key, oneBased: Boolean) extends AtomZZ { def naive(z: Objs) =
       z .toListAndTrash
         .zipWithIndex

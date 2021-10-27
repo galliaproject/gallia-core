@@ -6,7 +6,7 @@ import reflect.BasicType
 import io.CellConf
 
 // ===========================================================================
-class ModifyTableData(conf: CellConf) extends gallia.atoms.utils.ModifyObj { // 201231113658
+class ModifyTableData(conf: CellConf) extends atoms.utils.ModifyObj { // 201231113658
 
   // ---------------------------------------------------------------------------
   def modify(x: AObjs): Objs = x.z.map(super.modify(x.c))
@@ -24,7 +24,7 @@ class ModifyTableData(conf: CellConf) extends gallia.atoms.utils.ModifyObj { // 
       private def convert(tipe: BasicType)(value: String): Any = {
              if (tipe.isInt    ) value.toInt
         else if (tipe.isDouble ) value.toDouble
-        else if (tipe.isBoolean) gallia.inferring.table.BooleanDetector.forceBoolean(value)
+        else if (tipe.isBoolean) inferring.table.BooleanDetector.forceBoolean(value)
         else                     value }
 }
 

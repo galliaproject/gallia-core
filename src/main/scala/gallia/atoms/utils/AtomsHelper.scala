@@ -7,7 +7,7 @@ import aptus.Int_
 /** to help declutter the dedicated ones */
 object AtomsHelper {
 
-  @gallia.Distributivity
+  @Distributivity
   def logProgress(dis: Objs, nOpt: Option[Int], debug: Obj => String): Objs =
     nOpt
       .map { n =>

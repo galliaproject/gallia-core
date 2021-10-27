@@ -4,7 +4,7 @@ package domain
 import heads.Head
 
 // ===========================================================================
-case class BObj private[gallia](entries: gallia.domain.KVEs) { // TODO: t210124100009 - no proper rationale for "B" prefix
+case class BObj private[gallia](entries: KVEs) { // TODO: t210124100009 - no proper rationale for "B" prefix
 
     override def toString: String = formatDefault
       def formatDefault: String = entries.formatDefault
@@ -26,7 +26,7 @@ case class BObj private[gallia](entries: gallia.domain.KVEs) { // TODO: t2101241
   // ===========================================================================
   object BObj {
     implicit def toHead(value: BObj): HeadU =
-      new gallia.actions.in
+      new actions.in
         .InMemoryInputUb(value)
         .pipe(Head.inputU)
   }
@@ -41,7 +41,7 @@ case class BObjs(values: Seq[BObj]) {
   // ---------------------------------------------------------------------------
   object BObjs {
     implicit def toHead(value: BObjs): HeadZ =
-      new gallia.actions.in
+      new actions.in
         .InMemoryInputZb(value)
         .pipe(Head.inputZ)
   }

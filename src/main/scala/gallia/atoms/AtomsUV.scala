@@ -9,7 +9,7 @@ import FunctionWrappers._
 // ===========================================================================
 object AtomsUV {
 
-  @gallia.Distributivity case object _Size extends AtomZV { def naive(z: Objs) =
+  @Distributivity case object _Size extends AtomZV { def naive(z: Objs) =
     z.size }
 
   // ===========================================================================

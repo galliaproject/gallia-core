@@ -54,7 +54,7 @@ trait ObjsOperations { self: Objs =>
         self
           .map { o =>
             o.put(
-                gallia._tmp,
+                _tmp,
                 o.retainOpt(keys).isDefined)
           .retain(keys) } // guaranteed always at least _tmp
 }

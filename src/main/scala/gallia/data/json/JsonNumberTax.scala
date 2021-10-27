@@ -4,7 +4,7 @@ package data.json
 import meta._
 
 // ===========================================================================
-object JsonNumberTax extends gallia.atoms.utils.ModifyObj { // because of 201119115427
+object JsonNumberTax extends atoms.utils.ModifyObj { // because of 201119115427
 
   // ---------------------------------------------------------------------------
   def payUp(c: Cls)(o: Obj): Obj = super.modify(c)(o)

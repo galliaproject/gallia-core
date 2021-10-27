@@ -39,13 +39,13 @@ object IteratorStreamerUtils {
   private[streamer] def groupByKey[K: CT, V: CT](itr: Iterator[(K, V)]): Iterator[(K, List[V])] = { // spilling hack            
       // typically groupXN (as opposed to groupX1)
       //   for now can't do the same for key because of Option (see https://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210116153713)
-      val valueIsObj: Boolean = scala.reflect.classTag[V].runtimeClass == classOf[gallia.Obj]
+      val valueIsObj: Boolean = scala.reflect.classTag[V].runtimeClass == classOf[Obj]
 
       // ---------------------------------------------------------------------------
       // see https://github.com/galliaproject/gallia-core#poor-mans-scaling-spilling
       itr
         .map(serializeSortingLine(valueIsObj))
-          .pipe(GnuSortByFirstFieldHack(gallia.Hacks.ExecutionContext, debug = "gbk")(numerical = false /* TODO: allow */))
+          .pipe(GnuSortByFirstFieldHack(Hacks.ExecutionContext, debug = "gbk")(numerical = false /* TODO: allow */))
         .map(deserializeSortingLine[K, V](valueIsObj))
           .pipe(IteratorUtils.groupByPreSortedKey)          
     }
@@ -57,7 +57,7 @@ object IteratorStreamerUtils {
         : Iterator[V] =
       right.tipe match {
         case StreamerType.ViewBased =>
-          if (joinType.isInner || joinType.isLeft) hashJoin(gallia.Hacks.LoseOrderOnGrouping)(joinType, combine)(left, right).iterator // TODO: also do right version at least          
+          if (joinType.isInner || joinType.isLeft) hashJoin(Hacks.LoseOrderOnGrouping)(joinType, combine)(left, right).iterator // TODO: also do right version at least          
           else                                     spillingJoin                              (joinType, combine)(left, right)
   
         // ---------------------------------------------------------------------------
@@ -90,14 +90,14 @@ object IteratorStreamerUtils {
       def sortByKey(debug: String)(input: Iterator[(K, V)]): Iterator[Line] =
         input
           .map(serializeSideSortingLine)
-            .pipe(GnuSortByFirstFieldHack(gallia.Hacks.ExecutionContext, debug)(numerical = false /* TODO: allow */))
+            .pipe(GnuSortByFirstFieldHack(Hacks.ExecutionContext, debug)(numerical = false /* TODO: allow */))
   
       // ---------------------------------------------------------------------------              
       val sortedLeft : Iterator[Line] = sortByKey(debug = "left")(left .iterator)
       val sortedRight: Iterator[Line] = sortByKey(debug = "rite")(right.iterator)
   
       // ---------------------------------------------------------------------------
-      GnuJoinByFirstFieldHack(gallia.Hacks.ExecutionContext)(sortedLeft, sortedRight)
+      GnuJoinByFirstFieldHack(Hacks.ExecutionContext)(sortedLeft, sortedRight)
         .map(deserializeJoiningLine[V])
         .map(combine.tupled)               
     }

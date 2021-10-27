@@ -28,7 +28,7 @@ class ValueWrapper(val underlying: AnyValue) extends AnyVal {
     def asLocalDateTime: LocalDateTime = asTyped[LocalDateTime]
 
     // ---------------------------------------------------------------------------
-    def asObj    : gallia.Obj     = asTyped[gallia.Obj]
+    def asObj          : Obj     = asTyped[Obj]
   }
 
   // ===========================================================================

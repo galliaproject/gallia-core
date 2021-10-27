@@ -2,7 +2,7 @@ package gallia
 
 import aptus.{Anything_, Seq_}
 
-import gallia.actions._
+import actions._
 
 // ===========================================================================
 sealed trait Atom extends ActionAN {

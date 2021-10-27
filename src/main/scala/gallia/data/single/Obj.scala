@@ -25,18 +25,18 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
         case _ => false }
 
     // ===========================================================================
-    if (!gallia.Hacks.DisableRuntimeChecks) { // t210107094406 - possibility to opt out of the checks (for performance) - should opt out by default in prod
+    if (!Hacks.DisableRuntimeChecks) { // t210107094406 - possibility to opt out of the checks (for performance) - should opt out by default in prod
 
       // TODO: should use Key, Ren, ... directly for performance
       // ---------------------------------------------------------------------------
-      if (data.isEmpty)     gallia.vldt._Error.ObjCantBeEmpty                   .throwDataError()
-      if (!keys.isDistinct) gallia.vldt._Error.ObjDuplicateKeys(keyz.duplicates).throwDataError()
+      if (data.isEmpty)     vldt._Error.ObjCantBeEmpty                   .throwDataError()
+      if (!keys.isDistinct) vldt._Error.ObjDuplicateKeys(keyz.duplicates).throwDataError()
 
       // ---------------------------------------------------------------------------
       // TODO: to proper errors
       require( // a201104150252
-          !data.map   (_._2).exists(_.isInstanceOf[gallia.Objs]),
-          (data.filter(_._2          .isInstanceOf[gallia.Objs]).map(_._1).toSeq.#@@, this)
+          !data.map   (_._2).exists(_.isInstanceOf[Objs]),
+          (data.filter(_._2          .isInstanceOf[Objs]).map(_._1).toSeq.#@@, this)
             .str.prepend("can't contain Objz: "))
 
       require( // a201104150253
@@ -102,9 +102,9 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
   object Obj { import ObjIn.normalize
     
     // ---------------------------------------------------------------------------
-    def content(value: String)  : Obj = gallia.obj(gallia._content -> value)
-    def line   (value: String)  : Obj = gallia.obj(gallia._line    -> value)
-    def array  (value: Seq[Obj]): Obj = gallia.obj(gallia._array   -> value.toList)
+    def content(value: String)  : Obj = obj(_content -> value)
+    def line   (value: String)  : Obj = obj(_line    -> value)
+    def array  (value: Seq[Obj]): Obj = obj(_array   -> value.toList)
 
     // ---------------------------------------------------------------------------
     private[gallia] def build0      (data: UData)           : Obj = new Obj(data)

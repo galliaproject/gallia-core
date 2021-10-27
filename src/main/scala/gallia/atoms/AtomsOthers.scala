@@ -34,7 +34,7 @@ object AtomsOthers {
       { msg.foreach(println); u.pp.tapIf(_ => abort) { x => x.__exit; () } } }
 
     // ---------------------------------------------------------------------------
-    @gallia.Distributivity
+    @Distributivity
     case class _InspectZ(msg: Option[String], abort: Boolean) extends AtomZZ { def naive(z: Objs) =
       { msg.foreach(println); z.pp.tapIf(_ => abort) { x => x.__exit; () } } }
 
@@ -71,7 +71,7 @@ object AtomsOthers {
     z.toListAndTrash.reduceLeft(_ merge _) } //z.toList.map(_.data).reduceLeft(_ ++ _).pipe(obj)
 
   // ===========================================================================
-  @gallia.Scalability case class _Pivone(keyKey: Key, valueKey: Key) extends AtomZU { def naive(z: Objs) =
+  @Scalability case class _Pivone(keyKey: Key, valueKey: Key) extends AtomZU { def naive(z: Objs) =
       z .toListAndTrash
         .flatMap { o =>
           val newKey =
@@ -83,7 +83,7 @@ object AtomsOthers {
        // t201122154119 - if in is empty...
       
     // ---------------------------------------------------------------------------
-    @gallia.Scalability @deprecated case class _UnarrayEntries0(keyKeys: Keyz, separator: Separator, valueKey: Key) extends AtomZU { def naive(z: Objs) =
+    @Scalability @deprecated case class _UnarrayEntries0(keyKeys: Keyz, separator: Separator, valueKey: Key) extends AtomZU { def naive(z: Objs) =
         z .toListAndTrash
           .flatMap { o =>
             val newKey =
@@ -95,7 +95,7 @@ object AtomsOthers {
          // t201122154119 - if in is empty...
     
     // ---------------------------------------------------------------------------
-    @gallia.Scalability @deprecated case class _UnarrayBy0(keys: Keyz, sep: Separator) extends AtomZU { def naive(z: Objs) =
+    @Scalability @deprecated case class _UnarrayBy0(keys: Keyz, sep: Separator) extends AtomZU { def naive(z: Objs) =
         // FIXME: runtime check of keys
         z .toListAndTrash
           .flatMap { o =>

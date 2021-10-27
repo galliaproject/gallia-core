@@ -12,7 +12,7 @@ case class IntermediateMetaResult(dag: gallia.dag.DAG[IntermediateMetaResultNode
       override def toString: String = formatDefault
 
         def formatDefault: String = dag.formatDefault
-          //gallia.graphviz.GraphVizUtils.IntermediateMetaResultNode_ ; { node => (node.formatDotLabel, node.formatDotColor) }
+          //graphviz.GraphVizUtils.IntermediateMetaResultNode_ ; { node => (node.formatDotLabel, node.formatDotColor) }
 
       // ===========================================================================
       def forceActionPlan = successOpt match {
@@ -45,7 +45,7 @@ case class IntermediateMetaResult(dag: gallia.dag.DAG[IntermediateMetaResultNode
           .dropWhile(!_.isError)
           .headOption
           .map(_.errorOpt.get /* since isError */)
-          .map(gallia.MetaError)
+          .map(MetaError)
 
       // ---------------------------------------------------------------------------
       def forceLeafClass: Cls  = leafNode.result match {

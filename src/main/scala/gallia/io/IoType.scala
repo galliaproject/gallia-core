@@ -9,7 +9,7 @@ import out._
 // ===========================================================================
 sealed trait IoTypeU {
     def defaultRead  : (StartReadUFluency, InputUStringDrivenConf) => EndReadUFluency
-    def defaultFormat: gallia.Obj => String
+    def defaultFormat: Obj => String
 
     // ---------------------------------------------------------------------------
     // TODO: t210124100009 - rename "NonTable"
@@ -32,7 +32,7 @@ sealed trait IoTypeU {
     // ===========================================================================
     case object RawContent extends IoTypeU {
       def defaultRead   = (start, conf) => start.content
-      def defaultFormat = _.text(gallia._content) }
+      def defaultFormat = _.text(_content) }
 
     // ===========================================================================
     case object DirectJsonObject extends IoTypeU {
@@ -54,7 +54,7 @@ sealed trait IoTypeU {
 // ===========================================================================
 sealed trait IoTypeZ { // TODO: t210118103012 - proper handling
     def defaultRead  : (StartReadZFluency, InputZStringDrivenConf) => EndReadZFluency
-    def defaultFormat: gallia.Objs => Iterator[String]
+    def defaultFormat: Objs => Iterator[String]
 
     def outputConf(path: String): OutputConfZ
   }
@@ -83,7 +83,7 @@ sealed trait IoTypeZ { // TODO: t210118103012 - proper handling
     // ===========================================================================
     case object RawLines extends UrlLikeIoTypeZ {
       def defaultRead   = (start, conf) => start.lines.pipeIf(!conf.inMemoryMode)(_.iteratorMode)
-      def defaultFormat = _.consume.map(_.text(gallia._line)) }
+      def defaultFormat = _.consume.map(_.text(_line)) }
 
     // ===========================================================================
     case object DirectJsonArray  extends IoTypeZ {
@@ -106,7 +106,7 @@ sealed trait IoTypeZ { // TODO: t210118103012 - proper handling
     case object Table extends IoTypeZ {
       def defaultRead   = (start, conf) => start.table.pipeIf(!conf.inMemoryMode)(_.iteratorMode).schemaProvider(conf.schemaProvider).project(conf.projectionOpt)
       def defaultFormat = aptus.illegalState("TODO:210118103012")
-      def outputConf(path: String) = UrlLikeTableConf(path, gallia.io.UrlLike.Default, gallia.io.FormatConf.Default)
+      def outputConf(path: String) = UrlLikeTableConf(path, io.UrlLike.Default, io.FormatConf.Default)
     }
 
     // ===========================================================================

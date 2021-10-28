@@ -10,7 +10,8 @@ import data.json.ObjToGson
 // ===========================================================================
 class Obj private ( /* must not expose apply: see 210102140902, mostly so can use .obj(...) accessor */   
         protected[data] val data: UData) // TODO: two versions, see t210104164036
-      extends ObjAccessors
+      extends Serializable
+      with    ObjAccessors
       with    ObjOperations { // TODO: extends Ordered?
     @inline @deprecated def _data = data
 
@@ -100,7 +101,7 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
 
   // ===========================================================================
   object Obj { import ObjIn.normalize
-    
+ 
     // ---------------------------------------------------------------------------
     def content(value: String)  : Obj = obj(_content -> value)
     def line   (value: String)  : Obj = obj(_line    -> value)

@@ -894,11 +894,10 @@ and that she told them to keepeth their code (1) _practical_, (2) _readable_, an
 
 ## Contact & Announcements
 
-- Contact: <sub><img src="./images/ct.png"></sub>
-- [Twitter (@AnthonyCros)](https://twitter.com/anthony_cros) - for further announcements
-- [Linked In](https://www.linkedin.com/in/anthony-cros-3587b063/)
+- Contact: `contact.galliaproject at gmail.com`
 - [Blog](http://anthonycros.com/)
-
-See original announcement on the [Scala Users list](https://users.scala-lang.org/t/introducing-gallia-a-library-for-data-manipulation/7112)
+- [Linked In](https://www.linkedin.com/in/anthony-cros-3587b063/)
+- [Twitter (@AnthonyCros)](https://twitter.com/anthony_cros) - for further announcements
+- Original announcement on the [Scala Users list](https://users.scala-lang.org/t/introducing-gallia-a-library-for-data-manipulation/7112)
 
 <p align="center"><img src="./images/logo.png" alt="icon"></p>

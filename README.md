@@ -26,7 +26,7 @@ A more thorough discussion of design choices/limitations/direction will come as 
 <a name="210121153202"></a>
 Preliminary notes:
 - Some links lead to [documentation](http://github.com/galliaproject/gallia-docs) that is still to be written.
-- The examples use _JSON_ because of its ubiquity as a notation and despite its [flaws](http://github.com/galliaproject/gallia-docs/blob/init/json.md)
+- The examples use _JSON_ because of its ubiquity as a notation and despite its [flaws](http://github.com/galliaproject/gallia-docs/blob/master/json.md)
 
 <a name="210121153147"></a><a name="dependencies"></a>
 ## Dependencies

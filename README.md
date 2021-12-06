@@ -1,38 +1,40 @@
 <p align="center"><img src="./images/logo.png" alt="icon"></p>
 
-# Introducing Gallia: a Scala library for data manipulation
+# Introducing Gallia: a Scala library for data transformation
 by <a href="http://anthonycros.com/" target="_blank">Anthony Cros</a> (2021)
+
+<p align="center"><img src="./images/trivial_example.png" alt="trivial_example"></p>
 
 ## Introduction
 
 <a name="210121153145"></a>
-_Gallia_'s main goals are:
+_Gallia_ is a Scala library for generic data transformation whose main goals are:
 
 1. <a name="210127120327"></a> Practicality
 2. <a name="210127120328"></a> Readability
 3. <a name="210127120329"></a> Scalability (optionally)
 
 Execution happens in two phases, each traversing a dedicated execution [DAG](https://en.wikipedia.org/wiki/Directed_acyclic_graph):
-1. A initial _meta_ phase that ignores the data and ensures that transformation steps are consistent with one another (schema-wise)
-2. A subsequent _data_ phase where the data is actually processed
+1. A initial _meta_ phase which ignores the data entirely and ensures that transformation steps are consistent (schema-wise)
+2. A subsequent _data_ phase where the data is actually transformed
 
 <a name="210121153146"></a>
+<a name="210202173234"></a>
 This article is a quick tour that focuses on a few examples rather than a comprehensive guide.
 A more thorough discussion of design choices/limitations/direction will come as subsequent article(s).
-<a name="210202173234"></a>The project is very immature and at this point I would simply like to gauge the level of interest for it (please keep any feedback at this level for now).
 
 <a name="210121153202"></a>
 Preliminary notes:
-- Some links lead to [documentation](http://github.com/galliaproject/gallia-docs) that is actually to be written.
-- The examples use _JSON_ - despite its [flaws](http://github.com/galliaproject/gallia-docs/blob/init/json.md) - because of its ubiquity as a notation
+- Some links lead to [documentation](http://github.com/galliaproject/gallia-docs) that is still to be written.
+- The examples use _JSON_ because of its ubiquity as a notation and despite its [flaws](http://github.com/galliaproject/gallia-docs/blob/init/json.md)
 
 <a name="210121153147"></a><a name="dependencies"></a>
 ## Dependencies
 
-The library is available for both Scala 2.12 and 2.13
+The library is available for both Scala 2.12 and 2.13 (3.0 will be more [challenging](https://users.scala-lang.org/t/introducing-gallia-a-library-for-data-manipulation/7112/12?u=anthony.cros))
 
 <a name="sbt"></a><a name="210121153201"></a>
-It requires the following in your `build.sbt` file:
+Include the following in your `build.sbt` file:
 ```
 libraryDependencies += "io.github.galliaproject" %% "gallia-core" % "0.3.1"
 ```
@@ -61,7 +63,7 @@ it can also cater to the more trivial cases such as the ones presented below as 
 The same paradigm can therefore handle all (most) of your data manipulation needs.
 
 
-### Process single object (using JSON here)
+### Process individual object
 ```scala
 """{"foo": "hello", "bar": 1, "baz": true, "qux": "world"}"""
   .read() // will infer schema if none is provided
@@ -79,15 +81,14 @@ The same paradigm can therefore handle all (most) of your data manipulation need
     .nest('baz).under('parent)
 
     // flip boolean value of field "baz" (now nested under "parent")
-    .flip('parent |> 'baz ~> 'BAZ)
-                     // rename it "while-at-it" ("baz" -> "BAZ")
+    .flip('parent |> 'baz)
 
   .printJson()
-  // prints: {"foo": "HELLO", "bar": 2, "parent": { "BAZ": false }}
+  // prints: {"foo": "HELLO", "bar": 2, "parent": { "baz": false }}
 ```
 
 <a name="210121153151"></a>
- The schema is maintained throughout operations, so you get an error if you try for example to _square_ a boolean:
+It is very important to note that the schema is maintained throughout operations, so you will get an error if you try for example to square a boolean:
 ```scala
 """{"foo": "hello", "bar": 1, "baz": true, "qux": "world"}"""
   .read()
@@ -104,9 +105,9 @@ The same paradigm can therefore handle all (most) of your data manipulation need
 Notes:
 * This error occurs *prior* to the actual data run, and no data is therefore processed
 * The error mechanisms works at any level of nesting/multiplicity
-* Of course, some errors cannot be caught until the data is actually seen (e.g. `"foo".apply(5)` or _is-distinct_ types of checks)
+* Of course, some errors cannot be caught until the data is actually seen (e.g. IndexOutOfBounds types of checks)
 
-### Process collection of objects (as JSON here)
+### Process collection of objects
 ```scala
 // INPUT:
 //    {"first": "John", "last": "Johnson", "DOB": "1986-02-04", ...}\n
@@ -119,7 +120,7 @@ Notes:
     .toUpperCase('last)
     .fuse('first, 'last).as('name).using(_ + " " + _)
     .transformString('DOB ~> 'age).using(
-        _.toLocalDateFromIso.getYear.thn(2021 - _))
+        _.toLocalDateFromIso.getYear.pipe(2021 - _))
 
   .write(
     "/tmp/people.jsonl.gz")
@@ -131,7 +132,9 @@ Notes:
 <a name="210121153154"></a>
 Notes:
 - <a href="https://jsonlines.org/" target="_blank">JSONL</a> = one JSON document per line
-- This example makes use of `.toLocalDateFromIso()` and `.thn()` from our `import aptus._` above (see [docs](http://github.com/galliaproject/gallia-docs/blob/init/aptus.md))
+- This example makes use of:
+  - `.pipe()` from `scala.util.chaining`
+  - `.toLocalDateFromIso()` from our `import aptus._` above (see [docs](http://github.com/galliaproject/gallia-docs/blob/init/aptus.md))
 
 ### Process CSV/TSV files
 
@@ -159,7 +162,7 @@ Keys can be referenced as scala's `Symbol`, `String`, `Enumeration`, and `enumer
   .read()
     .rename("Very Poor Key Choice  " ~> 'much_better)
     .transformString('much_better).using(_ => "isn't it?")
-  // OUTPUT: {"much_better":"isn't it?"}
+  // OUTPUT: {"much_better": "isn't it?"}
 ```
 
 ### Path referencing
@@ -170,7 +173,7 @@ Paths can be referenced conveniently via the "pipe+greater-than" (`|>`) [notatio
   // OUTPUT: {"parent": {"foo": "VALUE"}}
 ```
 
- Note that a _key_ is just a trivial _path_.
+ Note that a _key_ is therefore just a trivial _path_.
 
 ### Target selection (keys or paths)
 Applicable for both `.read()` and `.stream()` (one vs multiple objects)

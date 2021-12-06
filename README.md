@@ -175,7 +175,7 @@ Paths can be referenced conveniently via the "pipe+greater-than" (`|>`) [notatio
 
  Note that a _key_ is therefore just a trivial _path_.
 
-### Target selection (keys or paths)
+### Target selection (keys/paths)
 Applicable for both `.read()` and `.stream()` (one vs multiple objects)
 ```scala
 // INPUT: {"foo": "hello", "bar": 1, "baz": true, "qux": "world"}
@@ -183,21 +183,6 @@ data.retain(_.firstKey) // {"foo": "hello"}
 
 data.retain(_.allBut('qux))      //{"foo": "hello", "bar": 1, "baz": true}
 data.retain(_.customKeys(_.tail))//{"bar": 1, "baz": true, "qux": "world"}
-
-// (overly) complex example:
-"""{"k1": "v1", "K2": "v2", "k3": "V3", "K4": "V4", "k5": "v5"}""".read()
-  .removeIfValueFor(_.string(_.filterKeys {
-      _.startsWith("k") })) // careful not to confuse key selection
-    .matches {
-      _.startsWith("v") }   // with value selection
-  // OUTPUT: {"K2": "v2", "k3": "V3", "K4": "V4"}
-
-// if need a more custom selection
-"""{"parent": {"foo": "hello", "bar": 1}}""".read()
-    // "leaf" as opposed to "all" (so will exclude 'parent path itself)
-    .retain(_.customLeafPaths(_.init))
-  // OUTPUT: {"parent": {"foo": "hello"}} since it corresponds
-  //   to the "init" of Seq('parent |> 'foo, 'parent |> 'bar)
 ```
 
 ### Generalization of target selection
@@ -205,20 +190,28 @@ Likewise applicable for both `.read()` and `.stream()`
 ```scala
 val obj = """{"foo": "hi", "bar": 1, "baz": true, "qux": "you"}""".read()
 
-// can't use "then" (scala) or "thn" (aptus)
+// can't use "then" (reserved in scala)
 obj.forKey    ('foo)      .zen(_ toUpperCase _) // { "foo": "HI", ...
 obj.forEachKey('foo)      .zen(_ toUpperCase _)
 obj.forEachKey('foo, 'bar).zen(_ toUpperCase _)
 
-obj.forAllKeys((x, k) => x.rename(k).using(_.toUpperCase)) //{"FOO":"hi",..
+obj.forAllKeys((o, k) => o.rename(k).using(_.toUpperCase)) //{"FOO":"hi",..
 // ... likewise with forPath, forEachPath, forAllPaths, forLeafPaths, ...
 ```
 
-### Nested data
+### Nested data seletion
 ```scala
 """{"parent": {"foo": "bar"}}""".read()
   .toUpperCase('parent |> 'foo)
   // OUTPUT: {"parent":{"foo":"BAR"}}
+```
+
+Note: _Gallia_ can generally apply transformations irrespective of multiplicity, as long as they still make sense:
+
+```scala
+"""{"parent": {"foo": ["bar", "baz"]}}""".read()
+  .toUpperCase('parent |> 'foo)
+  // OUTPUT: {"parent":{"foo":["BAR", "BAZ"]}}
 ```
 
 ### Renaming keys
@@ -228,14 +221,13 @@ Renaming can be expressed conveniently via the "tilde+greater-than" (`~>`) [nota
 ```scala
            """{"foo": "bar"}""" .read().rename           ('foo ~> 'FOO)
 """{"parent": {"foo": "bar"}}""".read().rename('parent |> 'foo ~> 'FOO)
-// OUTPUT:
+// OUTPUT: (respectively)
 //             {"FOO":"bar"}
 //   {"parent":{"FOO":"bar"}}
-// (respectively)
 ```
 
 <a name="210128094950"></a>
- A case could be made that `rekey` would be more appropriate than `rename`, but it feels too unnatural.
+ A case could be made that `rekey` would be more appropriate than `rename`, but it feels rather unnatural.
 
 ### Renaming keys _"while-at-it"_
 
@@ -245,9 +237,16 @@ Renaming can be expressed conveniently via the "tilde+greater-than" (`~>`) [nota
   // OUTPUT: {"FOO":2} - value is incremented and key is uppercased
 ```
 
+Note that this is functionally equivalent too:
+```scala
+"""{"foo": 1}""".read()
+  .increment('foo)
+  .rename   ('foo ~> 'FOO)
+```
+
 ## Single vs Multiple objects
 
- _Gallia_ does not necessarily expect its elements ("objects") to come in multiples, it is capable of processing them individually.
+ _Gallia_ does not necessarily expect its elements ("objects") to come in multiples, it is capable of processing them as individuals.
 
  Example of going from one to the other, then back:
 ```scala
@@ -256,10 +255,10 @@ Renaming can be expressed conveniently via the "tilde+greater-than" (`~>`) [nota
   .flattenBy('foo) // [{"foo": "bar1"}, {"foo": "bar2"}] (original array)
 ```
 
- There are other ways to go back and forth between the two (e.g. [reducing](#210120142925) as shown below, see code for more)
+ There are other ways to go back and forth between the two (e.g. [reducing](#210120142925) as shown below)
 
 <a name="210121153206"></a>
- Internally, all object-wise operations are actually just an implicit mapping so that the following two expressions are equivalent
+Internally, all object-wise operations on "streams" are actually just implicit MAP-pings, so that the following two expressions are equivalent
 ```scala
 """[{"foo": "bar1"}, {"foo": "bar2"}]""".stream()      .toUpperCase('foo)
 """[{"foo": "bar1"}, {"foo": "bar2"}]""".stream().map(_.toUpperCase('foo))
@@ -267,12 +266,12 @@ Renaming can be expressed conveniently via the "tilde+greater-than" (`~>`) [nota
 
 ## DAG Heads
 
-The Head type models a leaf in the DAG(s) that underlies the future execution plan.
+The Head type models a leaf in the DAG(s) that underlies the execution plan.
 
 Internally, heads comes in as three flavors, each offering a different and relevant subset of operations:
-1. _HeadO_: For single object manipulation
-2. _HeadS_: For multiple objects manipulation
-3. _HeadV[T]_: For _"orphan"_ values manipulation (_HeadV_ is typically not encountered in client code)
+1. _HeadO_: For single __O__-bject manipulation
+2. _HeadS_: For multiple object-__S__ manipulation
+3. _HeadV[T]_: For _"orphan"_ __V__-alues manipulation (_HeadV_ is typically not encountered in client code)
 
 Notes:
 - _"Orphan"_ values are more conceptually relevant to nested subgraphs, not commonly manipulated by client code. It represents values that are not part of a structured object, e.g the string `"foo"` alone as opposed to the same string `"foo`" within an object `{"key1": 1, "key2": "foo", ...}`.
@@ -759,6 +758,20 @@ I have never dealt with it personally but I imagine the likes of computational p
 - <a name="210223094318"></a><a name="spark-examples"></a>Spark-powered:
   - [GeneMania TSV files](https://github.com/galliaproject/gallia-genemania-spark#description) via Spark RDDs
 - (more coming soon)
+
+
+## Strengths
+Gallia's main strengths can be summed up like so:
+* The most common/useful data operations are provided, or at least [scheduled](https://github.com/galliaproject/gallia-docs/blob/master/tasks.md).
+* Readable DSL that domain experts should be able to at least partially comprehend.
+* Scaling is not an afterthought and *Spark RDDs* can be leveraged when required.
+* Meta-awareness, meaning inconsistent transformations are rejected whenever possible (for instance, cannot use a field that's been removed already).
+* Can process individual entities, not just collections thereof; that is, there's no need to create "dummy" collections of one entity in order to operate on that entity.
+* Can process nested entities of any multiplicity in a natural way.
+* Macros are [available](https://github.com/galliaproject/gallia-macros) for a smooth integration with case class hierarchies.
+* Provides flexible target selection - i.e. which field(s) to act on - which ranges from explicit reference to actual queries, including when nesting is involved.
+* The execution DAG is sufficiently abstracted that its optimization is a well-separated concern (e.g. predicate pushdowns, pruning, ...); note however, that few such optimizations are in place at the moment.
+
 
 ## FAQ
 

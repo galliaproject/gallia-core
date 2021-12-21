@@ -23,8 +23,8 @@ class TypedWhatever[+T](val typed: T) extends Serializable { // can't be AnyVal 
   // ===========================================================================
   def unary_!                      (implicit ev: T <:< Boolean): TypedWhatever[Boolean] = mapBoolean { !_ }
 
-  def &&(y: TypedWhatever[Boolean])(implicit ev: T <:< Boolean): TypedWhatever[Boolean] = mapBoolean { _ && y.boolean }
-  def ||(y: TypedWhatever[Boolean])(implicit ev: T <:< Boolean): TypedWhatever[Boolean] = mapBoolean { _ || y.boolean }
+  def &&(y: TypedWhatever[Boolean])(implicit ev: T <:< Boolean): TypedWhatever[Boolean] = mapBoolean { _ && y.typed.boolean }
+  def ||(y: TypedWhatever[Boolean])(implicit ev: T <:< Boolean): TypedWhatever[Boolean] = mapBoolean { _ || y.typed.boolean }
 
   // ---------------------------------------------------------------------------
   def == (that: Whatever): TypedWhatever[Boolean] = map(_.any == that.any)

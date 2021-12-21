@@ -32,7 +32,7 @@ object WhateverImplicits {
   }
 
   // ---------------------------------------------------------------------------
-  private def error(value: Any, id: String, klass: Class[_]) = s"TODO:expected ${klass}:${id}:${value}:${value.getClass}"  
+  private def error(value: Any, id: String, klass: Class[_]) = s"TODO:expected ${klass}:${id}:${value}:${value.getClass}:${value}"  
 }
 
 // ===========================================================================

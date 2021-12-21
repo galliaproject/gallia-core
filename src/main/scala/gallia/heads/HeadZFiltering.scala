@@ -17,7 +17,7 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
   import TSL.FilterBy1._
 
   // ===========================================================================
-  // must match filter below other than the flag:
+  // must match filter below other than the "asFind" flag:
   // TODO: t201021120753 - offer proper optional head
 
                   def findUnsafe(pred: Obj => Boolean): Self = zz(FilterUnsafe(pred, asFind = true))
@@ -44,14 +44,52 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
                           zz(FilterByZ(resolve(target), f, asFind = true)) }
 
                   // ===========================================================================
-                  def findBy(f1: KPathW, f2: KPathW)            : _FindBy2[WV, WV]     = findBy(_._explicit(f1.value), _._explicit(f2.value))
-                  def findBy(f1: KPathW, f2: KPathW, f3: KPathW): _FindBy3[WV, WV, WV] = findBy(_._explicit(f1.value), _._explicit(f2.value), _._explicit(f3.value))
+                  def findBy(f1: KPathW, f2: KPathW)            : __FindBy2WV = new __FindBy2WV(f1, f2)
+                  def findBy(f1: KPathW, f2: KPathW, f3: KPathW): __FindBy3WV = new __FindBy3WV(f1, f2, f3)
 
                       // ---------------------------------------------------------------------------
                       @Max5
                       def findBy[O1: WTT, O2: WTT         ](f1: FindByT[O1], f2: FindByT[O2])                 : _FindBy2[O1, O2]     = new _FindBy2(f1, f2)
                       def findBy[O1: WTT, O2: WTT, O3: WTT](f1: FindByT[O1], f2: FindByT[O2], f3: FindByT[O3]): _FindBy3[O1, O2, O3] = new _FindBy3(f1, f2, f3)
 
+                    // ===========================================================================                  
+                    class __FindBy1WV(target: KPathW) { import gallia.target.utils.TargetQueryUtils.tqkpath
+              
+                      def matches(f: WV => TWV[Boolean])                 : Self = zz(FilterByWV(tqkpath(target.value), f(_).typed, asFind = true))
+                      def matches(f: WV =>     Boolean) (implicit di: DI): Self = zz(FilterByWV(tqkpath(target.value), f,          asFind = true))
+              
+                      // ---------------------------------------------------------------------------
+                      /** similar to SQL's WHERE X IN Y clause */ // TODO: toSet if big enough? use bloom if very big?
+                      def    in[T:WTT](coll: Seq[T]): Self = matches({ wv =>  coll.contains(wv.any) })
+                      def notIn[T:WTT](coll: Seq[T]): Self = matches({ wv => !coll.contains(wv.any) })
+              
+                      def hasValue(value: Any): Self2 = matches(_.any == value)
+                      def notValue(value: Any): Self2 = matches(_.any != value)
+              
+                      def isPresent      : Self = hasSize(1)
+                      def isMissing      : Self = hasSize(1)
+              
+                      /** does not work for String.size (will return 1) */
+                      def hasSize(n: Int): Self = matches(Whatever.size(_) == n)
+              
+                      // ---------------------------------------------------------------------------
+                      def greaterThan     [N: Numeric](value: N): Self = matches(_ >  value.asInstanceOf[Number])
+                      def greaterOrEqualTo[N: Numeric](value: N): Self = matches(_ >= value.asInstanceOf[Number])
+              
+                      def lessThan        [N: Numeric](value: N): Self = matches(_ <  value.asInstanceOf[Number])
+                      def lessOrEqualTo   [N: Numeric](value: N): Self = matches(_ <= value.asInstanceOf[Number])
+                    }
+
+                    // ---------------------------------------------------------------------------
+                    class __FindBy2WV(target1: KPathW, target2: KPathW) { import gallia.target.utils.TargetQueryUtils.tqkpath2
+                        def matches(f: (WV, WV) => TWV[Boolean])                 : Self = zz(FilterByWV2(tqkpath2(target1.value, target2.value), f(_, _).typed, asFind = true))
+                        def matches(f: (WV, WV) =>     Boolean) (implicit di: DI): Self = zz(FilterByWV2(tqkpath2(target1.value, target2.value), f,             asFind = true)) }
+                  
+                      // ---------------------------------------------------------------------------
+                      class __FindBy3WV(target1: KPathW, target2: KPathW, target3: KPathW) { import gallia.target.utils.TargetQueryUtils.tqkpath3
+                        def matches(f: (WV, WV, WV) => TWV[Boolean])                 : Self = zz(FilterByWV3(tqkpath3(target1.value, target2.value, target3.value), f(_, _, _).typed, asFind = true))
+                        def matches(f: (WV, WV, WV) =>     Boolean) (implicit di: DI): Self = zz(FilterByWV3(tqkpath3(target1.value, target2.value, target3.value), f,                asFind = true)) }
+                  
                     // ===========================================================================
                     class _FindBy2[O1: WTT, O2: WTT](f1: FindByT[O1], f2: FindByT[O2]) {
                       def matches(f: (O1, O2) => Boolean): Self =
@@ -81,10 +119,16 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
       // ---------------------------------------------------------------------------
       class __FilterBy1WV(target: KPathW) { import gallia.target.utils.TargetQueryUtils.tqkpath
 
-        /** similar to SQL's WHERE X IN Y clause */
-        def in[T:WTT](coll: Seq[T]): Self = matches({ wv => coll.contains(wv.any) }) // TODO: toSet if big enough? use bloom if very big?       
+        def matches(f: WV => TWV[Boolean])                 : Self = zz(FilterByWV(tqkpath(target.value), f(_).typed, asFind = false))
+        def matches(f: WV =>     Boolean) (implicit di: DI): Self = zz(FilterByWV(tqkpath(target.value), f,          asFind = false))
 
-        def hasValue(a: Any): Self2 = matches(_.any == a)
+        // ---------------------------------------------------------------------------
+        /** similar to SQL's WHERE X IN Y clause */ // TODO: toSet if big enough? use bloom if very big?
+        def    in[T:WTT](coll: Seq[T]): Self = matches({ wv =>  coll.contains(wv.any) })
+        def notIn[T:WTT](coll: Seq[T]): Self = matches({ wv => !coll.contains(wv.any) })
+
+        def hasValue(value: Any): Self2 = matches(_.any == value)
+        def notValue(value: Any): Self2 = matches(_.any != value)
 
         def isPresent      : Self = hasSize(1)
         def isMissing      : Self = hasSize(1)
@@ -93,8 +137,11 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
         def hasSize(n: Int): Self = matches(Whatever.size(_) == n)
 
         // ---------------------------------------------------------------------------
-        def matches(f: WV => TWV[Boolean])                 : Self = zz(FilterByWV(tqkpath(target.value), f(_).typed))
-        def matches(f: WV =>     Boolean) (implicit di: DI): Self = zz(FilterByWV(tqkpath(target.value), f))
+        def greaterThan     [N: Numeric](value: N): Self = matches(_ >  value.asInstanceOf[Number])
+        def greaterOrEqualTo[N: Numeric](value: N): Self = matches(_ >= value.asInstanceOf[Number])
+
+        def lessThan        [N: Numeric](value: N): Self = matches(_ <  value.asInstanceOf[Number])
+        def lessOrEqualTo   [N: Numeric](value: N): Self = matches(_ <= value.asInstanceOf[Number])
       }
 
       // ---------------------------------------------------------------------------
@@ -109,16 +156,27 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
           zz(FilterByZ(resolve(target), f)) }
 
   // ===========================================================================
-  def filterBy(f1: KPathW, f2: KPathW)            : _FilterBy2[WV, WV]     = filterBy(_._explicit(f1.value), _._explicit(f2.value))
-  def filterBy(f1: KPathW, f2: KPathW, f3: KPathW): _FilterBy3[WV, WV, WV] = filterBy(_._explicit(f1.value), _._explicit(f2.value), _._explicit(f3.value))
+  @Max5
+  def filterBy(f1: KPathW, f2: KPathW)            : __FilterBy2WV = new __FilterBy2WV(f1, f2)
+  def filterBy(f1: KPathW, f2: KPathW, f3: KPathW): __FilterBy3WV = new __FilterBy3WV(f1, f2, f3)
 
-      // ---------------------------------------------------------------------------
-      @Max5
-      def filterBy[O1: WTT, O2: WTT         ](f1: FilterByT[O1], f2: FilterByT[O2])                   : _FilterBy2[O1, O2]     = new _FilterBy2(f1, f2)
-      def filterBy[O1: WTT, O2: WTT, O3: WTT](f1: FilterByT[O1], f2: FilterByT[O2], f3: FilterByT[O3]): _FilterBy3[O1, O2, O3] = new _FilterBy3(f1, f2, f3)
+    // ---------------------------------------------------------------------------
+    @Max5
+    def filterBy[O1: WTT, O2: WTT         ](f1: FilterByT[O1], f2: FilterByT[O2])                   : _FilterBy2[O1, O2]     = new _FilterBy2(f1, f2)
+    def filterBy[O1: WTT, O2: WTT, O3: WTT](f1: FilterByT[O1], f2: FilterByT[O2], f3: FilterByT[O3]): _FilterBy3[O1, O2, O3] = new _FilterBy3(f1, f2, f3)
 
     // ===========================================================================
-    class _FilterBy2[O1: WTT, O2: WTT](f1: FilterByT[O1], f2: FilterByT[O2]) {
+    class __FilterBy2WV(target1: KPathW, target2: KPathW) { import gallia.target.utils.TargetQueryUtils.tqkpath2
+        def matches(f: (WV, WV) => TWV[Boolean])                 : Self = zz(FilterByWV2(tqkpath2(target1.value, target2.value), f(_, _).typed, asFind = false))
+        def matches(f: (WV, WV) =>     Boolean) (implicit di: DI): Self = zz(FilterByWV2(tqkpath2(target1.value, target2.value), f,             asFind = false)) }
+  
+      // ---------------------------------------------------------------------------
+      class __FilterBy3WV(target1: KPathW, target2: KPathW, target3: KPathW) { import gallia.target.utils.TargetQueryUtils.tqkpath3
+        def matches(f: (WV, WV, WV) => TWV[Boolean])                 : Self = zz(FilterByWV3(tqkpath3(target1.value, target2.value, target3.value), f(_, _, _).typed, asFind = false))
+        def matches(f: (WV, WV, WV) =>     Boolean) (implicit di: DI): Self = zz(FilterByWV3(tqkpath3(target1.value, target2.value, target3.value), f,                asFind = false)) }
+
+    // ===========================================================================  
+    class _FilterBy2[O1: WTT, O2: WTT](f1: FilterByT[O1], f2: FilterByT[O2]) { 
       //TODO: areAllMissing/areAllPresent, ...
       def matches(f: (O1, O2) => Boolean): Self =
         zz(FilterByV2(resolve2(f1, f2), f)) }

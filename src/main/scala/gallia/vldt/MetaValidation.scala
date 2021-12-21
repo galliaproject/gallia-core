@@ -69,7 +69,7 @@ private[gallia] object MetaValidation {
   // ---------------------------------------------------------------------------
   def checkNotNesting(c: Cls, target: KPath) = errIf_(!c.field(target).isNesting)(ErrorId.NotNesting) // eg for TODO
 
-  def checkNotNumerical(c: Cls, target: KPath) = errIf_(!c.field(target).info.isNumerical)(ErrorId.NotNumeric) // eg for sum-by
+  def checkNotNumerical(c: Cls, target: KPath) = errIf_(!c.field(target).info.isNumericalType)(ErrorId.NotNumeric) // eg for sum-by
 
   // ===========================================================================
   def notEmpty(location: Location)(keys: Seq[Key]): Err_ = errIf_(keys.isEmpty)(ErrorId.CantBeEmpty)

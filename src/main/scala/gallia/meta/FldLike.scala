@@ -73,26 +73,44 @@ trait FldLike extends HasKey with InfoLike
       // ---------------------------------------------------------------------------
       def isBasicType(value: BasicType): Boolean = _containee.leafOpt.exists(_ == value)
 
-        def isString  : Boolean = isBasicType(BasicType._String)
+      // ---------------------------------------------------------------------------      
+      def isString  : Boolean = isBasicType(BasicType._String)
 
-        def isInt     : Boolean = isBasicType(BasicType._Int)
-        def isDouble  : Boolean = isBasicType(BasicType._Double)
+      def isInt     : Boolean = isBasicType(BasicType._Int)
+      def isDouble  : Boolean = isBasicType(BasicType._Double)
 
-        def isBoolean : Boolean = isBasicType(BasicType._Boolean)
+      def isBoolean : Boolean = isBasicType(BasicType._Boolean)
+
+      def isByte : Boolean = isBasicType(BasicType._Byte)
+      def isLong : Boolean = isBasicType(BasicType._Long)
+      def isShort: Boolean = isBasicType(BasicType._Short)
+      def isFloat: Boolean = isBasicType(BasicType._Float)
+      
+      def isBigInt    : Boolean = isBasicType(BasicType._BigInt)
+      def isBigDecimal: Boolean = isBasicType(BasicType._BigDecimal)
+
+      def isDate    : Boolean = isBasicType(BasicType._LocalDate)
+      def isDateTime: Boolean = isBasicType(BasicType._LocalDateTime)
+      
+      //TODO: isEnum
+
+      // ===========================================================================
+      def isStringDoubleBoolean: Boolean = isString || isDouble || isBoolean // useful for JSON
+      
+      // ---------------------------------------------------------------------------
+      def isBasicType      : Boolean = _containee.leafOpt.nonEmpty
+      def isNumericalType  : Boolean = _containee.leafOpt.exists(_.isNumericalType)
+      def isIntegerLikeType: Boolean = _containee.leafOpt.exists(_.isIntegerLikeType)
 
         // ---------------------------------------------------------------------------
-        def forceBasicType: BasicType = _containee.leafOpt.force
-        def forceNumericalType: NumericalType = numericalTypeOpt.force
+        def basicTypeOpt      : Option[BasicType]       = _containee.leafOpt
+        def numericalTypeOpt  : Option[NumericalType]   = _containee.leafOpt.flatMap(_.asNumericalTypeOpt)
+        def integerLikeTypeOpt: Option[IntegerLikeType] = _containee.leafOpt.flatMap(_.asIntegerLikeTypeOpt)
 
         // ---------------------------------------------------------------------------
-        @NumberAbstraction
-        def numericalTypeOpt: Option[NumericalType] = {
-               if (isInt)    BasicType._Int   .in.some
-          else if (isDouble) BasicType._Double.in.some
-          else               None }
-
-        // ---------------------------------------------------------------------------
-        def isNumerical : Boolean = isInt || isDouble // eg for sum-by - FIXME: more allowed types
+        def forceBasicType      : BasicType       = basicTypeOpt      .force
+        def forceNumericalType  : NumericalType   = numericalTypeOpt  .force
+        def forceIntegerLikeType: IntegerLikeType = integerLikeTypeOpt.force
     }
 
 // ===========================================================================

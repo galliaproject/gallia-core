@@ -33,6 +33,18 @@ trait HeadZAggregations { self: HeadZ =>
       def count(groupee: RenW)             : __Aggregate1 = aggregate(groupee).wit(_.count)
       def count(groupee: Groupee1Selection): __Aggregate1 = aggregate(groupee).wit(_.count)
 
+        def countPresent(groupee: RenW)             : __Aggregate1 = aggregate(groupee).wit(_.count_present)
+        def countPresent(groupee: Groupee1Selection): __Aggregate1 = aggregate(groupee).wit(_.count_present)
+        
+        def countMissing(groupee: RenW)             : __Aggregate1 = aggregate(groupee).wit(_.count_missing)
+        def countMissing(groupee: Groupee1Selection): __Aggregate1 = aggregate(groupee).wit(_.count_missing)
+
+        def countDistinct(groupee: RenW)             : __Aggregate1 = aggregate(groupee).wit(_.count_distinct)
+        def countDistinct(groupee: Groupee1Selection): __Aggregate1 = aggregate(groupee).wit(_.count_distinct)
+
+        def countDistinctPresent(groupee: RenW)             : __Aggregate1 = aggregate(groupee).wit(_.count_distinct_present)
+        def countDistinctPresent(groupee: Groupee1Selection): __Aggregate1 = aggregate(groupee).wit(_.count_distinct_present)
+
       def sum  (groupee: RenW)             : __Aggregate1 = aggregate(groupee).wit(_.sum)
       def sum  (groupee: Groupee1Selection): __Aggregate1 = aggregate(groupee).wit(_.sum)
 
@@ -63,8 +75,8 @@ trait HeadZAggregations { self: HeadZ =>
       def sumEach(groupees: GroupersSelection)                : AggEachBy = new AggWith(resolveGroupers(groupees)).wit(ReducingType.sum)
 
       // ---------------------------------------------------------------------------
-      def meanEach(groupee1: RenW, groupee2: RenW, more: RenW*): AggEachBy = sumEach(_.explicit(groupee1, groupee2, more:_*))
-      def meanEach(groupees: RenWz)                            : AggEachBy = sumEach(_.explicit(groupees))
+      def meanEach(groupee1: RenW, groupee2: RenW, more: RenW*): AggEachBy = meanEach(_.explicit(groupee1, groupee2, more:_*))
+      def meanEach(groupees: RenWz)                            : AggEachBy = meanEach(_.explicit(groupees))
       def meanEach(groupees: GroupersSelection)                : AggEachBy = new AggWith(resolveGroupers(groupees)).wit(ReducingType.mean)
 
       // ===========================================================================
@@ -108,17 +120,33 @@ trait HeadZAggregations { self: HeadZ =>
         def countPresentBy(groupers: RenWz)            : Self with HasAs = countPresentBy(_.explicit(groupers))
         def countPresentBy(grouper1: RenW, more: RenW*): Self with HasAs = countPresentBy(_.explicitFX(grouper1, more))
 
-  // ===========================================================================
-  // TODO:x
-  private def _countBy(groupers: GroupersSelection, ctipe: CountLikeType): Self with HasAs =
-        zzWithAs(CountBy(resolveGroupers(groupers), ctipe, asOpt = None))
+    // ---------------------------------------------------------------------------        
+    private def _otherAllBy(rtipe: ReducingType)(groupers: RenWz): Self with HasAs = aggregateEach(_.allBut(groupers.fromz)).wit(rtipe).by(groupers)
 
-      @deprecated private def _sumAllBy(groupers: GroupersSelection): Self with HasAs = ???//_countBy(groupers, ReducingType.sum)
+      // ---------------------------------------------------------------------------
+      def countAllBy(groupers: GroupersSelection)                : Self with HasAs = ??? // TODO
+      def countAllBy(groupers: RenWz)                            : Self with HasAs = _otherAllBy(ReducingType.count)(groupers)
+      def countAllBy(grouper1: RenW, grouper2: RenW, more: RenW*): Self with HasAs = countAllBy(grouper1, grouper2, more:_*)
 
-      def sumAllBy(groupers: GroupersSelection)                : Self with HasAs = ???//_sumAllBy(groupers)
-      def sumAllBy(groupers: RenWz)                            : Self with HasAs = ???//_sumAllBy(groupers)
-      def sumAllBy(grouper1: RenW, grouper2: RenW, more: RenW*): Self with HasAs = ???//_sumAllBy(grouper1, more)
+      // ---------------------------------------------------------------------------
+      def sumAllBy(groupers: GroupersSelection)                : Self with HasAs = ??? // TODO
+      def sumAllBy(groupers: RenWz)                            : Self with HasAs = _otherAllBy(ReducingType.sum)(groupers)
+      def sumAllBy(grouper1: RenW, grouper2: RenW, more: RenW*): Self with HasAs = sumAllBy(grouper1, grouper2, more:_*)
 
+      // ---------------------------------------------------------------------------
+      def meanAllBy(groupers: GroupersSelection)                : Self with HasAs = ??? // TODO
+      def meanAllBy(groupers: RenWz)                            : Self with HasAs = _otherAllBy(ReducingType.mean)(groupers)
+      def meanAllBy(grouper1: RenW, grouper2: RenW, more: RenW*): Self with HasAs = meanAllBy(grouper1, grouper2, more:_*)
+
+      // ---------------------------------------------------------------------------
+      def stdevAllBy(groupers: GroupersSelection)                : Self with HasAs = ??? // TODO
+      def stdevAllBy(groupers: RenWz)                            : Self with HasAs = _otherAllBy(ReducingType.stdev)(groupers)
+      def stdevAllBy(grouper1: RenW, grouper2: RenW, more: RenW*): Self with HasAs = stdevAllBy(grouper1, grouper2, more:_*)
+
+      // ---------------------------------------------------------------------------
+      def medianAllBy(groupers: GroupersSelection)                : Self with HasAs = ??? // TODO
+      def medianAllBy(groupers: RenWz)                            : Self with HasAs = _otherAllBy(ReducingType.median)(groupers)
+      def medianAllBy(grouper1: RenW, grouper2: RenW, more: RenW*): Self with HasAs = medianAllBy(grouper1, grouper2, more:_*)      
 }
 
 // ===========================================================================

@@ -52,14 +52,35 @@ sealed trait ReducingType extends EnumEntry {
 
     // ---------------------------------------------------------------------------
     protected[reducing] abstract class _Base( // TODO: rename
-              val defaultKey: Key,
-              val returnType: ReduceReturnType,
+            val defaultKey: Key,
+            val returnType: ReduceReturnType,
 
-            val f: List[Int   ] => Any,
-            val g: List[Double] => Any)
+            // ---------------------------------------------------------------------------
+            val ints       : List[Int   ]     => Any,          
+            val doubles    : List[Double]     => Any,
+                        
+            val bytes      : List[Byte]       => Any,
+            val shorts     : List[Short]      => Any,
+            val longs      : List[Long]       => Any,
+            
+            val floats     : List[Float]      => Any,
+                        
+            val bigInts    : List[BigInt]     => Any,
+            val bigDecimals: List[BigDecimal] => Any)
           extends ReducingType {
         def data(ignored: Boolean, numTypeOpt: Option[NumericalType]): Values => Any =
-          ReducingTypeUtils.baseData(f, g)(ignored, numTypeOpt)
+          ReducingTypeUtils.baseData(ignored, numTypeOpt)(
+              ints       ,
+              doubles    ,
+
+              bytes      ,
+              shorts     ,
+              longs      ,
+                          
+              floats     ,
+                                      
+              bigInts    ,
+              bigDecimals)            
       }
 
     // ===========================================================================
@@ -76,21 +97,21 @@ sealed trait ReducingType extends EnumEntry {
     // ---------------------------------------------------------------------------
     case object mean   extends RealAgg(_mean  ) { def data = ReducingTypeUtils._flattenedDoubles(_).mean  }
     case object stdev  extends RealAgg(_stdev ) { def data = ReducingTypeUtils._flattenedDoubles(_).stdev }
-    //TODO: variance
+    //TODO: variance?
 
     case object median extends RealAgg(_median) { def data = ReducingTypeUtils._flattenedDoubles(_).median } //TODO: t201207134039 - median floor/ceiling for ints (or left/right?)
     // TODO: percentile(n), quantile
 
     // ===========================================================================
-    case object sum   extends _Base(_sum  , ReduceReturnType.unchanged, _.sum  , _.sum  )
+    case object sum   extends _Base(_sum  , ReduceReturnType.unchanged, _.sum, _.sum, _.sum, _.sum, _.sum, _.sum, _.sum, _.sum)
 
     // ---------------------------------------------------------------------------
-    case object min   extends _Base(_min  , ReduceReturnType.unchanged, _.min  , _.min  )
-    case object max   extends _Base(_max  , ReduceReturnType.unchanged, _.max  , _.max  )
-    case object range extends _Base(_range, ReduceReturnType.unchanged, _.range, _.range)
+    case object min   extends _Base(_min  , ReduceReturnType.unchanged, _.min  , _.min, _.min  , _.min, _.min, _.min, _.min, _.min)
+    case object max   extends _Base(_max  , ReduceReturnType.unchanged, _.max  , _.max, _.max  , _.max, _.max, _.max, _.max, _.max)
+    case object range extends _Base(_range, ReduceReturnType.unchanged, _.range, _.range, _.range, _.range, _.range, _.range, _.range, _.range)
 
     // ---------------------------------------------------------------------------
-    case object IQR   extends _Base(_IQR  , ReduceReturnType.real     , _.IQR  , _.IQR  )
+    case object IQR   extends _Base(_IQR  , ReduceReturnType.real     , _.IQR  , _.IQR, _.IQR, _.IQR, _.IQR, _.IQR, _.IQR, _.IQR  )
 
     // ===========================================================================
     case object stats extends ReducingType {

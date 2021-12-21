@@ -35,6 +35,16 @@ case class OtherTableConf(outlet: OutletType, twc: TableWritingContext = TableWr
       def nullValue     (value: String)         = updateTableWritingContext(_.copy(nullValue      = value))
   }
 
+  // ---------------------------------------------------------------------------
+  case class PrettyTableConf(outlet: OutletType, twc: PrettyTableWritingContext = PrettyTableWritingContext.Default) extends OutputConfZ {
+    def actionZ = PrettyTableOutput(outlet, twc)
+
+    // ---------------------------------------------------------------------------
+    def updateTableWritingContext(f: PrettyTableWritingContext => PrettyTableWritingContext) = copy(twc = f(twc))
+      def arraySeparator(value: String) = updateTableWritingContext(_.copy(arraySeparator = value))
+      def nullValue     (value: String) = updateTableWritingContext(_.copy(nullValue      = value))
+  }
+
   // ===========================================================================
   case class UrlLikeTableConf(
       uriString : String,

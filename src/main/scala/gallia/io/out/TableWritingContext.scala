@@ -66,6 +66,18 @@ case class TableWritingContext(
         arraySeparator = "|",
         hasHeader      = true,
         nullValue      = "")
+     
+    // ===========================================================================        
+    private[out] def formatValue(arraySeparator: String)(value: Any): String = // TODO: use schema rather than pattern match (see t210115095838)
+        value match {
+          case seq: Seq[_] => seq.map(formatSingleValue).mkString(arraySeparator)        
+          case sgl         =>         formatSingleValue(sgl) }
+  
+      // ---------------------------------------------------------------------------
+      private[out] def formatSingleValue: PartialFunction[Any, String] = 
+        _ match {
+          case o: Obj => o.formatCompactJson
+          case x      => data.DataFormatting.formatBasicValue(x) }        
   }
 
 // ===========================================================================

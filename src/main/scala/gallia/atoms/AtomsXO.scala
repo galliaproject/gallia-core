@@ -44,6 +44,10 @@ object AtomsXO {
     case class _OtherTableOutput(skeys: Seq[SKey], outlet: OutletType, twc: TableWritingContext) extends AtomZO {
       def naive(z: Objs) = { twc.formatTable(skeys)(z).pipe(outlet.writeLines) } }
 
+    // ---------------------------------------------------------------------------
+    case class _PrettyTableOutput(skeys: Seq[SKey], outlet: OutletType, twc: PrettyTableWritingContext) extends AtomZO {
+      def naive(z: Objs) = { twc.formatTable(skeys)(z).pipe(outlet.writeLines) } }
+    
 }
 
 // ===========================================================================

@@ -84,19 +84,34 @@ class OtherFluencyU(outlet: OutletType) extends EndWriteUFluency {
     def table(sep: Char): OtherTableFluency = new OtherTableFluency(OtherTableConf(outlet).sep(sep))
       def tsv: OtherTableFluency = table('\t')
       def csv: OtherTableFluency = table(',')
+
+      def prettyTable: PrettyTableFluency = new PrettyTableFluency(PrettyTableConf(outlet))
   }
 
 // ===========================================================================
-class OtherTableFluency(val conf: OtherTableConf)
-      extends FluencyBase[OtherTableFluency, OtherTableConf](new OtherTableFluency(_))
-      with    EndWriteZFluency {
-    val self = this
-
-    // ---------------------------------------------------------------------------
-    def updateTableWritingContext(f: TableWritingContext => TableWritingContext): OtherTableFluency = conf.copy(twc = f(conf.twc))
-
-    def arraySeparator(value: String)         = updateTableWritingContext(_.copy(arraySeparator = value))
-    def nullValue     (value: String)         = updateTableWritingContext(_.copy(nullValue      = value))
+class PrettyTableFluency(val conf: PrettyTableConf)
+        extends FluencyBase[PrettyTableFluency, PrettyTableConf](new PrettyTableFluency(_))
+        with    EndWriteZFluency {
+      val self = this
+  
+      // ---------------------------------------------------------------------------
+      def updateTableWritingContext(f: PrettyTableWritingContext => PrettyTableWritingContext): PrettyTableFluency = conf.copy(twc = f(conf.twc))
+  
+      def arraySeparator(value: String) = updateTableWritingContext(_.copy(arraySeparator = value))
+      def nullValue     (value: String) = updateTableWritingContext(_.copy(nullValue      = value))
+  }
+  
+  // ---------------------------------------------------------------------------
+  class OtherTableFluency(val conf: OtherTableConf)
+        extends FluencyBase[OtherTableFluency, OtherTableConf](new OtherTableFluency(_))
+        with    EndWriteZFluency {
+      val self = this
+  
+      // ---------------------------------------------------------------------------
+      def updateTableWritingContext(f: TableWritingContext => TableWritingContext): OtherTableFluency = conf.copy(twc = f(conf.twc))
+  
+      def arraySeparator(value: String)         = updateTableWritingContext(_.copy(arraySeparator = value))
+      def nullValue     (value: String)         = updateTableWritingContext(_.copy(nullValue      = value))
 }
 
 // ===========================================================================

@@ -64,4 +64,9 @@ case class OtherOutputU(ioType: IoTypeU, outlet: OutletType) extends ActionUOc {
       def vldt(c: Cls): Errs = Nil //TODO
       def atomzo(c: Cls): AtomZO = _OtherTableOutput(c.skeys, outlet, twc) }
 
+  // ---------------------------------------------------------------------------
+  case class PrettyTableOutput(outlet: OutletType, twc: PrettyTableWritingContext) extends ActionZOc {
+      def vldt(c: Cls): Errs = Nil //TODO
+      def atomzo(c: Cls): AtomZO = _PrettyTableOutput(c.skeys, outlet, twc) }
+  
 // ===========================================================================

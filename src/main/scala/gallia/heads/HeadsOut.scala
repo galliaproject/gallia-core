@@ -60,7 +60,7 @@ trait HeadZOut { ignored: HeadZ =>
   def formatJsonArray: String = { val sw = new  java.io.StringWriter; write(_.formatString(sw).jsonArray); sw.toString }
 
   // ===========================================================================
-  //TODO: def printSchema()
+  //TODO: t211220170700 - def printSchema()
 
   def printString   () = { printJsonLines }
 
@@ -69,14 +69,14 @@ trait HeadZOut { ignored: HeadZ =>
   def printJsonArray() = { write(_.stdout.jsonArray); () }
 
   // ---------------------------------------------------------------------------
-  def printTable()       = { write(_.stdout.tsv); () }
-  def printPrettyTable() = { write(_.stdout.tsv); () } // TODO: actually prettify
-
-  // TODO: pretty (print/write)
+  def printTable()           = {          write(_.stdout.tsv); () }
+  def printPrettyTable()     = {          write(_.stdout.prettyTable); () }
+  def printPrettyTableHead() = { take(10).write(_.stdout.prettyTable); () }
 
   // ===========================================================================
   def writeFile(path: String) = { write(_.file(path)); () }
   def writeDefaultFile        = { write(_.file(HeadZ.DefaultOutputFile)); () }
+  //TODO: t211220134905 - write pretty table?  
 }
 
 // ===========================================================================

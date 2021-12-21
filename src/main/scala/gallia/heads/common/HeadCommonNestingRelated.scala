@@ -25,7 +25,8 @@ trait HeadCommonNestingRelated[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   // unnesting; note: renaming is N/A
 
   // ---------------------------------------------------------------------------
-  def unnestAllFrom(parent: KPathW) = unnestFrom(parent).fields(_.allKeys)
+  def unnestAllFrom(parent: KPathW): Self2 = unnestFrom(parent).fields(_.allKeys)
+  def unnestAllFromGroup           : Self2 = unnestAllFrom(_group) // common after custom aggregations
 
     // ===========================================================================
     def unnestFrom(parent: KPathW) = new {

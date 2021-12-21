@@ -762,15 +762,16 @@ I have never dealt with it personally but I imagine the likes of computational p
 
 ## Strengths
 Gallia's main strengths can be summed up like so:
-* The most common/useful data operations are provided, or at least [scheduled](https://github.com/galliaproject/gallia-docs/blob/master/tasks.md).
-* Readable DSL that domain experts should be able to at least partially comprehend.
-* Scaling is not an afterthought and *Spark RDDs* can be leveraged when required.
-* Meta-awareness, meaning inconsistent transformations are rejected whenever possible (for instance, cannot use a field that's been removed already).
-* Can process individual entities, not just collections thereof; that is, there's no need to create "dummy" collections of one entity in order to operate on that entity.
-* Can process nested entities of any multiplicity in a natural way.
-* Macros are [available](https://github.com/galliaproject/gallia-macros) for a smooth integration with case class hierarchies.
-* Provides flexible target selection - i.e. which field(s) to act on - which ranges from explicit reference to actual queries, including when nesting is involved.
-* The execution DAG is sufficiently abstracted that its optimization is a well-separated concern (e.g. predicate pushdowns, pruning, ...); note however, that few such optimizations are in place at the moment.
+* <a name="211220163120"></a>Offers a one-stop shop paradigm for most or all data transformations needs within one's application.
+* <a name="211220163121"></a>The most common/useful data operations are provided, or at least [scheduled](https://github.com/galliaproject/gallia-docs/blob/master/tasks.md).
+* <a name="211220163122"></a>Readable DSL that domain experts should be able to at least partially comprehend.
+* <a name="211220163123"></a>Scaling is not an afterthought and *Spark RDDs* can be leveraged when required.
+* <a name="211220163124"></a>Meta-awareness, meaning inconsistent transformations are rejected whenever possible (for instance, cannot use a field that's been removed already).
+* <a name="211220163125"></a>Can process individual entities, not just collections thereof; that is, there's no need to create "dummy" collections of one entity in order to operate on that entity.
+* <a name="211220163126"></a>Can process nested entities of any multiplicity in a natural way.
+* <a name="211220163127"></a>Macros are [available](https://github.com/galliaproject/gallia-macros) for a smooth integration with case class hierarchies.
+* <a name="211220163128"></a>Provides flexible target selection - i.e. which field(s) to act on - which ranges from explicit reference to actual queries, including when nesting is involved.
+* <a name="211220163129"></a>The execution DAG is sufficiently abstracted that its optimization is a well-separated concern (e.g. predicate pushdowns, pruning, ...); note however, that few such optimizations are in place at the moment.
 
 
 ## FAQ

@@ -40,9 +40,9 @@ case class Keyz(values: Seq[Key]) extends Seq[Key] {
     val Empty = Keyz.apply(Nil)
 
     // ---------------------------------------------------------------------------
-    def from(key: KeyW)                              : Keyz = Keyz(Seq(key.value))
-    def from(key1: KeyW,             more: Seq[KeyW]): Keyz = Keyz((    key1        +: more).map(_.value))
-    def from(key1: KeyW, key2: KeyW, more: Seq[KeyW]): Keyz = Keyz((Seq(key1, key2) ++ more).map(_.value))
+    def from(key: KeyW)                              : Keyz = Keyz(List(key.value))
+    def from(key1: KeyW,             more: Seq[KeyW]): Keyz = Keyz((     key1        +: more).map(_.value))
+    def from(key1: KeyW, key2: KeyW, more: Seq[KeyW]): Keyz = Keyz((List(key1, key2) ++ more).map(_.value))
   }
 
 // ===========================================================================
@@ -74,9 +74,9 @@ case class Renz(values: Seq[Ren]) extends Seq[Ren] {
 
   // ===========================================================================
   object Renz {
-    def from(key: RenW)                              : Renz = Renz(Seq(key.value))
-    def from(key1: RenW,             more: Seq[RenW]): Renz = Renz((    key1        +: more).map(_.value))
-    def from(key1: RenW, key2: RenW, more: Seq[RenW]): Renz = Renz((Seq(key1, key2) ++ more).map(_.value))
+    def from(key: RenW)                              : Renz = Renz(List(key.value))
+    def from(key1: RenW,             more: Seq[RenW]): Renz = Renz((     key1        +: more).map(_.value))
+    def from(key1: RenW, key2: RenW, more: Seq[RenW]): Renz = Renz((List(key1, key2) ++ more).map(_.value))
   }
 
 // ===========================================================================
@@ -118,7 +118,7 @@ case class KPathz(values: Seq[KPath]) extends Seq[KPath] {
 
   // ===========================================================================
   object KPathz {
-    def from(key: KeyW): KPathz = KPathz(Seq(KPath.from(key)))
+    def from(key: KeyW): KPathz = KPathz(List(KPath.from(key)))
 
     // ===========================================================================
     object Implicits {
@@ -167,7 +167,7 @@ case class RPathz(values: Seq[RPath]) extends Seq[RPath] {
 
   // ===========================================================================
   object RPathz {
-    def from(path: KPathW): RPathz = RPathz(Seq(RPath.from(path)))
+    def from(path: KPathW): RPathz = RPathz(List(RPath.from(path)))
   }
 
 // ===========================================================================

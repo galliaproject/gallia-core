@@ -15,7 +15,10 @@ package object gallia
   // ===========================================================================
   // TODO: t210121105809 - rename to HeadU->HeadO and HeadZ->HeadS (historical names)
   type HeadO = heads.HeadU
+  val  HeadO = heads.HeadU
+  
   type HeadS = heads.HeadZ
+  val  HeadS = heads.HeadZ
 
   type HeadU = gallia.heads.HeadU
   val  HeadU = gallia.heads.HeadU
@@ -115,8 +118,8 @@ package object gallia
   // ===========================================================================
   def cls[T: WTT]                 : Cls = reflect.TypeNode.parse[T].leaf.forceDataClass
   def cls(schemaFilePath: String) : Cls = meta.MetaObj.clsFromFile(schemaFilePath) // TODO: or also detect file vs direct object?
-  def cls(field1: Fld, more: Fld*): Cls = meta.Cls(field1 +: more)
-  def cls(fields: Seq[Fld])       : Cls = meta.Cls(fields)
+  def cls(field1: Fld, more: Fld*): Cls = cls((field1 +: more))
+  def cls(fields: Seq[Fld])       : Cls = meta.Cls(fields.toList)
 
   // ---------------------------------------------------------------------------
   def obj(entry1: DataEntry, more: DataEntry*): Obj = Obj.fromIterable((entry1 +: more).map(_.pair))

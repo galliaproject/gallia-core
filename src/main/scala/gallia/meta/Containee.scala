@@ -10,6 +10,10 @@ package meta
     // ---------------------------------------------------------------------------
     def nestingOpt: Option[Cls      ] = _either     .toOption
     def leafOpt   : Option[BasicType] = _either.swap.toOption
+    
+    // ---------------------------------------------------------------------------
+    def forceBasicType: BasicType = this.asInstanceOf[BasicType]
+    def forceCls      : Cls       = this.asInstanceOf[Cls]
   }
 
   // ===========================================================================

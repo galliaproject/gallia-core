@@ -20,8 +20,9 @@ Execution happens in two phases, each traversing a dedicated execution [DAG](htt
 
 <a name="210121153146"></a>
 <a name="210202173234"></a>
-This article is a quick tour that focuses on a few examples rather than a comprehensive guide.
-A more thorough discussion of design choices/limitations/direction will come as subsequent article(s).
+See introductory article in [Towards Data Science](https://towardsdatascience.com/gallia-a-library-for-data-transformation-3fafaaa2d8b9).
+The rest of this README serves as temporary documentation.
+More thorough discussions of design choices/limitations/direction will come as subsequent article(s).
 
 <a name="210121153202"></a>
 Preliminary notes:

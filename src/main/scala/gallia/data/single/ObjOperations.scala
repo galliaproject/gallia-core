@@ -263,7 +263,7 @@ trait ObjOperations { self: Obj =>
   // ---------------------------------------------------------------------------
   def transformObj   (key: Key, f: Obj    => Any): Obj = transformPath(key, _.asObj   .pipe(f))
   def transformObjx  (key: Key, f: Obj    => Any): Obj = transformPath(key,
-      _ match {
+      _ match { // TODO: should use schema rather (see t210115095838)
         case x: Seq[_] => x.map(_.asObj.pipe(f))
         case x         => x      .asObj.pipe(f) } )
 

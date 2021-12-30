@@ -13,7 +13,7 @@ case class ActualRen(from: Key, to: Key) {
 // ===========================================================================
 case class Ren(from: Key, to: Key /* may be the same as from */) { // TODO: t210115153452 - change so as to use Option for to
     override def toString: String = formatDefault
-      def formatDefault: String = if (isActual) s"${from} ~> ${to}" else from.name
+      def formatDefault: String = if (isActual) s"${from.name} ~> ${to.name}" else from.name
 
     def isActual: Boolean     = from != to
 
@@ -71,7 +71,7 @@ case class KPath(parent: Seq[Key], key: Key) {
     // symbolic access
 
     def |> (that: KeyW): KPath = appendLevel(that.value)
-    def |> (that: Ren  ): RPath = RPath(parent, that)
+    def |> (that: Ren  ): RPath = RPath(parent :+ key, that)
 
     def ||> (that: KeyWPair): SPathz = ???
 
@@ -105,7 +105,7 @@ case class RPath(parent: Seq[Key], ren: Ren) {
     override def toString: String = formatDefault
       def formatDefault: String = formatDebug
 
-      def formatDebug = from.formatDebug + (if (ren.isActual) s" ~> ${ren.to}" else "")
+      def formatDebug = from.formatDebug + (if (ren.isActual) s" ~> ${ren.to.name}" else "")
 
     // ---------------------------------------------------------------------------
     def prepend(root: KeyW): RPath = RPath(root.value +: parent, ren)

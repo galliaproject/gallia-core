@@ -72,6 +72,7 @@ object UtsBase {
   object Translate  extends QpathzBase { type Origin = Origins.Translate ; val origin = new Origin {} }
   object Custom     extends QpathzBase { type Origin = Origins.Custom    ; val origin = new Origin {} }
 
+  object Nest       extends QpathzBase { type Origin = Origins.Nest      ; val origin = new Origin {} }
   object Renesting  extends KeyzBase   { type Origin = Origins.Renesting ; val origin = new Origin {} }
   object UnnestFrom extends RenzBase   { type Origin = Origins.UnnestFrom; val origin = new Origin {} }
 

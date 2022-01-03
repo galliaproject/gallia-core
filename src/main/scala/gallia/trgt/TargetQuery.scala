@@ -82,7 +82,7 @@ class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](
   }
 
   // ===========================================================================
-  object TargetQuery {
+  object TargetQuery { // see more basic builders in TargetQueryUtils
     private def from[A](a: A)(f: A => RPathz): TqRPathz = new TqRPathz(_ => Nil, _ => f(a))
 
     // ---------------------------------------------------------------------------

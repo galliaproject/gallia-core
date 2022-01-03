@@ -12,7 +12,7 @@ protected trait TargetWrappers[$Wrap] extends Seq[$Wrap] {
 
 // ===========================================================================
 // TODO: use Iterable instead? mostly for Map.values; for mixed (eg Key/SKey, must use explicit type tag)
-case class KeyWz  (values: Seq[KeyW])   extends TargetWrappers[KeyW]   { def keyz   = Keyz  (values.map(_.value)); def keys : Seq[Key]   = values.map(_.value) }
+case class KeyWz  (values: Seq[KeyW])   extends TargetWrappers[KeyW]   { def keyz   = Keyz  (values.map(_.value)); def keys : Seq[Key]   = values.map(_.value); def skeys : Seq[SKey] = values.map(_.value.name) }
 case class KPathWz(values: Seq[KPathW]) extends TargetWrappers[KPathW] { def kpathz = KPathz(values.map(_.value)); def paths: Seq[KPath] = values.map(_.value) }
 case class RenWz  (values: Seq[RenW])   extends TargetWrappers[RenW]   {
   def renz  : Renz = Renz(values.map(_.value))
@@ -25,7 +25,8 @@ case class ActualRPathWz(values: Seq[ActualRPathW]) extends TargetWrappers[Actua
 
 // ===========================================================================
 object KeyWz {
-    def from(value: KeyW, more: Seq[KeyW] = Nil) = KeyWz(value +: more)    
+    def from(value : KeyW,               more: Seq[KeyW] = Nil) = KeyWz(value               +: more)
+    def from(value1: KeyW, value2: KeyW, more: Seq[KeyW])       = KeyWz(Seq(value1, value2) ++ more)
 
       // ---------------------------------------------------------------------------
       implicit def _to(tuple: (KeyW,       Seq[KeyW])): KeyWz = KeyWz(Seq(tuple._1          ) ++ tuple._2)

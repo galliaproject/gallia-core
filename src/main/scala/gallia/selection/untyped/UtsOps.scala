@@ -32,6 +32,7 @@ object UtsOps { // this is a big mess... FIXME: t210107203932
   trait  Translate  extends Core1N with HasSoleKey with Bundle.HasAllAlls with Bundle.HasExplicitKPathW
   trait  Convert    extends Core1N with HasSoleKey with Bundle.HasAllAlls with Bundle.HasExplicitKPathW
 
+  trait  Nest        extends Core1N with HasSoleKey with HasAllKeys with Bundle.HasExplicitRenW // TODO: must distinguish under and into for sole/all keys
   trait  Renesting   extends CoreN with NoSoleKey  with HasAllKeys with Bundle.HasExplicitKeyW
   trait  UnnestFrom  extends CoreN with HasSoleKey with HasAllKeys with Bundle.HasExplicitRenW
 

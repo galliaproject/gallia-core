@@ -15,11 +15,12 @@ trait HeadCommonNestingRelated[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   def nest(x: RPathW)                             = new _Nest(RPathWz.from(x))
   def nest(x1: RPathW, x2: RPathW, more: RPathW*) = new _Nest(x1, x2, more)
   def nest(xs: RPathWz)                           = new _Nest(xs)
+  def nest(sel: SEL.Nest.Selector)                = new _Nest(SEL.Nest.resolve(sel))
 
     // ---------------------------------------------------------------------------
-    final class _Nest(targets: RPathWz) {
-      def under(     newNestingKey: KeyW): Self2 = self2 :+ new NestUnder(targets.qpathz, newNestingKey     .value)
-      def into (existingNestingKey: RenW): Self2 = self2 :+ new NestInto (targets.qpathz, existingNestingKey.value) }
+    final class _Nest(targets: TqRPathz) {
+      def under(     newNestingKey: KeyW): Self2 = self2 :+ new NestUnder(targets, newNestingKey     .value)
+      def into (existingNestingKey: RenW): Self2 = self2 :+ new NestInto (targets, existingNestingKey.value) }
 
   // ===========================================================================
   // unnesting; note: renaming is N/A

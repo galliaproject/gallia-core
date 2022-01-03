@@ -88,7 +88,9 @@ sealed trait ReducingType extends EnumEntry {
     // - t210118084355 - mode, skewness, curtosis, MAD/mean absolute deviation, trimmed ...
     // - t210118084356 - distributions? (pretty costly)?
 
+    @deprecated("use count_all now")
     case object count                  extends CountLikeType { def data = countAll             _ }
+    case object count_all              extends CountLikeType { def data = countAll             _ }
     case object count_present          extends CountLikeType { def data = countPresent         _ }
     case object count_missing          extends CountLikeType { def data = countMissing         _ }
     case object count_distinct         extends CountLikeType { def data = countDistinct        _ }

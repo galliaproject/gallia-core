@@ -2,6 +2,9 @@ package gallia
 package heads.reducing
 
 // ===========================================================================
+case class ReducingPairs(values: Seq[ReducingPair]) { def keyz: Keyz = Keyz(values.map(_.target.value)) }
+
+// ===========================================================================
 trait ReducingPair {
     val target: KeyW // TODO: ren?
 

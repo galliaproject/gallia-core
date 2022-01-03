@@ -9,10 +9,10 @@ import heads.reducing.ReducingPair
 @NumberAbstraction
 object ActionsReducing {
 
-  case class Reduce(pairs: Seq[ReducingPair]) extends ActionZUc {
+  case class Reduce(pairs: ReducingPairs) extends ActionZUc {
       def vldt  (in: Cls): Errs    = Nil//TODO; at least one pair, no duplicates
-      def _meta (in: Cls): Cls    = pairs.map(_.field(in)).pipe(Cls.apply)
-      def atomzu(in: Cls): AtomZU = pairs.map(_.dataTriplet(in)).pipe(_Reduce)
+      def _meta (in: Cls): Cls    = pairs.values.map(_.field(in)).pipe(Cls.apply)
+      def atomzu(in: Cls): AtomZU = pairs.values.map(_.dataTriplet(in)).pipe(_Reduce)
     }
 
     // ---------------------------------------------------------------------------

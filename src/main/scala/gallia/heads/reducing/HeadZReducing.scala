@@ -44,8 +44,9 @@ trait HeadZReducing { ignored: HeadZ =>
     def stats = reduceWithStats(_.allKeys)
 
   // ===========================================================================
-  def reduce(pairs: Seq[ReducingPair]): HeadU = zu(Reduce(pairs))
+  def reduce(pairs:     ReducingPairs): HeadU = zu(Reduce(pairs))
 
+    def reduce(pairs: Seq[ReducingPair])                  : HeadU = reduce(ReducingPairs(pairs))
     def reduce(pair1: ReducingPair1, more: ReducingPair1*): HeadU = reduce(pair1 +: more)
     def reduce(pair1: ReducingPair , more: ReducingPair *): HeadU = reduce(pair1 +: more)
 

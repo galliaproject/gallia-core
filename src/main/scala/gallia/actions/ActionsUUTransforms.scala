@@ -52,6 +52,26 @@ object ActionsUUTransforms {
     }
 
   // ===========================================================================
+  case class TransformObjectCustom[D1: WTT](from: TqRPathz, to: TypeNode, f: Obj => D1) extends ActionUUb {
+        def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.pipe(_vldt.validType) ++ Nil // TODO: more       
+          // TODO: t210202155459 - verify input is indeed u
+        def _meta(c: Cls): Cls  = from.resolve(c).pipe(c.updateType(_, to))              
+        def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, wrap(f)))) }
+    
+    // ---------------------------------------------------------------------------
+    case class TransformObjectsCustom[D1: WTT](from: TqRPathz, to: TypeNode, f: Objs => D1) extends ActionUUb {
+        def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.pipe(_vldt.validType) ++ Nil // TODO: more        
+          // TODO: t210202155459 - verify input is indeed z
+        def _meta  (c: Cls): Cls     = from.resolve(c).pipe(c.updateType(_, to))              
+        def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, wrap((x: Seq[Obj]) => f(Objs.from(x)))))) }    
+
+    // ===========================================================================
+    case class TransformToObj(from: TtqRPathz, to: Cls, multiple: Boolean, f: _ff11) extends ActionUUb with TodoV1 { // TODO: split single/multiple
+      // TODO: validation, disallow '[]' (use missing field instead)
+      def _meta  (c: Cls): Cls     = from.qpathz_(c).pipe { c.transformInfo(_) { _ => Info(if (multiple) Container._Nes else Container._One, to) }}
+      def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe { _atoms(c)(_TransformVV(_, f)) } }
+    
+  // ===========================================================================
   case class TransformUZ(target: TqRPathz, f: HeadU => HeadZ) extends ActionUUb with HasTqRPathzTarget {
       private val _trnsf = utils.NestedTransform.parseUZ(f)
 
@@ -62,7 +82,6 @@ object ActionsUUTransforms {
             _trnsf.vldt(c, _) } ++
         target.__qpathz(c).pipe(_.fromz).pipe {
               checkUInput(c) }
-
         // TODO: t210202155459 - verify input is indeed z
 
       def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).toMultiple(x.force1FX) }
@@ -145,11 +164,6 @@ object ActionsUUTransforms {
       def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c)(_.updateType(_, to.node))
       def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.wrapc(to, f) ))) }
 
-    // ---------------------------------------------------------------------------
-case class TransformFoo(from: TtqRPathz, to: Cls, f: _ff11) extends ActionUUb with TodoV1 {  
-      def _meta  (c: Cls): Cls     = from.qpathz_(c).pipe(c.transformInfo(_)(_.updateContainee(to)))
-      def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, f))) }
-    
     // ---------------------------------------------------------------------------
     case class TransformVVxc(from: TtqRPathz, to: HT, f: _ff11) extends ActionUUb with TodoV1 {
       def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c)(_.updateContainee(_, to.node))

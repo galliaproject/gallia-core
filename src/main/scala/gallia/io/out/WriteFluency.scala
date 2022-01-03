@@ -64,6 +64,12 @@ class OtherFluencyU(outlet: OutletType) extends EndWriteUFluency {
     def json          = prettyJson    
       def compactJson = endOtherU(IoTypeU.CompactJsonObject, outlet)
       def prettyJson  = endOtherU(IoTypeU.PrettyJsonObject,  outlet)
+      
+    // ---------------------------------------------------------------------------
+    def display()                   : DisplayFluencyU = { display(forceRow = false) }
+    def displayForceTable()         : DisplayFluencyU = { display(forceRow = true ) }
+
+    def display(forceRow: Boolean = false): DisplayFluencyU = new DisplayFluencyU(DisplayConfU(forceRow))          
   }
 
   // ===========================================================================
@@ -86,6 +92,14 @@ class OtherFluencyU(outlet: OutletType) extends EndWriteUFluency {
       def csv: OtherTableFluency = table(',')
 
       def prettyTable: PrettyTableFluency = new PrettyTableFluency(PrettyTableConf(outlet))
+    
+    // ---------------------------------------------------------------------------
+    def display()                   : DisplayFluencyZ = { display(n = 10) }
+    def display(n: Int)             : DisplayFluencyZ = { display(n     , forceTable = false) }
+    def display(forceTable: Boolean): DisplayFluencyZ = { display(n = 10, forceTable) }
+    def displayForceTable()         : DisplayFluencyZ = { display(        forceTable = true) }
+
+    def display(n: Int, forceTable: Boolean = false): DisplayFluencyZ = new DisplayFluencyZ(DisplayConfZ(forceTable))
   }
 
 // ===========================================================================
@@ -112,6 +126,18 @@ class PrettyTableFluency(val conf: PrettyTableConf)
   
       def arraySeparator(value: String)         = updateTableWritingContext(_.copy(arraySeparator = value))
       def nullValue     (value: String)         = updateTableWritingContext(_.copy(nullValue      = value))
-}
+  }
+
+// ===========================================================================
+class DisplayFluencyU(val conf: DisplayConfU)
+        extends FluencyBase[DisplayFluencyU, DisplayConfU](new DisplayFluencyU(_))
+        with    EndWriteUFluency {
+      val self = this }
+  
+  // ---------------------------------------------------------------------------
+  class DisplayFluencyZ(val conf: DisplayConfZ)
+        extends FluencyBase[DisplayFluencyZ, DisplayConfZ](new DisplayFluencyZ(_))
+        with    EndWriteZFluency {
+      val self = this }
 
 // ===========================================================================

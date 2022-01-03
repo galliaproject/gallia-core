@@ -89,8 +89,7 @@ sealed trait IoTypeZ { // TODO: t210118103012 - proper handling
     case object DirectJsonArray  extends IoTypeZ {
         def defaultRead = (start, conf) => start.jsonArrayString.schemaProvider(conf.schemaProvider)
         def defaultFormat            = aptus.illegalState("TODO:210118103012")
-        def outputConf(path: String) = aptus.illegalState("TODO:210118103013")
-      }
+        def outputConf(path: String) = aptus.illegalState("TODO:210118103013") }
 
       // ---------------------------------------------------------------------------
       case object JsonLines extends UrlLikeIoTypeZ {
@@ -102,6 +101,11 @@ sealed trait IoTypeZ { // TODO: t210118103012 - proper handling
         def defaultRead   = (start, conf) => start.jsonArrayFile.pipeIf(!conf.inMemoryMode)(_.iteratorMode).schemaProvider(conf.schemaProvider).project(conf.projectionOpt)
         def defaultFormat = _.naiveFormatArrayLines }
 
+      // ---------------------------------------------------------------------------
+      case object JsonPrettyLines extends UrlLikeIoTypeZ {
+        def defaultRead   = aptus.illegalState("TODO:210118103012")
+        def defaultFormat = _.consume.map(_.formatPrettyJson) }
+      
     // ===========================================================================
     case object Table extends IoTypeZ {
       def defaultRead   = (start, conf) => start.table.pipeIf(!conf.inMemoryMode)(_.iteratorMode).schemaProvider(conf.schemaProvider).project(conf.projectionOpt)

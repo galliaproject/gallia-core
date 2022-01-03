@@ -45,6 +45,10 @@ case class OtherTableConf(outlet: OutletType, twc: TableWritingContext = TableWr
       def nullValue     (value: String) = updateTableWritingContext(_.copy(nullValue      = value))
   }
 
+  // ---------------------------------------------------------------------------
+  case class DisplayConfU(forceRow  : Boolean) extends OutputConfU { def actionU = DisplayOutputU(forceRow) }  
+  case class DisplayConfZ(forceTable: Boolean) extends OutputConfZ { def actionZ = DisplayOutputZ(forceTable) }
+  
   // ===========================================================================
   case class UrlLikeTableConf(
       uriString : String,

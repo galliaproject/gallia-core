@@ -48,6 +48,19 @@ def printBoth() { printSchema(); printPrettyJson() } // temporarily
   def writeDefaultFile        = { write(_.file(HeadU.DefaultOutputFile)); () }
 
   // TODO: pretty (print/write)
+  
+  // ===========================================================================
+  def display()                   : Unit = { display(forceRow = false) }
+  def displayForceTable()         : Unit = { display(forceRow = true) }
+
+  /** smart display: will show schema + choose table or JSON depending on whether there is nesting */
+  def display(forceRow: Boolean): Unit = {
+    printSchema()
+    println()
+    write(_.stdout.display(forceRow))
+    ()
+  }
+  
 }
 
 // ===========================================================================
@@ -92,9 +105,20 @@ trait HeadZOut { ignored: HeadZ =>
   def printTable()           = {          write(_.stdout.tsv); () }
   def printPrettyTable()     = {          write(_.stdout.prettyTable); () }
   def printPrettyTableHead() = { take(10).write(_.stdout.prettyTable); () }
-  
-def printBoth1() { printSchema(); printJsonl      () } // temporarily
-def printBoth2() { printSchema(); printPrettyTable() } // temporarily
+
+  // ---------------------------------------------------------------------------
+  def display()                   : Unit = { display(n = 10) }
+  def display(n: Int)             : Unit = { display(n     , forceTable = false) }
+  def display(forceTable: Boolean): Unit = { display(n = 10, forceTable) }
+  def displayForceTable()         : Unit = { display(        forceTable = true) }
+
+  /** smart display: will show schema + choose table or JSON depending on whether there is nesting */
+  def display(n: Int, forceTable: Boolean): Unit = {
+    printSchema()
+    println()
+    take(n).write(_.stdout.display(n, forceTable))
+    ()
+  }
   
   // ===========================================================================
   def writeFile(path: String) = { write(_.file(path)); () }

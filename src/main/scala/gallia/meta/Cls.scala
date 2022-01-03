@@ -49,6 +49,7 @@ case class Cls(fields: Seq[Fld])
 
     // ---------------------------------------------------------------------------
     def hasNesting                   : Boolean = fields.exists(_.isNesting)
+    def hasMultiple                  : Boolean = fields.exists(_.isMultiple)
     def areAllNonRequired(keyz: Keyz): Boolean = keyz.map(field(_)).forall(_.isNotRequired)
 
     def merge(that: Cls): Cls = Cls(this.fields ++ that.fields)

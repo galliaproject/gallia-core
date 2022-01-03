@@ -41,8 +41,6 @@ trait HeadUOut { ignored: HeadU =>
     def printCompactJson() = { write(_.stdout.compactJson); () }
     def printPrettyJson () = { write(_.stdout.prettyJson);  () }
 
-def printBoth() { printSchema(); printPrettyJson() } // temporarily
-
   // ===========================================================================
   def writeFile(path: String) = { write(_.file(path)); () }
   def writeDefaultFile        = { write(_.file(HeadU.DefaultOutputFile)); () }

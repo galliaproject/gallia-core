@@ -35,6 +35,16 @@ case class OtherTableConf(outlet: OutletType, twc: TableWritingContext = TableWr
       def nullValue     (value: String)         = updateTableWritingContext(_.copy(nullValue      = value))
   }
 
+// ===========================================================================
+case class RowConf(outlet: OutletType, twc: PrettyTableWritingContext = PrettyTableWritingContext.Default) extends OutputConfU {
+    def actionU = RowOutput(outlet, twc)
+
+    // ---------------------------------------------------------------------------
+    def updateTableWritingContext(f: PrettyTableWritingContext => PrettyTableWritingContext) = copy(twc = f(twc))
+      def arraySeparator(value: String) = updateTableWritingContext(_.copy(arraySeparator = value))
+      def nullValue     (value: String) = updateTableWritingContext(_.copy(nullValue      = value))
+  }
+
   // ---------------------------------------------------------------------------
   case class PrettyTableConf(outlet: OutletType, twc: PrettyTableWritingContext = PrettyTableWritingContext.Default) extends OutputConfZ {
     def actionZ = PrettyTableOutput(outlet, twc)
@@ -45,9 +55,9 @@ case class OtherTableConf(outlet: OutletType, twc: TableWritingContext = TableWr
       def nullValue     (value: String) = updateTableWritingContext(_.copy(nullValue      = value))
   }
 
-  // ---------------------------------------------------------------------------
-  case class DisplayConfU(forceRow  : Boolean) extends OutputConfU { def actionU = DisplayOutputU(forceRow) }  
-  case class DisplayConfZ(forceTable: Boolean) extends OutputConfZ { def actionZ = DisplayOutputZ(forceTable) }
+// ===========================================================================
+case class DisplayConfU(forceRow  : Boolean) extends OutputConfU { def actionU = DisplayOutputU(forceRow) }  
+case class DisplayConfZ(forceTable: Boolean) extends OutputConfZ { def actionZ = DisplayOutputZ(forceTable) }
   
   // ===========================================================================
   case class UrlLikeTableConf(

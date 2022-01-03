@@ -62,16 +62,18 @@ object ActionsOthers {
     def atomuz: AtomUZ = _ConvertUtoZ }
 
   // ---------------------------------------------------------------------------
-  abstract class FlattenBy(target: RPath) extends ActionUZ {
+  abstract class FlattenBy(target: KPath) extends ActionUZ {
       def vldt (in: Cls): Errs = Nil//TODO; check was seq?; ensure only one level of multiplicity
-      def _meta(in: Cls): Cls = in.rename(target).toNonMultiple(target.to).pipeIf(in.isOptional(target.from))(_.toNonRequired(target.to)) }
+      def _meta(in: Cls): Cls = in.toNonMultiple(target).pipeIf(in.isOptional(target))(_.toNonRequired(target)) }
 
     // ---------------------------------------------------------------------------
-    case class FlattenByU(target: RPath) extends FlattenBy(target) with ActionUZ {
-      def atoms(ignored: NodeMetaContext): Atoms = _FlattenByU(target.fromFX).in.seq } //TODO: + rename
+    case class FlattenByU(target: KPath) extends FlattenBy(target) with ActionUZ {
+      def atoms(ignored: NodeMetaContext): Atoms =
+        _FlattenByU(target).in.seq }
 
-    case class FlattenByZ(target: RPath) extends FlattenBy(target) with ActionZZ {
-      def atomzzs(ignored: NodeMetaContext): AtomZZs = _FlattenByZ(target.fromFX).in.seq } //TODO: + rename
+    case class FlattenByZ(target: KPath) extends FlattenBy(target) with ActionZZ {
+      def atomzzs(ignored: NodeMetaContext): AtomZZs = 
+        _FlattenByZ(target).in.seq }
 
   // ===========================================================================
   // zu

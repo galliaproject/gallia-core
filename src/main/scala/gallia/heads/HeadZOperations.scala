@@ -32,7 +32,7 @@ trait HeadZOperations { self: HeadZ =>
   // TODO:
   // - t210110094731 - selection
   // - t210131102306 - cascade if multiple?
-  def flattenBy(target: RPathW): HeadZ = zz(FlattenByZ(target.value))
+  def flattenBy(target: RPathW): HeadZ = rename(target.value).zz(FlattenByZ(target.value.to))
 
     def flattenByBoth : HeadZ = flattenByLeft.flattenByRight
     def flattenByLeft : HeadZ = flattenBy(_left)

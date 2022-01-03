@@ -13,8 +13,10 @@ private[actions] object ActionsUtils {
 
   def _atoms(f: Key => AtomUU)(values: RPathz): Seq[AtomUU] = _atoms(values.values, f)
 
-    def _atoms(values: RPathz    , f: Key => AtomUU): Seq[AtomUU] = _atoms(values.values, f)
-    def _atoms(values: KPathz    , f: Key => AtomUU): Seq[AtomUU] = _atoms(values.qpathz, f)
+    def _atoms(value : KPath     , f: Key => AtomUU): Seq[AtomUU] = _atoms(RPath.from(value), f)
+    def _atoms(value : RPath     , f: Key => AtomUU): Seq[AtomUU] = _atoms(Seq(value)       , f)
+    def _atoms(values: RPathz    , f: Key => AtomUU): Seq[AtomUU] = _atoms(values.values    , f)
+    def _atoms(values: KPathz    , f: Key => AtomUU): Seq[AtomUU] = _atoms(values.qpathz    , f)
     def _atoms(values: Seq[RPath], f: Key => AtomUU): Seq[AtomUU] =
       values
         .flatMap { qpath =>

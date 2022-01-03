@@ -13,31 +13,31 @@ object ActionsUUNestingRelated {
   import gallia.actions.utils.ActionsUtils.potentialRenaming
 
   // ===========================================================================
-  class NestUnder(target: RPathz, destination: Key) extends ActionUUa {
-        def  vldt(c: Cls): Errs = Nil //TODO
+  class NestUnder(target: TqRPathz, destination: Key) extends ActionUUb {
+        def  vldt(c: Cls): Errs = target.vldtAsOrigin(c) ++ Nil //TODO
            // TODO: t210128155944 - validate new key names
            // TODO: check target is distinct
-        def _meta(c: Cls): Cls  = target.values.map(_.renFX).pipe(Renz.apply).pipe(c.nest(_, destination))
-        def atomuus =
-          _Nest(target.fromz.forceKeyz /*FIXME*/, destination) +:
-            target.map(_.prepend(destination)).flatMap(potentialRenaming(_).toSeq).toSeq
+        def _meta(c: Cls): Cls  = target.resolve(c).map(_.renFX).pipe(Renz.apply).pipe(c.nest(_, destination))
+        def atomuus(c: Cls)     = target.resolve(c).pipe { rpathz =>
+          _Nest(rpathz.fromz.forceKeyz /*FIXME*/, destination) +:
+            rpathz.map(_.prepend(destination)).flatMap(potentialRenaming(_).toSeq).toSeq }
     }
 
     // ---------------------------------------------------------------------------
-    class NestInto(target: RPathz, destination: Ren) extends ActionUUa {      
-        def  vldt(c: Cls): Errs = Nil //TODO
-        def _meta(c: Cls): Cls  = target.values.map(_.renFX).pipe(Renz.apply).pipe(c.nest(_, destination.from)).rename(destination)
-        def atomuus =
-          (_Nest(target.fromz.forceKeyz /*FIXME*/, destination.from) +:
-            target.map(_.prepend(destination.from)).flatMap(potentialRenaming(_).toSeq).toSeq) ++ 
-            potentialRenaming(destination)          
+    class NestInto(target: TqRPathz, destination: Ren) extends ActionUUb {      
+        def  vldt(c: Cls): Errs = target.vldtAsOrigin(c) ++ Nil //TODO
+        def _meta(c: Cls): Cls  = target.resolve(c).map(_.renFX).pipe(Renz.apply).pipe(c.nest(_, destination.from)).rename(destination)
+        def atomuus(c: Cls)     = target.resolve(c).pipe { rpathz =>
+          (_Nest(rpathz.fromz.forceKeyz /*FIXME*/, destination.from) +:
+            rpathz.map(_.prepend(destination.from)).flatMap(potentialRenaming(_).toSeq).toSeq) ++ 
+            potentialRenaming(destination) }          
     }
 
   // ===========================================================================
   // TODO: split up
 
-  case class UnnestFrom(parent: KPath, target: TQRenz) extends ActionUUc { //TODO: multiple levels? mark here if one, all, ...
-    private def keyz(nc: Cls): Keyz = target.resolve(nc).fromsFX
+  case class UnnestFrom(parent: KPath, target: TQRenz) extends ActionUUb { //TODO: multiple levels? mark here if one, all, ...
+    private def fromz(nc: Cls): Keyz = target.resolve(nc).froms
 
     // ---------------------------------------------------------------------------
     def  vldt (c: Cls): Errs = {
@@ -47,33 +47,36 @@ object ActionsUUNestingRelated {
           val nc = c.forceNestedClass(parent)
 
           if (c.field(parent).isMultiple && nc.size > 1) errs("TODO:DoubleMultiple:210109145954")
-          else target.vldtAsOrigin(nc) }} //TODO: more
+          else target.vldtAsOrigin(nc) }} //TODO: more (check renamings, ...)
 
     // ---------------------------------------------------------------------------
     def _meta (c: Cls): Cls = {
       val nc = c.forceNestedClass(parent)
 
-      if (c.field(parent).isMultiple)
-        keyz(nc)
-          .force.one
-          .pipe { sole =>
-            c .unnestField(parent, sole)
-              .toMultiple(sole) }
-      else
-        keyz(nc)
-          .foldLeft(c)(
-              _.unnestField(parent, _))
+      // TODO: split in two actions rather
+      (  if (c.field(parent).isMultiple)
+          fromz(nc)
+            .force.one
+            .pipe { sole =>
+              c .unnestField(parent, sole)
+                .toMultiple(sole) }
+        else
+          fromz(nc)
+            .foldLeft(c)(
+                _.unnestField(parent, _)))
+      .rename(target.resolve(nc))
     }
 
     // ---------------------------------------------------------------------------
-    def atomuu(c: Cls) = {
+    def atomuus(c: Cls) = {
       val nc = c.forceNestedClass(parent)
-      val keyz = this.keyz(nc)
+      val fromz = this.fromz(nc)
 
       // ---------------------------------------------------------------------------
-           if (c.field(parent).isMultiple) _UnnestOOO (parent, keyz.values.force.one)
-      else if (keyz.size == nc.size)       _UnnestAll (parent) // TODO: still worth handling separately?
-      else                                 _UnnestSome(parent, keyz)
+      (      if (c.field(parent).isMultiple) _UnnestOOO (parent, fromz.values.force.one)
+        else if (fromz.size == nc.size)      _UnnestAll (parent) // TODO: still worth handling separately?
+        else                                 _UnnestSome(parent, fromz)) +: 
+      target.resolve(nc).flatMap(potentialRenaming(_))
     }
   }
 

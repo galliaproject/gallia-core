@@ -7,12 +7,12 @@ import atoms.AtomsIX._
 // ===========================================================================
 case class JsonObjectString(inputString: InputString, schemaProvider: OtherSchemaProvider) extends ActionIUd with TodoV0 with HasSchemaProviderU {
   def _meta: Cls   = __meta
-  def hasCommonObj = _JsonObjectString(inputString, schemaProvider, resultCls) }
+  def hasCommonObj = _JsonObjectString(inputString, schemaProvider, resultCls /* 211230183100 */) }
 
 // ===========================================================================
 case class JsonArrayString(inputString: InputString, schemaProvider: OtherSchemaProvider) extends ActionIZd with TodoV0 with HasSchemaProviderZ {
   def _meta: Cls    = __meta
-  def hasCommonObjs = _JsonArrayString(inputString, schemaProvider, resultCls) }
+  def hasCommonObjs = _JsonArrayString(inputString, schemaProvider, resultCls /* 211230183100 */) }
 
 // ===========================================================================
 case class JsonObjectFileInputU(

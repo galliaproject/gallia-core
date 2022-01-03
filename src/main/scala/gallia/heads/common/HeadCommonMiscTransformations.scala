@@ -4,6 +4,7 @@ package heads.common
 import aptus.{String_, Double_}
 
 import actions.ActionsUUReducer0._
+import actions.ActionsUUTransforms.{TransformObjectCustom, TransformObjectsCustom}
 
 // ===========================================================================
 trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
@@ -42,6 +43,31 @@ trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F]
     def transformRightObjectsUsing         (f: HeadZ => HeadZ)                    : Self2 = transform(_.objz(_right))   .using(f)
     def transformRightObjectsUsing         (f: HeadZ => HeadU)    (implicit d: DI): Self2 = transform(_.objz(_right))   .using(f)
     def transformRightObjectsUsing[D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI): Self2 = transform(_.objz(_right))(d).using(f)
+    
+  // ===========================================================================
+  // to/from JSON
+
+  // TODO: an "opaque object" version for each (see t210110094829)
+  def parseJsonObjectString(k: RPathW) = new {  
+      def usingSchema(c: Cls) = transformString(k).toObjUsing(c)(
+        atoms.AtomsIX._JsonObjectString.toObj(c)) }
+  
+    // ---------------------------------------------------------------------------
+    def parseJsonArrayString(k: RPathW) = new {  
+      def usingSchema(c: Cls) = transformString(k).toObjsUsing(c)(
+        atoms.AtomsIX._JsonArrayString.toObjs(c)) }
+  
+  // ---------------------------------------------------------------------------
+  /** uses compact form */
+  def formatJsonObjectString(k: RPathW): Self2 = transformObjectCustom (k)(_.formatCompactJson)   
+  def formatJsonArrayString (k: RPathW): Self2 = transformObjectsCustom(k)(_.formatCompactJson)
+
+    // ---------------------------------------------------------------------------
+    def transformObjectCustom [D: WTT](k: RPathW)(f: Obj  => D): Self2 = self2 :+ TransformObjectCustom (TargetQueryUtils.tqqpathz(k), typeNode[D], f)
+    def transformObjectsCustom[D: WTT](k: RPathW)(f: Objs => D): Self2 = self2 :+ TransformObjectsCustom(TargetQueryUtils.tqqpathz(k), typeNode[D], f)
+
+  // ---------------------------------------------------------------------------    
+  def zoomOnObject(target: KPathW): Self2 = retain(target.value).unnestAllFrom(target)
 
   // ===========================================================================
   // array ops

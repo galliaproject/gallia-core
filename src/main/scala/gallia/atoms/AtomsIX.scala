@@ -46,14 +46,36 @@ object AtomsIX {
   trait HasCommonObjs extends AtomIZ { def commonObjs: Objs }
 
   // ===========================================================================
-  case class _JsonObjectString(inputString: InputString, schemaProvider: OtherSchemaProvider, c: Cls) extends HasCommonObj {
-    def commonObj: Obj = JsonParsing.parseObject(inputString)
-      def naive: Option[Obj] = Some(commonObj.pipe(JsonNumberTax.payUp(c))) }
+  case class _JsonObjectString(inputString: InputString, ignored /* TODO: t211231112700 - investigate */: OtherSchemaProvider, c: Cls) extends HasCommonObj {
+      def naive: Option[Obj] = Some(commonObj)
+      
+      // ---------------------------------------------------------------------------
+      def commonObj: Obj = 
+        JsonParsing
+          .parseObject(inputString)
+          .pipeIf(c != null /* TODO: see 211230183100 */)(JsonNumberTax.payUp(c)) }
+  
+    // ---------------------------------------------------------------------------  
+    object _JsonObjectString {
+      def toObj(c: Cls)(value: String): Obj = _JsonObjectString(value, null /* TODO */, c).commonObj
+    }
 
   // ---------------------------------------------------------------------------
-  case class _JsonArrayString(inputString: InputString, schemaProvider: OtherSchemaProvider, c: Cls) extends HasCommonObjs {
-    def commonObjs: Objs = JsonParsing.parseArray(inputString).pipe(Objs.from)
-      def naive: Option[Objs] = commonObjs.map(JsonNumberTax.payUp(c)).in.some }
+  case class _JsonArrayString(inputString: InputString, ignored /* TODO: t211231112700 - investigate */: OtherSchemaProvider, c: Cls) extends HasCommonObjs {
+      def naive: Option[Objs] = Some(commonObjs)
+  
+      // ---------------------------------------------------------------------------
+      def commonObjs: Objs =
+        JsonParsing
+          .parseArray(inputString)
+          .pipe(Objs.from)
+          .map { x => if (c == null)  /* TODO: see 211230183100 */ x else JsonNumberTax.payUp(c)(x) }
+    }
+
+    // ---------------------------------------------------------------------------  
+    object _JsonArrayString {
+      def toObjs(c: Cls)(value: String): Objs = _JsonArrayString(value, null /* TODO */, c).commonObjs
+    }
 
   // ===========================================================================
   case class _JsonObjectFileInputU(input: InputUrlLike, c: Cls) extends HasCommonObj {

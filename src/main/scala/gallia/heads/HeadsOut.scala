@@ -16,9 +16,18 @@ trait HeadUOut { ignored: HeadU =>
           case Left (errors)  => throw errors.metaErrorOpt.get
           case Right(success) => () } }
 
+  // ---------------------------------------------------------------------------
+  private[gallia] def _metaOnly(): HeadU = StartU.pipe(_.stdout).conf.actionU.pipe(uo)
+    .tap {
+      _.end.runMetaOnly().either match {        
+          case Left (errors)  => throw errors.metaErrorOpt.get
+          case Right(success) => () } }
+    
   // ===========================================================================
-  // TODO: def printSchema()
-
+  /** will *not* process all the data (assuming input schema does not need to be inferred) */
+  def printSchema() = { showSchema()._metaOnly() }
+  
+  // ---------------------------------------------------------------------------
   def formatString: String = formatJson
 
   def formatJson         : String = { formatPrettyJson }  
@@ -31,6 +40,8 @@ trait HeadUOut { ignored: HeadU =>
   def printJson         () = { printPrettyJson }  
     def printCompactJson() = { write(_.stdout.compactJson); () }
     def printPrettyJson () = { write(_.stdout.prettyJson);  () }
+
+def printBoth() { printSchema(); printPrettyJson() } // temporarily
 
   // ===========================================================================
   def writeFile(path: String) = { write(_.file(path)); () }
@@ -50,7 +61,14 @@ trait HeadZOut { ignored: HeadZ =>
       _.end.runz().either match {
           case Left (errors)  => throw errors.metaErrorOpt.get
           case Right(success) => () } }
-
+  
+  // ---------------------------------------------------------------------------
+  private[gallia] def _metaOnly(): HeadZ = StartZ.pipe(_.stdout).conf.actionZ.pipe(zo)
+    .tap {
+      _.end.runMetaOnly().either match {        
+          case Left (errors)  => throw errors.metaErrorOpt.get
+          case Right(success) => () } }
+  
   // ===========================================================================
   def formatString: String = formatJsonLines
   //TODO: formatLines: Seq[Line]
@@ -60,8 +78,10 @@ trait HeadZOut { ignored: HeadZ =>
   def formatJsonArray: String = { val sw = new  java.io.StringWriter; write(_.formatString(sw).jsonArray); sw.toString }
 
   // ===========================================================================
-  //TODO: t211220170700 - def printSchema()
-
+  /** will *not* process all the data (assuming input schema does not need to be inferred) */
+  def printSchema() = { showSchema()._metaOnly() }
+  
+  // ---------------------------------------------------------------------------
   def printString   () = { printJsonLines }
 
   def printJsonl    () = { printJsonLines }
@@ -72,7 +92,10 @@ trait HeadZOut { ignored: HeadZ =>
   def printTable()           = {          write(_.stdout.tsv); () }
   def printPrettyTable()     = {          write(_.stdout.prettyTable); () }
   def printPrettyTableHead() = { take(10).write(_.stdout.prettyTable); () }
-
+  
+def printBoth1() { printSchema(); printJsonl      () } // temporarily
+def printBoth2() { printSchema(); printPrettyTable() } // temporarily
+  
   // ===========================================================================
   def writeFile(path: String) = { write(_.file(path)); () }
   def writeDefaultFile        = { write(_.file(HeadZ.DefaultOutputFile)); () }

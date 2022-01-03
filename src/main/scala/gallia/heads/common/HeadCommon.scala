@@ -39,8 +39,8 @@ trait HeadCommon[F <: HeadCommon[F]]
   def customU2U(meta: Cls => Cls, data: Obj => Obj) = self2 :+ new actions.ActionsCustoms.CustomUU(meta, data)
 
   // ---------------------------------------------------------------------------
-  def showSchema        :  Self2 = self2 :+ ShowSchema(abort = false)
-  def showSchemaAndAbort:  Self2 = self2 :+ ShowSchema(abort = true )
+  def showSchema()        :  Self2 = self2 :+ ShowSchema(abort = false)
+  def showSchemaAndAbort():  Self2 = self2 :+ ShowSchema(abort = true )
 
   // ===========================================================================
   private[gallia] def validateBObj (value: BObj ): Self2 = self2 :+ new ValidateBObj (value)

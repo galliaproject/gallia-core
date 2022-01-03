@@ -30,7 +30,7 @@ trait HeadCommonVeryBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   def reorderAsLastKeys(target1: KeyW, target2: KeyW, more: KeyW*): Self2 = reorderAsLastKeys(KeyWz.from(target1, target2, more)) 
   def reorderAsLastKeys(targets: KeyWz)                           : Self2 =
     reorderKeys { keys =>
-      keys.filterNot(targets.skeys.contains) ++ targets.skeys }
+      keys.filterNot(targets.skeys.contains) ++ targets.skeys.reverse }
 
   // ===========================================================================
   // rename (explicitly, aot dynamically); selection: use forX

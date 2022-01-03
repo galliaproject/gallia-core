@@ -9,11 +9,28 @@ import actions.ActionsUUVeryBasics._
 // ===========================================================================
 trait HeadCommonVeryBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
+  // ===========================================================================
+  // keys reordering
+
   def reorderKeys           (f: Seq[SKey] => Seq[SKey]): Self2 = self2 :+ ReorderKeys(f, recursively = false)
   def reorderKeysRecursively(f: Seq[SKey] => Seq[SKey]): Self2 = self2 :+ ReorderKeys(f, recursively = true )
 
   def reverseKeyOrder           : Self2 = reorderKeys           (_.reverse)
   def reverseKeyOrderRecursively: Self2 = reorderKeysRecursively(_.reverse)
+
+  // ---------------------------------------------------------------------------
+  def reorderAsFirstKey (target: KeyW)                             : Self2 = reorderAsFirstKeys(KeyWz.from(target))
+  def reorderAsFirstKeys(target1: KeyW, target2: KeyW, more: KeyW*): Self2 = reorderAsFirstKeys(KeyWz.from(target1, target2, more)) 
+  def reorderAsFirstKeys(targets: KeyWz)                           : Self2 =
+    reorderKeys { keys => 
+      targets.skeys ++ keys.filterNot(targets.skeys.contains) }
+
+  // ---------------------------------------------------------------------------
+  def reorderAsLastKey (target: KeyW)                             : Self2 = reorderAsLastKeys(KeyWz.from(target))
+  def reorderAsLastKeys(target1: KeyW, target2: KeyW, more: KeyW*): Self2 = reorderAsLastKeys(KeyWz.from(target1, target2, more)) 
+  def reorderAsLastKeys(targets: KeyWz)                           : Self2 =
+    reorderKeys { keys =>
+      keys.filterNot(targets.skeys.contains) ++ targets.skeys }
 
   // ===========================================================================
   // rename (explicitly, aot dynamically); selection: use forX

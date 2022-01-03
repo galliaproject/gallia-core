@@ -91,8 +91,9 @@ package object gallia
   val none = null // TODO: t210115144940 - vs object vs None vs null  vs NaN ...?
 
   // ===========================================================================
-  implicit class Input     (val inputString: InputString) extends ReadObj with StreamObjs with ReadHead with StreamHead
-  implicit class Connection(val connection : java.sql.Connection) extends StreamConnection
+  implicit class InputString__     (val inputString: InputString)         extends ReadObjFromString with StreamObjsFromString with ReadHeadFromString with StreamHeadFromString
+  implicit class InputIterable__[T](val values     : Iterable[T])         extends StreamObjsFromIterable[T]  
+  implicit class InputConnection__ (val connection : java.sql.Connection) extends StreamConnection
 
   // ---------------------------------------------------------------------------
   implicit class  Key_(val u:  Key) extends Key__ { val _key = u }

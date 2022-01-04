@@ -4,8 +4,6 @@ package io.out
 import scala.collection.JavaConverters._
 import org.apache.commons.csv._
 
-import data.DataFormatting.formatBasicValue
-
 // ===========================================================================
 case class TableWritingContext(
         fieldSeparator: FieldSeparator,
@@ -14,7 +12,7 @@ case class TableWritingContext(
         nullValue     : String) {
 
     // ---------------------------------------------------------------------------
-    private val Format =
+    private lazy val Format =
       TableWritingContext
         .DefaultTableFormat
         .withDelimiter(fieldSeparator) // TODO: cache common ones
@@ -25,33 +23,30 @@ case class TableWritingContext(
         data.consume.map      (formatTableRow   (keys))
 
       // ---------------------------------------------------------------------------
-      private def formatTableHeader(keys: Seq[String]): String = formatLine(Format)(keys)
+      private def formatTableHeader(keys: Seq[String]): String = formatLine(keys)
 
       // ---------------------------------------------------------------------------
       private def formatTableRow(keys: Seq[String])(o: gallia.Obj): String =
         keys
           .map { key =>
             o .opt(key)
-              .map(formatValue)
+              .map(TableWritingContext.formatValue(arraySeparator))
               .getOrElse(nullValue) }
-          .pipe(formatLine(Format))
+          .pipe(formatLine)
 
     // ===========================================================================
-    private def formatValue(value: Any): String = // TODO: use schema rather than pattern match (see t210115095838)
-      value match {
-        case seq: Seq[_] => seq.map(formatBasicValue).mkString(arraySeparator)
-        case sgl         =>         formatBasicValue(sgl) }
+    private def formatLine(values: Seq[String]): String = {
+      if (fieldSeparator == '\t') values.mkString("\t") // TODO: escape tabs
+      else {
+    	  // seems pretty inefficient... find alternative? also limits to Char for separator (see t201229151510)?
+        val writer = new java.io.StringWriter()
+          val printer = new CSVPrinter(writer, Format)
+            printer.printRecord(values.asJava)
+          printer.close()
+        writer.close()
 
-    // ===========================================================================
-    // seems pretty inefficient... find alternative? also limits to Char for separator (see t201229151510)?
-    private def formatLine(format: CSVFormat)(values: Seq[String]): String = {
-      val writer = new java.io.StringWriter()
-        val printer = new CSVPrinter(writer, format)
-          printer.printRecord(values.asJava)
-        printer.close()
-      writer.close()
-
-      writer.toString.dropRight(1 /* "record" separator automatically added */)
+        writer.toString.dropRight(1 /* "record" separator automatically added */)
+      }
     }
   }
 
@@ -67,17 +62,16 @@ case class TableWritingContext(
         hasHeader      = true,
         nullValue      = "")
      
-    // ===========================================================================        
+    // ===========================================================================
     private[out] def formatValue(arraySeparator: String)(value: Any): String = // TODO: use schema rather than pattern match (see t210115095838)
-        value match {
-          case seq: Seq[_] => seq.map(formatSingleValue).mkString(arraySeparator)        
-          case sgl         =>         formatSingleValue(sgl) }
-  
-      // ---------------------------------------------------------------------------
-      private[out] def formatSingleValue: PartialFunction[Any, String] = 
-        _ match {
-          case o: Obj => o.formatCompactJson
-          case x      => data.DataFormatting.formatBasicValue(x) }        
+      value match {
+        case seq: Seq[_] => seq.head match { // guaranteed non-empty by design (else None, not Nil)                    
+          case obj: Obj    => seq.map(_.asInstanceOf[Obj]).pipe(Objs.from).formatCompactJson
+          case sgl         => seq.map(data.DataFormatting.formatBasicValue).mkString(arraySeparator) }            
+        case objs: Objs => objs.formatCompactJson // TODO: check can happen?
+        case obj : Obj  => obj .formatCompactJson
+        case sgl        => data.DataFormatting.formatBasicValue(sgl) }
+
   }
 
 // ===========================================================================

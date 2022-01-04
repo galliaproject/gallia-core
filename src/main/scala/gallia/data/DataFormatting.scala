@@ -42,7 +42,7 @@ import aptus.{String_, Double_}
       case x: LocalDateTime => x.format(DateTimeFormatter.ISO_DATE_TIME)
 
       case x: gallia.Whatever => x.formatDefault // TODO: keep? allow whatever here?
-      case x: Unit         => "()".quote // TODO: keep?
+      case x: Unit            => "()".quote // TODO: keep?
       case gallia.none        => "null" // TODO: t210115144940
 
       case x =>

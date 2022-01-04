@@ -71,9 +71,9 @@ case class OtherOutputU(ioType: IoTypeU, outlet: OutletType) extends ActionUOc {
       def atomzo(c: Cls): AtomZO = _OtherTableOutput(c.skeys, outlet, twc) }
 
   // ===========================================================================
-  case class RowOutput(outlet: OutletType, twc: PrettyTableWritingContext) extends ActionUOc {
+  case class PrettyRowOutput(outlet: OutletType, twc: PrettyTableWritingContext) extends ActionUOc {
         def vldt(c: Cls): Errs = Nil //TODO
-        def atomuo(c: Cls): AtomUO = _RowOutput(c.skeys, outlet, twc) }
+        def atomuo(c: Cls): AtomUO = _PrettyRowOutput(c.skeys, outlet, twc) }
     
     // ---------------------------------------------------------------------------
     case class PrettyTableOutput(outlet: OutletType, twc: PrettyTableWritingContext) extends ActionZOc {
@@ -84,7 +84,7 @@ case class OtherOutputU(ioType: IoTypeU, outlet: OutletType) extends ActionUOc {
   case class DisplayOutputU(forceRow: Boolean) extends ActionUOc {
         def vldt  (c: Cls): Errs = Nil //TODO
         def atomuo(c: Cls): AtomUO = 
-          ( if (forceRow || !c.hasNesting) RowOutput(                             OutletType.StandardOutput, PrettyTableWritingContext.Default)
+          ( if (forceRow || !c.hasNesting) PrettyRowOutput(                       OutletType.StandardOutput, PrettyTableWritingContext.Default)
             else                           OtherOutputU(IoTypeU.PrettyJsonObject, OutletType.StandardOutput))
           .atomuo(c)}
     

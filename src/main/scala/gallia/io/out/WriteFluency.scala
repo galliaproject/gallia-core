@@ -103,19 +103,6 @@ class OtherFluencyU(outlet: OutletType) extends EndWriteUFluency {
   }
 
 // ===========================================================================
-class RowFluency(val conf: RowConf)
-        extends FluencyBase[RowFluency, RowConf](new RowFluency(_))
-        with    EndWriteUFluency {
-      val self = this
-  
-      // ---------------------------------------------------------------------------
-      def updateTableWritingContext(f: PrettyTableWritingContext => PrettyTableWritingContext): RowFluency = conf.copy(twc = f(conf.twc))
-  
-      def arraySeparator(value: String) = updateTableWritingContext(_.copy(arraySeparator = value))
-      def nullValue     (value: String) = updateTableWritingContext(_.copy(nullValue      = value))
-  }
-
-// ---------------------------------------------------------------------------
 class PrettyTableFluency(val conf: PrettyTableConf)
         extends FluencyBase[PrettyTableFluency, PrettyTableConf](new PrettyTableFluency(_))
         with    EndWriteZFluency {

@@ -51,7 +51,10 @@ class HeadU private[gallia]( // TODO: t210121105809 - rename to HeadO and genera
   // uz
 
   def flattenBy(target: RPathW): HeadZ = rename(target.value).uz(FlattenByU(target.value.to))
+  
+  @deprecated
   def convertToZ               : HeadZ = uz(ConvertUtoZ)
+  def convertToMultiple        : HeadZ = uz(ConvertUtoZ)
 
   // ===========================================================================
   def merge(that: HeadU): Self = handler.joinuu2u(this, that)

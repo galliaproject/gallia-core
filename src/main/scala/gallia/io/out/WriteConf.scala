@@ -8,6 +8,10 @@ sealed trait OutputConfU { private[gallia] def actionU: ActionUO }
 sealed trait OutputConfZ { private[gallia] def actionZ: ActionZO }
 
 // ===========================================================================
+case class ForeachConfU(f: Obj => Unit) extends OutputConfU { def actionU = ForeachOutputU(f) }
+case class ForeachConfZ(f: Obj => Unit) extends OutputConfZ { def actionZ = ForeachOutputZ(f) }
+
+// ===========================================================================
 case class UrlLikeNonTableConfU(ioType: IoTypeU, uriString: String, urlLike: UrlLike = UrlLike.Default) extends OutputConfU {
     def actionU = UrlLikeOutputU(ioType, uriString, urlLike) }
 

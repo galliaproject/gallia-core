@@ -13,7 +13,11 @@ import actions.AtomZOs
 // - check extension, eg no tsv/jsonl if u (vs z)
 // - if table, ensure flat
 
-// ---------------------------------------------------------------------------
+// ===========================================================================
+case class ForeachOutputU(f: Obj => Unit) extends IdentityV1 with ActionUOd { def atomuo = _ForeachOutputU(f) }
+case class ForeachOutputZ(f: Obj => Unit) extends IdentityV1 with ActionZOd { def atomzo = _ForeachOutputZ(f) }
+
+// ===========================================================================
 case class UrlLikeOutputU(ioType: IoTypeU, uriString: String, urlLike: UrlLike) extends ActionUOb {
     def vldt(c: Cls): Errs = Nil //TODO
     def atomuos(c: Cls): AtomUOs =

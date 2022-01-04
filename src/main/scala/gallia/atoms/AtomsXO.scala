@@ -9,6 +9,10 @@ object AtomsXO {
   val DefaultSchemaSuffix = ".schema.json" // TODO: t210115114509 - configurable
 
   // ===========================================================================
+  case class _ForeachOutputU(f: Obj => Unit) extends AtomUO { def naive(o: Obj)  = f(o) }
+  case class _ForeachOutputZ(f: Obj => Unit) extends AtomZO { def naive(s: Objs) = s.consume.foreach(f) }
+      
+  // ===========================================================================
   abstract class _SchemaOutput(c: Cls, uriString: String, urlLike: UrlLike, suffix: String) {
       def naive() = { urlLike.writeFileContent(uriString.append(suffix))(c.formatPrettyJson /* TODO: t210128103821 - format configurable */) } }
 

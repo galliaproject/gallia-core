@@ -22,6 +22,9 @@ class StartWriteUFluency() extends EndWriteUFluency {
 
     def uri(value: String)      : UriFluencyU = new UriFluencyU(value)
     def uri(value: java.net.URI): UriFluencyU = uri(value.toASCIIString)
+    
+    // ===========================================================================
+    def foreach(f: Obj => Unit): ForeachU = new ForeachU(f)
   }
 
   // ===========================================================================
@@ -48,6 +51,9 @@ class StartWriteUFluency() extends EndWriteUFluency {
 
     // ===========================================================================
     @deprecated def tsv(s: String) = file(s).tsv // TODO: or keep those shorthands?
+    
+    // ===========================================================================
+    def foreach(f: Obj => Unit): ForeachZ = new ForeachZ(f)
   }
 
 // ===========================================================================

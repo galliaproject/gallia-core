@@ -59,6 +59,8 @@ trait HeadUOut { ignored: HeadU =>
     ()
   }
   
+  // ---------------------------------------------------------------------------
+  def foreach(f: Obj => Unit) { write(_.foreach(f)); () }
 }
 
 // ===========================================================================
@@ -117,6 +119,9 @@ trait HeadZOut { ignored: HeadZ =>
     take(n).write(_.stdout.display(n, forceTable))
     ()
   }
+
+  // ---------------------------------------------------------------------------
+  def foreach(f: Obj => Unit) { write(_.foreach(f)); () }
   
   // ===========================================================================
   def writeFile(path: String) = { write(_.file(path)); () }

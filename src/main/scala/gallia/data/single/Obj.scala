@@ -63,10 +63,14 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
     // ===========================================================================
     override def toString: String = formatDefault
 
-      def formatDefault: String = formatCompactJson
+      def formatDefault : String = formatCompactJson
+      def printDefault(): Unit   = printCompactJson()
 
     def formatPrettyJson  : String = ObjToGson(this).pipe(GsonFormatter.pretty)
     def formatCompactJson : String = ObjToGson(this).pipe(GsonFormatter.compact)
+
+    def printPrettyJson (): Unit = { println(formatPrettyJson) }
+    def printCompactJson(): Unit = { println(formatCompactJson) }
 
     // ===========================================================================
     def size                          = data.size

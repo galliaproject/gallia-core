@@ -6,6 +6,10 @@ class EntirelyUriDrivenFluencyU(val conf: OutputConfU) extends EndWriteUFluency
 class EntirelyUriDrivenFluencyZ(val conf: OutputConfZ) extends EndWriteZFluency
 
   // ===========================================================================
+  class ForeachU(f: Obj => Unit) extends EndWriteUFluency { val conf = ForeachConfU(f) }
+  class ForeachZ(f: Obj => Unit) extends EndWriteZFluency { val conf = ForeachConfZ(f) }
+
+  // ===========================================================================
   class UriFluencyU(path: String) extends EndWriteUFluency { val conf = new UrlFluencyU(path).conf }
   class UriFluencyZ(path: String) extends EndWriteZFluency { val conf = new UrlFluencyZ(path).conf }
 

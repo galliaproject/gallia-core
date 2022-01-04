@@ -83,8 +83,10 @@ class OtherFluencyU(outlet: OutletType) extends EndWriteUFluency {
     // TODO: t210104111151 - offer to write JSON array as one-liner (though we want to discourage its use)?
     def jsonl = jsonLines
 
-      def jsonLines = endOtherZ(IoTypeZ.JsonLines, outlet)
-      def jsonArray = endOtherZ(IoTypeZ.JsonArray, outlet)
+      def jsonLines   = endOtherZ(IoTypeZ.JsonLines, outlet)
+      def jsonArray   = endOtherZ(IoTypeZ.JsonArray, outlet)
+      
+      def prettyJsons = endOtherZ(IoTypeZ.JsonPrettyLines, outlet)
 
     // ---------------------------------------------------------------------------
     def table(sep: Char): OtherTableFluency = new OtherTableFluency(OtherTableConf(outlet).sep(sep))

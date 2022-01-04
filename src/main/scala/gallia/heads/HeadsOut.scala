@@ -101,9 +101,10 @@ trait HeadZOut { ignored: HeadZ =>
   // ---------------------------------------------------------------------------
   def printString   () = { printJsonLines }
 
-  def printJsonl    () = { printJsonLines }
-  def printJsonLines() = { write(_.stdout.jsonLines); () }
-  def printJsonArray() = { write(_.stdout.jsonArray); () }
+  def printJsonl      () = { printJsonLines }
+  def printJsonLines  () = { write(_.stdout.jsonLines)  ; () }
+  def printJsonArray  () = { write(_.stdout.jsonArray)  ; () }  
+  def printPrettyJsons() = { write(_.stdout.prettyJsons); () }
 
   // ---------------------------------------------------------------------------
   def printTable()           = {          write(_.stdout.tsv); () }

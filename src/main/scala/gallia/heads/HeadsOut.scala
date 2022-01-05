@@ -35,6 +35,7 @@ trait HeadUOut { ignored: HeadU =>
     def formatPrettyJson : String = { val sw = new  java.io.StringWriter; write(_.formatString(sw).prettyJson) ; sw.toString }
   
   // ---------------------------------------------------------------------------
+  def printDefault   () = { printJson }
   def printString    () = { printJson }
   
   def printJson         () = { printPrettyJson }  
@@ -99,6 +100,7 @@ trait HeadZOut { ignored: HeadZ =>
   def printSchema() = { showSchema()._metaOnly() }
   
   // ---------------------------------------------------------------------------
+  def printDefault  () = { printJsonLines }
   def printString   () = { printJsonLines }
 
   def printJsonl      () = { printJsonLines }

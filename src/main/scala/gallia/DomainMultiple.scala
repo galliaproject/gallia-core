@@ -14,7 +14,8 @@ case class Keyz(values: Seq[Key]) extends Seq[Key] {
       def apply(idx: Int) = values(idx)
       def length: Int     = values.length
 
-    def valueSet: Set[Key] = values.toSet
+    def skeys   : Seq[SKey] = values.map(_.name)
+    def valueSet: Set[ Key] = values.toSet
 
     def duplicates: Keyz = Keyz(values.duplicates)
 

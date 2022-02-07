@@ -41,15 +41,30 @@ object ActionsUUVeryBasics {
 
   // ===========================================================================
   case class ReorderKeys(f: Seq[SKey] => Seq[SKey], recursively: Boolean) extends ActionUUd {
-      def  vldt(c: Cls): Errs = _vldt.checkKeysReordering(c, f, recursively)
-      def _meta(c: Cls): Cls  = c.reorderKeysRecursively(tmp, recursively)
-      def atomuu: AtomUU =
-        if (recursively) _ReorderKeysRecursively(tmp)
-        else             _ReorderKeys           (tmp)
+        def  vldt(c: Cls): Errs = _vldt.checkKeysReordering(c, f, recursively)
+        def _meta(c: Cls): Cls  = c.reorderKeys(tmp, recursively)
+        def atomuu: AtomUU =
+          if (recursively) _ReorderKeysRecursively(tmp)
+          else             _ReorderKeys           (tmp)
+  
+        // ---------------------------------------------------------------------------
+        private def tmp: Seq[Key] => Seq[Key] = _.map(_.name).pipe(f).map(_.symbol)
+      }
+  
+    // ---------------------------------------------------------------------------
+    case class ReorderSelectedKeys(target: TqKeyz, f: (Seq[SKey], Seq[SKey]) => Seq[SKey]) extends ActionUUc {
+        def  vldt(c: Cls): Errs = 
+          target.vldtTargetQuery(c)
+            .in.someIf(_.nonEmpty)
+            .getOrElse {       
+              _vldt.checkKeysReordering(c, f(_, target.resolve(c).skeys), recursively = false) }
+  
+        def _meta (c: Cls): Cls    = c.reorderKeys(tmp(c), recursively = false)
+        def atomuu(c: Cls): AtomUU = _ReorderKeys (tmp(c))
 
-      // ---------------------------------------------------------------------------
-      private def tmp: Seq[Key] => Seq[Key] = _.map(_.name).pipe(f).map(_.symbol)
-    }
+        // ---------------------------------------------------------------------------
+        private def tmp(c: Cls): Seq[Key] => Seq[Key] = _.map(_.name).pipe(f(_, target.resolve(c).skeys)).map(_.symbol)
+      }
 
   // ===========================================================================
   case class Rename(target: RPathz) extends ActionUUa {

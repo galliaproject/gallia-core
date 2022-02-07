@@ -20,11 +20,14 @@ object UtsOps { // this is a big mess... FIXME: t210107203932
   trait  CommonTyped extends Core1 with NoSoleKey with _HasSingleExplicitKPathW
 
   // ---------------------------------------------------------------------------
+trait  ReorderAsX extends Core1N with NoSoleKey with NoAllKeys with CantRenameKeys
+
+// ---------------------------------------------------------------------------
   trait  Rename extends Core1 with HasSoleKey with HasSingleExplicitKPathW
 
   // ---------------------------------------------------------------------------
-  trait  Remove extends Core1N with  NoSoleKey with NoAllKeys  with CantRenamePaths
-  trait  Retain extends Core1N with HasSoleKey with HasAllKeys with HasSingleExplicitKPathW
+  trait  Remove extends Core1N with NoSoleKey with NoAllKeys with CantRenamePaths
+  trait  Retain extends Core1N with NoSoleKey with NoAllKeys with  CanRenamePaths
 
   // ===========================================================================
   trait  SetDefault extends Core1N with NoSoleKey with HasIfType

@@ -119,28 +119,28 @@ package object gallia
   // ===========================================================================
   def cls[T: WTT]                 : Cls = reflect.TypeNode.parse[T].leaf.forceDataClass
   def cls(schemaFilePath: String) : Cls = meta.MetaObj.clsFromFile(schemaFilePath) // TODO: or also detect file vs direct object?
-  def cls(field1: Fld, more: Fld*): Cls = cls((field1 +: more))
+  def cls(field1: Fld, more: Fld*): Cls = cls((field1 +: more).toList)
   def cls(fields: Seq[Fld])       : Cls = meta.Cls(fields.toList)
 
   // ---------------------------------------------------------------------------
-  def obj(entry1: DataEntry, more: DataEntry*): Obj = Obj.fromIterable((entry1 +: more).map(_.pair))
+  def obj(entry1: DataEntry, more: DataEntry*): Obj = Obj.fromIterable((entry1 +: more).toList.map(_.pair))
   def obj(entries: Seq[(Key, AnyValue)])      : Obj = Obj.fromIterable(entries)
 
   // ---------------------------------------------------------------------------
   def objs(values: Obj*): Objs = Objs.from(values.toList)
 
   // ===========================================================================
-  def bobj(entry1: KVE, more: KVE*): BObj = BObj(KVEs(entry1 +: more))
+  def bobj(entry1: KVE, more: KVE*): BObj = BObj(KVEs((entry1 +: more).toList))
 
     def aobj(c: Cls)                 (u: Obj): AObj = AObj(c, u)
     def aobj(field1: Fld, more: Fld*)(u: Obj): AObj = AObj(cls(field1, more:_*), u) // can't have both meta and data be varargs...
 
   // ---------------------------------------------------------------------------
-  def bobjs(value1: BObj, more: BObj*): BObjs = BObjs(value1 +: more)
+  def bobjs(value1: BObj, more: BObj*): BObjs = (value1 +: more).toList.pipe(BObjs.apply)
 
-    def aobjs(values: AObj*)                        : AObjs = AObjs.from(values)
+    def aobjs(values: AObj*)                        : AObjs = values.toList.pipe(AObjs.from)
     def aobjs(field1: Fld, more: Fld*)(values: Obj*): AObjs = aobjs(cls(field1, more:_*))(values:_*)
-    def aobjs(c: Cls)                 (values: Obj*): AObjs = AObjs(c, Objs.from(values.toList))
+    def aobjs(c: Cls)                 (values: Obj*): AObjs = AObjs(c, values.toList.pipe(Objs.from))
     def aobjs(c: Cls, z: Objs)                      : AObjs = AObjs(c, z)
 
   // ===========================================================================

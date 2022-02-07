@@ -26,8 +26,8 @@ trait ClsLike { // read-only part
     def size: Int = _fields.size
 
     // ---------------------------------------------------------------------------
-    def  keys: Seq[ Key] = _fields.map(_.key)
-    def skeys: Seq[SKey] = _fields.map(_.key.name)
+    def  keys: Seq[ Key] = _fields.toList.map(_.key)
+    def skeys: Seq[SKey] = _fields.toList.map(_.key.name)
     def  keyz:     Keyz  = Keyz(keys)
 
     // ---------------------------------------------------------------------------

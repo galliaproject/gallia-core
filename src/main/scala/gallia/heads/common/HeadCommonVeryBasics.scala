@@ -15,22 +15,17 @@ trait HeadCommonVeryBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   def reorderKeys           (f: Seq[SKey] => Seq[SKey]): Self2 = self2 :+ ReorderKeys(f, recursively = false)
   def reorderKeysRecursively(f: Seq[SKey] => Seq[SKey]): Self2 = self2 :+ ReorderKeys(f, recursively = true )
 
-  def reverseKeyOrder           : Self2 = reorderKeys           (_.reverse)
-  def reverseKeyOrderRecursively: Self2 = reorderKeysRecursively(_.reverse)
+  // ---------------------------------------------------------------------------
+  def reorderAsFirstKeys(target1: KeyW, more: KeyW*): Self2 = reorderAsFirstKeys(_.explicit(target1 -> more)) 
+  def reorderAsFirstKeys(targets: KeyWz)            : Self2 = reorderAsFirstKeys(_.explicit(targets))
+  def reorderAsFirstKeys(selector: SEL.ReorderAsX.Selector): Self2 = 
+    self2 :+ ReorderSelectedKeys(SEL.ReorderAsX.resolve(selector), f = (allKeys, targetKeys) => targetKeys ++ allKeys.diff(targetKeys))
 
   // ---------------------------------------------------------------------------
-  def reorderAsFirstKey (target: KeyW)                             : Self2 = reorderAsFirstKeys(KeyWz.from(target))
-  def reorderAsFirstKeys(target1: KeyW, target2: KeyW, more: KeyW*): Self2 = reorderAsFirstKeys(KeyWz.from(target1, target2, more)) 
-  def reorderAsFirstKeys(targets: KeyWz)                           : Self2 =
-    reorderKeys { keys => 
-      targets.skeys ++ keys.filterNot(targets.skeys.contains) }
-
-  // ---------------------------------------------------------------------------
-  def reorderAsLastKey (target: KeyW)                             : Self2 = reorderAsLastKeys(KeyWz.from(target))
-  def reorderAsLastKeys(target1: KeyW, target2: KeyW, more: KeyW*): Self2 = reorderAsLastKeys(KeyWz.from(target1, target2, more)) 
-  def reorderAsLastKeys(targets: KeyWz)                           : Self2 =
-    reorderKeys { keys =>
-      keys.filterNot(targets.skeys.contains) ++ targets.skeys.reverse }
+  def reorderAsLastKeys(target1: KeyW, more: KeyW*): Self2 = reorderAsLastKeys(_.explicit(target1 -> more)) 
+  def reorderAsLastKeys(targets: KeyWz)            : Self2 = reorderAsLastKeys(_.explicit(targets))    
+  def reorderAsLastKeys(selector: SEL.ReorderAsX.Selector): Self2 = 
+    self2 :+ ReorderSelectedKeys(SEL.ReorderAsX.resolve(selector), f = (allKeys, targetKeys) => allKeys.diff(targetKeys) ++ targetKeys.reverse)
 
   // ===========================================================================
   // rename (explicitly, aot dynamically); selection: use forX
@@ -64,27 +59,23 @@ trait HeadCommonVeryBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   // ===========================================================================
   // remove
 
-  def remove(x : KPathW ): Self2 = remove(_.explicit(x ))
-  def remove(xs: KPathWz): Self2 = remove(_.explicit(xs))
-
-  def remove(x1: KPathW, x2: KPathW, more: KPathW*): Self2 = remove(_.explicit(x1, x2, more:_*))
-  def remove(sel: SEL.Remove.Selector)             : Self2 = self2 :+ new Remove(SEL.Remove.resolve(sel))
-
+  def remove(target1: KPathW, more: KPathW*): Self2 = remove(_.explicit(target1 -> more))
+  def remove(targets: KPathWz)              : Self2 = remove(_.explicit(targets))
+  def remove(selector: SEL.Remove.Selector) : Self2 = self2 :+ new Remove(SEL.Remove.resolve(selector))
+  
   // ===========================================================================
   // retain
 
-  def retain(x: RPathW ): Self2 = self2 :+ new Retain(x)
-  def retain(x: RPathWz): Self2 = self2 :+ new Retain(x)
-
-  def retain(x1: RPathW, x2: RPathW, more: RPathW*): Self2 = self2 :+ new Retain(x1, x2, more)
-  def retain(x: SEL.Retain.Selector)               : Self2 = self2 :+ new Retain(SEL.Retain.resolve(x))
+  def retain(target1: RPathW, more: RPathW*): Self2 = retain(_.explicit(target1 -> more))
+  def retain(targets: RPathWz)              : Self2 = retain(_.explicit(targets))
+  def retain(selector: SEL.Retain.Selector) : Self2 = self2 :+ new Retain(SEL.Retain.resolve(selector))
 
   // ===========================================================================
   // add
 
   // - t210111113206 - support adding path, eg: .add('p |> 'f -> "foo")
-  // - t210127194716 - p2 - also support append/prepend field(s); maybe genelized as insertion index (including negative)?
-  // - t210125111338 - investigate union types to restrict T (coming in scala 3?)
+  // - t210127194716 - p2 - also support append/prepend field(s); maybe generalized as insertion index (including negative)?
+  // - t210125111338 - investigate union types to restrict T at compile-time (coming in scala 3?)
 
   def add[T1: WTT](e1: KVE): Self2 = self2 :+ new Add(e1)
 
@@ -97,7 +88,8 @@ trait HeadCommonVeryBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   // replace
   // TODO:
   // - selection too (t210110094731)?
-  // - t210125111338 - investigate union types to restrict T (coming in scala 3?)
+  // - t210111113206 - support adding path, eg: .replace('p |> 'f -> "foo")
+  // - t210125111338 - investigate union types to restrict T at compile-time (coming in scala 3?)
 
   def replace[T1: WTT](e1: RVE): Self2 = self2 :+ new Replace(e1)
 
@@ -109,6 +101,10 @@ trait HeadCommonVeryBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   // ===========================================================================
   // shorthands
 
+  def reverseKeyOrder           : Self2 = reorderKeys           (_.reverse)
+  def reverseKeyOrderRecursively: Self2 = reorderKeysRecursively(_.reverse)
+  
+  // ---------------------------------------------------------------------------
   def renameToUpperCase(x: KPathW): Self2 = rename(x).using(_.toUpperCase)
   def renameToLowerCase(x: KPathW): Self2 = rename(x).using(_.toLowerCase)
   def renameToSnakeCase(x: KPathW): Self2 = rename(x).using(_.camelCaseToSnake)

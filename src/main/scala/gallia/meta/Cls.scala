@@ -6,7 +6,7 @@ import aptus.{Anything_, String_, Seq_}
 import target._
 
 // ===========================================================================
-case class Cls(fields: Seq[Fld])
+case class Cls(fields: Seq[Fld]) // TODO: as List?
       extends Containee
       with    ClsLike
       with    ClsHelper
@@ -83,7 +83,7 @@ case class Cls(fields: Seq[Fld])
     // ===========================================================================
     // both for val and meta
 
-    private[meta /*cls*/] def rewrap(fields: Seq[Fld]) = Cls(fields)
+    private[meta /*cls*/] def rewrap(fields: Seq[Fld]) = Cls(fields.toList)
 
     // ===========================================================================
     private[meta /*cls*/] def requireNewKey   (target : Key ) = { requireNewKeys(Keyz.from(target)) }
@@ -215,7 +215,7 @@ case class Cls(fields: Seq[Fld])
 
 // ===========================================================================
 object Cls {
-  val Dummy = Cls(Seq(Fld.Dummy))
+  val Dummy = Cls(List(Fld.Dummy))
 
   val Content = cls(_content.string)
   val Line    = cls(_line   .string) // TODO:opt?
@@ -227,15 +227,16 @@ object Cls {
   val FullPercentiles      = ClsConstants.FullPercentiles
 
   // ===========================================================================
-  private[gallia] def vleInt: Cls = Cls(Seq(Fld.oneInt(_vle)))
+  private[gallia] def vleInt: Cls = Cls(List(Fld.oneInt(_vle)))
 
-  private[gallia] def vle (node: TypeNode): Cls = Cls(Seq(Fld(_vle, node.forceNonBObjInfo)))
-  private[gallia] def vles(node: TypeNode): Cls = Cls(Seq(Fld(_vle, node.forceNonBObjInfo).toMultiple))
+  private[gallia] def vle (node: TypeNode): Cls = Cls(List(Fld(_vle, node.forceNonBObjInfo)))
+  private[gallia] def vles(node: TypeNode): Cls = Cls(List(Fld(_vle, node.forceNonBObjInfo).toMultiple))
 
   // ---------------------------------------------------------------------------
   def from(keys: Seq[ Key]): Cls = from(keys.map(_.name))
   def from(keys: Seq[SKey])(implicit di: DI): Cls =
     keys
+      .toList
       .map(skey => Fld(skey.symbol, Info.string))
       .pipe(Cls.apply)
 

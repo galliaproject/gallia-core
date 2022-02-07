@@ -65,6 +65,9 @@ object UtsBase {
   object Rename extends KPathBase { type Origin = Origins.Rename; val origin = new Origin {} }
 
   // ---------------------------------------------------------------------------
+  object ReorderAsX extends KeyzBase { type Origin = Origins.ReorderAsX; val origin = new Origin {} }
+  
+  // ---------------------------------------------------------------------------
   object Remove     extends QpathzBase { type Origin = Origins.Remove    ; val origin = new Origin {} }
   object Retain     extends QpathzBase { type Origin = Origins.Retain    ; val origin = new Origin {} }
   object SetDefault extends QpathzBase { type Origin = Origins.SetDefault; val origin = new Origin {} }

@@ -22,14 +22,15 @@ trait ClsAvanced { self: Cls =>
             case Some(thatField) => None } } )
 
   // ===========================================================================
-  def reorderKeysRecursively(f: Seq[Key] => Seq[Key], recursively: Boolean): Cls =
+  def reorderKeys(f: Seq[Key] => Seq[Key], recursively: Boolean): Cls =
     copy(fields =
-      f(keys)
+      keys
+        .pipe(f)
         .map(field(_))
         .mapIf(_.isNesting && recursively) {
           _.transformInfo(
               _.transformNestedClass(
-                  _.reorderKeysRecursively(f, recursively))) })
+                  _.reorderKeys(f, recursively))) })
 
   // ===========================================================================
   def swapFields(parent: Option[RPath], key1: Key, key2: Key): Cls =

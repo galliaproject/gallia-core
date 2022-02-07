@@ -8,13 +8,13 @@ object UtsBundle {
 
   // ===========================================================================
   trait Core1K
-        extends Bundle.OneIndex
-        with    Bundle.HasCustomKey
+        extends Bundle    .OneIndex
+        with    Bundle    .HasCustomKey
         with    Individual.HasSKeyMatches1
 
     // ---------------------------------------------------------------------------
   trait Core1 // sole/all/renaming must be handled explicitly
-        extends Bundle.Core1K
+        extends Bundle    .Core1K
         with    Individual.HasPathMatches1
 
     // ===========================================================================

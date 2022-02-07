@@ -22,10 +22,11 @@ object AtomsHelper {
 
   // ===========================================================================
   def reorderKeysRecursively(f: Seq[Key] => Seq[Key])(o: Obj): Obj =
-    f(o.keys)
+    o .keys
+      .pipe(f)
       .map { key =>
         key ->
-          (o.force(key) match { // TODO: t210115095838 - optimization: pass nesting from meta rather
+          (o.force(key) match { // TODO: t210115095838 - optimization: pass nesting info from meta rather
             case x: Obj    => reorderKeysRecursively(f)(x)
             case x: Seq[_] =>
               x.map {

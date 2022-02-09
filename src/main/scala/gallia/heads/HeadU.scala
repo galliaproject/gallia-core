@@ -66,6 +66,10 @@ class HeadU private[gallia]( // TODO: t210121105809 - rename to HeadO and genera
   @aptus.fordevonly // pretty ugly
   def inspectAndAbort     : Self = self ::+ InspectU(None,      abort = true)
 
+  // ---------------------------------------------------------------------------
+  def checkpoint(base: String)                        : Self2 = checkpoint(s"${base}.checkpoint.schema.json", s"${base}.checkpoint.data.json")  
+  def checkpoint(schemaPath: String, dataPath: String): Self2 = uu(CheckpointU(schemaPath, dataPath))
+  
   // ===========================================================================
   // TODO: add more common ones
   // TODO: t210117110015 - move to common (need to abstract ForX...)

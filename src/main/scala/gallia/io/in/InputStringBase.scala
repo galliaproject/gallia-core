@@ -62,6 +62,15 @@ private[io] trait InputStringBase { val inputString: InputString }
         .conf
         .actionU
         .pipe(Head.inputU)
+
+    // ---------------------------------------------------------------------------        
+    def uncheckpointSingle(): HeadO = {      
+      val schemaPath = s"${inputString}.checkpoint.schema.json"
+      val dataPath   = s"${inputString}.checkpoint.data.json"
+
+      dataPath.read(_.schema(schemaPath))
+    }
+        
   }
 
   // ===========================================================================
@@ -83,6 +92,14 @@ private[io] trait InputStringBase { val inputString: InputString }
           .conf
           .actionZ
           .pipe(Head.inputZ)
+
+    // ---------------------------------------------------------------------------
+    def uncheckpoint(): HeadZ = {
+      val schemaPath = s"${inputString}.checkpoint.schema.json"
+      val dataPath   = s"${inputString}.checkpoint.data.jsonl.gz"
+      
+      dataPath.stream(_.schema(schemaPath))
+    }
   }
 
   // ===========================================================================

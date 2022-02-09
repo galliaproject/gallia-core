@@ -4,9 +4,13 @@ package data.multiple.streamer
 import enumeratum.{Enum, EnumEntry}
 
 // ===========================================================================
-sealed trait StreamerType extends EnumEntry
+sealed trait StreamerType extends EnumEntry {
+    def isViewBased    : Boolean = this == StreamerType.ViewBased
+    def isIteratorBased: Boolean = this == StreamerType.IteratorBased
+    def isRDDBased     : Boolean = this == StreamerType.RDDBased
+  }
 
-  // ---------------------------------------------------------------------------
+  // ===========================================================================
   object StreamerType extends Enum[StreamerType] {
     val values = findValues
 

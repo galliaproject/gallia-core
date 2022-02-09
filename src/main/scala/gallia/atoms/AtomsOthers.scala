@@ -26,6 +26,21 @@ object AtomsOthers {
   case object _IdentityUU extends AtomUU { @inline def naive(o: Obj ) = o }
   case object _IdentityZZ extends AtomZZ { @inline def naive(z: Objs) = z }
 
+  // ===========================================================================
+  case class _CheckpointU(c: Cls, path1: String, path2: String) extends AtomUU { def naive(o: Obj) = {
+      gallia.atoms.AtomsXO._SchemaOutputU (c                          , path1, io.UrlLike.Plain, suffix = "").naive(o)    
+      gallia.atoms.AtomsXO._UrlLikeOutputU(io.IoTypeU.PrettyJsonObject, path2, io.UrlLike.Plain)             .naive(o)
+  
+      o } }
+    
+    // ---------------------------------------------------------------------------
+    case class _CheckpointZ(c: Cls, path1: String, path2: String) extends AtomZZ { def naive(z: Objs) = {
+      gallia.atoms.AtomsXO._SchemaOutputZ (c                   , path1, io.UrlLike.Plain, suffix = "").naive(z)    
+      gallia.atoms.AtomsXO._UrlLikeOutputZ(io.IoTypeZ.JsonLines, path2, io.UrlLike.Gzipped)           .naive(z)
+  
+      assert(!z.isIteratorBased) // FIXME: t220209132326
+      z } }
+
   // ---------------------------------------------------------------------------
   case class _MapV2V(f: _ff11) extends AtomVV { def naive(v: Any) = f(v) }
 

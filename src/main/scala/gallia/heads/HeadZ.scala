@@ -112,6 +112,10 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
   def logProgress(nOpt: Option[Int], debug: Obj => String): Self = zz(ActionsZZ.LogProgress(nOpt, debug))
 
   // ===========================================================================
+  def checkpoint(base: String)                        : Self2 = checkpoint(s"${base}.checkpoint.schema.json", s"${base}.checkpoint.data.jsonl.gz")  
+  def checkpoint(schemaPath: String, dataPath: String): Self2 = zz(CheckpointZ(schemaPath, dataPath))  
+
+  // ===========================================================================
   // TODO: add first/last/sample of N
 
   def inspect()           : Self = self ::+ InspectZ(None     , abort = false)

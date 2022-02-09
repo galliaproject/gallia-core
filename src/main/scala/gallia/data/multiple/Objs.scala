@@ -17,6 +17,11 @@ case class Objs private (  // TODO: two versions, see t210104164036
     // ---------------------------------------------------------------------------
     private def _rewrap(values: Streamer[Obj]): Objs = Objs.build(values)
 
+    // ---------------------------------------------------------------------------
+    private[gallia] def isViewBased    : Boolean = values.tipe.isViewBased
+    private[gallia] def isIteratorBased: Boolean = values.tipe.isIteratorBased
+    private[gallia] def isRDDBased     : Boolean = values.tipe.isRDDBased
+
     // ===========================================================================
     private[gallia] def _modifyUnderlyingStreamer(f: Streamer[Obj] => Streamer[Obj]): Objs = _rewrap(f(values)) // eg to modify spark RDD
 

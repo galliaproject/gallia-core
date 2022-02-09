@@ -228,6 +228,13 @@ object ActionsOthers {
     case class SquashZ5(from: TtqKPath5, to: TypeNode, f: _agg5) extends ActionZV with SquashXN {
       def atom(c: Cls) = _SquashZ5(from.pathPairT(c), f) }
 
+  // ===========================================================================
+  case class CheckpointU(path1: String, path2: String) extends ActionUUc with IdentityVM1 {
+      def atomuu(c: Cls) = _CheckpointU(c, path1, path2) }
+    
+    case class CheckpointZ(path1: String, path2: String) extends ActionZZc with IdentityVM1 {
+      def atomzz(c: Cls) = _CheckpointZ(c, path1, path2) }
+
 }
 
 // ===========================================================================

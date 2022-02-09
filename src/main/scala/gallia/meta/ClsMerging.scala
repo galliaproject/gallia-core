@@ -1,7 +1,7 @@
 package gallia
 package meta
 
-import aptus.Anything_
+import aptus.{Anything_, Seq_}
 
 import heads.merging.MergingData._
 
@@ -31,14 +31,23 @@ trait ClsMerging { self: Cls =>
         case JoinType.inner => Container._Nes }
   
   // ---------------------------------------------------------------------------
-  def join(that: Cls)(joinType: JoinType, joinKeys: JoinKey): Cls = {   
-    val that2 = that.remove(joinKeys.right)
+  def join(that: Cls)(joinType: JoinType, joinKeys: JoinKey): Cls = {
+    def thisFields = 
+      this
+        .mapFields(_.pipeIf(_.key != joinKeys.left)(_.toNonRequired))
+        .fields
+
+    def thatFields(b: Boolean): Seq[Fld] =
+      that
+        .fields
+        .filterNot(_.key == joinKeys.right)
+        .mapIf(_ => b)(_.toNonRequired)
     
     joinType match {
-      case JoinType.full  => Cls(this.mapFields(_.pipeIf(_.key != joinKeys.left)(_.toNonRequired)).fields ++ that2.mapFields(_.toNonRequired ).fields)                        
-      case JoinType.left  => Cls(this.fields                                                              ++ that2.mapFields(_.toNonRequired ).fields)                        
-      case JoinType.right => Cls(this.mapFields(_.pipeIf(_.key != joinKeys.left)(_.toNonRequired)).fields ++ that2.fields)
-      case JoinType.inner => Cls(this.fields                                                              ++ that2.fields)}
+      case JoinType.full  => Cls(thisFields  ++ thatFields(true) )                        
+      case JoinType.left  => Cls(self.fields ++ thatFields(true) )                        
+      case JoinType.right => Cls(thisFields  ++ thatFields(false))
+      case JoinType.inner => Cls(self.fields ++ thatFields(false)) }
   }
 
 }

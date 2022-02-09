@@ -11,12 +11,12 @@ import atoms.AtomsZZMerging._
 object ActionsZZMerging {
 
   case object UnionZ extends ActionZzToZ {
-    def _meta(c1: Cls , c2: Cls ): Cls  = c1.unionCompatible(c2) //TODO: val
+    def _meta (c1: Cls , c2: Cls ): Cls  = c1.unionCompatible(c2) //TODO: val
     def dataz2(c1: Cls , c2: Cls ): Atoms = _UnionZZ.in.seq
   }
 
   // ===========================================================================
-  case class Merging(data: MergingData) extends ActionZzToZ/* with CanForceAs1[Grouping] */{
+  case class Merging(data: MergingData) extends ActionZzToZ {
     override def vldt (c1: Cls, c2: Cls): Errs = {
       data
         .vldtJoinKeys(c1, c2).map(_Error.AmbiguousMergingKey).map(_.err).toSeq

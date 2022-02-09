@@ -30,10 +30,15 @@ case class UrlLike(
   // ===========================================================================
   object UrlLike {
 
-    val Default = UrlLike(
+    val Plain = UrlLike(
       explicitCharset     = None,
       explicitCompression = None)
 
+    val Gzipped = UrlLike(
+      explicitCharset     = None,
+      explicitCompression = Some(SupportedCompression.Gzip))
+      
+    val Default = Plain
   }
 
 // ===========================================================================

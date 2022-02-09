@@ -139,9 +139,13 @@ import meta._
           def formatDetails = offendingIndices.#@@.append(s"(${maxSize})") }
 
       // ---------------------------------------------------------------------------
-      case class MoreThanOneKey(keys: Seq[Key]) extends _Error1 {
+      case class MoreThanOneKey(keys: Seq[Key]) extends _Error1 { // eg when trying to use "sole" key selector
         val errorId = "201110091500"; val label = "MoreThanOneKey"
           def formatDetails = keys.#@@ }
+
+      // ---------------------------------------------------------------------------
+      case class AmbiguousMergingKey (keys: Keyz) extends _Error3 { val errorId = "220207150612"; val label = "AmbiguousMergingKey" }
+      case class NameConflictsForJoin(keys: Keyz) extends _Error3 { val errorId = "220207150613"; val label = "NameConflictsForJoin" } // t220209085836 - name conflict in join: offer mode to discard RHS conflicts, and mode to rename RHS      
 
       // ===========================================================================
       object Runtime {

@@ -17,7 +17,17 @@ object ActionsZZMerging {
 
   // ===========================================================================
   case class Merging(data: MergingData) extends ActionZzToZ/* with CanForceAs1[Grouping] */{
-    def vldt (in: Cls ): Errs = Nil// TODO
+    override def vldt (c1: Cls, c2: Cls): Errs = {
+      data
+        .vldtJoinKeys(c1, c2).map(_Error.AmbiguousMergingKey).map(_.err).toSeq
+        .orIfEmpty {
+          val jk = data.joinKeys(c1, c2)       
+          val xs = c1.keys.intersect(c2.keys).diff(jk.keys)
+
+          if (xs.nonEmpty) Seq(_Error.NameConflictsForJoin(Keyz(xs)).err) // t220209085836 - name conflict in join: offer mode to discard RHS conflicts, and mode to rename RHS
+          else             Nil        
+        }
+    }
 
     // ---------------------------------------------------------------------------
     def _meta(c1: Cls , c2: Cls): Cls =

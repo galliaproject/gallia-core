@@ -36,9 +36,9 @@ trait ClsMerging { self: Cls =>
     
     joinType match {
       case JoinType.full  => Cls(this.mapFields(_.pipeIf(_.key != joinKeys.left)(_.toNonRequired)).fields ++ that2.mapFields(_.toNonRequired ).fields)                        
-      case JoinType.left  => Cls(this.fields                                                             ++ that2.mapFields(_.toNonRequired ).fields)                        
+      case JoinType.left  => Cls(this.fields                                                              ++ that2.mapFields(_.toNonRequired ).fields)                        
       case JoinType.right => Cls(this.mapFields(_.pipeIf(_.key != joinKeys.left)(_.toNonRequired)).fields ++ that2.fields)
-      case JoinType.inner => Cls(this.fields                                                             ++ that2.fields) }
+      case JoinType.inner => Cls(this.fields                                                              ++ that2.fields)}
   }
 
 }

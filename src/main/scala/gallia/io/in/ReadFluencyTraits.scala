@@ -17,7 +17,7 @@ trait CanSetSchemaFluency[Fluency] { ignored: HasSelf[Fluency] =>
   def inferSchema           : Fluency
 
   // ---------------------------------------------------------------------------
-  // TODO: separate validation...
+  // TODO: t220207144513 - separate validation...
   // TODO: t210128103821 - generalize schema i/o for any format schema-like that can be (reasonnably) parsed, may be useful and limit code duplication (JSON schema, ...)
   final def schema[T: WTT]                 : Fluency = cls[T]             .pipe(explicitSchema)
   final def schema(schemaFilePath: String) : Fluency = cls(schemaFilePath).pipe(explicitSchema)

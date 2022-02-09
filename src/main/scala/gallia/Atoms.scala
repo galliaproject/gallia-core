@@ -57,9 +57,9 @@ sealed trait Atom extends ActionAN {
   trait AtomUZ extends Atom { def naive(o: Obj ): Objs }
 
   // ---------------------------------------------------------------------------
-  trait AtomUV extends Atom { def naive(o: Obj ): Any }
-  trait AtomZV extends Atom { def naive(o: Objs): Any }
-  trait AtomVV extends Atom { def naive(o: Any ): Any }
+  trait AtomUV extends Atom { def naive(o: Obj ): Vle }
+  trait AtomZV extends Atom { def naive(o: Objs): Vle }
+  trait AtomVV extends Atom { def naive(o: Vle ): Vle }
 
   // ---------------------------------------------------------------------------
   trait AtomUUtoU extends Atom { def naive(o1: Obj , o2: Obj ): Obj  }

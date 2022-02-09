@@ -13,17 +13,17 @@ sealed trait MergingData {
     val joinKeysOpt: Option[JoinKey]
 
     // ---------------------------------------------------------------------------
-    def vldtJoinKeys(c1: Cls, c2: Cls): Option[Any] =
+    def vldtJoinKeys(c1: Cls, c2: Cls): Option[Keyz] =
       joinKeysOpt match {
         case Some(_) => None
-        case None    => c1.keys.intersect(c2.keys).in.someIf(_.size != 1) }
+        case None    => c1.keys.intersect(c2.keys).in.someIf(_.size != 1).map(Keyz.apply) }
 
     // ---------------------------------------------------------------------------
     // TODO: consider case-insentivity? (arbitrarily favor left)
     def joinKeys(c1: Cls, c2: Cls): JoinKey =
       joinKeysOpt match {
         case Some(joinKeys) => joinKeys
-        case None           => c1.keys.intersect(c2.keys).force.one.pipe(JoinKey.common) } // already validated by here
+        case None           => c1.keys.intersect(c2.keys).force.one.pipe(JoinKey.common) } // already validated by here (see above)
   }
 
   // ===========================================================================
@@ -98,6 +98,8 @@ sealed trait MergingData {
           left : Key,
           right: Key) {
         /** arbitrarily choosing left as the "dominant" one */ def key = left
+
+        def keys = Seq(left, right)
       }
 
       // ---------------------------------------------------------------------------

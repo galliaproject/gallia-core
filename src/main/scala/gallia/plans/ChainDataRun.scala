@@ -13,7 +13,7 @@ object ChainDataRun {
       .values
       .foreach { node =>  
         latest = AtomProcessor(
-            Right(latest), missingInputs.apply)(
+            DataInput.SingleInput(latest), missingInputs.apply)(
             node.id, node.atom, node.debug) }
 
     latest

@@ -13,12 +13,14 @@ case class TypeLeaf(
 
       dataClass  : Boolean = false, // eg "case class Foo(a: String, b: Int)", but not necessarily all case classes (eg not scala.Some)
       enm        : Boolean = false, // "enum" is reserved in scala 3
+      bytes      : Boolean = false, // as ByteBuffer
       inheritsSeq: Boolean = false,
 
       fields     : Seq[Field] = Nil) {
 
     def keyz: Keyz = fields.map(_.key.symbol).pipe(Keyz.apply)
 
+    // ---------------------------------------------------------------------------
     def isSeq   : Boolean = inheritsSeq
 
     def isOption: Boolean = name == _Option
@@ -28,6 +30,7 @@ case class TypeLeaf(
 
     def isNotOne: Boolean = isSeq || isOption
 
+    // ---------------------------------------------------------------------------    
     def unaliased: TypeLeaf = copy(alias = None, fields = fields.map(_.unaliased))
 
     // ===========================================================================

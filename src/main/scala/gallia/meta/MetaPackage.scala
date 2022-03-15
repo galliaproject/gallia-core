@@ -14,6 +14,7 @@ package object meta {
   // ===========================================================================
   type NumericalType   = gallia.reflect.NumericalType
   type IntegerLikeType = gallia.reflect.IntegerLikeType
+  type RealLikeType    = gallia.reflect.RealLikeType
 }
 
 // ===========================================================================

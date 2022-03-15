@@ -19,8 +19,8 @@ object TsSingleIndividual {
 
     trait HasSingleOneFloat[$Wrap] { def float(target: $Wrap) = new One_[Float](target) }
 
-    trait HasSingleOneBigInt    [$Wrap] { def bigInt    (target: $Wrap) = new One_[BigInt] (target) }
-    trait HasSingleOneBigDecimal[$Wrap] { def bigDecimal(target: $Wrap) = new One_[BigDecimal](target) }
+    trait HasSingleOneBigInt    [$Wrap] { def bigInt(target: $Wrap) = new One_[BigInt] (target) }
+    trait HasSingleOneBigDecimal[$Wrap] { def bigDec(target: $Wrap) = new One_[BigDecimal](target) }
 
     trait HasSingleOneLocalDate    [$Wrap] { def date    (target: $Wrap) = new One_[LocalDate] (target) }
     trait HasSingleOneLocalDateTime[$Wrap] { def dateTime(target: $Wrap) = new One_[LocalDateTime](target) }
@@ -39,8 +39,8 @@ object TsSingleIndividual {
 
     trait HasSingleOptFloat[$Wrap] { def float_(target: $Wrap) = new Opt_[Float](target) }
 
-    trait HasSingleOptBigInt    [$Wrap] { def bigInt_    (target: $Wrap) = new Opt_[BigInt]    (target) }
-    trait HasSingleOptBigDecimal[$Wrap] { def bigDecimal_(target: $Wrap) = new Opt_[BigDecimal](target) }
+    trait HasSingleOptBigInt    [$Wrap] { def bigInt_(target: $Wrap) = new Opt_[BigInt]    (target) }
+    trait HasSingleOptBigDecimal[$Wrap] { def bigDec_(target: $Wrap) = new Opt_[BigDecimal](target) }
 
     trait HasSingleOptLocalDate    [$Wrap] { def date_    (target: $Wrap) = new Opt_[LocalDate ](target) }
     trait HasSingleOptLocalDateTime[$Wrap] { def dateTime_(target: $Wrap) = new Opt_[LocalDateTime](target) }
@@ -59,7 +59,7 @@ object TsSingleIndividual {
 
     trait HasSingleNesFloat[$Wrap] { def floats(target: $Wrap) = new Nes_[Float](target) }
 
-    trait HasSingleNesBigInt    [$Wrap] { def bigInts    (target: $Wrap) = new Nes_[BigInt]    (target) }
+    trait HasSingleNesBigInt    [$Wrap] { def bigIntegers(target: $Wrap) = new Nes_[BigInt]    (target) }
     trait HasSingleNesBigDecimal[$Wrap] { def bigDecimals(target: $Wrap) = new Nes_[BigDecimal](target) }
 
     trait HasSingleNesLocalDate    [$Wrap] { def dates    (target: $Wrap) = new Nes_[LocalDate]    (target) }
@@ -79,8 +79,8 @@ object TsSingleIndividual {
 
     trait HasSinglePesFloat[$Wrap] { def floats_(target: $Wrap) = new Pes_[Float](target) }
 
-    trait HasSinglePesBigInt    [$Wrap] { def bigInts_    (target: $Wrap) = new Pes_[BigInt]    (target) }
-    trait HasSinglePesBigDecimal[$Wrap] { def bigDecimals_(target: $Wrap) = new Pes_[BigDecimal](target) }
+    trait HasSinglePesBigInt    [$Wrap] { def bigInts_(target: $Wrap) = new Pes_[BigInt]    (target) }
+    trait HasSinglePesBigDecimal[$Wrap] { def bigDecs_(target: $Wrap) = new Pes_[BigDecimal](target) }
 
     trait HasSinglePesLocalDate    [$Wrap] { def dates_    (target: $Wrap) = new Pes_[LocalDate]    (target) }
     trait HasSinglePesLocalDateTime[$Wrap] { def dateTimes_(target: $Wrap) = new Pes_[LocalDateTime](target) }
@@ -99,14 +99,14 @@ object TsSingleIndividual {
 
     trait HasSingleXFloat[$Wrap] { def floatx(target: $Wrap ) = new One_[Float](target, ignoreContainer = true) }
 
-    trait HasSingleXBigInt    [$Wrap] { def bigIntx    (target: $Wrap ) = new One_[BigInt]    (target, ignoreContainer = true) }
-    trait HasSingleXBigDecimal[$Wrap] { def bigDecimalx(target: $Wrap ) = new One_[BigDecimal](target, ignoreContainer = true) }
+    trait HasSingleXBigInt    [$Wrap] { def bigIntx(target: $Wrap ) = new One_[BigInt]    (target, ignoreContainer = true) }
+    trait HasSingleXBigDecimal[$Wrap] { def bigDecx(target: $Wrap ) = new One_[BigDecimal](target, ignoreContainer = true) }
 
     trait HasSingleXLocalDate    [$Wrap] { def datex    (target: $Wrap ) = new One_[LocalDate]    (target, ignoreContainer = true) }
     trait HasSingleXLocalDateTime[$Wrap] { def dateTimex(target: $Wrap ) = new One_[LocalDateTime](target, ignoreContainer = true) }
 
     // ---------------------------------------------------------------------------
-    trait HasSingleXEnum[$Wrap] { def enumx[E <: enumeratum.EnumEntry : WTT](target: $Wrap ) = new One_[E](target, ignoreContainer = true) } //FIXME? - try - t210201095414
+    trait HasSingleXEnum[$Wrap] { def enumx[E <: EnumEntry : WTT](target: $Wrap ) = new One_[E](target, ignoreContainer = true) } //FIXME? - try - t210201095414
 }
 
 // ===========================================================================

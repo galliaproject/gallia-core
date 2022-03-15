@@ -38,8 +38,8 @@ trait FldCreator {
   // ---------------------------------------------------------------------------
   def byte    : Fld = Fld(_key, Info.from(_One, _Byte))
   def byte_   : Fld = Fld(_key, Info.from(_Opt, _Byte))
-  def bytes   : Fld = Fld(_key, Info.from(_Nes, _Byte))
-  def bytes_  : Fld = Fld(_key, Info.from(_Pes, _Byte))
+  def bytes   : Fld = Fld(_key, Info.from(_Nes, _Byte)) // not to be confused with binary...
+  def bytes_  : Fld = Fld(_key, Info.from(_Pes, _Byte)) // not to be confused with binary...
 
   def short   : Fld = Fld(_key, Info.from(_One, _Short))
   def short_  : Fld = Fld(_key, Info.from(_Opt, _Short))
@@ -82,6 +82,12 @@ def _dateTime   : Fld = Fld(_key, Info.from(_One, _LocalDateTime))
   // ---------------------------------------------------------------------------
   //TODO: enum - t210201095414
 
+  // ---------------------------------------------------------------------------
+  def binary    : Fld = Fld(_key, Info.from(_One, _Binary))
+  def binary_   : Fld = Fld(_key, Info.from(_Opt, _Binary))
+  def binarys   : Fld = Fld(_key, Info.from(_Nes, _Binary))
+  def binarys_  : Fld = Fld(_key, Info.from(_Pes, _Binary))
+  
   // ===========================================================================
   def cls_ (fields: Nes[Fld]): Fld = Fld(_key, Info.opt(Cls(fields)))
   def cls  (fields: Nes[Fld]): Fld = Fld(_key, Info.one(Cls(fields)))

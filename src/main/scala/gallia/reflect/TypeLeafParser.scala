@@ -26,13 +26,20 @@ private object TypeLeafParser {
         .map(_.fullName)
 
     // ---------------------------------------------------------------------------
+    val bytes: Boolean = fullName == _ByteBuffer
+    val enum : Boolean = baseClassNames.contains(_EnumEntry)
+
+    // ---------------------------------------------------------------------------
     TypeLeaf(
       name        = fullName,
       inScopeName = symbol.name.encodedName.toString,      
       alias       = alias,
-      dataClass   = isCaseClass && !fullName.startsWith("scala."),
-      enm         = baseClassNames.contains(_EnumEntry),
+
+      dataClass   = isCaseClass && !fullName.startsWith("scala.") && !enum,
+      enm         = enum,
+      bytes       = bytes,      
       inheritsSeq = baseClassNames.contains(_Seq),
+      
       fields      =
         if (isCaseClass) Field.parseAll(tpe) // may in theory be empty
         else             Nil)

@@ -58,12 +58,11 @@ private object ReducingTypeUtils {
         
         case BasicType._Byte   => (x: Values) => _flattenedBytes  (x).pipe(bytes)
         case BasicType._Short  => (x: Values) => _flattenedShorts (x).pipe(shorts)
+        case BasicType._Long   => (x: Values) => _flattenedLongs  (x).pipe(longs)
         case BasicType._Float  => (x: Values) => _flattenedFloats (x).pipe(floats)        
 
         case BasicType._BigInt => (x: Values) => _flattenedBigInts    (x).pipe(bigInts)        
-        case BasicType._BigDec => (x: Values) => _flattenedBigDecimals(x).pipe(bigDecimals)
-
-        case x => x.p; ??? }
+        case BasicType._BigDec => (x: Values) => _flattenedBigDecimals(x).pipe(bigDecimals) }
       .getOrElse { ??? }//FIXME: t210118084833 - dates, strings...
 
   // ---------------------------------------------------------------------------

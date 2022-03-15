@@ -6,23 +6,34 @@ import aptus.UriString
 import io.out._
 
 // ===========================================================================
-trait HeadUOut { ignored: HeadU =>
+trait HeadOut { self: Head[_] =>
 
-  def write()                                         : HeadU = write(x => x)
-  def write(uri: UriString)                           : HeadU = write(_.entirelyUriDriven(uri))
-  def write(f: StartWriteUFluency => EndWriteUFluency): HeadU = StartU.pipe(f).conf.actionU.pipe(uo)
-    .tap/*If(_.underlyingDagHasOnlyOutputLeaves /* 210205063004 */) - FIXME: t210122140324 */ {
-      _.end.runu().either match {
-          case Left (errors)  => throw errors.metaErrorOpt.get
-          case Right(success) => () } }
+  private[heads] def _meta: Unit =
+    self.end.runMetaOnly().either match {        
+      case Left (errors)  => throw errors.metaErrorOpt.get
+      case Right(success) => () }
+
+}
+
+// ===========================================================================
+trait HeadUOut extends HeadOut { self: HeadU =>
+
+  private[heads] def _all: Unit =
+    self.end.runu().either match {
+      case Left (errors)  => throw errors.metaErrorOpt.get
+      case Right(success) => () }
+
+  // ===========================================================================
+  def runGeneric(action: ActionUO): Unit = self.uo(action)._all
 
   // ---------------------------------------------------------------------------
-  private[gallia] def _metaOnly(): HeadU = StartU.pipe(_.stdout).conf.actionU.pipe(uo)
-    .tap {
-      _.end.runMetaOnly().either match {        
-          case Left (errors)  => throw errors.metaErrorOpt.get
-          case Right(success) => () } }
-    
+  def write()                                         : HeadU = write(x => x)
+  def write(uri: UriString)                           : HeadU = write(_.entirelyUriDriven(uri))
+  def write(f: StartWriteUFluency => EndWriteUFluency): HeadU = StartU.pipe(f).conf.actionU.pipe(uo).tap(_._all) // If(_.underlyingDagHasOnlyOutputLeaves /* 210205063004 */) - FIXME: t210122140324
+
+  // ---------------------------------------------------------------------------
+  private[gallia] def _metaOnly(): HeadU = StartU.pipe(_.stdout).conf.actionU.pipe(uo).tap(_._meta)
+
   // ===========================================================================
   /** will *not* process all the data (assuming input schema does not need to be inferred) */
   def printSchema() = { showSchema()._metaOnly() }
@@ -69,23 +80,24 @@ trait HeadUOut { ignored: HeadU =>
 }
 
 // ===========================================================================
-trait HeadZOut { ignored: HeadZ =>
+trait HeadZOut extends HeadOut { self: HeadZ =>
 
+  private[heads] def _all: Unit =
+    self.end.runz().either match {
+      case Left (errors)  => throw errors.metaErrorOpt.get
+      case Right(success) => () }
+
+  // ===========================================================================
+  def runGeneric(action: ActionZO): Unit = self.zo(action)._all
+  
+  // ---------------------------------------------------------------------------
   def write()                                         : HeadZ = write(x => x)
   def write(uri: UriString)                           : HeadZ = write(_.entirelyUriDriven(uri))
   def write(uri: UriString, container: String)        : HeadZ = ??? // TODO: t201230105232
-  def write(f: StartWriteZFluency => EndWriteZFluency): HeadZ = StartZ.pipe(f).conf.actionZ.pipe(zo)
-    .tap/*If(_.underlyingDagHasOnlyOutputLeaves /* 210205063004 */) - FIXME: t210122140324 */ {
-      _.end.runz().either match {
-          case Left (errors)  => throw errors.metaErrorOpt.get
-          case Right(success) => () } }
+  def write(f: StartWriteZFluency => EndWriteZFluency): HeadZ = StartZ.pipe(f).conf.actionZ.pipe(zo).tap(_._all) // If(_.underlyingDagHasOnlyOutputLeaves /* 210205063004 */) - FIXME: t210122140324      
   
   // ---------------------------------------------------------------------------
-  private[gallia] def _metaOnly(): HeadZ = StartZ.pipe(_.stdout).conf.actionZ.pipe(zo)
-    .tap {
-      _.end.runMetaOnly().either match {        
-          case Left (errors)  => throw errors.metaErrorOpt.get
-          case Right(success) => () } }
+  private[gallia] def _metaOnly(): HeadZ = StartZ.pipe(_.stdout).conf.actionZ.pipe(zo).tap(_._meta)
   
   // ===========================================================================
   def formatString: String = formatJsonLines

@@ -40,7 +40,9 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
   private[gallia] def _modifyUnderlyingStreamer(f: Streamer[Obj] => Streamer[Obj]): HeadZ = self ::+ ModifyUnderlyingStreamer(f)
 
   // ===========================================================================
-  @deprecated("bypasses the 210205063004 mechanism") def forceAObjs: AObjs = end().runz().forceData2(_.aobjs) // TODO: or forceData? forceResult?
+  @deprecated("bypasses the 210205063004 mechanism")
+  def  forceAObjs : AObjs = end().runz().forceData2(_.aobjs)
+  def _forceResult: AObjs = end().runz().forceData2(_.aobjs) // meant for tests only
 
   // ---------------------------------------------------------------------------
   protected[gallia] def rewrap      (newHeadId: NodeId): Self            = new HeadZ(newHeadId, handler)

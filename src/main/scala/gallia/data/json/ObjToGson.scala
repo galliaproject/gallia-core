@@ -1,12 +1,13 @@
 package gallia
 package data.json
 
+import aptus._
+
 // ===========================================================================
 object ObjToGson {
   import com.google.gson._
 
   private lazy val Gson = new GsonBuilder().create()
-  private lazy val SystemDefaultZoneId = java.time.ZoneId.systemDefault
 
   // ===========================================================================
   // TODO: t210115095838 - optimization: use schema (no need to pattern match seq/nesting, can use addElement, ...)!
@@ -20,31 +21,48 @@ object ObjToGson {
                 case sgl         => element(sgl) }) } }
 
     // ===========================================================================
-    @TypeMatching
-    private def element(value: Any): JsonElement =
-      value match {
-        case o: Obj                  => apply(o)
-
-        case e: enumeratum.EnumEntry => e.entryName.pipe(Gson.toJsonTree)
-        //TODO: t210110095228 - scala enum
-
-        // can't seem to get JsonSerializer to work
-        // TODO: t210116162405 - don't use timestamp?
-        case x: LocalDate     => x                            .toEpochDay   .pipe(Gson.toJsonTree) // or rely on gson's default serialization?
-        case x: LocalDateTime => x.atZone(SystemDefaultZoneId).toEpochSecond.pipe(Gson.toJsonTree)
-
-        case x: BigInt     => x.toString /* TODO: ok? */.pipe(Gson.toJsonTree) // or rely on gson's default serialization?
-        case x: BigDecimal => x.toString /* TODO: ok? */.pipe(Gson.toJsonTree)
-
-        case b => Gson.toJsonTree(b) }
-
-    // ---------------------------------------------------------------------------
     private def array(seq: Seq[_]): JsonArray = {
       val elements: Seq[JsonElement] = seq.map(element)
 
       new JsonArray(/*elements.size; FIXME: t210315113950 - causes issues with EMR: look into more*/)
         .tap { array => elements.foreach(array.add) }
     }
+    
+    // ---------------------------------------------------------------------------
+    @TypeMatching
+    private def element(value: Any): JsonElement =
+      value match { // see BasicType
+
+        case x: String  => Gson.toJsonTree(x)
+        case x: Int     => Gson.toJsonTree(x)
+        case x: Double  => Gson.toJsonTree(x)
+        case x: Boolean => Gson.toJsonTree(x)
+        
+        case x: Obj     => apply(x)
+
+        // ---------------------------------------------------------------------------
+        case x: Byte    => Gson.toJsonTree(x)
+        case x: Short   => Gson.toJsonTree(x)
+        case x: Long    => Gson.toJsonTree(x)
+        case x: Float   => Gson.toJsonTree(x)
+
+        // ---------------------------------------------------------------------------
+        case x: EnumEntry  => x.entryName.pipe(Gson.toJsonTree)
+
+        // ---------------------------------------------------------------------------
+        case x: BigInt     => x.toString /* stable */.pipe(Gson.toJsonTree)
+        case x: BigDecimal => x.toString /* stable */.pipe(Gson.toJsonTree)
+        
+        // ---------------------------------------------------------------------------
+        case x: LocalDateTime  => x.formatIsoDateTime.pipe(Gson.toJsonTree)
+        case x: LocalDate      => x.formatIsoDate    .pipe(Gson.toJsonTree)
+
+        // ---------------------------------------------------------------------------
+        case x: ByteBuffer => x.array.toBase64.prepend("base64:").pipe(Gson.toJsonTree)
+
+        // ---------------------------------------------------------------------------
+        case x => illegalState(x.getClass, x)
+      }
 
 }
 

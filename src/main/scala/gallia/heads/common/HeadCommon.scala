@@ -25,8 +25,8 @@ trait HeadCommon[F <: HeadCommon[F]]
     // TODO: print
 
     // ---------------------------------------------------------------------------
-    private[gallia] type Self2 = F
-    private[gallia] val  self2  = this
+    private[gallia] type Self2                = F
+    private[gallia] val  self2: HeadCommon[F] = this
 
     protected[heads] def :+ (action: ActionUU): F
 

@@ -154,7 +154,7 @@ case class RPath(parent: Seq[Key], ren: Ren) {
   // ===========================================================================
   object RPath {
     def from(from: Key, to: Key): RPath = RPath(Nil, Ren(from, to))
-    def from(path: KPathW)       : RPath = RPath(path.kpath.parent, Ren.from(path.kpath.key))
+    def from(path: KPathW)      : RPath = RPath(path.kpath.parent, Ren.from(path.kpath.key))
 
     // ---------------------------------------------------------------------------
     @deprecated("make sure ok") def from(path: Seq[Key], to: Key) = RPath(path.init /* TODO: safe? */, Ren(path.last, to)) // from RenameDynamically

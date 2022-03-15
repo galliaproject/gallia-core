@@ -6,7 +6,11 @@ import enumeratum.{Enum, EnumEntry}
 // ===========================================================================
 sealed trait Container extends EnumEntry {
     val isOne: Boolean = this == Container._One
-
+    val isOpt: Boolean = this == Container._Opt
+    val isNes: Boolean = this == Container._Nes
+    val isPes: Boolean = this == Container._Pes
+    
+    // ---------------------------------------------------------------------------
     val isMultiple: Boolean
     val isOptional: Boolean
 
@@ -41,7 +45,11 @@ sealed trait Container extends EnumEntry {
       }
     */
     
-    // ===========================================================================    
+    // ===========================================================================
+    def single  (optional: Boolean): Container = if (optional) Container._Opt else Container._One
+    def multiple(optional: Boolean): Container = if (optional) Container._Pes else Container._Nes
+
+    // ---------------------------------------------------------------------------
     def containerPairOpt(value: Any): Option[(Container, Any)] =
       value match {
         case None    => None // can't distinguish between _Opt and _Pes here
@@ -51,7 +59,7 @@ sealed trait Container extends EnumEntry {
         case x: Seq[_] => Some(Container._Nes -> x.head)
         case x         => Some(Container._One -> x) }        
 
-    // ===========================================================================
+    // ---------------------------------------------------------------------------
     def combine(c1: Container, c2: Container): Container =
       c1 match {
 

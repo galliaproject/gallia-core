@@ -170,7 +170,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
       def as(newKey1: KeyW, more: KeyW*): Self2 = self2 :+ new CopyEntries(target, (newKey1 +: more).map(_.value)) }
 
   // ===========================================================================
-  // zip strings
+  // zip strings; eg: {"f": "a,b,c", "g": "1,2,3"} -> {"p": [{"f": "a", "g": "1"}, ...]}
 
   // TODO:
   // - t210109142621 - unzip operation (optionally with separator)

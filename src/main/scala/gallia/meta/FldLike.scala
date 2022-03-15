@@ -86,13 +86,13 @@ trait FldLike extends HasKey with InfoLike
       def isShort: Boolean = isBasicType(BasicType._Short)
       def isFloat: Boolean = isBasicType(BasicType._Float)
       
-      def isBigInt    : Boolean = isBasicType(BasicType._BigInt)
-      def isBigDecimal: Boolean = isBasicType(BasicType._BigDecimal)
+      def isBigInt: Boolean = isBasicType(BasicType._BigInt)
+      def isBigDec: Boolean = isBasicType(BasicType._BigDec)
 
       def isDate    : Boolean = isBasicType(BasicType._LocalDate)
       def isDateTime: Boolean = isBasicType(BasicType._LocalDateTime)
-      
-      //TODO: isEnum
+
+      def isEnum : Boolean = isBasicType(BasicType._Enum)
 
       // ===========================================================================
       def isStringDoubleBoolean: Boolean = isString || isDouble || isBoolean // useful for JSON

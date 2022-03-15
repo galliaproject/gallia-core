@@ -18,8 +18,8 @@ trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F]
   def transformDate    (k: RPathW) = transform(_.datex    (k.value))
   def transformDateTime(k: RPathW) = transform(_.dateTimex(k.value))
 
-  def transformBigInt    (k: RPathW) = transform(_.bigIntx    (k.value))
-  def transformBigDecimal(k: RPathW) = transform(_.bigDecimalx(k.value))
+  def transformBigInt(k: RPathW) = transform(_.bigIntx(k.value))
+  def transformBigDec(k: RPathW) = transform(_.bigDecx(k.value))
 
   def transformEnum[E <: enumeratum.EnumEntry : WTT](k: RPathW) = transform(_.enumx[E](k.value)) // TODO: try
 

@@ -177,7 +177,7 @@ object RuntimeValidation { // 210115153346 - POC
           case x: Float => Some(Right(_Float))
 
           case x: BigInt        => Some(Right(_BigInt))
-          case x: BigDecimal    => Some(Right(_BigDecimal))
+          case x: BigDecimal    => Some(Right(_BigDec))
 
           case x: LocalDate     => Some(Right(_LocalDate))
           case x: LocalDateTime => Some(Right(_LocalDateTime))

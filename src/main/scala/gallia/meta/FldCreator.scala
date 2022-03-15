@@ -57,22 +57,24 @@ trait FldCreator {
   def floats_ : Fld = Fld(_key, Info.from(_Pes, _Float))
 
   // ---------------------------------------------------------------------------
-  def bigInt       : Fld = Fld(_key, Info.from(_One, _BigInt))
-  def bigInt_      : Fld = Fld(_key, Info.from(_Opt, _BigInt))
-  def bigInts      : Fld = Fld(_key, Info.from(_Nes, _BigInt))
-  def bigInts_     : Fld = Fld(_key, Info.from(_Pes, _BigInt))
+  def bigInt   : Fld = Fld(_key, Info.from(_One, _BigInt))
+  def bigInt_  : Fld = Fld(_key, Info.from(_Opt, _BigInt))
+  def bigInts  : Fld = Fld(_key, Info.from(_Nes, _BigInt))
+  def bigInts_ : Fld = Fld(_key, Info.from(_Pes, _BigInt))
 
-  def bigDecimal   : Fld = Fld(_key, Info.from(_One, _BigDecimal))
-  def bigDecimal_  : Fld = Fld(_key, Info.from(_Opt, _BigDecimal))
-  def bigDecimals  : Fld = Fld(_key, Info.from(_Nes, _BigDecimal))
-  def bigDecimals_ : Fld = Fld(_key, Info.from(_Pes, _BigDecimal))
+  def bigDec   : Fld = Fld(_key, Info.from(_One, _BigDec))
+  def bigDec_  : Fld = Fld(_key, Info.from(_Opt, _BigDec))
+  def bigDecs  : Fld = Fld(_key, Info.from(_Nes, _BigDec))
+  def bigDecs_ : Fld = Fld(_key, Info.from(_Pes, _BigDec))
 
 //def date       : Fld = Fld(_key, Info.from(_One, _LocalDate)) -- t210202100936 - conflict with aptus' ... as date1 ?
+def _date       : Fld = Fld(_key, Info.from(_One, _LocalDate))  
   def date_      : Fld = Fld(_key, Info.from(_Opt, _LocalDate))
   def dates      : Fld = Fld(_key, Info.from(_Nes, _LocalDate))
   def dates_     : Fld = Fld(_key, Info.from(_Pes, _LocalDate))
 
 //def dateTime   : Fld = Fld(_key, Info.from(_One, _LocalDateTime)) -- conflict with aptus' ... as dateTime1 ?
+def _dateTime   : Fld = Fld(_key, Info.from(_One, _LocalDateTime))  
   def dateTime_  : Fld = Fld(_key, Info.from(_Opt, _LocalDateTime))
   def dateTimes  : Fld = Fld(_key, Info.from(_Nes, _LocalDateTime))
   def dateTimes_ : Fld = Fld(_key, Info.from(_Pes, _LocalDateTime))

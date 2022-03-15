@@ -65,9 +65,10 @@ case class Objs private (  // TODO: two versions, see t210104164036
     private[gallia] def build(values: Streamer[Obj]) = new Objs(values)
 
     // ---------------------------------------------------------------------------
-    def splat(value1: Obj, more: Obj*): Objs = from(value1 +: more.toList)
-    def from(values: Seq [Obj])       : Objs = from(values.toList)
-    def from(values: List[Obj])       : Objs = Streamer.fromList(values).pipe(Objs.build)
+    def splat(value1: Obj, more: Obj*)               : Objs = from(value1 +: more.toList)
+    def from(values: Seq [Obj])                      : Objs = from(values.toList)
+    def from(values: List[Obj])                      : Objs = Streamer.fromList(values).pipe(Objs.build)
+    def from(values: aptus.Closeabled[Iterator[Obj]]): Objs = Objs.build(Streamer.fromIterator(values))
   }
 
 // ===========================================================================

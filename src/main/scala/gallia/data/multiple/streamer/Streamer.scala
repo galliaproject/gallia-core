@@ -91,7 +91,9 @@ trait Streamer[A] { // note: not necessarily bothering with genericity (in the g
     def fromView    [A](data: ViewRepr[A]): Streamer[A] = new ViewStreamer(data)
     def fromList    [A](data: List[A])    : Streamer[A] = new ViewStreamer(data.view)
     def fromIterator[A](data: Iterator[A]): Streamer[A] = new IteratorStreamer(data) // must close separately (eg to read first N lines)
-    def fromIterator[A](pair: (Iterator[A], Closeable)): Streamer[A] = { // for now... (TODO see t210116154537 as part of t210115104555)
+
+    def fromIterator[A](iter: aptus.Closeabled[Iterator[A]]): Streamer[A] = fromIterator(iter.underlying, iter.cls)
+    def fromIterator[A](pair: (Iterator[A], Closeable))     : Streamer[A] = { // for now... (TODO see t210116154537 as part of t210115104555)
       gallia.closeables += pair._2
       fromIterator(IteratorUtils.selfClosing(pair._1, pair._2))
     }

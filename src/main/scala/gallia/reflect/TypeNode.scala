@@ -7,7 +7,7 @@ import meta._
 
 // ===========================================================================
 case class TypeNode(
-      leaf : TypeLeaf,
+      leaf : TypeLeaf, // TODO: rename
       args : List[TypeNode]) {
 
     override def toString: String = formatDefault
@@ -30,10 +30,11 @@ case class TypeNode(
     /** including "one" as container */
     def isContainedDataClass: Boolean = validContainerOpt.exists(_.dataClass)
 
-    /** should return some if valid, just removing any Option/Seq containers */
-    def validContainerOpt: Option[TypeLeaf] = TypeNodeUtils.validContainerOpt(this)
-
+    // ---------------------------------------------------------------------------
     def forceValidContainer: TypeLeaf = validContainerOpt.force
+    
+      /** should return some if valid, just removing any Option/Seq containers */
+      def validContainerOpt: Option[TypeLeaf] = TypeNodeUtils.validContainerOpt(this)
 
     // ---------------------------------------------------------------------------
     def nodeDesc = NodeDesc.from(this)

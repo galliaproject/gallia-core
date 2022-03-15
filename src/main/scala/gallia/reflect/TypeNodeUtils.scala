@@ -7,7 +7,7 @@ import aptus.String_
 object TypeNodeUtils {
 
   /** should return some if valid, just removing any Option/Seq containers */
-  def validContainerOpt(dis: TypeNode): Option[TypeLeaf] =
+  private[reflect] def validContainerOpt(dis: TypeNode): Option[TypeLeaf] =
       _validContainerOpt(dis)
         .flatMap { node => node.args match {
             case Nil => Some(node.leaf)

@@ -25,7 +25,9 @@ package object reflect {
   private[reflect] val _None   = scala.None.getClass.fullPath
 
   // ===========================================================================
-  private[reflect] val _EnumEntry = enumeratum.EnumEntry.getClass.fullPath
+  private[reflect] val _EnumEntry = classOf[enumeratum.EnumEntry].fullPath
+
+  private[reflect] val _ByteBuffer = classOf[java.nio.ByteBuffer].fullPath
 }
 
 // ===========================================================================

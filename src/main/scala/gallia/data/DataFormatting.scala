@@ -30,8 +30,8 @@ import aptus.{String_, Double_}
       case x: Short     => x.formatExplicit
       case x: Byte      => x.formatExplicit // TODO: to hex form?
 
-      case x: BigInt     => x.bigInteger.toString
-      case x: BigDecimal => x.bigDecimal.toString }
+      case x: BigInt     => x.bigInteger.toString /* stable */
+      case x: BigDecimal => x.bigDecimal.toString /* stable */ }
 
     // ---------------------------------------------------------------------------
     def formatOther: PartialFunction[Any, String] = {

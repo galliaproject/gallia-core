@@ -57,7 +57,7 @@ trait HeadCommonAsserts[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
     def assertDataU[T1: WTT, T2: WTT]         (f1: AssertData[T1], f2: AssertData[T2])                     = new { def using(f: (T1, T2)     => Boolean): Self2 = self2 :+ AssertDataU2(resolve2(f1, f2), f) }
     def assertDataU[T1: WTT, T2: WTT, T3: WTT](f1: AssertData[T1], f2: AssertData[T2], f3: AssertData[T3]) = new { def using(f: (T1, T2, T3) => Boolean): Self2 = ??? }
 
-  def assertDataClass[DC: WTT]: Self2 = self2 :+ AssertDataClass(node[DC])
+  def assertDataClass[DC: WTT]: Self2 = self2 :+ AssertDataClass(typeNode[DC])
 
   // ---------------------------------------------------------------------------
   // additional validation

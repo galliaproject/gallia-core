@@ -62,7 +62,7 @@ object SchemaInferrer { // mostly for JSON for now...
           else                          _Float
         
         case x: BigInt        => _BigInt    
-        case x: BigDecimal    => _BigDecimal
+        case x: BigDecimal    => _BigDec
         
         case x: LocalDate     => _LocalDate        
         case x: LocalDateTime => _LocalDateTime }

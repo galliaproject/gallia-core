@@ -30,7 +30,7 @@ private[io] trait InputStringBase { val inputString: InputString }
           case InputStringType.JsonObject  => inputString.splitBy("\n").filterNot(_.trim.isEmpty).map(JsonParsing.parseObject).pipe(Objs.from)
           case InputStringType.JsonArray   => JsonParsing.parseArray(inputString).pipe(Objs.from)
           case InputStringType.Indirection =>
-            val content = inputString.readFileContent
+            val content = inputString.readFileContent // FIXME: t220315121047
 
            (if (InputStringType.parse(content).isJsonObject) JsonParsing.parseObject(content).pipe(Objs.splat(_))
             else                                             JsonParsing.parseArray (content).pipe(Objs.from))

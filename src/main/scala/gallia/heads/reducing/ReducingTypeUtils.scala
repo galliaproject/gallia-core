@@ -53,15 +53,15 @@ private object ReducingTypeUtils {
       : Values => Any =
     numTypeOpt
       .map {
-        case BasicType._Int        => (x: Values) => _flattenedInts   (x).pipe(ints)
-        case BasicType._Double     => (x: Values) => _flattenedDoubles(x).pipe(doubles)
+        case BasicType._Int    => (x: Values) => _flattenedInts   (x).pipe(ints)
+        case BasicType._Double => (x: Values) => _flattenedDoubles(x).pipe(doubles)
         
-        case BasicType._Byte       => (x: Values) => _flattenedBytes  (x).pipe(bytes)
-        case BasicType._Short      => (x: Values) => _flattenedShorts (x).pipe(shorts)
-        case BasicType._Float      => (x: Values) => _flattenedFloats (x).pipe(floats)        
+        case BasicType._Byte   => (x: Values) => _flattenedBytes  (x).pipe(bytes)
+        case BasicType._Short  => (x: Values) => _flattenedShorts (x).pipe(shorts)
+        case BasicType._Float  => (x: Values) => _flattenedFloats (x).pipe(floats)        
 
-        case BasicType._BigInt     => (x: Values) => _flattenedBigInts    (x).pipe(bigInts)        
-        case BasicType._BigDecimal => (x: Values) => _flattenedBigDecimals(x).pipe(bigDecimals)
+        case BasicType._BigInt => (x: Values) => _flattenedBigInts    (x).pipe(bigInts)        
+        case BasicType._BigDec => (x: Values) => _flattenedBigDecimals(x).pipe(bigDecimals)
 
         case x => x.p; ??? }
       .getOrElse { ??? }//FIXME: t210118084833 - dates, strings...

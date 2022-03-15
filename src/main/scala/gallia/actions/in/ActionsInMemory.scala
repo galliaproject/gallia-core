@@ -12,13 +12,13 @@ case class InMemoryMetaInput(c: Cls) extends ActionVM0 with IdentityV0 {
   case class InMemoryInputUa(value: AObj) extends ActionIUd with IdentityV0 {
     // TODO: t210116191208 - validate consistency of meta/data
     def _meta: Cls = value.c
-    def atomiu     = _InMemoryInputUa(value) }
+    def atomiu     = _GenericInputU(value.o) }
 
   // ---------------------------------------------------------------------------
   case class InMemoryInputZa(value: AObjs) extends ActionIZd with IdentityV0 {
     //TODO: t210116191208 - validate consistency of meta/data
     def _meta: Cls = value.c
-    def atomiz     = _InMemoryInputZa(value) }
+    def atomiz     = _GenericInputZ(value.z) }
 
 // ===========================================================================
 case class InMemoryInputUb(value: BObj) extends ActionIUd {

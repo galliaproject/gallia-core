@@ -5,6 +5,20 @@ import io.in._
 import atoms.AtomsIX._
 
 // ===========================================================================
+case class GenericInputU(schema: Cls, datum : Obj)    
+        extends ActionIUd with TodoV0 {
+      def _meta  = schema
+      def atomiu = _GenericInputU(datum) }
+  
+  // ---------------------------------------------------------------------------
+  case class GenericInputZ(
+          schema : Cls,
+          data   : aptus.Closeabled[Iterator[Obj]])    
+        extends ActionIZd with TodoV0 {
+      def _meta  = schema
+      def atomiz = _GenericInputZb(data) }
+
+// ===========================================================================
 case class JsonObjectString(inputString: InputString, schemaProvider: OtherSchemaProvider) extends ActionIUd with TodoV0 with HasSchemaProviderU {
   def _meta: Cls   = __meta
   def hasCommonObj = _JsonObjectString(inputString, schemaProvider, resultCls /* 211230183100 */) }

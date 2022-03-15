@@ -7,21 +7,21 @@ import io._
 import io.in._
 import actions.in.HasProjection
 import data.json.JsonParsing
-import data.json.JsonNumberTax
+import data.json.JsonTax
 import data.ModifyTableData
 import data.multiple.streamer.Streamer
 
 // ===========================================================================
 object AtomsIX {
 
-  case class _InMemoryInputUa(value: AObj) extends AtomIU {
-    def naive: Option[Obj] = Some(value.u) }
+  case   class _GenericInputU(datum: Obj) extends AtomIU { def naive: Option[Obj] = Some(datum) }
+    case class _GenericInputZ(data: Objs) extends AtomIZ { def naive: Option[Objs] = Some(data) }
 
     // ---------------------------------------------------------------------------
-    case class _InMemoryInputZa(value: AObjs) extends AtomIZ {
-      def naive: Option[Objs] = Some(value.z) }
+    case class _GenericInputZb(data: aptus.Closeabled[Iterator[Obj]]) extends AtomIZ {
+      def naive: Option[Objs] = Some(InputUrlLike.streamer(inMemoryMode = false)(data).pipe(Objs.build)) }
 
-    // ---------------------------------------------------------------------------
+  // ===========================================================================
     case class _InMemoryInputUb(value: BObj) extends AtomIU {
       def naive: Option[Obj] = Some(value.forceObj) }
 
@@ -53,8 +53,8 @@ object AtomsIX {
       def commonObj: Obj = 
         JsonParsing
           .parseObject(inputString)
-          .pipeIf(c != null /* TODO: see 211230183100 */)(JsonNumberTax.payUp(c)) }
-  
+          .pipeIf(c != null /* TODO: see 211230183100 */)(JsonTax.payAllUp(c)) }
+
     // ---------------------------------------------------------------------------  
     object _JsonObjectString {
       def toObj(c: Cls)(value: String): Obj = _JsonObjectString(value, null /* TODO */, c).commonObj
@@ -69,7 +69,7 @@ object AtomsIX {
         JsonParsing
           .parseArray(inputString)
           .pipe(Objs.from)
-          .map { x => if (c == null)  /* TODO: see 211230183100 */ x else JsonNumberTax.payUp(c)(x) }
+          .map { x => if (c == null)  /* TODO: see 211230183100 */ x else JsonTax.payAllUp(c)(x) }
     }
 
     // ---------------------------------------------------------------------------  
@@ -80,7 +80,7 @@ object AtomsIX {
   // ===========================================================================
   case class _JsonObjectFileInputU(input: InputUrlLike, c: Cls) extends HasCommonObj {
     def commonObj: Obj = input.content.pipe(JsonParsing.parseObject)
-      def naive: Option[Obj] = commonObj.pipe(JsonNumberTax.payUp(c)).in.some
+      def naive: Option[Obj] = commonObj.pipe(JsonTax.payAllUp(c)).in.some
   }
 
   // ===========================================================================
@@ -99,7 +99,7 @@ object AtomsIX {
             .pipe(Objs.build)
 
       // ---------------------------------------------------------------------------
-      def naive: Option[Objs] = Some(commonObjs.map(JsonNumberTax.payUp(schema)).pipe(projectData(schema)) )
+      def naive: Option[Objs] = Some(commonObjs.map(JsonTax.payAllUp(schema)).pipe(projectData(schema)) )
     }
 
     // ===========================================================================
@@ -116,7 +116,7 @@ object AtomsIX {
             .pipe(Objs.from)
 
       // ---------------------------------------------------------------------------
-      def naive: Option[Objs] = Some(commonObjs.map(JsonNumberTax.payUp(schema)).pipe(projectData(schema)) )
+      def naive: Option[Objs] = Some(commonObjs.map(JsonTax.payAllUp(schema)).pipe(projectData(schema)) )
     }
 
   // ===========================================================================
@@ -178,7 +178,7 @@ object AtomsIX {
       extends HasCommonObjs { import _MongodbInputZ._
       mongoDb()
 
-      def naive: Option[Objs] = commonObjs.map(JsonNumberTax.payUp(c)).in.some // TODO: confirm need to pay tax here
+      def naive: Option[Objs] = commonObjs.map(JsonTax.payAllUp(c)).in.some // TODO: confirm need to pay tax here
 
       // ===========================================================================
       // t210114153517 - must use jongo+find until figure out

@@ -77,6 +77,9 @@ package object gallia
 
   private[gallia] type ByteBuffer    = java.nio.ByteBuffer // note: use ByteBuffer.wrap(_: Array[Byte])
 
+  private[gallia] type EnumEntry            = enumeratum.EnumEntry
+  private[gallia] type Enum[T <: EnumEntry] = enumeratum.Enum[T]
+  
   // ---------------------------------------------------------------------------
   private[gallia] type Whatever = whatever.Whatever
   private[gallia] val  Whatever = whatever.Whatever

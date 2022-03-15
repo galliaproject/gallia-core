@@ -6,8 +6,7 @@ import aptus.Pes
 import gallia.reflect.BasicType
 
 // ===========================================================================
-object RuntimeValidation { // 210115153346 - POC
-  import gallia.meta._
+object RuntimeValidation { import meta._ // 210115153346 - POC  
   type DistinctSeq[A] = Seq[A]
 
   // ---------------------------------------------------------------------------
@@ -162,8 +161,7 @@ object RuntimeValidation { // 210115153346 - POC
       case x: Double  => Some(Right(_Double))
       case x: Boolean => Some(Right(_Boolean))
 
-      case x: enumeratum.EnumEntry => Some(Right(_Enum)) //TODO: make sure works as expected
-      //TODO: scala enum
+      case x: EnumEntry => Some(Right(_Enum)) //TODO: make sure works as expected
 
       case x: Obj => Some(Left(()))
 

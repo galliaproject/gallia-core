@@ -51,7 +51,7 @@ object SchemaInferrer { // mostly for JSON for now...
         case x: Int     => _Int
         case x: Boolean => _Boolean
 
-        case x: enumeratum.EnumEntry => _Enum
+        case x: EnumEntry => _Enum
 
         case x: Byte    => _Byte
         case x: Short   => _Short

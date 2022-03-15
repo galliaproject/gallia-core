@@ -76,13 +76,13 @@ trait ObjAccessors { ignored: Obj => // id210326140514
   def dateTimes_(key: KPathW): Pes[LocalDateTime] = opt  (key).map(_.asSeq.map(_.asLocalDateTime))
 
   // ===========================================================================
-  private def _enm[T <: enumeratum.EnumEntry: WTT](name: String): T  = reflect.CompanionReflection[T](methodName = "withName")(/* args */ name)
+  private def _enm[T <: EnumEntry: WTT](name: String): T  = reflect.CompanionReflection[T](methodName = "withName")(/* args */ name)
 
     // "enum" is a reserved keyword in scala 3
-    def enm  [T <: enumeratum.EnumEntry: WTT](key: KPathW):     T  = text  (key)      .pipe(_enm[T])
-    def enm_ [T <: enumeratum.EnumEntry: WTT](key: KPathW): Opt[T] = text_ (key)      .map(_enm[T])
-    def enms [T <: enumeratum.EnumEntry: WTT](key: KPathW): Seq[T] = texts (key)      .map(_enm[T])
-    def enms_[T <: enumeratum.EnumEntry: WTT](key: KPathW): Pes[T] = texts_(key).map(_.map(_enm[T]))
+    def enm  [T <: EnumEntry: WTT](key: KPathW):     T  = text  (key)      .pipe(_enm[T])
+    def enm_ [T <: EnumEntry: WTT](key: KPathW): Opt[T] = text_ (key)      .map(_enm[T])
+    def enms [T <: EnumEntry: WTT](key: KPathW): Seq[T] = texts (key)      .map(_enm[T])
+    def enms_[T <: EnumEntry: WTT](key: KPathW): Pes[T] = texts_(key).map(_.map(_enm[T]))
 
   // ---------------------------------------------------------------------------
   def text  (key: KPathW):     String  = force(key).pipe(format)

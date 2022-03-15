@@ -2,7 +2,6 @@ package gallia
 package data
 
 import java.time.format._
-import enumeratum.EnumEntry
 
 import aptus.{String_, Double_}
 

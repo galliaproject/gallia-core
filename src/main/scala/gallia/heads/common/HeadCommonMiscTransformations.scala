@@ -21,7 +21,7 @@ trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F]
   def transformBigInt(k: RPathW) = transform(_.bigIntx(k.value))
   def transformBigDec(k: RPathW) = transform(_.bigDecx(k.value))
 
-  def transformEnum[E <: enumeratum.EnumEntry : WTT](k: RPathW) = transform(_.enumx[E](k.value)) // TODO: try
+  def transformEnum[E <: EnumEntry : WTT](k: RPathW) = transform(_.enumx[E](k.value)) // TODO: try
 
   // ---------------------------------------------------------------------------
   // TODO: t210110094731

@@ -63,7 +63,7 @@ object CustomOrdering {
   def standAloneObj : Ordering[Obj]            = Ordering.by(_.formatCompactJson)
 
   // ---------------------------------------------------------------------------
-  def enumEntry     : Ordering[enumeratum.EnumEntry] = Ordering.by(_.entryName)
+  def enumEntry     : Ordering[EnumEntry]      = Ordering.by(_.entryName)
 }
 
 // ===========================================================================

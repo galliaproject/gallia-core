@@ -119,7 +119,7 @@ object AtomsOthers {
                 .getOrElse(dataError(ErrorId.Runtime.NoKeysLeft)) //TODO: or offer alterative if all missing?
   
             o.removeOpt(keys).map(newKey -> _) }
-          .pipe(obj(_)) }
+          .pipe(obj) }
 
   // ===========================================================================
   // uz

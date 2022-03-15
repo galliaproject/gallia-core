@@ -84,8 +84,9 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
     final lazy val skeySet: Set[SKey] = data.map(_._1).map(_.name).toSet
 
     // ---------------------------------------------------------------------------
-    private[single] def attemptKey (key: Key): Option[AnyValue] = data.find  (_._1 == key).map(_._2)    
-    private[single] def containsKey(key: Key):        Boolean   = data.exists(_._1 == key)
+    private[gallia] def forceKey   (key: Key):        AnyValue  = data.find  (_._1 == key).map(_._2).get
+    private[gallia] def attemptKey (key: Key): Option[AnyValue] = data.find  (_._1 == key).map(_._2)    
+    private[gallia] def containsKey(key: Key):        Boolean   = data.exists(_._1 == key)
             
     // ===========================================================================
     def contains   (path: KPathW): Boolean =  _contains(path)
@@ -115,6 +116,9 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
     private[gallia] def build0      (data: UData)           : Obj = new Obj(data)
     private[gallia] def build       (data: UData)           : Obj = build0(normalize(data))
     private[gallia] def fromIterable(data: Iterable[UEntry]): Obj = build (data.toArray)
+    
+    // ---------------------------------------------------------------------------
+    def fromJsonString(value: String): Obj = json.JsonParsing.parseObject(value)
   }
 
 // ===========================================================================

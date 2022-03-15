@@ -53,10 +53,29 @@ package object gallia
   type     Fld = meta.Fld
   lazy val Fld = meta.Fld
 
+  // ---------------------------------------------------------------------------
+  type BigDec = scala.BigDecimal
+  val  BigDec = scala.BigDecimal
+
+  // ---------------------------------------------------------------------------
+  def byteBuffer(byte1: Byte, more: Byte*): ByteBuffer = java.nio.ByteBuffer.wrap((byte1 +: more).toArray)
+  def byteBuffer(value: String)           : ByteBuffer = java.nio.ByteBuffer.wrap(value.getBytes)
+  def byteBuffer(bytes: Array[Byte])      : ByteBuffer = java.nio.ByteBuffer.wrap(bytes)
+  
   // ===========================================================================
   private[gallia] type AnyValue = Any
-  private[gallia] type LocalDate     = java.time.LocalDate
-  private[gallia] type LocalDateTime = java.time.LocalDateTime
+
+  // ---------------------------------------------------------------------------
+  private[gallia] type LocalTime      = java.time. LocalTime
+  private[gallia] type LocalDate      = java.time. LocalDate
+  
+  private[gallia] type LocalDateTime  = java.time. LocalDateTime
+  private[gallia] type OffsetDateTime = java.time.OffsetDateTime
+  private[gallia] type ZonedDateTime  = java.time. ZonedDateTime
+  
+  private[gallia] type Instant        = java.time.Instant
+
+  private[gallia] type ByteBuffer    = java.nio.ByteBuffer // note: use ByteBuffer.wrap(_: Array[Byte])
 
   // ---------------------------------------------------------------------------
   private[gallia] type Whatever = whatever.Whatever
@@ -123,9 +142,12 @@ package object gallia
   def cls(fields: Seq[Fld])       : Cls = meta.Cls(fields.toList)
 
   // ---------------------------------------------------------------------------
-  def obj(entry1: DataEntry, more: DataEntry*): Obj = Obj.fromIterable((entry1 +: more).toList.map(_.pair))
-  def obj(entries: Seq[(Key, AnyValue)])      : Obj = Obj.fromIterable(entries)
+  def obj(entry1: DataEntry, more: DataEntry*)            : Obj = Obj.fromIterable((entry1 +: more).toList.map(_.pair))
+  def obj(entries: Seq[( Key, AnyValue)])                 : Obj = Obj.fromIterable(entries)
+  def obj(entries: Seq[(SKey, AnyValue)])(implicit di: DI): Obj = Obj.fromIterable(entries.map { case (k, v) => Symbol(k) -> v })
 
+  def objFromDataClass[T  <: Product : WTT](value: T): Obj = data.single.ObjIn.fromDataClassInstance(value)
+  
   // ---------------------------------------------------------------------------
   def objs(values: Obj*): Objs = Objs.from(values.toList)
 
@@ -134,6 +156,8 @@ package object gallia
 
     def aobj(c: Cls)                 (u: Obj): AObj = AObj(c, u)
     def aobj(field1: Fld, more: Fld*)(u: Obj): AObj = AObj(cls(field1, more:_*), u) // can't have both meta and data be varargs...
+    
+    def aobjFromDataClass[T <: Product : WTT](value: T): AObj = AObj(cls[T], objFromDataClass(value))
 
   // ---------------------------------------------------------------------------
   def bobjs(value1: BObj, more: BObj*): BObjs = (value1 +: more).toList.pipe(BObjs.apply)
@@ -142,6 +166,8 @@ package object gallia
     def aobjs(field1: Fld, more: Fld*)(values: Obj*): AObjs = aobjs(cls(field1, more:_*))(values:_*)
     def aobjs(c: Cls)                 (values: Obj*): AObjs = AObjs(c, values.toList.pipe(Objs.from))
     def aobjs(c: Cls, z: Objs)                      : AObjs = AObjs(c, z)
+
+    def aobjsFromDataClasses[T <: Product : WTT](values: Seq[T]): AObjs = AObjs(cls[T], values.toList.map(objFromDataClass[T]).pipe(Objs.from))
 
   // ===========================================================================
   def indexToKey(i: Int): Key = rankToKey(i + 1)

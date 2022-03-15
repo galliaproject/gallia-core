@@ -1,7 +1,6 @@
 package gallia
 package io.in
 
-import java.io.Closeable
 import java.net.URL
 
 import aptus._
@@ -25,7 +24,7 @@ case class InputUrlLike( // TODO: t210115193904 - check URI, regular file vs sym
   // ---------------------------------------------------------------------------
   @Distributivity
   def firstLine(): Line = { // TODO: t210114154924 - generalize to n lines + make optional + cache
-    val (itr, cls) = linesPair()
+    val itr = linesPair()
 
     val streamer =
       Streamer
@@ -36,7 +35,7 @@ case class InputUrlLike( // TODO: t210115193904 - check URI, regular file vs sym
       if (streamer.nonEmpty) streamer.iterator.next()
       else                   ??? // TODO: see t210114154924
 
-    cls.close()
+    itr.close()
 
     first
   }
@@ -48,13 +47,11 @@ case class InputUrlLike( // TODO: t210115193904 - check URI, regular file vs sym
       .map(_.apply(this))
       .getOrElse {
         linesPair()
-          .pipe { x =>
-            if (inMemoryMode) Streamer.fromList(Closeabled.fromPair(x).consume(_.toList))
-            else              Streamer.fromIterator(x) } }
+          .pipe(InputUrlLike.streamer(inMemoryMode)) }
       .pipeOpt(linesPreprocessing)(f => _.pipe(f))
 
   // ===========================================================================
-  private def linesPair(): (Iterator[Line], Closeable) = _inputString.pipe(new URL(_)).pipe(_linesPair())
+  private def linesPair(): Closeabled[Iterator[Line]] = _inputString.pipe(new URL(_)).pipe(_lines())
 
   // ===========================================================================
   private def _content()(url: URL): Content =
@@ -67,11 +64,10 @@ case class InputUrlLike( // TODO: t210115193904 - check URI, regular file vs sym
         url.toExternalForm().stripPrefix("file:") /* FIXME? */.pipe(aptus.aptmisc.Zip.content) }
 
   // ===========================================================================
-  private def _linesPair()(url: URL): (Iterator[Line], Closeable) =
+  private def _lines()(url: URL): Closeabled[Iterator[Line]] =
     compression match {
       case SupportedCompression.NoCompression | SupportedCompression.Gzip | SupportedCompression.Bzip2 =>
-        val x = InputStreamUtils.lines(url, charset.charset)
-        x.underlying -> x
+        InputStreamUtils.lines(url, charset.charset)        
 
       case SupportedCompression.Zip => ??? /* TODO */ }
 }
@@ -82,6 +78,12 @@ object InputUrlLike {
 
   // ---------------------------------------------------------------------------
   private def normalize(value: String): String = SupportedUriScheme.file.normalizeOpt(value).getOrElse(value)
+  
+  // ---------------------------------------------------------------------------
+  def streamer[T](inMemoryMode: Boolean)(iter: Closeabled[Iterator[T]]): Streamer[T] = // TODO: move + include hack above properly?
+    if (inMemoryMode) Streamer.fromList    (iter.consume(_.toList))
+    else              Streamer.fromIterator(iter)
+
 }
 
 // ===========================================================================

@@ -69,6 +69,7 @@ case class Objs private (  // TODO: two versions, see t210104164036
     def from(values: Seq [Obj])                      : Objs = from(values.toList)
     def from(values: List[Obj])                      : Objs = Streamer.fromList(values).pipe(Objs.build)
     def from(values: aptus.Closeabled[Iterator[Obj]]): Objs = Objs.build(Streamer.fromIterator(values))
+    def from(values: aptus.CloseabledIterator[Obj])  : Objs = Objs.build(Streamer.fromIterator(values))
   }
 
 // ===========================================================================

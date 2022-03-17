@@ -64,6 +64,6 @@ object BigIntJsonTax extends JsonTax { type T = String
 // ---------------------------------------------------------------------------
 object LocalDataJsonTax extends JsonTax { type T = String
     def qualifies(field: Fld): Boolean = field.isDate 
-    def transformValue(ignored: Fld)(value: T): Any  = value.toLocalDateFromIso }
+    def transformValue(ignored: Fld)(value: T): Any  = value.parseLocalDate }
 
 // ===========================================================================

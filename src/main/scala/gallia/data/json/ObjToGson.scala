@@ -54,9 +54,13 @@ object ObjToGson {
         case x: BigDecimal => x.toString /* stable */.pipe(Gson.toJsonTree)
         
         // ---------------------------------------------------------------------------
-        case x: LocalDateTime  => x.formatIsoDateTime.pipe(Gson.toJsonTree)
-        case x: LocalDate      => x.formatIsoDate    .pipe(Gson.toJsonTree)
-
+        case x: LocalDateTime  => x.formatIso.pipe(Gson.toJsonTree)
+        case x: LocalDate      => x.formatIso.pipe(Gson.toJsonTree)
+        case x: LocalTime      => x.formatIso.pipe(Gson.toJsonTree)
+        case x: OffsetDateTime => x.formatIso.pipe(Gson.toJsonTree)
+        case x:  ZonedDateTime => x.formatIso.pipe(Gson.toJsonTree)
+        case x: Instant        => x.formatIso.pipe(Gson.toJsonTree)
+        
         // ---------------------------------------------------------------------------
         case x: ByteBuffer => x.array.toBase64.prepend("base64:").pipe(Gson.toJsonTree)
 

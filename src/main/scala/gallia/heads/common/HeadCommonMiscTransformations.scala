@@ -9,6 +9,11 @@ import actions.ActionsUUTransforms.{TransformObjectCustom, TransformObjectsCusto
 // ===========================================================================
 trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
+  def transformSole        (f: WV =>  WV)                   : Self2 = new _TransformWhatever(_.soleKey).using(f)
+  def transformSole[D: WTT](f: WV => TWV[D])                : Self2 = new _TransformWhatever(_.soleKey).using(f)
+  def transformSole[D: WTT](f: WV =>     D)(implicit di: DI): Self2 = new _TransformWhatever(_.soleKey).using(f)
+
+  // ---------------------------------------------------------------------------
   def transformString (k: RPathW) = transform(_.stringx (k.value))
   def transformInt    (k: RPathW) = transform(_.intx    (k.value))
   def transformDouble (k: RPathW) = transform(_.doublex (k.value))

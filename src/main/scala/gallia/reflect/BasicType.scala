@@ -180,6 +180,26 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
           /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse }
 
       // ---------------------------------------------------------------------------
+      case object _LocalTime extends BasicType { type T = LocalTime; val fullName = "java.time.LocalTime"
+        private implicit val ord: Ordering[T] = CustomOrdering.localTime
+          /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse }
+    
+    // ===========================================================================
+    case object _Instant extends BasicType { type T = LocalDateTime; val fullName = "java.time.Instant"
+        private implicit val ord: Ordering[T] = Ordering.by(identity) // not sure why needed 
+          /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse }
+  
+      // ---------------------------------------------------------------------------
+      case object _OffsetDateTime extends BasicType { type T = OffsetDateTime; val fullName = "java.time.OffsetDateTime"
+        private implicit val ord: Ordering[T] = CustomOrdering.offsetDateTime
+          /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse }
+    
+      // ---------------------------------------------------------------------------
+      case object _ZonedDateTime extends BasicType { type T = ZonedDateTime; val fullName = "java.time.ZonedDateTime"
+        private implicit val ord: Ordering[T] = CustomOrdering.zonedDateTime
+          /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse }
+    
+      // ---------------------------------------------------------------------------
       case object _LocalDateTime extends BasicType { type T = LocalDateTime; val fullName = "java.time.LocalDateTime"
         private implicit val ord: Ordering[T] = CustomOrdering.localDateTime
           /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse }

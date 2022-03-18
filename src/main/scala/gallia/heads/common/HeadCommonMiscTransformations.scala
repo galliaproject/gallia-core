@@ -13,20 +13,14 @@ trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F]
   def transformSole[D: WTT](f: WV => TWV[D])                : Self2 = new _TransformWhatever(_.soleKey).using(f)
   def transformSole[D: WTT](f: WV =>     D)(implicit di: DI): Self2 = new _TransformWhatever(_.soleKey).using(f)
 
+  // TODO: t220317154117 - consider a similar transformAll (if all of the same type?) 
+  
   // ---------------------------------------------------------------------------
   def transformString (k: RPathW) = transform(_.stringx (k.value))
   def transformInt    (k: RPathW) = transform(_.intx    (k.value))
   def transformDouble (k: RPathW) = transform(_.doublex (k.value))
   def transformBoolean(k: RPathW) = transform(_.booleanx(k.value))
-  // exclude: byte, short, ...
-
-  def transformDate    (k: RPathW) = transform(_.datex    (k.value))
-  def transformDateTime(k: RPathW) = transform(_.dateTimex(k.value))
-
-  def transformBigInt(k: RPathW) = transform(_.bigIntx(k.value))
-  def transformBigDec(k: RPathW) = transform(_.bigDecx(k.value))
-
-  def transformEnum[E <: EnumEntry : WTT](k: RPathW) = transform(_.enumx[E](k.value)) // TODO: try
+  // excluding less common ones: byte, short, ... (be explicit for those)
 
   // ---------------------------------------------------------------------------
   // TODO: t210110094731

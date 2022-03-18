@@ -16,29 +16,29 @@ private[gallia] object TsByTypeBundles {
 
     // ===========================================================================
     trait HasAllOneKeys
-          extends  TsByTypeIndividuals.HasAllOneStringKeys
-          with     TsByTypeIndividuals.HasAllOneIntKeys
-          with     TsByTypeIndividuals.HasAllOneDoubleKeys
-          with     TsByTypeIndividuals.HasAllOneBooleanKeys
+          extends  TsByTypeIndividual.HasAllOneStringKeys
+          with     TsByTypeIndividual.HasAllOneIntKeys
+          with     TsByTypeIndividual.HasAllOneDoubleKeys
+          with     TsByTypeIndividual.HasAllOneBooleanKeys
 
       trait HasAllOptKeys
-          extends TsByTypeIndividuals.HasAllOptStringKeys
-          with    TsByTypeIndividuals.HasAllOptIntKeys
-          with    TsByTypeIndividuals.HasAllOptDoubleKeys
-          with    TsByTypeIndividuals.HasAllOptBooleanKeys
+          extends TsByTypeIndividual.HasAllOptStringKeys
+          with    TsByTypeIndividual.HasAllOptIntKeys
+          with    TsByTypeIndividual.HasAllOptDoubleKeys
+          with    TsByTypeIndividual.HasAllOptBooleanKeys
 
     // ---------------------------------------------------------------------------
     trait HasAllOnePaths
-          extends TsByTypeIndividuals.HasAllOneStringPaths
-          with    TsByTypeIndividuals.HasAllOneIntPaths
-          with    TsByTypeIndividuals.HasAllOneDoublePaths
-          with    TsByTypeIndividuals.HasAllOneBooleanPaths
+          extends TsByTypeIndividual.HasAllOneStringPaths
+          with    TsByTypeIndividual.HasAllOneIntPaths
+          with    TsByTypeIndividual.HasAllOneDoublePaths
+          with    TsByTypeIndividual.HasAllOneBooleanPaths
 
       trait HasAllOptPaths
-          extends  TsByTypeIndividuals.HasAllOptStringPaths
-          with     TsByTypeIndividuals.HasAllOptIntPaths
-          with     TsByTypeIndividuals.HasAllOptDoublePaths
-          with     TsByTypeIndividuals.HasAllOptBooleanPaths
+          extends  TsByTypeIndividual.HasAllOptStringPaths
+          with     TsByTypeIndividual.HasAllOptIntPaths
+          with     TsByTypeIndividual.HasAllOptDoublePaths
+          with     TsByTypeIndividual.HasAllOptBooleanPaths
 }
 
 // ===========================================================================

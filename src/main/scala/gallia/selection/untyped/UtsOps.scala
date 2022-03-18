@@ -43,7 +43,7 @@ trait  ReorderAsX extends Core1N with NoSoleKey with NoAllKeys with CantRenameKe
 
   // ===========================================================================
   trait  RemoveIf  extends Core1N with NoSoleKey  with Bundle.HasAllAlls /* All* ok because conditional */
-with gallia.selection.typed.fluency.TsSingleIndividual.HasSingleOneTyped[KPathW]
+//with gallia.selection.typed.fluency.TsSingleIndividual.HasSingleOneTyped[KPathW]
     // extends UtsBundle.Indices with  UtsBundle.HasAllExplicits with HasSKeyMatches
 
   trait  Transform extends Core1N with HasSoleKey with Bundle.HasAllAlls with _HasSingleExplicitKPathW // ...; UtsBundle.Indices

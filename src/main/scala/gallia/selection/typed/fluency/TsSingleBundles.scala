@@ -3,132 +3,143 @@ package selection.typed.fluency
 
 // ===========================================================================
 @TypeMatching
-private[gallia] object TsSingleBundles {
-
-  trait HasSingleRequiredBasic[$Wrap] extends
-        TsSingleBundles.HasSingleOneBasic[$Wrap] with
-        TsSingleBundles.HasSingleNesBasic[$Wrap]
-
-      trait HasSingleOptionalBasic[$Wrap] extends
-        TsSingleBundles.HasSingleOptBasic[$Wrap] with
-        TsSingleBundles.HasSinglePesBasic[$Wrap]
+private[gallia] object TsSingleBundles { //TODO: enum - t210201095414
 
   // ===========================================================================
-  trait HasSingleTyped[$Wrap] extends
-           TsSingleBundles.HasSingleRequiredTyped[$Wrap]
-      with TsSingleBundles.HasSingleOptionalTyped[$Wrap]
+  trait HasSingleNesting[$Wrap] extends
+           TsSingleIndividual.HasSingleObj [$Wrap]
+      with TsSingleIndividual.HasSingleObjz[$Wrap]
 
-    // ---------------------------------------------------------------------------
-    trait HasSingleRequiredTyped[$Wrap] extends
-           TsSingleIndividual.HasSingleOneTyped[$Wrap]
-      with TsSingleIndividual.HasSingleNesTyped[$Wrap]
+  // ---------------------------------------------------------------------------
+  trait HasSingleBasic[$Wrap] extends
+      TsSingleBundles.HasSingleRequiredBasic[$Wrap] with
+      TsSingleBundles.HasSingleOptionalBasic[$Wrap] with
+      TsSingleBundles.HasSingleXBasic       [$Wrap] with
+      TsSingleBundles.HasSingleTypedBasic   [$Wrap]
 
-    // ---------------------------------------------------------------------------
-    trait HasSingleOptionalTyped[$Wrap] extends
-           TsSingleIndividual.HasSingleOptTyped[$Wrap]
-      with TsSingleIndividual.HasSinglePesTyped[$Wrap]
+    // ---------------------------------------------------------------------------        
+    trait HasSingleRequiredBasic[$Wrap] extends
+      TsSingleBundles.HasSingleOneBasic[$Wrap] with
+      TsSingleBundles.HasSingleNesBasic[$Wrap]
 
+    trait HasSingleOptionalBasic[$Wrap] extends
+      TsSingleBundles.HasSingleOptBasic[$Wrap] with
+      TsSingleBundles.HasSinglePesBasic[$Wrap]  
+      
+    trait HasSingleTypedBasic[$Wrap] extends
+      TsSingleIndividual.HasSingleNonXTyped[$Wrap] with  
+      TsSingleIndividual.HasSingleXTyped   [$Wrap]
+  
   // ===========================================================================
-    //TODO: enum - t210201095414
-    trait HasSingleOneBasic[$Wrap] extends
-        TsSingleIndividual.HasSingleOneString [$Wrap] with
-        TsSingleIndividual.HasSingleOneInt    [$Wrap] with
-        TsSingleIndividual.HasSingleOneDouble [$Wrap] with
-        TsSingleIndividual.HasSingleOneBoolean[$Wrap] with
+  trait HasSingleOneBasic[$Wrap] extends
+      TsSingleIndividual.HasSingleOneString [$Wrap] with
+      TsSingleIndividual.HasSingleOneInt    [$Wrap] with
+      TsSingleIndividual.HasSingleOneDouble [$Wrap] with
+      TsSingleIndividual.HasSingleOneBoolean[$Wrap] with
 
-        TsSingleIndividual.HasSingleOneByte [$Wrap] with
-        TsSingleIndividual.HasSingleOneShort[$Wrap] with
-        TsSingleIndividual.HasSingleOneLong [$Wrap] with
+      TsSingleIndividual.HasSingleOneByte [$Wrap] with
+      TsSingleIndividual.HasSingleOneShort[$Wrap] with
+      TsSingleIndividual.HasSingleOneLong [$Wrap] with
+      TsSingleIndividual.HasSingleOneFloat[$Wrap] with
 
-        TsSingleIndividual.HasSingleOneFloat[$Wrap] with
+      TsSingleIndividual.HasSingleOneBigInt[$Wrap] with
+      TsSingleIndividual.HasSingleOneBigDec[$Wrap] with
 
-        TsSingleIndividual.HasSingleOneBigInt    [$Wrap] with
-        TsSingleIndividual.HasSingleOneBigDecimal[$Wrap] with
-
-        TsSingleIndividual.HasSingleOneLocalDate    [$Wrap] with
-        TsSingleIndividual.HasSingleOneLocalDateTime[$Wrap]
-
-      // ---------------------------------------------------------------------------
-      trait HasSingleOptBasic[$Wrap] extends
-
-        TsSingleIndividual.HasSingleOptString [$Wrap] with
-        TsSingleIndividual.HasSingleOptInt    [$Wrap] with
-        TsSingleIndividual.HasSingleOptDouble [$Wrap] with
-        TsSingleIndividual.HasSingleOptBoolean[$Wrap] with
-
-        TsSingleIndividual.HasSingleOptByte [$Wrap] with
-        TsSingleIndividual.HasSingleOptShort[$Wrap] with
-        TsSingleIndividual.HasSingleOptLong [$Wrap] with
-
-        TsSingleIndividual.HasSingleOptFloat[$Wrap] with
-
-        TsSingleIndividual.HasSingleOptBigInt    [$Wrap] with
-        TsSingleIndividual.HasSingleOptBigDecimal[$Wrap] with
-
-        TsSingleIndividual.HasSingleOptLocalDate    [$Wrap] with
-        TsSingleIndividual.HasSingleOptLocalDateTime[$Wrap]
-
-      // ---------------------------------------------------------------------------
-      trait HasSingleNesBasic[$Wrap] extends
-        TsSingleIndividual.HasSingleNesString [$Wrap] with
-        TsSingleIndividual.HasSingleNesInt    [$Wrap] with
-        TsSingleIndividual.HasSingleNesDouble [$Wrap] with
-        TsSingleIndividual.HasSingleNesBoolean[$Wrap] with
-
-        TsSingleIndividual.HasSingleNesByte [$Wrap] with
-        TsSingleIndividual.HasSingleNesShort[$Wrap] with
-        TsSingleIndividual.HasSingleNesLong [$Wrap] with
-
-        TsSingleIndividual.HasSingleNesFloat[$Wrap] with
-
-        TsSingleIndividual.HasSingleNesBigInt    [$Wrap] with
-        TsSingleIndividual.HasSingleNesBigDecimal[$Wrap] with
-
-        TsSingleIndividual.HasSingleNesLocalDate    [$Wrap] with
-        TsSingleIndividual.HasSingleNesLocalDateTime[$Wrap]
-
-      // ---------------------------------------------------------------------------
-      trait HasSinglePesBasic[$Wrap] extends
-        TsSingleIndividual.HasSinglePesString [$Wrap] with
-        TsSingleIndividual.HasSinglePesInt    [$Wrap] with
-        TsSingleIndividual.HasSinglePesDouble [$Wrap] with
-        TsSingleIndividual.HasSinglePesBoolean[$Wrap] with
-
-        TsSingleIndividual.HasSinglePesByte [$Wrap] with
-        TsSingleIndividual.HasSinglePesShort[$Wrap] with
-        TsSingleIndividual.HasSinglePesLong [$Wrap] with
-
-        TsSingleIndividual.HasSinglePesFloat[$Wrap] with
-
-        TsSingleIndividual.HasSinglePesBigInt    [$Wrap] with
-        TsSingleIndividual.HasSinglePesBigDecimal[$Wrap] with
-
-        TsSingleIndividual.HasSinglePesLocalDate    [$Wrap] with
-        TsSingleIndividual.HasSinglePesLocalDateTime[$Wrap]
-        // TODO: more...
+      TsSingleIndividual.HasSingleOneLocalDate     [$Wrap] with
+      TsSingleIndividual.HasSingleOneLocalTime     [$Wrap] with
+      TsSingleIndividual.HasSingleOneLocalDateTime [$Wrap] with
+      TsSingleIndividual.HasSingleOneOffsetDateTime[$Wrap] with
+      TsSingleIndividual.HasSingleOneZonedDateTime [$Wrap] with
+      TsSingleIndividual.HasSingleOneInstant       [$Wrap]
 
     // ---------------------------------------------------------------------------
-    trait HasSingleXBasic[$Wrap] extends
-      TsSingleIndividual.HasSingleXTyped  [$Wrap] with
+    trait HasSingleOptBasic[$Wrap] extends
+      TsSingleIndividual.HasSingleOptString [$Wrap] with
+      TsSingleIndividual.HasSingleOptInt    [$Wrap] with
+      TsSingleIndividual.HasSingleOptDouble [$Wrap] with
+      TsSingleIndividual.HasSingleOptBoolean[$Wrap] with
 
-      TsSingleIndividual.HasSingleXString [$Wrap] with
-      TsSingleIndividual.HasSingleXInt    [$Wrap] with
-      TsSingleIndividual.HasSingleXDouble [$Wrap] with
-      TsSingleIndividual.HasSingleXBoolean[$Wrap] with
+      TsSingleIndividual.HasSingleOptByte [$Wrap] with
+      TsSingleIndividual.HasSingleOptShort[$Wrap] with
+      TsSingleIndividual.HasSingleOptLong [$Wrap] with
+      TsSingleIndividual.HasSingleOptFloat[$Wrap] with
 
-      TsSingleIndividual.HasSingleXByte [$Wrap] with
-      TsSingleIndividual.HasSingleXShort[$Wrap] with
-      TsSingleIndividual.HasSingleXLong [$Wrap] with
+      TsSingleIndividual.HasSingleOptBigInt[$Wrap] with
+      TsSingleIndividual.HasSingleOptBigDec[$Wrap] with
 
-      TsSingleIndividual.HasSingleXFloat[$Wrap] with
+      TsSingleIndividual.HasSingleOptLocalDate     [$Wrap] with
+      TsSingleIndividual.HasSingleOptLocalTime     [$Wrap] with
+      TsSingleIndividual.HasSingleOptLocalDateTime [$Wrap] with
+      TsSingleIndividual.HasSingleOptOffsetDateTime[$Wrap] with
+      TsSingleIndividual.HasSingleOptZonedDateTime [$Wrap] with
+      TsSingleIndividual.HasSingleOptInstant       [$Wrap]
 
-      TsSingleIndividual.HasSingleXBigInt    [$Wrap] with
-      TsSingleIndividual.HasSingleXBigDecimal[$Wrap] with
 
-      TsSingleIndividual.HasSingleXLocalDate    [$Wrap] with
-      TsSingleIndividual.HasSingleXLocalDateTime[$Wrap] with
+    // ---------------------------------------------------------------------------
+    trait HasSingleNesBasic[$Wrap] extends
+      TsSingleIndividual.HasSingleNesString [$Wrap] with
+      TsSingleIndividual.HasSingleNesInt    [$Wrap] with
+      TsSingleIndividual.HasSingleNesDouble [$Wrap] with
+      TsSingleIndividual.HasSingleNesBoolean[$Wrap] with
 
-      TsSingleIndividual.HasSingleXEnum[$Wrap]
+      TsSingleIndividual.HasSingleNesByte [$Wrap] with
+      TsSingleIndividual.HasSingleNesShort[$Wrap] with
+      TsSingleIndividual.HasSingleNesLong [$Wrap] with
+      TsSingleIndividual.HasSingleNesFloat[$Wrap] with
+
+      TsSingleIndividual.HasSingleNesBigInt[$Wrap] with
+      TsSingleIndividual.HasSingleNesBigDec[$Wrap] with
+
+      TsSingleIndividual.HasSingleNesLocalDate     [$Wrap] with
+      TsSingleIndividual.HasSingleNesLocalTime     [$Wrap] with
+      TsSingleIndividual.HasSingleNesLocalDateTime [$Wrap] with
+      TsSingleIndividual.HasSingleNesOffsetDateTime[$Wrap] with
+      TsSingleIndividual.HasSingleNesZonedDateTime [$Wrap] with
+      TsSingleIndividual.HasSingleNesInstant       [$Wrap]
+
+    // ---------------------------------------------------------------------------
+    trait HasSinglePesBasic[$Wrap] extends
+      TsSingleIndividual.HasSinglePesString [$Wrap] with
+      TsSingleIndividual.HasSinglePesInt    [$Wrap] with
+      TsSingleIndividual.HasSinglePesDouble [$Wrap] with
+      TsSingleIndividual.HasSinglePesBoolean[$Wrap] with
+
+      TsSingleIndividual.HasSinglePesByte [$Wrap] with
+      TsSingleIndividual.HasSinglePesShort[$Wrap] with
+      TsSingleIndividual.HasSinglePesLong [$Wrap] with
+      TsSingleIndividual.HasSinglePesFloat[$Wrap] with
+
+      TsSingleIndividual.HasSinglePesBigInt[$Wrap] with
+      TsSingleIndividual.HasSinglePesBigDec[$Wrap] with
+
+      TsSingleIndividual.HasSinglePesLocalDate     [$Wrap] with
+      TsSingleIndividual.HasSinglePesLocalTime     [$Wrap] with
+      TsSingleIndividual.HasSinglePesLocalDateTime [$Wrap] with
+      TsSingleIndividual.HasSinglePesOffsetDateTime[$Wrap] with
+      TsSingleIndividual.HasSinglePesZonedDateTime [$Wrap] with
+      TsSingleIndividual.HasSinglePesInstant       [$Wrap]
+
+  // ---------------------------------------------------------------------------
+  trait HasSingleXBasic[$Wrap] extends  
+    TsSingleIndividual.HasSingleXString [$Wrap] with
+    TsSingleIndividual.HasSingleXInt    [$Wrap] with
+    TsSingleIndividual.HasSingleXDouble [$Wrap] with
+    TsSingleIndividual.HasSingleXBoolean[$Wrap] with
+
+    TsSingleIndividual.HasSingleXByte [$Wrap] with
+    TsSingleIndividual.HasSingleXShort[$Wrap] with
+    TsSingleIndividual.HasSingleXLong [$Wrap] with
+    TsSingleIndividual.HasSingleXFloat[$Wrap] with
+
+    TsSingleIndividual.HasSingleXBigInt[$Wrap] with
+    TsSingleIndividual.HasSingleXBigDec[$Wrap] with
+
+    TsSingleIndividual.HasSingleXLocalDate     [$Wrap] with
+    TsSingleIndividual.HasSingleXLocalTime     [$Wrap] with
+    TsSingleIndividual.HasSingleXLocalDateTime [$Wrap] with
+    TsSingleIndividual.HasSingleXOffsetDateTime[$Wrap] with
+    TsSingleIndividual.HasSingleXZonedDateTime [$Wrap] with
+    TsSingleIndividual.HasSingleXInstant       [$Wrap]  
 }
 
 // ===========================================================================

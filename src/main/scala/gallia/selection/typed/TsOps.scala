@@ -10,109 +10,86 @@ object TsOps { // this is a big mess... TODO: t210107203932
   // ---------------------------------------------------------------------------
   object    RemoveIf
     extends RemoveIf
-    trait   RemoveIf // Ren/RPath may not be a good idea though
-        extends TsSingleBundles.HasSingleRequiredBasic[RPathW]
+    trait   RemoveIf extends // Ren/RPath may not be a good idea though
+             TsBundles.HasRequiredBasic[RPathW, RPathWz]
 
-        with    TsRepeatedIndividuals.HasRepeatedOneString[RPathW, RPathWz]
-        with    TsRepeatedIndividuals.HasRepeatedNesString[RPathW, RPathWz]
-        with    TsRepeatedIndividuals.HasRepeatedXString  [RPathW, RPathWz]
+        with TsByTypeBundles.HasAllOneKeys
+        with TsByTypeBundles.HasAllOnePaths
 
-        with    TsByTypeBundles.HasAllOneKeys
-        with    TsByTypeBundles.HasAllOnePaths
-
-        with    Untyped.RemoveIf.Origin  // firstKey, allKeys, ...
-        with    Untyped.RemoveIf.HasSels // for e.g. .removeIfValueFor(_.string(_.allKeys)).is("foo") - FIXME: issues if optional...
+        with Untyped.RemoveIf.Origin      // firstKey, allKeys, ...
+        with Untyped.RemoveIf.HasSelBasic // for e.g. .removeIfValueFor(_.string(_.allKeys)).is("foo") - FIXME: issues if optional...
 
   // ===========================================================================
   object    Transform
     extends Transform
-    trait   Transform
-        // notes: exclude Whatever?
-        extends TsSingleBundles.HasSingleRequiredBasic[RPathW]
-        with    TsSingleBundles.HasSingleOptionalBasic[RPathW] /* after much hesitation, leave access to optionality here; maybe create a special action for simplest case, like "morph" for "transmute" (arbitrarily) - t210202085958 */
-        with    TsSingleBundles.HasSingleXBasic[RPathW]
-
-        with    TsSingleBundles.HasSingleRequiredTyped[KeyW]
-
-        with    Untyped.Transform.Origin
-      //with    Untyped.Transform.HasOneSels
-
-        with    TsNestingIndividuals.HasOneObj [RPathW]
-        with    TsNestingIndividuals.HasOneObjz[RPathW]
-
-        with    TsRepeatedIndividuals.HasRepeatedOneString[RPathW, RPathWz]
-        //with HasXTypedSel[RPathW]
+    trait   Transform extends // notes: exclude Whatever?
+             Untyped.Transform.Origin
+        with _Typed[RPathW]
+        with TsSingleBundles  .HasSingleBasic  [RPathW] /* after much hesitation, leave access to optionality here; maybe create a special action for simplest case, like "morph" for "transmute" (arbitrarily) - t210202085958 */
+        with TsRepeatedBundles.HasRepeatedBasic[RPathW, RPathWz]
 
   // ===========================================================================
-  trait GenerateBase
-        extends TsSingleBundles.HasSingleRequiredBasic[KPathW]
-        with    TsSingleBundles.HasSingleOptionalBasic[KPathW]
-        with    TsSingleBundles.HasSingleTyped[KeyW]
-
-        with    Untyped.CommonTyped.Origin
-        with    Untyped.CommonTyped.HasOneSels //TODO: opt
+  trait GenerateBase extends 
+             TsSingleBundles.HasSingleBasic[KPathW]
+      //with TsSingleBundles.HasSingleTyped[KeyW]
+        with Untyped.CommonTyped.Origin
+        with Untyped.CommonTyped.HasSelBasic
 
     // ---------------------------------------------------------------------------
     object    Generate1
       extends Generate1
-      trait   Generate1
-          extends GenerateBase
-
-          with TsNestingIndividuals.HasOneObj [KPathW]
-          with TsNestingIndividuals.HasOneObjz[KPathW]
+      trait   Generate1 extends 
+               GenerateBase
+          with TsSingleBundles.HasSingleNesting[KPathW]
 
     // ---------------------------------------------------------------------------
     object    Generate2
       extends Generate2
-      trait   Generate2
-          extends GenerateBase
+      trait   Generate2 extends 
+           GenerateBase
 
   // ===========================================================================
   object    FilterByT
     extends FilterByT
-    trait   FilterByT // excludes obj(z) for T > 1
-          extends TsSingleBundles.HasSingleRequiredBasic [RPathW]
-          with    TsSingleBundles.HasSingleOptionalBasic [RPathW]
-          with    TsSingleBundles.HasSingleXBasic[RPathW]
+    trait   FilterByT extends // excludes obj(z) for T > 1
+               TsSingleBundles.HasSingleBasic[RPathW]
+          with TsSingleBundles.HasSingleXBasic[RPathW]
 
-          with    TsSingleBundles.HasSingleTyped[KeyW]
+          //with TsSingleBundles.HasSingleTyped[KeyW]
 
-          with    Untyped.Transform.Origin
-          with    Untyped.Transform.HasOneSels
+          with Untyped.Transform.Origin
+          with Untyped.Transform.HasOneSelBasic
 
-          with    TsRepeatedIndividuals.HasRepeatedOneString[RPathW, RPathWz] // TODO: more + bundle
+          with TsRepeatedIndividual.HasRepeatedOneString[RPathW, RPathWz] // TODO: more + bundle
 
     // ---------------------------------------------------------------------------
     object    FilterBy1
       extends FilterBy1
-      trait   FilterBy1
-          extends FilterByT
-          with    TsNestingIndividuals.HasOneObj[RPathW]
-          with    TsNestingIndividuals.HasOneObjz[RPathW]
+      trait   FilterBy1 extends 
+               FilterByT
+          with TsSingleBundles.HasSingleNesting[RPathW]
 
   // ===========================================================================
   object    Cotransform
     extends Cotransform
-    trait   Cotransform
-        extends TsSingleBundles   .HasSingleOneBasic[KPathW]
-        with    TsSingleIndividual.HasSingleOptString[KPathW]
+    trait   Cotransform extends 
+             TsSingleBundles   .HasSingleOneBasic [KPathW]
+        with TsSingleIndividual.HasSingleOptString[KPathW]
 
   // ===========================================================================
-  protected trait _Typed
-      extends TsSingleBundles.HasSingleTyped[KeyW]
+  protected trait _Typed[$Wrap] extends 
+           TsSingleBundles.HasSingleBasic  [$Wrap] // no support for Repeated
+      with TsSingleBundles.HasSingleNesting[$Wrap]
 
-      with    TsNestingIndividuals.HasOneObj [KPathW]
-      with    TsNestingIndividuals.HasOneObjz[KPathW]
-
-      with    Untyped.CommonTyped.Origin
-      with    Untyped.CommonTyped.HasOneSels // for eg fuse(_.string(_.firstKey), ...); TODO: exclude opt?
+      with Untyped.CommonTyped.Origin
+      with Untyped.CommonTyped.HasOneSelBasic // for eg fuse(_.string(_.firstKey), ...); TODO: exclude opt?
 
     // ---------------------------------------------------------------------------
     // TODO: customise
-    object FuseFission extends FuseFission; trait FuseFission extends _Typed with TsSingleBundles.HasSingleRequiredBasic[KPathW] with TsSingleBundles.HasSingleOptionalBasic[KPathW]
-    object AssertData  extends AssertData ; trait AssertData  extends _Typed with TsSingleBundles.HasSingleRequiredBasic[KPathW] with TsSingleBundles.HasSingleOptionalBasic[KPathW]
-    object Sorting     extends Sorting    ; trait Sorting     extends _Typed with TsSingleBundles.HasSingleRequiredBasic[KPathW] with TsSingleBundles.HasSingleOptionalBasic[KPathW]
-    object Squash      extends Squash     ; trait Squash      extends _Typed with TsSingleBundles.HasSingleRequiredBasic[KPathW] with TsSingleBundles.HasSingleOptionalBasic[KPathW]
+    object FuseFission extends FuseFission; trait FuseFission extends _Typed[KPathW]
+    object AssertData  extends AssertData ; trait AssertData  extends _Typed[KPathW]
+    object Sorting     extends Sorting    ; trait Sorting     extends _Typed[KPathW]
+    object Squash      extends Squash     ; trait Squash      extends _Typed[KPathW]
       //pivoting: must prevent opt for pivot (c200930125015)
 
 }

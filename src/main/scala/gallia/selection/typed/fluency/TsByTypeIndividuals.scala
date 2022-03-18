@@ -4,7 +4,7 @@ package typed.fluency
 
 // ===========================================================================
 @TypeMatching // very boilerplatey; TODO: t210124092716 - codegen (very boilerplaty)
-object TsByTypeIndividuals {
+object TsByTypeIndividual {
   import untyped.fluency.UtsIndividuals.{HasIfType, HasIfTypeRecursively}
 
   // ---------------------------------------------------------------------------

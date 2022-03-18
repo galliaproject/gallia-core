@@ -4,7 +4,7 @@ package selection.untyped
 import target._
 import target.utils.TargetQueryValidation._
 import selection.typed._
-import selection.typed.fluency.TsQueryIndividuals
+import selection.typed.fluency.TsSelBundles
 import selection.untyped.processors._
 
 // ===========================================================================
@@ -104,24 +104,21 @@ object UtsBase {
         type Selector = Origin => Target
 
         // ===========================================================================
-        trait HasSels
-            extends HasOneSels
+        trait HasSelBasic extends
+                 HasOneSelBasic
+            with HasOptSelBasic
+            with HasNesSelBasic
+            with HasPesSelBasic
+            with HasXSelBasic
+            with HasTypedSelBasic
 
           // ---------------------------------------------------------------------------
-          @TypeMatching
-          trait HasOneSels
-            //TODO: bundles
-            extends TsQueryIndividuals.HasOneStringSel [Origin, Target]
-            with    TsQueryIndividuals.HasOneIntSel    [Origin, Target]
-            with    TsQueryIndividuals.HasOneDoubleSel [Origin, Target]
-            with    TsQueryIndividuals.HasOneBooleanSel[Origin, Target]
-
-          // ---------------------------------------------------------------------------
-          trait HasOptSels extends
-            TsQueryIndividuals.HasOptStringSel [Origin, Target]
-            with    TsQueryIndividuals.HasOptIntSel    [Origin, Target]
-            with    TsQueryIndividuals.HasOptDoubleSel [Origin, Target]
-            with    TsQueryIndividuals.HasOptBooleanSel[Origin, Target]
+          trait HasOneSelBasic   extends TsSelBundles.HasSelOneBasic  [Origin, Target]
+          trait HasOptSelBasic   extends TsSelBundles.HasSelOptBasic  [Origin, Target]
+          trait HasNesSelBasic   extends TsSelBundles.HasSelNesBasic  [Origin, Target]
+          trait HasPesSelBasic   extends TsSelBundles.HasSelPesBasic  [Origin, Target]
+          trait HasXSelBasic     extends TsSelBundles.HasSelXBasic    [Origin, Target]
+          trait HasTypedSelBasic extends TsSelBundles.HasSelTypedBasic[Origin, Target]
     }
 
     // ===========================================================================

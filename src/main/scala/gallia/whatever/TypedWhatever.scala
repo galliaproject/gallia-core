@@ -2,7 +2,7 @@ package gallia
 package whatever
 
 // ===========================================================================
-/** when type is known (eg _.size will always result in a Int) but we need to remain in "whatever" land */
+/** when type is known (eg _.size will always result in a Int) but we need to remain in "whatever" territory */
 class TypedWhatever[+T](val typed: T) extends Serializable { // can't be AnyVal since Whatever already is
   import Whatever._
   import WhateverImplicits._
@@ -23,8 +23,8 @@ class TypedWhatever[+T](val typed: T) extends Serializable { // can't be AnyVal 
   // ===========================================================================
   def unary_!                      (implicit ev: T <:< Boolean): TypedWhatever[Boolean] = mapBoolean { !_ }
 
-  def &&(y: TypedWhatever[Boolean])(implicit ev: T <:< Boolean): TypedWhatever[Boolean] = mapBoolean { _ && y.typed.boolean }
-  def ||(y: TypedWhatever[Boolean])(implicit ev: T <:< Boolean): TypedWhatever[Boolean] = mapBoolean { _ || y.typed.boolean }
+  def && (y: TypedWhatever[Boolean])(implicit ev: T <:< Boolean): TypedWhatever[Boolean] = mapBoolean { _ && y.typed.boolean }
+  def || (y: TypedWhatever[Boolean])(implicit ev: T <:< Boolean): TypedWhatever[Boolean] = mapBoolean { _ || y.typed.boolean }
 
   // ---------------------------------------------------------------------------
   def == (that: Whatever): TypedWhatever[Boolean] = map(_.any == that.any)

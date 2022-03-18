@@ -19,6 +19,7 @@ class Whatever(private[gallia] val any: Any) extends AnyVal with Serializable { 
   // - t210124100009 - better name?
   // - t210113132613 - try replacing with TypedWhatever[Any]?
   // - t210112115205 - pattern matching error messages throughout
+  // - t220318104258 - consider using Dynamic, at least for methods that don't change type?
 
   // ---------------------------------------------------------------------------
   override def toString: String = formatDefault
@@ -32,45 +33,49 @@ class Whatever(private[gallia] val any: Any) extends AnyVal with Serializable { 
   // ===========================================================================
   // TODO: t210112165159 - consider === and !== so as to not clash with expected semantics?
 
+  def == (that: String) : TypedWhatever[Boolean] = any.string  == that
   def == (that: Boolean): TypedWhatever[Boolean] = any.boolean == that
+  def == (that: Int)    : TypedWhatever[Boolean] = any.int     == that
+  def == (that: Long)   : TypedWhatever[Boolean] = any.long    == that
+  def == (that: Double) : TypedWhatever[Boolean] = any.double  == that
+  // note: no support for byte/short/float (see 220318114510 whatever.md@docs)
+  
+    // ---------------------------------------------------------------------------
+    def == (that: BigInt): TypedWhatever[Boolean] = any.bigInt == that
+    def == (that: BigDec): TypedWhatever[Boolean] = any.bigDec == that
 
-  def == (that: String) : TypedWhatever[Boolean] = any.string == that
-
-  def   == (that: Int)   : TypedWhatever[Boolean] = any.int    == that
-    def == (that: Byte)  : TypedWhatever[Boolean] = any.byte   == that
-    def == (that: Short) : TypedWhatever[Boolean] = any.short  == that
-    def == (that: Long)  : TypedWhatever[Boolean] = any.long   == that
-
-    def == (that: Double): TypedWhatever[Boolean] = any.double == that
-    def == (that: Float) : TypedWhatever[Boolean] = any.float  == that
-
-    def == (that: BigInt)    : TypedWhatever[Boolean] = any.bigInt     == that
-    def == (that: BigDecimal): TypedWhatever[Boolean] = any.bigDecimal == that
-
-    def == (that: LocalDate)    : TypedWhatever[Boolean] = any.date     == that
-    def == (that: LocalDateTime): TypedWhatever[Boolean] = any.dateTime == that
-
+    // ---------------------------------------------------------------------------
+    def == (that: LocalDate)     : TypedWhatever[Boolean] = any.localDate      == that
+    def == (that: LocalTime)     : TypedWhatever[Boolean] = any.localTime      == that
+    def == (that: LocalDateTime) : TypedWhatever[Boolean] = any.localDateTime  == that
+    def == (that: OffsetDateTime): TypedWhatever[Boolean] = any.offsetDateTime == that
+    def == (that: ZonedDateTime) : TypedWhatever[Boolean] = any.zonedDateTime  == that
+    def == (that: Instant)       : TypedWhatever[Boolean] = any.instant        == that
+    
+    // ---------------------------------------------------------------------------
     // TODO: enums - t210201095414
 
-  // ---------------------------------------------------------------------------
+  // ===========================================================================
+  def != (that: String) : TypedWhatever[Boolean] = any.string  != that
   def != (that: Boolean): TypedWhatever[Boolean] = any.boolean != that
+  def != (that: Int)    : TypedWhatever[Boolean] = any.int     != that
+  def != (that: Long)   : TypedWhatever[Boolean] = any.long    != that
+  def != (that: Double) : TypedWhatever[Boolean] = any.double  != that
+  // note: no support for byte/short/float (see 220318114510 whatever.md@docs)
+  
+    // ---------------------------------------------------------------------------
+    def != (that: BigInt): TypedWhatever[Boolean] = any.bigInt != that
+    def != (that: BigDec): TypedWhatever[Boolean] = any.bigDec != that
 
-  def != (that: String) : TypedWhatever[Boolean] = any.string != that
+    // ---------------------------------------------------------------------------
+    def != (that: LocalDate)     : TypedWhatever[Boolean] = any.localDate      != that
+    def != (that: LocalTime)     : TypedWhatever[Boolean] = any.localTime      != that
+    def != (that: LocalDateTime) : TypedWhatever[Boolean] = any.localDateTime  != that
+    def != (that: OffsetDateTime): TypedWhatever[Boolean] = any.offsetDateTime != that
+    def != (that: ZonedDateTime) : TypedWhatever[Boolean] = any.zonedDateTime  != that
+    def != (that: Instant)       : TypedWhatever[Boolean] = any.instant        != that
 
-  def   != (that: Int)   : TypedWhatever[Boolean] = any.int    != that
-    def != (that: Byte)  : TypedWhatever[Boolean] = any.byte   != that
-    def != (that: Short) : TypedWhatever[Boolean] = any.short  != that
-    def != (that: Long)  : TypedWhatever[Boolean] = any.long   != that
-
-    def != (that: Double): TypedWhatever[Boolean] = any.double != that
-    def != (that: Float) : TypedWhatever[Boolean] = any.float  != that
-
-    def != (that: BigInt)    : TypedWhatever[Boolean] = any.bigInt     != that
-    def != (that: BigDecimal): TypedWhatever[Boolean] = any.bigDecimal != that
-
-    def != (that: LocalDate)    : TypedWhatever[Boolean] = any.date     != that
-    def != (that: LocalDateTime): TypedWhatever[Boolean] = any.dateTime != that
-
+    // ---------------------------------------------------------------------------
     // TODO: enums - t210201095414
 
   // ===========================================================================
@@ -182,14 +187,22 @@ object Whatever {
   import WhateverImplicits._
     implicit def _toBoolean   (value: Whatever): Boolean    = value.any.boolean
     implicit def _toInt       (value: Whatever): Int        = value.any.int    
+    implicit def _toLong      (value: Whatever): Long       = value.any.long 
     implicit def _toDouble    (value: Whatever): Double     = value.any.double 
-    implicit def _toString    (value: Whatever): String     = value.any.string   
-    
-    implicit def _toBigInt    (value: Whatever): BigInt     = value.any.bigInt 
-    implicit def _toBigDecimal(value: Whatever): BigDecimal = value.any.bigDecimal
-    
-    implicit def _toDate      (value: Whatever): LocalDate     = value.any.date    
-    implicit def _toDateTime  (value: Whatever): LocalDateTime = value.any.dateTime
+    implicit def _toString    (value: Whatever): String     = value.any.string
+    // note: no support for byte/short/float (see 220318114510 whatever.md@docs)  
+
+      // ---------------------------------------------------------------------------   
+      implicit def _toBigInt    (value: Whatever): BigInt     = value.any.bigInt 
+      implicit def _toBigDec    (value: Whatever): BigDecimal = value.any.bigDec
+      
+      // ---------------------------------------------------------------------------
+      implicit def _toLocalDate     (value: Whatever): LocalDate      = value.any.localDate
+      implicit def _toLocalTime     (value: Whatever): LocalTime      = value.any.localTime
+      implicit def _toLocalDateTime (value: Whatever): LocalDateTime  = value.any.localDateTime
+      implicit def _toOffsetDateTime(value: Whatever): OffsetDateTime = value.any.offsetDateTime
+      implicit def _toZonedDateTime (value: Whatever): ZonedDateTime  = value.any.zonedDateTime
+      implicit def _toInstant       (value: Whatever): Instant        = value.any.instant
 
   // ===========================================================================
   private def matchError(id: String, value : Any)              = { s"TODO:${id}:${value}:${value.getClass}" }

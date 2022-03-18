@@ -50,9 +50,10 @@ case class CallSite(
         val elems = ().reflect.stackTrace()
 
         elems
-          .dropWhile(elem =>
+          .dropWhile { elem =>
             Prefices.exists(elem.getClassName.startsWith) ||
-            elem.getLineNumber < 0)
+            elem.toString.contains("$.addResult(") || // TODO: t220318111014 - look into issue with testing code            
+            elem.getLineNumber < 0 }
           .headOption
           .map { elem =>
             SubCallSite(
@@ -60,7 +61,7 @@ case class CallSite(
               elem.getClassName,
               elem.getLineNumber,
               filePathOpt(elem)) }
-            .pipe(CallSite(_, elems))
+          .pipe(CallSite(_, elems))
       }
 
       // ---------------------------------------------------------------------------

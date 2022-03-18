@@ -59,21 +59,42 @@ trait ObjAccessors { ignored: Obj => // id210326140514
   def bigInts (key: KPathW): Seq[BigInt] = force(key)      .asSeq.map(_.asBigInt)
   def bigInts_(key: KPathW): Pes[BigInt] = opt  (key).map(_.asSeq.map(_.asBigInt))
 
-  def bigDecimal  (key: KPathW):     BigDecimal  = force(key)    .asBigDecimal
-  def bigDecimal_ (key: KPathW): Opt[BigDecimal] = opt(key).map(_.asBigDecimal)
-  def bigDecimals (key: KPathW): Seq[BigDecimal] = force(key)      .asSeq.map(_.asBigDecimal)
-  def bigDecimals_(key: KPathW): Pes[BigDecimal] = opt  (key).map(_.asSeq.map(_.asBigDecimal))
+  def bigDec  (key: KPathW):     BigDecimal  = force(key)    .asBigDec
+  def bigDec_ (key: KPathW): Opt[BigDecimal] = opt(key).map(_.asBigDec)
+  def bigDecs (key: KPathW): Seq[BigDecimal] = force(key)      .asSeq.map(_.asBigDec)
+  def bigDecs_(key: KPathW): Pes[BigDecimal] = opt  (key).map(_.asSeq.map(_.asBigDec))
 
+  // ---------------------------------------------------------------------------
   // time: t210202124121 - p3 - need a way to abstract date/dateTime, eg both can have a day added to
-  def date  (key: KPathW):     LocalDate  = force(key)      .asLocalDate
-  def date_ (key: KPathW): Opt[LocalDate] = opt  (key).map(_.asLocalDate)
-  def dates (key: KPathW): Seq[LocalDate] = force(key)      .asSeq.map(_.asLocalDate)
-  def dates_(key: KPathW): Pes[LocalDate] = opt  (key).map(_.asSeq.map(_.asLocalDate))
+  def localDate  (key: KPathW):     LocalDate  = force(key)      .asLocalDate
+  def localDate_ (key: KPathW): Opt[LocalDate] = opt  (key).map(_.asLocalDate)
+  def localDates (key: KPathW): Seq[LocalDate] = force(key)      .asSeq.map(_.asLocalDate)
+  def localDates_(key: KPathW): Pes[LocalDate] = opt  (key).map(_.asSeq.map(_.asLocalDate))
 
-  def dateTime  (key: KPathW):     LocalDateTime  = force(key)      .asLocalDateTime
-  def dateTime_ (key: KPathW): Opt[LocalDateTime] = opt  (key).map(_.asLocalDateTime)
-  def dateTimes (key: KPathW): Seq[LocalDateTime] = force(key)      .asSeq.map(_.asLocalDateTime)
-  def dateTimes_(key: KPathW): Pes[LocalDateTime] = opt  (key).map(_.asSeq.map(_.asLocalDateTime))
+  def localTime  (key: KPathW):     LocalTime  = force(key)      .asLocalTime
+  def localTime_ (key: KPathW): Opt[LocalTime] = opt  (key).map(_.asLocalTime)
+  def localTimes (key: KPathW): Seq[LocalTime] = force(key)      .asSeq.map(_.asLocalTime)
+  def localTimes_(key: KPathW): Pes[LocalTime] = opt  (key).map(_.asSeq.map(_.asLocalTime))
+
+  def localDateTime  (key: KPathW):     LocalDateTime  = force(key)      .asLocalDateTime
+  def localDateTime_ (key: KPathW): Opt[LocalDateTime] = opt  (key).map(_.asLocalDateTime)
+  def localDateTimes (key: KPathW): Seq[LocalDateTime] = force(key)      .asSeq.map(_.asLocalDateTime)
+  def localDateTimes_(key: KPathW): Pes[LocalDateTime] = opt  (key).map(_.asSeq.map(_.asLocalDateTime))
+
+  def offsetDateTime  (key: KPathW):     OffsetDateTime  = force(key)      .asOffsetDateTime
+  def offsetDateTime_ (key: KPathW): Opt[OffsetDateTime] = opt  (key).map(_.asOffsetDateTime)
+  def offsetDateTimes (key: KPathW): Seq[OffsetDateTime] = force(key)      .asSeq.map(_.asOffsetDateTime)
+  def offsetDateTimes_(key: KPathW): Pes[OffsetDateTime] = opt  (key).map(_.asSeq.map(_.asOffsetDateTime))
+
+  def zonedDateTime  (key: KPathW):     ZonedDateTime  = force(key)      .asZonedDateTime
+  def zonedDateTime_ (key: KPathW): Opt[ZonedDateTime] = opt  (key).map(_.asZonedDateTime)
+  def zonedDateTimes (key: KPathW): Seq[ZonedDateTime] = force(key)      .asSeq.map(_.asZonedDateTime)
+  def zonedDateTimes_(key: KPathW): Pes[ZonedDateTime] = opt  (key).map(_.asSeq.map(_.asZonedDateTime))
+
+  def instant  (key: KPathW):     Instant  = force(key)      .asInstant
+  def instant_ (key: KPathW): Opt[Instant] = opt  (key).map(_.asInstant)
+  def instants (key: KPathW): Seq[Instant] = force(key)      .asSeq.map(_.asInstant)
+  def instants_(key: KPathW): Pes[Instant] = opt  (key).map(_.asSeq.map(_.asInstant))
 
   // ===========================================================================
   private def _enm[T <: EnumEntry: WTT](name: String): T  = reflect.CompanionReflection[T](methodName = "withName")(/* args */ name)

@@ -22,10 +22,14 @@ class ValueWrapper(val underlying: AnyValue) extends AnyVal {
     def asFloat: Float = asTyped[Float]
 
     def asBigInt       : BigInt     = asTyped[BigInt]
-    def asBigDecimal   : BigDecimal = asTyped[BigDecimal]
+    def asBigDec       : BigDecimal = asTyped[BigDec]
 
-    def asLocalDate    : LocalDate     = asTyped[LocalDate]
-    def asLocalDateTime: LocalDateTime = asTyped[LocalDateTime]
+    def asLocalDate     : LocalDate      = asTyped[LocalDate]
+    def asLocalTime     : LocalTime      = asTyped[LocalTime]
+    def asLocalDateTime : LocalDateTime  = asTyped[LocalDateTime]
+    def asOffsetDateTime: OffsetDateTime = asTyped[OffsetDateTime]
+    def asZonedDateTime : ZonedDateTime  = asTyped[ZonedDateTime]
+    def asInstant       : Instant        = asTyped[Instant]
 
     // ---------------------------------------------------------------------------
     def asObj          : Obj     = asTyped[Obj]

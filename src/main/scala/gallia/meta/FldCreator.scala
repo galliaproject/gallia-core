@@ -3,90 +3,108 @@ package meta
 
 import aptus.Nes
 
-import reflect.Container._
 import reflect.BasicType._
 
 // ===========================================================================
 @TypeMatching
-trait FldCreator {
+trait FldCreator { import Fld._
   protected val _key: Key
 
   // ---------------------------------------------------------------------------
   def typed[T : WTT]: Fld = Fld(_key, Info.forceFrom[T])
 
-  // ---------------------------------------------------------------------------
-  def string    : Fld = Fld(_key, Info.from(_One, _String))
-  def string_   : Fld = Fld(_key, Info.from(_Opt, _String))
-  def strings   : Fld = Fld(_key, Info.from(_Nes, _String))
-  def strings_  : Fld = Fld(_key, Info.from(_Pes, _String))
+  // ===========================================================================
+  def string    : Fld = one(_key, _String)
+  def string_   : Fld = opt(_key, _String)
+  def strings   : Fld = nes(_key, _String)
+  def strings_  : Fld = pes(_key, _String)
 
-  def int       : Fld = Fld(_key, Info.from(_One, _Int))
-  def int_      : Fld = Fld(_key, Info.from(_Opt, _Int))
-  def ints      : Fld = Fld(_key, Info.from(_Nes, _Int))
-  def ints_     : Fld = Fld(_key, Info.from(_Pes, _Int))
+  def int       : Fld = one(_key, _Int)
+  def int_      : Fld = opt(_key, _Int)
+  def ints      : Fld = nes(_key, _Int)
+  def ints_     : Fld = pes(_key, _Int)
 
-  def double    : Fld = Fld(_key, Info.from(_One, _Double))
-  def double_   : Fld = Fld(_key, Info.from(_Opt, _Double))
-  def doubles   : Fld = Fld(_key, Info.from(_Nes, _Double))
-  def doubles_  : Fld = Fld(_key, Info.from(_Pes, _Double))
+  def double    : Fld = one(_key, _Double)
+  def double_   : Fld = opt(_key, _Double)
+  def doubles   : Fld = nes(_key, _Double)
+  def doubles_  : Fld = pes(_key, _Double)
 
-  def boolean   : Fld = Fld(_key, Info.from(_One, _Boolean))
-  def boolean_  : Fld = Fld(_key, Info.from(_Opt, _Boolean))
-  def booleans  : Fld = Fld(_key, Info.from(_Nes, _Boolean))
-  def booleans_ : Fld = Fld(_key, Info.from(_Pes, _Boolean))
-
-  // ---------------------------------------------------------------------------
-  def byte    : Fld = Fld(_key, Info.from(_One, _Byte))
-  def byte_   : Fld = Fld(_key, Info.from(_Opt, _Byte))
-  def bytes   : Fld = Fld(_key, Info.from(_Nes, _Byte)) // not to be confused with binary...
-  def bytes_  : Fld = Fld(_key, Info.from(_Pes, _Byte)) // not to be confused with binary...
-
-  def short   : Fld = Fld(_key, Info.from(_One, _Short))
-  def short_  : Fld = Fld(_key, Info.from(_Opt, _Short))
-  def shorts  : Fld = Fld(_key, Info.from(_Nes, _Short))
-  def shorts_ : Fld = Fld(_key, Info.from(_Pes, _Short))
-
-  def long    : Fld = Fld(_key, Info.from(_One, _Long))
-  def long_   : Fld = Fld(_key, Info.from(_Opt, _Long))
-  def longs   : Fld = Fld(_key, Info.from(_Nes, _Long))
-  def longs_  : Fld = Fld(_key, Info.from(_Pes, _Long))
-
-  def float   : Fld = Fld(_key, Info.from(_One, _Float))
-  def float_  : Fld = Fld(_key, Info.from(_Opt, _Float))
-  def floats  : Fld = Fld(_key, Info.from(_Nes, _Float))
-  def floats_ : Fld = Fld(_key, Info.from(_Pes, _Float))
+  def boolean   : Fld = one(_key, _Boolean)
+  def boolean_  : Fld = opt(_key, _Boolean)
+  def booleans  : Fld = nes(_key, _Boolean)
+  def booleans_ : Fld = pes(_key, _Boolean)
 
   // ---------------------------------------------------------------------------
-  def bigInt   : Fld = Fld(_key, Info.from(_One, _BigInt))
-  def bigInt_  : Fld = Fld(_key, Info.from(_Opt, _BigInt))
-  def bigInts  : Fld = Fld(_key, Info.from(_Nes, _BigInt))
-  def bigInts_ : Fld = Fld(_key, Info.from(_Pes, _BigInt))
+  def byte    : Fld = one(_key, _Byte)
+  def byte_   : Fld = opt(_key, _Byte)
+  def bytes   : Fld = nes(_key, _Byte) // not to be confused with binary...
+  def bytes_  : Fld = pes(_key, _Byte) // not to be confused with binary...
 
-  def bigDec   : Fld = Fld(_key, Info.from(_One, _BigDec))
-  def bigDec_  : Fld = Fld(_key, Info.from(_Opt, _BigDec))
-  def bigDecs  : Fld = Fld(_key, Info.from(_Nes, _BigDec))
-  def bigDecs_ : Fld = Fld(_key, Info.from(_Pes, _BigDec))
+  def short   : Fld = one(_key, _Short)
+  def short_  : Fld = opt(_key, _Short)
+  def shorts  : Fld = nes(_key, _Short)
+  def shorts_ : Fld = pes(_key, _Short)
 
-//def date       : Fld = Fld(_key, Info.from(_One, _LocalDate)) -- t210202100936 - conflict with aptus' ... as date1 ?
-def _date       : Fld = Fld(_key, Info.from(_One, _LocalDate))  
-  def date_      : Fld = Fld(_key, Info.from(_Opt, _LocalDate))
-  def dates      : Fld = Fld(_key, Info.from(_Nes, _LocalDate))
-  def dates_     : Fld = Fld(_key, Info.from(_Pes, _LocalDate))
+  def long    : Fld = one(_key, _Long)
+  def long_   : Fld = opt(_key, _Long)
+  def longs   : Fld = nes(_key, _Long)
+  def longs_  : Fld = pes(_key, _Long)
 
-//def dateTime   : Fld = Fld(_key, Info.from(_One, _LocalDateTime)) -- conflict with aptus' ... as dateTime1 ?
-def _dateTime   : Fld = Fld(_key, Info.from(_One, _LocalDateTime))  
-  def dateTime_  : Fld = Fld(_key, Info.from(_Opt, _LocalDateTime))
-  def dateTimes  : Fld = Fld(_key, Info.from(_Nes, _LocalDateTime))
-  def dateTimes_ : Fld = Fld(_key, Info.from(_Pes, _LocalDateTime))
+  def float   : Fld = one(_key, _Float)
+  def float_  : Fld = opt(_key, _Float)
+  def floats  : Fld = nes(_key, _Float)
+  def floats_ : Fld = pes(_key, _Float)
 
+  // ---------------------------------------------------------------------------
+  def bigInt   : Fld = one(_key, _BigInt)
+  def bigInt_  : Fld = opt(_key, _BigInt)
+  def bigInts  : Fld = nes(_key, _BigInt)
+  def bigInts_ : Fld = pes(_key, _BigInt)
+
+  def bigDec   : Fld = one(_key, _BigDec)
+  def bigDec_  : Fld = opt(_key, _BigDec)
+  def bigDecs  : Fld = nes(_key, _BigDec)
+  def bigDecs_ : Fld = pes(_key, _BigDec)
+
+  // ---------------------------------------------------------------------------
+  def localDate       : Fld = one(_key, _LocalDate)  
+  def localDate_      : Fld = opt(_key, _LocalDate)
+  def localDates      : Fld = nes(_key, _LocalDate)
+  def localDates_     : Fld = pes(_key, _LocalDate)
+
+  def localTime       : Fld = one(_key, _LocalTime)  
+  def localTime_      : Fld = opt(_key, _LocalTime)
+  def localTimes      : Fld = nes(_key, _LocalTime)
+  def localTimes_     : Fld = pes(_key, _LocalTime)
+  
+  def localDateTime   : Fld = one(_key, _LocalDateTime)
+  def localDateTime_  : Fld = opt(_key, _LocalDateTime)
+  def localDateTimes  : Fld = nes(_key, _LocalDateTime)
+  def localDateTimes_ : Fld = pes(_key, _LocalDateTime)
+
+  def offsetDateTime   : Fld = one(_key, _OffsetDateTime)
+  def offsetDateTime_  : Fld = opt(_key, _OffsetDateTime)
+  def offsetDateTimes  : Fld = nes(_key, _OffsetDateTime)
+  def offsetDateTimes_ : Fld = pes(_key, _OffsetDateTime)
+
+  def zonedDateTime   : Fld = one(_key, _ZonedDateTime)
+  def zonedDateTime_  : Fld = opt(_key, _ZonedDateTime)
+  def zonedDateTimes  : Fld = nes(_key, _ZonedDateTime)
+  def zonedDateTimes_ : Fld = pes(_key, _ZonedDateTime)
+
+  def instant   : Fld = one(_key, _Instant)
+  def instant_  : Fld = opt(_key, _Instant)
+  def instants  : Fld = nes(_key, _Instant)
+  def instants_ : Fld = pes(_key, _Instant)
+  
   // ---------------------------------------------------------------------------
   //TODO: enum - t210201095414
 
   // ---------------------------------------------------------------------------
-  def binary    : Fld = Fld(_key, Info.from(_One, _Binary))
-  def binary_   : Fld = Fld(_key, Info.from(_Opt, _Binary))
-  def binarys   : Fld = Fld(_key, Info.from(_Nes, _Binary))
-  def binarys_  : Fld = Fld(_key, Info.from(_Pes, _Binary))
+  def binary    : Fld = one(_key, _Binary)
+  def binary_   : Fld = opt(_key, _Binary)
+  def binarys   : Fld = nes(_key, _Binary)
+  def binarys_  : Fld = pes(_key, _Binary)
   
   // ===========================================================================
   def cls_ (fields: Nes[Fld]): Fld = Fld(_key, Info.opt(Cls(fields)))
@@ -103,7 +121,6 @@ def _dateTime   : Fld = Fld(_key, Info.from(_One, _LocalDateTime))
   def cls  (c: Cls): Fld = Fld(_key, Info.one(Cls(c.fields)))
   def clss (c: Cls): Fld = Fld(_key, Info.nes(Cls(c.fields)))
   def clss_(c: Cls): Fld = Fld(_key, Info.pes(Cls(c.fields)))
-
 }
 
 // ===========================================================================

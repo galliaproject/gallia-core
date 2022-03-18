@@ -71,7 +71,11 @@ case class Fld(key: Key, info: Info) extends FldLike {
 
     // ---------------------------------------------------------------------------
     def one(key: Key, containee: Containee) = Fld(key, Info(Container._One, containee))
+    def opt(key: Key, containee: Containee) = Fld(key, Info(Container._Opt, containee))
+    def nes(key: Key, containee: Containee) = Fld(key, Info(Container._Nes, containee))
+    def pes(key: Key, containee: Containee) = Fld(key, Info(Container._Pes, containee))
 
+    // ---------------------------------------------------------------------------
     def oneCls(key: Key, c: Cls) = Fld(key, Info.one(c))
     def nesCls(key: Key, c: Cls) = Fld(key, Info.nes(c))
 

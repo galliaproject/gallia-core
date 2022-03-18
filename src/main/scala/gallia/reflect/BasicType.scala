@@ -5,9 +5,7 @@ import scala.reflect.{classTag, ClassTag}
 import enumeratum.{Enum, EnumEntry}
 import java.time._
 
-import aptus.{Anything_, Seq_}
-
-import meta.Containee
+import aptus.{Anything_, Seq_, String_}
 
 // ===========================================================================
 sealed trait NumericalType extends BasicType
@@ -31,11 +29,15 @@ sealed trait NumericalType extends BasicType
 sealed trait BasicType // TODO: t210125111338 - investigate union types (coming in scala 3?)
       extends EnumEntry
       with    BasicTypeHelper
-      with    Containee {
+      with    meta.Containee {
     type T
 
+    // ---------------------------------------------------------------------------
     val fullName: FullName
 
+      final     def accessorName: String = fullName.pipe(accessorNameModifier).splitBy(".").last.uncapitalizeFirst
+      protected def accessorNameModifier(value: FullName): String = value // overriden by some: BigDec, Enum, ...
+    
     // ---------------------------------------------------------------------------
     def isInt    : Boolean = this == BasicType._Int
     def isDouble : Boolean = this == BasicType._Double
@@ -172,7 +174,8 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
 
     // ---------------------------------------------------------------------------
     case object _BigInt extends UnboundedNumber { type T = BigInt    ; val fullName = "scala.math.BigInt"    ; /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse; }
-    case object _BigDec extends UnboundedNumber { type T = BigDecimal; val fullName = "scala.math.BigDecimal"; /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse }
+    case object _BigDec extends UnboundedNumber { type T = BigDecimal; val fullName = "scala.math.BigDecimal"; /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse
+      override protected def accessorNameModifier(value: FullName): String = value.remove("imal") }
 
     // ===========================================================================
     case object _LocalDate     extends BasicType { type T = LocalDate    ; val fullName = "java.time.LocalDate"
@@ -209,17 +212,13 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
     // - t210114093525 - capture enum values (will need to adapt serialization)
     // - t210330102827 - capture enum name for macros
     case object _Enum extends BasicType { type T = EnumEntry; val fullName = "enumeratum.EnumEntry"
+    		override protected def accessorNameModifier(value: FullName): String = value.replace("EnumEntry",  "enm") // "enum" is reserved in Scala 3      
       private implicit val ord: Ordering[T] = CustomOrdering.enumEntry
       /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse }
 
     // ===========================================================================
     case object _Binary extends BasicType { type T = ByteBuffer; val fullName = "java.nio.ByteBuffer"
       private implicit val ord: Ordering[T] = CustomOrdering.byteBuffer
-        /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse }
-        
-    // ---------------------------------------------------------------------------
-    case object _Obj extends BasicType { type T = Obj; val fullName = "gallia.data.single.Obj"
-      private implicit val ord: Ordering[T] = CustomOrdering.standAloneObj
         /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse }
 
     // ===========================================================================

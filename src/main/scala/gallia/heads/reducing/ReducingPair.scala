@@ -38,10 +38,7 @@ trait ReducingPair {
         /** note: flattens None (must pre-process if need to account for them */
         def grouping: ReducingPair1 = ReducingType.grouping.pair(_key)
 
-        @deprecated
-        def count    : ReducingPair1 = ReducingType.count.pair(_key) // FIXME: t210223175659 - "method augmentString in object Predef of type (x: String)scala.collection.immutable.StringOps" if used with String...
-        def count_all: ReducingPair1 = ReducingType.count.pair(_key)
-
+        def count_all                : ReducingPair1 = ReducingType.count_all             .pair(_key)
           def count_present          : ReducingPair1 = ReducingType.count_present         .pair(_key)
           def count_missing          : ReducingPair1 = ReducingType.count_missing         .pair(_key)
           def count_distinct         : ReducingPair1 = ReducingType.count_distinct        .pair(_key)

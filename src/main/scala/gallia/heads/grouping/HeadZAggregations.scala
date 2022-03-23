@@ -34,8 +34,8 @@ trait HeadZAggregations { self: HeadZ =>
             def wit(rtipe: ReducingType)                 : __Aggregate1 = new __Aggregate1(groupee, rtipe) }
 
       // ---------------------------------------------------------------------------
-      def count(groupee: RenW)             : __Aggregate1 = aggregate(groupee).wit(_.count)
-      def count(groupee: Groupee1Selection): __Aggregate1 = aggregate(groupee).wit(_.count)
+      def count(groupee: RenW)             : __Aggregate1 = aggregate(groupee).wit(_.count_all)
+      def count(groupee: Groupee1Selection): __Aggregate1 = aggregate(groupee).wit(_.count_all)
 
         def countPresent(groupee: RenW)             : __Aggregate1 = aggregate(groupee).wit(_.count_present)
         def countPresent(groupee: Groupee1Selection): __Aggregate1 = aggregate(groupee).wit(_.count_present)
@@ -71,7 +71,7 @@ trait HeadZAggregations { self: HeadZ =>
       // ---------------------------------------------------------------------------
       def countEach(groupee1: RenW, groupee2: RenW, more: RenW*): AggEachBy = countEach(_.explicit(groupee1, groupee2, more:_*))
       def countEach(groupees: RenWz)                            : AggEachBy = countEach(_.explicit(groupees))
-      def countEach(groupees: GroupersSelection)                : AggEachBy = new AggWith(resolveGroupers(groupees)).wit(ReducingType.count)
+      def countEach(groupees: GroupersSelection)                : AggEachBy = new AggWith(resolveGroupers(groupees)).wit(ReducingType.count_all)
 
       // ---------------------------------------------------------------------------
       def sumEach(groupee1: RenW, groupee2: RenW, more: RenW*): AggEachBy = sumEach(_.explicit(groupee1, groupee2, more:_*))
@@ -115,7 +115,7 @@ trait HeadZAggregations { self: HeadZ =>
 
       // ---------------------------------------------------------------------------
       // TODO: t210131140932 - countBy needs to accept _.allKeys
-      def   countBy(groupers: GroupersSelection): Self with HasAs = countWith(ReducingType.count).by(groupers)
+      def   countBy(groupers: GroupersSelection): Self with HasAs = countWith(ReducingType.count_all).by(groupers)
         def countBy(groupers: RenWz)            : Self with HasAs = countBy(_.explicit(groupers))
         def countBy(grouper1: RenW, more: RenW*): Self with HasAs = countBy(_.explicitFX(grouper1, more))
 
@@ -135,7 +135,7 @@ trait HeadZAggregations { self: HeadZ =>
 
       // ---------------------------------------------------------------------------
       def countAllBy(groupers: GroupersSelection)                : Self with HasAs = ??? // TODO
-      def countAllBy(groupers: RenWz)                            : Self with HasAs = _otherAllBy(ReducingType.count)(groupers)
+      def countAllBy(groupers: RenWz)                            : Self with HasAs = _otherAllBy(ReducingType.count_all)(groupers)
       def countAllBy(grouper1: RenW, grouper2: RenW, more: RenW*): Self with HasAs = countAllBy(grouper1, grouper2, more:_*)
 
       // ---------------------------------------------------------------------------

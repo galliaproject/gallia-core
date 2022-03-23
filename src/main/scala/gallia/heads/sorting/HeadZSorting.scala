@@ -96,8 +96,8 @@ trait HeadZSorting { self: HeadZ =>
 
   // ---------------------------------------------------------------------------
   def sortByCount: Self = sortByAscendingCount
-    def sortByAscendingCount : Self = sortBy(Sorter.from(_count, descending = false))
-    def sortByDescendingCount: Self = sortBy(Sorter.from(_count, descending = true ))
+    def sortByAscendingCount : Self = sortBy(Sorter.from(_count_all, descending = false))
+    def sortByDescendingCount: Self = sortBy(Sorter.from(_count_all, descending = true ))
 
   def sortByGroupSize: Self = sortByAscendingGroupSize
     def sortByAscendingGroupSize : Self = ???//TODO: sortBy(Sorter.from(_count, descending = false))

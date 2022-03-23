@@ -44,7 +44,7 @@ sealed trait ReducingType extends EnumEntry {
     // ---------------------------------------------------------------------------
     @deprecated("use CountLikeType")
     protected[reducing] sealed trait CountAgg extends Base[Int] {
-        val defaultKey = _count
+        val defaultKey = _count_all
         def returnType = ReduceReturnType.integer }
 
     // ---------------------------------------------------------------------------
@@ -88,8 +88,6 @@ sealed trait ReducingType extends EnumEntry {
     // - t210118084355 - mode, skewness, curtosis, MAD/mean absolute deviation, trimmed ...
     // - t210118084356 - distributions? (pretty costly)?
 
-    @deprecated("use count_all now")
-    case object count                  extends CountLikeType { def data = countAll             _ }
     case object count_all              extends CountLikeType { def data = countAll             _ }
     case object count_present          extends CountLikeType { def data = countPresent         _ }
     case object count_missing          extends CountLikeType { def data = countMissing         _ }
@@ -145,7 +143,7 @@ sealed trait ReducingType extends EnumEntry {
 sealed trait CountLikeType extends ReducingType.CountAgg
 
   object CountLikeType {
-    val count                  = ReducingType.count
+    val count_all              = ReducingType.count_all    
     val count_present          = ReducingType.count_present
     val count_missing          = ReducingType.count_missing
     val count_distinct         = ReducingType.count_distinct

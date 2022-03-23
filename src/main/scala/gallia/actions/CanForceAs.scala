@@ -21,7 +21,7 @@ trait CanForceAs1[T] { def forceAs(key: Key): T } // TODO: t201208111414 - macro
   // ===========================================================================
   trait CanForceAs2[T] extends CanForceAs1[T] {
     val asOpt: Option[Key]
-    @aptus.nonfinl val defaultKey: Key = _count
+    @aptus.nonfinl val defaultKey: Key = _count_all
 
     final def as: Key = asOpt.getOrElse(defaultKey)
   }

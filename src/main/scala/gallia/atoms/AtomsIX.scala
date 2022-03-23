@@ -245,7 +245,7 @@ object AtomsIX {
     // ---------------------------------------------------------------------------
     def naive: Option[Objs] =
       aobjs(
-           c =                                    projectMeta(defaultSchema).assert(!_.hasNesting),
+           c =                                     projectMeta(defaultSchema).assert(!_.hasNesting),
            z = stringObjs(defaultSchema.keys).pipe(projectData(defaultSchema)) ) // see t210106120036 (project ealier)
         .pipe { x =>
           schemaProvider match {

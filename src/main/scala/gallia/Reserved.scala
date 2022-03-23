@@ -5,7 +5,13 @@ trait Reserved {
   val _id    = Symbol("_id")
 
   val _group  = Symbol("_group")
-  val _count  = Symbol("_count")
+
+  val _count_all              = Symbol("_count_all")
+  val _count_present          = Symbol("_count_present")
+  val _count_missing          = Symbol("_count_missing")
+  val _count_distinct         = Symbol("_count_distinct")
+  val _count_distinct_present = Symbol("_count_distinct_present")
+
   val _sum    = Symbol("_sum")
   val _mean   = Symbol("_mean")
   val _median = Symbol("_median")

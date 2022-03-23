@@ -20,7 +20,7 @@ private[reducing] object ReducingStats { // 210118083814
 
     private def counts(optional: Boolean): Cls =
       cls(
-          _count    .int,
+          _count_all.int,
           _distinct .int)
         .pipeIf(optional) {
           _.add(_present  .int) }
@@ -43,8 +43,8 @@ private[reducing] object ReducingStats { // 210118083814
     def strings(optional: Boolean): Cls =
       counts(optional)
           .merge(
-        if (optional) cls(_values.cls(_value.string_, _count.int))
-        else          cls(_values.cls(_value.string , _count.int)) )
+        if (optional) cls(_values.cls(_value.string_, _count_all.int))
+        else          cls(_values.cls(_value.string , _count_all.int)) )
 
   }
 
@@ -77,14 +77,14 @@ private[reducing] object ReducingStats { // 210118083814
           .sortBy { case (valueOpt, count) => (-count ,valueOpt) }
           .map { case (valueOpt, count) =>
             valueOpt match {
-              case None        => obj(                 _count -> count)
-              case Some(value) => obj(_value -> value, _count -> count) } }
+              case None        => obj(                 _count_all -> count)
+              case Some(value) => obj(_value -> value, _count_all -> count) } }
 
     // ===========================================================================
     private def counts(optional: Boolean)(values: Values): Obj =
       obj(
-          _count    -> values         .size,
-          _distinct -> values.distinct.size)
+          _count_all -> values         .size,
+          _distinct  -> values.distinct.size)
         .pipeIf(optional) {
           _.add(_present, values.flatten.size) }
 

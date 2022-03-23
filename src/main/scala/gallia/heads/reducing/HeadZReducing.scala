@@ -24,9 +24,9 @@ trait HeadZReducing { ignored: HeadZ =>
     // ---------------------------------------------------------------------------
     //TODO: vs toArray: def reduceWithGrouping(key1: KeyW, key2: KeyW, more: KeyW*): HeadU = reduce(key1, key2, more:_*).wit(_.grouping)
 
-    def reduceWithCount(key1: KeyW, more: KeyW*): HeadU = reduce(key1, more:_*).wit(_.count)
-    def reduceWithCount(keys: KeyWz)            : HeadU = reduce(keys         ).wit(_.count)
-    def reduceWithCount(sel: Selection)         : HeadU = reduce(sel          ).wit(_.count)
+    def reduceWithCount(key1: KeyW, more: KeyW*): HeadU = reduce(key1, more:_*).wit(_.count_all)
+    def reduceWithCount(keys: KeyWz)            : HeadU = reduce(keys         ).wit(_.count_all)
+    def reduceWithCount(sel: Selection)         : HeadU = reduce(sel          ).wit(_.count_all)
 
     def reduceWithSum  (key1: KeyW, more: KeyW*): HeadU = reduce(key1, more:_*).wit(_.sum)
     def reduceWithSum  (keys: KeyWz)            : HeadU = reduce(keys         ).wit(_.sum)

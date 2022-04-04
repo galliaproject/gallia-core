@@ -8,8 +8,9 @@ import io.out._
 // ===========================================================================
 trait HeadOut { self: Head[_] =>
 
-  private[heads] def _meta: Cls =
-    self.end.runMetaOnly().either match {        
+  /** will *not* process all the data (assuming input schema does not need to be inferred) */
+  def forceSchema: Cls =
+    self.end.runMetaOnly().either match {
       case Left (errors)  => throw errors.metaErrorOpt.get
       case Right(success) => success.meta.forceLeafClass }
 
@@ -42,11 +43,11 @@ trait HeadUOut extends HeadOut { self: HeadU =>
   def format(f: OtherFluencyU => EndWriteUFluency): String = { val sw = new java.io.StringWriter; write(_.formatString(sw).pipe(f)); sw.toString }
   
   // ---------------------------------------------------------------------------
-  private[gallia] def _metaOnly(): HeadU = StartU.pipe(_.stdout).conf.actionU.pipe(uo).tap { x => x._meta; () }
+  private[gallia] def _metaOnly(): HeadU = StartU.pipe(_.stdout).conf.actionU.pipe(uo).tap { x => x.forceSchema; () }
 
   // ===========================================================================
   /** will *not* process all the data (assuming input schema does not need to be inferred) */
-  def formatSchema: String = _meta.formatDefault
+  def formatSchema: String = forceSchema.formatDefault
   
   // ---------------------------------------------------------------------------
   def formatDefault   : String = formatJson
@@ -122,11 +123,11 @@ trait HeadZOut extends HeadOut { self: HeadZ =>
   def format(f: OtherFluencyZ => EndWriteZFluency): String = { val sw = new java.io.StringWriter; write(_.formatString(sw).pipe(f)); sw.toString }
   
   // ---------------------------------------------------------------------------
-  private[gallia] def _metaOnly(): HeadZ = StartZ.pipe(_.stdout).conf.actionZ.pipe(zo).tap { x => x._meta; () }
+  private[gallia] def _metaOnly(): HeadZ = StartZ.pipe(_.stdout).conf.actionZ.pipe(zo).tap { x => x.forceSchema; () }
 
   // ===========================================================================
   /** will *not* process all the data (assuming input schema does not need to be inferred) */
-  def formatSchema: String = _meta.formatDefault    
+  def formatSchema: String = forceSchema.formatDefault    
   
   // ---------------------------------------------------------------------------  
   def formatString : String = formatJsonLines

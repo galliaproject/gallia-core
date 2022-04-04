@@ -4,7 +4,7 @@ package data.multiple
 import scala.reflect.classTag
 
 import meta._
-import domain.SortingPair
+import domain.{PathPair, SortingPair}
 import data.single.ObjOrdering
 
 // ===========================================================================
@@ -16,9 +16,18 @@ trait ObjsOperations { self: Objs =>
   private implicit def _to(x: Seq[Obj]): Objs = Objs.from(x)
 
   // ===========================================================================
-  def toUpperCase(key: Key): Objs = map(_.toUpperCase(key))
-  //TODO: more... (see t210104164037)
+  def transformPath            (target: KPathW,   f: AnyValue => AnyValue): Objs = map(_.transformPath    (target, f)) // TODO: phase out
+  def transformPathx           (target: KPathW,   f: AnyValue => AnyValue): Objs = map(_.transformPathx   (target, f))
+  def transformPathPair        (target: PathPair, f: AnyValue => AnyValue): Objs = map(_.transformPathPair(target, f))
+  def transformWhateverPathPair(target: PathPair, f: AnyValue => AnyValue, checkType: Boolean): Objs = map(_.transformWhateverPathPair(target, f, checkType)) // only for Whatever to Whatever transformation...
 
+  // ---------------------------------------------------------------------------
+  def _transformKey            (key: Key,                                        f: AnyValue => AnyValue): Objs = map(_._transformKey(key, f))// TODO: phase out
+  def _transformKeyx           (key: Key,                                        f: AnyValue => AnyValue): Objs = map(_._transformKeyx(key, f))
+  def _transformRenx           (key: Ren)                                       (f: AnyValue => AnyValue): Objs = map(_._transformRenx(key)(f))
+  def _transformKeyPair        (key: Key, optional: Boolean)                    (f: AnyValue => AnyValue): Objs = map(_._transformKeyPair(key, optional)(f))
+  def _transformWhateverKeyPair(key: Key, optional: Boolean, checkType: Boolean)(f: AnyValue => AnyValue): Objs = map(_._transformWhateverKeyPair(key, optional, checkType)(f)) // abstracts requiredness + optionally check resulting type
+        
   // ===========================================================================
   def distinct: Objs = self._modifyUnderlyingStreamer(_.distinct)
 

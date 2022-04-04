@@ -252,15 +252,6 @@ trait ObjOperations { self: Obj =>
           case Container._Pes => opt  (target).toSeq.flatMap(_.asSeq) }
 
   // ===========================================================================
-  def toUpperCase(target: Key): Obj = _transformKey(target, _.asString.toUpperCase)
-  //TODO: more... (see t210104164037)
-
-  // ===========================================================================
-  def transformString (key: Key, f: String      => Any): Obj = transformPath(key, _.asString             .pipe(f))
-  def transformInts   (key: Key, f: Seq[Int   ] => Any): Obj = transformPath(key, _.asSeq.map(_.asInt   ).pipe(f))
-  def transformDoubles(key: Key, f: Seq[Double] => Any): Obj = transformPath(key, _.asSeq.map(_.asDouble).pipe(f))
-
-  // ---------------------------------------------------------------------------
   def transformObj   (key: Key, f: Obj    => Any): Obj = transformPath(key, _.asObj   .pipe(f))
   def transformObjx  (key: Key, f: Obj    => Any): Obj = transformPath(key,
       _ match { // TODO: should use schema rather (see t210115095838)

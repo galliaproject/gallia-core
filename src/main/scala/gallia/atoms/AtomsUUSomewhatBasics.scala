@@ -48,7 +48,7 @@ object AtomsUUSomewhatBasics {
 
   // ===========================================================================
   case class _Split(key: Key, splitter: StringSplitter) extends AtomUU { def naive(o: Obj) =
-    o.transformString(key, splitter.apply) }
+    o.transformPath(key, x => new data.single.ValueWrapper(x) /* why not picked up? */.asString.pipe(splitter.apply)) }
 
   // ---------------------------------------------------------------------------
   case class _Swap(key1: Key, key2: Key) extends AtomUU { def naive(o: Obj) =

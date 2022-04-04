@@ -62,21 +62,29 @@ package object gallia
   def byteBuffer(value: String)           : ByteBuffer = java.nio.ByteBuffer.wrap(value.getBytes)
   def byteBuffer(bytes: Array[Byte])      : ByteBuffer = java.nio.ByteBuffer.wrap(bytes)
   
+  // ---------------------------------------------------------------------------
+  implicit class ByteBuffer__(bb: ByteBuffer) {    
+    def mapBytes(f: Array[Byte] => Array[Byte]): ByteBuffer = bb.array.pipe(f).pipe(byteBuffer)  }
+
   // ===========================================================================
   private[gallia] type AnyValue = Any
 
   // ---------------------------------------------------------------------------
-  private[gallia] type LocalTime      = java.time. LocalTime
-  private[gallia] type LocalDate      = java.time. LocalDate
-  
-  private[gallia] type LocalDateTime  = java.time. LocalDateTime
-  private[gallia] type OffsetDateTime = java.time.OffsetDateTime
-  private[gallia] type ZonedDateTime  = java.time. ZonedDateTime
-  
-  private[gallia] type Instant        = java.time.Instant
+  private[gallia] type Temporal = java.time.temporal.Temporal
+    
+    private[gallia] type LocalTime      = java.time. LocalTime
+    private[gallia] type LocalDate      = java.time. LocalDate
+    
+    private[gallia] type LocalDateTime  = java.time. LocalDateTime
+    private[gallia] type OffsetDateTime = java.time.OffsetDateTime
+    private[gallia] type ZonedDateTime  = java.time. ZonedDateTime
+    
+    private[gallia] type Instant        = java.time.Instant
 
+  // ---------------------------------------------------------------------------
   private[gallia] type ByteBuffer    = java.nio.ByteBuffer // note: use ByteBuffer.wrap(_: Array[Byte])
 
+  // ---------------------------------------------------------------------------  
   private[gallia] type EnumEntry            = enumeratum.EnumEntry
   private[gallia] type Enum[T <: EnumEntry] = enumeratum.Enum[T]
   

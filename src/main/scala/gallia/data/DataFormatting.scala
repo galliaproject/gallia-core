@@ -3,23 +3,30 @@ package data
 
 import java.time.format._
 
-import aptus.{String_, Double_}
+import aptus.{String_, Double_, ArrayByte_}
 
 // ===========================================================================
 @TypeMatching object DataFormatting {
 
-  def formatBasicValue: PartialFunction[Any, String] = formatString.orElse(formatNumber).orElse(formatOther)
+  def formatBasicValue: PartialFunction[Any, String] =
+      formatString
+        .orElse {
+      formatNumber }
+        .orElse {
+      formatTemporal }
+        .orElse {
+      formatOther }
 
     // ===========================================================================
-    def formatString: PartialFunction[Any, String] = {
+    private[gallia] def formatString: PartialFunction[Any, String] = {
       case x: String    => x
 
       case x: EnumEntry => x.entryName
-      case x: Symbol    => x.name
-      case x: Char      => x.toString }
+      case x: Symbol    => x.name     /* keep? */
+      case x: Char      => x.toString /* keep? */}
 
     // ---------------------------------------------------------------------------
-    def formatNumber: PartialFunction[Any, String] = {
+    private[gallia] def formatNumber: PartialFunction[Any, String] = { // as in java.lang.Number
       case x: Int       => x.formatExplicit
       case x: Double    => x.formatExplicit
 
@@ -27,27 +34,43 @@ import aptus.{String_, Double_}
       case x: Float     => x.formatExplicit
 
       case x: Short     => x.formatExplicit
-      case x: Byte      => x.formatExplicit // TODO: to hex form?
-
-      case x: BigInt     => x.bigInteger.toString /* stable */
-      case x: BigDecimal => x.bigDecimal.toString /* stable */ }
+      case x: Byte      => x.formatExplicit
+      
+      case x: BigInt    => formatBigInt(x)
+      case x: BigDec    => formatBigDec(x) }
 
     // ---------------------------------------------------------------------------
-    def formatOther: PartialFunction[Any, String] = {
-      case x: Boolean => x.toString
-
-      //TODO: ISO_DATE* ok? - t210116162405 - read counterpart
-      case x: LocalDate     => x.format(DateTimeFormatter.ISO_DATE)
-      case x: LocalDateTime => x.format(DateTimeFormatter.ISO_DATE_TIME)
-
-      case x: gallia.Whatever => x.formatDefault // TODO: keep? allow whatever here?
+    private[gallia] def formatTemporal: PartialFunction[Any, String] = {
+      case x: LocalDate      => DateTimeFormatter.ISO_DATE            .format(x)
+      case x: LocalTime      => DateTimeFormatter.ISO_TIME            .format(x)
+      case x: LocalDateTime  => DateTimeFormatter.ISO_LOCAL_DATE_TIME .format(x)
+      case x: OffsetDateTime => DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(x)
+      case x: ZonedDateTime  => DateTimeFormatter.ISO_ZONED_DATE_TIME .format(x)
+      case x: Instant        => DateTimeFormatter.ISO_INSTANT         .format(x) }
+      
+    // ---------------------------------------------------------------------------
+    private[gallia] def formatOther: PartialFunction[Any, String] = {
+      case x: Boolean         => x.toString
+      case x: ByteBuffer      => formatBinary(x)
       case x: Unit            => "()".quote // TODO: keep?
-      case gallia.none        => "null" // TODO: t210115144940
+      case x: gallia.Whatever => aptus.illegalState()
 
+      case gallia.none        => "null" // TODO: t210115144940
       case x =>
         // "The only difference between Java strings and Json strings is that in Json, forward-slash (/) is escaped."
         org.apache.commons.lang3.StringEscapeUtils.escapeJava(x.toString ).quote // risky... error out rather?
     }
+
+    // ===========================================================================    
+    private[gallia] def formatBigInt(value: BigInt): String = value.bigInteger.toString /* stable */
+    private[gallia] def formatBigDec(value: BigDec): String = value.bigDecimal.toString /* stable */
+      
+    // ---------------------------------------------------------------------------
+    private[gallia] def formatBinary(bytes: ByteBuffer): String =
+      bytes
+        .array
+        .toBase64
+        .prepend("base64:")
 }
 
 // ===========================================================================

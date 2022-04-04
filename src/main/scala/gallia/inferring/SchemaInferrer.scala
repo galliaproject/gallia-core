@@ -35,8 +35,7 @@ object SchemaInferrer { // mostly for JSON for now...
                 (seq.head match {
                   case _: Obj => seq.map(_.asInstanceOf[Obj]).pipe(klass)
                   case leaf   => containee(leaf) })
-            case sgl => _One -> containee(value)
-          })
+            case sgl => _One -> containee(value) })
 
     // ---------------------------------------------------------------------------
     @PartialTypeMatching
@@ -44,14 +43,13 @@ object SchemaInferrer { // mostly for JSON for now...
     def containee(value: AnySingleValue): Containee =
       value match {
         case x: Obj => klass(x) 
+        
         case x: String  => _String
         case x: Double  => // 201119115427
           if (x.isValidInt /* Long? */) _Int // _Long?
           else                          _Double
         case x: Int     => _Int
         case x: Boolean => _Boolean
-
-        case x: EnumEntry => _Enum
 
         case x: Byte    => _Byte
         case x: Short   => _Short
@@ -62,10 +60,18 @@ object SchemaInferrer { // mostly for JSON for now...
           else                          _Float
         
         case x: BigInt        => _BigInt    
-        case x: BigDecimal    => _BigDec
+        case x: BigDec        => _BigDec
+
+        case x: LocalDate      => _LocalDate
+        case x: LocalTime      => _LocalTime
+        case x: LocalDateTime  => _LocalDateTime
+        case x: OffsetDateTime => _OffsetDateTime
+        case x: ZonedDateTime  => _ZonedDateTime
+        case x: Instant        => _Instant
         
-        case x: LocalDate     => _LocalDate        
-        case x: LocalDateTime => _LocalDateTime }
+        case x: ByteBuffer     => _Binary
+              
+        case x: EnumEntry      => _Enum }
 
 }
 

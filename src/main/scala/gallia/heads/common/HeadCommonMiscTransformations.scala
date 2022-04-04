@@ -7,12 +7,13 @@ import actions.ActionsUUReducer0._
 import actions.ActionsUUTransforms.{TransformObjectCustom, TransformObjectsCustom}
 
 // ===========================================================================
-trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
+trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // TODO: t210110094731 - add selections throughout
 
   def transformSole        (f: WV =>  WV)                   : Self2 = new _TransformWhatever(_.soleKey).using(f)
   def transformSole[D: WTT](f: WV => TWV[D])                : Self2 = new _TransformWhatever(_.soleKey).using(f)
   def transformSole[D: WTT](f: WV =>     D)(implicit di: DI): Self2 = new _TransformWhatever(_.soleKey).using(f)
 
+  // ---------------------------------------------------------------------------
   // TODO: t220317154117 - consider a similar transformAll (if all of the same type?) 
   
   // ---------------------------------------------------------------------------
@@ -25,6 +26,12 @@ trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F]
   // ---------------------------------------------------------------------------
   // TODO: t210110094731
   //def transformString(f: SEL.Transform.Selector): Self2 = ???//transform(_.stringx(f))
+  
+  // ---------------------------------------------------------------------------
+  // time: 
+  def transformStringToLocalDateTime(k: RPathW) = transformString(k).using(_.parseLocalDateTime /* from aptus */)
+  def transformStringToLocalDate    (k: RPathW) = transformString(k).using(_.parseLocalDate     /* from aptus */)
+  def transformStringToLocalTime    (k: RPathW) = transformString(k).using(_.parseLocalTime     /* from aptus */)
 
   // ---------------------------------------------------------------------------
   def transformObject (k: RPathW) = transform(_.obj (k.value)) // TODO: rename to convey 1 (as oppose to x)
@@ -130,11 +137,6 @@ trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F]
       def items[T: WTT](values: Seq[T]): Self = ???
 
       def items[T: WTT](value1: T, value2: T, more: T*): Self = ??? }
-
-    // ---------------------------------------------------------------------------
-    def transformGroup(f: Objs => AnyValue): Self = transform(_group).usingz(f)
-    def transformLeft (f: Objs => AnyValue): Self = transform(_left ).usingz(f)
-    def transformRight(f: Objs => AnyValue): Self = transform(_right).usingz(f)
 
     // ---------------------------------------------------------------------------
     def reformatTime(key: RKey, more: RKey*) = new {

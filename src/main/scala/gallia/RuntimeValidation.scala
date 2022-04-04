@@ -175,10 +175,16 @@ object RuntimeValidation { import meta._ // 210115153346 - POC
           case x: Float => Some(Right(_Float))
 
           case x: BigInt        => Some(Right(_BigInt))
-          case x: BigDecimal    => Some(Right(_BigDec))
+          case x: BigDec        => Some(Right(_BigDec))
 
-          case x: LocalDate     => Some(Right(_LocalDate))
-          case x: LocalDateTime => Some(Right(_LocalDateTime))
+          case x: LocalDate      => Some(Right(_LocalDate))
+          case x: LocalTime      => Some(Right(_LocalTime))
+          case x: LocalDateTime  => Some(Right(_LocalDateTime))
+          case x: OffsetDateTime => Some(Right(_OffsetDateTime))
+          case x: ZonedDateTime  => Some(Right(_ZonedDateTime))
+          case x: Instant        => Some(Right(_Instant))
+
+          case x: ByteBuffer     => Some(Right(_Binary))
 
           case _ => None
         }

@@ -97,9 +97,6 @@ trait FldLike extends HasKey with InfoLike
       def isBytes: Boolean = isBasicType(BasicType._Binary)
 
       // ===========================================================================
-      def isStringDoubleBoolean: Boolean = isString || isDouble || isBoolean // useful for JSON
-      
-      // ---------------------------------------------------------------------------
       def isBasicType      : Boolean = _containee.leafOpt.nonEmpty
       def isNumericalType  : Boolean = _containee.leafOpt.exists(_.isNumericalType)
       def isIntegerLikeType: Boolean = _containee.leafOpt.exists(_.isIntegerLikeType)

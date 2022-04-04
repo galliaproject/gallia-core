@@ -32,7 +32,7 @@ trait JsonTax extends atoms.utils.ModifyObj {
     c
       .fields
       .filter { field =>
-        !field.isStringDoubleBoolean && // most will stop here (optimization)
+        !field.isString && !field.isBoolean && // optimization
         ( qualifies(field) || 
           field.nestedClassOpt.exists { qualifyingFields(_).nonEmpty }) }
 

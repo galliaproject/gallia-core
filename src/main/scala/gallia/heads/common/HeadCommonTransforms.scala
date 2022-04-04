@@ -57,12 +57,12 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
       def using[D: WTT](f: O => D): Self2 = self2 :+ {
         val dest = typeNode[D]
 
-        if (dest.isContainedDataClass)
-          if (ttq.ignoreContainer) TransformVVxc(ttq, to = HT.parse[D], wrap(f))
-          else                     TransformVVc (ttq, to = HT.parse[D], wrap(f))
+        if (!dest.isContainedDataClass)
+          if (!ttq.ignoreContainer) TransformVV (ttq, dest, wrap(f), false)
+          else                      TransformVVx(ttq, dest, wrap(f))
         else
-          if (ttq.ignoreContainer) TransformVVx(ttq, dest, wrap(f))
-          else                     TransformVV (ttq, dest, wrap(f), false) } }
+          if (!ttq.ignoreContainer) TransformVVc (ttq, to = HT.parse[D], wrap(f))
+          else                      TransformVVxc(ttq, to = HT.parse[D], wrap(f)) } }
 
 }
 

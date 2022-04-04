@@ -115,9 +115,9 @@ object ActionsUUTransforms {
         target.__qpathz(c).pipe {
             _trnsf.vldt(c, _) } ++
         target.__qpathz(c).pipe(_.fromz).pipe {
-              checkUInput(c) }
+              checkUInput(c) } ++
+        _vldt.validType(typeNode[D1])
         //TODO: t210202155459 - verify input is indeed z
-        //TODO: t210202155202 - check dest type is valid
 
       // ---------------------------------------------------------------------------
       def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).transformInfo(x.force1FX)(_ => Info.forceFrom[D1]) }
@@ -134,8 +134,8 @@ object ActionsUUTransforms {
         target.__qpathz(c).pipe {
             _trnsf.vldt(c, _) } ++
         target.__qpathz(c).pipe(_.fromz).pipe {
-              checkZInput(c) }
-        //TODO: t210202155202 - check dest type is valid
+              checkZInput(c) } ++
+        _vldt.validType(typeNode[D1])
 
       // ---------------------------------------------------------------------------
       def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).transformInfo(x.force1FX)(_ => Info.forceFrom[D1]) }
@@ -146,7 +146,7 @@ object ActionsUUTransforms {
   // TODO: check input isn't u or z + destination type is valid
 
   case class TransformVV(from: TtqRPathz, to: TypeNode, f: _ff11, b: Boolean) extends ActionUUb {
-      def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ Nil //TODO: t210202155202 - check dest type is valid
+      def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ _vldt.validType(to)
       def _meta(c: Cls): Cls  =
         if (b) from.qpathz_(c).foldLeft(c)(_.updateContainee(_, to))
         else   from.qpathz_(c).foldLeft(c)(_.updateType(_, to))
@@ -155,7 +155,7 @@ object ActionsUUTransforms {
 
     // ---------------------------------------------------------------------------
     case class TransformVVx(from: TtqRPathz, to: TypeNode, f: _ff11) extends ActionUUb {
-      def  vldt(c: Cls): Errs = from.vldtAsOrigin(c, SpecialCardiMode.IgnoreAltogether) ++ Nil //TODO: t210202155202 - check dest type is valid
+      def  vldt(c: Cls): Errs = from.vldtAsOrigin(c, SpecialCardiMode.IgnoreAltogether) ++ _vldt.validType(to)
       def _meta(c: Cls): Cls  = from.qpathz_(c).foldLeft(c)(_.transformInfo(_)(_.updateContainee(to.forceNonBObjInfo.containee)))
       def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.wrapx(c, f)))) }
 

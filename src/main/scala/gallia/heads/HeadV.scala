@@ -7,7 +7,8 @@ import actions.ActionsOthers.MapV2V
 class HeadV[T: WTT /* will be Vle (Any) for data phase */] private[gallia] (
       override val nodeId : NodeId,
       override val handler: Handler)
-    extends Head[HeadV[T]] {
+    extends Head[HeadV[T]] 
+    with    HeadVOut[T] {
   private[gallia] type Self = HeadV[T]
 
   override def toString: String = nodeId // TODO

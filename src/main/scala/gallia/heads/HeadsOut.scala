@@ -1,19 +1,24 @@
 package gallia
 package heads
 
-import aptus.UriString
+import aptus.{UriString, Nes, Pes}
 
 import io.out._
 
 // ===========================================================================
 trait HeadOut { self: Head[_] =>
 
-  private[heads] def _meta: Unit =
+  private[heads] def _meta: Cls =
     self.end.runMetaOnly().either match {        
       case Left (errors)  => throw errors.metaErrorOpt.get
-      case Right(success) => () }
+      case Right(success) => success.meta.forceLeafClass }
 
 }
+
+// ===========================================================================
+trait HeadVOut[T] extends HeadOut { self: HeadV[T] =>
+  private[heads] def forceValues [T: WTT]: Nes[T] = end().runv[Nes[T]]().forceData2(_.value)
+  private[heads] def forceValues_[T: WTT]: Pes[T] = end().runv[Pes[T]]().forceData2(_.value) }
 
 // ===========================================================================
 trait HeadUOut extends HeadOut { self: HeadU =>
@@ -32,18 +37,32 @@ trait HeadUOut extends HeadOut { self: HeadU =>
   def write(f: StartWriteUFluency => EndWriteUFluency): HeadU = StartU.pipe(f).conf.actionU.pipe(uo).tap(_._all) // If(_.underlyingDagHasOnlyOutputLeaves /* 210205063004 */) - FIXME: t210122140324
 
   // ---------------------------------------------------------------------------
-  private[gallia] def _metaOnly(): HeadU = StartU.pipe(_.stdout).conf.actionU.pipe(uo).tap(_._meta)
+  def format(f: OtherFluencyU => EndWriteUFluency): String = { val sw = new java.io.StringWriter; write(_.formatString(sw).pipe(f)); sw.toString }
+  
+  // ---------------------------------------------------------------------------
+  private[gallia] def _metaOnly(): HeadU = StartU.pipe(_.stdout).conf.actionU.pipe(uo).tap { x => x._meta; () }
+
+  // ===========================================================================
+  /** will *not* process all the data (assuming input schema does not need to be inferred) */
+  def formatSchema: String = _meta.formatDefault
+  
+  // ---------------------------------------------------------------------------
+  def formatDefault   : String = formatJson
+  def formatString    : String = formatJson
+  
+  def formatJson         : String = formatPrettyJson 
+    def formatCompactJson: String = format(_.compactJson)
+    def formatPrettyJson : String = format(_.prettyJson)
+
+  // ---------------------------------------------------------------------------
+  def formatRow        : String = self.convertToMultiple.formatTable
+  def formatTable      : String = self.convertToMultiple.formatTable
+  def formatPrettyRow  : String = self.convertToMultiple.formatPrettyTable
+  def formatPrettyTable: String = self.convertToMultiple.formatPrettyTable
 
   // ===========================================================================
   /** will *not* process all the data (assuming input schema does not need to be inferred) */
   def printSchema() = { showSchema()._metaOnly() }
-  
-  // ---------------------------------------------------------------------------
-  def formatString: String = formatJson
-
-  def formatJson         : String = { formatPrettyJson }  
-    def formatCompactJson: String = { val sw = new  java.io.StringWriter; write(_.formatString(sw).compactJson); sw.toString }
-    def formatPrettyJson : String = { val sw = new  java.io.StringWriter; write(_.formatString(sw).prettyJson) ; sw.toString }
   
   // ---------------------------------------------------------------------------
   def printDefault   () = { printJson }
@@ -72,10 +91,11 @@ trait HeadUOut extends HeadOut { self: HeadU =>
     printSchema()
     println()
     write(_.stdout.display(forceRow))
+    
     ()
   }
   
-  // ---------------------------------------------------------------------------
+  // ===========================================================================
   def foreach(f: Obj => Unit) { write(_.foreach(f)); () }
 }
 
@@ -97,15 +117,29 @@ trait HeadZOut extends HeadOut { self: HeadZ =>
   def write(f: StartWriteZFluency => EndWriteZFluency): HeadZ = StartZ.pipe(f).conf.actionZ.pipe(zo).tap(_._all) // If(_.underlyingDagHasOnlyOutputLeaves /* 210205063004 */) - FIXME: t210122140324      
   
   // ---------------------------------------------------------------------------
-  private[gallia] def _metaOnly(): HeadZ = StartZ.pipe(_.stdout).conf.actionZ.pipe(zo).tap(_._meta)
+  def format(f: OtherFluencyZ => EndWriteZFluency): String = { val sw = new java.io.StringWriter; write(_.formatString(sw).pipe(f)); sw.toString }
   
+  // ---------------------------------------------------------------------------
+  private[gallia] def _metaOnly(): HeadZ = StartZ.pipe(_.stdout).conf.actionZ.pipe(zo).tap { x => x._meta; () }
+
   // ===========================================================================
-  def formatString: String = formatJsonLines
+  /** will *not* process all the data (assuming input schema does not need to be inferred) */
+  def formatSchema: String = _meta.formatDefault    
+  
+  // ---------------------------------------------------------------------------  
+  def formatString : String = formatJsonLines
+  def formatDefault: String = formatJsonLines
   //TODO: formatLines: Seq[Line]
 
   // ---------------------------------------------------------------------------
-  def formatJsonLines: String = { val sw = new  java.io.StringWriter; write(_.formatString(sw).jsonLines); sw.toString }
-  def formatJsonArray: String = { val sw = new  java.io.StringWriter; write(_.formatString(sw).jsonArray); sw.toString }
+  def formatJsonl      : String = format(_.jsonLines)  
+  def formatJsonLines  : String = format(_.jsonLines)
+  def formatJsonArray  : String = format(_.jsonArray)
+  def formatPrettyJsons: String = format(_.prettyJsons)
+
+  // ---------------------------------------------------------------------------
+  def formatTable      : String = format(_.tsv)
+  def formatPrettyTable: String = format(_.prettyTable)
 
   // ===========================================================================
   /** will *not* process all the data (assuming input schema does not need to be inferred) */
@@ -125,7 +159,7 @@ trait HeadZOut extends HeadOut { self: HeadZ =>
   def printPrettyTable()     = {          write(_.stdout.prettyTable); () }
   def printPrettyTableHead() = { take(10).write(_.stdout.prettyTable); () }
 
-  // ---------------------------------------------------------------------------
+  // ===========================================================================
   def display()                   : Unit = { display(n = 10) }
   def display(n: Int)             : Unit = { display(n     , forceTable = false) }
   def display(forceTable: Boolean): Unit = { display(n = 10, forceTable) }

@@ -65,11 +65,13 @@ trait HeadZSquashing { ignored: HeadZ =>
   def squashUnsafe[D1: WTT](f: Seq[Obj] => D1): HeadV[D1] = zv(SquashZUnsafe(node[D1], f))
 
   // ===========================================================================
-  def typeds [T: WTT](key: KPathW): HeadV[Nes[T]] = zv(GrabZ(TypedTargetQueryUtils.ttqkpath1[       T ](key)))
-  def typeds_[T: WTT](key: KPathW): HeadV[Pes[T]] = zv(GrabZ(TypedTargetQueryUtils.ttqkpath1[Option[T]](key))) // try and read this one out loud
+  private[heads]
+  def typeds [T: WTT](key: KPathW, checkOrigin: Boolean): HeadV[Nes[T]] = zv(GrabZ(TypedTargetQueryUtils.ttqkpath1[       T ](key), checkOrigin))
+  def typeds [T: WTT](key: KPathW)                      : HeadV[Nes[T]] = typeds[T](key, checkOrigin = true)
+  def typeds_[T: WTT](key: KPathW)                      : HeadV[Pes[T]] = zv(GrabZ(TypedTargetQueryUtils.ttqkpath1[Option[T]](key), checkOrigin = true)) // try and read this one out loud
 
-  def forceTypeds [T: WTT](key: KPathW): Nes[T] = typeds (key).end().runv[Nes[T]]().forceData2(_.value)
-  def forceTypeds_[T: WTT](key: KPathW): Pes[T] = typeds_(key).end().runv[Pes[T]]().forceData2(_.value)
+  def forceTypeds [T: WTT](key: KPathW): Nes[T] = typeds (key).forceValues [T]
+  def forceTypeds_[T: WTT](key: KPathW): Pes[T] = typeds_(key).forceValues_[T]
 }
 
 // ===========================================================================

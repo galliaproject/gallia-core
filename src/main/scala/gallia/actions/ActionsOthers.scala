@@ -194,10 +194,11 @@ object ActionsOthers {
     def atoms(ctx: NodeMetaContext): Atoms = _Size.in.seq }
 
   // ---------------------------------------------------------------------------
-  case class GrabZ(from: TtqKPath1 /* does not specify the surrounding Seq */) extends ActionZV {
-    def vldt (in: Seq[Cls]): Errs = from.vldtAsOrigin(in.force.one) //TODO: more
-    def _meta(ignored: Seq[Cls]): Cls = Cls.vles(from.node)
+  case class GrabZ(from: TtqKPath1 /* does not specify the surrounding Seq */, checkOrigin: Boolean /* not for V=Any */) extends ActionZV {
+    def vldt (in: Seq[Cls]): Errs = if (!checkOrigin) Nil     else from.vldtAsOrigin(in.force.one) //TODO: more
+    def _meta(in: Seq[Cls]): Cls  = if (!checkOrigin) in.head else Cls.vles(from.node)
 
+    // ---------------------------------------------------------------------------
     def atoms(ctx: NodeMetaContext): Atoms =
       ctx.afferents.force.one
         .pipe(from.pathPairT)

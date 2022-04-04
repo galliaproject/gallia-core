@@ -3,7 +3,7 @@ package gallia.selection.typed.fluency
 // ===========================================================================
 object TsSelBundles {
 
-  // ===========================================================================
+  // ---------------------------------------------------------------------------
   trait HasSelBasic[Origin, Target] extends
       TsSelBundles.HasSelRequiredBasic[Origin, Target] with
       TsSelBundles.HasSelOptionalBasic[Origin, Target] with
@@ -43,7 +43,9 @@ object TsSelBundles {
       TsSelIndividual.HasSelOneLocalDateTime [Origin, Target] with
       TsSelIndividual.HasSelOneOffsetDateTime[Origin, Target] with
       TsSelIndividual.HasSelOneZonedDateTime [Origin, Target] with
-      TsSelIndividual.HasSelOneInstant       [Origin, Target]
+      TsSelIndividual.HasSelOneInstant       [Origin, Target] with
+      
+      TsSelIndividual.HasSelOneBinary        [Origin, Target]
 
     // ---------------------------------------------------------------------------
     trait HasSelOptBasic[Origin, Target] extends
@@ -65,7 +67,9 @@ object TsSelBundles {
       TsSelIndividual.HasSelOptLocalDateTime [Origin, Target] with
       TsSelIndividual.HasSelOptOffsetDateTime[Origin, Target] with
       TsSelIndividual.HasSelOptZonedDateTime [Origin, Target] with
-      TsSelIndividual.HasSelOptInstant       [Origin, Target]
+      TsSelIndividual.HasSelOptInstant       [Origin, Target] with
+      
+      TsSelIndividual.HasSelOptBinary        [Origin, Target]
 
     // ---------------------------------------------------------------------------
     trait HasSelNesBasic[Origin, Target] extends
@@ -87,7 +91,9 @@ object TsSelBundles {
       TsSelIndividual.HasSelNesLocalDateTime [Origin, Target] with
       TsSelIndividual.HasSelNesOffsetDateTime[Origin, Target] with
       TsSelIndividual.HasSelNesZonedDateTime [Origin, Target] with
-      TsSelIndividual.HasSelNesInstant       [Origin, Target]
+      TsSelIndividual.HasSelNesInstant       [Origin, Target] with
+      
+      TsSelIndividual.HasSelNesBinary        [Origin, Target]
 
     // ---------------------------------------------------------------------------
     trait HasSelPesBasic[Origin, Target] extends
@@ -109,7 +115,9 @@ object TsSelBundles {
       TsSelIndividual.HasSelPesLocalDateTime [Origin, Target] with
       TsSelIndividual.HasSelPesOffsetDateTime[Origin, Target] with
       TsSelIndividual.HasSelPesZonedDateTime [Origin, Target] with
-      TsSelIndividual.HasSelPesInstant       [Origin, Target]
+      TsSelIndividual.HasSelPesInstant       [Origin, Target] with
+      
+      TsSelIndividual.HasSelPesBinary        [Origin, Target]
 
   // ---------------------------------------------------------------------------
   trait HasSelXBasic[Origin, Target] extends
@@ -133,7 +141,9 @@ object TsSelBundles {
     TsSelIndividual.HasSelXLocalDateTime [Origin, Target] with
     TsSelIndividual.HasSelXOffsetDateTime[Origin, Target] with
     TsSelIndividual.HasSelXZonedDateTime [Origin, Target] with
-    TsSelIndividual.HasSelXInstant       [Origin, Target]  
+    TsSelIndividual.HasSelXInstant       [Origin, Target] with
+    
+    TsSelIndividual.HasSelXBinary        [Origin, Target]
     
 }
 

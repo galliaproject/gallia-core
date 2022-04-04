@@ -18,11 +18,10 @@ class ValueWrapper(val underlying: AnyValue) extends AnyVal {
     def asByte : Byte  = asTyped[Byte]
     def asShort: Short = asTyped[Short]
     def asLong : Long  = asTyped[Long]
-
     def asFloat: Float = asTyped[Float]
 
-    def asBigInt       : BigInt     = asTyped[BigInt]
-    def asBigDec       : BigDecimal = asTyped[BigDec]
+    def asBigInt       : BigInt = asTyped[BigInt]
+    def asBigDec       : BigDec = asTyped[BigDec]
 
     def asLocalDate     : LocalDate      = asTyped[LocalDate]
     def asLocalTime     : LocalTime      = asTyped[LocalTime]
@@ -30,6 +29,8 @@ class ValueWrapper(val underlying: AnyValue) extends AnyVal {
     def asOffsetDateTime: OffsetDateTime = asTyped[OffsetDateTime]
     def asZonedDateTime : ZonedDateTime  = asTyped[ZonedDateTime]
     def asInstant       : Instant        = asTyped[Instant]
+    
+    def asBinary        : ByteBuffer     = asTyped[ByteBuffer]
 
     // ---------------------------------------------------------------------------
     def asObj          : Obj     = asTyped[Obj]

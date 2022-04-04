@@ -43,7 +43,9 @@ object TsRepeatedBundles {
       TsRepeatedIndividual.HasRepeatedOneLocalDateTime [$Wrap, $Wrapz] with
       TsRepeatedIndividual.HasRepeatedOneOffsetDateTime[$Wrap, $Wrapz] with
       TsRepeatedIndividual.HasRepeatedOneZonedDateTime [$Wrap, $Wrapz] with
-      TsRepeatedIndividual.HasRepeatedOneInstant       [$Wrap, $Wrapz]
+      TsRepeatedIndividual.HasRepeatedOneInstant       [$Wrap, $Wrapz] with
+      
+      TsRepeatedIndividual.HasRepeatedOneBinary        [$Wrap, $Wrapz]
 
     // ---------------------------------------------------------------------------
     trait HasRepeatedOptBasic[$Wrap, $Wrapz <: Seq[$Wrap]] extends
@@ -66,7 +68,9 @@ object TsRepeatedBundles {
       TsRepeatedIndividual.HasRepeatedOptLocalDateTime [$Wrap, $Wrapz] with
       TsRepeatedIndividual.HasRepeatedOptOffsetDateTime[$Wrap, $Wrapz] with
       TsRepeatedIndividual.HasRepeatedOptZonedDateTime [$Wrap, $Wrapz] with
-      TsRepeatedIndividual.HasRepeatedOptInstant       [$Wrap, $Wrapz]
+      TsRepeatedIndividual.HasRepeatedOptInstant       [$Wrap, $Wrapz] with
+      
+      TsRepeatedIndividual.HasRepeatedOptBinary        [$Wrap, $Wrapz]
 
 
     // ---------------------------------------------------------------------------
@@ -89,7 +93,9 @@ object TsRepeatedBundles {
       TsRepeatedIndividual.HasRepeatedNesLocalDateTime [$Wrap, $Wrapz] with
       TsRepeatedIndividual.HasRepeatedNesOffsetDateTime[$Wrap, $Wrapz] with
       TsRepeatedIndividual.HasRepeatedNesZonedDateTime [$Wrap, $Wrapz] with
-      TsRepeatedIndividual.HasRepeatedNesInstant       [$Wrap, $Wrapz]
+      TsRepeatedIndividual.HasRepeatedNesInstant       [$Wrap, $Wrapz] with
+      
+      TsRepeatedIndividual.HasRepeatedNesBinary        [$Wrap, $Wrapz]
 
     // ---------------------------------------------------------------------------
     trait HasRepeatedPesBasic[$Wrap, $Wrapz <: Seq[$Wrap]] extends
@@ -111,7 +117,9 @@ object TsRepeatedBundles {
       TsRepeatedIndividual.HasRepeatedPesLocalDateTime [$Wrap, $Wrapz] with
       TsRepeatedIndividual.HasRepeatedPesOffsetDateTime[$Wrap, $Wrapz] with
       TsRepeatedIndividual.HasRepeatedPesZonedDateTime [$Wrap, $Wrapz] with
-      TsRepeatedIndividual.HasRepeatedPesInstant       [$Wrap, $Wrapz]
+      TsRepeatedIndividual.HasRepeatedPesInstant       [$Wrap, $Wrapz] with
+      
+      TsRepeatedIndividual.HasRepeatedPesBinary        [$Wrap, $Wrapz]
 
   // ---------------------------------------------------------------------------
   trait HasRepeatedXBasic[$Wrap, $Wrapz <: Seq[$Wrap]] extends
@@ -134,8 +142,10 @@ object TsRepeatedBundles {
     TsRepeatedIndividual.HasRepeatedXLocalTime     [$Wrap, $Wrapz] with
     TsRepeatedIndividual.HasRepeatedXLocalDateTime [$Wrap, $Wrapz] with
     TsRepeatedIndividual.HasRepeatedXOffsetDateTime[$Wrap, $Wrapz] with
-    TsRepeatedIndividual.HasRepeatedXZonedDateTime [$Wrap, $Wrapz] with
-    TsRepeatedIndividual.HasRepeatedXInstant       [$Wrap, $Wrapz]
+    TsRepeatedIndividual.HasRepeatedXZonedDateTime [$Wrap, $Wrapz] with    
+    TsRepeatedIndividual.HasRepeatedXInstant       [$Wrap, $Wrapz] with
+    
+    TsRepeatedIndividual.HasRepeatedXBinary        [$Wrap, $Wrapz]
 
 }
 

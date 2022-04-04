@@ -50,7 +50,9 @@ private[gallia] object TsSingleBundles { //TODO: enum - t210201095414
       TsSingleIndividual.HasSingleOneLocalDateTime [$Wrap] with
       TsSingleIndividual.HasSingleOneOffsetDateTime[$Wrap] with
       TsSingleIndividual.HasSingleOneZonedDateTime [$Wrap] with
-      TsSingleIndividual.HasSingleOneInstant       [$Wrap]
+      TsSingleIndividual.HasSingleOneInstant       [$Wrap] with
+      
+      TsSingleIndividual.HasSingleOneBinary        [$Wrap]
 
     // ---------------------------------------------------------------------------
     trait HasSingleOptBasic[$Wrap] extends
@@ -72,7 +74,9 @@ private[gallia] object TsSingleBundles { //TODO: enum - t210201095414
       TsSingleIndividual.HasSingleOptLocalDateTime [$Wrap] with
       TsSingleIndividual.HasSingleOptOffsetDateTime[$Wrap] with
       TsSingleIndividual.HasSingleOptZonedDateTime [$Wrap] with
-      TsSingleIndividual.HasSingleOptInstant       [$Wrap]
+      TsSingleIndividual.HasSingleOptInstant       [$Wrap] with
+      
+      TsSingleIndividual.HasSingleOptBinary        [$Wrap]
 
 
     // ---------------------------------------------------------------------------
@@ -95,7 +99,9 @@ private[gallia] object TsSingleBundles { //TODO: enum - t210201095414
       TsSingleIndividual.HasSingleNesLocalDateTime [$Wrap] with
       TsSingleIndividual.HasSingleNesOffsetDateTime[$Wrap] with
       TsSingleIndividual.HasSingleNesZonedDateTime [$Wrap] with
-      TsSingleIndividual.HasSingleNesInstant       [$Wrap]
+      TsSingleIndividual.HasSingleNesInstant       [$Wrap] with
+      
+      TsSingleIndividual.HasSingleNesBinary        [$Wrap]
 
     // ---------------------------------------------------------------------------
     trait HasSinglePesBasic[$Wrap] extends
@@ -117,7 +123,9 @@ private[gallia] object TsSingleBundles { //TODO: enum - t210201095414
       TsSingleIndividual.HasSinglePesLocalDateTime [$Wrap] with
       TsSingleIndividual.HasSinglePesOffsetDateTime[$Wrap] with
       TsSingleIndividual.HasSinglePesZonedDateTime [$Wrap] with
-      TsSingleIndividual.HasSinglePesInstant       [$Wrap]
+      TsSingleIndividual.HasSinglePesInstant       [$Wrap] with
+      
+      TsSingleIndividual.HasSinglePesBinary        [$Wrap]
 
   // ---------------------------------------------------------------------------
   trait HasSingleXBasic[$Wrap] extends  
@@ -139,7 +147,9 @@ private[gallia] object TsSingleBundles { //TODO: enum - t210201095414
     TsSingleIndividual.HasSingleXLocalDateTime [$Wrap] with
     TsSingleIndividual.HasSingleXOffsetDateTime[$Wrap] with
     TsSingleIndividual.HasSingleXZonedDateTime [$Wrap] with
-    TsSingleIndividual.HasSingleXInstant       [$Wrap]  
+    TsSingleIndividual.HasSingleXInstant       [$Wrap] with
+    
+    TsSingleIndividual.HasSingleXBinary        [$Wrap]
 }
 
 // ===========================================================================

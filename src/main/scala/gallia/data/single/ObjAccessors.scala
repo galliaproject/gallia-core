@@ -59,10 +59,10 @@ trait ObjAccessors { ignored: Obj => // id210326140514
   def bigInts (key: KPathW): Seq[BigInt] = force(key)      .asSeq.map(_.asBigInt)
   def bigInts_(key: KPathW): Pes[BigInt] = opt  (key).map(_.asSeq.map(_.asBigInt))
 
-  def bigDec  (key: KPathW):     BigDecimal  = force(key)    .asBigDec
-  def bigDec_ (key: KPathW): Opt[BigDecimal] = opt(key).map(_.asBigDec)
-  def bigDecs (key: KPathW): Seq[BigDecimal] = force(key)      .asSeq.map(_.asBigDec)
-  def bigDecs_(key: KPathW): Pes[BigDecimal] = opt  (key).map(_.asSeq.map(_.asBigDec))
+  def bigDec  (key: KPathW):     BigDec  = force(key)    .asBigDec
+  def bigDec_ (key: KPathW): Opt[BigDec] = opt(key).map(_.asBigDec)
+  def bigDecs (key: KPathW): Seq[BigDec] = force(key)      .asSeq.map(_.asBigDec)
+  def bigDecs_(key: KPathW): Pes[BigDec] = opt  (key).map(_.asSeq.map(_.asBigDec))
 
   // ---------------------------------------------------------------------------
   // time: t210202124121 - p3 - need a way to abstract date/dateTime, eg both can have a day added to
@@ -96,6 +96,12 @@ trait ObjAccessors { ignored: Obj => // id210326140514
   def instants (key: KPathW): Seq[Instant] = force(key)      .asSeq.map(_.asInstant)
   def instants_(key: KPathW): Pes[Instant] = opt  (key).map(_.asSeq.map(_.asInstant))
 
+  // ---------------------------------------------------------------------------
+  def binary  (key: KPathW):     ByteBuffer  = force(key)      .asBinary
+  def binary_ (key: KPathW): Opt[ByteBuffer] = opt  (key).map(_.asBinary)
+  def binarys (key: KPathW): Seq[ByteBuffer] = force(key)      .asSeq.map(_.asBinary)
+  def binarys_(key: KPathW): Pes[ByteBuffer] = opt  (key).map(_.asSeq.map(_.asBinary))
+  
   // ===========================================================================
   private def _enm[T <: EnumEntry: WTT](name: String): T  = reflect.CompanionReflection[T](methodName = "withName")(/* args */ name)
 
@@ -107,13 +113,13 @@ trait ObjAccessors { ignored: Obj => // id210326140514
 
   // ---------------------------------------------------------------------------
   def text  (key: KPathW):     String  = force(key).pipe(format)
-  def text_ (key: KPathW): Opt[String] = opt  (key).map(format)
+  def text_ (key: KPathW): Opt[String] = opt  (key).map (format)
   def texts (key: KPathW): Seq[String] = force(key)      .asSeq.map(format)
   def texts_(key: KPathW): Pes[String] = opt  (key).map(_.asSeq.map(format))
 
   @NumberAbstraction
   def nmbr  (key: KPathW):     Double  = force(key).pipe(_nmbr)
-  def nmbr_ (key: KPathW): Opt[Double] = opt  (key).map(_nmbr)
+  def nmbr_ (key: KPathW): Opt[Double] = opt  (key).map (_nmbr)
   def nmbrs (key: KPathW): Seq[Double] = force(key)      .asSeq.map(_nmbr)
   def nmbrs_(key: KPathW): Pes[Double] = opt  (key).map(_.asSeq.map(_nmbr))
 

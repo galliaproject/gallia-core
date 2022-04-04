@@ -54,8 +54,10 @@ object TsSelIndividual {
   trait HasSelOneOffsetDateTime[A, Ignored] { def offsetDateTime(sel: A => Any) = new One_[OffsetDateTime](sel(allSelections[A])) }
   trait HasSelOneZonedDateTime [A, Ignored] { def zonedDateTime (sel: A => Any) = new One_[ZonedDateTime] (sel(allSelections[A])) }
   trait HasSelOneInstant       [A, Ignored] { def instant       (sel: A => Any) = new One_[Instant]       (sel(allSelections[A])) }
+  
+  trait HasSelOneBinary        [A, Ignored] { def binary        (sel: A => Any) = new One_[ByteBuffer]    (sel(allSelections[A])) }
 
-  // ---------------------------------------------------------------------------
+  // ===========================================================================
   trait HasSelOptString [A, Ignored] { def string_ (sel: A => Any) = new Opt_[String ](sel(allSelections[A])) }
   trait HasSelOptInt    [A, Ignored] { def int_    (sel: A => Any) = new Opt_[Int    ](sel(allSelections[A])) }
   trait HasSelOptDouble [A, Ignored] { def double_ (sel: A => Any) = new Opt_[Double ](sel(allSelections[A])) }
@@ -76,7 +78,9 @@ object TsSelIndividual {
   trait HasSelOptZonedDateTime [A, Ignored] { def zonedDateTime_ (sel: A => Any) = new Opt_[ZonedDateTime] (sel(allSelections[A])) }
   trait HasSelOptInstant       [A, Ignored] { def instant_       (sel: A => Any) = new Opt_[Instant]       (sel(allSelections[A])) }
   
-  // ---------------------------------------------------------------------------
+  trait HasSelOptBinary        [A, Ignored] { def binary_        (sel: A => Any) = new Opt_[ByteBuffer]    (sel(allSelections[A])) }
+  
+  // ===========================================================================
   trait HasSelNesString [A, Ignored] { def strings (sel: A => Any) = new Nes_[String ](sel(allSelections[A])) }
   trait HasSelNesInt    [A, Ignored] { def ints    (sel: A => Any) = new Nes_[Int    ](sel(allSelections[A])) }
   trait HasSelNesDouble [A, Ignored] { def doubles (sel: A => Any) = new Nes_[Double ](sel(allSelections[A])) }
@@ -97,7 +101,9 @@ object TsSelIndividual {
   trait HasSelNesZonedDateTime [A, Ignored] { def zonedDateTimes (sel: A => Any) = new Nes_[ZonedDateTime] (sel(allSelections[A])) }
   trait HasSelNesInstant       [A, Ignored] { def instants       (sel: A => Any) = new Nes_[Instant]       (sel(allSelections[A])) }
   
-  // ---------------------------------------------------------------------------
+  trait HasSelNesBinary        [A, Ignored] { def binarys        (sel: A => Any) = new Nes_[ByteBuffer]    (sel(allSelections[A])) }
+  
+  // ===========================================================================
   trait HasSelPesString [A, Ignored] { def strings_ (sel: A => Any) = new Pes_[String ](sel(allSelections[A])) }
   trait HasSelPesInt    [A, Ignored] { def ints_    (sel: A => Any) = new Pes_[Int    ](sel(allSelections[A])) }
   trait HasSelPesDouble [A, Ignored] { def doubles_ (sel: A => Any) = new Pes_[Double ](sel(allSelections[A])) }
@@ -117,8 +123,10 @@ object TsSelIndividual {
   trait HasSelPesOffsetDateTime[A, Ignored] { def offsetDateTimes_(sel: A => Any) = new Pes_[OffsetDateTime](sel(allSelections[A])) }
   trait HasSelPesZonedDateTime [A, Ignored] { def zonedDateTimes_ (sel: A => Any) = new Pes_[ZonedDateTime] (sel(allSelections[A])) }
   trait HasSelPesInstant       [A, Ignored] { def instants_       (sel: A => Any) = new Pes_[Instant]       (sel(allSelections[A])) }
+  
+  trait HasSelPesBinary        [A, Ignored] { def binarys_        (sel: A => Any) = new Pes_[ByteBuffer]    (sel(allSelections[A])) }
 
-  // ---------------------------------------------------------------------------
+  // ===========================================================================
   trait HasSelXString [A, Ignored] { def stringx (sel: A => Any) = new One_[String ](sel(allSelections[A]), ignoreContainer = true) }
   trait HasSelXInt    [A, Ignored] { def intx    (sel: A => Any) = new One_[Int    ](sel(allSelections[A]), ignoreContainer = true) }
   trait HasSelXDouble [A, Ignored] { def doublex (sel: A => Any) = new One_[Double ](sel(allSelections[A]), ignoreContainer = true) }
@@ -138,6 +146,8 @@ object TsSelIndividual {
   trait HasSelXOffsetDateTime[A, Ignored] { def offsetDateTimex(sel: A => Any) = new One_[OffsetDateTime](sel(allSelections[A]), ignoreContainer = true) }
   trait HasSelXZonedDateTime [A, Ignored] { def zonedDateTimex (sel: A => Any) = new One_[ZonedDateTime] (sel(allSelections[A]), ignoreContainer = true) }
   trait HasSelXInstant       [A, Ignored] { def instantx       (sel: A => Any) = new One_[Instant]       (sel(allSelections[A]), ignoreContainer = true) }
+  
+  trait HasSelXBinary        [A, Ignored] { def binaryx        (sel: A => Any) = new One_[ByteBuffer]    (sel(allSelections[A]), ignoreContainer = true) }
 }
 
 // ===========================================================================

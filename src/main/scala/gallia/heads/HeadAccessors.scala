@@ -90,6 +90,12 @@ private[gallia] trait HeadUAccessors { ignored: HeadU =>
   def instants   (key: KPathW): HeadV[Nes[Instant]] = typeds [Instant](key)
   def instants_  (key: KPathW): HeadV[Pes[Instant]] = typeds_[Instant](key)
 
+  // ---------------------------------------------------------------------------
+  def binary    (key: KPathW): HeadV[One[ByteBuffer]] = typed  [ByteBuffer](key)
+  def binary_   (key: KPathW): HeadV[Opt[ByteBuffer]] = typed_ [ByteBuffer](key)
+  def binarys   (key: KPathW): HeadV[Nes[ByteBuffer]] = typeds [ByteBuffer](key)
+  def binarys_  (key: KPathW): HeadV[Pes[ByteBuffer]] = typeds_[ByteBuffer](key)
+  
   // ===========================================================================
   def forceString  (key: KPathW): One[String] = forceTyped  [String](key)
   def forceString_ (key: KPathW): Opt[String] = forceTyped_ [String](key)
@@ -173,6 +179,12 @@ private[gallia] trait HeadUAccessors { ignored: HeadU =>
   def forceInstant_ (key: KPathW): Opt[Instant] = forceTyped_ [Instant](key)
   def forceInstants (key: KPathW): Nes[Instant] = forceTypeds [Instant](key)
   def forceInstants_(key: KPathW): Pes[Instant] = forceTypeds_[Instant](key)
+
+  // ---------------------------------------------------------------------------
+  def forceBinary  (key: KPathW): One[ByteBuffer] = forceTyped  [ByteBuffer](key)
+  def forceBinary_ (key: KPathW): Opt[ByteBuffer] = forceTyped_ [ByteBuffer](key)
+  def forceBinarys (key: KPathW): Nes[ByteBuffer] = forceTypeds [ByteBuffer](key)
+  def forceBinarys_(key: KPathW): Pes[ByteBuffer] = forceTypeds_[ByteBuffer](key)
   
   // ---------------------------------------------------------------------------
   //TODO: enum - t210201095414
@@ -181,7 +193,9 @@ private[gallia] trait HeadUAccessors { ignored: HeadU =>
 // ===========================================================================
 @TypeMatching
 private[gallia] trait HeadZAccessors { ignored: HeadZ => // TODO: t210202101142 - keep "accessor"?
+  def forceAnys(key: KPathW): Nes[Any] = typeds(key, checkOrigin = false).forceValues[Any]
 
+  // ===========================================================================
   def strings   (key: KPathW): HeadV[Nes[String]] = typeds [String](key)
   def strings_  (key: KPathW): HeadV[Pes[String]] = typeds_[String](key)
 
@@ -233,6 +247,10 @@ private[gallia] trait HeadZAccessors { ignored: HeadZ => // TODO: t210202101142 
   def instants    (key: KPathW): HeadV[Nes[Instant]] = typeds [Instant](key)
   def instants_   (key: KPathW): HeadV[Pes[Instant]] = typeds_[Instant](key)
   
+  // ---------------------------------------------------------------------------
+  def binarys    (key: KPathW): HeadV[Nes[ByteBuffer]] = typeds [ByteBuffer](key)
+  def binarys_   (key: KPathW): HeadV[Pes[ByteBuffer]] = typeds_[ByteBuffer](key)
+
   // ---------------------------------------------------------------------------
   //TODO: enum - t210201095414
 
@@ -289,7 +307,11 @@ private[gallia] trait HeadZAccessors { ignored: HeadZ => // TODO: t210202101142 
   def forceInstants_(key: KPathW): Pes[Instant] = forceTypeds_[Instant](key)
 
   // ---------------------------------------------------------------------------
-  //TODO: enum - t210201095414
+  def forceBinarys (key: KPathW): Nes[ByteBuffer] = forceTypeds [ByteBuffer](key)
+  def forceBinarys_(key: KPathW): Pes[ByteBuffer] = forceTypeds_[ByteBuffer](key)
+
+  // ---------------------------------------------------------------------------
+  //TODO: enum - t210201095414   
 }
 
 // ===========================================================================

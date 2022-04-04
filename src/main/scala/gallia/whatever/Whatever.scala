@@ -52,7 +52,9 @@ class Whatever(private[gallia] val any: Any) extends AnyVal with Serializable { 
     def == (that: ZonedDateTime) : TypedWhatever[Boolean] = any.zonedDateTime  == that
     def == (that: Instant)       : TypedWhatever[Boolean] = any.instant        == that
     
-    // ---------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------    
+    def == (that: ByteBuffer)    : TypedWhatever[Boolean] = any.binary         == that
+    
     // TODO: enums - t210201095414
 
   // ===========================================================================
@@ -193,8 +195,8 @@ object Whatever {
     // note: no support for byte/short/float (see 220318114510 whatever.md@docs)  
 
       // ---------------------------------------------------------------------------   
-      implicit def _toBigInt    (value: Whatever): BigInt     = value.any.bigInt 
-      implicit def _toBigDec    (value: Whatever): BigDecimal = value.any.bigDec
+      implicit def _toBigInt    (value: Whatever): BigInt = value.any.bigInt 
+      implicit def _toBigDec    (value: Whatever): BigDec = value.any.bigDec
       
       // ---------------------------------------------------------------------------
       implicit def _toLocalDate     (value: Whatever): LocalDate      = value.any.localDate

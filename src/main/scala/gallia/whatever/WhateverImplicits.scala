@@ -31,10 +31,13 @@ object WhateverImplicits {
     def instant        = u match { case x: Instant        => x; case _ => dataError(error(u, "210113130906", classOf[LocalDateTime])) }
 
     // ---------------------------------------------------------------------------
+    def binary         = u match { case x: ByteBuffer     => x; case _ => dataError(error(u, "210113130907", classOf[ByteBuffer])) }
+    
+    // ---------------------------------------------------------------------------
     // TODO: enum - t210201095414
   }
 
-  // ---------------------------------------------------------------------------
+  // ===========================================================================
   private def error(value: Any, id: String, klass: Class[_]) = s"TODO:expected ${klass}:${id}:${value}:${value.getClass}:${value}"  
 }
 

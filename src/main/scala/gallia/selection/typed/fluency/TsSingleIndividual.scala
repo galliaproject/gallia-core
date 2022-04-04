@@ -34,6 +34,8 @@ object TsSingleIndividual { //TODO: enum - t210201095414
   trait HasSingleOneOffsetDateTime[$Wrap] { def offsetDateTime(target: $Wrap) = new One_[OffsetDateTime](target) }
   trait HasSingleOneZonedDateTime [$Wrap] { def zonedDateTime (target: $Wrap) = new One_[ZonedDateTime] (target) }
   trait HasSingleOneInstant       [$Wrap] { def instant       (target: $Wrap) = new One_[Instant]       (target) }
+  
+  trait HasSingleOneBinary        [$Wrap] { def binary        (target: $Wrap) = new One_[ByteBuffer]    (target) }
 
   // ---------------------------------------------------------------------------
   trait HasSingleOptString [$Wrap] { def string_ (target: $Wrap) = new Opt_[String ](target) }
@@ -55,6 +57,8 @@ object TsSingleIndividual { //TODO: enum - t210201095414
   trait HasSingleOptOffsetDateTime[$Wrap] { def offsetDateTime_(target: $Wrap) = new Opt_[OffsetDateTime](target) }
   trait HasSingleOptZonedDateTime [$Wrap] { def zonedDateTime_ (target: $Wrap) = new Opt_[ZonedDateTime] (target) }
   trait HasSingleOptInstant       [$Wrap] { def instant_       (target: $Wrap) = new Opt_[Instant]       (target) }
+  
+  trait HasSingleOptBinary        [$Wrap] { def binary_        (target: $Wrap) = new Opt_[ByteBuffer]    (target) }
     
   // ---------------------------------------------------------------------------
   trait HasSingleNesString [$Wrap] { def strings (target: $Wrap) = new Nes_[String ](target) }
@@ -67,8 +71,8 @@ object TsSingleIndividual { //TODO: enum - t210201095414
   trait HasSingleNesLong [$Wrap] { def longs (target: $Wrap) = new Nes_[Long ](target) }
   trait HasSingleNesFloat[$Wrap] { def floats(target: $Wrap) = new Nes_[Float](target) }
 
-  trait HasSingleNesBigInt[$Wrap] { def bigIntegers(target: $Wrap) = new Nes_[BigInt]    (target) }
-  trait HasSingleNesBigDec[$Wrap] { def bigDecimals(target: $Wrap) = new Nes_[BigDec](target) }
+  trait HasSingleNesBigInt[$Wrap] { def bigInts(target: $Wrap) = new Nes_[BigInt]    (target) }
+  trait HasSingleNesBigDec[$Wrap] { def bigDecs(target: $Wrap) = new Nes_[BigDec](target) }
 
   trait HasSingleNesLocalDate     [$Wrap] { def localDates     (target: $Wrap) = new Nes_[LocalDate]     (target) }
   trait HasSingleNesLocalTime     [$Wrap] { def localTimes     (target: $Wrap) = new Nes_[LocalTime]     (target) }
@@ -76,6 +80,8 @@ object TsSingleIndividual { //TODO: enum - t210201095414
   trait HasSingleNesOffsetDateTime[$Wrap] { def offsetDateTimes(target: $Wrap) = new Nes_[OffsetDateTime](target) }
   trait HasSingleNesZonedDateTime [$Wrap] { def zonedDateTimes (target: $Wrap) = new Nes_[ZonedDateTime] (target) }
   trait HasSingleNesInstant       [$Wrap] { def instants       (target: $Wrap) = new Nes_[Instant]       (target) }
+  
+  trait HasSingleNesBinary        [$Wrap] { def binarys        (target: $Wrap) = new Nes_[ByteBuffer]    (target) }
     
   // ---------------------------------------------------------------------------
   trait HasSinglePesString [$Wrap] { def strings_ (target: $Wrap) = new Pes_[String ](target) }
@@ -97,6 +103,8 @@ object TsSingleIndividual { //TODO: enum - t210201095414
   trait HasSinglePesOffsetDateTime[$Wrap] { def offsetDateTimes_(target: $Wrap) = new Pes_[OffsetDateTime](target) }
   trait HasSinglePesZonedDateTime [$Wrap] { def zonedDateTimes_ (target: $Wrap) = new Pes_[ZonedDateTime] (target) }
   trait HasSinglePesInstant       [$Wrap] { def instants_       (target: $Wrap) = new Pes_[Instant]       (target) }
+  
+  trait HasSinglePesBinary        [$Wrap] { def binarys_        (target: $Wrap) = new Pes_[ByteBuffer]    (target) }
 
   // ===========================================================================
   trait HasSingleXString [$Wrap] { def stringx (target: $Wrap ) = new One_[String ](target, ignoreContainer = true) }
@@ -118,6 +126,8 @@ object TsSingleIndividual { //TODO: enum - t210201095414
   trait HasSingleXOffsetDateTime[$Wrap] { def offsetDateTimex(target: $Wrap ) = new One_[OffsetDateTime](target, ignoreContainer = true) }
   trait HasSingleXZonedDateTime [$Wrap] { def zonedDateTimex (target: $Wrap ) = new One_[ZonedDateTime] (target, ignoreContainer = true) }
   trait HasSingleXInstant       [$Wrap] { def instantx       (target: $Wrap ) = new One_[Instant]       (target, ignoreContainer = true) }
+  
+  trait HasSingleXBinary        [$Wrap] { def binaryx        (target: $Wrap ) = new One_[ByteBuffer]    (target, ignoreContainer = true) }
 }
 
 // ===========================================================================

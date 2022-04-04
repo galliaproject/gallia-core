@@ -1,7 +1,7 @@
 package gallia
 package heads.reducing
 
-import aptus.{Anything_, Seq_}
+import aptus.Anything_
 
 import meta._
 
@@ -26,7 +26,7 @@ private[reducing] object ReducingStats { // 210118083814
           _.add(_present  .int) }
 
     // ---------------------------------------------------------------------------
-    def nums[T: WTT](optional: Boolean): Cls =
+    def nums[T : WTT : Numeric](optional: Boolean): Cls =
       counts(optional)
           .merge(
         cls(
@@ -51,25 +51,22 @@ private[reducing] object ReducingStats { // 210118083814
   // ===========================================================================
   object Data {
 
-    def ints(optional: Boolean)(values: Values): Obj =
-        counts(optional)(values)
-      .merge(
-        nums(optional)(ReducingTypeUtils._flattenedInts(values)))
+    def ints   (optional: Boolean)(values: Values): Obj = counts(optional)(values).merge(nums(optional)(ReducingTypeUtils._flattenedInts   (values)))
+    def doubles(optional: Boolean)(values: Values): Obj = counts(optional)(values).merge(nums(optional)(ReducingTypeUtils._flattenedDoubles(values)))
+    
+    def bytes  (optional: Boolean)(values: Values): Obj = counts(optional)(values).merge(nums(optional)(ReducingTypeUtils._flattenedBytes  (values)))
+    def shorts (optional: Boolean)(values: Values): Obj = counts(optional)(values).merge(nums(optional)(ReducingTypeUtils._flattenedShorts (values)))
+    def longs  (optional: Boolean)(values: Values): Obj = counts(optional)(values).merge(nums(optional)(ReducingTypeUtils._flattenedLongs  (values)))
+    def floats (optional: Boolean)(values: Values): Obj = counts(optional)(values).merge(nums(optional)(ReducingTypeUtils._flattenedFloats (values)))
+        
+    def bigInts(optional: Boolean)(values: Values): Obj = counts(optional)(values).merge(nums(optional)(ReducingTypeUtils._flattenedBigInts(values)))
+    def bigDecs(optional: Boolean)(values: Values): Obj = counts(optional)(values).merge(nums(optional)(ReducingTypeUtils._flattenedBigDecs(values)))
 
     // ---------------------------------------------------------------------------
-    def doubles(optional: Boolean)(values: Values): Obj =
-        counts(optional)(values)
-      .merge(
-        nums(optional)(ReducingTypeUtils._flattenedDoubles(values)))
+    def strings(optional: Boolean)(values: Values): Obj = counts(optional)(values).merge(obj(_values -> __strings(ReducingTypeUtils._strings(values))))
 
-    // ---------------------------------------------------------------------------
-    def strings(optional: Boolean)(values: Values): Obj =
-          counts(optional)(values)
-        .merge(
-          obj(_values -> __strings(ReducingTypeUtils._strings(values))))
-
-      // ---------------------------------------------------------------------------
-      private def __strings(values: List[Option[String]]): Seq[Obj] =
+    // ===========================================================================
+    private def __strings(values: List[Option[String]]): Seq[Obj] =
         values
           .groupBy(identity)
           .mapValues(_.size)
@@ -90,16 +87,34 @@ private[reducing] object ReducingStats { // 210118083814
 
     // ---------------------------------------------------------------------------
     // TODO: t210118084355 - _skewness, kurtosis (opt?) + mode, IQR + more percentiles + MAD/mean absolute deviation, trimmed
-    private def nums[A: Numeric](optional: Boolean)(nums: List[A]): Obj =
-      obj(
-        _mean   -> nums.mean,
-        _stdev  -> nums.stdev,
+    private def nums[A: Numeric](optional: Boolean)(nums: List[A]): Obj = {
+      if (nums.size == 1) { // not handled well by DescriptiveStatistics
+        val sole = nums.head
+    
+        obj(
+          _mean   -> sole,
+          _stdev  -> 0.0,
+    
+          _min    -> sole,
+          _max    -> sole,
+    
+          _median -> sole)    
+      } else {
+        val num = implicitly[Numeric[A]]                      
+        val ds =
+          new org.apache.commons.math3.stat.descriptive.DescriptiveStatistics(
+            nums.map(num.toDouble).toArray)
 
-        _min    -> nums.min,
-        _max    -> nums.max,
-
-        _median -> nums.median)
-
+        obj(
+          _mean   -> ds.getMean,
+          _stdev  -> ds.getStandardDeviation, // note: returns sample's, ie bias-corrected, TODO: t220330150326- consider squaring(getPopulationVariance) instead? 
+    
+          _min    -> ds.getMin,
+          _max    -> ds.getMax,
+    
+          _median -> ds.getPercentile(50))
+      }
+    }
   }
 }
 

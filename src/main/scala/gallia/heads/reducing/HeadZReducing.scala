@@ -41,7 +41,7 @@ trait HeadZReducing { ignored: HeadZ =>
     def reduceWithStats(sel: Selection)         : HeadU = reduce(sel          ).wit(_.stats)
 
     // ---------------------------------------------------------------------------
-    def stats = reduceWithStats(_.allKeys)
+    def statsOnAllKeys = reduceWithStats(_.allKeys)
 
   // ===========================================================================
   def reduce(pairs:     ReducingPairs): HeadU = zu(Reduce(pairs))

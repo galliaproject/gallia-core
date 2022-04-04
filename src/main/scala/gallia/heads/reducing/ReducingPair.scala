@@ -36,7 +36,7 @@ trait ReducingPair {
 
         // ---------------------------------------------------------------------------
         /** note: flattens None (must pre-process if need to account for them */
-        def grouping: ReducingPair1 = ReducingType.grouping.pair(_key)
+        def values: ReducingPair1 = ReducingType.values.pair(_key)
 
         def count_all                : ReducingPair1 = ReducingType.count_all             .pair(_key)
           def count_present          : ReducingPair1 = ReducingType.count_present         .pair(_key)
@@ -49,6 +49,8 @@ trait ReducingPair {
         def mean  : ReducingPair1 = ReducingType.mean  .pair(_key)
         def stdev : ReducingPair1 = ReducingType.stdev .pair(_key)
         def median: ReducingPair1 = ReducingType.median.pair(_key)
+
+        def stats: ReducingPair1  = ReducingType.stats .pair(_key)
       }
 
     }

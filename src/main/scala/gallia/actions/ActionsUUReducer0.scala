@@ -18,8 +18,10 @@ import atoms.AtomsUUReducer0._
     // ---------------------------------------------------------------------------
     @deprecated("use reducer rather") case class ToSum(targets: TqRPathz) extends ActionUUc with TodoV1 { def hack(c: Cls) = targets.resolve(c).from1KFX
       def _meta(c: Cls): Cls  =
-        if (c.isInt(hack(c))) c.toOneInt   (hack(c))
-        else                  c.toOneDouble(hack(c))
+        hack(c).pipe(c.field).info.forceNumericalType match {
+          case BasicType._Int    => c.toOneInt   (hack(c))
+          case BasicType._Double => c.toOneDouble(hack(c))
+          case _ => ??? /* TODO: though scheduled for removal */ }
 
       def atomuu(c: Cls): AtomUU =
         if (c.isInt(hack(c))) _ToIntSum   (hack(c))

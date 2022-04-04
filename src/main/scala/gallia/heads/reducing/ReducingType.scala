@@ -3,13 +3,11 @@ package heads.reducing
 
 import aptus.{String_, Seq_}
 
-import enumeratum.{Enum, EnumEntry}
-
 import meta._
 import reflect.Container
 
 // ===========================================================================
-sealed trait ReducingType extends EnumEntry {
+sealed trait ReducingType { // don't make enum (else can't use `values`)
     def pair(u: Key) = ReducingPair1(u, this)
 
     // ---------------------------------------------------------------------------
@@ -32,10 +30,8 @@ sealed trait ReducingType extends EnumEntry {
   }
 
   // ===========================================================================
-  object ReducingType extends Enum[ReducingType] {
-    val values = findValues
+  object ReducingType { // don't make enum (else can't use `values`)
 
-    // ---------------------------------------------------------------------------
     protected sealed trait Base[T] extends ReducingType {
         final def data(ignored1: Boolean, ignored2: Option[NumericalType]) = data
         def data: Values => T
@@ -56,17 +52,17 @@ sealed trait ReducingType extends EnumEntry {
             val returnType: ReduceReturnType,
 
             // ---------------------------------------------------------------------------
-            val ints       : List[Int   ]     => Any,          
-            val doubles    : List[Double]     => Any,
+            val ints       : List[Int   ] => Any,          
+            val doubles    : List[Double] => Any,
                         
-            val bytes      : List[Byte]       => Any,
-            val shorts     : List[Short]      => Any,
-            val longs      : List[Long]       => Any,
+            val bytes      : List[Byte]   => Any,
+            val shorts     : List[Short]  => Any,
+            val longs      : List[Long]   => Any,
             
-            val floats     : List[Float]      => Any,
+            val floats     : List[Float]  => Any,
                         
-            val bigInts    : List[BigInt]     => Any,
-            val bigDecimals: List[BigDecimal] => Any)
+            val bigInts    : List[BigInt] => Any,
+            val bigDecimals: List[BigDec] => Any)
           extends ReducingType {
         def data(ignored: Boolean, numTypeOpt: Option[NumericalType]): Values => Any =
           ReducingTypeUtils.baseData(ignored, numTypeOpt)(
@@ -95,11 +91,12 @@ sealed trait ReducingType extends EnumEntry {
     case object count_distinct_present extends CountLikeType { def data = countDistinctPresent _ }
 
     // ---------------------------------------------------------------------------
-    case object mean   extends RealAgg(_mean  ) { def data = ReducingTypeUtils._flattenedDoubles(_).mean  }
-    case object stdev  extends RealAgg(_stdev ) { def data = ReducingTypeUtils._flattenedDoubles(_).stdev }
+    // FIXME: t220330111011 - bignums...
+    case object mean   extends RealAgg(_mean  ) { def data = ReducingTypeUtils._flattenedAsDoubles(_).mean  }
+    case object stdev  extends RealAgg(_stdev ) { def data = ReducingTypeUtils._flattenedAsDoubles(_).stdev }
     //TODO: variance?
 
-    case object median extends RealAgg(_median) { def data = ReducingTypeUtils._flattenedDoubles(_).median } //TODO: t201207134039 - median floor/ceiling for ints (or left/right?)
+    case object median extends RealAgg(_median) { def data = ReducingTypeUtils._flattenedAsDoubles(_).median } //TODO: t201207134039 - median floor/ceiling for ints (or left/right?)
     // TODO: percentile(n), quantile
 
     // ===========================================================================
@@ -124,7 +121,7 @@ sealed trait ReducingType extends EnumEntry {
     }
 
     // ===========================================================================
-    case object grouping /* = no aggregation (just flattening) */ extends ReducingType {
+    case object values /* = no aggregation (just flattening) */ extends ReducingType {
       val defaultKey = _values
       override protected def container = Container._Nes
       def returnType = ReduceReturnType.unchanged

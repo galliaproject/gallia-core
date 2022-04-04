@@ -3,20 +3,12 @@ package heads.grouping
 
 import target._
 import actions.ActionsZZAggregating._
-import actions.ActionsZZStats0.Stats0
 import heads.reducing.{ReducingPair, ReducingPair1, ReducingPairs, CountLikeType}
 
 // ===========================================================================
 trait HeadZAggregations { self: HeadZ =>
     // TODO: t201019161520 - optimization: specialized version of sumby/countby/... rather than combos
     // TODO: t201208115422 - more, eg x.aggregateEach('f1, 'f2).wit(_.aggregates(_.sum, _.count)).by('g)
-
-    // ===========================================================================
-    @deprecated("see 210118083814 for new version") def stats(groupee: RenW) = new { //TODO: has as?
-        private def _by(groupers: RenWz): HeadZ = zz(Stats0(groupee.value, groupers.renz, asOpt = None))
-          def by(key : RenW)                         : HeadZ = _by(RenWz.from(key))
-          def by(key1: RenW, key2: RenW, more: RenW*): HeadZ = _by(key1, key2, more)
-          def by(keys: RenWz)                        : HeadZ = _by(keys) }
 
     // ===========================================================================
     // aggregate 1
@@ -34,6 +26,10 @@ trait HeadZAggregations { self: HeadZ =>
             def wit(rtipe: ReducingType)                 : __Aggregate1 = new __Aggregate1(groupee, rtipe) }
 
       // ---------------------------------------------------------------------------
+      def stats(groupee: RenW)             : __Aggregate1 = aggregate(groupee).wit(_.stats)
+      def stats(groupee: Groupee1Selection): __Aggregate1 = aggregate(groupee).wit(_.stats)
+      
+      // ===========================================================================
       def count(groupee: RenW)             : __Aggregate1 = aggregate(groupee).wit(_.count_all)
       def count(groupee: Groupee1Selection): __Aggregate1 = aggregate(groupee).wit(_.count_all)
 
@@ -157,6 +153,21 @@ trait HeadZAggregations { self: HeadZ =>
       def medianAllBy(groupers: GroupersSelection)                : Self with HasAs = ??? // TODO
       def medianAllBy(groupers: RenWz)                            : Self with HasAs = _otherAllBy(ReducingType.median)(groupers)
       def medianAllBy(grouper1: RenW, grouper2: RenW, more: RenW*): Self with HasAs = medianAllBy(grouper1, grouper2, more:_*)      
+     
+    // ===========================================================================
+    def aggregateBy(key : GroupersSelection): _AggregateBy = new _AggregateBy(key)
+    def aggregateBy(keys: RenWz)            : _AggregateBy = aggregateBy(_.explicit(keys))
+    def aggregateBy(key1: RenW, more: RenW*): _AggregateBy = aggregateBy(_.explicitFX(key1, more))
+
+      // ---------------------------------------------------------------------------
+      class _AggregateBy private[HeadZAggregations] (key : GroupersSelection) {
+        def using(pair1: ReducingPair, more: ReducingPair*): HeadS =
+          self
+            .groupBy(key)
+            .transformGroupObjectsUsing { 
+              _.reduce(pair1, more:_*) }
+      	    .unnestAllFromGroup }
+
 }
 
 // ===========================================================================

@@ -5,6 +5,7 @@ import target._
 import FunctionWrappers.{_pp11, _pp21, _pp31}
 import atoms.AtomsZZFiltering._
 import gallia.FunctionWrappers._pp21
+import gallia.Whatever._
 
 // ===========================================================================
 object ActionsZZFiltering {
@@ -69,31 +70,31 @@ object ActionsZZFiltering {
     }
 
     // ===========================================================================
-    case class FilterByWV[T](target: TqKPath, pred: WV => Boolean, asFind: Boolean)
+    case class FilterByWV(target: TqKPath, pred: WV => Boolean, asFind: Boolean)
       extends ActionZZc with IdentityM1 with HasAsFind {
         def vldt  (c: Cls): Errs   = target.vldtAsOrigin(c)
         def atomzz(c: Cls): AtomZZ = target.pathPairT(c).pipe(_FilterBy1(_, wrap, max))
 
         // ---------------------------------------------------------------------------
-        private def wrap: _pp11 = (x: Any) => pred(new WV(x)) }
+        private def wrap: _pp11 = (x: Any) => whateverOpt(x).map(pred).getOrElse(false) }
 
       // ===========================================================================
-      case class FilterByWV2[T](target: TqKPath2, pred: (WV, WV) => Boolean, asFind: Boolean)
+      case class FilterByWV2(target: TqKPath2, pred: (WV, WV) => Boolean, asFind: Boolean)
         extends ActionZZc with IdentityM1 with HasAsFind {
           def vldt  (c: Cls): Errs   = target.vldtAsOrigin(c)
           def atomzz(c: Cls): AtomZZ = target.pathPairT(c).pipe(_FilterBy2(_, wrap, max))
   
           // ---------------------------------------------------------------------------
-          private def wrap: _pp21 = (x: Any, y: Any) => pred(new WV(x), new WV(y)) }
+          private def wrap: _pp21 = (x: Any, y: Any) => whatever2Opt(x, y).map(x => pred(x._1, x._2)).getOrElse(false) }
 
       // ===========================================================================
-      case class FilterByWV3[T](target: TqKPath3, pred: (WV, WV, WV) => Boolean, asFind: Boolean)
+      case class FilterByWV3(target: TqKPath3, pred: (WV, WV, WV) => Boolean, asFind: Boolean)
         extends ActionZZc with IdentityM1 with HasAsFind {
           def vldt  (c: Cls): Errs   = target.vldtAsOrigin(c)
           def atomzz(c: Cls): AtomZZ = target.pathPairT(c).pipe(_FilterBy3(_, wrap, max))
   
           // ---------------------------------------------------------------------------
-          private def wrap: _pp31 = (x: Any, y: Any, z: Any) => pred(new WV(x), new WV(y), new WV(z)) }    
+          private def wrap: _pp31 = (x: Any, y: Any, z: Any) => whatever3Opt(x, y, z).map(x => pred(x._1, x._2, x._3)).getOrElse(false) }    
 
 }
 

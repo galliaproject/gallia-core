@@ -1,6 +1,7 @@
 package gallia
 package whatever
 
+import aptus._
 import vldt._Error.Runtime.WhateverOperationForbidden
 
 // ===========================================================================
@@ -184,6 +185,25 @@ object Whatever {
   // ---------------------------------------------------------------------------
   private[gallia] def formatDefault(value: Any): String = WhateverUtils.formatDefault(value)
   private[gallia] def size         (value: Any): Int    = WhateverUtils.size(value)
+
+  // ---------------------------------------------------------------------------
+  private[gallia] def whateverOpt(value: Any): Option[Whatever] =          
+      value match {
+        case None    => None
+        case Some(x) => Some(new Whatever(x))
+        case      x  => Some(new Whatever(x)) }       
+
+    // ---------------------------------------------------------------------------  
+    private[gallia] def whatever2Opt(x: Any, y: Any): Option[(Whatever, Whatever)] =
+      (whateverOpt(x), whateverOpt(y))
+        .toOptionalTuple
+  
+    // ---------------------------------------------------------------------------
+    private[gallia] def whatever3Opt(x: Any, y: Any, z: Any): Option[(Whatever, Whatever, Whatever)] =
+      (whateverOpt(x), whateverOpt(y), whateverOpt(z))
+        .toSeq
+        .toOptionalSeq
+        .map(_.force.tuple3)
 
   // ===========================================================================
   import WhateverImplicits._

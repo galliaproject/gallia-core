@@ -59,7 +59,7 @@ case class Fld(key: Key, info: Info) extends FldLike {
       def    toMultiple: Fld = updateInfo(info.   toMultiple)
       def toNonMultiple: Fld = updateInfo(info.toNonMultiple)
 
-      def    toDouble: Fld = updateInfo(info.   toDouble)
+      def    toDouble: Fld = updateInfo(info.   toDouble) // see t210802091450
 
       // ---------------------------------------------------------------------------
       def nestedClassOpt: Option[Cls] = info.nestingTypeOpt
@@ -79,10 +79,12 @@ case class Fld(key: Key, info: Info) extends FldLike {
     def oneCls(key: Key, c: Cls) = Fld(key, Info.one(c))
     def nesCls(key: Key, c: Cls) = Fld(key, Info.nes(c))
 
-    def oneString (key: Key) = Fld(key, Info.oneString)
-    def oneInt    (key: Key) = Fld(key, Info.oneInt)
-    def oneDouble (key: Key) = Fld(key, Info.oneDouble)
-    def oneBoolean(key: Key) = Fld(key, Info.oneBoolean)
+    // ---------------------------------------------------------------------------
+    @PartialTypeMatching
+      def oneString (key: Key) = Fld(key, Info.oneString)
+      def oneInt    (key: Key) = Fld(key, Info.oneInt)
+      def oneDouble (key: Key) = Fld(key, Info.oneDouble)
+      def oneBoolean(key: Key) = Fld(key, Info.oneBoolean)
 
     // ===========================================================================
     @NumberAbstraction

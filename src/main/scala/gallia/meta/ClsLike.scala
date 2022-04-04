@@ -67,12 +67,10 @@ trait ClsLike { // read-only part
 
     // ===========================================================================
     @PartialTypeMatching
-    def isString (path: KPathW): Boolean = _field(path.value).isString
-
-    def isInt    (path: KPathW): Boolean = _field(path.value).isInt
-    def isDouble (path: KPathW): Boolean = _field(path.value).isDouble
-
-    def isBoolean(path: KPathW): Boolean = _field(path.value).isBoolean
+      def isString (path: KPathW): Boolean = _field(path.value).isString
+      def isInt    (path: KPathW): Boolean = _field(path.value).isInt
+      def isDouble (path: KPathW): Boolean = _field(path.value).isDouble
+      def isBoolean(path: KPathW): Boolean = _field(path.value).isBoolean
 
     // ===========================================================================
     //TODO: get fld-like, nested cls-like

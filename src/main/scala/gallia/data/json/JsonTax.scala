@@ -54,16 +54,16 @@ object JsonNumberTax extends JsonTax { type T = Double // because of 20111911542
 // ---------------------------------------------------------------------------
 object BigIntJsonTax extends JsonTax { type T = String
     def qualifies(field: Fld): Boolean = field.isBigInt
-    def transformValue(ignored: Fld)(value: T): Any  = BigInt.apply(value) }
+    def transformValue(ignoredQualitifyingField: Fld)(value: T): Any  = BigInt.apply(value) }
   
   // ---------------------------------------------------------------------------
   object BigDecJsonTax extends JsonTax { type T = String
     def qualifies(field: Fld): Boolean = field.isBigDec
-    def transformValue(ignored: Fld)(value: T): Any  = BigDecimal.apply(value) }
+    def transformValue(ignoredQualitifyingField: Fld)(value: T): Any  = BigDecimal.apply(value) }
 
 // ---------------------------------------------------------------------------
 object LocalDataJsonTax extends JsonTax { type T = String
     def qualifies(field: Fld): Boolean = field.isDate 
-    def transformValue(ignored: Fld)(value: T): Any  = value.parseLocalDate }
+    def transformValue(ignoredQualitifyingField: Fld)(value: T): Any  = value.parseLocalDate }
 
 // ===========================================================================

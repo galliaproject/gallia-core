@@ -17,11 +17,12 @@ trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F]
   // TODO: t220317154117 - consider a similar transformAll (if all of the same type?) 
   
   // ---------------------------------------------------------------------------
-  def transformString (k: RPathW) = transform(_.stringx (k.value))
-  def transformInt    (k: RPathW) = transform(_.intx    (k.value))
-  def transformDouble (k: RPathW) = transform(_.doublex (k.value))
-  def transformBoolean(k: RPathW) = transform(_.booleanx(k.value))
-  // excluding less common ones: byte, short, ... (be explicit for those)
+  @PartialTypeMatching
+    def transformString (k: RPathW) = transform(_.stringx (k.value))
+    def transformInt    (k: RPathW) = transform(_.intx    (k.value))
+    def transformDouble (k: RPathW) = transform(_.doublex (k.value))
+    def transformBoolean(k: RPathW) = transform(_.booleanx(k.value))
+   // excluding less common ones: byte, short, ... (be explicit for those)
 
   // ---------------------------------------------------------------------------
   // TODO: t210110094731

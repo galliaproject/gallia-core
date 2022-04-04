@@ -61,8 +61,13 @@ case class Info(container: Container, containee: Containee) extends InfoLike {
 
     def    toMultiple: Info = Info(if (isRequired) _Nes else _Pes, containee)
     def toNonMultiple: Info = Info(if (isRequired) _One else _Opt, containee)
-
-    def    toDouble: Info = Info(container, BasicType._Double)
+    
+    // ---------------------------------------------------------------------------
+    @PartialTypeMatching
+      def toBoolean: Info = Info(container, BasicType._Boolean)
+      def toStr    : Info = Info(container, BasicType._String)
+      def toInt    : Info = Info(container, BasicType._Int)
+      def toDouble : Info = Info(container, BasicType._Double)
 
     // ---------------------------------------------------------------------------
     def potentiallyProcessNesting(value: AnyValue): AnyValue =

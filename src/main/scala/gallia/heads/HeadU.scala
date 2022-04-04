@@ -80,9 +80,10 @@ class HeadU private[gallia]( // TODO: t210121105809 - rename to HeadO and genera
   
   def removeRecursivelyIfValue(value: String): Self2 = forLeafPaths { _.removeIfValueFor(_).is(value) } 
 
-  def convertToIntRecursively                : Self2 = forLeafPaths(_.convert(_).toInt)
-  def convertToDoubleRecursively             : Self2 = forLeafPaths(_.convert(_).toDouble)
-  def convertToBooleanRecursively            : Self2 = forLeafPaths(_.convert(_).toBoolean)
+  @PartialTypeMatching
+    def convertToIntRecursively    : Self2 = forLeafPaths(_.convert(_).toInt)
+    def convertToDoubleRecursively : Self2 = forLeafPaths(_.convert(_).toDouble)
+    def convertToBooleanRecursively: Self2 = forLeafPaths(_.convert(_).toBoolean)
 }
 
 // ===========================================================================

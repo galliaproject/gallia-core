@@ -99,18 +99,24 @@ trait FldLike extends HasKey with InfoLike
       // ===========================================================================
       def isBasicType      : Boolean = _containee.leafOpt.nonEmpty
       def isNumericalType  : Boolean = _containee.leafOpt.exists(_.isNumericalType)
+      def isUnboundedNumber: Boolean = _containee.leafOpt.exists(_.isUnboundedNumber)
+      def isBoundedNumber  : Boolean = _containee.leafOpt.exists(_.isBoundedNumber)
       def isIntegerLikeType: Boolean = _containee.leafOpt.exists(_.isIntegerLikeType)
       def isrealLikeType   : Boolean = _containee.leafOpt.exists(_.isRealLikeType)
 
         // ---------------------------------------------------------------------------
         def basicTypeOpt      : Option[BasicType]       = _containee.leafOpt
         def numericalTypeOpt  : Option[NumericalType]   = _containee.leafOpt.flatMap(_.asNumericalTypeOpt)
+        def unboundedNumberOpt: Option[UnboundedNumber] = _containee.leafOpt.flatMap(_.asUnboundedNumberOpt)
+        def   boundedNumberOpt: Option[  BoundedNumber] = _containee.leafOpt.flatMap(_.asBoundedNumberOpt)
         def integerLikeTypeOpt: Option[IntegerLikeType] = _containee.leafOpt.flatMap(_.asIntegerLikeTypeOpt)
         def realLikeTypeOpt   : Option[RealLikeType]    = _containee.leafOpt.flatMap(_.asRealLikeTypeOpt)
 
         // ---------------------------------------------------------------------------
         def forceBasicType      : BasicType       = basicTypeOpt      .force
         def forceNumericalType  : NumericalType   = numericalTypeOpt  .force
+        def forceUnboundedNumber: UnboundedNumber = unboundedNumberOpt.force
+        def forceBoundedNumber  :   BoundedNumber =   boundedNumberOpt.force
         def forceIntegerLikeType: IntegerLikeType = integerLikeTypeOpt.force
         def forceRealLikeType   : RealLikeType    = realLikeTypeOpt   .force
     }

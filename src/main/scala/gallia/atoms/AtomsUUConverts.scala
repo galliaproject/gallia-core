@@ -6,6 +6,7 @@ import aptus.String_
 import domain._
 
 // ===========================================================================
+@PartialTypeMatching
 object AtomsUUConverts {
   import AtomsUUTransforms._TransformVV
 

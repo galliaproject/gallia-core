@@ -35,9 +35,7 @@ sealed trait KVE { // Key-Value Entry
             MetaValidation.validateBObj(
                 nextLocation.addIndex(index))(value) }
 
-      @NumberAbstraction
       def metaEntry: (Key, Info)     = key -> bobjs.map(_.forceCls).distinct.force.one.pipe(Info.nes)
-
       def dataEntry: (Key, AnyValue) = key -> bobjs.map(_.forceObj)
     }
 

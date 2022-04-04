@@ -12,9 +12,12 @@ package object meta {
   private[meta] val  TypeNode  = gallia.reflect.TypeNode
 
   // ===========================================================================
-  type NumericalType   = gallia.reflect.NumericalType
-  type IntegerLikeType = gallia.reflect.IntegerLikeType
-  type RealLikeType    = gallia.reflect.RealLikeType
+  type NumericalType       = gallia.reflect.NumericalType
+    type UnboundedNumber   = gallia.reflect.UnboundedNumber
+    type   BoundedNumber   = gallia.reflect.  BoundedNumber
+      type IntegerLikeType = gallia.reflect.IntegerLikeType
+      type RealLikeType    = gallia.reflect.   RealLikeType  
+
 }
 
 // ===========================================================================

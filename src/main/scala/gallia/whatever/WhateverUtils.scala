@@ -1,31 +1,24 @@
 package gallia
 package whatever
 
-import aptus.{Seq_, Int_, Double_}
+import aptus.Seq_
+import data.DataFormatting.formatBasicValue
 
 // ===========================================================================
 object WhateverUtils {
   
   private[whatever] def formatDefault(value: Any): String =
-      value match {
+    value match {
 
-        // legit?
-        case None           => "None"
-        case Nil            => "Nil"
+      // legit?
+      case None           => "None"
+      case Nil            => "Nil"
 
-        case Some(value)    => s"Some(${formatIndividualValue(value)})"
-        case values: Seq[_] => s"Seq(${values.map(formatIndividualValue).join(",")})"
+      case Some(value)    => s"Some(${formatBasicValue(value)})"
+      case values: Seq[_] => s"Seq(${values.map(formatBasicValue).join(",")})"
 
-        case value          => formatIndividualValue(value) }
+      case value          => formatBasicValue(value) }
 
-      // ---------------------------------------------------------------------------
-      private def formatIndividualValue(value: Any) = value match {
-          case x: Int    => x.formatExplicit
-          case x: Long   => x.formatExplicit
-          case x: Double => x.formatExplicit
-          //TODO: t210202160709 - more
-          case x         => x.toString }
-      
   // ===========================================================================
   private[whatever] def size(value: Any): Int =
     value match {

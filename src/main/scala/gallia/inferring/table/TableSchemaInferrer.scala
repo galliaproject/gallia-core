@@ -70,7 +70,7 @@ object TableSchemaInferrer {
   private def combineInfos(values: Seq[Info]): Info =
       Info(
         values.map(_.container)     .reduceLeft(Container.combine),
-        values.map(_.forceBasicType).pipe       (BasicType.combine) )
+        values.map(_.forceBasicType).pipe      (BasicType.combine) )
 
   // ---------------------------------------------------------------------------
   private def combineContainers(values: Seq[Info]): Info =

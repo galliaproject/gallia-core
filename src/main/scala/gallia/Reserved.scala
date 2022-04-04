@@ -12,6 +12,7 @@ trait Reserved {
   val _count_distinct         = Symbol("_count_distinct")
   val _count_distinct_present = Symbol("_count_distinct_present")
 
+  val _values = Symbol("_values")
   val _sum    = Symbol("_sum")
   val _mean   = Symbol("_mean")
   val _median = Symbol("_median")
@@ -33,7 +34,6 @@ trait Reserved {
 
   // ---------------------------------------------------------------------------
   val _vle    = Symbol("_vle")
-  val _values = Symbol("_values")
   val _sole   = Symbol("_sole")
 
     //TODO: or always use _sole?

@@ -3,6 +3,7 @@ package gallia
 // ===========================================================================
 /** has explicit key + all but keys + step 1 of 2-step-rename */
 case class KeyW(value: Key) {
+    def skey         : SKey  = value.name
     def ren          : Ren   = Ren(value, value)
     def ren(to: KeyW): Ren   = Ren(value, to.value)
     def kpath        : KPath = KPath.from(value)

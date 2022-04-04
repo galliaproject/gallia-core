@@ -75,8 +75,8 @@ object UtsIndividuals { // mostly meant to convey intent
   trait HasTailKeys    { def tailKeys: KeyzSelection = new CustomSimpleKeysFunction(_.tail) } //TODO: dedicated?
 
   // ===========================================================================
-  trait HasSKeyMatches1 { def     findKey(pred: SKey => Boolean) : KeySelection    = KeyPredicate1(pred) }
-  trait HasSKeyMatchesN { def  filterKeys(pred: SKey => Boolean) : KeyzSelection   = KeyPredicateN(pred) }
+  trait HasSKeyMatches1 { def     findKey(pred: SKey  => Boolean): KeySelection    = KeyPredicate1(pred) }
+  trait HasSKeyMatchesN { def  filterKeys(pred: SKey  => Boolean): KeyzSelection   = KeyPredicateN(pred) }
   trait HasPathMatches1 { def    findPath(pred: KPath => Boolean): KPathSelection  = PathPredicate1(pred) }
   trait HasPathMatchesN { def filterPaths(pred: KPath => Boolean): KPathzSelection = PathPredicateN(pred) }
 

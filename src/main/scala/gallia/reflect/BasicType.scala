@@ -175,7 +175,7 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
     // ---------------------------------------------------------------------------
     case object _BigInt extends UnboundedNumber { type T = BigInt    ; val fullName = "scala.math.BigInt"    ; /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse; }
     case object _BigDec extends UnboundedNumber { type T = BigDecimal; val fullName = "scala.math.BigDecimal"; /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse
-      override protected def accessorNameModifier(value: FullName): String = value.remove("imal") }
+      override protected def accessorNameModifier(value: FullName): String = value.replace("imal", "") }
 
     // ===========================================================================
     case object _LocalDate     extends BasicType { type T = LocalDate    ; val fullName = "java.time.LocalDate"

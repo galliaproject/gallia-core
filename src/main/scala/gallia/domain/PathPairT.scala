@@ -3,13 +3,18 @@ package domain
 
 // ===========================================================================
 case class PathPair(path: KPath, optional: Boolean) {
-    def lookup(o: Obj ): AnyValue = if (optional) o.opt(path) else o.force(path)
-
+      def lookup(o: Obj ): AnyValue = if (optional) o.opt(path) else o.force(path)
+  
+      // ---------------------------------------------------------------------------
+      def matching(value1: Any, value2: Any): Boolean =
+        if (optional) value1 == Some(value2)
+        else          value1 ==      value2
+    }
+  
     // ---------------------------------------------------------------------------
-    def matching(value1: Any, value2: Any): Boolean =
-      if (optional) value1 == Some(value2)
-      else          value1 ==      value2
-  }
+    object PathPair {
+      def from(key: KeyW): PathPair = PathPair(KPath.from(key), optional = false)
+    }
 
   // ===========================================================================
   case class PathPair2(pair1: PathPair, pair2: PathPair) {

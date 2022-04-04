@@ -37,6 +37,8 @@ case class AObjs(c: Cls, z: Objs) {
     // ---------------------------------------------------------------------------
     def forceAObj: AObj = AObj(c, z.toListAndTrash.force.one)
     
+    def rawData: Iterator[Seq[AnyValue]] = z.consume.map(_.values)
+
     // ---------------------------------------------------------------------------
     override def toString: String = formatDefault
       def formatDefault: String =
@@ -57,7 +59,7 @@ case class AObjs(c: Cls, z: Objs) {
     def from(values: Seq[AObj]): AObjs =
       AObjs(
         c = values.map(_.c).pipe(combineCls),
-        z = values.map(_.u).pipe(Objs.from))
+        z = values.map(_.o).toList.pipe(Objs.from))
   }
 
 

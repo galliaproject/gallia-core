@@ -152,11 +152,9 @@ object ActionsOthers {
   // ===========================================================================
   // uv
 
-  case class GrabU(from: TtqKPath1) extends ActionUV {
-    def vldt (in: Seq[Cls]): Errs = from.vldtAsOrigin(in.force.one) //TODO: more
-    def _meta(ignored: Seq[Cls]): Cls = Cls.vle(from.node)
-    def atoms(ctx: NodeMetaContext): Atoms = { val c = ctx.afferents.force.one; _GrabU(from.pathPairT(c)).in.seq } }
-
+  case class GrabU(from: TtqKPath1, checkOrigin: Boolean /* not for V=Any */) 
+    extends Grab[AtomUV](from, checkOrigin, _GrabUOpt, _GrabUOne) with ActionUV
+    
   // ---------------------------------------------------------------------------
   case class PopulateDataClass(node: TypeNode) extends ActionUV {
     def vldt (in: Seq[Cls]): Errs = ???
@@ -194,18 +192,8 @@ object ActionsOthers {
     def atoms(ctx: NodeMetaContext): Atoms = _Size.in.seq }
 
   // ---------------------------------------------------------------------------
-  case class GrabZ(from: TtqKPath1 /* does not specify the surrounding Seq */, checkOrigin: Boolean /* not for V=Any */) extends ActionZV {
-    def vldt (in: Seq[Cls]): Errs = if (!checkOrigin) Nil     else from.vldtAsOrigin(in.force.one) //TODO: more
-    def _meta(in: Seq[Cls]): Cls  = if (!checkOrigin) in.head else Cls.vles(from.node)
-
-    // ---------------------------------------------------------------------------
-    def atoms(ctx: NodeMetaContext): Atoms =
-      ctx.afferents.force.one
-        .pipe(from.pathPairT)
-        .pipe { pair =>
-          if (pair.optional) _GrabZOpt(pair.path)
-          else               _GrabZOne(pair.path)  }
-        .in.seq }
+  case class GrabZ(from: TtqKPath1 /* does not specify the surrounding Seq */, checkOrigin: Boolean /* not for V=Any */) 
+    extends Grab[AtomZV](from, checkOrigin, _GrabZOpt, _GrabZOne) with ActionZV // {
 
   // ---------------------------------------------------------------------------
   case class SquashZUnsafe(to: TypeNode, f: Seq[Obj] => Any) extends ActionZV {
@@ -236,6 +224,23 @@ object ActionsOthers {
     case class CheckpointZ(path1: String, path2: String) extends ActionZZc with IdentityVM1 {
       def atomzz(c: Cls) = _CheckpointZ(c, path1, path2) }
 
+  // ===========================================================================
+  abstract class Grab[$Atom <: Atom](
+      from       : TtqKPath1,
+      checkOrigin: Boolean /* not for V=Any */,
+      ifOpt      : KPath => $Atom,
+      ifOne      : KPath => $Atom) {
+    def vldt (in: Seq[Cls]): Errs = if (!checkOrigin) Nil     else from.vldtAsOrigin(in.force.one) //TODO: more
+    def _meta(in: Seq[Cls]): Cls  = if (!checkOrigin) in.head else Cls.vles(from.node)
+
+    // ---------------------------------------------------------------------------
+    def atoms(ctx: NodeMetaContext): Atoms =
+      ctx.afferents.force.one
+        .pipe(from.pathPairT)
+        .pipe { pair =>
+          if (pair.optional) Seq(ifOpt(pair.path))
+          else               Seq(ifOne(pair.path))  } }
+    
 }
 
 // ===========================================================================

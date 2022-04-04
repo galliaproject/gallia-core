@@ -1,7 +1,7 @@
 package gallia
 package heads
 
-import aptus.{UriString, Nes, Pes}
+import aptus.{UriString, One, Opt, Nes, Pes}
 
 import io.out._
 
@@ -17,6 +17,8 @@ trait HeadOut { self: Head[_] =>
 
 // ===========================================================================
 trait HeadVOut[T] extends HeadOut { self: HeadV[T] =>
+  private[heads] def forceValue  [T: WTT]: One[T] = end().runv[One[T]]().forceData2(_.value)
+  private[heads] def forceValue_ [T: WTT]: Opt[T] = end().runv[Opt[T]]().forceData2(_.value)  
   private[heads] def forceValues [T: WTT]: Nes[T] = end().runv[Nes[T]]().forceData2(_.value)
   private[heads] def forceValues_[T: WTT]: Pes[T] = end().runv[Pes[T]]().forceData2(_.value) }
 

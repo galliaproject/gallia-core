@@ -15,12 +15,12 @@ sealed trait NumericalType extends BasicType
   sealed trait   BoundedNumber extends NumericalType // excluding bignums
   
     // ---------------------------------------------------------------------------
-    sealed trait IntegerLikeType extends BoundedNumber {
+    sealed trait IntegerLikeType extends BoundedNumber { // basically: byte, short, int & long
         // especially useful for JSON (since doesn't differentiate integers)
         def toIntegerLike(value: Double): Any /* eg value.toLong for _Long */ }    
 
     // ---------------------------------------------------------------------------
-    sealed trait RealLikeType extends BoundedNumber {
+    sealed trait RealLikeType extends BoundedNumber { // basically: float & double
         // especially useful for JSON (since doesn't differentiate integers)
         def toRealLike(value: Double): Any /* eg value.toDouble for _Float */ }    
 

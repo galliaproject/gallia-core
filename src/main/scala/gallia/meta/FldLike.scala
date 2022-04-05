@@ -73,13 +73,11 @@ trait FldLike extends HasKey with InfoLike
       // ---------------------------------------------------------------------------
       def isBasicType(value: BasicType): Boolean = _containee.leafOpt.exists(_ == value)
 
-      // ---------------------------------------------------------------------------      
+      // ---------------------------------------------------------------------------
+      def isBoolean : Boolean = isBasicType(BasicType._Boolean)      
       def isString  : Boolean = isBasicType(BasicType._String)
-
       def isInt     : Boolean = isBasicType(BasicType._Int)
       def isDouble  : Boolean = isBasicType(BasicType._Double)
-
-      def isBoolean : Boolean = isBasicType(BasicType._Boolean)
 
       def isByte : Boolean = isBasicType(BasicType._Byte)
       def isLong : Boolean = isBasicType(BasicType._Long)
@@ -89,12 +87,16 @@ trait FldLike extends HasKey with InfoLike
       def isBigInt: Boolean = isBasicType(BasicType._BigInt)
       def isBigDec: Boolean = isBasicType(BasicType._BigDec)
 
-      def isDate    : Boolean = isBasicType(BasicType._LocalDate)
-      def isDateTime: Boolean = isBasicType(BasicType._LocalDateTime)
+      def isLocalDate     : Boolean = isBasicType(BasicType._LocalDate)
+      def isLocalTime     : Boolean = isBasicType(BasicType._LocalTime)
+      def isLocalDateTime : Boolean = isBasicType(BasicType._LocalDateTime)
+      def isOffsetDateTime: Boolean = isBasicType(BasicType._OffsetDateTime)
+      def isZonedDateTime : Boolean = isBasicType(BasicType._ZonedDateTime)
+      def isInstant       : Boolean = isBasicType(BasicType._Instant)
 
       def isEnum : Boolean = isBasicType(BasicType._Enum)
 
-      def isBytes: Boolean = isBasicType(BasicType._Binary)
+      def isBinary: Boolean = isBasicType(BasicType._Binary)
 
       // ===========================================================================
       def isBasicType      : Boolean = _containee.leafOpt.nonEmpty

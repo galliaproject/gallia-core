@@ -261,7 +261,7 @@ object AtomsIX {
         .pipe { x =>
           schemaProvider match {
             case TableSchemaProvider.NoInferring => x.z // nothing to do
-            case _                               => new ModifyTableData(cellConf).modify(x) }}
+            case _                               => new ModifyTableData(cellConf).modify(x) }} // TODO: t220406110532: proper TableTax counterpart to JSON's (see 220406110635)
         .in.some
 
     // ---------------------------------------------------------------------------

@@ -1,20 +1,25 @@
 package gallia
-package data.json
+package data
+package json
 
 import aptus._
 import enumeratum.{Enum, EnumEntry}
-import meta._
 import reflect.BasicType
+import meta._
 
 // ===========================================================================
 /** due to the very limited set of primitives datatypes supported by JSON */
-object JsonTax { import reflect.BasicType._  
+object JsonTax { // 220406110635
+  import reflect.BasicType._
+  
+  // ---------------------------------------------------------------------------
   private val JsonTypes       : Set[BasicType] = Set(_String, _Boolean, _Double)
   private val JsonTypesWithInt: Set[BasicType] = JsonTypes + _Int
 
   // ---------------------------------------------------------------------------
-  private val JsonIntegerTax = JsonTax[Double](_.isInt, _.toInt)// because of 201119115427; this is a high price to pay to support integers...
-  
+  // because of 201119115427; this is a high price to pay to support integers with JSON...
+  private val JsonIntegerTax = JsonTax[Double](_.isInt, d => d.toInt.assert(_.toDouble == d))
+
   // ===========================================================================
   def payUp(c: Cls, z: Objs): Objs = {
     val types = c.basicTypeSet
@@ -81,27 +86,52 @@ sealed trait ExtendedJsonTax extends EnumEntry {
     val values = findValues
 
     // ---------------------------------------------------------------------------
-    case object JsonByte           extends ExtendedJsonTax { val value = JsonTax[Double](_.isByte , _.toByte) }    
-    case object JsonShort          extends ExtendedJsonTax { val value = JsonTax[Double](_.isShort, _.toShort) }
-    case object JsonLong           extends ExtendedJsonTax { val value = JsonTax[Double](_.isLong , _.toLong) }
-    case object JsonFloat          extends ExtendedJsonTax { val value = JsonTax[Double](_.isFloat, _.toFloat) }
-    
-    case object JsonBigInt         extends ExtendedJsonTax { val value = JsonTax[String](_.isBigInt, BigInt    .apply) }
-    case object JsonBigDec         extends ExtendedJsonTax { val value = JsonTax[String](_.isBigDec, BigDecimal.apply) }
-    
-    case object JsonLocalDate      extends ExtendedJsonTax { val value = JsonTax[Any](_.isLocalDate,      mult(_                  .parseLocalDate    , _.toLocalDate    ) /* aptus' */) }
-    case object JsonLocalDateTime  extends ExtendedJsonTax { val value = JsonTax[Any](_.isLocalDateTime,  mult(_.replace(" ", "T").parseLocalDateTime, _.toLocalDateTime) /* aptus' */) } // see https://stackoverflow.com/questions/9531524/in-an-iso-8601-date-is-the-t-character-mandatory
-    case object JsonInstant        extends ExtendedJsonTax { val value = JsonTax[Any](_.isInstant,        mult(_                  .parseInstant      , _.toInstant      ) /* aptus' */) }
-    
+    case object JsonByte           extends ExtendedJsonTax { val value = JsonTax[Double](_.isByte , d => d.toByte                         .assert(_.toDouble == d)) }    
+    case object JsonShort          extends ExtendedJsonTax { val value = JsonTax[Double](_.isShort, d => d.toShort                        .assert(_.toDouble == d)) }
+    case object JsonLong           extends ExtendedJsonTax { val value = JsonTax[Double](_.isLong , d => d.assert(doubleFitsLong) .toLong .assert(_.toDouble == d)) }
+    case object JsonFloat          extends ExtendedJsonTax { val value = JsonTax[Double](_.isFloat, _     .assert(doubleFitsFloat).toFloat) } // note: precision may also be affected
+
+    case object JsonBigInt         extends ExtendedJsonTax { val value = JsonTax[Any](_.isBigInt, stringOrLong  (BigInt    .apply, BigInt    .apply)) }
+    case object JsonBigDec         extends ExtendedJsonTax { val value = JsonTax[Any](_.isBigDec, stringOrDouble(BigDecimal.apply, BigDecimal.apply)) }
+
+    case object JsonLocalDate      extends ExtendedJsonTax { val value = JsonTax[Any](_.isLocalDate,     stringOrLong(_                  .parseLocalDate    , _.toLocalDate    ) /* aptus' */) }
+    case object JsonLocalDateTime  extends ExtendedJsonTax { val value = JsonTax[Any](_.isLocalDateTime, stringOrLong(_.replace(" ", "T").parseLocalDateTime, _.toLocalDateTime) /* aptus' */) } // see https://stackoverflow.com/questions/9531524/in-an-iso-8601-date-is-the-t-character-mandatory
+    case object JsonInstant        extends ExtendedJsonTax { val value = JsonTax[Any](_.isInstant,       stringOrLong(_                  .parseInstant      , _.toInstant      ) /* aptus' */) }
+
     case object JsonLocalTime      extends ExtendedJsonTax { val value = JsonTax[String](_.isLocalTime,      _.parseLocalTime      /* aptus' */) }
     case object JsonOffsetDateTime extends ExtendedJsonTax { val value = JsonTax[String](_.isOffsetDateTime, _.parseOffsetDateTime /* aptus' */) }
     case object JsonZonedDateTime  extends ExtendedJsonTax { val value = JsonTax[String](_.isZonedDateTime,  _.parseZonedDateTime  /* aptus' */) }
+
+    case object JsonBinary         extends ExtendedJsonTax { val value = JsonTax[String](_.isBinary,  DataFormatting.parseBinaryString) }
+
+    // ===========================================================================
+    private def stringOrLong[T](ifString: String => T, ifLong: Long => T): Any => T =
+        _ match {
+          case s: String => ifString(s)
+          case n: Number => ifLong  (numberToLong(n)) }
+  
+      // ---------------------------------------------------------------------------
+      private def stringOrDouble[T](ifString: String => T, ifDouble: Double => T): Any => T =
+        _ match {
+          case s: String => ifString(s)
+          case n: Number => ifDouble(n.doubleValue) }      
     
     // ===========================================================================
-    private def mult[T](ifString: String => T, ifLong: Long => T): Any => T =
-      _ match {
-        case s: String => ifString(s)
-        case n: Number => ifLong  (n.longValue) }     
+    private def numberToLong(n: Number): Long =
+      n
+        .doubleValue
+        .assert(doubleFitsLong)
+        .pipe(d => d.toLong.assert(_.toDouble == d))
+
+    // ---------------------------------------------------------------------------
+    private def doubleFitsFloat(d: Double): Boolean = 
+      d <= java.lang.Float.MAX_VALUE && 
+      d >= java.lang.Float.MIN_VALUE
+
+    // ---------------------------------------------------------------------------
+    private def doubleFitsLong(d: Double): Boolean = 
+      d <= java.lang.Long.MAX_VALUE && 
+      d >= java.lang.Long.MIN_VALUE      
   }
 
 // ===========================================================================

@@ -7,7 +7,9 @@ import aptus.{String_, Double_, ArrayByte_}
 
 // ===========================================================================
 @TypeMatching object DataFormatting {
-
+  private val Base64StringPrefix = "base64:"
+  
+  // ===========================================================================
   def formatBasicValue: PartialFunction[Any, String] =
       formatString
         .orElse {
@@ -65,12 +67,19 @@ import aptus.{String_, Double_, ArrayByte_}
     private[gallia] def formatBigInt(value: BigInt): String = value.bigInteger.toString /* stable */
     private[gallia] def formatBigDec(value: BigDec): String = value.bigDecimal.toString /* stable */
       
-    // ---------------------------------------------------------------------------
+    // ===========================================================================
     private[gallia] def formatBinary(bytes: ByteBuffer): String =
       bytes
         .array
         .toBase64
-        .prepend("base64:")
+        .prepend(Base64StringPrefix)
+
+    // ---------------------------------------------------------------------------
+    def parseBinaryString(value: String): ByteBuffer =
+      value
+        .stripPrefixGuaranteed(Base64StringPrefix)
+        .unBase64
+        .pipe(byteBuffer)
 }
 
 // ===========================================================================

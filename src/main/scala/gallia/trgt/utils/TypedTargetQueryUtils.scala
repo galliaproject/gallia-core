@@ -11,14 +11,14 @@ object TypedTargetQueryUtils {
   // ===========================================================================
   // ttqqpathz
 
-  def ttqqpathz1[T: WTT](value: TqRPathz): TtqRPathz = new TtqRPathz(value, node[T].normalizeSome, HT.instantiator[T], ignoreContainer = false)
+  def ttqqpathz1[T: WTT](value: TqRPathz): TtqRPathz = new TtqRPathz(value, typeNode[T].normalizeSome, HT.instantiator[T], ignoreContainer = false)
 
   // ===========================================================================
   // ttqkpath
 
   def ttqkpath1(tq: TqKPath, ht: HasType) = new TtqKPath(tq, ht.node, ht.instantiator, ignoreContainer = false) // for cotransform + override at least
 
-  def ttqkpath1[T1: WTT](f1: KPathW) = new TtqKPath(_tqkpath(f1.kpath), node[T1], HT.instantiator[T1], ignoreContainer = false)
+  def ttqkpath1[T1: WTT](f1: KPathW) = new TtqKPath(_tqkpath(f1.kpath), typeNode[T1], HT.instantiator[T1], ignoreContainer = false)
 
     def ttqkpath2[T1: WTT, T2: WTT](k1: KPathW, k2: KPathW) = new TtqKPath2(ttqkpath1[T1](k1), ttqkpath1[T2](k2))
 

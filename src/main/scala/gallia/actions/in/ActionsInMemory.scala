@@ -34,7 +34,7 @@ case class InMemoryInputUb(value: BObj) extends ActionIUd {
 
 // ===========================================================================
 case class InMemoryInputV[T: WTT](value: T) extends ActionIVd {
-  private val typeNode = node[T]
+  private val typeNode = gallia.typeNode[T]
 
   // ---------------------------------------------------------------------------
   def vldt: Errs = _vldt.validType(Location.Root -> typeNode)

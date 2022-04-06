@@ -112,8 +112,6 @@ package object gallia
   private[gallia] def errs  (any: Any)             : Errs = Seq(Err(any))
 
   // ---------------------------------------------------------------------------
-  @deprecated
-  private[gallia] def     node[T: WTT] = gallia.reflect.TypeNode.parse[T]
   private[gallia] def typeNode[T: WTT] = gallia.reflect.TypeNode.parse[T]
 
   // ===========================================================================

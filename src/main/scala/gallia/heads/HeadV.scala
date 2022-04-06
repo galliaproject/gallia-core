@@ -18,7 +18,7 @@ class HeadV[T: WTT /* will be Vle (Any) for data phase */] private[gallia] (
   private[gallia] def rewrap[T2: WTT](newNodeId: NodeId): HeadV[T2] = new HeadV[T2](newNodeId, handler)
 
   // ===========================================================================
-  def mapV [         T2: WTT](f: T  => T2)                            : HeadV[    T2 ] = handler.chainvv(this)(MapV2V(node[T2], (x: Any) => f(x.asInstanceOf[T]) ))
+  def mapV [         T2: WTT](f: T  => T2)                            : HeadV[    T2 ] = handler.chainvv(this)(MapV2V(typeNode[T2], (x: Any) => f(x.asInstanceOf[T]) ))
   def mapVs[T1: WTT, T2: WTT](f: T1 => T2)(implicit ev: T <:< Seq[T1]): HeadV[Seq[T2]] = mapV[Seq[T2]](_.map(f)) // worth keeping? - TODO: subclass rather?
 }
 

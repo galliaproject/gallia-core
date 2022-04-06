@@ -129,8 +129,8 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
       // ---------------------------------------------------------------------------
       /** strict = all values are translated, therefore type can change */
-      def usingStrict [O: WTT, D : WTT](entries: Seq[(O, D)]): Self2 = self2 :+ new Translate(ttqqpathz1[O](target), node[D], true , entries)
-      def usingLenient[O: WTT, D : WTT](entries: Seq[(O, D)]): Self2 = self2 :+ new Translate(ttqqpathz1[O](target), node[D], false, entries)
+      def usingStrict [O: WTT, D : WTT](entries: Seq[(O, D)]): Self2 = self2 :+ new Translate(ttqqpathz1[O](target), typeNode[D], true , entries)
+      def usingLenient[O: WTT, D : WTT](entries: Seq[(O, D)]): Self2 = self2 :+ new Translate(ttqqpathz1[O](target), typeNode[D], false, entries)
     }
 
   // ===========================================================================

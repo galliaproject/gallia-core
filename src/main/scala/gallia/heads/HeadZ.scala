@@ -72,7 +72,7 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
   private[heads] def zo        (action: ActionZO): HeadZ    = handler.chainzo(self)(action)
 
   // ===========================================================================
-  def     map[V: WTT](f: HeadU => HeadV[V])(implicit di: DI): HeadV[List[V]] = zv(ActionsZZ.    MapU2V(node[V], f))
+  def     map[V: WTT](f: HeadU => HeadV[V])(implicit di: DI): HeadV[List[V]] = zv(ActionsZZ.    MapU2V(typeNode[V], f))
   def     map        (f: HeadU => HeadU)                    : Self           = zz(ActionsZZ.    MapU2U(f)) // TODO: misnomer... endo-map?
 
   def flatMap0       (f: HeadU => HeadZ)                    : Self           = zz(ActionsZZ.FlatMap   (f)) // TODO: still makes sense (or use map+flattenBy)?

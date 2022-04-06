@@ -4,8 +4,26 @@ package meta
 import aptus.Seq_
 
 // ===========================================================================
-trait ClsAvanced { self: Cls =>
+trait ClsAdvanced { self: Cls =>
 
+  def containsMatching(pred: Fld => Boolean): Boolean =
+    fields.exists { field =>
+      field
+        .nestedClassOpt
+        .map(_.containsMatching(pred))
+        .getOrElse(pred(field)) }
+
+  // ---------------------------------------------------------------------------
+  def basicTypeSet: Set[BasicType] =
+    fields
+      .flatMap { field =>
+        field
+          .nestedClassOpt
+          .map      (_.basicTypeSet)
+          .getOrElse(Set(field.forceBasicType)) }  
+      .toSet
+
+  // ===========================================================================
   /** expects no conflicts                   */ def mergeDisjoint  (that: Cls): Cls = that.fields.foldLeft(this)(_ add _)
   /** expects common fields to be compatible */ def unionCompatible(that: Cls): Cls =
     Cls(

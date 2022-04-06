@@ -13,7 +13,6 @@ package object in extends gallia.__io with gallia._io {
   val  ReadQuerying = gallia.io.in.ReadQuerying
 
   // ===========================================================================
-  val JsonNumberTax  = gallia.data.json.JsonNumberTax
   val SchemaInferrer = gallia.inferring.SchemaInferrer
 
   // ---------------------------------------------------------------------------

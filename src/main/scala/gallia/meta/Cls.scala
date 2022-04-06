@@ -12,7 +12,7 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
       with    ClsHelper
       with    ClsNesting
       with    ClsBasics
-      with    ClsAvanced
+      with    ClsAdvanced
       with    ClsNestingRelated
       with    ClsAggregating
       with    ClsMerging {
@@ -232,6 +232,16 @@ object Cls {
   private[gallia] def vle (node: TypeNode): Cls = Cls(List(Fld(_vle, node.forceNonBObjInfo)))
   private[gallia] def vles(node: TypeNode): Cls = Cls(List(Fld(_vle, node.forceNonBObjInfo).toMultiple))
 
+  // ---------------------------------------------------------------------------
+  @PartialTypeMatching
+    def oneBoolean(key: KeyW): Cls = Cls(List(key.value.boolean))
+    def oneString (key: KeyW): Cls = Cls(List(key.value.string))
+    def oneInt    (key: KeyW): Cls = Cls(List(key.value.int))
+    def oneDouble (key: KeyW): Cls = Cls(List(key.value.double))
+
+  // ---------------------------------------------------------------------------
+  def fromFile(schemaFilePath: String) : Cls = meta.MetaObj.clsFromFile(schemaFilePath) // TODO: or also detect file vs direct object?
+  
   // ---------------------------------------------------------------------------
   def from(keys: Seq[ Key]): Cls = from(keys.map(_.name))
   def from(keys: Seq[SKey])(implicit di: DI): Cls =

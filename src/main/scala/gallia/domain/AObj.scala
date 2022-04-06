@@ -15,7 +15,7 @@ case class AObj(c: Cls, @deprecated u: Obj) { // TODO: tt210124100009 - initiall
     override def toString: String = formatDefault
       def formatDefault: String =
         c.formatDefault + "\n" +
-        u.pp
+        o.pp
 
     def toBObj : BObj  = ??? //TODO
     def inAObjs: AObjs = AObjs(c, Objs.from(List(o)))

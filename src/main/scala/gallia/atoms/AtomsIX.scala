@@ -53,7 +53,7 @@ object AtomsIX {
       def commonObj: Obj = 
         JsonParsing
           .parseObject(inputString)
-          .pipeIf(c != null /* TODO: see 211230183100 */)(JsonTax.payAllUp(c)) }
+          .pipeIf(c != null /* TODO: see 211230183100 */)(JsonTax.payUp(c)) }
 
     // ---------------------------------------------------------------------------  
     object _JsonObjectString {
@@ -69,7 +69,7 @@ object AtomsIX {
         JsonParsing
           .parseArray(inputString)
           .pipe(Objs.from)
-          .map { x => if (c == null)  /* TODO: see 211230183100 */ x else JsonTax.payAllUp(c)(x) }
+          .pipe { z => if (c == null)  /* TODO: see 211230183100 */ z else JsonTax.payUp(c, z) }
     }
 
     // ---------------------------------------------------------------------------  
@@ -80,7 +80,7 @@ object AtomsIX {
   // ===========================================================================
   case class _JsonObjectFileInputU(input: InputUrlLike, c: Cls) extends HasCommonObj {
     def commonObj: Obj = input.content.pipe(JsonParsing.parseObject)
-      def naive: Option[Obj] = commonObj.pipe(JsonTax.payAllUp(c)).in.some
+      def naive: Option[Obj] = Some(commonObj.pipe(JsonTax.payUp(c)))
   }
 
   // ===========================================================================
@@ -99,7 +99,11 @@ object AtomsIX {
             .pipe(Objs.build)
 
       // ---------------------------------------------------------------------------
-      def naive: Option[Objs] = Some(commonObjs.map(JsonTax.payAllUp(schema)).pipe(projectData(schema)) )
+      def naive: Option[Objs] = 
+        commonObjs
+          .pipe(JsonTax.payUp(schema, _))
+          .pipe(projectData(schema))
+          .in.some
     }
 
     // ===========================================================================
@@ -116,7 +120,11 @@ object AtomsIX {
             .pipe(Objs.from)
 
       // ---------------------------------------------------------------------------
-      def naive: Option[Objs] = Some(commonObjs.map(JsonTax.payAllUp(schema)).pipe(projectData(schema)) )
+      def naive: Option[Objs] = 
+        commonObjs
+          .pipe(JsonTax.payUp(schema, _))
+          .pipe(projectData(schema))
+          .in.some
     }
 
   // ===========================================================================
@@ -178,7 +186,10 @@ object AtomsIX {
       extends HasCommonObjs { import _MongodbInputZ._
       mongoDb()
 
-      def naive: Option[Objs] = commonObjs.map(JsonTax.payAllUp(c)).in.some // TODO: confirm need to pay tax here
+      def naive: Option[Objs] = 
+        commonObjs
+          .map(JsonTax.payUp(c)) // TODO: confirm need to pay tax here?
+          .in.some
 
       // ===========================================================================
       // t210114153517 - must use jongo+find until figure out

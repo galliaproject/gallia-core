@@ -19,6 +19,21 @@ trait ObjOperations { self: Obj =>
   // - t210104164036 and t210104164037: more generally, most of this will be rewritten in that context...
 
   // ===========================================================================
+  def modifyValuesRecursively(f: AnyValue => AnyValue): Obj =
+    self
+      .data
+      .map { case (key, value) =>
+        key ->
+          (value match {
+            case seq: Seq[_] =>
+              seq.map {              
+                case o: Obj => o.modifyValuesRecursively(f)
+                case bsc    => f(bsc) }
+            case o: Obj => o.modifyValuesRecursively(f)
+            case bsc    => f(bsc) }) }
+      .pipe(Obj.build)
+
+  // ===========================================================================
   def merge(that: Obj): Obj = {
     val set = that.keySet
 

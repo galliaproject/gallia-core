@@ -39,10 +39,6 @@ private[gallia] object MetaValidation {
   def typeCompatibility[$Target](c: Cls, duo: Duo[$Target], mode: SpecialCardiMode): Errs =
       _helper.typeCompatibility(c, duo, mode)
 
-    // ---------------------------------------------------------------------------
-    private[vldt] def _infoCompatilibity(kpath: KPath, info1: Info, info2: Info, mode: SpecialCardiMode): Err_ =
-      errIf_(!MetaValidationCompatibility.compatible(info1, info2, mode))(_Error.TypeMismatch(kpath, info1, info2, mode).err)
-
   // ===========================================================================
   def checkKeysReordering(c: Cls, f: Seq[SKey] => Seq[SKey], recursively: Boolean): Errs = {
     val nesting :Errs =

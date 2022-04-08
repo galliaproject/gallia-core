@@ -159,6 +159,16 @@ object FunctionWrappers {
       private def _unwrapWhatever1(value: Any): Any = value.asInstanceOf[              Whatever]   .any
       private def _unwrapWhatever2(value: Any): Any = value.asInstanceOf[whatever.TypedWhatever[_]].typed
 
+  // ===========================================================================
+  private[gallia] implicit class WeakTypeTag_[T](
+      wtt: scala.reflect.runtime.universe.WeakTypeTag[T]) {
+
+    // see t210125111338 (union types)
+    def ifApplicable(f: T => Any): AnyValue => AnyValue = value =>
+      if (wtt.canEqual(value)) f(value.asInstanceOf[T])
+      else                       value
+  }
+
 }
 
 // ===========================================================================

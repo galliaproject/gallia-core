@@ -1,6 +1,7 @@
 package gallia
 package heads.common
 
+import scala.reflect.runtime.universe.weakTypeTag
 import target.HT
 import FunctionWrappers._
 import actions.ActionsUUTransforms._
@@ -48,6 +49,9 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
     // ===========================================================================
     class _TransformVV[O: WTT](f1: Transform[O]) { val ttq = resolves(f1)
+      private val wtto = weakTypeTag[O]
+
+      // ---------------------------------------------------------------------------
       def toObjsUsing(c: Cls)(f: O => Objs): Self2 = self2 :+ TransformToObj(ttq, c, multiple = true , wrap(f)) // TODO: rename
       def toObjUsing (c: Cls)(f: O => Obj ): Self2 = self2 :+ TransformToObj(ttq, c, multiple = false, wrap(f)) // TODO: rename
       

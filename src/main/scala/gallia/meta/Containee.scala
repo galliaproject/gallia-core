@@ -3,7 +3,7 @@ package meta
 
 // ===========================================================================
 @aptus.pseudosealed /* only two: BasicType and Cls (nesting) */ trait Containee {
-    private def _either: Either[BasicType, Cls] = this match {
+    private[gallia] def _either: Either[BasicType, Cls] = this match {
       case x: BasicType => Left (x)
       case x: Cls       => Right(x) }
 

@@ -2,6 +2,7 @@ package gallia
 package meta
 
 import aptus.{Seq_, String_}
+import GalliaUtils.Seq__
 
 // ===========================================================================
 case class FldPair(field1: Fld, field2: Fld) {
@@ -12,10 +13,11 @@ case class FldPair(field1: Fld, field2: Fld) {
 // ===========================================================================
 /** PNF = Potentially Nested Field */
 case class PNF(path: KPath, info: Info) extends FldLike {
-            override val key = path.key
+              override val key = path.key
 
-  protected override val _container: Container = info.container
-  protected override val _containee: Containee = info.containee
+    protected override val _container:      Container  = info.container
+    protected override val _containee:      Containee  = info.containee
+    protected override val _containees: Seq[Containee] = Seq(_containee) // see t210125111338 (union types)    
 }
 
 // ===========================================================================
@@ -23,28 +25,33 @@ case class Fld(key: Key, info: Info) extends FldLike {
     require(key.name.nonEmpty)// TODO: validation
 
     // ---------------------------------------------------------------------------
+    private[gallia] /* private while experimental */ def infos = Seq(info) // see t210125111338 (union types)
+    
+    // ---------------------------------------------------------------------------
     // mostly for macros
     private var enumNameOpt: Option[String] = None
     def setEnumName(enumName: String) = { enumNameOpt = Some(enumName); this }
     def forceEnumName: String = enumNameOpt.get
 
     // ---------------------------------------------------------------------------
-    protected override val _container: Container = info.container
-    protected override val _containee: Containee = info.containee
+    protected override val _container:      Container  = info.container
+    protected override val _containee:      Containee  = info.containee
+    protected override val _containees: Seq[Containee] = Seq(_containee) // see t210125111338 (union types)    
 
     def toPNF(parent: Seq[Key]) = PNF(KPath(parent, key), info)
 
     // ---------------------------------------------------------------------------
     override def toString = formatDefault
-      def formatDefault = s"${key.name.padRight(16, ' ')}\t${info.formatDefault}"
+      def formatDefault = s"${key.name.padRight(16, ' ')}\t${infos.map(_.formatDefault).join("|")}" // see t210125111338 (union types)
 
     // ===========================================================================
-    def transformKey  (f: Key  => Key ): Fld = Fld(f(key),   info )
+    def transformKey  (f: Key  => Key ): Fld = Fld(f(key),   info)
     def transformInfo (f: Info => Info): Fld = Fld(  key , f(info))
 
     // ===========================================================================
-    def updateKey  (newValue: Key  ): Fld = Fld(newValue, info)
-    def updateInfo (newValue: Info ): Fld = Fld(key, newValue)
+    def updateKey (                newValue: Key ): Fld = Fld(newValue, info)
+    def updateInfo(                newValue: Info): Fld = Fld(key, newValue)
+    def updateInfo(oldValue: Info, newValue: Info): Fld = Fld(key, infos.mapIfGuaranteed(_ == oldValue)(_ => newValue).force.one) // see t210125111338 (union types)
 
     // ---------------------------------------------------------------------------
     def updateContainee(newValue: Containee): Fld = transformInfo(_.updateContainee(newValue))

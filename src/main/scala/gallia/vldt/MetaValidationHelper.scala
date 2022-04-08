@@ -47,11 +47,12 @@ object MetaValidationHelper {
 
     // ---------------------------------------------------------------------------
     private def _typeCompatibility(c: Cls)(kpath: KPath, ht: HasTypeNode, mode: SpecialCardiMode): Err_ =
-      (   c.field_(kpath).map(_.info),
+      (   c.field_(kpath).map(_.infos), // see t210125111338 (union types)
           ht.infoOpt(isValidType))
         .toOptionalTuple
-        .flatMap { case (infoA, infoB) =>
-          _infoCompatilibity(kpath, infoA, infoB, mode) }
+        .flatMap { case (infoAs, infoB) =>
+          errIf_(!MetaValidationCompatibility.oneCompatible(infoAs, infoB, mode)) {
+            _Error.TypeMismatch(kpath, infoAs.head, infoB, mode).err } }
 
   // ===========================================================================
   def validateBObjs(value: BObjs): Errs = {

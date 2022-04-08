@@ -127,7 +127,7 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
 
     // ===========================================================================
     //TODO: ensure not nested type?
-    def   updateType(target: Key   , node: TypeNode): Cls =            transformField(target)(_.updateInfo(node.forceNonBObjInfo))
+    def   updateType(target: Key   , node: TypeNode): Cls = transformField(target)(_.updateInfo(node.forceNonBObjInfo))
       def updateType(target: Ren   , node: TypeNode): Cls = rename(target).updateType(target.to, node)
 
       def updateType(target: KPath , node: TypeNode): Cls = transformx(target)(_.updateType(_, node), _.updateType(_, node))
@@ -135,6 +135,17 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
 
       def updateType(target: KPathz, node: TypeNode): Cls = target.foldLeft(this)(_.updateType(_, node))
       def updateType(target: RPathz, node: TypeNode): Cls = target.foldLeft(this)(_.updateType(_, node))
+
+    // ---------------------------------------------------------------------------
+    //TODO: ensure not nested type?
+    def   updateType(target: Key   , fromNode: TypeNode, toNode: TypeNode): Cls = transformField(target)(_.updateInfo(fromNode.forceNonBObjInfo, toNode.forceNonBObjInfo))
+      def updateType(target: Ren   , fromNode: TypeNode, toNode: TypeNode): Cls = rename(target).updateType(target.to, fromNode, toNode)
+    
+      def updateType(target: KPath , fromNode: TypeNode, toNode: TypeNode): Cls = transformx(target)(_.updateType(_, fromNode, toNode), _.updateType(_, fromNode, toNode))
+      def updateType(target: RPath , fromNode: TypeNode, toNode: TypeNode): Cls = transformx(target)(_.updateType(_, fromNode, toNode), _.updateType(_, fromNode, toNode))
+    
+      def updateType(target: KPathz, fromNode: TypeNode, toNode: TypeNode): Cls = target.foldLeft(this)(_.updateType(_, fromNode, toNode))
+      def updateType(target: RPathz, fromNode: TypeNode, toNode: TypeNode): Cls = target.foldLeft(this)(_.updateType(_, fromNode, toNode))
 
     // ---------------------------------------------------------------------------
     def   updateContainee(target: Key   , node: TypeNode): Cls =                 transformField(target)(_.updateContainee(node.forceNonBObjInfo.containee))

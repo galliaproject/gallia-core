@@ -227,7 +227,7 @@ trait ObjOperations { self: Obj =>
     // ---------------------------------------------------------------------------
     def force(target: KPathW): AnyValue  =
       target.value.tailPair match {
-        case (leaf  , None      ) => attemptKey(leaf).get
+        case (leaf  , None      ) => forceKey(leaf)
         case (parent, Some(tail)) =>
           attemptKey(parent) match {
               case None        => dataError(s"TODO:CantBeNone:210106171759:${target}") // in theory should have been validated against..

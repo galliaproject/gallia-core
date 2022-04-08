@@ -119,14 +119,14 @@ case class KVEs(values: Seq[KVE]) {
 
     // ---------------------------------------------------------------------------
     def keys: Seq[Key] = values.map(_.key)
-    def keyz: Keyz = Keyz(values.map(_.key))
+    def keyz: Keyz     = Keyz(keys)
 
     // ---------------------------------------------------------------------------
     def forceMetaEntries: Seq[(Key, Info    )] = values.map(_.metaEntry)
     def forceDataEntries: Seq[(Key, AnyValue)] = values.map(_.dataEntry)
 
     // ---------------------------------------------------------------------------
-    def forceCls: Cls = forceMetaEntries.map((Fld.apply _).tupled).pipe(Cls(_))
+    def forceCls: Cls = forceMetaEntries.map { case (key, info) => Fld(key, info) }.pipe(Cls(_))
     def forceObj: Obj = forceDataEntries.pipe(obj)
 
   }

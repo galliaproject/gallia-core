@@ -144,6 +144,9 @@ package object gallia
 
   implicit def _toWrappedSelection(x: selection.untyped.processors.RPathzSelection): selection.typed.TsWrapper[Whatever] = new selection.typed.TsWrapper[Whatever](x)
 
+  // ---------------------------------------------------------------------------
+  private[gallia] implicit def Info_(info: meta.Info): Seq[meta.Info] = Seq(info) // see t210125111338 (union types)
+  
   // ===========================================================================
   def cls[T: WTT]                 : Cls = reflect.TypeNode.parse[T].leaf.forceDataClass
   def cls(schemaFilePath: String) : Cls = Cls.fromFile(schemaFilePath) // TODO: or also detect file vs direct object?

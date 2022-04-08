@@ -147,7 +147,7 @@ object ActionsUUTransforms {
 
   case class TransformVV(from: TtqRPathz, to: TypeNode, f: _ff11) extends ActionUUb {
       def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ _vldt.validType(to)
-      def _meta(c: Cls): Cls  = from.qpathz_(c).foldLeft(c)(_.updateType(_, to))
+      def _meta(c: Cls): Cls  = from.qpathz_(c).foldLeft(c)(_.updateType(_, from.node, to))
       //FIXME: t210615104657 - if to is Option[T]        
       def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, f))) }
 

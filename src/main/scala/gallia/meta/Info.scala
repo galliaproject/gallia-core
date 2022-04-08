@@ -9,8 +9,9 @@ import vldt.SpecialCardiMode
 
 // ===========================================================================
 case class Info(container: Container, containee: Containee) extends InfoLike {
-    protected override val _container: Container = container
-    protected override val _containee: Containee = containee
+    protected override val _container:      Container  =     container
+    protected override val _containee:      Containee  =     containee
+    protected override val _containees: Seq[Containee] = Seq(containee) // see t210125111338 (union types)
 
     // ===========================================================================
     override def toString = formatDefault

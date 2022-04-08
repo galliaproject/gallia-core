@@ -20,7 +20,7 @@ trait ClsAdvanced { self: Cls =>
         field
           .nestedClassOpt
           .map      (_.basicTypeSet)
-          .getOrElse(Set(field.forceBasicType)) }  
+          .getOrElse(field.forceBasicTypes.toSet) }  
       .toSet
 
   // ===========================================================================

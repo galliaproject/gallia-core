@@ -119,12 +119,12 @@ import meta._
       // ---------------------------------------------------------------------------
       // TODO: distinguish container/containee error
       object       TypeMismatch extends _ErrorCompanion("201101174017", "TypeMismatch")
-        case class TypeMismatch(kpath: KPath, infoA: Info, infoB: Info, mode: SpecialCardiMode) extends _HasCompanion2(
+        case class TypeMismatch(kpath: KPath, infoAs: Seq[Info], infoB: Info, mode: SpecialCardiMode) extends _HasCompanion2(
                    TypeMismatch) with  _Error1 {
           def formatDetails =
             Seq(
                 s"for ${kpath}:",
-                s"expected: ${infoA.formatDefault(":")},",
+                s"${infoAs.map(_.formatDefault(":")).section("expected")},", // see t210125111338 (union types)
                  s"but got: ${infoB.formatDefault(":")}",
                 s"(mode: ${mode})")
               .joinln }

@@ -64,14 +64,15 @@ trait FldLike extends HasKey with InfoLike
 
     // ===========================================================================
     trait HasContainee {
-      protected val _containee: Containee
+      protected val _containee :     Containee
+      protected val _containees: Seq[Containee] // see t210125111338 (union types)
 
       // ---------------------------------------------------------------------------
       def isNesting: Boolean = _containee.nestingOpt.nonEmpty
       def isLeaf   : Boolean = _containee.leafOpt   .nonEmpty
 
       // ---------------------------------------------------------------------------
-      def isBasicType(value: BasicType): Boolean = _containee.leafOpt.exists(_ == value)
+      def isBasicType(value: BasicType): Boolean = _containees.exists(_.leafOpt.exists(_ == value))
 
       // ---------------------------------------------------------------------------
       def isBoolean : Boolean = isBasicType(BasicType._Boolean)      
@@ -121,6 +122,10 @@ trait FldLike extends HasKey with InfoLike
         def forceBoundedNumber  :   BoundedNumber =   boundedNumberOpt.force
         def forceIntegerLikeType: IntegerLikeType = integerLikeTypeOpt.force
         def forceRealLikeType   : RealLikeType    = realLikeTypeOpt   .force
+        
+        // ---------------------------------------------------------------------------
+        // see t210125111338 (union types)
+        def forceBasicTypes: Seq[BasicType] = _containees.map(_.leafOpt.get)
     }
 
 // ===========================================================================

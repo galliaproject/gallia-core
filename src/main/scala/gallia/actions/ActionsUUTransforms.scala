@@ -145,11 +145,9 @@ object ActionsUUTransforms {
   // ===========================================================================
   // TODO: check input isn't u or z + destination type is valid
 
-  case class TransformVV(from: TtqRPathz, to: TypeNode, f: _ff11, b: Boolean) extends ActionUUb {
+  case class TransformVV(from: TtqRPathz, to: TypeNode, f: _ff11) extends ActionUUb {
       def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ _vldt.validType(to)
-      def _meta(c: Cls): Cls  =
-        if (b) from.qpathz_(c).foldLeft(c)(_.updateContainee(_, to))
-        else   from.qpathz_(c).foldLeft(c)(_.updateType(_, to))
+      def _meta(c: Cls): Cls  = from.qpathz_(c).foldLeft(c)(_.updateType(_, to))
       //FIXME: t210615104657 - if to is Option[T]        
       def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, f))) }
 

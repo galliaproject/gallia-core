@@ -4,9 +4,9 @@ package inferring.table
 import aptus.Seq_
 
 import reflect.BasicType
+import reflect.Container
 import meta.Fld
 import meta.Info
-import reflect.Container
 import io.CellConf
 
 // ===========================================================================

@@ -33,7 +33,18 @@ private[actions] object ActionsUtils {
   def _atoms(c: Cls)(f: PathPair => AtomUU)(values: Seq[RPath]): Seq[AtomUU] =
     values
       .flatMap { qpath =>
-        potentialRenaming(qpath).toSeq :+ f(PathPair(qpath.to, c.isOptional(qpath.from))) }
+        potentialRenaming(qpath).toSeq :+ 
+        f(PathPair(qpath.to, c.isOptional(qpath.from))) }
+
+  // ---------------------------------------------------------------------------
+  def _atoms2(c: Cls)(ifOne: PathPair => AtomUU, ifMultiple: PathPair => AtomUU)(values: Seq[RPath]): Seq[AtomUU] = // see t210125111338 (union types)
+    values
+      .flatMap { qpath =>
+        val pair = PathPair(qpath.to, c.isOptional(qpath.from))
+
+        potentialRenaming(qpath).toSeq :+ 
+        (if (!c.field(qpath.from).isUnionType) ifOne     (pair) 
+         else                                  ifMultiple(pair))}
 
   // ===========================================================================
   def potentialRenaming(value: Ren  ): Option[AtomUU] = value.actualOpt.map(_Rename)  

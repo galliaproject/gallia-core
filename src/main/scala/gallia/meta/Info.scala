@@ -8,10 +8,12 @@ import domain.SortingPair
 import vldt.SpecialCardiMode
 
 // ===========================================================================
-case class Info(container: Container, containee: Containee) extends InfoLike {
-    protected override val _container:      Container  =     container
-    protected override val _containee:      Containee  =     containee
-    protected override val _containees: Seq[Containee] = Seq(containee) // see t210125111338 (union types)
+case class Info(
+          container: Container,
+          containee: Containee)
+        extends Info1Like {
+      protected override lazy val _container1: Container  = container
+      protected override lazy val _containee1: Containee  = containee
 
     // ===========================================================================
     override def toString = formatDefault
@@ -34,11 +36,6 @@ case class Info(container: Container, containee: Containee) extends InfoLike {
       containee match {
         case tipe: BasicType => tipe.superPair(container, pair.descending, pair.missingLast)
         case r: Cls          => ??? } // TODO
-
-    // ===========================================================================
-    def nestingTypeOpt: Option[Cls] = _containee.nestingOpt
-
-    def forceNestedClass: Cls = _containee.nestingOpt.get
 
     // ===========================================================================
     def transformContainer  (f: Container => Container): Info = copy(container = f(this.container))
@@ -83,38 +80,48 @@ case class Info(container: Container, containee: Containee) extends InfoLike {
     def forceFrom[T : WTT]: Info = TypeNode.parse[T].forceNonBObjInfo
 
     // ---------------------------------------------------------------------------
-    def    string  = Info(_One, BasicType._String)
+    def    string : Info = Info(_One, BasicType._String)
 
-    def oneString  = Info(_One, BasicType._String)
-    def oneInt     = Info(_One, BasicType._Int)
-    def oneDouble  = Info(_One, BasicType._Double)
-    def oneBoolean = Info(_One, BasicType._Boolean)
+    def oneString : Info = Info(_One, BasicType._String)
+    def oneInt    : Info = Info(_One, BasicType._Int)
+    def oneDouble : Info = Info(_One, BasicType._Double)
+    def oneBoolean: Info = Info(_One, BasicType._Boolean)
 
-    def optString  = Info(_Opt, BasicType._String)
-    def optInt     = Info(_Opt, BasicType._Int)
-    def optDouble  = Info(_Opt, BasicType._Double)
-    def optBoolean = Info(_Opt, BasicType._Boolean)
-
-    // ---------------------------------------------------------------------------
-    def from(container: Container, tipe: BasicType) = Info(container, tipe)
-
-      def one(tipe: BasicType) = Info(_One, tipe)
-      def opt(tipe: BasicType) = Info(_Opt, tipe)
-      def pes(tipe: BasicType) = Info(_Pes, tipe)
-      def nes(tipe: BasicType) = Info(_Nes, tipe)
+    def optString : Info = Info(_Opt, BasicType._String)
+    def optInt    : Info = Info(_Opt, BasicType._Int)
+    def optDouble : Info = Info(_Opt, BasicType._Double)
+    def optBoolean: Info = Info(_Opt, BasicType._Boolean)
 
     // ---------------------------------------------------------------------------
-    def one(tipe: Cls) = Info(_One, tipe)
-    def opt(tipe: Cls) = Info(_Opt, tipe)
-    def pes(tipe: Cls) = Info(_Pes, tipe)
-    def nes(tipe: Cls) = Info(_Nes, tipe)
+    def from(container: Container, tipe: BasicType): Info = Info(container, tipe)
+
+      def one(tipe: BasicType): Info = Info(_One, tipe)
+      def opt(tipe: BasicType): Info = Info(_Opt, tipe)
+      def pes(tipe: BasicType): Info = Info(_Pes, tipe)
+      def nes(tipe: BasicType): Info = Info(_Nes, tipe)
+      
+      def one(f: BasicType.type => BasicType): Info = Info(_One, f(BasicType))      
+      def opt(f: BasicType.type => BasicType): Info = Info(_Opt, f(BasicType))
+      def pes(f: BasicType.type => BasicType): Info = Info(_Pes, f(BasicType))
+      def nes(f: BasicType.type => BasicType): Info = Info(_Nes, f(BasicType))
+
+      def boolean(f: Container.type => Container): Info = Info(f(Container), BasicType._Boolean)
+      def string (f: Container.type => Container): Info = Info(f(Container), BasicType._String)
+      def int    (f: Container.type => Container): Info = Info(f(Container), BasicType._Int)
+      def double (f: Container.type => Container): Info = Info(f(Container), BasicType._Double)
+      
+    // ---------------------------------------------------------------------------
+    def one(tipe: Cls): Info = Info(_One, tipe)
+    def opt(tipe: Cls): Info = Info(_Opt, tipe)
+    def pes(tipe: Cls): Info = Info(_Pes, tipe)
+    def nes(tipe: Cls): Info = Info(_Nes, tipe)
 
     // ---------------------------------------------------------------------------
-    def optOrOne(optional: Boolean)(tipe: Cls) = if (optional) Info.opt(tipe) else Info.one(tipe)
-    def pesOrNes(optional: Boolean)(tipe: Cls) = if (optional) Info.pes(tipe) else Info.nes(tipe)
+    def optOrOne(optional: Boolean)(tipe: Cls): Info = if (optional) Info.opt(tipe) else Info.one(tipe)
+    def pesOrNes(optional: Boolean)(tipe: Cls): Info = if (optional) Info.pes(tipe) else Info.nes(tipe)
 
     // ---------------------------------------------------------------------------
-    def from(container: Container, tipe: Cls) = Info(container, tipe)
+    def from(container: Container, tipe: Cls): Info = Info(container, tipe)
 
     def from(optional: Boolean, multiple: Boolean)(tipe: Cls): Info =
       if (multiple)

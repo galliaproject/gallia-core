@@ -49,7 +49,7 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
     // ===========================================================================
     class _TransformVV[O: WTT](f1: Transform[O]) { val ttq = resolves(f1)
-      private val wtto = weakTypeTag[O]
+      private val wtto = new WeakTypeTagDecorator(weakTypeTag[O])
 
       // ---------------------------------------------------------------------------
       def toObjsUsing(c: Cls)(f: O => Objs): Self2 = self2 :+ TransformToObj(ttq, c, multiple = true , wrap(f)) // TODO: rename
@@ -62,7 +62,7 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
         val dest = typeNode[D]
 
         if (!dest.isContainedDataClass)
-          if (!ttq.ignoreContainer) TransformVV (ttq, dest, wrap(f))
+          if (!ttq.ignoreContainer) TransformVV (ttq, dest, wrap(f), wtto.ifApplicable(f))
           else                      TransformVVx(ttq, dest, wrap(f))
         else
           if (!ttq.ignoreContainer) TransformVVc (ttq, to = HT.parse[D], wrap(f))

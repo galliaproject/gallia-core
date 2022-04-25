@@ -23,6 +23,14 @@ trait Aliases {
   private[gallia] type      Coll[A] = collection.GenTraversable    [A]
   private[gallia] type SparkColl[A] = collection.   TraversableOnce[A]
 
+  // ---------------------------------------------------------------------------
+  private[gallia] type ClsName    =        String
+  private[gallia] type ClsNameOpt = Option[String]
+
+  // ---------------------------------------------------------------------------
+  private[gallia] type EnmName    =        String
+  private[gallia] type EnmNameOpt = Option[String]
+
   // ===========================================================================
   type Regex   = scala.util.matching.Regex
   type Pattern = java.util.regex.Pattern

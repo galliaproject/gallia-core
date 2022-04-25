@@ -74,9 +74,9 @@ object RuntimeValidation { import meta._ // 210115153346 - POC
 
     // ---------------------------------------------------------------------------
     val multiplicityErrors: Option[ValErr] = {
-           if (field.info.   isMultiple && !isMultiple) Some(ValErr(12, key, None, s"should be mult"))
-      else if (field.info.isNotMultiple &&  isMultiple) Some(ValErr(13, key, None, s"shouldn't be mult"))
-      else                                              None }
+           if ( field.info1.isMultiple && !isMultiple) Some(ValErr(12, key, None, s"should be mult"))
+      else if (!field.info1.isMultiple &&  isMultiple) Some(ValErr(13, key, None, s"shouldn't be mult"))
+      else                                             None }
 
     // ---------------------------------------------------------------------------
     val typeErrors: Iterable[ValErr] =
@@ -87,7 +87,7 @@ object RuntimeValidation { import meta._ // 210115153346 - POC
 
         // ---------------------------------------------------------------------------
         case Seq(Some(Left(() /* = object(s) */))) =>
-          field.info.containee match {
+          field.info1.containee match {
 
             case basicTipe: BasicType => Some(ValErr(14, key, None, s"is obj but should be ${basicTipe}"))
 
@@ -110,7 +110,7 @@ object RuntimeValidation { import meta._ // 210115153346 - POC
 
         // ---------------------------------------------------------------------------
         case Seq(Some(Right(singleType))) =>
-          field.info.containee match {
+          field.info1.containee match {
             case x: BasicType if x == singleType => None
             case l: BasicType                    => Some(ValErr(17, key, None, s"is $singleType but should be ${l}"))
             case _: Cls                          => Some(ValErr(18, key, None, s"is $singleType but should be an obj")) }

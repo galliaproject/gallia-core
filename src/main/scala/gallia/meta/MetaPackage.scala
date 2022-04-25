@@ -28,14 +28,14 @@ package object meta {
   
   // ===========================================================================
   /** PNF = Potentially Nested Field */
-  case class PNF(path: KPath, info: Info) extends FldLike {
+  // see t210125111338 (union types) - adapt
+  case class PNF(path: KPath, info: Info) extends HasKey with Info1Like {
                 override val key = path.key
   
-      protected override val _container:      Container  = info.container
-      protected override val _containee:      Containee  = info.containee
-      protected override val _containees: Seq[Containee] = Seq(_containee) // see t210125111338 (union types)    
+      protected override lazy val _container1:      Container  = info.container
+      protected override lazy val _containee1:      Containee  = info.containee
   }
-      
+
 }
 
 // ===========================================================================

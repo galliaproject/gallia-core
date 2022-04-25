@@ -28,7 +28,7 @@ object AtomsUUResnesting {
               formattedKey ~> formattedTail,
                 headKey)
 
-            .transformInfo(headKey) { // best to recurse *after* nesting to avoid key collisions
+            .transformSoleInfo(headKey) { // best to recurse *after* nesting to avoid key collisions
               info =>
                 info
                   .forceNestedClass // since we just nested it

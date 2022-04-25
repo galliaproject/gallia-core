@@ -70,7 +70,7 @@ object ActionsZZAggregating {
 
     // ---------------------------------------------------------------------------
     private def dataTriplet1(c: Cls, rtipe: ReducingType)(groupee: Key): ReducingDataTriplet1 =
-      ReducingDataTriplet1(groupee, rtipe, c.isOptional(groupee), c.field(groupee).info.numericalTypeOpt)
+      ReducingDataTriplet1(groupee, rtipe, c.isOptional(groupee), c.field(groupee).numericalTypeOpt)
 
 }
 

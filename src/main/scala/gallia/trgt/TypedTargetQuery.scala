@@ -23,11 +23,12 @@ case class TypedTargetQuery[$Target /* TODO: t210823111030 - ungenerify */]( // 
     def duo      (c: Cls): Duo[$Target]    = Duo[$Target](node, tq.resolve(c))
     def fieldPair(c: Cls): ($Target, Info) = (tq.resolve(c), node.forceNonBObjInfo)
     
-    def containee(c: Cls)(implicit ev: $Target <:< KPath) = kpathT(c).pipe(c.field(_).info.containee)
+    def containee1(c: Cls)(implicit ev: $Target <:< KPath) = kpathT(c).pipe(c.field(_).containee1)
 
-    def kpathT (c: Cls)(implicit ev: $Target <:< KPath ): KPath  = kpath_(c)
-    def kpath_ (c: Cls)(implicit ev: $Target <:< KPath ): KPath  = tq.resolve(c)
-    def qpathz_(c: Cls)(implicit ev: $Target <:< RPathz): RPathz = tq.resolve(c)
+    def resolve(c: Cls)                                 : $Target = tq.resolve(c)
+    def kpathT (c: Cls)(implicit ev: $Target <:< KPath ): KPath   = kpath_(c)
+    def kpath_ (c: Cls)(implicit ev: $Target <:< KPath ): KPath   = tq.resolve(c)
+    def qpathz_(c: Cls)(implicit ev: $Target <:< RPathz): RPathz  = tq.resolve(c)
 
     def tqkpath(implicit ev: $Target <:< KPath): TqKPath = tq.asInstanceOf[TqKPath]
       
@@ -39,8 +40,8 @@ case class TypedTargetQuery[$Target /* TODO: t210823111030 - ungenerify */]( // 
             node.isContainedWhatever /* TODO: contained ok here? */)
 
     // ---------------------------------------------------------------------------
-    def wrapx (c: Cls,                  f: Any => Any): Any => Any = tq.container(c).containerWrap(f)
-    def wrapxc(c: Cls, to: HasTypeNode, f: Any => Any): Any => Any = tq.container(c).containerWrap(wrapc(to, f))
+    def wrapx (c: Cls,                  f: Any => Any): Any => Any = tq.container1(c).containerWrap(f)
+    def wrapxc(c: Cls, to: HasTypeNode, f: Any => Any): Any => Any = tq.container1(c).containerWrap(wrapc(to, f))
 
     // ===========================================================================
     // vldt

@@ -13,7 +13,7 @@ class ModifyTableData(conf: CellConf) extends atoms.utils.ModifyObj { // 2012311
   def modify(x: AObjs): Objs = x.z.map(super.modify(x.c))
 
     // ===========================================================================
-    override protected def qualifyingFields(c: Cls): Seq[Fld] = c.fields.filterNot(_.info.isOneString)
+    override protected def qualifyingFields(c: Cls): Seq[Fld] = c.fields.filterNot(_.info1.isOneString)
 
       // ===========================================================================
       override protected def transformation(qualifyingField: Fld): Any => Any =

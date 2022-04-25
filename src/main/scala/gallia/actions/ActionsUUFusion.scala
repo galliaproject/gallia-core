@@ -74,7 +74,7 @@ object ActionsUUFusion { import ActionsUtils.removeAll
         val fromPath1 = from.tq1.resolve(c)
         val fromPath2 = from.tq2.resolve(c)
 
-        c .add(to, fromPath1.pipe(c.field).info) // choosing first arbitrarily (210817130604)
+        c .add(to, fromPath1.pipe(c.field).info1) // choosing first arbitrarily (210817130604)
           .remove (fromPath1)
           .remove (fromPath2)
       }
@@ -100,7 +100,7 @@ object ActionsUUFusion { import ActionsUtils.removeAll
           val fromPath2 = from.tq2.resolve(c)
           val fromPath3 = from.tq3.resolve(c)
   
-          c .add(to, fromPath1.pipe(c.field).info) // choosing first arbitrarily (210817130604)
+          c .add(to, fromPath1.pipe(c.field).info1) // choosing first arbitrarily (210817130604)
             .remove (fromPath1)
             .remove (fromPath2)
             .remove (fromPath3)

@@ -6,19 +6,19 @@ private object UtsProcessorsUtils {
 
   def ifType[T: WTT](c: Cls): Seq[Key] =
     c.fields.flatMap { f =>
-      if (f.info.isType[T]) Some(f.key)
-      else                  None }
+      if (f.info1.isType[T]) Some(f.key)
+      else                   None }
 
   // ---------------------------------------------------------------------------
   def ifTypeRecursively[T: WTT](path: OptionalKPath)(c: Cls): Seq[KPath] =
     c.fields.flatMap { f =>
       val path2 = path.appendLevel(f.key)
 
-      f.info.nestingTypeOpt match {
+      f.nestedClassOpt match {
         case Some(c2) => ifTypeRecursively[T](path2)(c2)
         case None     =>
-          if (f.info.isType[T]) Seq(path2.forcePath)
-          else                  Nil } }
+          if (f.info1.isType[T]) Seq(path2.forcePath)
+          else                   Nil } }
 
   // ---------------------------------------------------------------------------
   // outOfBounds(5)(Seq(0, 1, 2, 3, 4, 5, -1, -2, -3, -4, -5, -6)).p // List(5, -6)

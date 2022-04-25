@@ -32,7 +32,7 @@ trait ClsNestingRelated { self: Cls =>
         out.mergeDisjoint(
           in
             .fields.force.one
-            .info.forceNestedClass) }
+            .forceNestedClass) }
 
     // ---------------------------------------------------------------------------
     def unnestOOO(key: Key): Cls = //TODO: add req
@@ -41,7 +41,8 @@ trait ClsNestingRelated { self: Cls =>
           out.mergeDisjoint(
             in
               .fields.force.one
-              .info.forceNestedClass) }
+              .forceNestedClass) }
+
     // ---------------------------------------------------------------------------
     def unnestObject(path: KPath): Cls =
       transformx(path)(
@@ -56,7 +57,7 @@ trait ClsNestingRelated { self: Cls =>
 
       // ---------------------------------------------------------------------------
       private[meta] def unnestField(parentKey: Key, leaf: Key): Cls = {
-        val nestedClass = field(parentKey).info.forceNestedClass
+        val nestedClass = field(parentKey).forceNestedClass
 
         val (nestedField, remainingNestedClassOpt) = nestedClass.potchSingle(leaf)
 
@@ -64,13 +65,13 @@ trait ClsNestingRelated { self: Cls =>
           remainingNestedClassOpt match {
             case None                       => x.remove(parentKey)
             case Some(remainingNestedClass) =>
-              x.transformInfo(parentKey) {
+              x.transformSoleInfo(parentKey) {
                   _.updateContainee(remainingNestedClass) } } }
       }
 
   // ===========================================================================
   def updatedNestingFieldInfo(c: Cls, targetKeys: Renz, existingNestingKey: Key): Info = { // for nest into
-      val existingNestingFieldInfo: Info = c.field(existingNestingKey).info
+      val existingNestingFieldInfo: Info = c.field(existingNestingKey).info1
 
       val existingNestedFields: Seq[Fld] =
         existingNestingFieldInfo

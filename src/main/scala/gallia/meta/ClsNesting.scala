@@ -10,7 +10,7 @@ trait ClsNesting { dis: Cls =>
      : Cls =
     path.tailPair match {
         case (leaf  , None      ) => root(dis, leaf)
-        case (parent, Some(tail)) => dis.transformInfo(parent){
+        case (parent, Some(tail)) => dis.transformSoleInfo(parent){
           _.transformNestedClass{ nc =>
               rec(nc, tail) } } }
 
@@ -21,7 +21,7 @@ trait ClsNesting { dis: Cls =>
      : Cls =
     path.tailPair match {
         case Left ( renaming      ) => root(dis, renaming)
-        case Right((parent, qpath)) => dis.transformInfo(parent){
+        case Right((parent, qpath)) => dis.transformSoleInfo(parent){
           _.transformNestedClass{ nc =>
               rec(nc, qpath) } } }
 

@@ -24,7 +24,7 @@ class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](
     def filterByPaths(c: Cls)(implicit ev: $Target <:< KPathz): Cls = ???
 
     // ---------------------------------------------------------------------------
-    def info(c: Cls)(implicit ev: $Target <:< KPath) = c.field(kpath_(c)).info
+    def info1(c: Cls)(implicit ev: $Target <:< KPath) = c.field(kpath_(c)).info1
     
     def isMultiple(c: Cls) = _is(c, _.isMultiple)
     def isRequired(c: Cls) = _is(c, _.isRequired)
@@ -37,11 +37,11 @@ class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](
           .exists(pred)
 
     // ---------------------------------------------------------------------------
-    def container(c: Cls): Container =
+    def container1(c: Cls): Container =
         __qpaths(c)
           .head /* since all supposed to be the same: 201005113232 */
           .from.pipe(c.field(_))
-          .info.container
+          .container1
 
     // ---------------------------------------------------------------------------
     def keyz_  (c: Cls)(implicit ev: $Target <:< Keyz  ): Keyz     = resolve(c)

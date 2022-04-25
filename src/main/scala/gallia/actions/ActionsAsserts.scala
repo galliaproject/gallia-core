@@ -3,7 +3,7 @@ package actions
 
 import target._
 import FunctionWrappers._
-import meta.InfoLike
+import meta.InfosLike
 import atoms.AtomsUV._
 import atoms.AtomsAsserts._
 
@@ -21,7 +21,7 @@ object ActionsAsserts {
           _Error.MetaAssertionFailure.errsIf(test = !pred(c)) }
 
     // ---------------------------------------------------------------------------
-    case class AssertField(target: KPath, _error: _Error, pred: InfoLike => Boolean) extends IdentityM1 with IdentityUUa {
+    case class AssertField(target: KPath, _error: _Error, pred: InfosLike => Boolean) extends IdentityM1 with IdentityUUa {
           def vldt (c: Cls): Errs =
             _error.errsIf(test = !c.field_(target).exists(pred)) }
 
@@ -39,7 +39,7 @@ object ActionsAsserts {
             def vldt (c: Cls): Errs =
               _Error.ContaineeAssertionFailure(target, basicType).errsIf(
                   !c.field_(target).exists(
-                      _.isBasicType(basicType))) }
+                      _.info1.isBasicType(basicType))) }
 
   // ===========================================================================
   case class AssertDataUnsafeU(pred: gallia.Obj => Boolean) extends ActionUU with IdentityVM1 with AtomsUUd {

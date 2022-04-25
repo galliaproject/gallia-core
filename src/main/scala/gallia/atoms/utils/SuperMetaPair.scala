@@ -14,7 +14,7 @@ case class SuperMetaPair[T](
 
     def parse(c: Cls, path: KPath, pair: SortingPair) =
       c .field(path)
-        .info
+        .info1
         .superPair(pair)
   }
 

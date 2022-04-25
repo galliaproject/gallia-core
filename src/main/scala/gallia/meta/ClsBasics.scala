@@ -69,7 +69,7 @@ trait ClsBasics { self: Cls =>
       .flatMap { key =>
         mapping.get(key).map {
           case None              => field(key)
-          case Some(nestedPaths) => field(key).transformInfo(_.transformNestedClass(_.retain(nestedPaths))) } }
+          case Some(nestedPaths) => field(key).transformAllInfos(_.transformNestedClass(_.retain(nestedPaths))) } }
       .pipe(Cls.apply)
   }
 

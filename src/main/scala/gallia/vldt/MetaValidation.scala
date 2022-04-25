@@ -57,15 +57,14 @@ private[gallia] object MetaValidation {
   }
 
   // ===========================================================================
-  def checkNonRequired(c: Cls, targets: KPathz): Errs = targets.flatMap { path => _Error.Tmp(path, "is required"    ).errsIf(c.isRequired(path)) }
-  def checkRequired   (c: Cls, targets: KPathz): Errs = targets.flatMap { path => _Error.Tmp(path, "is not required").errsIf(c.isOptional(path)) }
-  def checkNonMultiple(c: Cls, targets: KPathz): Errs = targets.flatMap { path => _Error.Tmp(path, "is multiple"    ).errsIf(c.isMultiple(path)) }
-  def checkMultiple   (c: Cls, targets: KPathz): Errs = targets.flatMap { path => _Error.Tmp(path, "is not multiple").errsIf(c.isScalar(path)) }
+  def checkNonRequired(c: Cls, targets: KPathz): Errs = targets.flatMap { path => _Error.Tmp(path, " is required"    ).errsIf(c.isRequired(path)) }
+  def checkRequired   (c: Cls, targets: KPathz): Errs = targets.flatMap { path => _Error.Tmp(path, " is not required").errsIf(c.isOptional(path)) }
+  def checkNonMultiple(c: Cls, targets: KPathz): Errs = targets.flatMap { path => _Error.Tmp(path, " is multiple"    ).errsIf(c.isMultiple(path)) }
+  def checkMultiple   (c: Cls, targets: KPathz): Errs = targets.flatMap { path => _Error.Tmp(path, " is not multiple").errsIf(c.isSingle  (path)) }
 
   // ---------------------------------------------------------------------------
-  def checkNotNesting(c: Cls, target: KPath) = errIf_(!c.field(target).isNesting)(ErrorId.NotNesting) // eg for TODO
-
-  def checkNotNumerical(c: Cls, target: KPath) = errIf_(!c.field(target).info.isNumericalType)(ErrorId.NotNumeric) // eg for sum-by
+  def checkNotNesting  (c: Cls, target: KPath) = errIf_(!c.field(target).info1.isNesting)(ErrorId.NotNesting) // eg for TODO
+  def checkNotNumerical(c: Cls, target: KPath) = errIf_(!c.field(target).isNumericalType)(ErrorId.NotNumeric) // eg for sum-by
 
   // ===========================================================================
   def notEmpty(location: Location)(keys: Seq[Key]): Err_ = errIf_(keys.isEmpty)(ErrorId.CantBeEmpty)

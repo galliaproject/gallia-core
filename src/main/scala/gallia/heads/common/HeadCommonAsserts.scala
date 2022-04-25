@@ -14,7 +14,7 @@ trait HeadCommonAsserts[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
     //TODO: field selection too? or for-key...
     def assertField(target: KPathW) = new {
-        def matches(pred: InfoLike => Boolean): Self2 =
+        def matches(pred: InfosLike => Boolean): Self2 =
           self2 :+ AssertField(target.value, _Error.FieldAssertionFailure(target.value), pred) }
 
       private def _assertContainer(target: KPath, container: Container): Self2 = self2 :+ AssertContainer(target, container)

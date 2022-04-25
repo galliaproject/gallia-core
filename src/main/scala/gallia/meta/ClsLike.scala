@@ -52,25 +52,18 @@ trait ClsLike { // read-only part
     def contains(path : KPath): Boolean =
       path.tailPair match {
         case (leaf  , None      ) => contains(leaf)
-        case (parent, Some(tail)) => _field_(parent).flatMap(_.info.nestingTypeOpt).exists(_.contains(tail)) }
+        case (parent, Some(tail)) => _field_(parent).flatMap(_.nestedClassOpt).exists(_.contains(tail)) }
 
     // ===========================================================================
-    // TODO: @delegate to fld-like
-    def isNesting (path: KPathW): Boolean = _field(path.value).isNesting
-    def isMultiple(path: KPathW): Boolean = _field(path.value).isMultiple
+    def hasNesting(path: KPathW): Boolean = _field(path.value).infos.exists(_.isNesting)
+
+    // ---------------------------------------------------------------------------
+    def isMultiple(path: KPathW): Boolean = _field(path.value).infos.forall(_.isMultiple)
     def isRequired(path: KPathW): Boolean = _field(path.value).isRequired
 
     // ---------------------------------------------------------------------------
-    def isLeaf    (path: KPathW): Boolean = _field(path.value).isNotNesting
-    def isScalar  (path: KPathW): Boolean = _field(path.value).isNotMultiple // "scalar" term ok with option?
+    def isSingle  (path: KPathW): Boolean = _field(path.value).infos.forall(!_.isMultiple)
     def isOptional(path: KPathW): Boolean = !isRequired(path)
-
-    // ===========================================================================
-    @PartialTypeMatching
-      def isString (path: KPathW): Boolean = _field(path.value).isString
-      def isInt    (path: KPathW): Boolean = _field(path.value).isInt
-      def isDouble (path: KPathW): Boolean = _field(path.value).isDouble
-      def isBoolean(path: KPathW): Boolean = _field(path.value).isBoolean
 
     // ===========================================================================
     //TODO: get fld-like, nested cls-like

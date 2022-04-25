@@ -30,20 +30,19 @@ object ActionsUUSomewhatBasics {
 
   // ===========================================================================
   case class SetDefault(target: TtqRPathz, value: AnyValue) extends ActionUUb {
-    def  vldt(c: Cls): Errs =
+    def vldt(c: Cls): Errs =
       target.vldtAsOrigin(c) ++
       _vldt.typeCompatibility(c, target.duo(c), SpecialCardiMode.Normal)
       //TODO: check was opt? what about multiple?
 
-    def _meta(c: Cls): Cls   = target.qpathz_(c).foldLeft(c)(_ toRequired _)
+    def _meta  (c: Cls): Cls     = target.qpathz_(c).foldLeft(c)(_ toRequired _)
     def atomuus(c: Cls): AtomUUs = target.qpathz_(c).pipe(_atoms(_SetDefault(_, value)))
   }
 
   // ===========================================================================
   case class Split(paths: RPathz, splitter: StringSplitter) extends ActionUUa with TodoV1 {
     def _meta(c: Cls): Cls  = paths.foldLeft(c)(_ toMultiple _)
-    def atomuus: AtomUUs = _atoms(paths, _Split(_, splitter))
-  }
+    def atomuus: AtomUUs = _atoms(paths, _Split(_, splitter)) }
 
   // ===========================================================================
   /** strict = all values are translated, therefore type can change */
@@ -67,8 +66,8 @@ object ActionsUUSomewhatBasics {
       def _meta(c: Cls): Cls =
         target.qpathz_(c).pipe { qpathz =>
           toOpt match {
-            case None     => c.rename    (qpathz)
-            case Some(to) => c.updateType(qpathz, to) } }
+            case None     => c.rename        (qpathz)
+            case Some(to) => c.updateSoleInfo(qpathz, to.forceNonBObjInfo) } }
 
       // ---------------------------------------------------------------------------
       def atomuus(c: Cls): AtomUUs = target.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, _helper.Translate.wrap(mapping, toOpt))))

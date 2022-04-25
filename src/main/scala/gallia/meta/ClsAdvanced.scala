@@ -1,29 +1,9 @@
 package gallia
 package meta
 
-import aptus.Seq_
-
 // ===========================================================================
 trait ClsAdvanced { self: Cls =>
 
-  def containsMatching(pred: Fld => Boolean): Boolean =
-    fields.exists { field =>
-      field
-        .nestedClassOpt
-        .map(_.containsMatching(pred))
-        .getOrElse(pred(field)) }
-
-  // ---------------------------------------------------------------------------
-  def basicTypeSet: Set[BasicType] =
-    fields
-      .flatMap { field =>
-        field
-          .nestedClassOpt
-          .map      (_.basicTypeSet)
-          .getOrElse(field.forceBasicTypes.toSet) }  
-      .toSet
-
-  // ===========================================================================
   /** expects no conflicts                   */ def mergeDisjoint  (that: Cls): Cls = that.fields.foldLeft(this)(_ add _)
   /** expects common fields to be compatible */ def unionCompatible(that: Cls): Cls =
     Cls(
@@ -31,7 +11,7 @@ trait ClsAdvanced { self: Cls =>
         .map { thisField =>
           that.field_(thisField.key) match {
             case None            => thisField.toNonRequired
-            case Some(thatField) => Fld(thisField.key, Info.combine(thisField.info, thatField.info)) } } ++
+            case Some(thatField) => Fld(thisField.key, Info.combine(thisField.info1, thatField.info1)) } } ++
       that
         .fields
         .flatMap { thatField =>
@@ -45,16 +25,17 @@ trait ClsAdvanced { self: Cls =>
       keys
         .pipe(f)
         .map(field(_))
-        .mapIf(_.isNesting && recursively) {
-          _.transformInfo(
-              _.transformNestedClass(
-                  _.reorderKeys(f, recursively))) })
+        .map { field =>
+          if (!recursively) field
+          else
+            field.transformNestedClasses( // TODO: t220422133901 - classES ok?
+              _.reorderKeys(f, recursively)) })
 
   // ===========================================================================
   def swapFields(parent: Option[RPath], key1: Key, key2: Key): Cls =
     parent match {
-      case None    =>                           swapFields(key1, key2)
-      case Some(p) => transformNestedClass(p)(_.swapFields(key1, key2)) }
+      case None    =>                             swapFields(key1, key2)
+      case Some(p) => transformNestedClasses(p)(_.swapFields(key1, key2)) } // TODO: t220422133901 - classES ok?
 
   // ---------------------------------------------------------------------------
   def copyField(target: KPath, newKey: Key): Cls =
@@ -98,7 +79,7 @@ trait ClsAdvanced { self: Cls =>
 
     // ---------------------------------------------------------------------------
     private def untuplify(targetKey: Ren, newKeys: Keyz, f: Container => Container): Cls =
-      transformInfo(targetKey) { // see 210109100250, may have to force them all to be strings
+      transformSoleInfo(targetKey) { // see 210109100250, may have to force them all to be strings
         info => Info(
             f(info.container),
             newKeys

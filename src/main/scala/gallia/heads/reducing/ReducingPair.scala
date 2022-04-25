@@ -13,8 +13,8 @@ trait ReducingPair {
     def dataTriplet(in: Cls): ReducingDataTriplet
 
     // ---------------------------------------------------------------------------
-    protected final def optional(in: Cls): Boolean               = in.field(target.value).info.isOptional
-    protected final def ntipeOpt(in: Cls): Option[NumericalType] = in.field(target.value).info.numericalTypeOpt
+    protected final def optional(in: Cls): Boolean               = in.field(target.value).isOptional
+    protected final def ntipeOpt(in: Cls): Option[NumericalType] = in.field(target.value).numericalTypeOpt
   }
 
   // ===========================================================================

@@ -20,30 +20,39 @@ object ObjOrdering {
       def compare(left: Obj, right: Obj): Int = // TODO: worth trying to optimize? (eg trivial cases, ...)
           //TODO: just use Iterable's?
           c .fields
-            .view
-            .map(compareField(left, right))
-            .find(_ != 0) // TODO: comfirm lazy
-            .getOrElse(0)
+              .view
+              .map(compareField(left, right))
+              .find(_ != 0) // TODO: comfirm lazy
+              .getOrElse(0)
 
-       // ===========================================================================
+       // ---------------------------------------------------------------------------
        def compareField(left: Obj, right: Obj)(field: Fld): Int = {
-          val key       = field.key
-          val container = field.info.container
-
-          field.info.containee match {
-
-            // ---------------------------------------------------------------------------
-            case tipe: BasicType =>
-              val ori = PathPair(KPath.from(key), field.isOptional)
-
-              field.info.compare(pair)(
-                  ori.lookup(left),
-                  ori.lookup(right))
-
-            // ---------------------------------------------------------------------------
-            case c: Cls => ??? // FIXME: recurse
+            val key      = field.key
+            val optional = field.isOptional
+            
+            field
+              .infos
+              .view
+              .map(compareInfo(key, optional)(left, right))
+              .find(_ != 0)        
+              .getOrElse(0)
           }
-        }
+
+          // ---------------------------------------------------------------------------
+          private def compareInfo(key: Key, optional: Boolean)(left: Obj, right: Obj)(info: meta.Info): Int =                 
+            info.containee match {
+  
+              // ---------------------------------------------------------------------------
+              case tipe: BasicType =>
+                val ori = PathPair(KPath.from(key), optional)
+  
+                tipe.compare(info.container, pair.descending, pair.missingLast)(
+                    ori.lookup(left),
+                    ori.lookup(right))
+  
+              // ---------------------------------------------------------------------------
+              case c: Cls => ??? // FIXME: recurse
+            }
   }
 
 }

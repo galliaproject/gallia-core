@@ -32,6 +32,8 @@ trait Reserved {
   val _tmp2 = Symbol("_tmp2")
   val _tmp3 = Symbol("_tmp3")
 
+  val _type = Symbol("_type")
+
   // ---------------------------------------------------------------------------
   val _vle    = Symbol("_vle")
   val _sole   = Symbol("_sole")

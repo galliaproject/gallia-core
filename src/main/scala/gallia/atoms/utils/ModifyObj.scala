@@ -4,6 +4,7 @@ package atoms.utils
 import meta._
 
 // ===========================================================================
+@deprecated("favor ObjModifier (220425095249) now - union-type aware counterpart")
 trait ModifyObj {
   // TODO: + handle enums (t210116114654)?
 

@@ -7,7 +7,7 @@ import FunctionWrappers._
 import actions.ActionsUUTransforms._
 
 // ===========================================================================
-trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
+trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 220412171653
   import TSL.Transform._
 
   // TODO: t201124094119 - how to allow using(identity)?
@@ -25,10 +25,24 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 //def transformb[O: WTT](f1: Transform[O])                                              = new TransformVV(f1)
 
     // ===========================================================================
-    class _TransformU(f1: Transform[HeadU]) {
-      def using         (f: HeadU => HeadU)                            : Self2 = self2 :+ TransformUU    (tqqpathz(f1), f)
-      def using         (f: HeadU => HeadZ)    (implicit d: DI)        : Self2 = self2 :+ TransformUZ    (tqqpathz(f1), f)
-      def using[V1: WTT](f: HeadU => HeadV[V1])(implicit d: DI, d2: DI): Self2 = self2 :+ TransformUV[V1](tqqpathz(f1), f) }
+    trait ___TransformU {
+        protected val target : Transform[HeadU]
+        protected val clsNameOpt: ClsNameOpt = None
+
+        // ---------------------------------------------------------------------------
+        def using         (f: HeadU => HeadU)                            : Self2 = self2 :+ TransformUU    (tqqpathz(target), clsNameOpt, f)
+        def using         (f: HeadU => HeadZ)    (implicit d: DI)        : Self2 = self2 :+ TransformUZ    (tqqpathz(target), f)
+        def using[V1: WTT](f: HeadU => HeadV[V1])(implicit d: DI, d2: DI): Self2 = self2 :+ TransformUV[V1](tqqpathz(target), f) }
+
+      // ===========================================================================
+      class _TransformU(val target: Transform[HeadU]) extends ___TransformU {
+          /** disambiguate in case of union type - see t210125111338 */
+          def typeName(name: ClsName) = new __TransformU(target, name)
+        }
+
+        // ---------------------------------------------------------------------------
+        class __TransformU(val target: Transform[HeadU], name: String) extends ___TransformU {
+          protected override val clsNameOpt: ClsNameOpt = Some(name) }
 
     // ===========================================================================
     class _TransformZ(f1: Transform[HeadZ]) {

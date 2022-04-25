@@ -11,6 +11,7 @@ import atoms.AtomsUUTransforms._TransformWW
 object ActionsUUTransforms {
   import gallia.actions.utils
   import utils.ActionsUtils._
+  import utils.NestedTransform
 
   // ===========================================================================
   private[actions] trait HasTqRPathzTarget { // TODO
@@ -18,8 +19,8 @@ object ActionsUUTransforms {
     def resolve(c: Cls) = target.qpathz_(c) }
 
   // ===========================================================================
-  case class TransformUU(target: TqRPathz, f: HeadU => HeadU) extends ActionUUb with HasTqRPathzTarget {
-      private val _trnsf = utils.NestedTransform.parseUU(f)
+  case class TransformUU(target: TqRPathz, nameOpt: ClsNameOpt, f: HeadU => HeadU) extends ActionUUb with HasTqRPathzTarget {
+      private val _trnsf: NestedTransform = utils.NestedTransform.parseUU(nameOpt)(f)
 
       // ---------------------------------------------------------------------------
       def  vldt(c: Cls): Errs =
@@ -28,7 +29,7 @@ object ActionsUUTransforms {
             _trnsf.vldt(c, _) } ++
         target.__qpathz(c).pipe(_.fromz).pipe {
               checkUInput(c) }
-        // TODO: t210202155459 - verify input is indeed z
+        // TODO: t210202155459 - verify input is indeed u
 
       // ---------------------------------------------------------------------------
       def _meta  (c: Cls): Cls     = resolve(c).pipe   (_trnsf.transformMeta(c, _))
@@ -36,7 +37,7 @@ object ActionsUUTransforms {
 
     // ===========================================================================
     case class TransformZZ(target: TqRPathz, f: HeadZ => HeadZ) extends ActionUUb with HasTqRPathzTarget {
-      private val _trnsf = utils.NestedTransform.parseZZ(f)
+      private val _trnsf: NestedTransform = utils.NestedTransform.parseZZ(f)
 
       // ---------------------------------------------------------------------------
       def  vldt(c: Cls): Errs =
@@ -55,25 +56,25 @@ object ActionsUUTransforms {
   case class TransformObjectCustom[D1: WTT](from: TqRPathz, to: TypeNode, f: Obj => D1) extends ActionUUb {
         def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.pipe(_vldt.validType) ++ Nil // TODO: more       
           // TODO: t210202155459 - verify input is indeed u
-        def _meta(c: Cls): Cls  = from.resolve(c).pipe(c.updateType(_, to))              
+        def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c) { _.updateSoleInfo(_, to.forceNonBObjInfo) }
         def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, wrap(f)))) }
     
     // ---------------------------------------------------------------------------
     case class TransformObjectsCustom[D1: WTT](from: TqRPathz, to: TypeNode, f: Objs => D1) extends ActionUUb {
         def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.pipe(_vldt.validType) ++ Nil // TODO: more        
           // TODO: t210202155459 - verify input is indeed z
-        def _meta  (c: Cls): Cls     = from.resolve(c).pipe(c.updateType(_, to))              
+        def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c) { _.updateSoleInfo(_, to.forceNonBObjInfo) }
         def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, wrap((x: Seq[Obj]) => f(Objs.from(x)))))) }    
 
     // ===========================================================================
     case class TransformToObj(from: TtqRPathz, to: Cls, multiple: Boolean, f: _ff11) extends ActionUUb with TodoV1 { // TODO: split single/multiple
       // TODO: validation, disallow '[]' (use missing field instead)
-      def _meta  (c: Cls): Cls     = from.qpathz_(c).pipe { c.transformInfo(_) { _ => Info(if (multiple) Container._Nes else Container._One, to) }}
+      def _meta  (c: Cls): Cls     = from.qpathz_(c).pipe { c.transformSoleInfo(_) { _ => Info(if (multiple) Container._Nes else Container._One, to) }}
       def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe { _atoms(c)(_TransformVV(_, f)) } }
     
   // ===========================================================================
   case class TransformUZ(target: TqRPathz, f: HeadU => HeadZ) extends ActionUUb with HasTqRPathzTarget {
-      private val _trnsf = utils.NestedTransform.parseUZ(f)
+      private val _trnsf: NestedTransform = utils.NestedTransform.parseUZ(f)
 
       // ---------------------------------------------------------------------------
       def  vldt(c: Cls): Errs =
@@ -90,8 +91,7 @@ object ActionsUUTransforms {
 
     // ===========================================================================
     case class TransformZU(target: TqRPathz, f: HeadZ => HeadU) extends ActionUUb with HasTqRPathzTarget {
-
-      private val _trnsf = utils.NestedTransform.parseZU(f)
+      private val _trnsf: NestedTransform = utils.NestedTransform.parseZU(f)
 
       // ---------------------------------------------------------------------------
       def  vldt(c: Cls): Errs =
@@ -107,7 +107,7 @@ object ActionsUUTransforms {
 
   // ===========================================================================
   case class TransformUV[D1: WTT](target: TqRPathz, f: HeadU => HeadV[D1]) extends ActionUUb with HasTqRPathzTarget {
-      private val _trnsf = utils.NestedTransform.parseUV(f)
+      private val _trnsf: NestedTransform = utils.NestedTransform.parseUV(f)
 
       // ---------------------------------------------------------------------------
       def  vldt(c: Cls): Errs =
@@ -120,13 +120,13 @@ object ActionsUUTransforms {
         //TODO: t210202155459 - verify input is indeed z
 
       // ---------------------------------------------------------------------------
-      def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).transformInfo(x.force1FX)(_ => Info.forceFrom[D1]) }
+      def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).transformSoleInfo(x.force1FX)(_ => Info.forceFrom[D1]) }
       def atomuus(c: Cls): AtomUUs = resolve(c).pipe {      _trnsf.atomuusUV    (c)(_, target.isOptional(c)) }
     }
 
     // ===========================================================================
     case class TransformZV[D1: WTT](target: TqRPathz, f: HeadZ => HeadV[D1]) extends ActionUUb with HasTqRPathzTarget {
-      private val _trnsf = utils.NestedTransform.parseZV(f)
+      private val _trnsf: NestedTransform = utils.NestedTransform.parseZV(f)
 
       // ---------------------------------------------------------------------------
       def  vldt(c: Cls): Errs =
@@ -138,13 +138,12 @@ object ActionsUUTransforms {
         _vldt.validType(typeNode[D1])
 
       // ---------------------------------------------------------------------------
-      def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).transformInfo(x.force1FX)(_ => Info.forceFrom[D1]) }
+      def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).transformSoleInfo(x.force1FX)(_ => Info.forceFrom[D1]) }
       def atomuus(c: Cls): AtomUUs = resolve(c).pipe { _trnsf.atomuusZV(c)(_, target.isOptional(c)) }
     }
 
   // ===========================================================================
   // TODO: check input isn't u or z + destination type is valid
-
   case class TransformVV(from: TtqRPathz, to: TypeNode, f: _ff11, g: _ff11) extends ActionUUb {
       def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ _vldt.validType(to)
       def _meta(c: Cls): Cls  = from.qpathz_(c).foldLeft(c)(_.updateType(_, from.node, to))
@@ -154,17 +153,17 @@ object ActionsUUTransforms {
     // ---------------------------------------------------------------------------
     case class TransformVVx(from: TtqRPathz, to: TypeNode, f: _ff11) extends ActionUUb {
       def  vldt(c: Cls): Errs = from.vldtAsOrigin(c, SpecialCardiMode.IgnoreAltogether) ++ _vldt.validType(to)
-      def _meta(c: Cls): Cls  = from.qpathz_(c).foldLeft(c)(_.transformInfo(_)(_.updateContainee(to.forceNonBObjInfo.containee)))
+      def _meta(c: Cls): Cls  = from.qpathz_(c).foldLeft(c)(_.transformSoleInfo(_)(_.updateContainee(to.forceNonBObjInfo.containee)))
       def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.wrapx(c, f)))) }
 
     // ---------------------------------------------------------------------------
     case class TransformVVc(from: TtqRPathz, to: HT, f: _ff11) extends ActionUUb with TodoV1 {
-      def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c)(_.updateType(_, to.node))
+      def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c) { _.updateSoleInfo(_, to.node.forceNonBObjInfo) }
       def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.wrapc(to, f) ))) }
 
     // ---------------------------------------------------------------------------
     case class TransformVVxc(from: TtqRPathz, to: HT, f: _ff11) extends ActionUUb with TodoV1 {
-      def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c)(_.updateContainee(_, to.node))
+      def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c)(_.transformSoleContainee(_)(_ => to.node.forceNonBObjInfo.containee))
       def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.wrapxc(c, to, f) ))) }
 
     // ===========================================================================
@@ -177,7 +176,7 @@ object ActionsUUTransforms {
     // ---------------------------------------------------------------------------
     case class TransformWW1b(from: TtqRPathz, to: TypeNode, f: _ff11) extends ActionUUb {
       def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) ++ to.pipe(_vldt.validType)
-      def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c) { (curr, path) => curr.updateContainee(path, to) }
+      def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c)(_.transformSoleContainee(_)(_ => to.forceNonBObjInfo.containee))
       def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformWW(_, f, checkType = false))) }
 
   // ===========================================================================
@@ -189,10 +188,10 @@ object ActionsUUTransforms {
     // ---------------------------------------------------------------------------
     private def checkUOrZInput(c: Cls, multiple: Boolean, paths: KPathz): Errs =
       paths
-        .filterNot(path =>
-          (!multiple && c.isScalar  (path) ||
+        .filterNot { path =>
+          (!multiple && c.isSingle  (path) ||
             multiple && c.isMultiple(path)) &&
-          c.isNesting(path))
+          c.hasNesting(path) }
         .in.noneIf(_.isEmpty).toSeq
         .flatMap { invalidPaths =>
           if (multiple) errs(s"210110194028:NotObjsOrObjs_:${KPathz(invalidPaths)}")

@@ -18,13 +18,19 @@ object MetaObj { // 201222111332
       .pipe(JsonParsing.parseObject) // TODO: support more than just JSON
       .pipe(cls)
 
+  // ---------------------------------------------------------------------------
+  def clsFromString(value: String): Cls =
+    value
+      .pipe(JsonParsing.parseObject) // TODO: support more than just JSON
+      .pipe(cls)
+
   // ===========================================================================
   def cls(value: Obj): Cls = Cls(value.objs("fields").map(fld))
   def cls(value: Cls): Obj = obj("fields" -> value.fields.map(fld))
 
     // ---------------------------------------------------------------------------
-    def fld(value: Obj): Fld = Fld(value.string("key").symbol, value.obj("info").pipe(info))
-    def fld(value: Fld): Obj = obj("key" -> value.key.name, "info" -> value.info.pipe(info))
+    def fld(value: Obj): Fld = Fld(value.string("key").symbol, value.objs("infos").map(info))
+    def fld(value: Fld): Obj = obj("key" -> value.key.name, "infos" -> value.infos.map(info))
 
       // ---------------------------------------------------------------------------
       // TODO: check enums ok?
@@ -49,7 +55,12 @@ object MetaObj { // 201222111332
   def formatClassDebug(value: Cls): DebugString = value.fields.map(formatFieldDebug).joinln
 
     // ---------------------------------------------------------------------------
-    def formatFieldDebug(value: Fld): DebugString = value.key.name.padRight(16, ' ').tab(value.info.pipe(formatInfoDebug))
+    def formatFieldDebug(value: Fld): DebugString =
+        value
+          .key
+          .name
+          .padRight(16, ' ')
+          .tab(value.infos.map(formatInfoDebug).join("|"))
 
       // ---------------------------------------------------------------------------
       def formatInfoDebug(value: Info): DebugString =

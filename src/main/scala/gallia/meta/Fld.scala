@@ -1,59 +1,79 @@
 package gallia
 package meta
 
-import aptus.{Seq_, String_}
+import aptus.{Anything_, Seq_, String_}
 import GalliaUtils.Seq__
 
 // ===========================================================================
-case class Fld(key: Key, info: Info) extends FldLike {
+case class Fld(key: Key, infos: Seq[Info]) extends FldLike {
     require(key.name.nonEmpty)// TODO: validation
+    infos
+      .requireNonEmpty
+      .requireDistinct
+      .require( // a220411090125
+        _.map(_.isRequired).distinct.size == 1,
+        _.map(_.isRequired).@@)
 
     // ---------------------------------------------------------------------------
-    private[gallia] /* private while experimental */ def infos = Seq(info) // see t210125111338 (union types)
-    
+    def isUnionType: Boolean = infos.size > 1 // see t210125111338 (union types)
+    def info1      : Info    = infos match {  // see t210125111338 (union types)
+        case Seq(sole) => sole
+        case seq       => aptus.unsupportedOperation("limited support for union types (see t210125111338)") }
+
+      // ---------------------------------------------------------------------------
+      def containee1: Containee = info1.containee
+      def container1: Container = info1.container   
+
     // ---------------------------------------------------------------------------
     // mostly for macros
-    private var enumNameOpt: Option[String] = None
-    def setEnumName(enumName: String) = { enumNameOpt = Some(enumName); this }
-    def forceEnumName: String = enumNameOpt.get
+    private var _enumNameOpt: EnmNameOpt = None
+      def setEnumName(enumName: EnmName) = { _enumNameOpt = Some(enumName); this }
+      def forceEnumName: EnmName    = _enumNameOpt.get
+      def enumNameOpt  : EnmNameOpt = _enumNameOpt
 
     // ---------------------------------------------------------------------------
-    protected override val _container:      Container  = info.container
-    protected override val _containee:      Containee  = info.containee
-    protected override val _containees: Seq[Containee] = Seq(_containee) // see t210125111338 (union types)    
+    // see t210125111338 (union types)
+    protected override val _containees: Seq[Containee] = infos.map(_.containee)
+    protected override val _containers: Seq[Container] = infos.map(_.container)
 
-    def toPNF(parent: Seq[Key]) = PNF(KPath(parent, key), info)
+    def toPNF(parent: Seq[Key]) = PNF(KPath(parent, key), info1)
 
     // ---------------------------------------------------------------------------
     override def toString = formatDefault
       def formatDefault = s"${key.name.padRight(16, ' ')}\t${infos.map(_.formatDefault).join("|")}" // see t210125111338 (union types)
 
     // ===========================================================================
-    def transformKey  (f: Key  => Key ): Fld = Fld(f(key),   info)
-    def transformInfo (f: Info => Info): Fld = Fld(  key , f(info))
+    def transformKey(f: Key => Key): Fld = copy(key = f(key))
 
-    // ===========================================================================
-    def updateKey (                newValue: Key ): Fld = Fld(newValue, info)
-    def updateInfo(                newValue: Info): Fld = Fld(key, newValue)
-    def updateInfo(oldValue: Info, newValue: Info): Fld = Fld(key, infos.mapIfGuaranteed(_ == oldValue)(_ => newValue).force.one) // see t210125111338 (union types)
+    def transformSoleInfo                        (f: Info => Info): Fld = copy(infos = f(info1))
+    def transformAllInfos                        (f: Info => Info): Fld = copy(infos = infos.map(f))
+    def transformSpecificInfo(p: Info => Boolean)(f: Info => Info): Fld = copy(infos = infos.mapAffectExactlyOne(p)(f)) // see t210125111338 (union types)
 
     // ---------------------------------------------------------------------------
-    def updateContainee(newValue: Containee): Fld = transformInfo(_.updateContainee(newValue))
-    def updateContainer(newValue: Container): Fld = transformInfo(_.updateContainer(newValue))
+    def transformNestedClasses                   (f: Cls  => Cls): Fld = copy(infos = infos.mapIf              (_.isNesting)              (_.transformNestedClass(f)))
+    def transformSoleNestedClass                 (f: Cls  => Cls): Fld = copy(infos = infos.mapAffectExactlyOne(_.isNesting)              (_.transformNestedClass(f)))
+    def transformNestedClass(name   : ClsName)   (f: Cls  => Cls): Fld = copy(infos = infos.mapIf              (_.isNestingWithName(name))(_.transformNestedClass(f)))
+    def transformNestedClass(nameOpt: ClsNameOpt)(f: Cls  => Cls): Fld =
+      nameOpt
+        .map { name => transformNestedClass(name)(f) }
+        .getOrElse {   transformSoleNestedClass  (f) }
+
+    // ---------------------------------------------------------------------------
+    def updateKey                         (newValue: Key ): Fld = copy(key = newValue)
+    def updateSoleInfo                    (newValue: Info): Fld = transformSoleInfo(_ => newValue)
+    def updateSpecificInfo(oldValue: Info, newValue: Info): Fld = transformSpecificInfo(_ == oldValue)(_ => newValue) // see t210125111338 (union types)
 
     // ===========================================================================
     // commonly used
 
-      def    toRequired: Fld = updateInfo(info.   toRequired)
-      def toNonRequired: Fld = updateInfo(info.toNonRequired)
+      def    toRequired: Fld = transformAllInfos(_.toRequired)
+      def toNonRequired: Fld = transformAllInfos(_.toNonRequired)
 
-      def    toMultiple: Fld = updateInfo(info.   toMultiple)
-      def toNonMultiple: Fld = updateInfo(info.toNonMultiple)
-
-      def    toDouble: Fld = updateInfo(info.   toDouble) // see t210802091450
+      def    toMultiple: Fld = transformSoleInfo(_.toMultiple)
+      def toNonMultiple: Fld = transformSoleInfo(_.toNonMultiple)
 
       // ---------------------------------------------------------------------------
-      def nestedClassOpt: Option[Cls] = info.nestingTypeOpt
+      def toDouble: Fld = transformSoleInfo(_.toDouble) // see t210802091450
   }
 
   // ===========================================================================

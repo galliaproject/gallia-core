@@ -13,7 +13,7 @@ trait FldCreator { import Fld._
   // ---------------------------------------------------------------------------
   def typed[T : WTT]: Fld = Fld(_key, Info.forceFrom[T])
 
-  private[gallia] /* private while experimental */ def union(first: Info, more: Info*): Fld = Fld(_key, (first +: more).head) // see t210125111338 (union types)
+  def union(first: Info, more: Info*): Fld = Fld(_key, (first +: more)) // see t210125111338 (union types)
 
   // ===========================================================================
   def string    : Fld = one(_key, _String)

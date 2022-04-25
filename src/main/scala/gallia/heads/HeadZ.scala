@@ -89,7 +89,7 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
   def forcePopulateDataClasses[DC: WTT] = ???
 
   // ===========================================================================
-  // for consistency only, shouldn't really use outside of tests (use .thn instead)
+  // for consistency only, shouldn't really use outside of tests (use .pipe instead); TODO: t220425112901 - rename to `thn`
   def zen        (f: Self => Self    ): Self     = zz(ZenZZ(f))
   def zen        (f: Self => HeadU   ): HeadU    = zu(ZenZU(f))
   def zen[V: WTT](f: Self => HeadV[V]): HeadV[V] = zv(ZenZV(f))

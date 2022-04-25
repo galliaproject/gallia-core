@@ -77,6 +77,7 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
     def keys   : Seq[ Key           ] = data.map(_._1).toList
     def values : Seq[      AnyValue ] = data.map(_._2).toList
     def entries: Seq[(Key, AnyValue)] = data          .toList
+    def lookup : Map[ Key, AnyValue ] = data.toMap
 
     // ---------------------------------------------------------------------------
     final      def  keyz  :      Keyz = Keyz(keys)

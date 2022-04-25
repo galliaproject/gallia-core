@@ -40,6 +40,8 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
     override val requiredKeys  : Seq[Key] = _fields.filter(_.isRequired).map(_.key)
     override val requiredKeySet: Set[Key] = _fields.filter(_.isRequired).map(_.key).toSet
 
+    def indexOf(key: Key): Int = keys.indexOf(key)
+
     // ---------------------------------------------------------------------------
     override def toString = formatDefault
 

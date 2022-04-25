@@ -29,7 +29,7 @@ object ActionsUUSomewhatBasics {
       def atomuus(c: Cls): AtomUUs = target.qpathz_(c).pipe(_atoms(_RemoveWhateverIf(_, value))) }
 
   // ===========================================================================
-  case class SetDefault(target: TtqRPathz, value: AnyValue) extends ActionUUb {
+  case class SetDefaultValueFor(target: TtqRPathz, value: AnyValue) extends ActionUUb {
     def vldt(c: Cls): Errs =
       target.vldtAsOrigin(c) ++
       _vldt.typeCompatibility(c, target.duo(c), SpecialCardiMode.Normal)

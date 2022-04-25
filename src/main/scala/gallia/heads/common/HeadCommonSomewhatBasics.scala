@@ -54,7 +54,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
     private[heads] def setDefaultFor(target: TqRPathz) = new _SetDefaultFor(target)
     final class _SetDefaultFor(targets: TqRPathz){
       def asValue[T: WTT](defaultValue: => T): Self2 =
-        self2 :+ SetDefault(ttqqpathz1[Option[T]](targets), defaultValue) }
+        self2 :+ SetDefaultValueFor(ttqqpathz1[Option[T]](targets), defaultValue) }
 
   // ===========================================================================
   // convert

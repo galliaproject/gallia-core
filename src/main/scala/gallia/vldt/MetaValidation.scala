@@ -113,7 +113,7 @@ private[gallia] object MetaValidation {
 
   def fieldRenaming(c: Cls, path: RPath): Errs = Nil ++
                        fieldPresence(c, path.from) ++
-    path.toOpt.flatMap(fieldAbsence (c, _))
+    path.pathOpt.flatMap(fieldAbsence (c, _))
 
   // ---------------------------------------------------------------------------
   def fieldsPresence(c: Cls, paths: KPathz): Errs =

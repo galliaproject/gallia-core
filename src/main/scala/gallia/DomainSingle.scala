@@ -48,8 +48,9 @@ case class KPath(parent: Seq[Key], key: Key) {
 
     def isLeaf     : Boolean = parent.isEmpty
     def forceLeaf  : Key     = this.assert(_.isLeaf   ).key
+
     @deprecated
-    def forceLeafFX: Key     = this.assert(_.isLeaf   ).key // FIXME
+    def forceLeafFX:        Key  = this.assert(_.isLeaf   ).key // FIXME
     def leafOpt    : Option[Key] = if (parent.isEmpty) Some(key) else None
 
     def appendLevel(that: Key): KPath = KPath(all, that)
@@ -127,10 +128,9 @@ case class RPath(parent: Seq[Key], ren: Ren) {
 
     def to: KPath  = KPath(parent, ren.to  )
 
-    @deprecated
-    def toOpt  : Option[KPath] = if (isActual) Some(to) else None
-    def pathOpt: Option[KPath] = if (isActual) Some(to) else None
-    def leafOpt: Option[Ren]   = if (parent.isEmpty) Some(ren) else None
+    // ---------------------------------------------------------------------------
+    def pathOpt: Option[KPath] = if (isActual) Some(to ) else None
+    def leafOpt: Option[Ren]   = if (isLeaf)   Some(ren) else None
 
     // ---------------------------------------------------------------------------
     def initPair: (Option[KPath], Ren) = (
@@ -151,9 +151,6 @@ case class RPath(parent: Seq[Key], ren: Ren) {
           case Left ( renaming      ) => ???
           case Right((parent, qpath)) => ???
       */
-
-    // ---------------------------------------------------------------------------
-    @deprecated def either0: Either[Either[Key, ActualRen], Either[(KPath, Key), (KPath, ActualRen)]] = ??? // see 210115153704@w
   }
 
   // ===========================================================================

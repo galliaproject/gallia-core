@@ -153,8 +153,8 @@ case class RPathz(values: Seq[RPath]) extends Seq[RPath] {
     def froms: Seq[KPath] = values.map(_.from)
     def fromz:     KPathz = values.map(_.from).pipe(KPathz.apply)
 
-    def   tos: Seq[KPath] = values.flatMap(_.toOpt)
-    def   toz:     KPathz = values.flatMap(_.toOpt).pipe(KPathz.apply)
+    def   tos: Seq[KPath] = values.flatMap(_.pathOpt)
+    def   toz:     KPathz = values.flatMap(_.pathOpt).pipe(KPathz.apply)
 
     // ---------------------------------------------------------------------------
     //FIXME: see t210110104437

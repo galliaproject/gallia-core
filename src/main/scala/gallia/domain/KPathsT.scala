@@ -5,14 +5,16 @@ import vldt.MetaValidation
 
 // ===========================================================================
 trait KPathSeq {
-    def paths: Seq[KPath]
-    
+          def paths: Seq[KPath]
+    final def pathz: KPathz     = KPathz(paths)
+
+    // ---------------------------------------------------------------------------
     def vldtAsNewDestination(c: Cls): Errs =
       paths.flatMap(MetaValidation.fieldAbsence(c, _)) ++ 
       MetaValidation.distinctKPaths(paths)
   }
 
-  // ---------------------------------------------------------------------------
+  // ===========================================================================
   case class KPaths2(path1: KPath, path2: KPath) extends KPathSeq {
     override val paths: Seq[KPath] = Seq(path1, path2)
     def entries(v1: AnyValue, v2: AnyValue) = Seq(path1 -> v1, path2 -> v2)

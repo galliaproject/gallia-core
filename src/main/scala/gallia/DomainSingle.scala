@@ -50,6 +50,7 @@ case class KPath(parent: Seq[Key], key: Key) {
     def forceLeaf  : Key     = this.assert(_.isLeaf   ).key
     @deprecated
     def forceLeafFX: Key     = this.assert(_.isLeaf   ).key // FIXME
+    def leafOpt    : Option[Key] = if (parent.isEmpty) Some(key) else None
 
     def appendLevel(that: Key): KPath = KPath(all, that)
 
@@ -122,10 +123,14 @@ case class RPath(parent: Seq[Key], ren: Ren) {
     //FIXME: see t210110104437
     @deprecated def fromFX: KPath = KPath(parent, ren.from)
     @deprecated def renFX : Ren   = ren
+    @deprecated def forceKPathFX = forceKPath
 
     def to: KPath  = KPath(parent, ren.to  )
 
-    def toOpt : Option[KPath] = if (isActual) Some(to) else None
+    @deprecated
+    def toOpt  : Option[KPath] = if (isActual) Some(to) else None
+    def pathOpt: Option[KPath] = if (isActual) Some(to) else None
+    def leafOpt: Option[Ren]   = if (parent.isEmpty) Some(ren) else None
 
     // ---------------------------------------------------------------------------
     def initPair: (Option[KPath], Ren) = (
@@ -164,7 +169,8 @@ case class RPath(parent: Seq[Key], ren: Ren) {
 case class TKPath(path: KPath, tipe: gallia.reflect.TypeNode) extends gallia.target.HasTypeNode with HasType {
   lazy val instantiator = null // FIXME: t210826103357
   override val node = tipe
-  def fieldPair(c: Cls): (KPath, gallia.meta.Info) = (path, tipe.forceNonBObjInfo)  
+  def fieldPair(c: Cls): (KPath, gallia.meta.Info) = (path, tipe.forceNonBObjInfo)
+  def isLeaf: Boolean = path.isLeaf
 }
   
 // ===========================================================================

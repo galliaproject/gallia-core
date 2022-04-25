@@ -4,6 +4,7 @@ package gallia
 package object atoms {
   type _ff11 = gallia.FunctionWrappers._ff11
   type _ff21 = gallia.FunctionWrappers._ff21
+  type _ff12 = gallia.FunctionWrappers._ff12
 
   // ---------------------------------------------------------------------------
   val  ErrorId = gallia.vldt. ErrorId

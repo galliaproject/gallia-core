@@ -5,14 +5,17 @@ import enumeratum.{Enum, EnumEntry}
 
 // ===========================================================================
 sealed trait Container extends EnumEntry {
-    val isOne: Boolean = this == Container._One
-    val isOpt: Boolean = this == Container._Opt
-    val isNes: Boolean = this == Container._Nes
-    val isPes: Boolean = this == Container._Pes
+    def isOne: Boolean = isSingle   && isRequired
+    def isOpt: Boolean = isSingle   && isOptional
+    def isNes: Boolean = isMultiple && isRequired
+    def isPes: Boolean = isMultiple && isOptional
     
     // ---------------------------------------------------------------------------
-    val isMultiple: Boolean
-    val isOptional: Boolean
+    def isMultiple: Boolean
+    def isOptional: Boolean
+
+    def isSingle  : Boolean = !isMultiple
+    def isRequired: Boolean = !isOptional
 
     // ---------------------------------------------------------------------------
     def containerWrap(f: Any => Any): Any => Any =

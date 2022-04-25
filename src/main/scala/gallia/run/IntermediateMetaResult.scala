@@ -50,7 +50,7 @@ case class IntermediateMetaResult(dag: gallia.dag.DAG[IntermediateMetaResultNode
       // ---------------------------------------------------------------------------
       def forceLeafClass: Cls  = leafNode.result match {
           case ResultSchema.UpstreamError          => aptus.illegalState("UpstreamError:201006134638") //TODO
-          case ResultSchema.Errors(values, origin) => aptus.illegalState(s"Errors:201006134639:${values}:${origin}") //TODO
+          case ResultSchema.Errors(values, origin) => aptus.illegalState(s"MetaErrors:201006134639:${values}:${origin}") //TODO
           case ResultSchema.Success(value)         => value }
 
       // ===========================================================================

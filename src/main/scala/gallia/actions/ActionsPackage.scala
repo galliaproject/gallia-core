@@ -72,6 +72,9 @@ package object actions { // TODO: delegate access to all of AtomsUtils._
   val  _TransformVV = atoms.AtomsUUTransforms._TransformVV
   
   // ===========================================================================
+  private[actions] implicit def _atomUUToAtomUUs(value: AtomUU): Seq[AtomUU] = Seq(value)
+
+  // ---------------------------------------------------------------------------
   implicit class Seq__[A](values: Seq[A]) {
     def orIfEmpty(generator: => Seq[A]): Seq[A] = if (values.isEmpty) generator else values // convenient for validations
   }

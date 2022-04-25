@@ -7,10 +7,11 @@ package object gallia
     with    Aliases
     with    Annotations {
 
-  private[gallia] implicit class GalliaAnything_[A](u: A) { // so as to not import chaining._ everywhere
-    def pipe[B](f: A => B)   : B =   f(u)
-    def tap [B](f: A => Unit): A = { f(u); u }    
-  }
+  private[gallia] implicit class GalliaAnything_[A](value: A) { // so as to not import chaining._ everywhere
+    def pipe[B](f: A => B)   : B =   f(value)
+    def tap [B](f: A => Unit): A = { f(value); value }
+    def _p                   : A = { System.out.println(  value ); value }
+    def _i(f: A => Any)      : A = { System.out.println(f(value)); value } }
 
   // ===========================================================================
   // TODO: t210121105809 - rename to HeadU->HeadO and HeadZ->HeadS (historical names)
@@ -148,10 +149,11 @@ package object gallia
   private[gallia] implicit def Info_(info: meta.Info): Seq[meta.Info] = Seq(info) // see t210125111338 (union types)
   
   // ===========================================================================
-  def cls[T: WTT]                 : Cls = reflect.TypeNode.parse[T].leaf.forceDataClass
-  def cls(schemaFilePath: String) : Cls = Cls.fromFile(schemaFilePath) // TODO: or also detect file vs direct object?
-  def cls(field1: Fld, more: Fld*): Cls = cls((field1 +: more).toList)
-  def cls(fields: Seq[Fld])       : Cls = meta.Cls(fields.toList)
+  def cls[T: WTT]                         : Cls = reflect.TypeNode.parse[T].leaf.forceDataClass
+  def cls(schemaFilePath: String)         : Cls = Cls.fromFile(schemaFilePath) // TODO: or also detect file vs direct object?
+  def cls(field1: Fld, more: Fld*)        : Cls = cls((field1 +: more).toList)
+  def cls               (fields: Seq[Fld]): Cls = meta.Cls(fields.toList)
+  def cls(name: ClsName, fields: Seq[Fld]): Cls = meta.Cls(fields.toList).setName(name)
 
   // ---------------------------------------------------------------------------
   def obj(entry1: DataEntry, more: DataEntry*)            : Obj = Obj.fromIterable((entry1 +: more).toList.map(_.pair))

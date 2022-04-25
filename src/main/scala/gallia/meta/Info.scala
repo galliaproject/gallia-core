@@ -26,12 +26,6 @@ case class Info(
           case nesting: Cls     => s"${container}\t${nesting.formatDefault.sectionAllOff}" }
 
     // ===========================================================================
-    def compare(pair: SortingPair)(x: AnyValue, y: AnyValue): Int = // for ObjOrdering
-      containee match {
-        case tipe: BasicType => tipe.compare(container, pair.descending, pair.missingLast)(x, y)
-        case r: Cls          => ??? } // TODO
-
-    // ---------------------------------------------------------------------------
     def superPair(pair: SortingPair) = // for sorting
       containee match {
         case tipe: BasicType => tipe.superPair(container, pair.descending, pair.missingLast)
@@ -67,9 +61,11 @@ case class Info(
       def toInt    : Info = Info(container, BasicType._Int)
       def toDouble : Info = Info(container, BasicType._Double)
 
+      def toOptionalBoolean: Info = Info.boolean(_._Opt)
+      
     // ---------------------------------------------------------------------------
     def potentiallyProcessNesting(value: AnyValue): AnyValue =
-      nestingTypeOpt
+      nestedClassOpt
        .map { nestedClass =>
          container.containerWrap(nestedClass.valueToObj)(value) }
        .getOrElse(value)

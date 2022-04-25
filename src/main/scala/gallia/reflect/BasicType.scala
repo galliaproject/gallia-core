@@ -56,6 +56,12 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
     def isIntegerLikeType: Boolean = this.isInstanceOf[IntegerLikeType]
     def isRealLikeType   : Boolean = this.isInstanceOf[RealLikeType]
 
+    def forceNumericalType   = this.asInstanceOf[NumericalType]
+    def forceUnboundedNumber = this.asInstanceOf[UnboundedNumber]
+    def forceBoundedNumber   = this.asInstanceOf[BoundedNumber]    
+    def forceIntegerLikeType = this.asInstanceOf[IntegerLikeType]
+    def forceRealLikeType    = this.asInstanceOf[RealLikeType]
+    
     def asNumericalTypeOpt   = if (this.isInstanceOf[NumericalType])   Some(this.asInstanceOf[NumericalType])   else None
     def asUnboundedNumberOpt = if (this.isInstanceOf[UnboundedNumber]) Some(this.asInstanceOf[UnboundedNumber]) else None
     def asBoundedNumberOpt   = if (this.isInstanceOf[BoundedNumber])   Some(this.asInstanceOf[BoundedNumber])   else None    

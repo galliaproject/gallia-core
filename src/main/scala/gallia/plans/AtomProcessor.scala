@@ -86,10 +86,7 @@ private[plans] object AtomProcessor {
 
       //TODO: t210114111111 - distinguish RuntimeErrors (eg not distinct checking it is) from others (eg transform "".head or bugs)
       case util.Failure(throwable) =>
-        System.err.println(s"${throwable.getMessage}: ${throwable.getStackTrace.toList.mkString(", ")}")
-        throw new Exception(
-            RunCtx(nodeId, nodeAtom, debug, throwable, inputData(nodeAtom)).formatDefault, // will be pretty ugly...
-            throwable)
+        throw new Exception(RunCtx(nodeId, nodeAtom, debug, throwable, inputData(nodeAtom)).formatDefault) // will be pretty ugly...
 
       // ---------------------------------------------------------------------------
       case util.Success(ndt) => ndt

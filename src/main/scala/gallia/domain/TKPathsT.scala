@@ -11,6 +11,8 @@ trait TKPathSeq extends KPathSeq {
     def values: Seq[TKPath]
     final def paths : Seq[KPath] = values.map(_.path)
 
+    final def allLeaves = paths.forall(_.isLeaf)
+
     // ---------------------------------------------------------------------------
     // vldt
     override def vldtAsNewDestination(c: Cls): Errs = 

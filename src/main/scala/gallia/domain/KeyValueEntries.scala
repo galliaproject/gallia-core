@@ -55,7 +55,7 @@ sealed trait KVE { // Key-Value Entry
       def dataEntry: (Key, AnyValue) = key ->
         (node
           .forceNonBObjInfo
-          .nestingTypeOpt
+          .nestedClassOpt
           .map { c =>
               if (node.isMultiple) c.valueToObjs(value)
               else                 c.valueToObj (value) }

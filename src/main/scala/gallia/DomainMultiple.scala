@@ -93,6 +93,11 @@ case class KPathz(values: Seq[KPath]) extends Seq[KPath] {
         case seq => seq.map(_.formatDebug).mkString("[", ", ", "]") }
 
     // ---------------------------------------------------------------------------
+    def keyzOpt: Option[Keyz] = values.map(_.leafOpt).toOptionalSeq.map(Keyz.apply) // if all leaves
+      
+    // ---------------------------------------------------------------------------
+    override def distinct: KPathz = KPathz(values.distinct)
+    
     def union  (paths: KPathz): KPathz = KPathz(this.values ++ paths.values)
     def prepend(path : KPath ): KPathz = KPathz(path +: values)
     def  append(path : KPath ): KPathz = KPathz(        values :+ path)
@@ -161,7 +166,7 @@ case class RPathz(values: Seq[RPath]) extends Seq[RPath] {
 
     // ---------------------------------------------------------------------------
     def forceKPathz: KPathz = values.map(_.forceKPath).pipe(KPathz.apply)
-    def forceRenz  : Renz   = values.map(_.forceLeaf).pipe(Renz.apply)
+    def forceRenz  : Renz   = values.map(_.forceLeaf) .pipe(Renz.apply)
     @deprecated
     def forceRenzFX: Renz   = values.map(_.forceLeaf).pipe(Renz.apply) // FIXME (t210110104437)
   }

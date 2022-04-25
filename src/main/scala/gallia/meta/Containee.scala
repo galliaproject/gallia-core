@@ -8,6 +8,10 @@ package meta
       case x: Cls       => Right(x) }
 
     // ---------------------------------------------------------------------------
+    def isNesting: Boolean = _either.isRight
+    def isLeaf   : Boolean = _either.isLeft
+
+    // ---------------------------------------------------------------------------
     def nestingOpt: Option[Cls      ] = _either     .toOption
     def leafOpt   : Option[BasicType] = _either.swap.toOption
     

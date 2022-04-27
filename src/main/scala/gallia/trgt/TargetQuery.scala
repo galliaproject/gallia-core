@@ -24,9 +24,9 @@ class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](
     def filterByPaths(c: Cls)(implicit ev: $Target <:< KPathz): Cls = ???
 
     // ---------------------------------------------------------------------------
-    def info1(c: Cls)(implicit ev: $Target <:< KPath) = c.field(kpath_(c)).info1
-    
-    def isMultiple(c: Cls) = _is(c, _.isMultiple)
+    def ofni (c: Cls)(implicit ev: $Target <:< KPath) = c.field(kpath_(c)).ofni
+
+    // ---------------------------------------------------------------------------
     def isRequired(c: Cls) = _is(c, _.isRequired)
     def isOptional(c: Cls) = _is(c, _.isOptional)
 
@@ -41,7 +41,8 @@ class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](
         __qpaths(c)
           .head /* since all supposed to be the same: 201005113232 */
           .from.pipe(c.field(_))
-          .container1
+          .ofni
+          .container
 
     // ---------------------------------------------------------------------------
     def keyz_  (c: Cls)(implicit ev: $Target <:< Keyz  ): Keyz     = resolve(c)

@@ -21,7 +21,7 @@ case class ObjModifierCtx(
             field
               .pipe(itemOpt(qualifies))
               .map { item =>
-                ObjModifierQualifyingFld(field.key, field.isMultiple, item) } }
+                ObjModifierQualifyingFld(field.key, field.info1.isMultiple, item) } }
           .in.noneIf(_.isEmpty)
           .map(ObjModifierCtx.apply(c.nameOpt, _))
 

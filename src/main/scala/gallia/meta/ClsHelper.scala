@@ -76,12 +76,12 @@ trait ClsHelper { ignored: Cls =>
   }
 
   // ---------------------------------------------------------------------------
-  def _replace(key: Ren, info: Info): Cls = {
+  def _replace(key: Ren, ofni: Ofni): Cls = {
     requireKnownKey(key.from)
 
     fields
       .map { field =>
-        if (field.key == key.from) Fld(key.to, info)
+        if (field.key == key.from) Fld(key.to, ofni)
         else                       field }
       .pipe(rewrap)
   }

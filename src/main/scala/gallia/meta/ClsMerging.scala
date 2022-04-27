@@ -19,17 +19,17 @@ trait ClsMerging { self: Cls =>
       Cls(
         field(joinKeys.left) +: // arbitrarily choosing left as the "dominant" one
         Seq(
-          Fld(as.left , Info(coGroupContainer(joinType, isLeft = true) , this.remove(joinKeys.left ))),
-          Fld(as.right, Info(coGroupContainer(joinType, isLeft = false), that.remove(joinKeys.right))) ) )
-  
+          Fld(as.left , Ofni(coGroupOptionality(joinType, isLeft = true) , Info.multiple(this.remove(joinKeys.left )))),
+          Fld(as.right, Ofni(coGroupOptionality(joinType, isLeft = false), Info.multiple(that.remove(joinKeys.right)))) ) )
+
     // ---------------------------------------------------------------------------
-    private def coGroupContainer(joinType: JoinType, isLeft: Boolean): Container =
+    private def coGroupOptionality(joinType: JoinType, isLeft: Boolean): Optional =
       joinType match {
-        case JoinType.full  => Container._Pes                    
-        case JoinType.left  => if (isLeft) Container._Nes else Container._Pes
-        case JoinType.right => if (isLeft) Container._Pes else Container._Nes
-        case JoinType.inner => Container._Nes }
-  
+        case JoinType.full  =>                             _Optional
+        case JoinType.left  => if ( isLeft) _Required else _Optional
+        case JoinType.right => if (!isLeft) _Required else _Optional
+        case JoinType.inner =>              _Required }
+
   // ---------------------------------------------------------------------------
   def join(that: Cls)(joinType: JoinType, joinKeys: JoinKey): Cls = {
     def thisFields = 

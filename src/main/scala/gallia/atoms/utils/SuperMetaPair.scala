@@ -12,10 +12,16 @@ case class SuperMetaPair[T](
   // ---------------------------------------------------------------------------
   object SuperMetaPair {
 
-    def parse(c: Cls, path: KPath, pair: SortingPair) =
-      c .field(path)
-        .info1
-        .superPair(pair)
+    def parse(c: Cls, path: KPath, pair: SortingPair) = {
+      val field = c.field(path)
+
+      field
+        .forceBasicType /* FIXME: t220426143741 */
+        .superPair(
+          field.ofni.container,
+          pair.descending,
+          pair.missingLast)
+    }
   }
 
 // ===========================================================================

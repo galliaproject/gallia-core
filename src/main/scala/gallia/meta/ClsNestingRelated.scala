@@ -15,14 +15,14 @@ trait ClsNestingRelated { self: Cls =>
   private def nestInto (targetKeys: Renz, existingNestingKey: Key): Cls =
     replace(
         key  = Ren.from(existingNestingKey),
-        info = updatedNestingFieldInfo(this, targetKeys, existingNestingKey))
+        ofni = updatedNestingFieldOfni(this, targetKeys, existingNestingKey))
       .remove(targetKeys.froms)
 
   // ---------------------------------------------------------------------------
   private def nestUnder(targetKeys: Renz, newNestingKey: Key): Cls =
     add(
         key  = newNestingKey,
-        info = newNestingFieldInfo(this, targetKeys))
+        ofni = newNestingFieldOfni(this, targetKeys))
       .remove(targetKeys.froms)
 
   // ===========================================================================
@@ -70,42 +70,34 @@ trait ClsNestingRelated { self: Cls =>
       }
 
   // ===========================================================================
-  def updatedNestingFieldInfo(c: Cls, targetKeys: Renz, existingNestingKey: Key): Info = { // for nest into
-      val existingNestingFieldInfo: Info = c.field(existingNestingKey).info1
+  def updatedNestingFieldOfni(c: Cls, targetKeys: Renz, existingNestingKey: Key): Ofni = { // for nest into
+    val existingNestingFieldOfni: Ofni = c.field(existingNestingKey).ofni
 
-      val existingNestedFields: Seq[Fld] =
-        existingNestingFieldInfo
-          .forceNestedClass
-          .fields
+    val existingNestedFields: Seq[Fld] =
+      existingNestingFieldOfni
+        .forceNestedClass
+        .fields
 
-      val updatedNestedClass: Cls = Cls(
-          existingNestedFields ++
-          nestingFields(c, targetKeys))
+    val updatedNestedClass: Cls = Cls(
+      existingNestedFields ++
+        nestingFields(c, targetKeys))
 
-      existingNestingFieldInfo
-        .updateContainee(updatedNestedClass)
-        //FIXME: t210122162650 - p1 - meta nest into: handle optional like nest under
-        //.pipe { info =>
-        //  val nestedKeys: Keyz = combineNestedKeys(targetKeys, existingNestedFields)
-        //  if (c.areAllNonRequired(nestedKeys)) info.toNonRequired
-        //  else                                 info }
-    }
-
-    // ===========================================================================
-    private def combineNestedKeys(targetKeys: Renz, existingNestedFields: Seq[Fld]): Keyz =
-        targetKeys.froms
-          .union {
-        existingNestedFields
-          .map(_.key)
-          .pipe(Keyz.apply) }
+    existingNestingFieldOfni
+      .updateContainee(updatedNestedClass)
+    //FIXME: t210122162650 - p1 - meta nest into: handle optional like nest under
+    //.pipe { info =>
+    //  val nestedKeys: Keyz = combineNestedKeys(targetKeys, existingNestedFields)
+    //  if (c.areAllNonRequired(nestedKeys)) info.toNonRequired
+    //  else                                 info }
+  }
 
   // ===========================================================================
-  def newNestingFieldInfo(c: Cls, targetKeys: Renz): Info = // for nest under
-      nestingFields(c, targetKeys)
-        .pipe(Cls.apply)
-        .pipe { nestedClass =>
-          if (c.areAllNonRequired(targetKeys.froms)) Info.opt(nestedClass)
-          else                                       Info.one(nestedClass) }
+  def newNestingFieldOfni(c: Cls, targetKeys: Renz): Ofni = // for nest under
+    nestingFields(c, targetKeys)
+      .pipe(Cls.apply)
+      .pipe { nestedClass =>
+        if (c.areAllNonRequired(targetKeys.froms)) Ofni.opt(nestedClass)
+        else                                       Ofni.one(nestedClass) }
 
   // ===========================================================================
   private def nestingFields(c: Cls, targetKeys: Renz): Seq[Fld] =

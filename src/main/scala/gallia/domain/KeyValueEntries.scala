@@ -15,14 +15,14 @@ sealed trait KVE { // Key-Value Entry
     def formatDefault: String = toString
 
     def vldt(nextLocation: Location): Errs
-    def metaEntry: (Key, Info)
+    def metaEntry: (Key, Ofni)
     def dataEntry: (Key, AnyValue)
   }
 
   // ===========================================================================
   case class BObjKVE(key: Key, bobj: BObj) extends KVE {
       def vldt(nextLocation: Location): Errs = MetaValidation.validateBObj(nextLocation)(bobj)
-      def metaEntry: (Key, Info)     = key -> bobj.forceCls.pipe(Info.one)
+      def metaEntry: (Key, Ofni)     = key -> bobj.forceCls.pipe(Ofni.one)
       def dataEntry: (Key, AnyValue) = key -> bobj.forceObj
     }
 
@@ -35,7 +35,7 @@ sealed trait KVE { // Key-Value Entry
             MetaValidation.validateBObj(
                 nextLocation.addIndex(index))(value) }
 
-      def metaEntry: (Key, Info)     = key -> bobjs.map(_.forceCls).distinct.force.one.pipe(Info.nes)
+      def metaEntry: (Key, Ofni)     = key -> bobjs.map(_.forceCls).distinct.force.one.pipe(Ofni.nes)
       def dataEntry: (Key, AnyValue) = key -> bobjs.map(_.forceObj)
     }
 
@@ -50,11 +50,11 @@ sealed trait KVE { // Key-Value Entry
             case None     => MetaValidation.validType        (nextLocation, node)
             case Some(cc) => MetaValidation.validateCaseClass(nextLocation)(cc) }
 
-      def metaEntry: (Key, Info) = key -> node.forceNonBObjInfo
+      def metaEntry: (Key, Ofni) = key -> node.forceNonBObjOfni
 
       def dataEntry: (Key, AnyValue) = key ->
         (node
-          .forceNonBObjInfo
+          .forceNonBObjOfni
           .nestedClassOpt
           .map { c =>
               if (node.isMultiple) c.valueToObjs(value)
@@ -95,7 +95,7 @@ case class RVE(underlying: KVE, to: Key) {
     override def toString: String = formatDefault
       def formatDefault: String = if (underlying.key != to) s"${underlying.key} ~> ${underlying.formatDefault}" else underlying.formatDefault
 
-    def metaEntry: (Ren, Info    ) = underlying.metaEntry.mapFirst(_ => ren)
+    def metaEntry: (Ren, Ofni    ) = underlying.metaEntry.mapFirst(_ => ren)
     def dataEntry: (Ren, AnyValue) = underlying.dataEntry.mapFirst(_ => ren)
   }
 
@@ -122,7 +122,7 @@ case class KVEs(values: Seq[KVE]) {
     def keyz: Keyz     = Keyz(keys)
 
     // ---------------------------------------------------------------------------
-    def forceMetaEntries: Seq[(Key, Info    )] = values.map(_.metaEntry)
+    def forceMetaEntries: Seq[(Key, Ofni    )] = values.map(_.metaEntry)
     def forceDataEntries: Seq[(Key, AnyValue)] = values.map(_.dataEntry)
 
     // ---------------------------------------------------------------------------
@@ -152,7 +152,7 @@ case class RVEs(values: Seq[RVE]) {
     def renz: Renz = values.map(_.ren).pipe(Renz.apply)
 
     // ---------------------------------------------------------------------------
-    def forceMetaEntries: Seq[(Ren, Info    )] = values.map(_.metaEntry)
+    def forceMetaEntries: Seq[(Ren, Ofni    )] = values.map(_.metaEntry)
     def forceDataEntries: Seq[(Ren, AnyValue)] = values.map(_.dataEntry)
   }
 

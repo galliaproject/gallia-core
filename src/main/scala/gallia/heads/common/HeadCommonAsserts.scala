@@ -14,7 +14,7 @@ trait HeadCommonAsserts[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
     //TODO: field selection too? or for-key...
     def assertField(target: KPathW) = new {
-        def matches(pred: InfosLike => Boolean): Self2 =
+        def matches(pred: OfniLike => Boolean): Self2 =
           self2 :+ AssertField(target.value, _Error.FieldAssertionFailure(target.value), pred) }
 
       private def _assertContainer(target: KPath, container: Container): Self2 = self2 :+ AssertContainer(target, container)
@@ -46,7 +46,7 @@ trait HeadCommonAsserts[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
       // ---------------------------------------------------------------------------
       class _CustomField(target: TqRPathz) {
-        def using(f: Info => Info): Self2 = self2 :+ CustomField(target, f) }
+        def using(f: Ofni => Ofni): Self2 = self2 :+ CustomField(target, f) }
 
   // ---------------------------------------------------------------------------
   import TSL.AssertData._

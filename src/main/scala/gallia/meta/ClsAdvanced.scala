@@ -11,7 +11,7 @@ trait ClsAdvanced { self: Cls =>
         .map { thisField =>
           that.field_(thisField.key) match {
             case None            => thisField.toNonRequired
-            case Some(thatField) => Fld(thisField.key, Info.combine(thisField.info1, thatField.info1)) } } ++
+            case Some(thatField) => Fld(thisField.key, Ofni.combine(thisField.ofni, thatField.ofni)) } } ++
       that
         .fields
         .flatMap { thatField =>
@@ -58,7 +58,7 @@ trait ClsAdvanced { self: Cls =>
   // ===========================================================================
   def zipStrings(keys: Renz, newNestingKey : Key): Cls =
       add(  key  = newNestingKey,
-            info = Info.nes(nestedClass(keys)) )
+            ofni = Ofni.nes(nestedClass(keys)) )
         .remove(keys.froms)
 
     // ---------------------------------------------------------------------------
@@ -69,21 +69,21 @@ trait ClsAdvanced { self: Cls =>
           field(entry.from)
             .updateKey(entry.to)
             .toNonMultiple
-            .toNonRequired // TODO: t210108203819 offer a strict version
-        }.pipe(Cls.apply)
+            .toNonRequired } // TODO: t210108203819 offer a strict version
+        .pipe(Cls.apply)
 
   // ===========================================================================
-  def untuplifyz(targetKey: Ren, newKeys: Keyz): Cls = untuplify(targetKey, newKeys, _ => Container._One) //  TODO: add check one string;
-  def untuplifya(targetKey: Ren, newKeys: Keyz): Cls = untuplify(targetKey, newKeys, identity)            // TODO: add check strings
-  def untuplifyb(targetKey: Ren, newKeys: Keyz): Cls = untuplify(targetKey, newKeys, _ => Container._Nes /* TODO: can it be empty? */)
+  def untuplifyz(targetKey: Ren, newKeys: Keyz): Cls = untuplify(targetKey, newKeys, _ => _Single)   // TODO: add check one string;
+  def untuplifya(targetKey: Ren, newKeys: Keyz): Cls = untuplify(targetKey, newKeys, identity)       // TODO: add check strings
+  def untuplifyb(targetKey: Ren, newKeys: Keyz): Cls = untuplify(targetKey, newKeys, _ => _Multiple) // TODO: can it be empty?
 
     // ---------------------------------------------------------------------------
-    private def untuplify(targetKey: Ren, newKeys: Keyz, f: Container => Container): Cls =
+    private def untuplify(targetKey: Ren, newKeys: Keyz, f: Multiple => Multiple): Cls =
       transformSoleInfo(targetKey) { // see 210109100250, may have to force them all to be strings
         info => Info(
-            f(info.container),
+            f(info.multiple),
             newKeys
-              .map(Fld(_, Info.oneString))
+              .map(Fld(_, Ofni.oneString))
               .pipe(Cls.apply)) }
 
   // ===========================================================================
@@ -102,7 +102,7 @@ trait ClsAdvanced { self: Cls =>
         .pipe { remaining =>
           newKeys
             .values
-            .map(Fld(_, Info.one(remaining)))
+            .map(Fld(_, Ofni.one(remaining)))
             .pipe(Cls.apply) }
 
   // ===========================================================================

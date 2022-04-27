@@ -25,16 +25,6 @@ package object meta {
     override def toString: String = formatDefault
       def formatDefault: String = Seq(field1.formatDefault, field2.formatDefault).section
   }
-  
-  // ===========================================================================
-  /** PNF = Potentially Nested Field */
-  // see t210125111338 (union types) - adapt
-  case class PNF(path: KPath, info: Info) extends HasKey with Info1Like {
-                override val key = path.key
-  
-      protected override lazy val _container1:      Container  = info.container
-      protected override lazy val _containee1:      Containee  = info.containee
-  }
 
 }
 

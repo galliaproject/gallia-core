@@ -27,7 +27,7 @@ case class CallSite(
           s"${filePath}${location}")
 
     // ---------------------------------------------------------------------------
-    def location: String = s"(${fileName}:${line})" // meant to be IDE-click-friendly          
+    def location: String = s"${fileName}(${fileName}:${line})" // meant to be IDE-click-friendly
   }
 
   // ===========================================================================

@@ -49,7 +49,7 @@ private object SchemaInferrerUtils {
         .map(dis.field(_))
         .map(_.toNonRequired) // because not present in that, therefore not required
         .foldLeft(dis) { (curr, field) =>
-          curr.replace(field.key, field.info1) }
+          curr.replace(field.key, field.ofni) }
 
     // ---------------------------------------------------------------------------
     def addMissingFieldsFrom(that: Cls): Cls =

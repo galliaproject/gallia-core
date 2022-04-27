@@ -2,6 +2,7 @@ package gallia
 package reflect
 
 import enumeratum.{Enum, EnumEntry}
+import gallia.meta.Ofni
 
 // ===========================================================================
 sealed trait Container extends EnumEntry {
@@ -24,6 +25,15 @@ sealed trait Container extends EnumEntry {
         case Container._Opt => _.asInstanceOf[Option    [_] ]      .map(f)
         case Container._Nes => _.asInstanceOf[       Seq[_] ]      .map(f)
         case Container._Pes => _.asInstanceOf[Option[Seq[_]]].map(_.map(f)) }
+
+    // ---------------------------------------------------------------------------
+    def ofni(containee: meta.Containee): Ofni =
+      this match {
+        case Container._One => Ofni.one(containee)
+        case Container._Opt => Ofni.opt(containee)
+        case Container._Nes => Ofni.nes(containee)
+        case Container._Pes => Ofni.pes(containee) }
+
   }
 
   // ===========================================================================
@@ -51,6 +61,14 @@ sealed trait Container extends EnumEntry {
     // ===========================================================================
     def single  (optional: Boolean): Container = if (optional) Container._Opt else Container._One
     def multiple(optional: Boolean): Container = if (optional) Container._Pes else Container._Nes
+
+    // ---------------------------------------------------------------------------
+    def from(optional: Optional, multiple: Multiple): Container =
+      (optional, multiple) match {
+        case (false, false) => Container._One
+        case (true,  false) => Container._Opt
+        case (false, true ) => Container._Nes
+        case (true,  true ) => Container._Pes }
 
     // ---------------------------------------------------------------------------
     def containerPairOpt(value: Any): Option[(Container, Any)] =

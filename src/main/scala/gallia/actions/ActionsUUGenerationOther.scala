@@ -23,7 +23,7 @@ object ActionsUUGenerationOther { //TODO: t210111095156 separate all the Whateve
       protected val _trnsf: NestedTransform
 
       // ---------------------------------------------------------------------------
-      protected val metaF: Boolean => Cls  => Info // boolean is "isOptional"
+      protected val metaF: Optional => Cls  => Ofni
       protected val dataF: (Cls, PathPair) => _ff11
 
       // ---------------------------------------------------------------------------
@@ -42,8 +42,8 @@ object ActionsUUGenerationOther { //TODO: t210111095156 separate all the Whateve
     case class GenerateUU(target: TqKPath, newPath: KPath, f: HeadU => HeadU) extends _Generate(target, newPath) {
         protected val _trnsf = NestedTransform.parseUU(f)
 
-        protected val metaF = optional  => Info.from(optional, /* multiple */ false)
-        protected val dataF = (c, pair) => _trnsf.uu(c.forceNestedClass(pair.path), pair.optional)
+        protected val metaF = optional  => nc => Ofni(optional, Info(multiple = false, nc))
+        protected val dataF = (nc, pair) => _trnsf.uu(nc.forceNestedClass(pair.path), pair.optional)
 
         // ---------------------------------------------------------------------------
         def  vldt(c: Cls): Errs = protoValidate(c) ++ target.checkErrors(c)(checkUInput) }
@@ -52,7 +52,7 @@ object ActionsUUGenerationOther { //TODO: t210111095156 separate all the Whateve
       case class GenerateZZ(target: TqKPath, newPath: KPath, f: HeadZ => HeadZ) extends _Generate(target, newPath) {
         protected val _trnsf = NestedTransform.parseZZ(f)
 
-        protected val metaF = optional  => Info.from(optional, /* multiple */ true)
+        protected val metaF = optional  => nc => Ofni(optional, Info(multiple = true, nc))
         protected val dataF = (c, pair) => _trnsf.zz(c.forceNestedClass(pair.path), pair.optional)
 
         // ---------------------------------------------------------------------------

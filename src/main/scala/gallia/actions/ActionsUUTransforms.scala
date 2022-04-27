@@ -56,20 +56,20 @@ object ActionsUUTransforms {
   case class TransformObjectCustom[D1: WTT](from: TqRPathz, to: TypeNode, f: Obj => D1) extends ActionUUb {
         def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.pipe(_vldt.validType) ++ Nil // TODO: more       
           // TODO: t210202155459 - verify input is indeed u
-        def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c) { _.updateSoleInfo(_, to.forceNonBObjInfo) }
+        def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c) { _.updateOfni(_, to.forceNonBObjOfni) }
         def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, wrap(f)))) }
     
     // ---------------------------------------------------------------------------
     case class TransformObjectsCustom[D1: WTT](from: TqRPathz, to: TypeNode, f: Objs => D1) extends ActionUUb {
         def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.pipe(_vldt.validType) ++ Nil // TODO: more        
           // TODO: t210202155459 - verify input is indeed z
-        def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c) { _.updateSoleInfo(_, to.forceNonBObjInfo) }
+        def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c) { _.updateOfni(_, to.forceNonBObjOfni) }
         def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, wrap((x: Seq[Obj]) => f(Objs.from(x)))))) }    
 
     // ===========================================================================
     case class TransformToObj(from: TtqRPathz, to: Cls, multiple: Boolean, f: _ff11) extends ActionUUb with TodoV1 { // TODO: split single/multiple
       // TODO: validation, disallow '[]' (use missing field instead)
-      def _meta  (c: Cls): Cls     = from.qpathz_(c).pipe { c.transformSoleInfo(_) { _ => Info(if (multiple) Container._Nes else Container._One, to) }}
+      def _meta  (c: Cls): Cls     = from.qpathz_(c).pipe { c.updateSoleInfo(_, Info(multiple, to))}
       def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe { _atoms(c)(_TransformVV(_, f)) } }
     
   // ===========================================================================
@@ -120,7 +120,7 @@ object ActionsUUTransforms {
         //TODO: t210202155459 - verify input is indeed z
 
       // ---------------------------------------------------------------------------
-      def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).transformSoleInfo(x.force1FX)(_ => Info.forceFrom[D1]) }
+      def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).updateOfni(x.force1FX, Ofni.forceFrom[D1]) }
       def atomuus(c: Cls): AtomUUs = resolve(c).pipe {      _trnsf.atomuusUV    (c)(_, target.isOptional(c)) }
     }
 
@@ -138,7 +138,7 @@ object ActionsUUTransforms {
         _vldt.validType(typeNode[D1])
 
       // ---------------------------------------------------------------------------
-      def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).transformSoleInfo(x.force1FX)(_ => Info.forceFrom[D1]) }
+      def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).updateOfni(x.force1FX, Ofni.forceFrom[D1]) }
       def atomuus(c: Cls): AtomUUs = resolve(c).pipe { _trnsf.atomuusZV(c)(_, target.isOptional(c)) }
     }
 
@@ -153,17 +153,17 @@ object ActionsUUTransforms {
     // ---------------------------------------------------------------------------
     case class TransformVVx(from: TtqRPathz, to: TypeNode, f: _ff11) extends ActionUUb {
       def  vldt(c: Cls): Errs = from.vldtAsOrigin(c, SpecialCardiMode.IgnoreAltogether) ++ _vldt.validType(to)
-      def _meta(c: Cls): Cls  = from.qpathz_(c).foldLeft(c)(_.transformSoleInfo(_)(_.updateContainee(to.forceNonBObjInfo.containee)))
+      def _meta(c: Cls): Cls  = from.qpathz_(c).foldLeft(c)(_.transformSoleInfo(_)(_.updateContainee(to.forceNonBObjOfni.info1.containee)))
       def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.wrapx(c, f)))) }
 
     // ---------------------------------------------------------------------------
     case class TransformVVc(from: TtqRPathz, to: HT, f: _ff11) extends ActionUUb with TodoV1 {
-      def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c) { _.updateSoleInfo(_, to.node.forceNonBObjInfo) }
+      def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c) { _.updateOfni(_, to.node.forceNonBObjOfni) }
       def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.wrapc(to, f) ))) }
 
     // ---------------------------------------------------------------------------
     case class TransformVVxc(from: TtqRPathz, to: HT, f: _ff11) extends ActionUUb with TodoV1 {
-      def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c)(_.transformSoleContainee(_)(_ => to.node.forceNonBObjInfo.containee))
+      def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c)(_.transformSoleContainee(_)(_ => to.node.forceNonBObjOfni.info1.containee))
       def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.wrapxc(c, to, f) ))) }
 
     // ===========================================================================
@@ -176,7 +176,7 @@ object ActionsUUTransforms {
     // ---------------------------------------------------------------------------
     case class TransformWW1b(from: TtqRPathz, to: TypeNode, f: _ff11) extends ActionUUb {
       def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) ++ to.pipe(_vldt.validType)
-      def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c)(_.transformSoleContainee(_)(_ => to.forceNonBObjInfo.containee))
+      def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c)(_.transformSoleContainee(_)(_ => to.forceNonBObjOfni.info1.containee))
       def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformWW(_, f, checkType = false))) }
 
   // ===========================================================================

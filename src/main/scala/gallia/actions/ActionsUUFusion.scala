@@ -74,7 +74,7 @@ object ActionsUUFusion { import ActionsUtils.removeAll
         val fromPath1 = from.tq1.resolve(c)
         val fromPath2 = from.tq2.resolve(c)
 
-        c .add(to, fromPath1.pipe(c.field).info1) // choosing first arbitrarily (210817130604)
+        c .add(to, fromPath1.pipe(c.field).ofni) // choosing first arbitrarily (210817130604)
           .remove (fromPath1)
           .remove (fromPath2)
       }
@@ -100,7 +100,7 @@ object ActionsUUFusion { import ActionsUtils.removeAll
           val fromPath2 = from.tq2.resolve(c)
           val fromPath3 = from.tq3.resolve(c)
   
-          c .add(to, fromPath1.pipe(c.field).info1) // choosing first arbitrarily (210817130604)
+          c .add(to, fromPath1.pipe(c.field).ofni) // choosing first arbitrarily (210817130604)
             .remove (fromPath1)
             .remove (fromPath2)
             .remove (fromPath3)
@@ -122,7 +122,7 @@ object ActionsUUFusion { import ActionsUtils.removeAll
       def vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c) ++ _vldt.validType(toType)
 
       def _meta(c: Cls): Cls    =          
-        c .add   (to, toType.forceNonBObjInfo)
+        c .add   (to, toType.forceNonBObjOfni)
           .remove(from.tq1.resolve(c))
           .remove(from.tq2.resolve(c))
 
@@ -136,7 +136,7 @@ object ActionsUUFusion { import ActionsUtils.removeAll
       def vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c) ++ _vldt.validType(toType)
 
       def _meta(c: Cls): Cls    =          
-        c .add   (to, toType.forceNonBObjInfo)
+        c .add   (to, toType.forceNonBObjOfni)
           .remove(from.tq1.resolve(c))
           .remove(from.tq2.resolve(c))
           .remove(from.tq3.resolve(c))

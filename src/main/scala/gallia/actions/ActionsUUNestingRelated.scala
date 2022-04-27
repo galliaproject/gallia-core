@@ -46,7 +46,7 @@ object ActionsUUNestingRelated {
         case None =>
           val nc = c.forceNestedClass(parent)
 
-          if (c.field(parent).isMultiple && nc.size > 1) errs("TODO:DoubleMultiple:210109145954")
+          if (c.field(parent).info1.isMultiple && nc.size > 1) errs("TODO:DoubleMultiple:210109145954")
           else target.vldtAsOrigin(nc) }} //TODO: more (check renamings, ...)
 
     // ---------------------------------------------------------------------------
@@ -54,7 +54,7 @@ object ActionsUUNestingRelated {
       val nc = c.forceNestedClass(parent)
 
       // TODO: split in two actions rather
-      (  if (c.field(parent).isMultiple)
+      (  if (c.field(parent).info1.isMultiple)
           fromz(nc)
             .force.one
             .pipe { sole =>
@@ -73,9 +73,9 @@ object ActionsUUNestingRelated {
       val fromz = this.fromz(nc)
 
       // ---------------------------------------------------------------------------
-      (      if (c.field(parent).isMultiple) _UnnestOOO (parent, fromz.values.force.one)
-        else if (fromz.size == nc.size)      _UnnestAll (parent) // TODO: still worth handling separately?
-        else                                 _UnnestSome(parent, fromz)) +: 
+      (      if (c.field(parent).info1.isMultiple) _UnnestOOO (parent, fromz.values.force.one)
+        else if (fromz.size == nc.size)            _UnnestAll (parent) // TODO: still worth handling separately?
+        else                                       _UnnestSome(parent, fromz)) +:
       target.resolve(nc).flatMap(potentialRenaming(_))
     }
   }

@@ -31,6 +31,7 @@ object ObjOrdering {
             val optional = field.isOptional
             
             field
+              .ofni
               .infos
               .view
               .map(compareInfo(key, optional)(left, right))
@@ -45,8 +46,9 @@ object ObjOrdering {
               // ---------------------------------------------------------------------------
               case tipe: BasicType =>
                 val ori = PathPair(KPath.from(key), optional)
-  
-                tipe.compare(info.container, pair.descending, pair.missingLast)(
+                val container = reflect.Container.from(optional, info.multiple)
+
+                tipe.compare(container, pair.descending, pair.missingLast)(
                     ori.lookup(left),
                     ori.lookup(right))
   

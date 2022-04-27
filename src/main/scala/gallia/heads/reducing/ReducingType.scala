@@ -12,7 +12,7 @@ sealed trait ReducingType { // don't make enum (else can't use `values`)
 
     // ---------------------------------------------------------------------------
     final def field(          original: Fld): Fld = field(defaultKey, original)
-    final def field(key: Key, original: Fld): Fld = Fld(key, Info(container, containee(original.isOptional, original.forceBasicType)))
+    final def field(key: Key, original: Fld): Fld = Fld(key, container.ofni(containee(original.isOptional, original.forceBasicType)))
 
       // ---------------------------------------------------------------------------
       protected def container: Container = Container._One // only overriden by no grouping (remains Seq)

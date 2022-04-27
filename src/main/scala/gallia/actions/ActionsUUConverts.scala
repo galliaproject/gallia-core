@@ -30,7 +30,7 @@ object ActionsUUConverts {
   // ---------------------------------------------------------------------------
   case class ConvertToFlag[T: WTT](target: TqRPathz, trueValue: T, strict: Boolean) extends ActionUUbb {
     def vldt                     (c: Cls): Errs    = target.vldtAsOrigin(c)
-    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleInfo(_, _.toOptionalBoolean) } // TODO: t210108114447 - support own "flag" type? 
+    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.updateOfni(_, Ofni.optBoolean) } // TODO: t210108114447 - support own "flag" type?
     def atomuus(origin: CallSite)(c: Cls): AtomUUs = target.resolve(c).pipe(_atoms(c)(_ConvertToFlag(origin)(_, trueValue, strict))) }
 
   // ---------------------------------------------------------------------------
@@ -42,7 +42,7 @@ object ActionsUUConverts {
   // ---------------------------------------------------------------------------
   case class ConvertToOptionalBoolean[T: WTT](target: TqRPathz, trueValue: T, falseValue: T, nullValue: T) extends ActionUUbb {
     def vldt                     (c: Cls): Errs    = target.vldtAsOrigin(c)
-    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleInfo(_, _.toOptionalBoolean) }
+    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.updateOfni(_, Ofni.optBoolean) }
     def atomuus(origin: CallSite)(c: Cls): AtomUUs = target.resolve(c).pipe(_atoms(c)(_ConvertToOptionalBoolean(origin)(_, trueValue, falseValue, nullValue))) }
 
   // ===========================================================================

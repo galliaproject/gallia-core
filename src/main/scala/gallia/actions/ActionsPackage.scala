@@ -18,6 +18,9 @@ package object actions { // TODO: delegate access to all of AtomsUtils._
   type Info = meta.Info
   val  Info = meta.Info
 
+  type Ofni = meta.Ofni
+  val  Ofni = meta.Ofni
+
   val  Cls  = meta.Cls
 
   // ---------------------------------------------------------------------------

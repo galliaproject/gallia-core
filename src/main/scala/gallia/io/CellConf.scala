@@ -3,7 +3,7 @@ package io
 
 import aptus.{Anything_, String_}
 
-import meta.Info
+import meta.{Info, Ofni}
 import inferring.table.TypeGuessing
 import reflect.{Container, BasicType}
 
@@ -22,16 +22,16 @@ case class CellConf(
   private val soleArraySeparator: Option[String] = if (arraySeparators.size == 1) Some(arraySeparators.head) else None
 
   // ===========================================================================
-  def inferContainerOnly(value: String): Container = {
+  def inferContainerOnly(value: String): Container =
            if (isNull (value)) Container._Opt
       else if (isArray(value)) Container._Nes
-      else                     Container._One }
+      else                     Container._One
 
   // ---------------------------------------------------------------------------
-  def inferInfo(value: String): Info = {
-           if (isNull (value)) Info(Container._Opt, BasicType._String)
-      else if (isArray(value)) Info(Container._Nes, arrayType(splitArray(value)))
-      else                     Info(Container._One, TypeGuessing(value)) }
+  def inferOfni(value: String): Ofni =
+           if (isNull (value)) Ofni(_Optional, Info(_Single,   BasicType._String))
+      else if (isArray(value)) Ofni(_Required, Info(_Multiple, arrayType(splitArray(value))))
+      else                     Ofni(_Required, Info(_Single,   TypeGuessing(value)))
 
     // ---------------------------------------------------------------------------
     private def arrayType(values: Seq[String]): BasicType =

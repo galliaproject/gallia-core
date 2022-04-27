@@ -14,16 +14,25 @@ private[gallia] object InfoUtils {
        .map { field =>
          Fld(
              field.key.symbol,
-             field.node.forceNonBObjInfo)
+             field.node.forceNonBObjOfni)
            .setEnumName(field.node.leaf.name) /* mostly for macros */ }
        .pipe(Cls.apply)
        .setName(leaf.name.splitBy(".").last /* TODO: see t210325105833 - need to be in scope for macros */) // mostly for macros
 
   // ---------------------------------------------------------------------------
   def forceNonBObjInfo(node: TypeNode): Info =
-     Info(
-         node.containerType,
-         node.forceValidContainer.pipe(containee(node.isContainedDataClass)))
+    Info(
+      node.containerType.isMultiple, // note: ignores optionality
+      containee(
+        node.isContainedDataClass)(
+        node.forceValidContainer))
+
+  // ---------------------------------------------------------------------------
+  def forceNonBObjOfni(node: TypeNode): Ofni =
+      node
+        .forceValidContainer
+        .pipe(containee(node.isContainedDataClass))
+        .pipe(node.containerType.ofni)
 
     // ---------------------------------------------------------------------------
     private def containee(isContainedDataClass: Boolean)(leaf: TypeLeaf): Containee =

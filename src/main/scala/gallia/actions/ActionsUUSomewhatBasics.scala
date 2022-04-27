@@ -66,8 +66,8 @@ object ActionsUUSomewhatBasics {
       def _meta(c: Cls): Cls =
         target.qpathz_(c).pipe { qpathz =>
           toOpt match {
-            case None     => c.rename        (qpathz)
-            case Some(to) => c.updateSoleInfo(qpathz, to.forceNonBObjInfo) } }
+            case None     => c.rename    (qpathz)
+            case Some(to) => c.updateOfni(qpathz, to.forceNonBObjOfni) } }
 
       // ---------------------------------------------------------------------------
       def atomuus(c: Cls): AtomUUs = target.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, _helper.Translate.wrap(mapping, toOpt))))

@@ -1,137 +1,104 @@
 package gallia
 package meta
 
-import aptus.Option_
+import aptus._
 
 // ===========================================================================
-trait HasContainee1 {
-    protected val _containee1: Containee
-
-    // ---------------------------------------------------------------------------
-    def isNesting: Boolean = _containee1.nestingOpt.nonEmpty
-    def isLeaf   : Boolean = _containee1.leafOpt   .nonEmpty
-
-    def isNestingWithName(name: String): Boolean = _containee1.nestingOpt.exists(_.nameOpt == Some(name))
-
-    // ---------------------------------------------------------------------------
-    def isBasicType(value: BasicType): Boolean = _containee1.leafOpt.exists(_ == value)
-
-    // ---------------------------------------------------------------------------
-    def isBoolean : Boolean = isBasicType(BasicType._Boolean)
-    def isString  : Boolean = isBasicType(BasicType._String)
-    def isInt     : Boolean = isBasicType(BasicType._Int)
-    def isDouble  : Boolean = isBasicType(BasicType._Double)
-
-    def isByte : Boolean = isBasicType(BasicType._Byte)
-    def isLong : Boolean = isBasicType(BasicType._Long)
-    def isShort: Boolean = isBasicType(BasicType._Short)
-    def isFloat: Boolean = isBasicType(BasicType._Float)
-
-    def isBigInt: Boolean = isBasicType(BasicType._BigInt)
-    def isBigDec: Boolean = isBasicType(BasicType._BigDec)
-
-    def isLocalDate     : Boolean = isBasicType(BasicType._LocalDate)
-    def isLocalTime     : Boolean = isBasicType(BasicType._LocalTime)
-    def isLocalDateTime : Boolean = isBasicType(BasicType._LocalDateTime)
-    def isOffsetDateTime: Boolean = isBasicType(BasicType._OffsetDateTime)
-    def isZonedDateTime : Boolean = isBasicType(BasicType._ZonedDateTime)
-    def isInstant       : Boolean = isBasicType(BasicType._Instant)
-
-    def isEnum : Boolean = isBasicType(BasicType._Enum)
-
-    def isBinary: Boolean = isBasicType(BasicType._Binary)
-
-    // ===========================================================================
-    def isBasicType      : Boolean = _containee1.leafOpt.nonEmpty
-    def isNumericalType  : Boolean = _containee1.leafOpt.exists(_.isNumericalType)
-    def isUnboundedNumber: Boolean = _containee1.leafOpt.exists(_.isUnboundedNumber)
-    def isBoundedNumber  : Boolean = _containee1.leafOpt.exists(_.isBoundedNumber)
-    def isIntegerLikeType: Boolean = _containee1.leafOpt.exists(_.isIntegerLikeType)
-    def isRealLikeType   : Boolean = _containee1.leafOpt.exists(_.isRealLikeType)
-
-      // ---------------------------------------------------------------------------
-      def basicTypeOpt      : Option[BasicType]       = _containee1.leafOpt
-      def numericalTypeOpt  : Option[NumericalType]   = _containee1.leafOpt.flatMap(_.asNumericalTypeOpt)
-      def unboundedNumberOpt: Option[UnboundedNumber] = _containee1.leafOpt.flatMap(_.asUnboundedNumberOpt)
-      def   boundedNumberOpt: Option[  BoundedNumber] = _containee1.leafOpt.flatMap(_.asBoundedNumberOpt)
-      def integerLikeTypeOpt: Option[IntegerLikeType] = _containee1.leafOpt.flatMap(_.asIntegerLikeTypeOpt)
-      def realLikeTypeOpt   : Option[RealLikeType]    = _containee1.leafOpt.flatMap(_.asRealLikeTypeOpt)
-
-      // ---------------------------------------------------------------------------
-      def forceBasicType      : BasicType       = basicTypeOpt      .force
-      def forceNumericalType  : NumericalType   = numericalTypeOpt  .force
-      def forceUnboundedNumber: UnboundedNumber = unboundedNumberOpt.force
-      def forceBoundedNumber  :   BoundedNumber =   boundedNumberOpt.force
-      def forceIntegerLikeType: IntegerLikeType = integerLikeTypeOpt.force
-      def forceRealLikeType   : RealLikeType    = realLikeTypeOpt   .force
-  }
+trait HasContainees {  // see t210125111338 (union types)
+  protected val _containees: Seq[Containee]
 
   // ===========================================================================
-  trait HasContainees {  // see t210125111338 (union types)
-    protected val _containees: Seq[Containee]
+  def  isNesting: Boolean = _containees.forall(_.isNesting)
+  def hasNesting: Boolean = _containees.exists(_.isNesting)
 
-    // ---------------------------------------------------------------------------
-    def hasBasicType(value: BasicType): Boolean = _containees.exists(_.leafOpt == Some(value))
-    def  isBasicType(value: BasicType): Boolean = _containees.forall(_.leafOpt == Some(value)) // + only 1 by design (see a220411090125)
+  // ---------------------------------------------------------------------------
+  def  isBasicType: Boolean = _containees.forall(_.isLeaf)
+  def hasBasicType: Boolean = _containees.exists(_.isLeaf)
 
-    // ---------------------------------------------------------------------------
-    def isBoolean : Boolean = isBasicType(BasicType._Boolean)
-    def isString  : Boolean = isBasicType(BasicType._String)
-    def isInt     : Boolean = isBasicType(BasicType._Int)
-    def isDouble  : Boolean = isBasicType(BasicType._Double)
+  // ===========================================================================
+  def nestedClassOpt  : Option[    Cls ] = _containees.flatMap(_.nestingOpt).force.option
+  def nestedClassesOpt: Option[Seq[Cls]] = _containees.flatMap(_.nestingOpt).in.noneIf(_.isEmpty)
 
-    def isByte : Boolean = isBasicType(BasicType._Byte)
-    def isLong : Boolean = isBasicType(BasicType._Long)
-    def isShort: Boolean = isBasicType(BasicType._Short)
-    def isFloat: Boolean = isBasicType(BasicType._Float)
+  // ---------------------------------------------------------------------------
+  def forceNestedClass                     : Cls  = nestedClassOpt.get
+  def forceNestedClass(nameOpt: ClsNameOpt): Cls =
+    _containees
+      .flatMap(_.nestingOpt)
+      .filter { nc => nameOpt.forall { name => nc.nameOpt == Some(name) } }
+      match {
+        case Seq(sole) => sole
+        case ncs       => aptus.illegalState(ncs.size, nameOpt, ncs.map(_.nameOpt)) }
 
-    def isBigInt: Boolean = isBasicType(BasicType._BigInt)
-    def isBigDec: Boolean = isBasicType(BasicType._BigDec)
+  // ---------------------------------------------------------------------------
+  def basicTypeOpt  : Option[BasicType] = _containees.flatMap(_.leafOpt).force.option
+  def forceBasicType:        BasicType  = basicTypeOpt.get
 
-    def isLocalDate     : Boolean = isBasicType(BasicType._LocalDate)
-    def isLocalTime     : Boolean = isBasicType(BasicType._LocalTime)
-    def isLocalDateTime : Boolean = isBasicType(BasicType._LocalDateTime)
-    def isOffsetDateTime: Boolean = isBasicType(BasicType._OffsetDateTime)
-    def isZonedDateTime : Boolean = isBasicType(BasicType._ZonedDateTime)
-    def isInstant       : Boolean = isBasicType(BasicType._Instant)
+  // ---------------------------------------------------------------------------
+  def    isNumericalType   : Boolean               = basicTypeOpt.exists (_.isNumericalType)
+  def      numericalTypeOpt: Option[NumericalType] = basicTypeOpt.flatMap(_.asNumericalTypeOpt)
+  def forceNumericalType   :        NumericalType  = numericalTypeOpt.get
 
-    def isEnum : Boolean = isBasicType(BasicType._Enum)
+  // ---------------------------------------------------------------------------
+  def    hasBasicType(value: BasicType): Boolean = _containees.exists(_.leafOpt == Some(value))
+  def areAllBasicType(value: BasicType): Boolean = _containees.forall(_.leafOpt == Some(value)) // + only 1 by design (see a220411090125)
 
-    def isBinary: Boolean = isBasicType(BasicType._Binary)
+  // ---------------------------------------------------------------------------
+  def isBoolean : Boolean = areAllBasicType(BasicType._Boolean)
+  def isString  : Boolean = areAllBasicType(BasicType._String)
+  def isInt     : Boolean = areAllBasicType(BasicType._Int)
+  def isDouble  : Boolean = areAllBasicType(BasicType._Double)
 
-    // ---------------------------------------------------------------------------
-    def hasBoolean : Boolean = hasBasicType(BasicType._Boolean)
-    def hasString  : Boolean = hasBasicType(BasicType._String)
-    def hasInt     : Boolean = hasBasicType(BasicType._Int)
-    def hasDouble  : Boolean = hasBasicType(BasicType._Double)
+  def isByte : Boolean = areAllBasicType(BasicType._Byte)
+  def isLong : Boolean = areAllBasicType(BasicType._Long)
+  def isShort: Boolean = areAllBasicType(BasicType._Short)
+  def isFloat: Boolean = areAllBasicType(BasicType._Float)
 
-    def hasByte : Boolean = hasBasicType(BasicType._Byte)
-    def hasLong : Boolean = hasBasicType(BasicType._Long)
-    def hasShort: Boolean = hasBasicType(BasicType._Short)
-    def hasFloat: Boolean = hasBasicType(BasicType._Float)
+  def isBigInt: Boolean = areAllBasicType(BasicType._BigInt)
+  def isBigDec: Boolean = areAllBasicType(BasicType._BigDec)
 
-    def hasBigInt: Boolean = hasBasicType(BasicType._BigInt)
-    def hasBigDec: Boolean = hasBasicType(BasicType._BigDec)
+  def isLocalDate     : Boolean = areAllBasicType(BasicType._LocalDate)
+  def isLocalTime     : Boolean = areAllBasicType(BasicType._LocalTime)
+  def isLocalDateTime : Boolean = areAllBasicType(BasicType._LocalDateTime)
+  def isOffsetDateTime: Boolean = areAllBasicType(BasicType._OffsetDateTime)
+  def isZonedDateTime : Boolean = areAllBasicType(BasicType._ZonedDateTime)
+  def isInstant       : Boolean = areAllBasicType(BasicType._Instant)
 
-    def hasLocalDate     : Boolean = hasBasicType(BasicType._LocalDate)
-    def hasLocalTime     : Boolean = hasBasicType(BasicType._LocalTime)
-    def hasLocalDateTime : Boolean = hasBasicType(BasicType._LocalDateTime)
-    def hasOffsetDateTime: Boolean = hasBasicType(BasicType._OffsetDateTime)
-    def hasZonedDateTime : Boolean = hasBasicType(BasicType._ZonedDateTime)
-    def hasInstant       : Boolean = hasBasicType(BasicType._Instant)
+  def isEnum : Boolean = areAllBasicType(BasicType._Enum)
 
-    def hasEnum : Boolean = hasBasicType(BasicType._Enum)
+  def isBinary: Boolean = areAllBasicType(BasicType._Binary)
 
-    def hasBinary: Boolean = hasBasicType(BasicType._Binary)
+  // ---------------------------------------------------------------------------
+  def hasBoolean : Boolean = hasBasicType(BasicType._Boolean)
+  def hasString  : Boolean = hasBasicType(BasicType._String)
+  def hasInt     : Boolean = hasBasicType(BasicType._Int)
+  def hasDouble  : Boolean = hasBasicType(BasicType._Double)
 
-    // ===========================================================================
-    // see t210125111338 (union types)
-    def forceBasicTypes      : Seq[BasicType      ] = _containees.map(_.leafOpt.get)
-    def forceNumericalTypes  : Seq[NumericalType  ] = _containees.map(_.leafOpt.get).flatMap(_.asNumericalTypeOpt)
-    def forceUnboundedNumbers: Seq[UnboundedNumber] = _containees.map(_.leafOpt.get).flatMap(_.asUnboundedNumberOpt)
-    def forceBoundedNumbers  : Seq[  BoundedNumber] = _containees.map(_.leafOpt.get).flatMap(_.asBoundedNumberOpt)
-    def forceIntegerLikeTypes: Seq[IntegerLikeType] = _containees.map(_.leafOpt.get).flatMap(_.asIntegerLikeTypeOpt)
-    def forceRealLikeTypes   : Seq[RealLikeType   ] = _containees.map(_.leafOpt.get).flatMap(_.asRealLikeTypeOpt)
-  }
+  def hasByte : Boolean = hasBasicType(BasicType._Byte)
+  def hasLong : Boolean = hasBasicType(BasicType._Long)
+  def hasShort: Boolean = hasBasicType(BasicType._Short)
+  def hasFloat: Boolean = hasBasicType(BasicType._Float)
+
+  def hasBigInt: Boolean = hasBasicType(BasicType._BigInt)
+  def hasBigDec: Boolean = hasBasicType(BasicType._BigDec)
+
+  def hasLocalDate     : Boolean = hasBasicType(BasicType._LocalDate)
+  def hasLocalTime     : Boolean = hasBasicType(BasicType._LocalTime)
+  def hasLocalDateTime : Boolean = hasBasicType(BasicType._LocalDateTime)
+  def hasOffsetDateTime: Boolean = hasBasicType(BasicType._OffsetDateTime)
+  def hasZonedDateTime : Boolean = hasBasicType(BasicType._ZonedDateTime)
+  def hasInstant       : Boolean = hasBasicType(BasicType._Instant)
+
+  def hasEnum : Boolean = hasBasicType(BasicType._Enum)
+
+  def hasBinary: Boolean = hasBasicType(BasicType._Binary)
+
+  // ===========================================================================
+  def forceBasicTypes      : Seq[BasicType      ] = _containees.map(_.leafOpt.get)
+  def forceNumericalTypes  : Seq[NumericalType  ] = _containees.map(_.leafOpt.get).flatMap(_.asNumericalTypeOpt)
+  def forceUnboundedNumbers: Seq[UnboundedNumber] = _containees.map(_.leafOpt.get).flatMap(_.asUnboundedNumberOpt)
+  def forceBoundedNumbers  : Seq[  BoundedNumber] = _containees.map(_.leafOpt.get).flatMap(_.asBoundedNumberOpt)
+  def forceIntegerLikeTypes: Seq[IntegerLikeType] = _containees.map(_.leafOpt.get).flatMap(_.asIntegerLikeTypeOpt)
+  def forceRealLikeTypes   : Seq[RealLikeType   ] = _containees.map(_.leafOpt.get).flatMap(_.asRealLikeTypeOpt)
+}
 
 // ===========================================================================

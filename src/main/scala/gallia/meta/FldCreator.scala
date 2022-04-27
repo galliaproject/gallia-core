@@ -11,9 +11,13 @@ trait FldCreator { import Fld._
   protected val _key: Key
 
   // ---------------------------------------------------------------------------
-  def typed[T : WTT]: Fld = Fld(_key, Info.forceFrom[T])
+  def typed[T : WTT]: Fld = Fld(_key, Ofni.forceFrom[T])
 
-  def union(first: Info, more: Info*): Fld = Fld(_key, (first +: more)) // see t210125111338 (union types)
+  // ---------------------------------------------------------------------------
+  // see t210125111338 (union types)
+  def union(optional: Optional)(first: Info, more: Info*): Fld = Fld(_key, Ofni(optional , (first +: more)))
+  def requiredUnion            (first: Info, more: Info*): Fld = Fld(_key, Ofni(_Required, (first +: more)))
+  def optionalUnion            (first: Info, more: Info*): Fld = Fld(_key, Ofni(_Optional, (first +: more)))
 
   // ===========================================================================
   def string    : Fld = one(_key, _String)
@@ -109,20 +113,20 @@ trait FldCreator { import Fld._
   def binarys_  : Fld = pes(_key, _Binary)
   
   // ===========================================================================
-  def cls_ (fields: Nes[Fld]): Fld = Fld(_key, Info.opt(Cls(fields)))
-  def cls  (fields: Nes[Fld]): Fld = Fld(_key, Info.one(Cls(fields)))
-  def clss (fields: Nes[Fld]): Fld = Fld(_key, Info.nes(Cls(fields)))
-  def clss_(fields: Nes[Fld]): Fld = Fld(_key, Info.pes(Cls(fields)))
+  def cls_ (fields: Nes[Fld]): Fld = Fld(_key, Ofni.opt(Cls(fields)))
+  def cls  (fields: Nes[Fld]): Fld = Fld(_key, Ofni.one(Cls(fields)))
+  def clss (fields: Nes[Fld]): Fld = Fld(_key, Ofni.nes(Cls(fields)))
+  def clss_(fields: Nes[Fld]): Fld = Fld(_key, Ofni.pes(Cls(fields)))
 
-  def cls_ (field1: Fld, more: Fld*): Fld = Fld(_key, Info.opt(Cls(field1 +: more)))
-  def cls  (field1: Fld, more: Fld*): Fld = Fld(_key, Info.one(Cls(field1 +: more)))
-  def clss (field1: Fld, more: Fld*): Fld = Fld(_key, Info.nes(Cls(field1 +: more)))
-  def clss_(field1: Fld, more: Fld*): Fld = Fld(_key, Info.pes(Cls(field1 +: more)))
+  def cls_ (field1: Fld, more: Fld*): Fld = Fld(_key, Ofni.opt(Cls(field1 +: more)))
+  def cls  (field1: Fld, more: Fld*): Fld = Fld(_key, Ofni.one(Cls(field1 +: more)))
+  def clss (field1: Fld, more: Fld*): Fld = Fld(_key, Ofni.nes(Cls(field1 +: more)))
+  def clss_(field1: Fld, more: Fld*): Fld = Fld(_key, Ofni.pes(Cls(field1 +: more)))
 
-  def cls_ (c: Cls): Fld = Fld(_key, Info.opt(Cls(c.fields)))
-  def cls  (c: Cls): Fld = Fld(_key, Info.one(Cls(c.fields)))
-  def clss (c: Cls): Fld = Fld(_key, Info.nes(Cls(c.fields)))
-  def clss_(c: Cls): Fld = Fld(_key, Info.pes(Cls(c.fields)))
+  def cls_ (c: Cls): Fld = Fld(_key, Ofni.opt(Cls(c.fields)))
+  def cls  (c: Cls): Fld = Fld(_key, Ofni.one(Cls(c.fields)))
+  def clss (c: Cls): Fld = Fld(_key, Ofni.nes(Cls(c.fields)))
+  def clss_(c: Cls): Fld = Fld(_key, Ofni.pes(Cls(c.fields)))
 }
 
 // ===========================================================================

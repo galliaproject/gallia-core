@@ -76,7 +76,7 @@ object ActionsUUCotransforms { // TODO: t210826102833 - rework co-transforms
 
   // ===========================================================================
   @deprecated private implicit class HasTypedTargetQuerySeq_(u: gallia.target.HasTypedTargetQuerySeq[KPath]) {
-      @deprecated def containees(c:Cls): Seq[Containee] = u.tqs.map(_.kpath_(c)).map(c.field(_).containee1)
+      @deprecated def containees(c:Cls): Seq[Containee] = u.tqs.map(_.kpath_(c)).map(c.field(_).info1.containee)
     
       // ---------------------------------------------------------------------------
       @deprecated def put(c: Cls, from:  Containee)                    : Cls = put(c, Seq(from))

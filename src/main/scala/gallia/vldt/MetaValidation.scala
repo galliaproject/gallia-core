@@ -63,7 +63,7 @@ private[gallia] object MetaValidation {
   def checkMultiple   (c: Cls, targets: KPathz): Errs = targets.flatMap { path => _Error.Tmp(path, " is not multiple").errsIf(c.isSingle  (path)) }
 
   // ---------------------------------------------------------------------------
-  def checkNotNesting  (c: Cls, target: KPath) = errIf_(!c.field(target).info1.isNesting)(ErrorId.NotNesting) // eg for TODO
+  def checkNotNesting  (c: Cls, target: KPath) = errIf_(!c.field(target).isNesting)      (ErrorId.NotNesting) // eg for TODO
   def checkNotNumerical(c: Cls, target: KPath) = errIf_(!c.field(target).isNumericalType)(ErrorId.NotNumeric) // eg for sum-by
 
   // ===========================================================================
@@ -91,10 +91,6 @@ private[gallia] object MetaValidation {
   def disjointKeyss (keys1: Seq[Key], keys2: Seq[Key])       = errIf_(!keys1 .isDisjointWith(keys2 ))(s"${ErrorId.NotDisjoint} ${keys1} ${keys2}")
 
   def disjoint(values1: KPathz, values2: KPathz)              = errIf_(!values1.isDisjointWith(values2))(s"${ErrorId.NotDisjoint} ${values1} ${values1}")
-
-  // ===========================================================================
-  def cantBeSeq(info: Info) = errIf_(info.isMultiple)("cantbeseq")
-  def cantBeObj(info: Info) = errIf_(info.isNesting )("cantbeobj")
 
   // ===========================================================================
   def someFieldsAreLeft(c: Cls, size: Int) = errIf_(c.size <= size)(s"${ErrorId.NoFieldsLeft}")

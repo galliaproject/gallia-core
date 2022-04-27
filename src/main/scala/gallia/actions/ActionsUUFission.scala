@@ -91,9 +91,9 @@ object ActionsUUFission { import ActionsUtils.{remove, removeAll}
       // ---------------------------------------------------------------------------
       def _meta(c: Cls): Cls = {
         val fromPath = from.resolve(c)
-        val info     = c.field(fromPath).info1
+        val ofni     = c.field(fromPath).ofni
 
-        to.paths.foldLeft(c) { _.add(_, info) }
+        to.paths.foldLeft(c) { _.add(_, ofni) }
           .remove(fromPath)
       }
       
@@ -114,9 +114,9 @@ object ActionsUUFission { import ActionsUtils.{remove, removeAll}
         // ---------------------------------------------------------------------------
         def _meta  (c: Cls): Cls = {
           val fromPath = from.resolve(c)
-          val info     = c.field(fromPath).info1
+          val ofni     = c.field(fromPath).ofni
   
-          to.paths.foldLeft(c) { _.add(_, info) }
+          to.paths.foldLeft(c) { _.add(_, ofni) }
             .remove(fromPath)
         }
       

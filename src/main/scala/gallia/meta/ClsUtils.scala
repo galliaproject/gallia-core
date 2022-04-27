@@ -8,7 +8,7 @@ object ClsUtils {
     dis.fields
       .map { field =>
         field.key ->
-          field.info1.potentiallyProcessNesting(
+          field.ofni.potentiallyProcessNesting(
             value = itr.next()) }
       .pipe(obj)
       .tap(_ => assert(itr.isEmpty, dis /* TODO: pass original value? */))

@@ -13,14 +13,10 @@ object MetaValidationCompatibility {
   def compatible(x: Containee, y: Containee): Boolean = x == y // FIXME
 
   // ---------------------------------------------------------------------------
-  def oneCompatible(xs: Seq[Info], y: Info, mode: SpecialCardiMode): Boolean = // see t210125111338 (union types)
-    xs.exists(x => compatible(x, y, mode))  
-
-  // ---------------------------------------------------------------------------
-  def compatible(x: Info, y: Info, mode: SpecialCardiMode): Boolean =
+  def compatible(x: Ofni, y: Ofni, mode: SpecialCardiMode): Boolean =
     if (mode == SpecialCardiMode.IgnoreAltogether)
-      x.toRequired.toNonMultiple ==
-      y.toRequired.toNonMultiple
+      x.toRequired.toSingle ==
+      y.toRequired.toSingle
 
     // ---------------------------------------------------------------------------
     else if (mode == SpecialCardiMode.IgnoreRequiredness)
@@ -30,7 +26,6 @@ object MetaValidationCompatibility {
     // ---------------------------------------------------------------------------
     else
       x == y // FIXME
-
 
 }
 

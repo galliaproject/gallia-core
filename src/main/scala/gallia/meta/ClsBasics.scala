@@ -18,41 +18,41 @@ trait ClsBasics { self: Cls =>
   def rename(pathz: RPathz   ): Cls = pathz.foldLeft(this)(_ rename _)
 
   // ===========================================================================
-  def put(pair: (KPath, Info))(implicit di: DummyImplicit): Cls = put(pair._1, pair._2)
-  def put(path: KPath, info: Info): Cls =
-    if (contains(path)) replace(path, info)
-    else                add    (path, info)
+  def put(pair: (KPath, Ofni))(implicit di: DummyImplicit): Cls = put(pair._1, pair._2)
+  def put(path: KPath, ofni: Ofni): Cls =
+    if (contains(path)) replace(path, ofni)
+    else                add    (path, ofni)
 
   // ---------------------------------------------------------------------------
-  def put(pair: (Key, Info)): Cls = put(pair._1, pair._2)
-  def put(key: Key, info: Info): Cls =
-    if (contains(key)) replace(key, info)
-    else               add    (key, info)
+  def put(pair: (Key, Ofni)): Cls = put(pair._1, pair._2)
+  def put(key: Key, ofni: Ofni): Cls =
+    if (contains(key)) replace(key, ofni)
+    else               add    (key, ofni)
 
   // ---------------------------------------------------------------------------
-  def replace(path: RPath, info: Info): Cls = transformx(path)(_.replace(_, info), _.replace(_, info))
+  def replace(path: RPath, ofni: Ofni): Cls = transformx(path)(_.replace(_, ofni), _.replace(_, ofni))
 
-  def replace(pair: (Ren, Info))                 : Cls = replace(pair._1, pair._2)
-  def replace(pair: (Key, Info))(implicit di: DI): Cls = replace(pair._1, pair._2)
+  def replace(pair: (Ren, Ofni))                 : Cls = replace(pair._1, pair._2)
+  def replace(pair: (Key, Ofni))(implicit di: DI): Cls = replace(pair._1, pair._2)
 
-  def replace(key: Key, info: Info)              : Cls = replace(Ren.from(key), info)
-  def replace(key: Ren, info: Info)              : Cls = _replace(key, info)
+  def replace(key: Key, ofni: Ofni)              : Cls = replace(Ren.from(key), ofni)
+  def replace(key: Ren, ofni: Ofni)              : Cls = _replace(key, ofni)
 
-  def replace(path: KPath, info: Info): Cls = transformx(path)(_.replace(_, info), _.replace(_, info))
+  def replace(path: KPath, ofni: Ofni): Cls = transformx(path)(_.replace(_, ofni), _.replace(_, ofni))
 
-  def replace(pairs: Seq[(Ren, Info)])                 : Cls = pairs.foldLeft(this)(_ replace _)
-  def replace(pairs: Seq[(Key, Info)])(implicit di: DI): Cls = pairs.foldLeft(this)(_ replace _)
+  def replace(pairs: Seq[(Ren, Ofni)])                 : Cls = pairs.foldLeft(this)(_ replace _)
+  def replace(pairs: Seq[(Key, Ofni)])(implicit di: DI): Cls = pairs.foldLeft(this)(_ replace _)
 
   // ---------------------------------------------------------------------------
-  def add(pair: (Key, Info))   : Cls = add(Fld(pair._1, pair._2))
-  def add(key: Key, info: Info): Cls = add(Fld(key, info))
-
   def add(field: Fld): Cls = { requireNewKey(field.key); rewrap(fields :+ field) }
 
-  def add(path: KPath, info: Info)             : Cls = transformx(path)(_.add(_, info), _.add(_, info))
-  def add(pair: (KPath, Info))(implicit di: DI): Cls = add(pair._1, pair._2)
-  
-  def add(pairs: Seq[(Key, Info)])             : Cls = pairs.foldLeft(this)(_ add _)
+  def add(pair: (Key, Ofni))   : Cls = add(Fld(pair._1, pair._2))
+  def add(key: Key, ofni: Ofni): Cls = add(Fld(key, ofni))
+
+  def add(path: KPath, ofni: Ofni)             : Cls = transformx(path)(_.add(_, ofni), _.add(_, ofni))
+  def add(pair: (KPath, Ofni))(implicit di: DI): Cls = add(pair._1, pair._2)
+
+  def add(pairs: Seq[(Key, Ofni)])             : Cls = pairs.foldLeft(this)(_ add _)
 
   // ===========================================================================
   @deprecated("favor combo retain+rename") def retain(key : Ren) : Cls = { requireRenamingKey(key); rewrap(field(key).in.seq) }

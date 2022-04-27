@@ -35,7 +35,7 @@ class Instantiator private (
 
         // ---------------------------------------------------------------------------
         private def processContainedObj(c2: Cls, field: Fld, o: Obj): AnyValue =
-          field.container1 match { // TODO: use Container.wrap now?
+          field.ofni.container match { // TODO: use Container.wrap now?
             case Container._Opt => o.opt  (field.key)                           .map (processObj(c2, field))
             case Container._Pes => o.opt  (field.key).map(_.asInstanceOf[Seq[_]].map (processObj(c2, field)))
             case Container._One => o.force(field.key)                           .pipe(processObj(c2, field))

@@ -6,7 +6,7 @@ import scala.collection.mutable
 import aptus.{Seq_, String_}
 
 import reflect.BasicType
-import meta.Info
+import meta.Ofni
 
 // ===========================================================================
 class MutableValuesSubset(keys: Seq[Key], max: Int) {
@@ -32,8 +32,8 @@ class MutableValuesSubset(keys: Seq[Key], max: Int) {
   private def getValues(key: Key): Seq[String] = subsets(key).toList.sorted
 
   // ---------------------------------------------------------------------------
-  def potentiallyUpdateInfo(key: Key, info: Info): Info =
-    if (info.isMultiple) info
+  def potentiallyUpdateOfni(key: Key, info: Ofni): Ofni =
+    if (info.info1.isMultiple) info
     else {
       val values = subsets(key)
 

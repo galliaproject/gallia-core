@@ -31,6 +31,24 @@ trait Aliases {
   private[gallia] type EnmName    =        String
   private[gallia] type EnmNameOpt = Option[String]
 
+  // ---------------------------------------------------------------------------
+  private[gallia] type Optional = Boolean
+  private[gallia] type Required = Boolean
+
+  private[gallia] type Multiple = Boolean
+  private[gallia] type Single   = Boolean
+
+  // ---------------------------------------------------------------------------
+  private[gallia] val _Optional = true
+  private[gallia] val _Multiple = true
+
+  private[gallia] val _Required = false
+  private[gallia] val _Single   = false
+
+  // ---------------------------------------------------------------------------
+  def formatOptional(value: Optional): String = if (value) "_Optional" else "_Required"
+  def formatMultiple(value: Multiple): String = if (value) "_Multiple" else "_Single"
+
   // ===========================================================================
   type Regex   = scala.util.matching.Regex
   type Pattern = java.util.regex.Pattern

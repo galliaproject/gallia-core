@@ -7,6 +7,7 @@ package object target { // TODO: t210202090211 - p3 - rename package and homogen
 
   // ---------------------------------------------------------------------------
   private[target] type Info      = gallia.meta.Info
+  private[target] type Ofni      = gallia.meta.Ofni
   private[target] type Fld       = gallia.meta.Fld
 
   private[target] type Container = gallia.reflect.Container

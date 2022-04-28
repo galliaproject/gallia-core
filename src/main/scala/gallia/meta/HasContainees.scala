@@ -20,8 +20,9 @@ trait HasContainees {  // see t210125111338 (union types)
   def nestedClassesOpt: Option[Seq[Cls]] = containees.flatMap(_.nestingOpt).in.noneIf(_.isEmpty)
 
   // ---------------------------------------------------------------------------
-  def forceNestedClass                     : Cls  = nestedClassOpt.get
-  def forceNestedClass(nameOpt: ClsNameOpt): Cls =
+  def forceNestedClasses                   : Seq[Cls] = nestedClassesOpt.get
+  def forceNestedClass                     :     Cls  = nestedClassOpt.get
+  def forceNestedClass(nameOpt: ClsNameOpt):     Cls  =
     containees
       .flatMap(_.nestingOpt)
       .filter { nc => nameOpt.forall { name => nc.nameOpt == Some(name) } }

@@ -13,6 +13,9 @@ package object gallia
     def _p                   : A = { System.out.println(  value ); value }
     def _i(f: A => Any)      : A = { System.out.println(f(value)); value } }
 
+  // ---------------------------------------------------------------------------
+  private[gallia] implicit class GalliaSeq[T](val seq: Seq[T]) extends GalliaUtils.GalliaSeq[T] // TODO: to aptus if generalizes well?
+
   // ===========================================================================
   // TODO: t210121105809 - rename to HeadU->HeadO and HeadZ->HeadS (historical names)
   type HeadO = heads.HeadU

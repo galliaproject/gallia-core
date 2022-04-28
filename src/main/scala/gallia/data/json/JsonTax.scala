@@ -56,10 +56,11 @@ sealed trait JsonTax extends EnumEntry {
       case object JsonBinaryTax         extends JsonTax { def valueOpt(c: Cls) = jsonTax[String](c)(_.hasBinary)(DataFormatting.parseBinaryString) }
 
       // ===========================================================================
+      // TODO: t220427122749 - less opaque, so can guess better when needed
       private def jsonTax[T: WTT](c: Cls)(pred: Fld => Boolean)(f: T => Any): Option[Obj => Obj] =
-        ObjModifierCtx
+        ObjModifierCtxParser
           .parse(c)(pred)
-          .map(new ObjModifier[T](c.hasUnions, _, f))
+          .map(new ObjModifier[T](_, f))
           .map(_.modify)
   }
 

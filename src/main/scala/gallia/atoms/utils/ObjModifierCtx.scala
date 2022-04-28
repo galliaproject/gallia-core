@@ -6,65 +6,85 @@ import aptus._
 
 // ===========================================================================
 case class ObjModifierCtx(
-    nameOpt: ClsNameOpt, // only useful if multiple nestings (union)
-    values : Seq[ObjModifierQualifyingFld])
+      nameOpt: ClsNameOpt, // only useful if multiple nestings (union)
+      values : Seq[ObjModifierQualifyingFld]) {
 
-  // ===========================================================================
-  object ObjModifierCtx {
-
-    def parse
-            (c: Cls)
-            (qualifies: Fld => Boolean) // eg "is int" as in JSON
-          : Option[ObjModifierCtx] =
-        c .fields
-          .flatMap { field =>
-            field
-              .pipe(itemOpt(qualifies))
-              .map { item =>
-                ObjModifierQualifyingFld(field.key, field.info1.isMultiple, item) } }
-          .in.noneIf(_.isEmpty)
-          .map(ObjModifierCtx.apply(c.nameOpt, _))
-
-      // ---------------------------------------------------------------------------
-      private def itemOpt(qualifies: Fld => Boolean)(field: Fld): Option[ObjModifierItem] =
-        field
-          .nestedClassesOpt
-           match {
-            case None =>
-              if (qualifies(field)) Some(ObjModifierAction)
-              else                  None
-            case Some(ncs) =>
-              ncs
-                .flatMap(parse(_)(qualifies))
-                 match {
-                  case Nil       => None
-                  case Seq(sole) => Some(ObjModifierNesting(sole))
-                  case more      => Some(ObjModifierNestings(more)) } }
-
-  }
-
-  // ===========================================================================
-  case class ObjModifierQualifyingFld(key: Key, multiple: Boolean, item: ObjModifierItem)
+    val keySet: Set[Key] = values.map(_.key).toSet
 
     // ---------------------------------------------------------------------------
-    sealed trait ObjModifierItem
+    override def toString: String = formatDefault
+      def formatDefault: String =
+        values
+          .map(_.formatDefault)
+          .section(nameOpt.getOrElse(""))
+  }
+  // ===========================================================================
+  trait ObjModifierQualifyingFld {
+      val key        : Key
+      val item       : ObjModifierItem
 
       // ---------------------------------------------------------------------------
-      /** e.g. turn Double into Int, as in JSON */
-      case object ObjModifierAction extends ObjModifierItem
+      def formatDefault: String
+    }
 
-      // ---------------------------------------------------------------------------
-      case class ObjModifierNesting(nesting: ObjModifierCtx) extends ObjModifierItem
+    // ===========================================================================
+    case class ObjModifierQualifyingNonUnionFld(
+            key     : Key,
+            multiple: Multiple,
+            item    : ObjModifierItemNonUnion)
+          extends ObjModifierQualifyingFld {
 
-      // ---------------------------------------------------------------------------
-      case class ObjModifierNestings(nestings: Seq[ObjModifierCtx]) extends ObjModifierItem {
-        require(nestings.nonEmpty)
-        require(nestings.forall(_.nameOpt.nonEmpty), nestings.map(_.nameOpt))
-
-        // ---------------------------------------------------------------------------
-        def withTypeName(typeOpt: Option[String]): ObjModifierCtx = typeOpt match {
-            case None        => ??? // TODO: t220422111733 - try and guess based on keys (unsupported yet)
-            case Some(value) => nestings.find(_.nameOpt == Some(value)).getOrElse(???) }
+        override def toString: String = formatDefault
+          def formatDefault: String =
+            Seq(
+                key.name.append("\t"),
+                formatMultiple(multiple).append("\t"),
+                item.formatDefault)
+              .join
       }
+    // ===========================================================================
+    case class ObjModifierQualifyingUnionFld(
+            key        : Key,
+            item       : ObjModifierItemUnion)
+          extends ObjModifierQualifyingFld {
+
+        override def toString: String = formatDefault
+          def formatDefault: String =
+            s"${key}\t${item.formatDefault}"
+      }
+
+  // ===========================================================================
+  sealed trait ObjModifierItem { def formatDefault: String }
+      sealed trait ObjModifierItemNonUnion extends ObjModifierItem
+      sealed trait ObjModifierItemUnion    extends ObjModifierItem
+
+    // ---------------------------------------------------------------------------
+    case object ObjModifierNonUnionAction extends ObjModifierItemNonUnion {
+        def formatDefault: String = getClass.getSimpleName }
+
+      // ---------------------------------------------------------------------------
+      case object ObjModifierUnionAction extends ObjModifierItemUnion {
+        def formatDefault: String = getClass.getSimpleName }
+
+    // ---------------------------------------------------------------------------
+    case class ObjModifierNonUnionNesting(nesting: ObjModifierCtx) extends ObjModifierItemNonUnion {
+        def formatDefault: String = nesting.formatDefault }
+
+      // ---------------------------------------------------------------------------
+      case class ObjModifierUnionNesting(alsoValue: Boolean, nesting: ObjModifierCtx) extends ObjModifierItemUnion {
+          def formatDefault: String = s"${alsoValue}\t${nesting.formatDefault}" }
+
+    // ---------------------------------------------------------------------------
+    case class ObjModifierUnionNestings(alsoValue: Boolean, nestings: Seq[ObjModifierCtx]) extends ObjModifierItemUnion {
+      require(nestings.nonEmpty)
+
+      // ---------------------------------------------------------------------------
+      def formatDefault: String = nestings.map(_.formatDefault).section(alsoValue.str)
+
+      // ---------------------------------------------------------------------------
+      def withTypeNameOpt(o: Obj)(typeOpt: Option[String]): Option[ObjModifierCtx] = typeOpt match {
+          case None        => ObjModifierCtxUtils.guessOpt(nestings)(o)
+          case Some(value) => nestings.find(_.nameOpt == Some(value)) }
+    }
 
 // ===========================================================================

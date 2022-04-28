@@ -21,6 +21,25 @@ object GalliaUtils { // consider moving those to aptus whenever generic enough
 
   }
 
+  // ===========================================================================
+  private[gallia] trait GalliaSeq[T] { //TODO: to aptus if generalizes well?
+    protected val seq: Seq[T]
+
+    // ---------------------------------------------------------------------------
+    def ifOne[U](ifSole: T => U, otherwise: Seq[T] => U): U = ifOneMatch(_ => true)(ifSole, otherwise)
+
+    // ---------------------------------------------------------------------------
+    def ifOneMatch[U](pred: T => Boolean)(ifSole: T => U, otherwise: Seq[T] => U): U = ifOneMatchEither(pred) match {
+      case Right(x) => ifSole   (x)
+      case Left (x) => otherwise(x) }
+
+    // ---------------------------------------------------------------------------
+    def ifOneMatchEither(pred: T => Boolean): Either[Seq[T], T] =
+      seq.filter(pred) match {
+        case Seq(sole) => Right(sole)
+        case other     => Left (other) }
+  }
+
 }
 
 // ===========================================================================

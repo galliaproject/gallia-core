@@ -153,7 +153,7 @@ object ActionsUUTransforms {
     // ---------------------------------------------------------------------------
     case class TransformVVx(from: TtqRPathz, to: TypeNode, f: _ff11) extends ActionUUb {
       def  vldt(c: Cls): Errs = from.vldtAsOrigin(c, SpecialCardiMode.IgnoreAltogether) ++ _vldt.validType(to)
-      def _meta(c: Cls): Cls  = from.qpathz_(c).foldLeft(c)(_.transformSoleInfo(_)(_.updateContainee(to.forceNonBObjOfni.info1.containee)))
+      def _meta(c: Cls): Cls  = from.qpathz_(c).foldLeft(c)(_.transformSoleContainee(_)(_ => to.forceNonBObjOfni.info1.containee))
       def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.wrapx(c, f)))) }
 
     // ---------------------------------------------------------------------------

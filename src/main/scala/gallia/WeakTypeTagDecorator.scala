@@ -1,13 +1,15 @@
 package gallia
 
+import gallia.reflect.BasicType
+
 // ===========================================================================
 private class WeakTypeTagDecorator[T](wtt: scala.reflect.runtime.universe.WeakTypeTag[T]) {
-  private val name: String = wtt.tpe.typeSymbol.name.decodedName.toString
+  private val fullName: String = wtt.tpe.typeSymbol.fullName
 
   // ---------------------------------------------------------------------------
-  def sameType(value: Any): Boolean =
-    // TODO: t220411094433 - hopefully there's a cleaner way...
-    name == value.getClass.getSimpleName
+  def sameType(value: Any): Boolean = // TODO: t220411094433 - hopefully there's a cleaner way...
+    fullName ==
+    value.getClass.getName.pipe(BasicType.normalizeFullName)
 
   // ---------------------------------------------------------------------------
   // see t210125111338 (union types)

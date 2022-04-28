@@ -23,18 +23,18 @@ class RunResult[$SuccessResult <: SuccessResult[$Data], $Data](val either: Eithe
     private[gallia] def forceErrors: Errs =
       either match {
         case Left (errors)  => errors.allErrors
-        case Right(success) => aptus.illegalState("TODO:201016114235", success) }
+        case Right(success) => aptus.illegalState("MetaErrors (201016114235)", success) }
 
     // ---------------------------------------------------------------------------
     private[gallia] def forceData1b: $Data =
       either match {
-        case Left (errors)  => aptus.illegalState("TODO:201016114128", errors.allErrors.#@@, errors.formatDefault)
+        case Left (errors)  => aptus.illegalState("MetaErrors (201016114128)", errors.allErrors.#@@, errors.formatDefault)
         case Right(success) => success.data }
 
     // ---------------------------------------------------------------------------
     private[gallia] def forceData2[T](f: $SuccessResult => T): T =
       either match {
-        case Left (errors)  => aptus.illegalState("TODO:201016114132", errors.allErrors.#@@, errors.formatDefault)
+        case Left (errors)  => aptus.illegalState("MetaErrors (201016114132)", errors.allErrors.#@@, errors.formatDefault)
         case Right(success) => f(success) }
 
   }

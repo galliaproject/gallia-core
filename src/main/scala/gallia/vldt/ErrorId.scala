@@ -119,7 +119,7 @@ import meta._
       // ---------------------------------------------------------------------------
       // TODO: distinguish container/containee error
       object       TypeMismatch extends _ErrorCompanion("201101174017", "TypeMismatch")
-        case class TypeMismatch(kpath: KPath, infoA: Ofni, infoB: Ofni, mode: SpecialCardiMode) extends _HasCompanion2(
+        case class TypeMismatch(kpath: KPath, infoA: Ofni, infoB: Ofnu, mode: SpecialCardiMode) extends _HasCompanion2(
                    TypeMismatch) with  _Error1 {
           def formatDetails =
             Seq(

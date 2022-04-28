@@ -48,7 +48,7 @@ object MetaValidationHelper {
     // ---------------------------------------------------------------------------
     private def _typeCompatibility(c: Cls)(kpath: KPath, ht: HasTypeNode, mode: SpecialCardiMode): Err_ =
       (   c.field_(kpath).map(_.ofni), // see t210125111338 (union types)
-          ht.ofniOpt(isValidType))
+          ht.ofnuOpt(isValidType))
         .toOptionalTuple
         .flatMap { case (ofniA, ofniB) =>
           errIf_(!MetaValidationCompatibility.compatible(ofniA, ofniB, mode)) {

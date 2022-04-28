@@ -26,6 +26,13 @@ package object meta {
       def formatDefault: String = Seq(field1.formatDefault, field2.formatDefault).section
   }
 
+  // ===========================================================================
+  /** PNF = Potentially Nested Field */
+  // see t210125111338 (union types) - adapt
+  case class PNF(path: KPath, optional: Optional, multiple: Multiple, containee: Containee) extends HasKey with OfnuLike {
+    final override           val  key : Key  = path.key
+    final override protected val _ofnu: Ofnu = Ofnu(optional, multiple, containee) }
+
 }
 
 // ===========================================================================

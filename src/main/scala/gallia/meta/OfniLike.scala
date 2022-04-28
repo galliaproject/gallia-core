@@ -8,11 +8,6 @@ trait OfniLike extends InfosLike {
   protected val _ofni: Ofni
 
   // ===========================================================================
-  @deprecated def info1: Info = _ofni.infos match {  // see t210125111338 (union types)
-    case Seq(sole) => sole
-    case more      => aptus.unsupportedOperation("limited support for union types (see t210125111338)") }
-
-  // ===========================================================================
   def isType[T: WTT]: Boolean = isType(TypeNode.parse[T])
 
     def isType(node: TypeNode): Boolean =

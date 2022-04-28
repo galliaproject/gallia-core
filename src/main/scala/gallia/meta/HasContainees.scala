@@ -5,24 +5,24 @@ import aptus._
 
 // ===========================================================================
 trait HasContainees {  // see t210125111338 (union types)
-  protected val _containees: Seq[Containee]
+  def containees: Seq[Containee]
 
   // ===========================================================================
-  def  isNesting: Boolean = _containees.forall(_.isNesting)
-  def hasNesting: Boolean = _containees.exists(_.isNesting)
+  def  isNesting: Boolean = containees.forall(_.isNesting)
+  def hasNesting: Boolean = containees.exists(_.isNesting)
 
   // ---------------------------------------------------------------------------
-  def  isBasicType: Boolean = _containees.forall(_.isLeaf)
-  def hasBasicType: Boolean = _containees.exists(_.isLeaf)
+  def  isBasicType: Boolean = containees.forall(_.isLeaf)
+  def hasBasicType: Boolean = containees.exists(_.isLeaf)
 
   // ===========================================================================
-  def nestedClassOpt  : Option[    Cls ] = _containees.flatMap(_.nestingOpt).force.option
-  def nestedClassesOpt: Option[Seq[Cls]] = _containees.flatMap(_.nestingOpt).in.noneIf(_.isEmpty)
+  def nestedClassOpt  : Option[    Cls ] = containees.flatMap(_.nestingOpt).force.option
+  def nestedClassesOpt: Option[Seq[Cls]] = containees.flatMap(_.nestingOpt).in.noneIf(_.isEmpty)
 
   // ---------------------------------------------------------------------------
   def forceNestedClass                     : Cls  = nestedClassOpt.get
   def forceNestedClass(nameOpt: ClsNameOpt): Cls =
-    _containees
+    containees
       .flatMap(_.nestingOpt)
       .filter { nc => nameOpt.forall { name => nc.nameOpt == Some(name) } }
       match {
@@ -30,7 +30,7 @@ trait HasContainees {  // see t210125111338 (union types)
         case ncs       => aptus.illegalState(ncs.size, nameOpt, ncs.map(_.nameOpt)) }
 
   // ---------------------------------------------------------------------------
-  def basicTypeOpt  : Option[BasicType] = _containees.flatMap(_.leafOpt).force.option
+  def basicTypeOpt  : Option[BasicType] = containees.flatMap(_.leafOpt).force.option
   def forceBasicType:        BasicType  = basicTypeOpt.get
 
   // ---------------------------------------------------------------------------
@@ -39,8 +39,8 @@ trait HasContainees {  // see t210125111338 (union types)
   def forceNumericalType   :        NumericalType  = numericalTypeOpt.get
 
   // ---------------------------------------------------------------------------
-  def    hasBasicType(value: BasicType): Boolean = _containees.exists(_.leafOpt == Some(value))
-  def areAllBasicType(value: BasicType): Boolean = _containees.forall(_.leafOpt == Some(value)) // + only 1 by design (see a220411090125)
+  def    hasBasicType(value: BasicType): Boolean = containees.exists(_.leafOpt == Some(value))
+  def areAllBasicType(value: BasicType): Boolean = containees.forall(_.leafOpt == Some(value)) // + only 1 by design (see a220411090125)
 
   // ---------------------------------------------------------------------------
   def isBoolean : Boolean = areAllBasicType(BasicType._Boolean)
@@ -93,12 +93,12 @@ trait HasContainees {  // see t210125111338 (union types)
   def hasBinary: Boolean = hasBasicType(BasicType._Binary)
 
   // ===========================================================================
-  def forceBasicTypes      : Seq[BasicType      ] = _containees.map(_.leafOpt.get)
-  def forceNumericalTypes  : Seq[NumericalType  ] = _containees.map(_.leafOpt.get).flatMap(_.asNumericalTypeOpt)
-  def forceUnboundedNumbers: Seq[UnboundedNumber] = _containees.map(_.leafOpt.get).flatMap(_.asUnboundedNumberOpt)
-  def forceBoundedNumbers  : Seq[  BoundedNumber] = _containees.map(_.leafOpt.get).flatMap(_.asBoundedNumberOpt)
-  def forceIntegerLikeTypes: Seq[IntegerLikeType] = _containees.map(_.leafOpt.get).flatMap(_.asIntegerLikeTypeOpt)
-  def forceRealLikeTypes   : Seq[RealLikeType   ] = _containees.map(_.leafOpt.get).flatMap(_.asRealLikeTypeOpt)
+  def forceBasicTypes      : Seq[BasicType      ] = containees.map(_.leafOpt.get)
+  def forceNumericalTypes  : Seq[NumericalType  ] = containees.map(_.leafOpt.get).flatMap(_.asNumericalTypeOpt)
+  def forceUnboundedNumbers: Seq[UnboundedNumber] = containees.map(_.leafOpt.get).flatMap(_.asUnboundedNumberOpt)
+  def forceBoundedNumbers  : Seq[  BoundedNumber] = containees.map(_.leafOpt.get).flatMap(_.asBoundedNumberOpt)
+  def forceIntegerLikeTypes: Seq[IntegerLikeType] = containees.map(_.leafOpt.get).flatMap(_.asIntegerLikeTypeOpt)
+  def forceRealLikeTypes   : Seq[RealLikeType   ] = containees.map(_.leafOpt.get).flatMap(_.asRealLikeTypeOpt)
 }
 
 // ===========================================================================

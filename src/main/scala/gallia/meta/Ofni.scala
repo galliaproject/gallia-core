@@ -2,11 +2,10 @@ package gallia
 package meta
 
 import aptus._
-import domain.SortingPair
 import GalliaUtils.Seq__
 
 // ===========================================================================
-case class Ofni(optional: Boolean, infos: Seq[Info]) extends OfniLike {
+case class Ofni(optional: Optional, infos: Seq[Info]) extends OfniLike {
     override protected val _ofni: Ofni = this
 
     // ---------------------------------------------------------------------------
@@ -14,10 +13,14 @@ case class Ofni(optional: Boolean, infos: Seq[Info]) extends OfniLike {
       .requireNonEmpty
       .requireDistinct
 
-    // ---------------------------------------------------------------------------
-    @deprecated def container: Container = Container.from(optional, info1.multiple)
+    // ===========================================================================
+    @deprecated def container1: Container = Container.from(optional, info1.multiple)
 
     // ---------------------------------------------------------------------------
+    def forceContainer: Container = Container.from(optional, infos.map(_.multiple).distinct.force.one)
+    def forceOfnu     : Ofnu      = forceInfo.pipe { info => Ofnu(optional, info.multiple, info.containee) }
+
+    // ===========================================================================
     override def toString = formatDefault
       def formatDefault: String =
         //  see t210125111338 (union types)
@@ -37,6 +40,7 @@ case class Ofni(optional: Boolean, infos: Seq[Info]) extends OfniLike {
     def transformSpecificInfo(p: Info => Boolean)(f: Info => Info): Ofni = copy(infos = infos.mapAffectExactlyOne(p)(f)) // see t210125111338 (union types)
 
     // ---------------------------------------------------------------------------
+def transformNestedClass2(target: Cls)           (f: Cls  => Cls): Ofni = copy(infos = infos.mapAffectExactlyOne(_.nestedClassOpt == Some(target))(_.transformNestedClass(f)))
     def transformNestedClasses                   (f: Cls  => Cls): Ofni = copy(infos = infos.mapIf              (_.isNesting)              (_.transformNestedClass(f)))
     def transformSoleNestedClass                 (f: Cls  => Cls): Ofni = copy(infos = infos.mapAffectExactlyOne(_.isNesting)              (_.transformNestedClass(f)))
     def transformNestedClass(name   : ClsName)   (f: Cls  => Cls): Ofni = copy(infos = infos.mapIf              (_.isNestingWithName(name))(_.transformNestedClass(f)))
@@ -57,7 +61,7 @@ case class Ofni(optional: Boolean, infos: Seq[Info]) extends OfniLike {
     def potentiallyProcessNesting(value: AnyValue): AnyValue =
       nestedClassOpt
         .map { nestedClass =>
-          container.containerWrap(nestedClass.valueToObj)(value) }
+          container1.containerWrap(nestedClass.valueToObj)(value) }
         .getOrElse(value)
   }
 
@@ -95,7 +99,7 @@ case class Ofni(optional: Boolean, infos: Seq[Info]) extends OfniLike {
         vldt.MetaValidationCompatibility.compatible(left, right, SpecialCardiMode.Normal),
         (left, right))
 
-      val combinedContainer = Container.combine(left.container, right.container)
+      val combinedContainer = Container.combine(left.container1, right.container1)
 
       Ofni(
         optional = combinedContainer.isOptional,

@@ -16,7 +16,7 @@ case class IntermediateMetaResult(dag: gallia.dag.DAG[IntermediateMetaResultNode
 
       // ===========================================================================
       def forceActionPlan = successOpt match {
-          case None          => aptus.illegalArgument(allErrors.joinln.prepend("TODO:210114174456"))
+          case None          => aptus.illegalArgument(allErrors.joinln.prepend("ActionPlanCreation:210114174456:"))
           case Some(success) => ActionPlanPopulator(success.dag) }
 
       // ---------------------------------------------------------------------------

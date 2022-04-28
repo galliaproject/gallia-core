@@ -112,9 +112,9 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
     val values = findValues
 
     // ===========================================================================
-    def fromFullNameOpt(value: FullName): Option[BasicType] = _lookup.get     (normalize(value))
-    def fromFullName   (value: FullName):        BasicType  = _lookup.apply   (normalize(value))
-    def isKnown        (value: FullName):        Boolean    = _lookup.contains(normalize(value))
+    def fromFullNameOpt(value: FullName): Option[BasicType] = _lookup.get     (normalizeFullName(value))
+    def fromFullName   (value: FullName):        BasicType  = _lookup.apply   (normalizeFullName(value))
+    def isKnown        (value: FullName):        Boolean    = _lookup.contains(normalizeFullName(value))
     
     // ---------------------------------------------------------------------------
       private val _lookup: Map[FullName, BasicType] = values.map { x => x.fullName -> x }.force.map
@@ -123,10 +123,11 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
           value,
           aptus.illegalState(s"TODO:CantFindType:201013093225:${value}"))
 
-      // ---------------------------------------------------------------------------
-      private def normalize(value: FullName): FullName =
-        if (value == "java.lang.String") value
-        else                             value.replace("java.lang.", "scala.") // not so for java.math (not equivalent at runtime)
+    // ===========================================================================
+    def normalizeFullName(value: FullName): FullName =
+           if (value == "java.lang.String")  value
+      else if (value == "java.lang.Integer") "scala.Int"
+      else                                   value.replace("java.lang.", "scala.") // not so for java.math (not equivalent at runtime)
 
     // ===========================================================================
     def combine(values: Seq[BasicType]): BasicType = // TODO: subtype these 3?

@@ -27,11 +27,11 @@ object ActionsAsserts {
 
       // ---------------------------------------------------------------------------
       // TODO: as predicate of Container rather
-      case class AssertContainer(target: KPath, container: Container) extends IdentityM1 with IdentityUUa {
+      case class AssertContainer(target: KPath, container: Container) extends IdentityM1 with IdentityUUa { // TODO: t220427091730 - change to optional/multiple
           def vldt (c: Cls): Errs =
             _Error.ContainerAssertionFailure(target, container).errsIf(
                 !c.field_(target).exists(
-                    _.ofni.container == container)) }
+                    _.ofni.container1 == container)) }
 
       // ---------------------------------------------------------------------------
       //TODO: as predicate of rather

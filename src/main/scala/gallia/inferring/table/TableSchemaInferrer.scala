@@ -77,7 +77,7 @@ object TableSchemaInferrer {
     // ---------------------------------------------------------------------------
     private def _combineOfnis(values: Seq[Ofni])(f: Seq[Ofni] => BasicType): Ofni =
       values
-        .map(_.container)
+        .map(_.container1)
         .reduceLeft(Container.combine)
         .ofni(f(values))
 }

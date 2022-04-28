@@ -7,8 +7,8 @@ import aptus.String_
 case class Fld(key: Key, ofni: Ofni) extends FldLike {
     require(key.name.nonEmpty)// TODO: validation
 
-    final override protected      val _ofni: Ofni = ofni
-    final override protected lazy val infos: Seq[Info] = _ofni.infos
+    final override protected val _ofni: Ofni      = ofni
+    final override           def infos: Seq[Info] = _ofni.infos
 
     // ---------------------------------------------------------------------------
     // mostly for macros

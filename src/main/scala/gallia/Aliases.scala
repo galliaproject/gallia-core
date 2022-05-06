@@ -28,8 +28,17 @@ trait Aliases {
   private[gallia] type ClsNameOpt = Option[String]
 
   // ---------------------------------------------------------------------------
+  private[gallia] type         UnionObjectDisambiguatorOpt = Option[UnionObjectDisambiguator]
+  private[gallia] sealed trait UnionObjectDisambiguator { def filter(ncs: Seq[Cls]): Seq[Cls] }
+
+    // ---------------------------------------------------------------------------
+    private[gallia] case class DisambiguateByClassIndex    (value: aptus.Index)                         extends UnionObjectDisambiguator { def filter(ncs: Seq[Cls]) = Seq(ncs(value)) }
+    private[gallia] case class DisambiguateByClassPredicate(meta: Cls => Boolean, data: Obj => Boolean) extends UnionObjectDisambiguator { def filter(ncs: Seq[Cls]) = meta.pipe(ncs.filter) }
+
+  // ---------------------------------------------------------------------------
   private[gallia] type EnmName    =        String
   private[gallia] type EnmNameOpt = Option[String]
+  private[gallia] type EnumStringValue = String
 
   // ---------------------------------------------------------------------------
   private[gallia] type Optional = Boolean

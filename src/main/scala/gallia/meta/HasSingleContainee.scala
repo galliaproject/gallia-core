@@ -1,4 +1,5 @@
-package gallia.meta
+package gallia
+package meta
 
 // ===========================================================================
 trait HasSingleContainee {
@@ -15,13 +16,16 @@ trait HasSingleContainee {
   def isBasicType: Boolean = containee.leafOpt   .nonEmpty
 
   // ---------------------------------------------------------------------------
-  def isBasicType(value: BasicType): Boolean = containee.leafOpt.exists(_ == value)
+  def isBasicType(value: BasicType)          : Boolean = containee.leafOpt.exists(_ == value)
+  def isBasicType(pred: BasicType => Boolean): Boolean = containee.isBasicType(pred)
 
   // ---------------------------------------------------------------------------
   def isBoolean : Boolean = isBasicType(BasicType._Boolean)
   def isString  : Boolean = isBasicType(BasicType._String)
   def isInt     : Boolean = isBasicType(BasicType._Int)
   def isDouble  : Boolean = isBasicType(BasicType._Double)
+
+  def isEnm     : Boolean = isBasicType(_.isEnm)
 }
 
 // ===========================================================================

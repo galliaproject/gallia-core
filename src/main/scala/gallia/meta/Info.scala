@@ -12,8 +12,7 @@ case class Info(
     override def toString = formatDefault
 
       // ---------------------------------------------------------------------------
-      def formatDefault             : String = formatDefault("\t")
-      def formatDefault(sep: String): String =
+      def formatDefault: String =
         containee match {
           case basic: BasicType =>
             if (multiple) s"${formatMultiple(multiple)}:${basic}"
@@ -38,12 +37,17 @@ case class Info(
     def toMultiple: Info = copy(multiple = true)
     def toSingle  : Info = copy(multiple = false)
 
+    // ---------------------------------------------------------------------------
+    def isEnmMatching(multiple: Multiple): Boolean = isEnm && this.multiple == multiple
+
     // ===========================================================================
     @PartialTypeMatching
       def toBoolean: Info = copy(containee = BasicType._Boolean)
-      def toStr    : Info = copy(containee = BasicType._String)
       def toInt    : Info = copy(containee = BasicType._Int)
       def toDouble : Info = copy(containee = BasicType._Double)
+
+    // ---------------------------------------------------------------------------
+    def ofnu(optional: Optional): Ofnu = Ofnu(optional, multiple, containee)
   }
 
   // ===========================================================================

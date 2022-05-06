@@ -16,7 +16,7 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
       with    ClsNestingRelated
       with    ClsAggregating
       with    ClsMerging {
-  
+
     fields
       .require(_.nonEmpty)
       .requireDistinctBy(_.key)
@@ -31,8 +31,9 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
     // ---------------------------------------------------------------------------
     override val lookup: Map[Key, Fld] = fields.map(_.associateLeft(_.key)).force.map
 
-    override val keySet    : Set   [Key] = keys.toSet
-    override val keyVector : Vector[Key] = keys.toVector
+    override val  keySet    : Set   [ Key] =  keys.toSet
+    override val skeySet    : Set   [SKey] = skeys.toSet
+    override val  keyVector : Vector[ Key] =  keys.toVector
 
     override val requiredKeys  : Seq[Key] = fields.filter(_.isRequired).map(_.key)
     override val requiredKeySet: Set[Key] = fields.filter(_.isRequired).map(_.key).toSet
@@ -75,6 +76,7 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
     private[meta /*cls*/] def requireRenamingKeys(targets: RenWz) = { requireKnownKeys(targets.fromz); requireNewKeys  (targets.toz) }
 
     // ===========================================================================
+    def toObj  = MetaObj.cls(this)
     def toObj2 = MetaObj.cls(this)
 
     def formatJson        = toObj2.formatCompactJson
@@ -105,7 +107,7 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
 
     // ===========================================================================
     //TODO: ensure not nested type?
-    def updateType(target: Key   , fromNode: TypeNode, toNode: TypeNode): Cls = transformField(target)(_.updateOptionality(toNode.isOption).updateSpecificInfo(fromNode.forceNonBObjInfo, toNode.forceNonBObjInfo))
+    def updateType(target: Key   , fromNode: TypeNode, toNode: TypeNode): Cls = transformField(target)(_.updateOptionality(toNode.isOption).updateSpecificInfo(fromNode.forceNonBObjInfo(enmOpt(target)), toNode.forceNonBObjInfo(enmOpt(target))))
     def updateType(target: Ren   , fromNode: TypeNode, toNode: TypeNode): Cls = rename(target).updateType(target.to, fromNode, toNode)
 
     def updateType(target: KPath , fromNode: TypeNode, toNode: TypeNode): Cls = transformx(target)(_.updateType(_, fromNode, toNode), _.updateType(_, fromNode, toNode))
@@ -114,44 +116,35 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
     def updateType(target: KPathz, fromNode: TypeNode, toNode: TypeNode): Cls = target.foldLeft(this)(_.updateType(_, fromNode, toNode))
     def updateType(target: RPathz, fromNode: TypeNode, toNode: TypeNode): Cls = target.foldLeft(this)(_.updateType(_, fromNode, toNode))
 
-      // ---------------------------------------------------------------------------
-      def updateOfni(target: Key   , ofni: Ofni): Cls = transformField(target)(_.transformOfni(_ => ofni))
-      def updateOfni(target: Ren   , ofni: Ofni): Cls = rename(target).updateOfni(target.to, ofni)
+    // ---------------------------------------------------------------------------
+    def updateSpecificOfnu(target: Key   , from: Ofnu, to: Ofnu): Cls = transformField(target)(_.updateSpecificOfnu(from, to))
+    def updateSpecificOfnu(target: Ren   , from: Ofnu, to: Ofnu): Cls = rename(target).updateSpecificOfnu(target.to, from, to)
 
-      def updateOfni(target: KPath , ofni: Ofni): Cls = transformx(target)(_.updateOfni(_, ofni), _.updateOfni(_, ofni))
-      def updateOfni(target: RPath , ofni: Ofni): Cls = transformx(target)(_.updateOfni(_, ofni), _.updateOfni(_, ofni))
+    def updateSpecificOfnu(target: KPath , from: Ofnu, to: Ofnu): Cls = transformx(target)(_.updateSpecificOfnu(_, from, to), _.updateSpecificOfnu(_, from, to))
+    def updateSpecificOfnu(target: RPath , from: Ofnu, to: Ofnu): Cls = transformx(target)(_.updateSpecificOfnu(_, from, to), _.updateSpecificOfnu(_, from, to))
 
-      def updateOfni(target: KPathz, ofni: Ofni): Cls = target.foldLeft(this)(_.updateOfni(_, ofni))
-      def updateOfni(target: RPathz, ofni: Ofni): Cls = target.foldLeft(this)(_.updateOfni(_, ofni))
+    def updateSpecificOfnu(target: KPathz, from: Ofnu, to: Ofnu): Cls = target.foldLeft(this)(_.updateSpecificOfnu(_, from, to))
+    def updateSpecificOfnu(target: RPathz, from: Ofnu, to: Ofnu): Cls = target.foldLeft(this)(_.updateSpecificOfnu(_, from, to))
 
-      // ---------------------------------------------------------------------------
-      def transformOfni(target: Key   , f: Ofni => Ofni): Cls = transformField(target)(_.transformOfni(f))
-      def transformOfni(target: Ren   , f: Ofni => Ofni): Cls = rename(target).transformOfni(target.to, f)
+    // ---------------------------------------------------------------------------
+    def updateOfni(target: Key   , ofni: Ofni): Cls = transformField(target)(_.transformOfni(_ => ofni))
+    def updateOfni(target: Ren   , ofni: Ofni): Cls = rename(target).updateOfni(target.to, ofni)
 
-      def transformOfni(target: KPath , f: Ofni => Ofni): Cls = transformx(target)(_.transformOfni(_, f), _.transformOfni(_, f))
-      def transformOfni(target: RPath , f: Ofni => Ofni): Cls = transformx(target)(_.transformOfni(_, f), _.transformOfni(_, f))
+    def updateOfni(target: KPath , ofni: Ofni): Cls = transformx(target)(_.updateOfni(_, ofni), _.updateOfni(_, ofni))
+    def updateOfni(target: RPath , ofni: Ofni): Cls = transformx(target)(_.updateOfni(_, ofni), _.updateOfni(_, ofni))
 
-      def transformOfni(target: KPathz, f: Ofni => Ofni): Cls = target.foldLeft(this)(_.transformOfni(_, f))
-      def transformOfni(target: RPathz, f: Ofni => Ofni): Cls = target.foldLeft(this)(_.transformOfni(_, f))
+    def updateOfni(target: KPathz, ofni: Ofni): Cls = target.foldLeft(this)(_.updateOfni(_, ofni))
+    def updateOfni(target: RPathz, ofni: Ofni): Cls = target.foldLeft(this)(_.updateOfni(_, ofni))
 
-        // ---------------------------------------------------------------------------
-        @deprecated def   updateSoleInfo(target: Key   , info: Info): Cls = transformField(target)(_.transformSoleInfo(_ => info))
-          @deprecated def updateSoleInfo(target: Ren   , info: Info): Cls = rename(target).updateSoleInfo(target.to, info)
+    // ---------------------------------------------------------------------------
+    def transformOfni(target: Key   , f: Ofni => Ofni): Cls = transformField(target)(_.transformOfni(f))
+    def transformOfni(target: Ren   , f: Ofni => Ofni): Cls = rename(target).transformOfni(target.to, f)
 
-          @deprecated def updateSoleInfo(target: KPath , info: Info): Cls = transformx(target)(_.updateSoleInfo(_, info), _.updateSoleInfo(_, info))
-          @deprecated def updateSoleInfo(target: RPath , info: Info): Cls = transformx(target)(_.updateSoleInfo(_, info), _.updateSoleInfo(_, info))
-          @deprecated def updateSoleInfo(target: KPathz, info: Info): Cls = target.foldLeft(this)(_.updateSoleInfo(_, info))
-          @deprecated def updateSoleInfo(target: RPathz, info: Info): Cls = target.foldLeft(this)(_.updateSoleInfo(_, info))
+    def transformOfni(target: KPath , f: Ofni => Ofni): Cls = transformx(target)(_.transformOfni(_, f), _.transformOfni(_, f))
+    def transformOfni(target: RPath , f: Ofni => Ofni): Cls = transformx(target)(_.transformOfni(_, f), _.transformOfni(_, f))
 
-        // ---------------------------------------------------------------------------
-        @deprecated def   transformSoleInfo(target: Key   , f: Info => Info): Cls = transformField(target)(_.transformSoleInfo(f))
-          @deprecated def transformSoleInfo(target: Ren   , f: Info => Info): Cls = rename(target).transformSoleInfo(target.to, f)
-
-          @deprecated def transformSoleInfo(target: KPath , f: Info => Info): Cls = transformx(target)(_.transformSoleInfo(_, f), _.transformSoleInfo(_, f))
-          @deprecated def transformSoleInfo(target: RPath , f: Info => Info): Cls = transformx(target)(_.transformSoleInfo(_, f), _.transformSoleInfo(_, f))
-
-          @deprecated def transformSoleInfo(target: KPathz, f: Info => Info): Cls = target.foldLeft(this)(_.transformSoleInfo(_, f))
-          @deprecated def transformSoleInfo(target: RPathz, f: Info => Info): Cls = target.foldLeft(this)(_.transformSoleInfo(_, f))
+    def transformOfni(target: KPathz, f: Ofni => Ofni): Cls = target.foldLeft(this)(_.transformOfni(_, f))
+    def transformOfni(target: RPathz, f: Ofni => Ofni): Cls = target.foldLeft(this)(_.transformOfni(_, f))
 
     // ===========================================================================
     def transformField(target: Key   )(f: Fld => Fld): Cls =               _transformField(target)(f)
@@ -173,13 +166,14 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
       def transformSoleInfo     (target: RPathW )(f: Info => Info): Cls = transformField(target.value)(_.transformSoleInfo(f))
 
         def transformSoleContainee(target: RPathWz)(f: Containee => Containee): Cls = target.values.foldLeft(this)(_.transformSoleContainee(_)(f))
-        def transformSoleContainee(target: RPathW )(f: Containee => Containee): Cls = transformField(target.value)(_.transformSoleInfo(_.transformContainee(f)))
+        def transformSoleContainee(target: RPathW )(f: Containee => Containee): Cls = transformField(target.value)(_.transformSoleContainee(f))
 
       // ---------------------------------------------------------------------------
-      def transformNestedClasses                     (target: RPathW)(f: Cls  => Cls): Cls = transformField(target.value)(_.transformNestedClasses       (f))
-      def transformSoleNestedClass                   (target: RPathW)(f: Cls  => Cls): Cls = transformField(target.value)(_.transformSoleNestedClass     (f))
-      def transformNestedClass  (name   : ClsName)   (target: RPathW)(f: Cls  => Cls): Cls = transformField(target.value)(_.transformNestedClass(name)   (f))
-      def transformNestedClass  (nameOpt: ClsNameOpt)(target: RPathW)(f: Cls  => Cls): Cls = transformField(target.value)(_.transformNestedClass(nameOpt)(f))
+      def transformNestedClasses  (target: RPathW)(f: Cls  => Cls): Cls = transformField(target.value)(_.transformNestedClasses       (f))
+      def transformSoleNestedClass(target: RPathW)(f: Cls  => Cls): Cls = transformField(target.value)(_.transformSoleNestedClass     (f))
+
+      def transformNestedClass(disambiguatorOpt: UnionObjectDisambiguatorOpt)(target: RPathW)(f: Cls  => Cls): Cls =
+        transformField(target.value)(_.transformNestedClass(disambiguatorOpt)(f))
 
     // ===========================================================================
     def    toRequired(key: RPathW): Cls = transformOfni(key.value, _.toRequired)

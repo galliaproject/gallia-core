@@ -40,14 +40,15 @@ case class Ofni(optional: Optional, infos: Seq[Info]) extends OfniLike {
     def transformSpecificInfo(p: Info => Boolean)(f: Info => Info): Ofni = copy(infos = infos.mapAffectExactlyOne(p)(f)) // see t210125111338 (union types)
 
     // ---------------------------------------------------------------------------
-def transformNestedClass2(target: Cls)           (f: Cls  => Cls): Ofni = copy(infos = infos.mapAffectExactlyOne(_.nestedClassOpt == Some(target))(_.transformNestedClass(f)))
-    def transformNestedClasses                   (f: Cls  => Cls): Ofni = copy(infos = infos.mapIf              (_.isNesting)              (_.transformNestedClass(f)))
-    def transformSoleNestedClass                 (f: Cls  => Cls): Ofni = copy(infos = infos.mapAffectExactlyOne(_.isNesting)              (_.transformNestedClass(f)))
-    def transformNestedClass(name   : ClsName)   (f: Cls  => Cls): Ofni = copy(infos = infos.mapIf              (_.isNestingWithName(name))(_.transformNestedClass(f)))
-    def transformNestedClass(nameOpt: ClsNameOpt)(f: Cls  => Cls): Ofni =
-      nameOpt
-        .map { name => transformNestedClass(name)(f) }
-        .getOrElse {   transformSoleNestedClass  (f) }
+    def transformNestedClasses                    (f: Cls  => Cls): Ofni = copy(infos = infos.mapIf              (_.isNesting)                     (_.transformNestedClass(f)))
+    def transformSoleNestedClass                  (f: Cls  => Cls): Ofni = copy(infos = infos.mapAffectExactlyOne(_.isNesting)                     (_.transformNestedClass(f)))
+    def transformNestedClass(target: Cls)         (f: Cls  => Cls): Ofni = copy(infos = infos.mapAffectExactlyOne(_.nestedClassOpt == Some(target))(_.transformNestedClass(f)))
+    def transformNestedClass(target: Index)       (f: Cls  => Cls): Ofni = copy(infos = infos.mapIndex           (__lookup(target))                (_.transformNestedClass(f)))
+    def transformNestedClass(pred: Cls => Boolean)(f: Cls  => Cls): Ofni = copy(infos = infos.mapAffectExactlyOne(_.nestedClassOpt.exists(pred))   (_.transformNestedClass(f)))
+
+    def transformNestedClass(target: UnionObjectDisambiguator)(f: Cls  => Cls): Ofni = target match { // TODO: validate first...
+        case DisambiguateByClassIndex    (index)   => transformNestedClass(index)(f)
+        case DisambiguateByClassPredicate(meta, _) => transformNestedClass(meta) (f) }
 
     // ---------------------------------------------------------------------------
     def updateSoleInfo                    (newValue: Info): Ofni = transformSoleInfo                   (_ => newValue)

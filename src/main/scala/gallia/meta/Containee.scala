@@ -18,6 +18,9 @@ package meta
     // ---------------------------------------------------------------------------
     def forceBasicType: BasicType = this.asInstanceOf[BasicType]
     def forceCls      : Cls       = this.asInstanceOf[Cls]
+
+    // ---------------------------------------------------------------------------
+    def isBasicType(pred: BasicType => Boolean): Boolean = leafOpt.exists(pred)
   }
 
   // ===========================================================================

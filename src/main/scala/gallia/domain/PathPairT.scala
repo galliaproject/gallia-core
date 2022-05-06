@@ -4,7 +4,13 @@ package domain
 // ===========================================================================
 case class PathPair(path: KPath, optional: Boolean) {
       def lookup(o: Obj ): AnyValue = if (optional) o.opt(path) else o.force(path)
-  
+
+      // ---------------------------------------------------------------------------
+      def matches(pred: Obj => Boolean)(o: Obj): Boolean = // for union types
+        // TODO: if multiple t220505155458
+        if (optional) o.opt  (path).exists { case o: Obj => pred(o); case _ => false }
+        else          o.force(path) match  { case o: Obj => pred(o); case _ => false }
+
       // ---------------------------------------------------------------------------
       def matching(value1: Any, value2: Any): Boolean =
         if (optional) value1 == Some(value2)

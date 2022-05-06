@@ -11,7 +11,7 @@ case class Fld(key: Key, ofni: Ofni) extends FldLike {
     final override           def infos: Seq[Info] = _ofni.infos
 
     // ---------------------------------------------------------------------------
-    // mostly for macros
+    // mostly for macros (see t210330102827)
     private var _enumNameOpt: EnmNameOpt = None
       def setEnumName(enumName: EnmName) = { _enumNameOpt = Some(enumName); this }
       def forceEnumName: EnmName    = _enumNameOpt.get
@@ -34,11 +34,15 @@ case class Fld(key: Key, ofni: Ofni) extends FldLike {
     def transformSpecificInfo(p: Info => Boolean)(f: Info => Info): Fld = transformOfni(_.transformSpecificInfo(p)(f)) // see t210125111338 (union types)
 
     // ---------------------------------------------------------------------------
-    def transformNestedClasses                   (f: Cls  => Cls): Fld = transformOfni(_.transformNestedClasses    (f))
-    def transformSoleNestedClass                 (f: Cls  => Cls): Fld = transformOfni(_.transformSoleNestedClass  (f))
-    def transformNestedClass(name   : ClsName)   (f: Cls  => Cls): Fld = transformOfni(_.transformNestedClass(name)(f))
-    def transformNestedClass(nameOpt: ClsNameOpt)(f: Cls  => Cls): Fld =
-      nameOpt
+    def transformSoleContainee                   (f: Containee => Containee): Fld = transformSoleInfo(_.transformContainee(f))
+
+    // ---------------------------------------------------------------------------
+    def transformNestedClasses                     (f: Cls  => Cls): Fld = transformOfni(_.transformNestedClasses      (f))
+    def transformSoleNestedClass                   (f: Cls  => Cls): Fld = transformOfni(_.transformSoleNestedClass    (f))
+
+    def transformNestedClass(target   : UnionObjectDisambiguator)   (f: Cls  => Cls): Fld = transformOfni(_.transformNestedClass(target)(f))
+    def transformNestedClass(targetOpt: UnionObjectDisambiguatorOpt)(f: Cls  => Cls)(implicit di: DI): Fld =
+      targetOpt
         .map { name => transformNestedClass(name)(f) }
         .getOrElse {   transformSoleNestedClass  (f) }
 
@@ -48,8 +52,9 @@ case class Fld(key: Key, ofni: Ofni) extends FldLike {
     def updateOptionality(value: Optional): Fld = updateOfni(ofni.updateOptionality(value))
 
     // ---------------------------------------------------------------------------
-    def updateSoleInfo                    (newValue: Info): Fld = transformSoleInfo(_ => newValue)
-    def updateSpecificInfo(oldValue: Info, newValue: Info): Fld = transformSpecificInfo(_ == oldValue)(_ => newValue) // see t210125111338 (union types)
+    def updateSoleInfo                    (newValue: Info): Fld = transformSoleInfo                        (_ => newValue)
+    def updateSpecificInfo(oldValue: Info, newValue: Info): Fld = transformSpecificInfo(_ == oldValue)     (_ => newValue) // see t210125111338 (union types)
+    def updateSpecificOfnu(oldValue: Ofnu, newValue: Ofnu): Fld = transformSpecificInfo(_ == oldValue.info)(_ => newValue.info).updateOptionality(newValue.optional)
 
     // ===========================================================================
     // commonly used

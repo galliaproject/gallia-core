@@ -28,7 +28,9 @@ case class TypeNode(
 
     // ---------------------------------------------------------------------------
     /** including "one" as container */
-    def isContainedDataClass: Boolean = validContainerOpt.exists(_.dataClass)
+    def isContainedDataClass : Boolean = validContainerOpt.exists(_.dataClass)
+    def isContainedEnum      : Boolean = validContainerOpt.exists(_.enm)
+    def isContainedEnumeratum: Boolean = validContainerOpt.exists(_.isEnumeratum)
 
     // ---------------------------------------------------------------------------
     def forceValidContainer: TypeLeaf = validContainerOpt.force
@@ -98,6 +100,12 @@ case class TypeNode(
     def containerType: Container = containerTypeOpt.getOrElse(Container._One)
 
     // ---------------------------------------------------------------------------
+    def enmOfnu(c: Cls, path: KPath, multiple: Multiple): Ofnu =
+      c .field(path)
+        .enmContainee(multiple)
+        .pipe(containerType.ofnu)
+
+    // ---------------------------------------------------------------------------
     def containerTypeOpt: Option[Container] = {
            if (isSeq        ) Some(Container._Nes)
       else if (isOptionOfSeq) Some(Container._Pes)
@@ -105,8 +113,9 @@ case class TypeNode(
       else                    None }
 
     // ===========================================================================
-    def forceNonBObjOfni: Ofni = this.assert(!_.isContainedBObj).pipe(InfoUtils.forceNonBObjOfni)
-    def forceNonBObjInfo: Info = this.assert(!_.isContainedBObj).pipe(InfoUtils.forceNonBObjInfo)
+    def forceNonBObjOfni                 : Ofni = this.assert(!_.isContainedBObj).pipe(InfoUtils.forceNonBObjOfni)
+    def forceNonBObjInfo                 : Info = this.assert(!_.isContainedBObj).pipe(InfoUtils.forceNonBObjInfo)
+    def forceNonBObjInfo(enmOpt: _EnmOpt): Info = this.assert(!_.isContainedBObj).pipe(InfoUtils.forceNonBObjInfo(enmOpt))
   }
 
   // ===========================================================================

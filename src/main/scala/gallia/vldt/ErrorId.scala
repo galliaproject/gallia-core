@@ -122,11 +122,11 @@ import meta._
         case class TypeMismatch(kpath: KPath, infoA: Ofni, infoB: Ofnu, mode: SpecialCardiMode) extends _HasCompanion2(
                    TypeMismatch) with  _Error1 {
           def formatDetails =
-            Seq(
+            (Seq(
                 s"for ${kpath}:",
-                s"${infoA.formatDefault.prepend("expected")},", // see t210125111338 (union types)
-                 s"but got: ${infoB.formatDefault}",
-                s"(mode: ${mode})")
+                s"\texpected:\t${infoA.formatDefault},", // see t210125111338 (union types)
+                 s"\tbut got:\t${infoB.formatDefault}") ++
+               (if (mode.isNormal) Nil else Seq(s"(mode: ${mode})")))
               .joinln }
 
       // ---------------------------------------------------------------------------
@@ -146,6 +146,10 @@ import meta._
       // ---------------------------------------------------------------------------
       case class AmbiguousMergingKey (keys: Keyz) extends _Error3 { val errorId = "220207150612"; val label = "AmbiguousMergingKey" }
       case class NameConflictsForJoin(keys: Keyz) extends _Error3 { val errorId = "220207150613"; val label = "NameConflictsForJoin" } // t220209085836 - name conflict in join: offer mode to discard RHS conflicts, and mode to rename RHS      
+
+      // ---------------------------------------------------------------------------
+      case class NotAnEnumField         (kpath: KPath)                 extends _Error3 { val errorId = "220504143050"; val label = "NotAnEnumField" }
+      case class InvalidEnumStringValues(values: Seq[EnumStringValue]) extends _Error3 { val errorId = "220504143051"; val label = "InvalidEnumStringValues" }
 
       // ===========================================================================
       object Runtime {

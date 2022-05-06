@@ -20,19 +20,18 @@ trait HasContainees {  // see t210125111338 (union types)
   def nestedClassesOpt: Option[Seq[Cls]] = containees.flatMap(_.nestingOpt).in.noneIf(_.isEmpty)
 
   // ---------------------------------------------------------------------------
-  def forceNestedClasses                   : Seq[Cls] = nestedClassesOpt.get
-  def forceNestedClass                     :     Cls  = nestedClassOpt.get
-  def forceNestedClass(nameOpt: ClsNameOpt):     Cls  =
+  def forceNestedClasses: Seq[Cls] = nestedClassesOpt.get
+  def forceNestedClass  :     Cls  = nestedClassOpt.get
+  def forceNestedClass(disambiguatorOpt: UnionObjectDisambiguatorOpt): Cls  =
     containees
       .flatMap(_.nestingOpt)
-      .filter { nc => nameOpt.forall { name => nc.nameOpt == Some(name) } }
-      match {
-        case Seq(sole) => sole
-        case ncs       => aptus.illegalState(ncs.size, nameOpt, ncs.map(_.nameOpt)) }
+      .pipe { ncs => disambiguatorOpt.map(_.filter(ncs)).getOrElse(ncs) } // TODO: t220506114023 - validate first...
+      .ifOneOrElse(errorMessage = _.map(_.nameOpt) -> disambiguatorOpt)
 
   // ---------------------------------------------------------------------------
-  def basicTypeOpt  : Option[BasicType] = containees.flatMap(_.leafOpt).force.option
-  def forceBasicType:        BasicType  = basicTypeOpt.get
+  def basicTypeOpt  : Option[    BasicType ] = containees.flatMap(_.leafOpt).force.option
+  def basicTypesOpt : Option[Seq[BasicType]] = containees.flatMap(_.leafOpt).inNoneIfEmpty
+  def forceBasicType:            BasicType   = basicTypeOpt.get
 
   // ---------------------------------------------------------------------------
   def    isNumericalType   : Boolean               = basicTypeOpt.exists (_.isNumericalType)
@@ -64,9 +63,9 @@ trait HasContainees {  // see t210125111338 (union types)
   def isZonedDateTime : Boolean = areAllBasicType(BasicType._ZonedDateTime)
   def isInstant       : Boolean = areAllBasicType(BasicType._Instant)
 
-  def isEnum : Boolean = areAllBasicType(BasicType._Enum)
-
   def isBinary: Boolean = areAllBasicType(BasicType._Binary)
+
+  def isEnum  : Boolean = containees.forall(_.leafOpt.exists(_.isEnm))
 
   // ---------------------------------------------------------------------------
   def hasBoolean : Boolean = hasBasicType(BasicType._Boolean)
@@ -89,9 +88,9 @@ trait HasContainees {  // see t210125111338 (union types)
   def hasZonedDateTime : Boolean = hasBasicType(BasicType._ZonedDateTime)
   def hasInstant       : Boolean = hasBasicType(BasicType._Instant)
 
-  def hasEnum : Boolean = hasBasicType(BasicType._Enum)
-
   def hasBinary: Boolean = hasBasicType(BasicType._Binary)
+
+  def hasEnum: Boolean = containees.exists(_.leafOpt.exists(_.isEnm))
 
   // ===========================================================================
   def forceBasicTypes      : Seq[BasicType      ] = containees.map(_.leafOpt.get)
@@ -100,6 +99,19 @@ trait HasContainees {  // see t210125111338 (union types)
   def forceBoundedNumbers  : Seq[  BoundedNumber] = containees.map(_.leafOpt.get).flatMap(_.asBoundedNumberOpt)
   def forceIntegerLikeTypes: Seq[IntegerLikeType] = containees.map(_.leafOpt.get).flatMap(_.asIntegerLikeTypeOpt)
   def forceRealLikeTypes   : Seq[RealLikeType   ] = containees.map(_.leafOpt.get).flatMap(_.asRealLikeTypeOpt)
+
+  // ===========================================================================
+  /** nesting to non-(necessarily-)nesting */
+  protected def __lookup: Map[Index, Index] = {
+    var nestingIndex = -1
+
+    containees
+      .zipWithIndex
+      .flatMap { case (info, containeeIndex) =>
+        if (info.isNesting) { nestingIndex += 1; Some(nestingIndex -> containeeIndex) }
+        else                                     None }
+      .toMap }
+
 }
 
 // ===========================================================================

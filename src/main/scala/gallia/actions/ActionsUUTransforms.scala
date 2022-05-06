@@ -19,8 +19,8 @@ object ActionsUUTransforms {
     def resolve(c: Cls) = target.qpathz_(c) }
 
   // ===========================================================================
-  case class TransformUU(target: TqRPathz, nameOpt: ClsNameOpt, f: HeadU => HeadU) extends ActionUUb with HasTqRPathzTarget {
-      private val _trnsf: NestedTransform = utils.NestedTransform.parseUU(nameOpt)(f)
+  case class TransformUU(target: TqRPathz, disambiguatorOpt: UnionObjectDisambiguatorOpt, f: HeadU => HeadU) extends ActionUUb with HasTqRPathzTarget {
+      private val _trnsf: NestedTransform = utils.NestedTransform.parseUU(disambiguatorOpt)(f)
 
       // ---------------------------------------------------------------------------
       def  vldt(c: Cls): Errs =
@@ -33,7 +33,7 @@ object ActionsUUTransforms {
 
       // ---------------------------------------------------------------------------
       def _meta  (c: Cls): Cls     = resolve(c).pipe   (_trnsf.transformMeta(c, _))
-      def atomuus(c: Cls): AtomUUs = resolve(c).flatMap(_trnsf.transformData(c, multiple = false)) } //TODO: can only be one target actually
+      def atomuus(c: Cls): AtomUUs = resolve(c).flatMap(_trnsf.transformData(c, _Single)) } //TODO: can only be one target actually
 
     // ===========================================================================
     case class TransformZZ(target: TqRPathz, f: HeadZ => HeadZ) extends ActionUUb with HasTqRPathzTarget {
@@ -49,7 +49,7 @@ object ActionsUUTransforms {
 
       // ---------------------------------------------------------------------------
       def _meta  (c: Cls): Cls     = resolve(c).pipe   (_trnsf.transformMeta(c, _))
-      def atomuus(c: Cls): AtomUUs = resolve(c).flatMap(_trnsf.transformData(c, multiple = true)) //TODO: can only be one target actualy               
+      def atomuus(c: Cls): AtomUUs = resolve(c).flatMap(_trnsf.transformData(c, _Multiple)) //TODO: can only be one target actualy
     }
 
   // ===========================================================================
@@ -69,7 +69,7 @@ object ActionsUUTransforms {
     // ===========================================================================
     case class TransformToObj(from: TtqRPathz, to: Cls, multiple: Boolean, f: _ff11) extends ActionUUb with TodoV1 { // TODO: split single/multiple
       // TODO: validation, disallow '[]' (use missing field instead)
-      def _meta  (c: Cls): Cls     = from.qpathz_(c).pipe { c.updateSoleInfo(_, Info(multiple, to))}
+      def _meta  (c: Cls): Cls     = from.qpathz_(c).pipe { c.transformField(_)(_.transformSoleInfo(_ => Info(multiple, to))) }
       def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe { _atoms(c)(_TransformVV(_, f)) } }
     
   // ===========================================================================
@@ -144,16 +144,16 @@ object ActionsUUTransforms {
 
   // ===========================================================================
   // TODO: check input isn't u or z + destination type is valid
+  // FIXME: t210615104657 - if to is Option[T]
   case class TransformVV(from: TtqRPathz, to: TypeNode, f: _ff11, g: _ff11) extends ActionUUb {
-      def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ _vldt.validType(to)
-      def _meta(c: Cls): Cls  = from.qpathz_(c).foldLeft(c)(_.updateType(_, from.node, to))
-      //FIXME: t210615104657 - if to is Option[T]        
+      def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) ++ _vldt.validType(to)
+      def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c) { _.updateType(_, from.node, to) }
       def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms2(c)(_TransformVV(_, f), _TransformVV(_, g))) }
 
     // ---------------------------------------------------------------------------
     case class TransformVVx(from: TtqRPathz, to: TypeNode, f: _ff11) extends ActionUUb {
-      def  vldt(c: Cls): Errs = from.vldtAsOrigin(c, SpecialCardiMode.IgnoreAltogether) ++ _vldt.validType(to)
-      def _meta(c: Cls): Cls  = from.qpathz_(c).foldLeft(c)(_.transformSoleContainee(_)(_ => to.forceNonBObjOfni.info1.containee))
+      def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c, SpecialCardiMode.IgnoreAltogether) ++ _vldt.validType(to)
+      def _meta  (c: Cls): Cls     = from.qpathz_(c).foldLeft(c)(_.transformSoleContainee(_)(_ => to.forceNonBObjOfni.info1.containee))
       def atomuus(c: Cls): AtomUUs = from.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.wrapx(c, f)))) }
 
     // ---------------------------------------------------------------------------
@@ -196,23 +196,6 @@ object ActionsUUTransforms {
         .flatMap { invalidPaths =>
           if (multiple) errs(s"210110194028:NotObjsOrObjs_:${KPathz(invalidPaths)}")
           else          errs(s"210110194029:NotObjOrObj_:${  KPathz(invalidPaths)}") }
-
-  // ---------------------------------------------------------------------------
-  import gallia.meta.InfoUtils
-
-  private[actions] def checkNode(node: TypeNode): Errs =
-    node.validContainerOpt match {
-      case None =>
-        if (node.isContainedWhatever2) Nil
-        else                           errs(s"TODO:210112142932:${node}")
-
-      case Some(leaf) =>
-        InfoUtils.containeeOpt(leaf) match {
-          case None     => errs(s"TODO:210112142933:${node}")
-          case Some(yy) => Nil } }
-      //bobj('v -> 1  ).transform ('v).using(x => Seq(x, x +  1 )).fail("210112142933") // limitation; .test(bobj('v -> Seq(1  ,   2 ) ))
-      //bobj('v -> "1").transform ('v).using(x => Seq(x, x + "1")).fail("210112142933") // limitation; .test(bobj('v -> Seq("1", "11") ))
-      //Default01.transform('f).using(_.size.toString).test(bobj('f -> "3", 'g -> 1))
 
 }
 

@@ -2,7 +2,7 @@ package gallia
 package reflect
 
 import enumeratum.{Enum, EnumEntry}
-import gallia.meta.Ofni
+import gallia.meta.{Ofni, Ofnu}
 
 // ===========================================================================
 sealed trait Container extends EnumEntry {
@@ -34,6 +34,13 @@ sealed trait Container extends EnumEntry {
         case Container._Nes => Ofni.nes(containee)
         case Container._Pes => Ofni.pes(containee) }
 
+    // ---------------------------------------------------------------------------
+    def ofnu(containee: meta.Containee): Ofnu =
+      this match {
+        case Container._One => Ofnu.one(containee)
+        case Container._Opt => Ofnu.opt(containee)
+        case Container._Nes => Ofnu.nes(containee)
+        case Container._Pes => Ofnu.pes(containee) }
   }
 
   // ===========================================================================

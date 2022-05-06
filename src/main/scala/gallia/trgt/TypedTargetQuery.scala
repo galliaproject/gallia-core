@@ -19,6 +19,8 @@ case class TypedTargetQuery[$Target /* TODO: t210823111030 - ungenerify */]( // 
 
     def size(c: Cls): Int = tq.size(c)
 
+    def isMultiple: Boolean = node.isMultiple
+
     // ---------------------------------------------------------------------------
     def duo      (c: Cls): Duo[$Target]    = Duo[$Target](node, tq.resolve(c))
     def fieldPair(c: Cls): ($Target, Ofni) = (tq.resolve(c), node.forceNonBObjOfni)

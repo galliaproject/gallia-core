@@ -2,7 +2,6 @@ package gallia
 package vldt
 
 import aptus.Seq_
-
 import meta._
 import reflect._
 import target._
@@ -36,8 +35,14 @@ private[gallia] object MetaValidation {
   // ===========================================================================
   // type compability: check type validity too but not presence
 
-  def typeCompatibility[$Target](c: Cls, duo: Duo[$Target], mode: SpecialCardiMode): Errs =
-      _helper.typeCompatibility(c, duo, mode)
+  def typeCompatibility[$Target](c: Cls, duo: Duo[$Target], mode: SpecialCardiMode): Errs = _helper.typeCompatibility(c, duo, mode)
+
+  // ===========================================================================
+  // enums
+
+  def checkIsEnumField       (c: Cls)(target: TargetQuery[RPathz])                                     : Errs = _helper.checkIsEnumField       (c)(target)
+  def checkAreValidEnumValues(c: Cls)(target: TargetQuery[RPathz])(f: Seq[EnumValue] => Seq[EnumValue]): Errs = _helper.checkAreValidEnumValues(c)(target)(f)
+  def checkAreValidEnumValues(values: Seq[EnumValue])                                                  : Err_ = _helper.checkAreValidEnumValues(values)
 
   // ===========================================================================
   def checkKeysReordering(c: Cls, f: Seq[SKey] => Seq[SKey], recursively: Boolean): Errs = {

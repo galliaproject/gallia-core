@@ -12,8 +12,9 @@ trait ClsLike { // read-only part
     // optimization for runtime validation
     val lookup: Map[Key, Fld]
 
-    val keySet   : Set   [Key]
-    val keyVector: Vector[Key]
+    val  keySet  : Set   [ Key]
+    val skeySet  : Set   [SKey]
+    val keyVector: Vector[ Key]
 
     val requiredKeys  : Seq[Key]
     val requiredKeySet: Set[Key]
@@ -60,7 +61,8 @@ trait ClsLike { // read-only part
     def filter5(pred: PNF     => Boolean): Seq[KPath] = _filterPNF(Nil, pred).map(KPath.opt(_).force)
 
     // ---------------------------------------------------------------------------
-    def contains(key  : Key  ): Boolean = keySet.contains(key)
+    def contains(skey : SKey ): Boolean = skeySet.contains(skey)
+    def contains( key :  Key ): Boolean =  keySet.contains( key)
     def contains(path : KPath): Boolean =
       path.tailPair match {
         case (leaf  , None      ) => contains(leaf)
@@ -84,6 +86,9 @@ trait ClsLike { // read-only part
     // ---------------------------------------------------------------------------
     def isRequired(path: KPathW): Boolean = field(path.value).isRequired
     def isOptional(path: KPathW): Boolean = field(path.value).isOptional
+
+    // ===========================================================================
+    private[gallia] def enmOpt(target: Key): Option[_Enm] = field(target).basicTypesOpt.toSeq.flatten.flatMap(_.enmOpt).force.option
 
     // ===========================================================================
     //TODO: get fld-like, nested cls-like

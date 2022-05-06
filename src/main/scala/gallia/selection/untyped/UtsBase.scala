@@ -66,7 +66,10 @@ object UtsBase {
 
   // ---------------------------------------------------------------------------
   object ReorderAsX extends KeyzBase { type Origin = Origins.ReorderAsX; val origin = new Origin {} }
-  
+
+  // ---------------------------------------------------------------------------
+  object ModifyEnumValuesFor extends QpathzBase { type Origin = Origins.ModifyEnumValuesFor; val origin = new Origin {} }
+
   // ---------------------------------------------------------------------------
   object Remove     extends QpathzBase { type Origin = Origins.Remove    ; val origin = new Origin {} }
   object Retain     extends QpathzBase { type Origin = Origins.Retain    ; val origin = new Origin {} }

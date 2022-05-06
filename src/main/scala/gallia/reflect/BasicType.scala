@@ -2,7 +2,6 @@ package gallia
 package reflect
 
 import scala.reflect.{classTag, ClassTag}
-import enumeratum.{Enum, EnumEntry}
 import java.time._
 
 import aptus.{Anything_, Seq_, String_}
@@ -43,11 +42,7 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
     def isDouble : Boolean = this == BasicType._Double
     def isBoolean: Boolean = this == BasicType._Boolean
     def isString : Boolean = this == BasicType._String
-    
-    def isByte : Boolean = this == BasicType._Byte
-    def isShort: Boolean = this == BasicType._Short
-    def isLong : Boolean = this == BasicType._Long
-    def isFloat: Boolean = this == BasicType._Float
+    def isEnm    : Boolean = this.isInstanceOf[_Enm]
 
     // ---------------------------------------------------------------------------    
     def isNumericalType  : Boolean = this.isInstanceOf[NumericalType]
@@ -67,6 +62,10 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
     def asBoundedNumberOpt   = if (this.isInstanceOf[BoundedNumber])   Some(this.asInstanceOf[BoundedNumber])   else None    
     def asIntegerLikeTypeOpt = if (this.isInstanceOf[IntegerLikeType]) Some(this.asInstanceOf[IntegerLikeType]) else None
     def asRealLikeTypeOpt    = if (this.isInstanceOf[RealLikeType])    Some(this.asInstanceOf[RealLikeType])    else None
+
+    // ---------------------------------------------------------------------------
+    def forceEnm:        _Enm  = enmOpt.get
+    def enmOpt  : Option[_Enm] = if (isEnm) Some(this.asInstanceOf[BasicType._Enm]) else None
 
     // ===========================================================================
     final lazy val alias: Option[Alias] = ReflectUtils.simplify(fullName).in.noneIf(_ == fullName)
@@ -108,26 +107,26 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
   }
 
   // ===========================================================================
-  @TypeMatching object BasicType extends Enum[BasicType] {
+  @TypeMatching object BasicType extends Enum[BasicType]  {
     val values = findValues
 
     // ===========================================================================
-    def fromFullNameOpt(value: FullName): Option[BasicType] = _lookup.get     (normalizeFullName(value))
-    def fromFullName   (value: FullName):        BasicType  = _lookup.apply   (normalizeFullName(value))
-    def isKnown        (value: FullName):        Boolean    = _lookup.contains(normalizeFullName(value))
-    
-    // ---------------------------------------------------------------------------
-      private val _lookup: Map[FullName, BasicType] = values.map { x => x.fullName -> x }.force.map
+    def fromFullNameOpt(value: FullName): Option[BasicType] = lookup.get     (normalizeFullName(value))
+    def fromFullName   (value: FullName):        BasicType  = lookup.apply   (normalizeFullName(value))
+    def isKnown        (value: FullName):        Boolean    = lookup.contains(normalizeFullName(value))
 
-      private def lookup(value: FullName): BasicType = _lookup.getOrElse(
-          value,
-          aptus.illegalState(s"TODO:CantFindType:201013093225:${value}"))
+    // ---------------------------------------------------------------------------
+      private val lookup: Map[FullName, BasicType] =
+        values
+          .map { x => x.fullName -> x }
+          .force.map
+          .withDefault { value => aptus.illegalState(s"TODO:CantFindType:201013093225:${value}") }
 
     // ===========================================================================
     def normalizeFullName(value: FullName): FullName =
-           if (value == "java.lang.String")  value
-      else if (value == "java.lang.Integer") "scala.Int"
-      else                                   value.replace("java.lang.", "scala.") // not so for java.math (not equivalent at runtime)
+           if (value == "java.lang.Integer") "scala.Int"
+      else if (value == "java.lang.String")   value
+      else                                    value.replace("java.lang.", "scala.") // not so for java.math (not equivalent at runtime)
 
     // ===========================================================================
     def combine(values: Seq[BasicType]): BasicType = // TODO: subtype these 3?
@@ -220,12 +219,17 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
 
     // ===========================================================================
     // TODO:
-    // - t210114093525 - capture enum values (will need to adapt serialization)
-    // - t210330102827 - capture enum name for macros
-    case object _Enum extends BasicType { type T = EnumEntry; val fullName = "enumeratum.EnumEntry"
-    		override protected def accessorNameModifier(value: FullName): String = value.replace("EnumEntry",  "enm") // "enum" is reserved in Scala 3      
-      private implicit val ord: Ordering[T] = CustomOrdering.enumEntry
-      /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse }
+    // - t210330102827 - capture enum name for macros (currently stored in Fld hackily)
+    case class _Enm(values: Seq[EnumValue]) extends BasicType { type T = Seq[EnumValue]; val fullName = gallia.reflect._EnumValue
+      vldt.MetaValidation.checkAreValidEnumValues(values).require(_.isEmpty /* ie no errors reported */)
+      def stringValues: Seq[EnumStringValue] = values.map(_.stringValue)
+
+      override protected def accessorNameModifier(value: FullName): String = "enm"
+        private implicit val ord: Ordering[T] = CustomOrdering.enumValue
+          /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse }
+
+      // ---------------------------------------------------------------------------
+      object _Enm { private[gallia] val Dummy = _Enm(Seq(EnumValue("dummy"))) } // useful for internal comparisons in validation, see 220506101842
 
     // ===========================================================================
     case object _Binary extends BasicType { type T = ByteBuffer; val fullName = "java.nio.ByteBuffer"

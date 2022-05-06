@@ -102,16 +102,24 @@ trait FldCreator { import Fld._
   def instant_  : Fld = opt(_key, _Instant)
   def instants  : Fld = nes(_key, _Instant)
   def instants_ : Fld = pes(_key, _Instant)
-  
-  // ---------------------------------------------------------------------------
-  //TODO: enum - t210201095414
 
   // ---------------------------------------------------------------------------
   def binary    : Fld = one(_key, _Binary)
   def binary_   : Fld = opt(_key, _Binary)
   def binarys   : Fld = nes(_key, _Binary)
   def binarys_  : Fld = pes(_key, _Binary)
-  
+
+  // ---------------------------------------------------------------------------
+  def enm   (value1: EnumStringValue, more: EnumStringValue*): Fld = enm  ((value1 +: more).map(EnumValue.apply))
+  def enm_  (value1: EnumStringValue, more: EnumStringValue*): Fld = enm_ ((value1 +: more).map(EnumValue.apply))
+  def enms  (value1: EnumStringValue, more: EnumStringValue*): Fld = enms ((value1 +: more).map(EnumValue.apply))
+  def enms_ (value1: EnumStringValue, more: EnumStringValue*): Fld = enms_((value1 +: more).map(EnumValue.apply))
+
+  def enm   (values: Seq[EnumValue]): Fld = one(_key, _Enm(values.toList))
+  def enm_  (values: Seq[EnumValue]): Fld = opt(_key, _Enm(values.toList))
+  def enms  (values: Seq[EnumValue]): Fld = nes(_key, _Enm(values.toList))
+  def enms_ (values: Seq[EnumValue]): Fld = pes(_key, _Enm(values.toList))
+
   // ===========================================================================
   def cls_ (fields: Nes[Fld]): Fld = Fld(_key, Ofni.opt(Cls(fields)))
   def cls  (fields: Nes[Fld]): Fld = Fld(_key, Ofni.one(Cls(fields)))

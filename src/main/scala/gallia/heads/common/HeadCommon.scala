@@ -43,6 +43,20 @@ trait HeadCommon[F <: HeadCommon[F]]
   def showSchemaAndAbort():  Self2 = self2 :+ ShowSchema(abort = true )
 
   // ===========================================================================
+  def modifyEnumValuesFor(target1: RPathW, more: RPathW*)            : _ModifyEnumValuesFor = modifyEnumValuesFor(_.explicit(target1 -> more))
+  def modifyEnumValuesFor(targets: RPathWz)                          : _ModifyEnumValuesFor = modifyEnumValuesFor(_.explicit(targets))
+  def modifyEnumValuesFor(selector: SEL.ModifyEnumValuesFor.Selector): _ModifyEnumValuesFor = new _ModifyEnumValuesFor(SEL.ModifyEnumValuesFor.resolve(selector))
+
+    // ---------------------------------------------------------------------------
+    class _ModifyEnumValuesFor(target: TqRPathz) {
+      def add   (value: EnumStringValue)          : Self2 = using(_ :+             EnumValue(value))
+      def remove(value: EnumStringValue)          : Self2 = using(_.filterNot(_ == EnumValue(value)))
+
+      // ---------------------------------------------------------------------------
+      def using(f: Seq[EnumValue] => Seq[EnumValue]): Self2 =
+        self2 :+ actions.ActionsOthers.ModifyEnumValuesFor(target, f) }
+
+  // ===========================================================================
   private[gallia] def validateBObj (value: BObj ): Self2 = self2 :+ new ValidateBObj (value)
   private[gallia] def validateBObjs(value: BObjs): Self2 = self2 :+ new ValidateBObjs(value)
 

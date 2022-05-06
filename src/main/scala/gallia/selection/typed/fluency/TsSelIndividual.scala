@@ -57,6 +57,8 @@ object TsSelIndividual {
   
   trait HasSelOneBinary        [A, Ignored] { def binary        (sel: A => Any) = new One_[ByteBuffer]    (sel(allSelections[A])) }
 
+  trait HasSelOneEnm           [A, Ignored] { def enm           (sel: A => Any) = new One_[EnumValue]      (sel(allSelections[A])) }
+
   // ===========================================================================
   trait HasSelOptString [A, Ignored] { def string_ (sel: A => Any) = new Opt_[String ](sel(allSelections[A])) }
   trait HasSelOptInt    [A, Ignored] { def int_    (sel: A => Any) = new Opt_[Int    ](sel(allSelections[A])) }
@@ -79,7 +81,9 @@ object TsSelIndividual {
   trait HasSelOptInstant       [A, Ignored] { def instant_       (sel: A => Any) = new Opt_[Instant]       (sel(allSelections[A])) }
   
   trait HasSelOptBinary        [A, Ignored] { def binary_        (sel: A => Any) = new Opt_[ByteBuffer]    (sel(allSelections[A])) }
-  
+
+  trait HasSelOptEnm           [A, Ignored] { def enm_           (sel: A => Any) = new Opt_[EnumValue]      (sel(allSelections[A])) }
+
   // ===========================================================================
   trait HasSelNesString [A, Ignored] { def strings (sel: A => Any) = new Nes_[String ](sel(allSelections[A])) }
   trait HasSelNesInt    [A, Ignored] { def ints    (sel: A => Any) = new Nes_[Int    ](sel(allSelections[A])) }
@@ -102,7 +106,9 @@ object TsSelIndividual {
   trait HasSelNesInstant       [A, Ignored] { def instants       (sel: A => Any) = new Nes_[Instant]       (sel(allSelections[A])) }
   
   trait HasSelNesBinary        [A, Ignored] { def binarys        (sel: A => Any) = new Nes_[ByteBuffer]    (sel(allSelections[A])) }
-  
+
+  trait HasSelNesEnm           [A, Ignored] { def enms           (sel: A => Any) = new Nes_[EnumValue]      (sel(allSelections[A])) }
+
   // ===========================================================================
   trait HasSelPesString [A, Ignored] { def strings_ (sel: A => Any) = new Pes_[String ](sel(allSelections[A])) }
   trait HasSelPesInt    [A, Ignored] { def ints_    (sel: A => Any) = new Pes_[Int    ](sel(allSelections[A])) }
@@ -126,6 +132,8 @@ object TsSelIndividual {
   
   trait HasSelPesBinary        [A, Ignored] { def binarys_        (sel: A => Any) = new Pes_[ByteBuffer]    (sel(allSelections[A])) }
 
+  trait HasSelPesEnm           [A, Ignored] { def enms_           (sel: A => Any) = new Pes_[EnumValue]      (sel(allSelections[A])) }
+
   // ===========================================================================
   trait HasSelXString [A, Ignored] { def stringx (sel: A => Any) = new One_[String ](sel(allSelections[A]), ignoreContainer = true) }
   trait HasSelXInt    [A, Ignored] { def intx    (sel: A => Any) = new One_[Int    ](sel(allSelections[A]), ignoreContainer = true) }
@@ -148,6 +156,9 @@ object TsSelIndividual {
   trait HasSelXInstant       [A, Ignored] { def instantx       (sel: A => Any) = new One_[Instant]       (sel(allSelections[A]), ignoreContainer = true) }
   
   trait HasSelXBinary        [A, Ignored] { def binaryx        (sel: A => Any) = new One_[ByteBuffer]    (sel(allSelections[A]), ignoreContainer = true) }
+
+  trait HasSelXEnm           [A, Ignored] { def enmx           (sel: A => Any) = new One_[EnumValue]      (sel(allSelections[A]), ignoreContainer = true) }
+
 }
 
 // ===========================================================================

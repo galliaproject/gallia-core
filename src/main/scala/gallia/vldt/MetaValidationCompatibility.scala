@@ -22,11 +22,9 @@ object MetaValidationCompatibility {
       xs.exists(compatible(_, y))
 
     // ---------------------------------------------------------------------------
-    def compatible(x: Cls      , y: Cls)      : Boolean = x == y // TODO: handle some aliases, eg Nes,...
-    def compatible(x: Ofni     , y: Ofni)     : Boolean = x == y // FIXME
-    def compatible(x: Info     , y: Info)     : Boolean = x == y // FIXME
-    def compatible(x: Containee, y: Containee): Boolean = x == y // FIXME
-
+    def compatible(x: Cls , y: Cls) : Boolean = x == y // TODO: handle some aliases, eg Nes,...
+    def compatible(x: Ofni, y: Ofni): Boolean = x == y // FIXME
+    def compatible(x: Info, y: Info): Boolean = x == y || (x.isEnm && y.isEnm /* 220506101842 */) // FIXME
 }
 
 // ===========================================================================

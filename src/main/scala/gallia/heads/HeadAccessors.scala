@@ -71,7 +71,7 @@ private[gallia] trait HeadUAccessors { ignored: HeadU =>
   def localTime_   (key: KPathW): HeadV[Opt[LocalTime]] = typed_ [LocalTime](key)
   def localTimes   (key: KPathW): HeadV[Nes[LocalTime]] = typeds [LocalTime](key)
   def localTimes_  (key: KPathW): HeadV[Pes[LocalTime]] = typeds_[LocalTime](key)
-  
+
   def localDateTime    (key: KPathW): HeadV[One[LocalDateTime]] = typed  [LocalDateTime](key)
   def localDateTime_   (key: KPathW): HeadV[Opt[LocalDateTime]] = typed_ [LocalDateTime](key)
   def localDateTimes   (key: KPathW): HeadV[Nes[LocalDateTime]] = typeds [LocalDateTime](key)
@@ -97,7 +97,13 @@ private[gallia] trait HeadUAccessors { ignored: HeadU =>
   def binary_   (key: KPathW): HeadV[Opt[ByteBuffer]] = typed_ [ByteBuffer](key)
   def binarys   (key: KPathW): HeadV[Nes[ByteBuffer]] = typeds [ByteBuffer](key)
   def binarys_  (key: KPathW): HeadV[Pes[ByteBuffer]] = typeds_[ByteBuffer](key)
-  
+
+  // ---------------------------------------------------------------------------
+  def enm    (key: KPathW): HeadV[One[EnumValue]] = typed  [EnumValue](key)
+  def enm_   (key: KPathW): HeadV[Opt[EnumValue]] = typed_ [EnumValue](key)
+  def enms   (key: KPathW): HeadV[Nes[EnumValue]] = typeds [EnumValue](key)
+  def enms_  (key: KPathW): HeadV[Pes[EnumValue]] = typeds_[EnumValue](key)
+
   // ===========================================================================
   def forceString  (key: KPathW): One[String] = forceTyped  [String](key)
   def forceString_ (key: KPathW): Opt[String] = forceTyped_ [String](key)
@@ -161,7 +167,7 @@ private[gallia] trait HeadUAccessors { ignored: HeadU =>
   def forceLocalTime_ (key: KPathW): Opt[LocalTime] = forceTyped_ [LocalTime](key)
   def forceLocalTimes (key: KPathW): Nes[LocalTime] = forceTypeds [LocalTime](key)
   def forceLocalTimes_(key: KPathW): Pes[LocalTime] = forceTypeds_[LocalTime](key)
-  
+
   def forceLocalDateTime  (key: KPathW): One[LocalDateTime] = forceTyped  [LocalDateTime](key)
   def forceLocalDateTime_ (key: KPathW): Opt[LocalDateTime] = forceTyped_ [LocalDateTime](key)
   def forceLocalDateTimes (key: KPathW): Nes[LocalDateTime] = forceTypeds [LocalDateTime](key)
@@ -187,9 +193,12 @@ private[gallia] trait HeadUAccessors { ignored: HeadU =>
   def forceBinary_ (key: KPathW): Opt[ByteBuffer] = forceTyped_ [ByteBuffer](key)
   def forceBinarys (key: KPathW): Nes[ByteBuffer] = forceTypeds [ByteBuffer](key)
   def forceBinarys_(key: KPathW): Pes[ByteBuffer] = forceTypeds_[ByteBuffer](key)
-  
+
   // ---------------------------------------------------------------------------
-  //TODO: enum - t210201095414
+  def forceEnm  (key: KPathW): One[EnumValue] = forceTyped  [EnumValue](key)
+  def forceEnm_ (key: KPathW): Opt[EnumValue] = forceTyped_ [EnumValue](key)
+  def forceEnms (key: KPathW): Nes[EnumValue] = forceTypeds [EnumValue](key)
+  def forceEnms_(key: KPathW): Pes[EnumValue] = forceTypeds_[EnumValue](key)
 }
 
 // ===========================================================================
@@ -236,7 +245,7 @@ private[gallia] trait HeadZAccessors { ignored: HeadZ => // TODO: t210202101142 
 
   def localTimes        (key: KPathW): HeadV[Nes[LocalTime]] = typeds [LocalTime](key)
   def localTimes_       (key: KPathW): HeadV[Pes[LocalTime]] = typeds_[LocalTime](key)
-  
+
   def localDateTimes    (key: KPathW): HeadV[Nes[LocalDateTime]] = typeds [LocalDateTime](key)
   def localDateTimes_   (key: KPathW): HeadV[Pes[LocalDateTime]] = typeds_[LocalDateTime](key)
 
@@ -248,13 +257,14 @@ private[gallia] trait HeadZAccessors { ignored: HeadZ => // TODO: t210202101142 
 
   def instants    (key: KPathW): HeadV[Nes[Instant]] = typeds [Instant](key)
   def instants_   (key: KPathW): HeadV[Pes[Instant]] = typeds_[Instant](key)
-  
+
   // ---------------------------------------------------------------------------
   def binarys    (key: KPathW): HeadV[Nes[ByteBuffer]] = typeds [ByteBuffer](key)
   def binarys_   (key: KPathW): HeadV[Pes[ByteBuffer]] = typeds_[ByteBuffer](key)
 
   // ---------------------------------------------------------------------------
-  //TODO: enum - t210201095414
+  def enms    (key: KPathW): HeadV[Nes[EnumValue]] = typeds [EnumValue](key)
+  def enms_   (key: KPathW): HeadV[Pes[EnumValue]] = typeds_[EnumValue](key)
 
   // ===========================================================================
   def forceStrings (key: KPathW): Nes[String] = forceTypeds [String](key)
@@ -295,7 +305,7 @@ private[gallia] trait HeadZAccessors { ignored: HeadZ => // TODO: t210202101142 
 
   def forceLocalTimes (key: KPathW): Nes[LocalTime] = forceTypeds [LocalTime](key)
   def forceLocalTimes_(key: KPathW): Pes[LocalTime] = forceTypeds_[LocalTime](key)
-  
+
   def forceLocalDateTimes (key: KPathW): Nes[LocalDateTime] = forceTypeds [LocalDateTime](key)
   def forceLocalDateTimes_(key: KPathW): Pes[LocalDateTime] = forceTypeds_[LocalDateTime](key)
 
@@ -313,7 +323,8 @@ private[gallia] trait HeadZAccessors { ignored: HeadZ => // TODO: t210202101142 
   def forceBinarys_(key: KPathW): Pes[ByteBuffer] = forceTypeds_[ByteBuffer](key)
 
   // ---------------------------------------------------------------------------
-  //TODO: enum - t210201095414   
+  def forceEnms (key: KPathW): Nes[EnumValue] = forceTypeds [EnumValue](key)
+  def forceEnms_(key: KPathW): Pes[EnumValue] = forceTypeds_[EnumValue](key)
 }
 
 // ===========================================================================

@@ -15,13 +15,14 @@ class TypedWhatever[+T](val typed: T) extends Serializable { // can't be AnyVal 
   // ---------------------------------------------------------------------------
   private[gallia] def map[T2](f: T => T2): TypedWhatever[T2] = new TypedWhatever[T2](f(typed))
 
-    private[gallia] def mapNumber [T2](f: Double  => T2): TypedWhatever[T2] = map { x => f(x.number.doubleValue) }
-    private[gallia] def mapInt    [T2](f: Int     => T2): TypedWhatever[T2] = map { x => f(x.int) }
-    private[gallia] def mapBoolean[T2](f: Boolean => T2): TypedWhatever[T2] = map { x => f(x.boolean) }
-    private[gallia] def mapString [T2](f: String  => T2): TypedWhatever[T2] = map { x => f(x.string) }
+    private[gallia] def mapNumber [T2](f: Double    => T2): TypedWhatever[T2] = map { x => f(x.number.doubleValue) }
+    private[gallia] def mapInt    [T2](f: Int       => T2): TypedWhatever[T2] = map { x => f(x.int) }
+    private[gallia] def mapBoolean[T2](f: Boolean   => T2): TypedWhatever[T2] = map { x => f(x.boolean) }
+    private[gallia] def mapString [T2](f: String    => T2): TypedWhatever[T2] = map { x => f(x.string) }
+    private[gallia] def mapEnm    [T2](f: EnumValue => T2): TypedWhatever[T2] = map { x => f(x.enm) }
   
   // ===========================================================================
-  def unary_!                      (implicit ev: T <:< Boolean): TypedWhatever[Boolean] = mapBoolean { !_ }
+  def unary_!                       (implicit ev: T <:< Boolean): TypedWhatever[Boolean] = mapBoolean { !_ }
 
   def && (y: TypedWhatever[Boolean])(implicit ev: T <:< Boolean): TypedWhatever[Boolean] = mapBoolean { _ && y.typed.boolean }
   def || (y: TypedWhatever[Boolean])(implicit ev: T <:< Boolean): TypedWhatever[Boolean] = mapBoolean { _ || y.typed.boolean }
@@ -88,6 +89,9 @@ class TypedWhatever[+T](val typed: T) extends Serializable { // can't be AnyVal 
   def log2       : TypedWhatever[Double] = mapNumber(x => math.log(x) / math.log(2))
   
   def pow(n: Int): TypedWhatever[Double] = mapNumber(math.pow(_, n))
+
+  // ---------------------------------------------------------------------------
+  def enmStringValue: TypedWhatever[String] = mapEnm(_.stringValue)
 }
 
 // ===========================================================================

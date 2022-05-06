@@ -57,7 +57,7 @@ object RuntimeValidation { import meta._ // 210115153346 - POC
                   validateField(_, key, value) } }
 
       // ---------------------------------------------------------------------------
-      unknownFieldErrors ++
+      unknownFieldErrors         ++
       missingRequiredFieldErrors ++
       otherFieldErrors
     }
@@ -69,8 +69,7 @@ object RuntimeValidation { import meta._ // 210115153346 - POC
     val (isMultiple: Boolean, types: DistinctSeq[Option[Either[Unit, BasicType]]]) =
       value match {
         case seq: Seq[_] => true  -> seq.map(tipe).distinct
-        case sgl         => false -> Seq(    tipe(sgl))
-      }
+        case sgl         => false -> Seq(    tipe(sgl)) }
 
     // ---------------------------------------------------------------------------
     val multiplicityErrors: Option[ValErr] = {
@@ -161,7 +160,7 @@ object RuntimeValidation { import meta._ // 210115153346 - POC
       case x: Double  => Some(Right(_Double))
       case x: Boolean => Some(Right(_Boolean))
 
-      case x: EnumEntry => Some(Right(_Enum)) //TODO: make sure works as expected
+      case x: EnumValue => Some(Right(_Enm.Dummy)) //TODO: make sure works as expected
 
       case x: Obj => Some(Left(()))
 

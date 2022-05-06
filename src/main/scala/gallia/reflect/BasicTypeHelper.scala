@@ -64,6 +64,9 @@ object CustomOrdering {
 
   // ---------------------------------------------------------------------------
   def enumEntry     : Ordering[EnumEntry]      = Ordering.by(_.entryName)
+
+  // ---------------------------------------------------------------------------
+  def enumValue     : Ordering[Seq[EnumValue]]      = Ordering.by((x: Seq[EnumValue]) => x.map(_.stringValue))(aptus.seqOrdering)
 }
 
 // ===========================================================================

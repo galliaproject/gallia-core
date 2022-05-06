@@ -3,7 +3,7 @@ package selection.typed.fluency
 
 // ===========================================================================
 @TypeMatching // very boilerplatey; TODO: t210124092716 - codegen (very boilerplaty)
-object TsSingleIndividual { //TODO: enum - t210201095414
+object TsSingleIndividual {
 
   // ---------------------------------------------------------------------------
   //TODO: rename, these also abstract requiredness
@@ -37,6 +37,8 @@ object TsSingleIndividual { //TODO: enum - t210201095414
   
   trait HasSingleOneBinary        [$Wrap] { def binary        (target: $Wrap) = new One_[ByteBuffer]    (target) }
 
+  trait HasSingleOneEnm           [$Wrap] { def enm           (target: $Wrap) = new One_[EnumValue]      (target) }
+
   // ---------------------------------------------------------------------------
   trait HasSingleOptString [$Wrap] { def string_ (target: $Wrap) = new Opt_[String ](target) }
   trait HasSingleOptInt    [$Wrap] { def int_    (target: $Wrap) = new Opt_[Int    ](target) }
@@ -59,7 +61,9 @@ object TsSingleIndividual { //TODO: enum - t210201095414
   trait HasSingleOptInstant       [$Wrap] { def instant_       (target: $Wrap) = new Opt_[Instant]       (target) }
   
   trait HasSingleOptBinary        [$Wrap] { def binary_        (target: $Wrap) = new Opt_[ByteBuffer]    (target) }
-    
+
+  trait HasSingleOptEnm           [$Wrap] { def enm_           (target: $Wrap) = new Opt_[EnumValue]      (target) }
+
   // ---------------------------------------------------------------------------
   trait HasSingleNesString [$Wrap] { def strings (target: $Wrap) = new Nes_[String ](target) }
   trait HasSingleNesInt    [$Wrap] { def ints    (target: $Wrap) = new Nes_[Int    ](target) }
@@ -82,7 +86,9 @@ object TsSingleIndividual { //TODO: enum - t210201095414
   trait HasSingleNesInstant       [$Wrap] { def instants       (target: $Wrap) = new Nes_[Instant]       (target) }
   
   trait HasSingleNesBinary        [$Wrap] { def binarys        (target: $Wrap) = new Nes_[ByteBuffer]    (target) }
-    
+
+  trait HasSingleNesEnm           [$Wrap] { def enms           (target: $Wrap) = new Nes_[EnumValue]      (target) }
+
   // ---------------------------------------------------------------------------
   trait HasSinglePesString [$Wrap] { def strings_ (target: $Wrap) = new Pes_[String ](target) }
   trait HasSinglePesInt    [$Wrap] { def ints_    (target: $Wrap) = new Pes_[Int    ](target) }
@@ -106,6 +112,8 @@ object TsSingleIndividual { //TODO: enum - t210201095414
   
   trait HasSinglePesBinary        [$Wrap] { def binarys_        (target: $Wrap) = new Pes_[ByteBuffer]    (target) }
 
+  trait HasSinglePesEnm           [$Wrap] { def enms_           (target: $Wrap) = new Pes_[EnumValue]      (target) }
+
   // ===========================================================================
   trait HasSingleXString [$Wrap] { def stringx (target: $Wrap ) = new One_[String ](target, ignoreContainer = true) }
   trait HasSingleXInt    [$Wrap] { def intx    (target: $Wrap ) = new One_[Int    ](target, ignoreContainer = true) }
@@ -128,6 +136,8 @@ object TsSingleIndividual { //TODO: enum - t210201095414
   trait HasSingleXInstant       [$Wrap] { def instantx       (target: $Wrap ) = new One_[Instant]       (target, ignoreContainer = true) }
   
   trait HasSingleXBinary        [$Wrap] { def binaryx        (target: $Wrap ) = new One_[ByteBuffer]    (target, ignoreContainer = true) }
+
+  trait HasSingleXEnm           [$Wrap] { def enmx           (target: $Wrap ) = new One_[EnumValue]      (target, ignoreContainer = true) }
 }
 
 // ===========================================================================

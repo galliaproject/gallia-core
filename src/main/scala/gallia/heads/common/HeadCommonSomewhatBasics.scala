@@ -85,6 +85,9 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
       def toFlag      [T : WTT](trueValue: T                 ): Self2 = toFlag(trueValue, strict = false)
       def toFlag      [T : WTT](trueValue: T, strict: Boolean): Self2 = self2 :+ ConvertToFlag(target, trueValue, strict)
 
+      def toEnum(value1: EnumStringValue, more: EnumStringValue*): Self2 = toEnum((value1 +: more).map(EnumValue.apply))
+      def toEnum(values: Seq[EnumValue])                         : Self2 = self2 :+ ConvertToEnum(target,  values.toList)
+
       // ---------------------------------------------------------------------------
       // TODO: keep these within convert?
 

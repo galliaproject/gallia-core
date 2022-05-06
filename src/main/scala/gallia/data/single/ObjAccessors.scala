@@ -3,6 +3,7 @@ package data
 package single
 
 import aptus.{Opt, Pes}
+import reflect.ReflectUtils.withEntryName
 
 // ===========================================================================
 @TypeMatching
@@ -101,15 +102,18 @@ trait ObjAccessors { ignored: Obj => // id210326140514
   def binary_ (key: KPathW): Opt[ByteBuffer] = opt  (key).map(_.asBinary)
   def binarys (key: KPathW): Seq[ByteBuffer] = force(key)      .asSeq.map(_.asBinary)
   def binarys_(key: KPathW): Pes[ByteBuffer] = opt  (key).map(_.asSeq.map(_.asBinary))
-  
-  // ===========================================================================
-  private def _enm[T <: EnumEntry: WTT](name: String): T  = reflect.CompanionReflection[T](methodName = "withName")(/* args */ name)
 
-    // "enum" is a reserved keyword in scala 3
-    def enm  [T <: EnumEntry: WTT](key: KPathW):     T  = text  (key)      .pipe(_enm[T])
-    def enm_ [T <: EnumEntry: WTT](key: KPathW): Opt[T] = text_ (key)      .map(_enm[T])
-    def enms [T <: EnumEntry: WTT](key: KPathW): Seq[T] = texts (key)      .map(_enm[T])
-    def enms_[T <: EnumEntry: WTT](key: KPathW): Pes[T] = texts_(key).map(_.map(_enm[T]))
+  // ---------------------------------------------------------------------------
+  def enm  (key: KPathW):     EnumValue  = force(key)      .asEnum
+  def enm_ (key: KPathW): Opt[EnumValue] = opt  (key).map(_.asEnum)
+  def enms (key: KPathW): Seq[EnumValue] = force(key)      .asSeq.map(_.asEnum)
+  def enms_(key: KPathW): Pes[EnumValue] = opt  (key).map(_.asSeq.map(_.asEnum))
+
+  // ===========================================================================
+  def enumeratum   [T <: EnumEntry: WTT](key: KPathW):     T  = enm  (key)            .stringValue.pipe(withEntryName[T])
+  def enumeratum_  [T <: EnumEntry: WTT](key: KPathW): Opt[T] = enm_ (key).map(      _.stringValue.pipe(withEntryName[T]))
+  def enumeratums  [T <: EnumEntry: WTT](key: KPathW): Seq[T] = enms (key)      .map(_.stringValue.pipe(withEntryName[T]))
+  def enumeratums_ [T <: EnumEntry: WTT](key: KPathW): Pes[T] = enms_(key).map(_.map(_.stringValue.pipe(withEntryName[T])))
 
   // ---------------------------------------------------------------------------
   def text  (key: KPathW):     String  = force(key).pipe(format)
@@ -117,6 +121,7 @@ trait ObjAccessors { ignored: Obj => // id210326140514
   def texts (key: KPathW): Seq[String] = force(key)      .asSeq.map(format)
   def texts_(key: KPathW): Pes[String] = opt  (key).map(_.asSeq.map(format))
 
+  // ---------------------------------------------------------------------------
   @NumberAbstraction
   def nmbr  (key: KPathW):     Double  = force(key).pipe(_nmbr)
   def nmbr_ (key: KPathW): Opt[Double] = opt  (key).map (_nmbr)

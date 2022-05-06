@@ -69,8 +69,9 @@ object SchemaInferrer { // mostly for JSON for now...
         case x: Instant        => _Instant
         
         case x: ByteBuffer     => _Binary
-              
-        case x: EnumEntry      => _Enum }
+
+        case x: EnumValue      => _Enm(Seq(x))
+        case x: EnumEntry      => _Enm(Seq(EnumValue(x.entryName))) }
 
 }
 

@@ -65,7 +65,11 @@ package object gallia
   def byteBuffer(byte1: Byte, more: Byte*): ByteBuffer = java.nio.ByteBuffer.wrap((byte1 +: more).toArray)
   def byteBuffer(value: String)           : ByteBuffer = java.nio.ByteBuffer.wrap(value.getBytes)
   def byteBuffer(bytes: Array[Byte])      : ByteBuffer = java.nio.ByteBuffer.wrap(bytes)
-  
+
+  // ---------------------------------------------------------------------------
+  /** a simple wrapper for enum values */ case class EnumValue(stringValue: EnumStringValue) extends AnyVal {
+    override def toString: String = stringValue /* used by convert(myEnum).toStr */ }
+
   // ---------------------------------------------------------------------------
   implicit class ByteBuffer__(bb: ByteBuffer) {    
     def mapBytes(f: Array[Byte] => Array[Byte]): ByteBuffer = bb.array.pipe(f).pipe(byteBuffer)  }
@@ -91,7 +95,10 @@ package object gallia
   // ---------------------------------------------------------------------------  
   private[gallia] type EnumEntry            = enumeratum.EnumEntry
   private[gallia] type Enum[T <: EnumEntry] = enumeratum.Enum[T]
-  
+
+  private[gallia] type _Enm    =        gallia.reflect.BasicType._Enm
+  private[gallia] type _EnmOpt = Option[gallia.reflect.BasicType._Enm]
+
   // ---------------------------------------------------------------------------
   private[gallia] type Whatever = whatever.Whatever
   private[gallia] val  Whatever = whatever.Whatever

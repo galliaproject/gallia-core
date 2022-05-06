@@ -55,8 +55,9 @@ class Whatever(private[gallia] val any: Any) extends AnyVal with Serializable { 
     
     // ---------------------------------------------------------------------------    
     def == (that: ByteBuffer)    : TypedWhatever[Boolean] = any.binary         == that
-    
-    // TODO: enums - t210201095414
+
+    // ---------------------------------------------------------------------------
+    def == (that: EnumValue)(implicit di: DI): TypedWhatever[Boolean] = any.enm            == that
 
   // ===========================================================================
   def != (that: String) : TypedWhatever[Boolean] = any.string  != that
@@ -79,7 +80,10 @@ class Whatever(private[gallia] val any: Any) extends AnyVal with Serializable { 
     def != (that: Instant)       : TypedWhatever[Boolean] = any.instant        != that
 
     // ---------------------------------------------------------------------------
-    // TODO: enums - t210201095414
+    def != (that: ByteBuffer)    : TypedWhatever[Boolean] = any.binary         != that
+
+    // ---------------------------------------------------------------------------
+    def != (that: EnumValue)(implicit di: DI): TypedWhatever[Boolean] = any.enm            != that
 
   // ===========================================================================
   // TODO: t210202160407 - provide it for more types (eg String, dates, ...)?
@@ -155,6 +159,9 @@ class Whatever(private[gallia] val any: Any) extends AnyVal with Serializable { 
 
   def pow(n: Int): TypedWhatever[Double] = _number(math.pow(_, n))
 
+  // ---------------------------------------------------------------------------
+  def stringValue: TypedWhatever[String] = _enm(_.stringValue)
+
   // ===========================================================================  
   private def _string[T](f: String => T): TypedWhatever[T] = any match {
         case x: String => f(x)
@@ -175,6 +182,10 @@ class Whatever(private[gallia] val any: Any) extends AnyVal with Serializable { 
         case x: Number => f(x.doubleValue)
         case x         => dataError(matchError("210113123521", x)) }
 
+    // ---------------------------------------------------------------------------
+    private def _enm[T](f: EnumValue => T): TypedWhatever[T] = any match {
+      case x: EnumValue => f(x)
+      case x            => dataError(matchError("210113123521", x)) }
 }
 
 // ===========================================================================
@@ -225,6 +236,12 @@ object Whatever {
       implicit def _toOffsetDateTime(value: Whatever): OffsetDateTime = value.any.offsetDateTime
       implicit def _toZonedDateTime (value: Whatever): ZonedDateTime  = value.any.zonedDateTime
       implicit def _toInstant       (value: Whatever): Instant        = value.any.instant
+
+      // ---------------------------------------------------------------------------
+      implicit def _toBinary        (value: Whatever): ByteBuffer        = value.any.binary
+
+      // ---------------------------------------------------------------------------
+      implicit def _toEnm           (value: Whatever): EnumValue        = value.any.enm
 
   // ===========================================================================
   private def matchError(id: String, value : Any)              = { s"TODO:${id}:${value}:${value.getClass}" }

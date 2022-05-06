@@ -66,13 +66,30 @@ object MetaObj { // 201222111332
 
             // ---------------------------------------------------------------------------
             private def containee(value: Any) = (value match { // see 210118133408
-              case s: String => BasicType.withName(s)
-              case o: Obj    => cls(o) })
+                case s: String => BasicType.withName(s)
+                case o: Obj    =>
+                  o.string_(_type) match {
+                    case Some("_Enm") => enm(o)
+                    case None         => cls(o) } })
 
             // ---------------------------------------------------------------------------
             private def containee(value: Containee): Any = (value match {
-              case tipe   : BasicType => tipe.entryName
-              case nesting: Cls       => cls(nesting) })
+                case e      : BasicType._Enm => enm(e)
+                case bsc    : BasicType      => bsc.entryName
+                case nesting: Cls            => cls(nesting) })
+
+              // ---------------------------------------------------------------------------
+              private def enm(value: Obj): BasicType =
+                value
+                  .strings("values")
+                  .map(EnumValue.apply)
+                  .pipe(BasicType._Enm.apply)
+
+              // ---------------------------------------------------------------------------
+              private def enm(value: BasicType._Enm): Obj =
+                obj(
+                  _type    -> "_Enm",
+                  "values" -> value.stringValues.assert(_.nonEmpty))
 
   // ===========================================================================
   def formatClassDebug(value: Cls): DebugString = value.fields.map(formatFieldDebug).joinln

@@ -3,7 +3,7 @@ package selection.typed.fluency
 
 // ===========================================================================
 @TypeMatching // very boilerplatey; TODO: t210124092716 - codegen (very boilerplaty)
-object TsRepeatedIndividual { //TODO: enum - t210201095414
+object TsRepeatedIndividual {
   
   // ---------------------------------------------------------------------------  
   trait HasRepeatedNonXTyped[$Wrap, $Wrapz <: Seq[$Wrap]] { def typed [T: WTT](x1: $Wrap, x2: $Wrap, more: $Wrap*) = new One_[T]((x1, x2, more)) } // TODO: t210201103739 - validate T for .typed
@@ -31,6 +31,8 @@ object TsRepeatedIndividual { //TODO: enum - t210201095414
   trait HasRepeatedOneInstant       [$Wrap, $Wrapz <: Seq[$Wrap]] { def instant       (x1: $Wrap, x2: $Wrap, more: $Wrap*) = new One_[Instant]       ((x1, x2, more)) }
   
   trait HasRepeatedOneBinary        [$Wrap, $Wrapz <: Seq[$Wrap]] { def binary        (x1: $Wrap, x2: $Wrap, more: $Wrap*) = new One_[ByteBuffer]    ((x1, x2, more)) }
+
+  trait HasRepeatedOneEnm           [$Wrap, $Wrapz <: Seq[$Wrap]] { def enm           (x1: $Wrap, x2: $Wrap, more: $Wrap*) = new One_[EnumValue]      ((x1, x2, more)) }
   
   // ===========================================================================
   trait HasRepeatedOptString [$Wrap, $Wrapz <: Seq[$Wrap]] { def string_ (x1: $Wrap, x2: $Wrap, more: $Wrap*) = new Opt_[String] ((x1, x2, more)) }
@@ -54,6 +56,8 @@ object TsRepeatedIndividual { //TODO: enum - t210201095414
   trait HasRepeatedOptInstant       [$Wrap, $Wrapz <: Seq[$Wrap]] { def instant_       (x1: $Wrap, x2: $Wrap, more: $Wrap*) = new Opt_[Instant]       ((x1, x2, more)) }
   
   trait HasRepeatedOptBinary        [$Wrap, $Wrapz <: Seq[$Wrap]] { def binary_        (x1: $Wrap, x2: $Wrap, more: $Wrap*) = new Opt_[ByteBuffer]    ((x1, x2, more)) }
+
+  trait HasRepeatedOptEnm           [$Wrap, $Wrapz <: Seq[$Wrap]] { def enm_           (x1: $Wrap, x2: $Wrap, more: $Wrap*) = new Opt_[EnumValue]      ((x1, x2, more)) }
      
   // ===========================================================================
   trait HasRepeatedNesString [$Wrap, $Wrapz <: Seq[$Wrap]] { def strings (x1: $Wrap, x2: $Wrap, more: $Wrap*) = new Nes_[String] ((x1, x2, more)) }
@@ -78,6 +82,8 @@ object TsRepeatedIndividual { //TODO: enum - t210201095414
   
   trait HasRepeatedNesBinary        [$Wrap, $Wrapz <: Seq[$Wrap]] { def binarys        (x1: $Wrap, x2: $Wrap, more: $Wrap*) = new Nes_[ByteBuffer]    ((x1, x2, more)) }
 
+  trait HasRepeatedNesEnm           [$Wrap, $Wrapz <: Seq[$Wrap]] { def enms           (x1: $Wrap, x2: $Wrap, more: $Wrap*) = new Nes_[EnumValue]      ((x1, x2, more)) }
+
   // ===========================================================================
   trait HasRepeatedPesString [$Wrap, $Wrapz <: Seq[$Wrap]] { def strings_ (x1: $Wrap, x2: $Wrap, more: $Wrap*) = new Pes_[String] ((x1, x2, more)) }
   trait HasRepeatedPesInt    [$Wrap, $Wrapz <: Seq[$Wrap]] { def ints_    (x1: $Wrap, x2: $Wrap, more: $Wrap*) = new Pes_[Int]    ((x1, x2, more)) }
@@ -101,6 +107,8 @@ object TsRepeatedIndividual { //TODO: enum - t210201095414
   
   trait HasRepeatedPesBinary        [$Wrap, $Wrapz <: Seq[$Wrap]] { def binarys_        (x1: $Wrap, x2: $Wrap, more: $Wrap*) = new Pes_[ByteBuffer]    ((x1, x2, more)) }
 
+  trait HasRepeatedPesEnm           [$Wrap, $Wrapz <: Seq[$Wrap]] { def enms_           (x1: $Wrap, x2: $Wrap, more: $Wrap*) = new Pes_[EnumValue]      ((x1, x2, more)) }
+
   // ===========================================================================
   trait HasRepeatedXString [$Wrap, $Wrapz <: Seq[$Wrap]] { def stringx (x1: $Wrap, x2: $Wrap, more: $Wrap*) = new One_[String] ((x1, x2, more), ignoreContainer = true) }
   trait HasRepeatedXInt    [$Wrap, $Wrapz <: Seq[$Wrap]] { def intx    (x1: $Wrap, x2: $Wrap, more: $Wrap*) = new One_[Int]    ((x1, x2, more), ignoreContainer = true) }
@@ -123,6 +131,8 @@ object TsRepeatedIndividual { //TODO: enum - t210201095414
   trait HasRepeatedXInstant       [$Wrap, $Wrapz <: Seq[$Wrap]] { def instantx       (x1: $Wrap, x2: $Wrap, more: $Wrap*) = new One_[Instant]       ((x1, x2, more), ignoreContainer = true) }
   
   trait HasRepeatedXBinary        [$Wrap, $Wrapz <: Seq[$Wrap]] { def binaryx        (x1: $Wrap, x2: $Wrap, more: $Wrap*) = new One_[ByteBuffer]    ((x1, x2, more), ignoreContainer = true) }
+
+  trait HasRepeatedXEnm           [$Wrap, $Wrapz <: Seq[$Wrap]] { def enmx           (x1: $Wrap, x2: $Wrap, more: $Wrap*) = new One_[EnumValue]      ((x1, x2, more), ignoreContainer = true) }
 }
 
 // ===========================================================================

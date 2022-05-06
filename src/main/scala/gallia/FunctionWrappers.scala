@@ -159,6 +159,13 @@ object FunctionWrappers {
       private def _unwrapWhatever1(value: Any): Any = value.asInstanceOf[              Whatever]   .any
       private def _unwrapWhatever2(value: Any): Any = value.asInstanceOf[whatever.TypedWhatever[_]].typed
 
+  // ===========================================================================
+  def enumeratumWrap[O <: enumeratum.EnumEntry : gallia.WTT](f: O => Any): _ff11 =
+    _ .toString /* so works with eg Int */
+      .pipe { entryName => reflect.CompanionReflection[O](methodName = "withName")(entryName) }
+      .pipe(f)
+       match { case e: EnumEntry => e.entryName; case x => x }
+
 }
 
 // ===========================================================================

@@ -32,6 +32,8 @@ class ValueWrapper(val underlying: AnyValue) extends AnyVal {
     
     def asBinary        : ByteBuffer     = asTyped[ByteBuffer]
 
+    def asEnum         : EnumValue       = asTyped[EnumValue]
+
     // ---------------------------------------------------------------------------
     def asObj          : Obj     = asTyped[Obj]
   }

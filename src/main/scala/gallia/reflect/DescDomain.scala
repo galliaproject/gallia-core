@@ -58,16 +58,18 @@ sealed trait NodeDesc
   // ---------------------------------------------------------------------------
   object NodeDesc {
 
-    case class Node    (node: TypeNode)  extends NodeDesc
-    case class Nesting (nested: ClsDesc) extends NodeDesc
-    case class Other   (name: FullName)  extends NodeDesc
+    case class  Node    (node: TypeNode)  extends NodeDesc
+    case class  Nesting (nested: ClsDesc) extends NodeDesc
+    case object Enumeratum                extends NodeDesc
+    case class  Other   (name: FullName)  extends NodeDesc
 
     // ---------------------------------------------------------------------------
     def from(node: TypeNode): NodeDesc =
       node.validContainerOpt match {
-        case None                                     => Node(node)
-        case Some(fieldType) if (fieldType.dataClass) => Nesting(ClsDesc.from(fieldType, generic = false))
-        case Some(fieldType)                          => Other(fieldType.name) }
+        case None                                        => Node(node)
+        case Some(fieldType) if (fieldType.dataClass)    => Nesting(ClsDesc.from(fieldType, generic = false))
+        case Some(fieldType) if (fieldType.isEnumeratum) => Enumeratum // not actually used at the moment
+        case Some(fieldType)                             => Other(fieldType.name) }
   }
 
 // ===========================================================================

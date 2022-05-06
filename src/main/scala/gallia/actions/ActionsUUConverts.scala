@@ -11,20 +11,27 @@ object ActionsUUConverts {
 
   // ---------------------------------------------------------------------------
   case class ConvertToString(target: TqRPathz) extends ActionUUb {
-      def vldt   (c: Cls): Errs    = target.vldtAsOrigin(c) // TODO: validate can reasonably formatted to a string
-      def _meta  (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleInfo(_, _.toStr) }
-      def atomuus(c: Cls): AtomUUs = target.resolve(c).pipe(_atoms(c)(_ConvertToString)) }
+    def vldt   (c: Cls): Errs    = target.vldtAsOrigin(c) // TODO: validate can reasonably formatted to a string
+    def _meta  (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleInfo(_)(_.copy(containee = BasicType._String)) }
+    def atomuus(c: Cls): AtomUUs = target.resolve(c).pipe(_atoms(c)(_ConvertToString)) }
+
+  // ---------------------------------------------------------------------------
+  case class ConvertToEnum(target: TqRPathz, values: Seq[EnumValue]) extends ActionUUb {
+    def vldt   (c: Cls): Errs    = target.vldtAsOrigin(c) // TODO: validate can reasonably formatted to a string
+      .orIfEmpty { _vldt.checkAreValidEnumValues(values).toSeq }
+    def _meta  (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleInfo(_)(_.copy(containee = BasicType._Enm(values))) }
+    def atomuus(c: Cls): AtomUUs = target.resolve(c).pipe(_atoms(c)(_ConvertToEnum)) } // TODO: optim: only if not String field already
 
   // ---------------------------------------------------------------------------
   case class ConvertToInt(target: TqRPathz) extends ActionUUbb {
     def vldt                     (c: Cls): Errs    = target.vldtAsOrigin(c)
-    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleInfo(_, _.toInt) }
+    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleInfo(_)(_.toInt) }
     def atomuus(origin: CallSite)(c: Cls): AtomUUs = target.resolve(c).pipe(_atoms(c)(_ConvertToInt(origin))) }
 
   // ---------------------------------------------------------------------------
   case class ConvertToDouble(target: TqRPathz) extends ActionUUbb {
     def vldt                     (c: Cls): Errs    = target.vldtAsOrigin(c)
-    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleInfo(_, _.toDouble) }
+    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleInfo(_)(_.toDouble) }
     def atomuus(origin: CallSite)(c: Cls): AtomUUs = target.resolve(c).pipe(_atoms(c)(_ConvertToDouble(origin))) }
 
   // ---------------------------------------------------------------------------
@@ -36,7 +43,7 @@ object ActionsUUConverts {
   // ---------------------------------------------------------------------------
   case class ConvertToBoolean[T: WTT](target: TqRPathz, trueValue: T, falseValue: T) extends ActionUUbb {
     def vldt                     (c: Cls): Errs    = target.vldtAsOrigin(c)
-    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleInfo(_, _.toBoolean) }
+    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleInfo(_)(_.toBoolean) }
     def atomuus(origin: CallSite)(c: Cls): AtomUUs = target.resolve(c).pipe(_atoms(c)(_ConvertToBoolean(origin)(_, trueValue, falseValue))) }
 
   // ---------------------------------------------------------------------------

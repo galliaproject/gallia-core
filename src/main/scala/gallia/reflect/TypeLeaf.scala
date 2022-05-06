@@ -16,12 +16,14 @@ case class TypeLeaf(
       bytes      : Boolean = false, // as ByteBuffer
       inheritsSeq: Boolean = false,
 
-      fields     : Seq[Field] = Nil) {
+      enumeratumValueNamesOpt: Option[Seq[String]] = None, // not used currently
+      fields: Seq[Field] = Nil) {
 
     def keyz: Keyz = fields.map(_.key.symbol).pipe(Keyz.apply)
 
     // ---------------------------------------------------------------------------
-    def isSeq   : Boolean = inheritsSeq
+    def isSeq       : Boolean = inheritsSeq
+    def isEnumeratum: Boolean = enumeratumValueNamesOpt.nonEmpty
 
     def isOption: Boolean = name == _Option
 
@@ -44,7 +46,11 @@ case class TypeLeaf(
       util.Try(InfoUtils.forceNestedClass(this)) match {
         case util.Failure(error)          => Left(s"TODO:t201015102536:${error.toString}")
         case util.Success(validDataClass) => Right(validDataClass) }
-    
+
+    // ---------------------------------------------------------------------------
+    def enumeratumEnum: Seq[EnumValue] = enumeratumValueNamesOpt.get.map(EnumValue.apply)
+.reverse /* TODO: always? */
+
     // ===========================================================================
     override def toString: String = formatDefault
       def formatDefault: String =
@@ -52,7 +58,12 @@ case class TypeLeaf(
         else                s"${_formatDefault}${fields.map(_.formatDefault).section2}"
 
       // ---------------------------------------------------------------------------
-      private def _formatDefault: String = s"${name}\t${alias}\t${dataClass}\t${enm}\t${inheritsSeq}"
+      private def _formatDefault: String =
+        Seq(
+            name, inScopeName, alias,
+            dataClass, enm, bytes, inheritsSeq,
+            enumeratumValueNamesOpt)
+          .join("\t")
   }
 
 // ===========================================================================

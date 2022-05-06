@@ -23,6 +23,18 @@ object AtomsUUConverts {
     }
 
     // ===========================================================================
+    case class _ConvertToEnum(target: PathPair) extends AtomUU { def naive(o: Obj) =
+        _TransformVV(target, toEnum).naive(o)
+
+      // ---------------------------------------------------------------------------
+      private def toEnum(value: Any) =
+        util.Try {
+          utils.AtomsUtils.applyx(_.toString.pipe(EnumValue.apply))(value) }
+        .getOrElse {
+          dataError(s"TODO:210106152658:${target}:${value}") }
+    }
+
+    // ===========================================================================
     case class _ConvertToInt(origin: CallSite)(target: PathPair) extends AtomUU { def naive(o: Obj) =
         _TransformVV(target, toInt).naive(o)
 

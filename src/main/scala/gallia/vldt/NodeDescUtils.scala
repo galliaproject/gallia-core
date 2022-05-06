@@ -8,10 +8,8 @@ import reflect._
 
 // ===========================================================================
 object NodeDescUtils {
-
-  def isValid(value: NodeDesc): Boolean = value.isValid
-
-  def errorMessages(value: NodeDesc): Seq[String] = value.errorMessages
+  def isValid      (value: NodeDesc): Boolean     = !value.isInvalid
+  def errorMessages(value: NodeDesc): Seq[String] =  value.errorMessages
 
   // ===========================================================================
   private implicit class ClsDesc_(u: ClsDesc) { import u._
@@ -53,11 +51,11 @@ object NodeDescUtils {
   // ===========================================================================
   private implicit class NodeDesc_(u: NodeDesc) { import NodeDesc._
 
-    def isValid  : Boolean = !isInvalid
     def isInvalid: Boolean =
       u match {
         case Node(_)          => true
-        case Other(name)      => !BasicType.isKnown(name)
+        case Enumeratum       => false
+        case Other(fullName)  => fullName != reflect._EnumValue && !BasicType.isKnown(fullName)
         case Nesting(nesting) => nesting.isInvalid }
 
     // ===========================================================================
@@ -65,7 +63,8 @@ object NodeDescUtils {
     def errorMessages(parent: Parent): Seq[ErrorMsg] =
       u match {
         case Node(node)       => s"${ErrorId.InvalidTypeNode} - ${parent} ${node.formatDefault}".in.seq
-        case Other(name)    =>
+        case Enumeratum       => Nil
+        case Other(name)      =>
           if (BasicType.isKnown(name)) Nil
           else                         s"${ErrorId.UnsupportedTlSubtype} - ${parent} - ${name}".in.seq
         case Nesting(nesting) => nesting.errorMessages(parent) }

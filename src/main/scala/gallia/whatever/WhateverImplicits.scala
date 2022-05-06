@@ -34,7 +34,7 @@ object WhateverImplicits {
     def binary         = u match { case x: ByteBuffer     => x; case _ => dataError(error(u, "210113130907", classOf[ByteBuffer])) }
     
     // ---------------------------------------------------------------------------
-    // TODO: enum - t210201095414
+    def enm            = u match { case x: EnumValue      => x; case _ => dataError(error(u, "210113130908", classOf[EnumValue])) }
   }
 
   // ===========================================================================

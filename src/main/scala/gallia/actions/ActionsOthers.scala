@@ -3,7 +3,6 @@ package actions
 
 import aptus.{Anything_, Seq_}
 import aptus.Separator
-
 import target._
 import FunctionWrappers._
 import data.multiple.Streamer
@@ -48,6 +47,18 @@ object ActionsOthers {
   case class Unpivot(keyz: Keyz) extends ActionUUd with TodoV1 /* origins + check compatible infos */ {
     def _meta(c: Cls): Cls    = c.unpivot(keyz)        
     def atomuu       : AtomUU =  _Unpivot(keyz) }
+
+  // ===========================================================================
+  /** a purely meta operation */
+  case class ModifyEnumValuesFor(target: TqRPathz, f: Seq[EnumValue] => Seq[EnumValue]) extends IdentityUUa {
+    def  vldt(c: Cls): Errs = // allows no change
+      target.vldtAsOrigin(c)
+        .orIfEmpty { _vldt.checkIsEnumField       (c)(target) }
+        .orIfEmpty { _vldt.checkAreValidEnumValues(c)(target)(f) }
+
+    // ---------------------------------------------------------------------------
+    def _meta(c: Cls): Cls  = target.qpathz_(c).foldLeft(c) { _.transformSoleContainee(_) {
+      case BasicType._Enm(values) => BasicType._Enm(f(values)) } } }
 
   // ===========================================================================
   case object UnionUU extends Action with ActionV2 with ActionM2 with ActionAN {

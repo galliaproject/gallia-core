@@ -32,6 +32,14 @@ trait OfniLike extends InfosLike {
   def isOpt: Boolean = isOptional && areAllSingle
   def isNes: Boolean = isRequired && areAllMultiple
   def isPes: Boolean = isOptional && areAllMultiple
+
+  // ===========================================================================
+  def trivialContaineeOpt: Option[Containee] =  _ofni.infos.ifOneOpt.flatMap(_.inSomeIf(_ => isRequired)).map(_.containee)
+
+  // ===========================================================================
+  private[gallia] def enmOfnu     (multiple: Boolean): Ofnu      = enmInfo(multiple).ofnu(_ofni.optional)
+  private[gallia] def enmContainee(multiple: Boolean): Containee = enmInfo(multiple).containee
+  private[gallia] def enmInfo     (multiple: Boolean): Info      =  _ofni.infos.filter(_.isEnmMatching(multiple)).force.one
 }
 
 // ===========================================================================

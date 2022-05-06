@@ -55,6 +55,30 @@ object MetaValidationHelper {
             _Error.TypeMismatch(kpath, ofniA, ofniB, mode).err } }
 
   // ===========================================================================
+  def checkIsEnumField(c: Cls)(target: TargetQuery[RPathz]): Errs =
+    target
+      .resolve(c)
+      .map(_.from)
+      .flatMap { kpath =>
+        if (c.field(kpath).isEnum) None
+        else                       Some(_Error.NotAnEnumField(kpath).err) }
+
+  // ---------------------------------------------------------------------------
+  def checkAreValidEnumValues(c: Cls)(target: TargetQuery[RPathz])(f: Seq[EnumValue] => Seq[EnumValue]): Errs =
+    target
+      .resolve(c)
+      .map(_.from)
+      .flatMap { path =>
+        c.field(path).containees.flatMap {
+          case BasicType._Enm(origin) => checkAreValidEnumValues(f(origin))
+          case _                      => None } }
+
+  // ---------------------------------------------------------------------------
+  def checkAreValidEnumValues(values: Seq[EnumValue]): Err_ =
+      if (values.isEmpty || values.distinct != values) Some(_Error.InvalidEnumStringValues(values.map(_.stringValue)).err)
+      else                                             None
+
+  // ===========================================================================
   def validateBObjs(value: BObjs): Errs = {
     val tmp = value.values.flatMap(validateBObj)
 

@@ -3,6 +3,7 @@ package heads.common
 
 import env.ActionDag
 import actions.ActionsUUVeryBasics._
+import actions.ActionsUUUnionTypes
 
 // ===========================================================================
 trait HeadCommon[F <: HeadCommon[F]]
@@ -59,6 +60,16 @@ trait HeadCommon[F <: HeadCommon[F]]
   // ===========================================================================
   private[gallia] def validateBObj (value: BObj ): Self2 = self2 :+ new ValidateBObj (value)
   private[gallia] def validateBObjs(value: BObjs): Self2 = self2 :+ new ValidateBObjs(value)
+
+  // ===========================================================================
+  def fuseToUnion(origin1: KeyW, origin2: KeyW) = new {
+      def as(union: KeyW): Self2 = self2 :+
+        ActionsUUUnionTypes.FuseToUnion(origin1.value, origin2.value, union.value) }
+
+    // ---------------------------------------------------------------------------
+    def fissionFromUnion(origin: KeyW) = new {
+      def as(target1: KeyW, target2: KeyW): Self2 = self2 :+
+        ActionsUUUnionTypes.FissionFromUnion(origin.value, target1.value, target2.value) }
 
   // ===========================================================================
   // TODO: t210127164512

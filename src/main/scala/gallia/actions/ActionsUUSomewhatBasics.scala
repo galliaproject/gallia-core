@@ -19,7 +19,7 @@ object ActionsUUSomewhatBasics {
         else                    target.vldtAsOrigin(c, mode = SpecialCardiMode.IgnoreRequiredness)
 
       def _meta  (c: Cls): Cls     = target.tq.qpathz_(c).foldLeft(c)(_ toNonRequired _)
-      def atomuus(c: Cls): AtomUUs = target.tq.qpathz_(c).pipe(_atoms(_RemoveIf(_, pred ))) }
+      def atomuus(c: Cls): AtomUUs = target.tq.qpathz_(c).pipe(_atoms(x => _RemoveIf(x, x, pred ))) }
 
     // ===========================================================================
     case class RemoveConditionallyWhatever(target: TqRPathz, value: Any) extends ActionUUb {
@@ -28,16 +28,52 @@ object ActionsUUSomewhatBasics {
       def _meta  (c: Cls): Cls     = target.qpathz_(c).foldLeft(c)(_ toNonRequired _)
       def atomuus(c: Cls): AtomUUs = target.qpathz_(c).pipe(_atoms(_RemoveWhateverIf(_, value))) }
 
-  // ===========================================================================
-  case class SetDefaultValueFor(target: TtqRPathz, value: AnyValue) extends ActionUUb {
-    def vldt(c: Cls): Errs =
-      target.vldtAsOrigin(c) ++
-      _vldt.typeCompatibility(c, target.duo(c), SpecialCardiMode.Normal)
-      //TODO: check was opt? what about multiple?
+    // ===========================================================================
+    case class RemoveConditionally2(reference: TypedTargetQuery[Key], target: TqKey, pred: Any => Boolean) extends ActionUUc {
+      def  vldt (c: Cls): Errs   = reference.vldtAsOrigin(c) ++ target.vldtAsOrigin(c)
+      def _meta (c: Cls): Cls    = c.toNonRequired(target.resolve(c))
+      def atomuu(c: Cls): AtomUU = _RemoveIf(reference.resolve(c), target.resolve(c), pred) }
 
-    def _meta  (c: Cls): Cls     = target.qpathz_(c).foldLeft(c)(_ toRequired _)
-    def atomuus(c: Cls): AtomUUs = target.qpathz_(c).pipe(_atoms(_SetDefault(_, value)))
-  }
+    // ---------------------------------------------------------------------------
+    case class RemoveConditionally2Whatever(reference: Key, target: TqKey, value: Any) extends ActionUUc {
+      def  vldt (c: Cls): Errs   = _vldt.fieldPresence(c, reference).toSeq ++ target.vldtAsOrigin(c)
+      def _meta (c: Cls): Cls    = c.toNonRequired(target.resolve(c))
+      def atomuu(c: Cls): AtomUU = _RemoveIf(reference, target.resolve(c), _ == value) }
+
+  // ===========================================================================
+  case class SetDefaultValueFor(target: TtqRPathz, newValue: AnyValue) extends ActionUUb {
+        def vldt(c: Cls): Errs =
+          target.vldtAsOrigin(c) ++
+          _vldt.typeCompatibility(c, target.duo(c), SpecialCardiMode.Normal)
+        //TODO: check was opt? what about multiple?
+
+        def _meta  (c: Cls): Cls     = target.qpathz_(c).foldLeft(c)(_ toRequired _)
+        def atomuus(c: Cls): AtomUUs = target.qpathz_(c).pipe(_atoms(_SetDefault(_, newValue))) }
+
+      // ---------------------------------------------------------------------------
+      case class SetDefaultConditionally2(
+            reference: TypedTargetQuery[Key], target: TqKey, pred: Any => Boolean, newValueType: TypeNode, newValue: Any)
+          extends IdentityM1 with ActionUUc {
+        def vldt(c: Cls): Errs =
+          reference.vldtAsOrigin(c) ++
+          target.vldtAsOrigin(c).orIfEmpty {
+            _vldt.typeCompatibility(c, target.duo(c, newValueType), SpecialCardiMode.IgnoreRequiredness) }
+
+        // ---------------------------------------------------------------------------
+        def atomuu(c: Cls): AtomUU = _SetDefault2(reference.resolve(c), target.resolve(c), pred, newValue) }
+
+      // ---------------------------------------------------------------------------
+      case class SetDefaultConditionally2Whatever(
+            reference: Key, target: TqKey, referenceValue: Any, newValueType: TypeNode, newValue: Any)
+          extends IdentityM1 with ActionUUc {
+
+        def vldt(c: Cls): Errs   =
+          _vldt.fieldPresence(c, reference).toSeq ++
+          target.vldtAsOrigin(c).orIfEmpty {
+            _vldt.typeCompatibility(c, target.duo(c, newValueType), SpecialCardiMode.IgnoreRequiredness) }
+
+        // ---------------------------------------------------------------------------
+        def atomuu(c: Cls): AtomUU = _SetDefault2(reference, target.resolve(c), _ == referenceValue, newValue) }
 
   // ===========================================================================
   case class Split(paths: RPathz, splitter: StringSplitter) extends ActionUUa with TodoV1 {

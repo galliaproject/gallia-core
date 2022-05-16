@@ -19,6 +19,12 @@ object TsOps { // this is a big mess... TODO: t210107203932
         with Untyped.RemoveIf.Origin      // firstKey, allKeys, ...
         with Untyped.RemoveIf.HasSelBasic // for e.g. .removeIfValueFor(_.string(_.allKeys)).is("foo") - FIXME: issues if optional...
 
+  // ---------------------------------------------------------------------------
+  object    IfValueFor
+    extends IfValueFor
+    trait   IfValueFor extends // Ren/RPath may not be a good idea though
+          TsSingleBundles.HasSingleBasic[KeyW]
+
   // ===========================================================================
   object    Transform
     extends Transform
@@ -52,7 +58,7 @@ object TsOps { // this is a big mess... TODO: t210107203932
   object    FilterByT
     extends FilterByT
     trait   FilterByT extends // excludes obj(z) for T > 1
-               TsSingleBundles.HasSingleBasic[RPathW]
+               TsSingleBundles.HasSingleBasic [RPathW]
           with TsSingleBundles.HasSingleXBasic[RPathW]
 
           //with TsSingleBundles.HasSingleTyped[KeyW]
@@ -72,9 +78,10 @@ object TsOps { // this is a big mess... TODO: t210107203932
   // ===========================================================================
   object    Cotransform
     extends Cotransform
-    trait   Cotransform extends 
-             TsSingleBundles   .HasSingleOneBasic [KPathW]
-        with TsSingleIndividual.HasSingleOptString[KPathW]
+    trait   Cotransform extends
+             _Typed[RPathW]
+        with TsSingleBundles  .HasSingleBasic  [RPathW]
+        with TsRepeatedBundles.HasRepeatedBasic[RPathW, RPathWz]
 
   // ===========================================================================
   protected trait _Typed[$Wrap] extends 

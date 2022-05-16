@@ -5,46 +5,32 @@ package atoms
 object AtomsUUSomewhatBasics {
 
   // ---------------------------------------------------------------------------
-  case class _RemoveIf(key: Key, pred: AnyValue => Boolean) extends AtomUU { def naive(o: Obj) =
-    o .opt(key)
-      .map { value =>
-        if (pred(value)) o.remove(key)
-        else             o }
-      .getOrElse(o) }
+  case class _RemoveIf(reference: Key, target: Key, pred: AnyValue => Boolean) extends AtomUU { def naive(o: Obj) =
+      o.removeIf(reference, target, pred) }
 
-  // ---------------------------------------------------------------------------
-  case class _RemoveWhateverIf(key: Key, value: AnyValue) extends AtomUU { def naive(o: Obj) =
-    o .opt(key)
-      .map { _value =>
-        if (_value == value) o.remove(key)
-        else                 o }
-      .getOrElse(o) }
-
-  // ---------------------------------------------------------------------------
-  case class _RemoveWhateverIfAll(map: Map[Key, AnyValue]) extends AtomUU with AtomCombiner[_RemoveWhateverIf] {
-      def naive(o: Obj) =
-        o ._data
-          .flatMap { case (key, value) =>
-            map.get(key) match {
-              case None              =>                                     Some(key -> value)
-              case Some(targetValue) => if (value == targetValue) None else Some(key -> value) } }
-          .pipe(Obj.build0)
-    }
-  
     // ---------------------------------------------------------------------------
-    object _RemoveWhateverIfAll {
+    case class _RemoveWhateverIf(key: Key, value: AnyValue) extends AtomUU { def naive(o: Obj) =
+      o.removeWhateverIf(key, value) }
 
-      def from(values: Seq[_RemoveWhateverIf]): _RemoveWhateverIfAll =
-        values
-          .map { x => x.key -> x.value }
-          .toMap
-          .pipe(_RemoveWhateverIfAll.apply)
+    // ---------------------------------------------------------------------------
+    case class _RemoveWhateverIfAll(map: Map[Key, AnyValue]) extends AtomUU with AtomCombiner[_RemoveWhateverIf] { def naive(o: Obj) =
+        o.removeWhateverIfAll(map) }
 
-    }
+      // ---------------------------------------------------------------------------
+      object _RemoveWhateverIfAll {
+        def from(values: Seq[_RemoveWhateverIf]): _RemoveWhateverIfAll =
+          values
+            .map { x => x.key -> x.value }.toMap
+            .pipe(_RemoveWhateverIfAll.apply)
+      }
 
   // ===========================================================================
   case class _SetDefault(key: Key, value: AnyValue) extends AtomUU { def naive(o: Obj) =
-    if (o.contains(key)) o else o.add(key, value) }
+      if (o.contains(key)) o else o.add(key, value) }
+
+    // ---------------------------------------------------------------------------
+    case class _SetDefault2(reference: Key, target: Key, pred: AnyValue => Boolean, newValue: Any) extends AtomUU { def naive(o: Obj) =
+      o.setDefault2(reference, target, pred, newValue) }
 
   // ===========================================================================
   case class _Split(key: Key, splitter: StringSplitter) extends AtomUU { def naive(o: Obj) =

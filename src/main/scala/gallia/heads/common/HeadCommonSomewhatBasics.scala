@@ -14,29 +14,48 @@ import target.utils.TypedTargetQueryUtils._
 
 // ===========================================================================
 trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
+  private implicit def _toSelf2(action: ActionUU): Self2 = self2 :+ action // TODO: move up
 
   // ---------------------------------------------------------------------------
   // remove conditionally
   // note: 210111134300 - may need to name the whatever version differently, else creates  lots of problems
   //   most of the time, we expect the Whatever version to be used though...
 
-  def removeIfValueFor(f : RPathW )                           = new _RemoveWhateverIf(RPathWz.from(f))
-  def removeIfValueFor(f : RPathWz)                           = new _RemoveWhateverIf(f)
-  def removeIfValueFor(f1: RPathW, f2: RPathW, more: RPathW*) = new _RemoveWhateverIf(f1, f2 ,more) // keep?
+  def removeIfValueFor(f : RPathW )                           = new _RemoveConditionallyWhatever(RPathWz.from(f))
+  def removeIfValueFor(f : RPathWz)                           = new _RemoveConditionallyWhatever(f)
+  def removeIfValueFor(f1: RPathW, f2: RPathW, more: RPathW*) = new _RemoveConditionallyWhatever(f1, f2 ,more) // keep?
 
   // ---------------------------------------------------------------------------
   def removeIfValueFor[T: WTT](f: RemoveIf[T]) = new _RemoveConditionally[T](TSL.RemoveIf.resolves(f)) // TODO: accept renaming
 
     // TODO: t210111134021 - forbid is(None)
 
-    // ===========================================================================
-    final class _RemoveConditionally[T: WTT] private[HeadCommonSomewhatBasics](target: TtqRPathz) {
-      def is     (value: Any): Self2 = matches(_ == value)
-      def matches(pred: T => Boolean): Self2 = self2 :+ RemoveConditionally(target, pwrap(pred)) }
+  // ---------------------------------------------------------------------------
+  def removeValueFor(target: KeyW)                         : _RemoveConditionally2 = removeValueFor(_.explicit(target))
+  def removeValueFor(selector: SEL.RemoveValueFor.Selector): _RemoveConditionally2 = new _RemoveConditionally2(SEL.RemoveValueFor.resolve(selector))
 
     // ===========================================================================
-    final class _RemoveWhateverIf private[HeadCommonSomewhatBasics](target: TqRPathz) {
-      def is[T: WTT](a: T): Self2 = self2 :+ RemoveConditionallyWhatever(target, a) }
+    final class _RemoveConditionally[T: WTT] private[common](target: TtqRPathz) {
+      def is     (value: Any): Self2 = matches(_ == value)
+      def matches(pred: T => Boolean): Self2 =
+        RemoveConditionally(target, pwrap(pred)) }
+
+    // ===========================================================================
+    final class _RemoveConditionallyWhatever private[common](target: TqRPathz) {
+      def is(value: Any): Self2 = RemoveConditionallyWhatever(target, value) }
+
+    // ===========================================================================
+    final class _RemoveConditionally2 private[common] (target: TqKey) {
+
+      def ifValueFor(reference: KeyW) = new {
+        def is(value: Any): Self2 =
+          RemoveConditionally2Whatever(reference.value, target, value) }
+
+      // ---------------------------------------------------------------------------
+      def ifValueFor[T: WTT](reference: IfValueFor[T]) = new {
+          def is     (value: Any)        : Self2 = matches(_ == value)
+          def matches(pred: T => Boolean): Self2 =
+            RemoveConditionally2(TSL.IfValueFor.resolve2(reference), target, pwrap(pred)) } }
 
   // ===========================================================================
   // set default
@@ -45,16 +64,31 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   // TODO: t210129093607 - offer a setDefaults('foo -> 1, 'bar -> "baz", ...)
 
   def setDefaultFor(path : RPathW ): _SetDefaultFor = setDefaultFor(RPathWz.from(path))
-  def setDefaultFor(paths: RPathWz): _SetDefaultFor = setDefaultFor(TargetQueryUtils.tqqpathz(paths.qpathz))
+  def setDefaultFor(paths: RPathWz): _SetDefaultFor = new _SetDefaultFor(TargetQueryUtils.tqqpathz(paths.qpathz))
 
   def setDefaultFor(path1: RPathW, path2: RPathW, more: RPathW*): _SetDefaultFor = setDefaultFor((path1, path2, more))
   def setDefaultFor(sel: SEL.SetDefault.Selector)               : _SetDefaultFor = new _SetDefaultFor(SEL.SetDefault.resolve(sel))
 
+  def setDefaultConditionally(target: KeyW)                        : _SetDefaultConditionally2 = setDefaultConditionally(_.explicit(target))
+  def setDefaultConditionally(selector: SEL.SetDefaultFor.Selector): _SetDefaultConditionally2 = new _SetDefaultConditionally2(SEL.SetDefaultFor.resolve(selector))
+
     // ---------------------------------------------------------------------------
-    private[heads] def setDefaultFor(target: TqRPathz) = new _SetDefaultFor(target)
-    final class _SetDefaultFor(targets: TqRPathz){
+    final class _SetDefaultFor private[common] (targets: TqRPathz){
       def asValue[T: WTT](defaultValue: => T): Self2 =
-        self2 :+ SetDefaultValueFor(ttqqpathz1[Option[T]](targets), defaultValue) }
+        SetDefaultValueFor(ttqqpathz1[Option[T]](targets), defaultValue) }
+
+    // ---------------------------------------------------------------------------
+    final class _SetDefaultConditionally2 private[common](target: TqKey) {
+      def asValue[T: WTT](newValue: T) = new {
+
+        def ifValueFor(reference: KeyW) = new {
+          def is(referenceValue: Any): Self2 =
+            SetDefaultConditionally2Whatever(reference.value, target, referenceValue, typeNode[T], newValue) }
+
+        def ifValueFor[U: WTT](reference: IfValueFor[U]) = new {
+          def is     (value: Any)        : Self2 = matches(_ == value)
+          def matches(pred: U => Boolean): Self2 =
+            SetDefaultConditionally2(TSL.IfValueFor.resolve2(reference), target, pwrap(pred), typeNode[T], newValue) } } }
 
   // ===========================================================================
   // convert
@@ -70,36 +104,44 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
     class _Convert(target: TqRPathz) {
 
       /** can't call it toString */
-      def toStr     : Self2 = self2 :+ ConvertToString(target)
+      def toStr     : Self2 = ConvertToString(target)
 
-      def toInt     : Self2 = self2 :+ ConvertToInt   (target)
-      def toDouble  : Self2 = self2 :+ ConvertToDouble(target)
+      def toInt     : Self2 = ConvertToInt   (target)
+      def toDouble  : Self2 = ConvertToDouble(target)
 
       def toBoolean : Self2 = toBoolean("true", "false")
       def toFlag    : Self2 = toFlag   ("true")
 
-      def toBoolean        [T : WTT]              (trueValue: T, falseValue: T): Self2 = self2 :+ ConvertToBoolean        (target, trueValue, falseValue)
-      def toOptionalBoolean[T : WTT](nullValue: T)(trueValue: T, falseValue: T): Self2 = self2 :+ ConvertToOptionalBoolean(target, trueValue, falseValue, nullValue)
+      def toBoolean        [T : WTT]              (trueValue: T, falseValue: T): Self2 = ConvertToBoolean        (target, trueValue, falseValue)
+      def toOptionalBoolean[T : WTT](nullValue: T)(trueValue: T, falseValue: T): Self2 = ConvertToOptionalBoolean(target, trueValue, falseValue, nullValue)
 
       def toStrictFlag[T : WTT](trueValue: T                 ): Self2 = toFlag(trueValue, strict = true)
       def toFlag      [T : WTT](trueValue: T                 ): Self2 = toFlag(trueValue, strict = false)
-      def toFlag      [T : WTT](trueValue: T, strict: Boolean): Self2 = self2 :+ ConvertToFlag(target, trueValue, strict)
+      def toFlag      [T : WTT](trueValue: T, strict: Boolean): Self2 = ConvertToFlag(target, trueValue, strict)
 
       def toEnum(value1: EnumStringValue, more: EnumStringValue*): Self2 = toEnum((value1 +: more).map(EnumValue.apply))
-      def toEnum(values: Seq[EnumValue])                         : Self2 = self2 :+ ConvertToEnum(target,  values.toList)
+      def toEnum(values: Seq[EnumValue])                         : Self2 = ConvertToEnum(target,  values.toList)
 
       // ---------------------------------------------------------------------------
       // TODO: keep these within convert?
 
-      def toNonRequired                 : Self2 = self2 :+ ToNonRequired(target, strict = false)
-      def toNonRequired(strict: Boolean): Self2 = self2 :+ ToNonRequired(target, strict)
-      def    toRequired                 : Self2 = self2 :+ ToRequired   (target, strict = false)
-      def    toRequired(strict: Boolean): Self2 = self2 :+ ToRequired   (target, strict)
+      @deprecated
+      def toNonRequired                 : Self2 = ToNonRequired(target, strict = false)
+      def toOptional                    : Self2 = ToNonRequired(target, strict = false)
+      @deprecated
+      def toNonRequired(strict: Boolean): Self2 = ToNonRequired(target, strict)
+      def toOptional   (strict: Boolean): Self2 = ToNonRequired(target, strict)
+      def    toRequired                 : Self2 = ToRequired   (target, strict = false)
+      def    toRequired(strict: Boolean): Self2 = ToRequired   (target, strict)
 
-      def toNonMultiple                 : Self2 = self2 :+ ToNonMultiple(target, strict = false) // aka force one
-      def toNonMultiple(strict: Boolean): Self2 = self2 :+ ToNonMultiple(target, strict)         // aka force one
-      def    toMultiple                 : Self2 = self2 :+ ToMultiple   (target, strict = false) // aka in seq
-      def    toMultiple(strict: Boolean): Self2 = self2 :+ ToMultiple   (target, strict)         // aka in seq
+      @deprecated
+      def toNonMultiple                 : Self2 = ToNonMultiple(target, strict = false) // aka force one
+      def toSingle                      : Self2 = ToNonMultiple(target, strict = false) // aka force one
+      @deprecated
+      def toNonMultiple(strict: Boolean): Self2 = ToNonMultiple(target, strict)         // aka force one
+      def toSingle     (strict: Boolean): Self2 = ToNonMultiple(target, strict)         // aka force one
+      def    toMultiple                 : Self2 = ToMultiple   (target, strict = false) // aka in seq
+      def    toMultiple(strict: Boolean): Self2 = ToMultiple   (target, strict)         // aka in seq
 
       def toOneAndOnlyOne: Self2 = convert(target).toRequired.convert(target).toNonMultiple
     }

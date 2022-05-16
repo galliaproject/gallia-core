@@ -340,6 +340,38 @@ trait ObjOperations { self: Obj =>
     rest.add(_group, value)        
   }
 
+  // ===========================================================================
+  def removeIf(reference: Key, target: Key, pred: AnyValue => Boolean): Obj =
+      attemptKey(reference) // reference may be the same as target (most common case)
+        .map { value =>
+          if (pred(value)) remove(target)
+          else             self }
+        .getOrElse(self)
+
+    // ---------------------------------------------------------------------------
+    def removeWhateverIf(key: Key, targetValue: AnyValue): Obj =
+      attemptKey(key)
+        .map { value =>
+          if (value == targetValue) remove(key)
+          else                      self }
+        .getOrElse(self)
+
+    // ---------------------------------------------------------------------------
+    def removeWhateverIfAll(map: Map[Key, AnyValue]): Obj =
+      data
+        .flatMap { case (key, value) =>
+          map.get(key) match {
+            case None              =>                                     Some(key -> value)
+            case Some(targetValue) => if (value == targetValue) None else Some(key -> value) } }
+        .pipe(Obj.build0)
+
+  // ---------------------------------------------------------------------------
+  def setDefault2(reference: Key, target: Key, pred: AnyValue => Boolean, newValue: AnyValue): Obj =
+    attemptKey(reference)
+      .map { value =>
+        if (pred(value) && !containsKey(target)) add(target, newValue)
+        else                                     self }
+      .getOrElse(self)
 }
 
 // ===========================================================================

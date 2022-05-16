@@ -59,7 +59,11 @@ object UtsBase {
   object CommonTyped extends KPathBase { type Origin = Origins.CommonTyped  ; val origin = new Origin {} }
 
   // ---------------------------------------------------------------------------
-  object RemoveIf extends UtsBase { type Origin = Origins.RemoveIf }
+  object RemoveIf    extends UtsBase { type Origin = Origins.RemoveIf }
+
+  // ---------------------------------------------------------------------------
+  object RemoveValueFor extends KeyBase { type Origin = Origins.RemoveValueFor; val origin = new Origin {} }
+  object SetDefaultFor  extends KeyBase { type Origin = Origins.SetDefaultFor ; val origin = new Origin {} }
 
   // ---------------------------------------------------------------------------
   object Rename extends KPathBase { type Origin = Origins.Rename; val origin = new Origin {} }

@@ -45,9 +45,9 @@ object UtsOps { // this is a big mess... FIXME: t210107203932
   trait  Custom     extends Core1N with HasSoleKey with Bundle.HasAllAlls with Bundle.HasExplicitKPathW
 
   // ===========================================================================
-  trait  RemoveIf  extends Core1N with NoSoleKey  with Bundle.HasAllAlls /* All* ok because conditional */
-//with gallia.selection.typed.fluency.TsSingleIndividual.HasSingleOneTyped[KPathW]
-    // extends UtsBundle.Indices with  UtsBundle.HasAllExplicits with HasSKeyMatches
+  trait  RemoveIf       extends Core1N with NoSoleKey  with Bundle.HasAllAlls /* All* ok because conditional */
+  trait  RemoveValueFor extends Core1  with HasSoleKey with CantRenameKey
+  trait  SetDefaultFor  extends Core1  with HasSoleKey with CantRenameKey
 
   trait  Transform extends Core1N with HasSoleKey with Bundle.HasAllAlls with _HasSingleExplicitKPathW // ...; UtsBundle.Indices
   trait  FilterBy  extends Core1  with HasSoleKey                        with _HasSingleExplicitKPathW

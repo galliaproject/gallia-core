@@ -13,10 +13,13 @@ private[typed] trait TsBase {
     def resolve [T: WTT](tsl: TSelector[T]): TypedTargetQuery[KPath ] = new TypedTargetQuery[KPath ](tqkpath (tsl), node[T], HT.instantiator[T], wrapper(tsl).ignoreContainer)
     def resolves[T: WTT](tsl: TSelector[T]): TypedTargetQuery[RPathz] = new TypedTargetQuery[RPathz](tqqpathz(tsl), node[T], HT.instantiator[T], wrapper(tsl).ignoreContainer)
 
+    def resolve2[T: WTT](tsl: TSelector[T]): TypedTargetQuery[Key]    = new TypedTargetQuery[Key]   (tqkey (tsl), node[T], HT.instantiator[T], wrapper(tsl).ignoreContainer)
+
     // ---------------------------------------------------------------------------
     private def wrapper[T: WTT](tsl: TSelector[T]): TsWrapper[T] = tsl.apply(from)
 
     // ---------------------------------------------------------------------------
+    def tqkey   (tsl: TSelector[_]): TqKey    = wrapper(tsl).forceTQKey
     def tqkpath (tsl: TSelector[_]): TqKPath  = wrapper(tsl).forceTqKPath  // only for generate?
     def tqqpathz(tsl: TSelector[_]): TqRPathz = wrapper(tsl).forceTqRPathz // for uu
 
@@ -41,6 +44,7 @@ private[typed] trait TsBase {
   // ===========================================================================
   object TsBase {
     object RemoveIf    extends TsBase { type From = TsOps.RemoveIf   ; val from = new From {} }
+    object IfValueFor  extends TsBase { type From = TsOps.IfValueFor ; val from = new From {} }
     object Squash      extends TsBase { type From = TsOps.Squash     ; val from = new From {} } // also grab and pivot (see 200924162200)
     object AssertData  extends TsBase { type From = TsOps.AssertData ; val from = new From {} }
     object Sorting     extends TsBase { type From = TsOps.Sorting    ; val from = new From {} }

@@ -10,7 +10,11 @@ class TsWrapper[T] private[gallia] (
     // TODO: add Whatever flag (easier, also see 210122154401)
 
   // ===========================================================================
-  private def _tqkpath (value: KPath)  = new TqKPath (_ => Nil, _ => value)
+  private def _tqkpath (value: KPath) = new TqKPath(_ => Nil, _ => value)
+  private def _tqkey   (value: Key)   = new TQKey  (_ => Nil, _ => value)
+
+    // ---------------------------------------------------------------------------
+    def forceTQKey: TQKey = selection match { case x: KeyW => _tqkey(x.value) }
 
     // ---------------------------------------------------------------------------
     def forceTqKPath: TqKPath =

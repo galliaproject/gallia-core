@@ -109,6 +109,7 @@ object UtsBundle {
   trait HasExplicitIndex extends Individual.HasSingleExplicitIndex with Individual.HasRepeatedExplicitIndex
 
   // ===========================================================================
+  type  CantRenameKey   =       Individual.HasSingleExplicitKeyW // for consistency only
   trait CantRenameKeys  extends Individual.HasSingleExplicitKeyW   with Individual.HasRepeatedExplicitKeyW
   trait  CanRenameKeys  extends Individual.HasSingleExplicitRenW   with Individual.HasRepeatedExplicitRenW
   trait CantRenamePaths extends Individual.HasSingleExplicitKPathW with Individual.HasRepeatedExplicitKPathW

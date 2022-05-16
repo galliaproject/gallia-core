@@ -47,6 +47,8 @@ package object common extends _heads {
   type Generate2  [T] = TSL.Generate2.TSelector[T]
 
   type RemoveIf   [T] = TSL.RemoveIf   .TSelector[T]
+  type IfValueFor [T] = TSL.IfValueFor .TSelector[T]
+
   type Cotransform[T] = TSL.Cotransform.TSelector[T]
   type Transform  [T] = TSL.Transform  .TSelector[T]
 }

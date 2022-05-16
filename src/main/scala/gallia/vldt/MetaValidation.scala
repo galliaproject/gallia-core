@@ -40,9 +40,13 @@ private[gallia] object MetaValidation {
   // ===========================================================================
   // enums
 
-  def checkIsEnumField       (c: Cls)(target: TargetQuery[RPathz])                                     : Errs = _helper.checkIsEnumField       (c)(target)
+  def checkIsEnumField       (c: Cls)(target: TargetQuery[RPathz])                                     : Errs = _helper._checkField            (c)(target)(_.isEnum)(_Error.NotAnEnumField.apply)
   def checkAreValidEnumValues(c: Cls)(target: TargetQuery[RPathz])(f: Seq[EnumValue] => Seq[EnumValue]): Errs = _helper.checkAreValidEnumValues(c)(target)(f)
   def checkAreValidEnumValues(values: Seq[EnumValue])                                                  : Err_ = _helper.checkAreValidEnumValues(values)
+
+  // ===========================================================================
+  // union types
+  def checkIsUnionField(c: Cls)(target: Key): Errs = _helper._checkField(c)(TargetQuery.fromKey(target))(_.isUnionType)(_Error.NotAnUnionField.apply)
 
   // ===========================================================================
   def checkKeysReordering(c: Cls, f: Seq[SKey] => Seq[SKey], recursively: Boolean): Errs = {

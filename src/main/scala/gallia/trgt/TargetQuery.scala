@@ -2,9 +2,8 @@ package gallia
 package target
 
 import aptus.Anything_
-
 import domain._
-import vldt.MetaValidation
+import vldt.{MetaValidation, SpecialCardiMode}
 import selection.untyped.processors.RPathzSelection
 
 // ===========================================================================
@@ -63,6 +62,8 @@ class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](
     def __qpathz(c: Cls): RPathz     = RPathz(__qpaths(c))
     def __qpaths(c: Cls): Seq[RPath] =
       resolve(c) match {
+        case x: Key    => RPathz.from(x).values
+        case x: Ren    => RPathz.from(x).values
         case x: KPath  => x.qpath.in.seq
         case x: Keyz   => x.qpathz.values
         case x: Renz   => x.qpathz.values
@@ -80,11 +81,17 @@ class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](
     // ---------------------------------------------------------------------------
     def pathPairT(c: Cls)(implicit ev: $Target <:< KPath ):  PathPair = kpath_(c).pipe { path => PathPair(path, c.isOptional(path)) }
     def path     (c: Cls)(implicit ev: $Target <:< KPath ): KPath     = kpath_(c)
+
+    // ---------------------------------------------------------------------------
+    def duo(c: Cls, node: TypeNode): Duo[$Target] = Duo(node, resolve(c))
   }
 
   // ===========================================================================
   object TargetQuery { // see more basic builders in TargetQueryUtils
     private def from[A](a: A)(f: A => RPathz): TqRPathz = new TqRPathz(_ => Nil, _ => f(a))
+
+    // ---------------------------------------------------------------------------
+    def fromKey(key: Key): TqRPathz = from(key)(RPathz.from)
 
     // ---------------------------------------------------------------------------
     implicit def toTqRPathz(x: RPathW)                       : TqRPathz = from(x)(_.qpathz)

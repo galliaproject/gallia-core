@@ -93,6 +93,10 @@ import meta._
     sealed trait _Error1 extends _Error { final def formatDetails2 = Some(formatDetails); def formatDetails: String }
     sealed trait _Error2 extends _Error { final def formatDetails2 = None }
     sealed trait _Error3 extends _Error { final def formatDetails2 = Some(toString.stripPrefix(getClass.toString/*.getSimpleName - java.lang.InternalError: Malformed class name*/)) }
+    sealed trait _Error4[T] extends _Error3 {
+      val target: T
+      final def errIf (p: T => Boolean): Err_ = errIf(p(target))
+      final def errsIf(p: T => Boolean): Errs = errIf(p(target)).toSeq }
 
     // ===========================================================================
     @deprecated("will be completely rehauled") object _Error { // t201120101734 - reformat error(s)
@@ -150,6 +154,10 @@ import meta._
       // ---------------------------------------------------------------------------
       case class NotAnEnumField         (kpath: KPath)                 extends _Error3 { val errorId = "220504143050"; val label = "NotAnEnumField" }
       case class InvalidEnumStringValues(values: Seq[EnumStringValue]) extends _Error3 { val errorId = "220504143051"; val label = "InvalidEnumStringValues" }
+
+      // ---------------------------------------------------------------------------
+      case class NotAnUnionField   (kpath: KPath) extends _Error3      { val errorId = "220511144415"; val label = "NotAnUnionField" }
+      case class MoreThanOneNesting(target: Fld)  extends _Error4[Fld] { val errorId = "220511152109"; val label = "MoreThanOneNesting" }
 
       // ===========================================================================
       object Runtime {

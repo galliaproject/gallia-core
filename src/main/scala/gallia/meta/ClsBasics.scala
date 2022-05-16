@@ -44,7 +44,9 @@ trait ClsBasics { self: Cls =>
   def replace(pairs: Seq[(Key, Ofni)])(implicit di: DI): Cls = pairs.foldLeft(this)(_ replace _)
 
   // ---------------------------------------------------------------------------
-  def add(field: Fld): Cls = { requireNewKey(field.key); rewrap(fields :+ field) }
+  def add      (field: Fld)             : Cls = { requireNewKey(field.key); rewrap(fields :+ field) }
+  def addBefore(field: Fld, target: Key): Cls = { requireNewKey(field.key); val index = indexOf(target).assert(_ >= 0); rewrap(fields.take(index)     ++ List(field) ++ fields.drop(index)) }
+  def addAfter (field: Fld, target: Key): Cls = { requireNewKey(field.key); val index = indexOf(target).assert(_ >= 0); rewrap(fields.take(index + 1) ++ List(field) ++ fields.drop(index + 1)) }
 
   def add(pair: (Key, Ofni))   : Cls = add(Fld(pair._1, pair._2))
   def add(key: Key, ofni: Ofni): Cls = add(Fld(key, ofni))

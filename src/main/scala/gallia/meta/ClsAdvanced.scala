@@ -1,6 +1,8 @@
 package gallia
 package meta
 
+import aptus._
+
 // ===========================================================================
 trait ClsAdvanced { self: Cls =>
 
@@ -121,7 +123,27 @@ trait ClsAdvanced { self: Cls =>
             field.updateKey(_vle)) }
 
     rest.add(Fld.nesCls(_group, value))
-  }    
+  }
+
+  // ===========================================================================
+  def fuseToUnion(dest1: Key, dest2: Key)(union: Key): Cls =
+      addBefore(
+          field = union.requiredUnion(
+            field(dest1).infos ++
+            field(dest2).infos),
+          target = dest1)
+        .remove(dest1)
+        .remove(dest2)
+
+    // ---------------------------------------------------------------------------
+    def fissionFromUnion(origin: Key)(dest1: Key, dest2: Key): Cls = {
+      val (info1, info2) = field(origin).infos.force.tuple2
+
+       addBefore(Fld.optional(dest1, info1), target = origin)
+      .addAfter (Fld.optional(dest2, info2), target = origin)
+      .remove(origin)
+    }
+
 }
 
 // ===========================================================================

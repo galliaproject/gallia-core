@@ -7,7 +7,7 @@ import target._
 
 // ===========================================================================
 case class Cls(fields: Seq[Fld]) // TODO: as List?
-      extends Containee
+      extends meta.Containee
       with    ClsLike
       with    ClsHelper
       with    ClsNesting
@@ -49,6 +49,9 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
     // ---------------------------------------------------------------------------
     def merge(that: Cls): Cls = Cls(this.fields ++ that.fields)
 
+    // ---------------------------------------------------------------------------
+    override def valuePredicate: AnyValue => Boolean = _.isInstanceOf[Obj]
+
     // ===========================================================================
     def _filterByKey (pred:  Key => Boolean): Seq[Fld] = fields.filterBy(pred)(_. key)
     def _filterBySKey(pred: SKey => Boolean): Seq[Fld] = fields.filterBy(pred)(_.skey)
@@ -76,12 +79,17 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
     private[meta /*cls*/] def requireRenamingKeys(targets: RenWz) = { requireKnownKeys(targets.fromz); requireNewKeys  (targets.toz) }
 
     // ===========================================================================
-    def toObj  = MetaObj.cls(this)
-    def toObj2 = MetaObj.cls(this)
+    def aobj (o: Obj)             : AObj  = AObj (this, o)
+    def aobjs(o1: Obj, more: Obj*): AObjs = AObjs(this, Objs.from(o1 +: more))
 
-    def formatJson        = toObj2.formatCompactJson
-    def formatCompactJson = toObj2.formatCompactJson
-    def formatPrettyJson  = toObj2.formatPrettyJson
+    def toObj : Obj = MetaObj.cls(this)
+    @deprecated
+    def toObj2: Obj = MetaObj.cls(this)
+
+    // ===========================================================================
+    def formatJson        = toObj.formatCompactJson
+    def formatCompactJson = toObj.formatCompactJson
+    def formatPrettyJson  = toObj.formatPrettyJson
 
     def formatShort0: String = MetaObj.formatClassDebug(this)
     def formatShort : String = MetaObj.formatClassDebug(this).sectionAllOff("<root>")
@@ -115,6 +123,19 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
 
     def updateType(target: KPathz, fromNode: TypeNode, toNode: TypeNode): Cls = target.foldLeft(this)(_.updateType(_, fromNode, toNode))
     def updateType(target: RPathz, fromNode: TypeNode, toNode: TypeNode): Cls = target.foldLeft(this)(_.updateType(_, fromNode, toNode))
+
+    // ---------------------------------------------------------------------------
+    def updateTypex(target: Key   , fromNode: TypeNode, toNode: TypeNode): Cls = transformField(target) { field =>
+      field.updateSpecificContainee(
+        fromNode.forceNonBObjInfo(enmOpt(field.key)).containee /* TODO validate: t220516133530 */,
+          toNode.forceNonBObjInfo(enmOpt(target)).containee) }
+    def updateTypex(target: Ren   , fromNode: TypeNode, toNode: TypeNode): Cls = rename(target).updateTypex(target.to, fromNode, toNode)
+
+    def updateTypex(target: KPath , fromNode: TypeNode, toNode: TypeNode): Cls = transformx(target)(_.updateTypex(_, fromNode, toNode), _.updateTypex(_, fromNode, toNode))
+    def updateTypex(target: RPath , fromNode: TypeNode, toNode: TypeNode): Cls = transformx(target)(_.updateTypex(_, fromNode, toNode), _.updateTypex(_, fromNode, toNode))
+
+    def updateTypex(target: KPathz, fromNode: TypeNode, toNode: TypeNode): Cls = target.foldLeft(this)(_.updateTypex(_, fromNode, toNode))
+    def updateTypex(target: RPathz, fromNode: TypeNode, toNode: TypeNode): Cls = target.foldLeft(this)(_.updateTypex(_, fromNode, toNode))
 
     // ---------------------------------------------------------------------------
     def updateSpecificOfnu(target: Key   , from: Ofnu, to: Ofnu): Cls = transformField(target)(_.updateSpecificOfnu(from, to))

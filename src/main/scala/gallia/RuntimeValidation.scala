@@ -111,7 +111,14 @@ object RuntimeValidation { import meta._ // 210115153346 - POC
         case Seq(Some(Right(singleType))) =>
           field.info1.containee match {
             case x: BasicType if x == singleType => None
-            case l: BasicType                    => Some(ValErr(17, key, None, s"is $singleType but should be ${l}"))
+            case e: _Enm =>
+              if (singleType.isEnm)
+                if (e.values.contains(value)) None
+                else                          Some(ValErr(23, key, None, s"invalid enum value: ${value}"))
+              else                            Some(ValErr(21, key, None, s"is $singleType but should be ${e}"))
+            case l: BasicType =>
+              if (singleType.isEnm) Some(ValErr(22, key, None, s"is _Enm but should be ${l}"))
+              else                  Some(ValErr(17, key, None, s"is $singleType but should be ${l}"))
             case _: Cls                          => Some(ValErr(18, key, None, s"is $singleType but should be an obj")) }
 
         // ---------------------------------------------------------------------------

@@ -2,17 +2,15 @@ package gallia
 package atoms
 
 import aptus.{Anything_, String_}
-
 import io._
 import io.in._
 import actions.in.HasProjection
-import data.json.JsonParsing
-import data.json.JsonTax
+import data.json.{JsonTax, JsonParsing}
 import data.ModifyTableData
 import data.multiple.streamer.Streamer
 
 // ===========================================================================
-object AtomsIX {
+object AtomsIX { import utils.JdbcUtils
 
   case   class _GenericInputU(datum: Obj) extends AtomIU { def naive: Option[Obj] = Some(datum) }
     case class _GenericInputZ(data: Objs) extends AtomIZ { def naive: Option[Objs] = Some(data) }
@@ -128,54 +126,47 @@ object AtomsIX {
     }
 
   // ===========================================================================
-  case class _JdbcInputZ1(inputString: InputString, queryingOpt: Option[ReadQuerying] /* missing if URI-driven */) extends AtomIZ {
-      import aptus.aptmisc.Rdbms.generalize
-      import aptus.ResultSet_
-  
-      // ---------------------------------------------------------------------------
+  case class _JdbcInputZ1(
+         inputString: InputString,
+         queryingOpt: Option[ReadQuerying] /* missing if URI-driven */,
+         schemaOpt  : Option[Cls] /* None for inferring */)
+        extends AtomIZ {
+
       def naive: Option[Objs] = {
         val sqlQuery = tmp.map(_.query).get// TODO: t210114202848 - validate
   
-        val (rs, cls) = aptus.aptmisc.Rdbms(new java.net.URI(inputString)).query(sqlQuery)
-  
-        Streamer
-          .fromIterator((rs.rawRdbmsEntries, cls))
-          .map(generalize).map(obj)
-          .pipe(Objs.build)
-          .in.some
-      }
-  
-      // ===========================================================================
+        aptus.aptmisc
+          .Rdbms(new java.net.URI(inputString))
+          .query2(sqlQuery)
+          .pipe(JdbcUtils.objsOpt(schemaOpt)) }
+
+      // ---------------------------------------------------------------------------
       private def tmp: Option[ReadQuerying] =
           queryingOpt
         .orElse {
-          extractTableNameOpt(inputString, "table").map(ReadQuerying.All) }
-
-      // ===========================================================================
-      private def extractTableNameOpt(inputString: String, param: String): Option[String] = // not standard...
-        inputString // FIXME: t210115205609 - decoding
-          .splitBy("&")
-          .find(_.startsWith(s"${param}="))
-          .map(_.stripPrefix(s"${param}="))
+          JdbcUtils
+            .extractTableNameOpt(inputString, "table")
+            .map(ReadQuerying.All) }
     }
     
     // ===========================================================================
-    case class _JdbcInputZ2(connection: java.sql.Connection, querying: ReadQuerying) extends AtomIZ {
-      import aptus.aptmisc.Rdbms.generalize
-      import aptus.ResultSet_
-  
+    case class _JdbcInputZ2(
+         connection: java.sql.Connection,
+         querying  : ReadQuerying,
+         schemaOpt : Option[Cls] /* None for inferring */)
+        extends AtomIZ {
+
+      def columns =
+        aptus.aptmisc
+          .Rdbms (connection)
+          .columns(querying.query)
+
       // ---------------------------------------------------------------------------
-      def naive: Option[Objs] = {
-        val (rs, cls) = aptus.aptmisc.Rdbms(connection/*new java.net.URI(inputString)*/).query(querying.query)
-  
-        Streamer
-          .fromIterator((rs.rawRdbmsEntries, cls))
-          .map(generalize).map(obj)
-          .pipe(Objs.build)
-          .in.some
-      }
-  
-    }  
+      def naive: Option[Objs] =
+        aptus.aptmisc
+          .Rdbms (connection)
+          .query2(querying.query)
+          .pipe(JdbcUtils.objsOpt(schemaOpt)) }
 
   // ===========================================================================
   case class _MongodbInputZ(
@@ -261,7 +252,7 @@ object AtomsIX {
         .pipe { x =>
           schemaProvider match {
             case TableSchemaProvider.NoInferring => x.z // nothing to do
-            case _                               => new ModifyTableData(cellConf).modify(x) }} // TODO: t220406110532: proper TableTax counterpart to JSON's (see 220406110635)
+            case _                               => new ModifyTableData(cellConf).modify(x) }}
         .in.some
 
     // ---------------------------------------------------------------------------

@@ -11,7 +11,7 @@ import atoms.AtomsAsserts._
 object ActionsAsserts {
 
   case class AssertDataClass(node: TypeNode) extends ActionUUa with IdentityM1 with IdentityUUa {
-      def vldt (c: Cls): Errs = node.leaf.dataClassEither match {
+      def vldt(c: Cls): Errs = node.leaf.dataClassEither match {
         case Left (errorDetails)   => _Error.InvalidDataClass(errorDetails).errs
         case Right(validDataClass) => _vldt.classCompatibilities(c, validDataClass).toSeq } }
 
@@ -40,6 +40,14 @@ object ActionsAsserts {
               _Error.ContaineeAssertionFailure(target, basicType).errsIf(
                   !c.field_(target).exists(
                       _.areAllBasicType(basicType))) }
+
+      // ---------------------------------------------------------------------------
+      case class AssertUnionType(target: KPath, negated: Boolean) extends IdentityM1 with IdentityUUa {
+            def vldt (c: Cls): Errs =
+              _Error.ContaineeAssertionFailure(target, null).errsIf(
+                  !c.field_(target).exists(field =>
+                      (!negated &&  field.isUnionType) ||
+                      ( negated && !field.isUnionType))) }
 
   // ===========================================================================
   case class AssertDataUnsafeU(pred: gallia.Obj => Boolean) extends ActionUU with IdentityVM1 with AtomsUUd {

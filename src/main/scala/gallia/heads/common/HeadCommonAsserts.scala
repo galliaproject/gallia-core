@@ -35,6 +35,10 @@ trait HeadCommonAsserts[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
       // TODO: assert sizes
 
   // ---------------------------------------------------------------------------
+  def assertIsUnionType (target: KPathW): Self2 = self2 :+ AssertUnionType(target.value, negated = false)
+  def assertNotUnionType(target: KPathW): Self2 = self2 :+ AssertUnionType(target.value, negated = true)
+
+  // ---------------------------------------------------------------------------
   def customMeta(f: Cls => Cls): Self2 = self2 :+ CustomMeta(f)
 
     // TODO: or customInfo?

@@ -88,7 +88,10 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
     private[gallia] def forceKey   (key: Key):        AnyValue  = data.find  (_._1 == key).map(_._2).get
     private[gallia] def attemptKey (key: Key): Option[AnyValue] = data.find  (_._1 == key).map(_._2)    
     private[gallia] def containsKey(key: Key):        Boolean   = data.exists(_._1 == key)
-            
+
+    // ---------------------------------------------------------------------------
+    def sortedByKeys: Obj = data.sortBy(_._1.name).pipe(Obj.build)
+
     // ===========================================================================
     def contains   (path: KPathW): Boolean =  _contains(path)
     def containsNot(path: KPathW): Boolean = !_contains(path)

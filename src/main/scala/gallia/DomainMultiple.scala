@@ -173,7 +173,8 @@ case class RPathz(values: Seq[RPath]) extends Seq[RPath] {
 
   // ===========================================================================
   object RPathz {
-    def from(path: KPathW): RPathz = RPathz(List(RPath.from(path)))
+    def from(key: Key)    : RPathz = RPathz(List(KPath.from(key).qpath))
+    def from(path: RPathW): RPathz = RPathz(List(path.value ))
   }
 
 // ===========================================================================

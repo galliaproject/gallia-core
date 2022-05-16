@@ -19,9 +19,9 @@ object AtomsOthers {
   }
 
   // ===========================================================================
-  case class _Unpivot(keyz: Keyz) extends AtomUU { def naive(u: Obj) = 
-    u.unpivot(keyz) }
-    
+  case class _Unpivot(keyz: Keyz) extends AtomUU { def naive(o: Obj) =
+    o.unpivot(keyz) }
+
   // ===========================================================================
   case object _IdentityUU extends AtomUU { @inline def naive(o: Obj ) = o }
   case object _IdentityZZ extends AtomZZ { @inline def naive(z: Objs) = z }

@@ -7,7 +7,8 @@ import aptus._
 // ===========================================================================
 object JsonTaxUtils {
 
-  private[json] def stringOrLong[T](ifString: String => T, ifLong: Long => T): Any => T =
+  private[json] def stringOrLong[T](pair:    (String => T,         Long => T)): Any => T = stringOrLong(pair._1, pair._2)
+  private[json] def stringOrLong[T](ifString: String => T, ifLong: Long => T) : Any => T =
     _ match {
       case s: String => ifString(s)
       case n: Number => ifLong  (numberToLong(n)) }
@@ -21,18 +22,9 @@ object JsonTaxUtils {
   // ===========================================================================
   private[json] def numberToLong(n: Number): Long =
     n .doubleValue
-      .assert(doubleFitsLong)
+      .assert(reflect.BasicTypeUtils.doubleFitsLong)
       .pipe(d => d.toLong.assert(_.toDouble == d))
 
-  // ---------------------------------------------------------------------------
-  private[json] def doubleFitsFloat(d: Double): Boolean =
-    d <= java.lang.Float.MAX_VALUE &&
-    d >= java.lang.Float.MIN_VALUE
-
-  // ---------------------------------------------------------------------------
-  private[json] def doubleFitsLong(d: Double): Boolean =
-    d <= java.lang.Long.MAX_VALUE &&
-    d >= java.lang.Long.MIN_VALUE
 }
 
 // ===========================================================================

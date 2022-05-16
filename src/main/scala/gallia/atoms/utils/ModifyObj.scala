@@ -4,11 +4,8 @@ package atoms.utils
 import meta._
 
 // ===========================================================================
-@deprecated("favor ObjModifier (220425095249) now - union-type aware counterpart")
-trait ModifyObj {
-  // TODO: + handle enums (t210116114654)?
+trait ModifyObj { // note: not union-type aware
 
-  // ---------------------------------------------------------------------------
   def modify(c: Cls)(o: Obj): Obj =
       qualifyingFields(c)
         .foldLeft(o) { (curr, qualifyingField) =>

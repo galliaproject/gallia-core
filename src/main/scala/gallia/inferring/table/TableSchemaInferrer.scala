@@ -71,7 +71,7 @@ object TableSchemaInferrer {
       .toMap
 
   // ===========================================================================
-  private def combineOfnisAll   (values: Seq[Ofni]): Ofni = _combineOfnis(values)(_.map(_.forceBasicType).pipe(BasicType.combine))
+  private def combineOfnisAll   (values: Seq[Ofni]): Ofni = _combineOfnis(values)(_.map(_.forceBasicType).pipe(reflect.BasicTypeUtils.combine))
   private def combineOfnisString(values: Seq[Ofni]): Ofni = _combineOfnis(values)(_ => BasicType._String)
 
     // ---------------------------------------------------------------------------

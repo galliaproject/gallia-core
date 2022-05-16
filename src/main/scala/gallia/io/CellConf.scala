@@ -2,10 +2,9 @@ package gallia
 package io
 
 import aptus.{Anything_, String_}
-
 import meta.{Info, Ofni}
 import inferring.table.TypeGuessing
-import reflect.{Container, BasicType}
+import reflect.{BasicType, Container, UnparameterizedBasicType}
 
 // ===========================================================================
 case class CellConf(
@@ -38,7 +37,7 @@ case class CellConf(
       values
         .map(TypeGuessing.apply)
         .distinct
-        .pipe(BasicType.combine)
+        .pipe(reflect.BasicTypeUtils.combine)
 
   // ===========================================================================
   def transformValue(multiple: Boolean)(value: String): Either[Option[String], Seq[String]] =
@@ -51,6 +50,13 @@ case class CellConf(
         _.toSeq,
         identity)
       .toSet
+
+  // ===========================================================================
+  def transformBasicValue(tipe: BasicType)(value: String): Any =
+    tipe match {
+      case _: BasicType._Enm           => BasicType._Enm.parseString(value)
+      case    BasicType._Boolean       => inferring.table.BooleanDetector.forceBoolean(value)
+      case x: UnparameterizedBasicType => x.parseString(value) }
 
   // ===========================================================================
   private def isNull (value: String): Boolean = !noNulls  && nullValueSet.contains(value) /* no trimming intentionally */

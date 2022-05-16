@@ -2,68 +2,38 @@ package gallia
 package data
 package json
 
-import aptus._
-import meta._
-import gallia.atoms.utils._
-
 // ===========================================================================
-sealed trait JsonTax extends EnumEntry {
-    def valueOpt(c: Cls): Option[Obj => Obj] }
+sealed trait JsonTax extends EnumEntry with HasTaxOpt
 
-  // ===========================================================================
-  /** due to the very limited set of primitives datatypes supported by JSON */
-  object JsonTax extends Enum[JsonTax] { // 220406110635
+  // ---------------------------------------------------------------------------
+  /** costly due to the very limited set of primitives datatypes supported by JSON */
+  object JsonTax extends Enum[JsonTax] with HasTaxes { // 220406110635
+    import JsonTaxUtils._
+
     val values = findValues
 
-    // ===========================================================================
-    def payUp(c: Cls)(o: Obj): Obj  = taxesOpt(c) match {
-        case None        => o
-        case Some(taxes) => taxes(o) }
-
     // ---------------------------------------------------------------------------
-    def payUp(c: Cls, z: Objs): Objs = taxesOpt(c) match {
-        case None        => z
-        case Some(taxes) => z.map(taxes) }
+    case object JsonIntTax            extends DoubleTax(BasicType._Int)   with JsonTax
 
-    // ===========================================================================
-    private def taxesOpt(c: Cls): Option[Obj => Obj] = // TODO: t220405114144 - optimize
-        values
-          .flatMap  (_.valueOpt(c))
-          .in.noneIf(_.isEmpty)
-          .map { taxes => taxes.foldLeft(_) { (curr, tax) => tax(curr) } }
+    case object JsonByteTax           extends DoubleTax(BasicType._Byte)  with JsonTax
+    case object JsonShortTax          extends DoubleTax(BasicType._Short) with JsonTax
+    case object JsonLongTax           extends DoubleTax(BasicType._Long)  with JsonTax
+    case object JsonFloatTax          extends DoubleTax(BasicType._Float) with JsonTax
 
-      // ===========================================================================
-      import JsonTaxUtils._
+    case object JsonBigIntTax         extends JsonTax { def valueOpt(c: Cls) = _tax[Any](c)(_.hasBigInt)(stringOrLong  (BigInt    .apply, BigInt    .apply)) }
+    case object JsonBigDecTax         extends JsonTax { def valueOpt(c: Cls) = _tax[Any](c)(_.hasBigDec)(stringOrDouble(BigDecimal.apply, BigDecimal.apply)) }
 
-      case object JsonIntTax            extends JsonTax { def valueOpt(c: Cls) = jsonTax[Double](c)(_.hasInt)  (d => d.toInt.assert(_.toDouble == d)) }
+    case object JsonLocalDateTax      extends JsonTax { def valueOpt(c: Cls) = _tax[Any](c)(_.hasLocalDate)    (stringOrLong(BasicType._LocalDate    .pair)) }
+    case object JsonLocalDateTimeTax  extends JsonTax { def valueOpt(c: Cls) = _tax[Any](c)(_.hasLocalDateTime)(stringOrLong(BasicType._LocalDateTime.pair)) }
+    case object JsonInstantTax        extends JsonTax { def valueOpt(c: Cls) = _tax[Any](c)(_.hasInstant)      (stringOrLong(BasicType._Instant      .pair)) }
 
-      case object JsonByteTax           extends JsonTax { def valueOpt(c: Cls) = jsonTax[Double](c)(_.hasByte) (d => d.toByte                         .assert(_.toDouble == d)) }
-      case object JsonShortTax          extends JsonTax { def valueOpt(c: Cls) = jsonTax[Double](c)(_.hasShort)(d => d.toShort                        .assert(_.toDouble == d)) }
-      case object JsonLongTax           extends JsonTax { def valueOpt(c: Cls) = jsonTax[Double](c)(_.hasLong) (d => d.assert(doubleFitsLong) .toLong .assert(_.toDouble == d)) }
-      case object JsonFloatTax          extends JsonTax { def valueOpt(c: Cls) = jsonTax[Double](c)(_.hasFloat)(_     .assert(doubleFitsFloat).toFloat) } // note: precision may also be affected
+    case object JsonLocalTimeTax      extends StringTax(BasicType._LocalTime)      with JsonTax
+    case object JsonOffsetDateTimeTax extends StringTax(BasicType._OffsetDateTime) with JsonTax
+    case object JsonZonedDateTimeTax  extends StringTax(BasicType._ZonedDateTime)  with JsonTax
 
-      case object JsonBigIntTax         extends JsonTax { def valueOpt(c: Cls) = jsonTax[Any]   (c)(_.hasBigInt)(stringOrLong  (BigInt    .apply, BigInt    .apply)) }
-      case object JsonBigDecTax         extends JsonTax { def valueOpt(c: Cls) = jsonTax[Any]   (c)(_.hasBigDec)(stringOrDouble(BigDecimal.apply, BigDecimal.apply)) }
+    case object JsonBinaryTax         extends StringTax(BasicType._Binary)         with JsonTax
 
-      case object JsonLocalDateTax      extends JsonTax { def valueOpt(c: Cls) = jsonTax[Any]   (c)(_.hasLocalDate)    (stringOrLong(_                  .parseLocalDate    , _.toLocalDate    ) /* aptus' */) }
-      case object JsonLocalDateTimeTax  extends JsonTax { def valueOpt(c: Cls) = jsonTax[Any]   (c)(_.hasLocalDateTime)(stringOrLong(_.replace(" ", "T").parseLocalDateTime, _.toLocalDateTime) /* aptus' */) } // see https://stackoverflow.com/questions/9531524/in-an-iso-8601-date-is-the-t-character-mandatory
-      case object JsonInstantTax        extends JsonTax { def valueOpt(c: Cls) = jsonTax[Any]   (c)(_.hasInstant)      (stringOrLong(_                  .parseInstant      , _.toInstant      ) /* aptus' */) }
-
-      case object JsonLocalTimeTax      extends JsonTax { def valueOpt(c: Cls) = jsonTax[String](c)(_.hasLocalTime)     (_.parseLocalTime      /* aptus' */) }
-      case object JsonOffsetDateTimeTax extends JsonTax { def valueOpt(c: Cls) = jsonTax[String](c)(_.hasOffsetDateTime)(_.parseOffsetDateTime /* aptus' */) }
-      case object JsonZonedDateTimeTax  extends JsonTax { def valueOpt(c: Cls) = jsonTax[String](c)(_.hasZonedDateTime) (_.parseZonedDateTime  /* aptus' */) }
-
-      case object JsonBinaryTax         extends JsonTax { def valueOpt(c: Cls) = jsonTax[String](c)(_.hasBinary)(DataFormatting.parseBinaryString) }
-
-      case object JsonEnumTax           extends JsonTax { def valueOpt(c: Cls) = jsonTax[String](c)(_.hasEnum)(EnumValue.apply) }
-
-      // ===========================================================================
-      // TODO: t220427122749 - less opaque, so can guess better when needed
-      private def jsonTax[T: WTT](c: Cls)(pred: Fld => Boolean)(f: T => Any): Option[Obj => Obj] =
-        ObjModifierCtxParser
-          .parse(c)(pred)
-          .map(new ObjModifier[T](_, f))
-          .map(_.modify)
+    case object JsonEnumTax           extends StringEnumTax                        with JsonTax
   }
 
 // ===========================================================================

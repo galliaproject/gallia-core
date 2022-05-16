@@ -82,7 +82,7 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
 
         if (!dest.isContainedDataClass)
           if (!ttq.ignoreContainer) TransformVV (ttq, dest, wrap(f), wtto.ifApplicable(f))
-          else                      TransformVVx(ttq, dest, wrap(f))
+          else                      TransformVVx(ttq, dest, wrap(f), wtto.ifApplicable(f))
         else
           if (!ttq.ignoreContainer) TransformVVc (ttq, to = HT.parse[D], wrap(f))
           else                      TransformVVxc(ttq, to = HT.parse[D], wrap(f)) } }

@@ -15,8 +15,7 @@ private[gallia] object InfoUtils {
         Fld(
           field.key.symbol,
           field.node.forceNonBObjOfni)
-          .setEnumName(field.node.leaf.name) /* mostly for macros */
-      }
+          .setEnumName(field.node.leaf.name) /* mostly for macros */ }
       .pipe(Cls.apply)
       .setName(leaf.name.splitBy(".").last /* TODO: see t210325105833 - need to be in scope for macros */) // mostly for macros
 

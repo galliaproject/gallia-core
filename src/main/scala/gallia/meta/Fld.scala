@@ -29,12 +29,11 @@ case class Fld(key: Key, ofni: Ofni) extends FldLike {
     def transformOfni(f: Ofni => Ofni): Fld = copy(ofni = f(ofni))
 
     // ---------------------------------------------------------------------------
-    def transformSoleInfo                        (f: Info => Info): Fld = transformOfni(_.transformSoleInfo       (f))
-    def transformAllInfos                        (f: Info => Info): Fld = transformOfni(_.transformAllInfos       (f))
-    def transformSpecificInfo(p: Info => Boolean)(f: Info => Info): Fld = transformOfni(_.transformSpecificInfo(p)(f)) // see t210125111338 (union types)
-
-    // ---------------------------------------------------------------------------
-    def transformSoleContainee                   (f: Containee => Containee): Fld = transformSoleInfo(_.transformContainee(f))
+    def transformSoleInfo                                  (f: Info => Info)          : Fld = transformOfni(_.transformSoleInfo            (f))
+    def transformAllInfos                                  (f: Info => Info)          : Fld = transformOfni(_.transformAllInfos            (f))
+    def transformSpecificInfo     (p: Info => Boolean)     (f: Info => Info)          : Fld = transformOfni(_.transformSpecificInfo     (p)(f))
+    def transformSpecificContainee(p: Containee => Boolean)(f: Containee => Containee): Fld = transformOfni(_.transformSpecificContainee(p)(f))
+    def transformSoleContainee                             (f: Containee => Containee): Fld = transformSoleInfo(_.transformContainee(f))
 
     // ---------------------------------------------------------------------------
     def transformNestedClasses                     (f: Cls  => Cls): Fld = transformOfni(_.transformNestedClasses      (f))
@@ -52,9 +51,10 @@ case class Fld(key: Key, ofni: Ofni) extends FldLike {
     def updateOptionality(value: Optional): Fld = updateOfni(ofni.updateOptionality(value))
 
     // ---------------------------------------------------------------------------
-    def updateSoleInfo                    (newValue: Info): Fld = transformSoleInfo                        (_ => newValue)
-    def updateSpecificInfo(oldValue: Info, newValue: Info): Fld = transformSpecificInfo(_ == oldValue)     (_ => newValue) // see t210125111338 (union types)
-    def updateSpecificOfnu(oldValue: Ofnu, newValue: Ofnu): Fld = transformSpecificInfo(_ == oldValue.info)(_ => newValue.info).updateOptionality(newValue.optional)
+    def updateSoleInfo                              (newValue: Info)     : Fld = transformSoleInfo                             (_ => newValue)
+    def updateSpecificInfo     (oldValue: Info,      newValue: Info)     : Fld = transformSpecificInfo     (_ == oldValue)     (_ => newValue)
+    def updateSpecificContainee(oldValue: Containee, newValue: Containee): Fld = transformSpecificContainee(_ == oldValue)     (_ => newValue)
+    def updateSpecificOfnu     (oldValue: Ofnu,      newValue: Ofnu)     : Fld = transformSpecificInfo     (_ == oldValue.info)(_ => newValue.info).updateOptionality(newValue.optional)
 
     // ===========================================================================
     // commonly used
@@ -78,6 +78,10 @@ case class Fld(key: Key, ofni: Ofni) extends FldLike {
     def opt(key: Key, containee: Containee) = Fld(key, Ofni.opt(containee))
     def nes(key: Key, containee: Containee) = Fld(key, Ofni.nes(containee))
     def pes(key: Key, containee: Containee) = Fld(key, Ofni.pes(containee))
+
+    // ---------------------------------------------------------------------------
+    def required(key: Key, info: Info) = Fld(key, Ofni.required(info))
+    def optional(key: Key, info: Info) = Fld(key, Ofni.optional(info))
 
     // ---------------------------------------------------------------------------
     def oneCls(key: Key, c: Cls) = Fld(key, Ofni.one(c))

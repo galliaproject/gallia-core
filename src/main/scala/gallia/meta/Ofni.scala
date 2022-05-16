@@ -28,23 +28,26 @@ case class Ofni(optional: Optional, infos: Seq[Info]) extends OfniLike {
         else                                           infos.map(_.formatDefault).join("|")
 
     // ===========================================================================
-    def toRequired: Ofni = copy(optional = false)
-    def toOptional: Ofni = copy(optional = true)
+    private def updateInfos(newInfos: Seq[Info]) = copy(infos = newInfos.distinct)
 
-    def toSingle  : Ofni = copy(infos    = infos.map(_.toSingle))
-    def toMultiple: Ofni = copy(infos    = infos.map(_.toMultiple))
+      def toSingle  : Ofni = updateInfos(newInfos = infos.map(_.toSingle))
+      def toMultiple: Ofni = updateInfos(newInfos = infos.map(_.toMultiple))
+
+      def toRequired: Ofni = copy(optional = false)
+      def toOptional: Ofni = copy(optional = true)
 
     // ===========================================================================
-    def transformSoleInfo                        (f: Info => Info): Ofni = copy(infos = f(info1))
-    def transformAllInfos                        (f: Info => Info): Ofni = copy(infos = infos.map(f))
-    def transformSpecificInfo(p: Info => Boolean)(f: Info => Info): Ofni = copy(infos = infos.mapAffectExactlyOne(p)(f)) // see t210125111338 (union types)
+    def transformSoleInfo                                  (f: Info => Info)          : Ofni = updateInfos(newInfos = f(info1))
+    def transformAllInfos                                  (f: Info => Info)          : Ofni = updateInfos(newInfos = infos.map(f))
+    def transformSpecificInfo     (p: Info      => Boolean)(f: Info => Info)          : Ofni = updateInfos(newInfos = infos.mapAffectExactlyOne(p)(f)) // see t210125111338 (union types)
+    def transformSpecificContainee(p: Containee => Boolean)(f: Containee => Containee): Ofni = updateInfos(newInfos = infos.mapAffectExactlyOne(_.containee.pipe(p))(_.transformContainee(f)))
 
     // ---------------------------------------------------------------------------
-    def transformNestedClasses                    (f: Cls  => Cls): Ofni = copy(infos = infos.mapIf              (_.isNesting)                     (_.transformNestedClass(f)))
-    def transformSoleNestedClass                  (f: Cls  => Cls): Ofni = copy(infos = infos.mapAffectExactlyOne(_.isNesting)                     (_.transformNestedClass(f)))
-    def transformNestedClass(target: Cls)         (f: Cls  => Cls): Ofni = copy(infos = infos.mapAffectExactlyOne(_.nestedClassOpt == Some(target))(_.transformNestedClass(f)))
-    def transformNestedClass(target: Index)       (f: Cls  => Cls): Ofni = copy(infos = infos.mapIndex           (__lookup(target))                (_.transformNestedClass(f)))
-    def transformNestedClass(pred: Cls => Boolean)(f: Cls  => Cls): Ofni = copy(infos = infos.mapAffectExactlyOne(_.nestedClassOpt.exists(pred))   (_.transformNestedClass(f)))
+    def transformNestedClasses                    (f: Cls  => Cls): Ofni = updateInfos(newInfos = infos.mapIf              (_.isNesting)                     (_.transformNestedClass(f)))
+    def transformSoleNestedClass                  (f: Cls  => Cls): Ofni = updateInfos(newInfos = infos.mapAffectExactlyOne(_.isNesting)                     (_.transformNestedClass(f)))
+    def transformNestedClass(target: Cls)         (f: Cls  => Cls): Ofni = updateInfos(newInfos = infos.mapAffectExactlyOne(_.nestedClassOpt == Some(target))(_.transformNestedClass(f)))
+    def transformNestedClass(target: Index)       (f: Cls  => Cls): Ofni = updateInfos(newInfos = infos.mapIndex           (__lookup(target))                (_.transformNestedClass(f)))
+    def transformNestedClass(pred: Cls => Boolean)(f: Cls  => Cls): Ofni = updateInfos(newInfos = infos.mapAffectExactlyOne(_.nestedClassOpt.exists(pred))   (_.transformNestedClass(f)))
 
     def transformNestedClass(target: UnionObjectDisambiguator)(f: Cls  => Cls): Ofni = target match { // TODO: validate first...
         case DisambiguateByClassIndex    (index)   => transformNestedClass(index)(f)
@@ -68,6 +71,10 @@ case class Ofni(optional: Optional, infos: Seq[Info]) extends OfniLike {
 
   // ===========================================================================
   object Ofni {
+    def required(info: Info) = Ofni(_Required, Seq(info))
+    def optional(info: Info) = Ofni(_Optional, Seq(info))
+
+    // ---------------------------------------------------------------------------
     def one(containee: Containee): Ofni = Ofni(_Required, Seq(Info(_Single  , containee)))
     def opt(containee: Containee): Ofni = Ofni(_Optional, Seq(Info(_Single, containee)))
     def nes(containee: Containee): Ofni = Ofni(_Required, Seq(Info(_Multiple, containee)))

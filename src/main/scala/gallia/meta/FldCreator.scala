@@ -19,6 +19,11 @@ trait FldCreator { import Fld._
   def requiredUnion            (first: Info, more: Info*): Fld = Fld(_key, Ofni(_Required, (first +: more)))
   def optionalUnion            (first: Info, more: Info*): Fld = Fld(_key, Ofni(_Optional, (first +: more)))
 
+  // ---------------------------------------------------------------------------
+  def union        (ofni : Ofni)     : Fld = Fld(_key, ofni)
+  def requiredUnion(infos: Seq[Info]): Fld = Fld(_key, Ofni(_Required, infos))
+  def optionalUnion(infos: Seq[Info]): Fld = Fld(_key, Ofni(_Optional, infos))
+
   // ===========================================================================
   def string    : Fld = one(_key, _String)
   def string_   : Fld = opt(_key, _String)

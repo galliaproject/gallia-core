@@ -29,6 +29,9 @@ case class Info(
     def updateContainee(newValue: Cls)      : Info = transformContainee(_ => newValue)
     def updateContainee(newValue: Containee): Info = transformContainee(_ => newValue)
 
+    // ---------------------------------------------------------------------------
+    def updateMultiple(newValue: Multiple): Info = copy(multiple = newValue)
+
     // ===========================================================================
     def isMultiple: Boolean =  multiple // for consistency
     def isSingle  : Boolean = !multiple

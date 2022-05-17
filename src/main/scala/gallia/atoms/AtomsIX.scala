@@ -2,6 +2,7 @@ package gallia
 package atoms
 
 import aptus.{Anything_, String_}
+import aptus.aptmisc.Rdbms
 import io._
 import io.in._
 import actions.in.HasProjection
@@ -132,6 +133,14 @@ object AtomsIX { import utils.JdbcUtils
          schemaOpt  : Option[Cls] /* None for inferring */)
         extends AtomIZ {
 
+      def columns: Rdbms.Columns = {
+        val sqlQuery = tmp.map(_.query).get// TODO: t210114202848 - validate
+
+        aptus.aptmisc
+          .Rdbms (new java.net.URI(inputString))
+          .columns(sqlQuery) }
+
+      // ---------------------------------------------------------------------------
       def naive: Option[Objs] = {
         val sqlQuery = tmp.map(_.query).get// TODO: t210114202848 - validate
   
@@ -156,7 +165,7 @@ object AtomsIX { import utils.JdbcUtils
          schemaOpt : Option[Cls] /* None for inferring */)
         extends AtomIZ {
 
-      def columns =
+      def columns: Rdbms.Columns =
         aptus.aptmisc
           .Rdbms (connection)
           .columns(querying.query)

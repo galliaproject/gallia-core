@@ -14,8 +14,12 @@ case class JdbcInputZ1(
   private var c: Cls = null
 
   // ---------------------------------------------------------------------------
-  def vldt  : Errs   = Nil //TODO
-  def _meta : Cls    = _JdbcInputZ1(inputString, queryingOpt, None).naive.force.toListAndTrash.pipe(SchemaInferrer.klass).tap { c = _ } //TODO: t201223092238 - use JDBC meta instead
+  def vldt : Errs = Nil //TODO
+  def _meta: Cls  =
+    _JdbcInputZ1(inputString, queryingOpt, None)
+      .columns
+      .pipe(utils.JdbcUtils.columnsToCls)
+      .tap { c = _ }
   def atomiz: AtomIZ = _JdbcInputZ1(inputString, queryingOpt, Some(c)) }
 
 // ---------------------------------------------------------------------------
@@ -26,8 +30,8 @@ case class JdbcInputZ2(
   private var c: Cls = null
 
   // ---------------------------------------------------------------------------
-  def vldt  : Errs   = Nil //TODO
-  def _meta : Cls    =
+  def vldt : Errs = Nil //TODO
+  def _meta: Cls  =
     _JdbcInputZ2(connection, querying, None)
       .columns
       .pipe(utils.JdbcUtils.columnsToCls)

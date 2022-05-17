@@ -77,7 +77,10 @@ trait ClsLike { // read-only part
 
     // ---------------------------------------------------------------------------
     def hasNesting (path: KPathW): Boolean = field(path.value).ofni.hasNesting
+
+    // ---------------------------------------------------------------------------
     def hasMultiple(path: KPathW): Boolean = field(path.value).ofni.hasMultiple
+    def hasSingle  (path: KPathW): Boolean = field(path.value).ofni.hasSingle
 
     // ---------------------------------------------------------------------------
     def isMultiple(path: KPathW): Boolean = field(path.value).ofni.areAllMultiple

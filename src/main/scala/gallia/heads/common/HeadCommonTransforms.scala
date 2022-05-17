@@ -38,22 +38,40 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
       // ===========================================================================
       class _TransformU(val target: Transform[HeadU]) extends ___TransformU {
           /** disambiguate in case of union type - see t210125111338 */
-          def withPredicate(meta: Cls => Boolean, data: Obj => Boolean): __TransformU = new __TransformU(target, DisambiguateByClassPredicate(meta, data))
+          def withPredicate(meta: Cls => Boolean, data: Obj => Boolean): __TransformU = new __TransformU(target, DisambiguateByClassPredicateU(meta, data))
 
           // ---------------------------------------------------------------------------
-          def withTypeName(value: ClsName): __TransformU = withPredicate(_.nameOpt == Some(value), o => o.string_(_type).exists(_ == value))
+          def withTypeName(value: ClsName): __TransformU = withPredicate(_.nameOpt == Some(value), _.string_(_type).exists(_ == value))
           def withFieldHint(field: KPathW): __TransformU = withPredicate(_.contains(field.value), _.contains(field.value)) // convenient if unique to the type + required field
-          def withIndex    (value: Index) : __TransformU = new __TransformU(target, DisambiguateByClassIndex (value)) }
+          def withIndex    (value: Index) : __TransformU = new __TransformU(target, DisambiguateByClassIndex(value)) }
 
         // ---------------------------------------------------------------------------
         class __TransformU(val target: Transform[HeadU], disambiguator: UnionObjectDisambiguator) extends ___TransformU {
           protected override val disambiguatorOpt = Some(disambiguator) }
 
     // ===========================================================================
-    class _TransformZ(f1: Transform[HeadZ]) {
-      def using         (f: HeadZ => HeadZ)                            : Self2 = self2 :+ TransformZZ    (tqqpathz(f1), f)
-      def using         (f: HeadZ => HeadU)    (implicit d: DI)        : Self2 = self2 :+ TransformZU    (tqqpathz(f1), f)
-      def using[D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI, d2: DI): Self2 = self2 :+ TransformZV[D1](tqqpathz(f1), f) }
+    trait ___TransformZ {
+        protected val target: Transform[HeadZ]
+        protected val disambiguatorOpt: Option[UnionObjectDisambiguator] = None
+
+        // ---------------------------------------------------------------------------
+        def using         (f: HeadZ => HeadZ)                            : Self2 = self2 :+ TransformZZ    (tqqpathz(target), disambiguatorOpt, f)
+        def using         (f: HeadZ => HeadU)    (implicit d: DI)        : Self2 = self2 :+ TransformZU    (tqqpathz(target), f)
+        def using[D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI, d2: DI): Self2 = self2 :+ TransformZV[D1](tqqpathz(target), f) }
+
+      // ===========================================================================
+      class _TransformZ(val target: Transform[HeadZ]) extends ___TransformZ {
+          /** disambiguate in case of union type - see t210125111338 */
+          def withPredicate(meta: Cls => Boolean, data: Seq[Obj] => Boolean): __TransformZ = new __TransformZ(target, DisambiguateByClassPredicateZ(meta, data))
+
+          // ---------------------------------------------------------------------------
+          def withTypeName(value: ClsName): __TransformZ = withPredicate(_.nameOpt == Some(value), _.forall(_.string_(_type).exists(_ == value)))
+          def withFieldHint(field: KPathW): __TransformZ = withPredicate(_.contains(field.value), _.exists /* one is enough */(_.contains(field.value))) // convenient if unique to the typ
+          def withIndex    (value: Index) : __TransformZ = new __TransformZ(target, DisambiguateByClassIndex(value)) }
+
+        // ---------------------------------------------------------------------------
+        class __TransformZ(val target: Transform[HeadZ], disambiguator: UnionObjectDisambiguator) extends ___TransformZ {
+          protected override val disambiguatorOpt = Some(disambiguator) }
 
     // ===========================================================================
     class _TransformWhatever(f1: Transform[WV]) {

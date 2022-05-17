@@ -7,7 +7,7 @@ import actions._
 import FunctionWrappers._
 import dag.RootId
 import domain.PathPair
-import atoms.AtomsUUTransforms.{_Transform1to1, _Transform1to1b, _Transform1to1c}
+import atoms.AtomsUUTransforms.{_Transform1to1, _Transform1to1b, _Transform1to1U, _Transform1to1Z}
 import heads.HeadsNestingHandler
 
 // ===========================================================================
@@ -24,8 +24,10 @@ class NestedTransform(disambiguatorOpt: UnionObjectDisambiguatorOpt, adag: MetaP
     def vldt(c: Cls, kpath: KPath): Errs = //TODO: t220422121108 - check nesting field
       kpath
         .pipe(c.field_).toSeq
-        .map(_.forceNestedClass(disambiguatorOpt))
-        .flatMap(_vldt)
+        .flatMap { f =>
+          disambiguatorOpt
+            .map    (_._vldt(f))
+            .getOrElse(_vldt(f.forceNestedClass)) }
 
       // ---------------------------------------------------------------------------
       /*private - needed for forkey */
@@ -57,20 +59,21 @@ class NestedTransform(disambiguatorOpt: UnionObjectDisambiguatorOpt, adag: MetaP
 
     val f: _ff11 =
       if (!multiple)
-        if (optional) plan.V2.naiveRunUU_
-        else          plan.V2.naiveRunUU
+        if (!optional) plan.V2.naiveRunUU
+        else           plan.V2.naiveRunUU_
       else
-        if (optional) plan.V2.naiveRunZZ_
-        else          plan.V2.naiveRunZZ
+        if (!optional) plan.V2.naiveRunZZ
+        else           plan.V2.naiveRunZZ_
 
     val pair = PathPair(path.to, optional)
 
     potentialRenaming(path).toSeq :+
       disambiguatorOpt
         .map {
-          case DisambiguateByClassIndex    (_)       => _Transform1to1b.replace(      f)(pair) // costly
-          case DisambiguateByClassPredicate(_, data) => _Transform1to1c.replace(data, f)(pair) }
-        .getOrElse {                                    _Transform1to1 .replace(      f)(pair) }
+          case DisambiguateByClassIndex     (_)       => _Transform1to1b.replace(      f)(pair) // costly
+          case DisambiguateByClassPredicateU(_, data) => _Transform1to1U.replace(data, f)(pair)
+          case DisambiguateByClassPredicateZ(_, data) => _Transform1to1Z.replace(data, f)(pair) }
+        .getOrElse {                                     _Transform1to1 .replace(      f)(pair) }
   }  
   
   // ---------------------------------------------------------------------------
@@ -113,16 +116,18 @@ class NestedTransform(disambiguatorOpt: UnionObjectDisambiguatorOpt, adag: MetaP
 
 // ===========================================================================
 object NestedTransform { // TODO: not necessarily "nested" per se (eg forX context)...
-  def parseUU(disambiguatorOpt: UnionObjectDisambiguatorOpt)(f: HeadU => HeadU   ): NestedTransform =  { val (rootId, dag, leafId) = HeadsNestingHandler.uToU(f); new NestedTransform(disambiguatorOpt, MetaPlan(dag), rootId) }
+  def parseUU(disambiguatorOpt: UnionObjectDisambiguatorOpt)(f: HeadU => HeadU): NestedTransform = { val (rootId, dag, leafId) = HeadsNestingHandler.uToU(f); new NestedTransform(disambiguatorOpt, MetaPlan(dag), rootId) }
+  def parseZZ(disambiguatorOpt: UnionObjectDisambiguatorOpt)(f: HeadZ => HeadZ): NestedTransform = { val (rootId, dag, leafId) = HeadsNestingHandler.zToZ(f); new NestedTransform(disambiguatorOpt, MetaPlan(dag), rootId) }
 
-  def parseUU                     (f: HeadU => HeadU   ): NestedTransform =  { val (rootId, dag, leafId) = HeadsNestingHandler.uToU(f); new NestedTransform(None,    MetaPlan(dag), rootId) }
-  def parseZZ                     (f: HeadZ => HeadZ   ): NestedTransform =  { val (rootId, dag, leafId) = HeadsNestingHandler.zToZ(f); new NestedTransform(None,    MetaPlan(dag), rootId) }
+  // ---------------------------------------------------------------------------
+  def parseUU        (f: HeadU => HeadU   ): NestedTransform =  { val (rootId, dag, leafId) = HeadsNestingHandler.uToU(f); new NestedTransform(None, MetaPlan(dag), rootId) }
+  def parseZZ        (f: HeadZ => HeadZ   ): NestedTransform =  { val (rootId, dag, leafId) = HeadsNestingHandler.zToZ(f); new NestedTransform(None, MetaPlan(dag), rootId) }
 
-  def parseUZ                     (f: HeadU => HeadZ   ): NestedTransform =  { val (rootId, dag, leafId) = HeadsNestingHandler.uToZ(f); new NestedTransform(None,    MetaPlan(dag), rootId) }
-  def parseZU                     (f: HeadZ => HeadU   ): NestedTransform =  { val (rootId, dag, leafId) = HeadsNestingHandler.zToU(f); new NestedTransform(None,    MetaPlan(dag), rootId) }
+  def parseUZ        (f: HeadU => HeadZ   ): NestedTransform =  { val (rootId, dag, leafId) = HeadsNestingHandler.uToZ(f); new NestedTransform(None, MetaPlan(dag), rootId) }
+  def parseZU        (f: HeadZ => HeadU   ): NestedTransform =  { val (rootId, dag, leafId) = HeadsNestingHandler.zToU(f); new NestedTransform(None, MetaPlan(dag), rootId) }
 
-  def parseUV[T: WTT]             (f: HeadU => HeadV[T]): NestedTransform =  { val (rootId, dag, leafId) = HeadsNestingHandler.uToV(f); new NestedTransform(None,    MetaPlan(dag), rootId) }
-  def parseZV[T: WTT]             (f: HeadZ => HeadV[T]): NestedTransform =  { val (rootId, dag, leafId) = HeadsNestingHandler.zToV(f); new NestedTransform(None,    MetaPlan(dag), rootId) }
+  def parseUV[T: WTT](f: HeadU => HeadV[T]): NestedTransform =  { val (rootId, dag, leafId) = HeadsNestingHandler.uToV(f); new NestedTransform(None, MetaPlan(dag), rootId) }
+  def parseZV[T: WTT](f: HeadZ => HeadV[T]): NestedTransform =  { val (rootId, dag, leafId) = HeadsNestingHandler.zToV(f); new NestedTransform(None, MetaPlan(dag), rootId) }
 }
 
 // ===========================================================================

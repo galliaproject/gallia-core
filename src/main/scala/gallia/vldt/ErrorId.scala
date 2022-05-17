@@ -159,6 +159,9 @@ import meta._
       case class NotAnUnionField   (kpath: KPath) extends _Error3      { val errorId = "220511144415"; val label = "NotAnUnionField" }
       case class MoreThanOneNesting(target: Fld)  extends _Error4[Fld] { val errorId = "220511152109"; val label = "MoreThanOneNesting" }
 
+      // ---------------------------------------------------------------------------
+      case class NotExactlyOneNestedClass(target: Fld) extends _Error3 { val errorId = "220517100834"; val label = "NotExactlyOneNestedClass" }
+
       // ===========================================================================
       object Runtime {
 
@@ -192,7 +195,9 @@ import meta._
         // ---------------------------------------------------------------------------
         case class DifferingRuntimeType(from: String, to: String) extends _Error3 { val errorId = "210811104025"; val label = "DifferingRuntimeType" }
         
-        case class WhateverOperationForbidden(error: String) extends _Error3 { val errorId = "210811145146"; val label = "WhateverOperationForbidden" }        
+        case class WhateverOperationForbidden(error: String) extends _Error3 { val errorId = "210811145146"; val label = "WhateverOperationForbidden" }
+
+        case class NotAPartition(keys: Keyz) extends _Error3 { val errorId = "220517094323"; val label = "NotAPartition" }
       }
     }
 

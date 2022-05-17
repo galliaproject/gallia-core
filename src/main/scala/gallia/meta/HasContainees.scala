@@ -16,17 +16,15 @@ trait HasContainees {  // see t210125111338 (union types)
   def hasBasicType: Boolean = containees.exists(_.isLeaf)
 
   // ===========================================================================
-  def nestedClassOpt  : Option[    Cls ] = containees.flatMap(_.nestingOpt).force.option
-  def nestedClassesOpt: Option[Seq[Cls]] = containees.flatMap(_.nestingOpt).in.noneIf(_.isEmpty)
-
-  // ---------------------------------------------------------------------------
-  def forceNestedClasses: Seq[Cls] = nestedClassesOpt.get
-  def forceNestedClass  :     Cls  = nestedClassOpt.get
-  def forceNestedClass(disambiguatorOpt: UnionObjectDisambiguatorOpt): Cls  =
+  def nestedClassOpt                                                 : Option[Cls] = containees.flatMap(_.nestingOpt).force.option // TODO: handle unions
+  def nestedClassesOpt(disambiguatorOpt: UnionObjectDisambiguatorOpt): Seq   [Cls] =
     containees
       .flatMap(_.nestingOpt)
-      .pipe { ncs => disambiguatorOpt.map(_.filter(ncs)).getOrElse(ncs) } // TODO: t220506114023 - validate first...
-      .ifOneOrElse(errorMessage = _.map(_.nameOpt) -> disambiguatorOpt)
+      .pipe { ncs => disambiguatorOpt.map(_.filter(ncs)).getOrElse(ncs) }
+
+  // ---------------------------------------------------------------------------
+  def forceNestedClass  :     Cls  = nestedClassOpt.get
+  def forceNestedClass(disambiguatorOpt: UnionObjectDisambiguatorOpt): Cls  = nestedClassesOpt(disambiguatorOpt).ifOneOrElse(errorMessage = _.map(_.nameOpt) -> disambiguatorOpt)
 
   // ---------------------------------------------------------------------------
   def basicTypeOpt  : Option[    BasicType ] = containees.flatMap(_.leafOpt).force.option

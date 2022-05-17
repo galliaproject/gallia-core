@@ -6,18 +6,29 @@ case class PathPair(path: KPath, optional: Boolean) {
       def lookup(o: Obj ): AnyValue = if (optional) o.opt(path) else o.force(path)
 
       // ---------------------------------------------------------------------------
-      def matches(pred: Obj => Boolean)(o: Obj): Boolean = // for union types
-        // TODO: if multiple t220505155458
+      def matching(value1: Any, value2: Any): Boolean =
+        if (optional) value1 == Some(value2)
+        else          value1 ==      value2
+
+      // ===========================================================================
+      def matchesU(pred: Obj => Boolean)(o: Obj): Boolean = // for union types
         if (optional) o.opt  (path).exists { case o: Obj => pred(o); case _ => false }
         else          o.force(path) match  { case o: Obj => pred(o); case _ => false }
 
       // ---------------------------------------------------------------------------
-      def matching(value1: Any, value2: Any): Boolean =
-        if (optional) value1 == Some(value2)
-        else          value1 ==      value2
+      def matchesZ(pred: Seq[Obj] => Boolean)(o: Obj): Boolean = // for union types
+          if (optional) o.opt  (path).exists(_matchesZ(pred))
+          else          o.force(path).pipe  (_matchesZ(pred))
+
+        // ---------------------------------------------------------------------------
+        private def _matchesZ(pred: Seq[Obj] => Boolean): Any => Boolean = {
+          case seq: Seq[_] => seq.head match {
+            case _: Obj => pred(seq.asInstanceOf[Seq[Obj]])
+            case _      => false }
+          case _ => false }
     }
-  
-    // ---------------------------------------------------------------------------
+
+    // ===========================================================================
     object PathPair {
       def from(key: KeyW): PathPair = PathPair(KPath.from(key), optional = false)
     }

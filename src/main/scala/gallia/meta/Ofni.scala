@@ -49,9 +49,9 @@ case class Ofni(optional: Optional, infos: Seq[Info]) extends OfniLike {
     def transformNestedClass(target: Index)       (f: Cls  => Cls): Ofni = updateInfos(newInfos = infos.mapIndex           (__lookup(target))                (_.transformNestedClass(f)))
     def transformNestedClass(pred: Cls => Boolean)(f: Cls  => Cls): Ofni = updateInfos(newInfos = infos.mapAffectExactlyOne(_.nestedClassOpt.exists(pred))   (_.transformNestedClass(f)))
 
-    def transformNestedClass(target: UnionObjectDisambiguator)(f: Cls  => Cls): Ofni = target match { // TODO: validate first...
-        case DisambiguateByClassIndex    (index)   => transformNestedClass(index)(f)
-        case DisambiguateByClassPredicate(meta, _) => transformNestedClass(meta) (f) }
+    def transformNestedClass(target: UnionObjectDisambiguator)(f: Cls  => Cls): Ofni = target match {
+        case    DisambiguateByClassIndex(index) => transformNestedClass(index)(f)
+        case x: DisambiguateByClassPredicate    => transformNestedClass(x.meta) (f) }
 
     // ---------------------------------------------------------------------------
     def updateSoleInfo                    (newValue: Info): Ofni = transformSoleInfo                   (_ => newValue)

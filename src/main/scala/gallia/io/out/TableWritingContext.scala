@@ -66,8 +66,8 @@ case class TableWritingContext(
     private[out] def formatValue(arraySeparator: String)(value: Any): String = // TODO: use schema rather than pattern match (see t210115095838)
       value match {
         case seq: Seq[_] => seq.head match { // guaranteed non-empty by design (else None, not Nil)                    
-          case obj: Obj    => seq.map(_.asInstanceOf[Obj]).pipe(Objs.from).formatCompactJson
-          case sgl         => seq.map(data.DataFormatting.formatBasicValue).mkString(arraySeparator) }            
+          case _: Obj      => seq.map(_.asInstanceOf[Obj]).pipe(Objs.from).formatCompactJson
+          case _           => seq.map(data.DataFormatting.formatBasicValue).mkString(arraySeparator) }
         case objs: Objs => objs.formatCompactJson // TODO: check can happen?
         case obj : Obj  => obj .formatCompactJson
         case sgl        => data.DataFormatting.formatBasicValue(sgl) }

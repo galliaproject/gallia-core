@@ -10,13 +10,15 @@ object AtomsUUTransforms {
   case class _TransformWW(pair: PathPair, f: _ff11, checkType: Boolean) extends AtomUU { def naive(o: Obj): Obj = o.transformWhateverPathPair(pair, f, checkType) }
 
   // ---------------------------------------------------------------------------
-  case class _Transform1to1 (ori: PathPair1, des: KPaths1,                    f: _ff11) extends AtomUU { def naive(o: Obj): Obj =                        ori.lookup(o).pipe(f).pipe { v1  => o.put(des, v1) } }
-  case class _Transform1to1b(ori: PathPair1, des: KPaths1,                    f: _ff11) extends AtomUU { def naive(o: Obj): Obj =             util.Try { ori.lookup(o).pipe(f).pipe { v1  => o.put(des, v1) } }.getOrElse(o) }
-  case class _Transform1to1c(ori: PathPair1, des: KPaths1, p: Obj => Boolean, f: _ff11) extends AtomUU { def naive(o: Obj): Obj = if (ori.matches(p)(o)) ori.lookup(o).pipe(f).pipe { v1  => o.put(des, v1) } else o }
+  case class _Transform1to1 (ori: PathPair1, des: KPaths1,                         f: _ff11) extends AtomUU { def naive(o: Obj): Obj =                         ori.lookup(o).pipe(f).pipe { v1  => o.put(des, v1) } }
+  case class _Transform1to1b(ori: PathPair1, des: KPaths1,                         f: _ff11) extends AtomUU { def naive(o: Obj): Obj =              util.Try { ori.lookup(o).pipe(f).pipe { v1  => o.put(des, v1) } }.getOrElse(o) }
+  case class _Transform1to1U(ori: PathPair1, des: KPaths1, p:     Obj  => Boolean, f: _ff11) extends AtomUU { def naive(o: Obj): Obj = if (ori.matchesU(p)(o)) ori.lookup(o).pipe(f).pipe { v1  => o.put(des, v1) } else o }
+  case class _Transform1to1Z(ori: PathPair1, des: KPaths1, p: Seq[Obj] => Boolean, f: _ff11) extends AtomUU { def naive(o: Obj): Obj = if (ori.matchesZ(p)(o)) ori.lookup(o).pipe(f).pipe { v1  => o.put(des, v1) } else o }
 
-    object _Transform1to1  { def replace                   (f: _ff11)(ori: PathPair1): _Transform1to1  = _Transform1to1 (ori, ori.path, f) }
-    object _Transform1to1b { def replace                   (f: _ff11)(ori: PathPair1): _Transform1to1b = _Transform1to1b(ori, ori.path, f) }
-    object _Transform1to1c { def replace(p: Obj => Boolean, f: _ff11)(ori: PathPair1): _Transform1to1c = _Transform1to1c(ori, ori.path, p, f) }
+    object _Transform1to1  { def replace                        (f: _ff11)(ori: PathPair1): _Transform1to1  = _Transform1to1 (ori, ori.path, f) }
+    object _Transform1to1b { def replace                        (f: _ff11)(ori: PathPair1): _Transform1to1b = _Transform1to1b(ori, ori.path, f) }
+    object _Transform1to1U { def replace(p:     Obj  => Boolean, f: _ff11)(ori: PathPair1): _Transform1to1U = _Transform1to1U(ori, ori.path, p, f) }
+    object _Transform1to1Z { def replace(p: Seq[Obj] => Boolean, f: _ff11)(ori: PathPair1): _Transform1to1Z = _Transform1to1Z(ori, ori.path, p, f) }
 
   case class _Transform1to2 (ori: PathPair1, des: KPaths2,  f: _ff12) extends AtomUU { def naive(o: Obj): Obj = ori.lookup(o).pipe(f).pipe { case (v1, v2)                                  => o.put(des.entries(v1, v2) ) } }
   case class _Transform1to3 (ori: PathPair1, des: KPaths3,  f: _ff13) extends AtomUU { def naive(o: Obj): Obj = ori.lookup(o).pipe(f).pipe { case (v1, v2, v3)                              => o.put(des.entries(v1, v2, v3) ) } }

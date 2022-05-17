@@ -36,8 +36,8 @@ object ActionsUUTransforms {
       def atomuus(c: Cls): AtomUUs = resolve(c).flatMap(_trnsf.transformData(c, _Single)) } //TODO: can only be one target actually
 
     // ===========================================================================
-    case class TransformZZ(target: TqRPathz, f: HeadZ => HeadZ) extends ActionUUb with HasTqRPathzTarget {
-      private val _trnsf: NestedTransform = utils.NestedTransform.parseZZ(f)
+    case class TransformZZ(target: TqRPathz, disambiguatorOpt: UnionObjectDisambiguatorOpt, f: HeadZ => HeadZ) extends ActionUUb with HasTqRPathzTarget {
+      private val _trnsf: NestedTransform = utils.NestedTransform.parseZZ(disambiguatorOpt)(f)
 
       // ---------------------------------------------------------------------------
       def  vldt(c: Cls): Errs =
@@ -189,8 +189,9 @@ object ActionsUUTransforms {
     private def checkUOrZInput(c: Cls, multiple: Boolean, paths: KPathz): Errs =
       paths
         .filterNot { path =>
-          (!multiple && c.isSingle  (path) ||
-            multiple && c.isMultiple(path)) &&
+          (!multiple && c.hasSingle  (path) ||
+            multiple && c.hasMultiple(path)) &&
+          // FIXME: t220517120657 - ensure rightcombination
           c.hasNesting(path) }
         .in.noneIf(_.isEmpty).toSeq
         .flatMap { invalidPaths =>

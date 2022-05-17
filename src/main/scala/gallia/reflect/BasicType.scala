@@ -77,14 +77,13 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
       private val lookup: Map[FullName, BasicType] = BasicTypeUtils.createLookup(values)
 
     // ===========================================================================
-    // note: excluding Char and Unit intentionally
-
     // TODO:
     // - t210108114447 - support own "flag" type?
     // - t210109142406 - dedicated matrix/tensor object (dense/sparse); look into existing libraries
     // - t210110094829 - accept Obj as value, albeit the standalone version (see t210104164037)
     // - t210110095252 - CLOB
     // - change names upon serialization (eg "string" instead of _String)
+    // - t220513135713 - provide built-in "Char" enum
 
     // ---------------------------------------------------------------------------
     case object _String extends UnparameterizedBasicType {

@@ -6,10 +6,9 @@ object AtomsUUUnionTypes {
 
   case class _FuseToUnion(origin1: Key, origin2: Key, dest: Key) extends AtomUU { def naive(o: Obj) =
       (o.attemptKey(origin1), o.attemptKey(origin2)) match {
+        case (None    , None    ) => o
         case (Some(x1), None    ) => o.add(dest, x1).remove(origin1)
         case (None    , Some(x2)) => o.add(dest, x2).remove(origin2)
-
-        // t220517105833 - allow optionals?
         case _                    => _Error.Runtime.NotAPartition(Keyz(Seq(origin1, origin2))).throwDataError(o) } }
 
     // ---------------------------------------------------------------------------

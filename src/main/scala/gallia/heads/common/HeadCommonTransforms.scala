@@ -28,7 +28,7 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
     // ===========================================================================
     trait ___TransformU {
         protected val target: Transform[HeadU]
-        protected val disambiguatorOpt: Option[UnionObjectDisambiguator] = None
+        protected val disambiguatorOpt: Option[UnionObjectDisambiguator] = None // TODO: t220517123057: support for UZ and UV
 
         // ---------------------------------------------------------------------------
         def using         (f: HeadU => HeadU)                            : Self2 = self2 :+ TransformUU    (tqqpathz(target), disambiguatorOpt, f)
@@ -52,7 +52,7 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
     // ===========================================================================
     trait ___TransformZ {
         protected val target: Transform[HeadZ]
-        protected val disambiguatorOpt: Option[UnionObjectDisambiguator] = None
+        protected val disambiguatorOpt: Option[UnionObjectDisambiguator] = None // TODO: t220517123057: support for ZU and ZV
 
         // ---------------------------------------------------------------------------
         def using         (f: HeadZ => HeadZ)                            : Self2 = self2 :+ TransformZZ    (tqqpathz(target), disambiguatorOpt, f)

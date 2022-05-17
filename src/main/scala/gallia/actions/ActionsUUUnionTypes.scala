@@ -20,7 +20,6 @@ object ActionsUUUnionTypes {
       def  vldt(c: Cls ): Errs =
         Seq(_vldt.fieldPresence(c, origin), _vldt.fieldsAbsence(c, Seq(dest1, dest2))).flatten
           .orIfEmpty(_vldt.checkIsUnionField(c)(origin))
-          .orIfEmpty(_vldt.checkRequired(c, KPathz.from(origin))) // limited to partitions for now (see t220517105833)
           .orIfEmpty(c.field(origin).pipe(_Error.MoreThanOneNesting).errsIf(
             _.infos.filter(_.isNesting).size > 1) /* TODO: t220511152605: a version that allows more (more complex) */)
 

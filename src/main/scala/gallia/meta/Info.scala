@@ -51,6 +51,9 @@ case class Info(
 
     // ---------------------------------------------------------------------------
     def ofnu(optional: Optional): Ofnu = Ofnu(optional, multiple, containee)
+
+    // ===========================================================================
+    def valuePredicate(value: Any): Boolean = containee.valuePredicate(if (multiple) value.asInstanceOf[Seq[_]].head else value)
   }
 
   // ===========================================================================

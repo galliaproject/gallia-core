@@ -125,10 +125,10 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
     def updateType(target: RPathz, fromNode: TypeNode, toNode: TypeNode): Cls = target.foldLeft(this)(_.updateType(_, fromNode, toNode))
 
     // ---------------------------------------------------------------------------
-    def updateTypex(target: Key   , fromNode: TypeNode, toNode: TypeNode): Cls = transformField(target) { field =>
+    def updateTypex(target: Key, fromNode: TypeNode, toNode: TypeNode): Cls = transformField(target) { field =>
       field.updateSpecificContainee(
-        fromNode.forceNonBObjInfo(enmOpt(field.key)).containee /* TODO validate: t220516133530 */,
-          toNode.forceNonBObjInfo(enmOpt(target)).containee) }
+        fromNode.forceNonBObjInfo(enmOpt(field.key)).containee,
+          toNode.forceNonBObjInfo(enmOpt(target))   .containee) }
     def updateTypex(target: Ren   , fromNode: TypeNode, toNode: TypeNode): Cls = rename(target).updateTypex(target.to, fromNode, toNode)
 
     def updateTypex(target: KPath , fromNode: TypeNode, toNode: TypeNode): Cls = transformx(target)(_.updateTypex(_, fromNode, toNode), _.updateTypex(_, fromNode, toNode))

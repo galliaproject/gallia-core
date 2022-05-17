@@ -20,13 +20,14 @@ object ActionsUUUnionTypes {
       def  vldt(c: Cls ): Errs =
         Seq(_vldt.fieldPresence(c, origin), _vldt.fieldsAbsence(c, Seq(dest1, dest2))).flatten
           .orIfEmpty(_vldt.checkIsUnionField(c)(origin))
+          .orIfEmpty(_vldt.checkRequired(c, KPathz.from(origin))) // limited to partitions for now (see t220517105833)
           .orIfEmpty(c.field(origin).pipe(_Error.MoreThanOneNesting).errsIf(
             _.infos.filter(_.isNesting).size > 1) /* TODO: t220511152605: a version that allows more (more complex) */)
 
       // ---------------------------------------------------------------------------
       def _meta(c: Cls ): Cls    = c.fissionFromUnion(origin)(dest1, dest2)
-      def atomuu(c: Cls): AtomUU = c.field(origin).containees.force.tuple2.pipe { case (bsc1, bsc2) =>
-        _FissionFromUnion(origin, dest1, dest2, bsc1.valuePredicate, bsc2.valuePredicate) } }
+      def atomuu(c: Cls): AtomUU = c.field(origin).infos.force.tuple2.pipe { case (info1, info2) =>
+        _FissionFromUnion(origin, dest1, dest2, info1.valuePredicate, info2.valuePredicate) } }
 
 }
 

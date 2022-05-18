@@ -83,17 +83,16 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
     def aobj (o: Obj)             : AObj  = AObj (this, o)
     def aobjs(o1: Obj, more: Obj*): AObjs = AObjs(this, Objs.from(o1 +: more))
 
-    def toObj : Obj = MetaObj.cls(this)
-    @deprecated
-    def toObj2: Obj = MetaObj.cls(this)
+    // ---------------------------------------------------------------------------
+    def toObj : Obj = MetaObj2.clsToObj(this)
 
     // ===========================================================================
     def formatJson        = toObj.formatCompactJson
     def formatCompactJson = toObj.formatCompactJson
     def formatPrettyJson  = toObj.formatPrettyJson
 
-    def formatShort0: String = MetaObj.formatClassDebug(this)
-    def formatShort : String = MetaObj.formatClassDebug(this).sectionAllOff("<root>")
+    def formatShort0: String = MetaObj0.formatClassDebug(this)
+    def formatShort : String = MetaObj0.formatClassDebug(this).sectionAllOff("<root>")
     def formatFull  : String = ???//MetaObj.cls (this)
 
     def printShort() = { formatShort.p; () }
@@ -247,9 +246,9 @@ object Cls {
 
   // ---------------------------------------------------------------------------
   // TODO: or also detect file vs direct object?
-  def fromFile  (schemaFilePath: String): Cls = meta.MetaObj.clsFromFile  (schemaFilePath)
-  def fromString(value: String)         : Cls = meta.MetaObj.clsFromString(value)
-  def fromObj   (value: Obj)            : Cls = meta.MetaObj.cls          (value)
+  def fromFile  (schemaFilePath: String): Cls = meta.MetaObj1.clsFromFile  (schemaFilePath)
+  def fromString(value: String)         : Cls = meta.MetaObj1.clsFromString(value)
+  def fromObj   (value: Obj)            : Cls = meta.MetaObj1.clsFromObj   (value)
 
   // ---------------------------------------------------------------------------
   def from(keys: Seq[ Key]): Cls = from(keys.map(_.name))

@@ -14,6 +14,8 @@ object AtomsCustom {
   case class _CustomOV(f: Obj  => Vle ) extends AtomUV { def naive(o: Obj ) = f(o) }
   case class _CustomZV(f: Objs => Vle ) extends AtomZV { def naive(z: Objs) = f(z) }
 
+  // ===========================================================================
+  case class _CustomConditionalOO(p: Obj => Boolean, f: Obj => Obj) extends AtomUU { def naive(o: Obj) = if (!p(o)) o else f(o) }
 }
 
 // ===========================================================================

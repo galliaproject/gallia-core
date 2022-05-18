@@ -9,6 +9,7 @@ import target._
 case class Cls(fields: Seq[Fld]) // TODO: as List?
       extends meta.Containee
       with    ClsLike
+
       with    ClsHelper
       with    ClsNesting
       with    ClsBasics
@@ -44,7 +45,7 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
       def formatDefault =
         fields
           .map(_.formatDefault)
-          .section(nameOpt.map(_.quote.colon).getOrElse("cls:"))
+          .section(nameOpt.map(_.quote.colon).getOrElse(""))
 
     // ---------------------------------------------------------------------------
     def merge(that: Cls): Cls = Cls(this.fields ++ that.fields)
@@ -209,6 +210,10 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
 
     def    toMultiple(path: RPath): Cls = transformx(path)(_    toMultiple _, _    toMultiple _)
     def toNonMultiple(path: RPath): Cls = transformx(path)(_ toNonMultiple _, _ toNonMultiple _)
+
+    // ===========================================================================
+    def metaSchema: Cls  = MetaSchema.withDepth(maxDepth)
+    def metaAObj  : AObj = AObj(metaSchema, toObj)
   }
 
 // ===========================================================================
@@ -239,9 +244,11 @@ object Cls {
     def oneDouble (key: KeyW): Cls = Cls(List(key.value.double))
 
   // ---------------------------------------------------------------------------
-  def fromFile  (schemaFilePath: String): Cls = meta.MetaObj.clsFromFile  (schemaFilePath) // TODO: or also detect file vs direct object?
-  def fromString(value: String)         : Cls = meta.MetaObj.clsFromString(value)          // TODO: or also detect file vs direct object?
-  
+  // TODO: or also detect file vs direct object?
+  def fromFile  (schemaFilePath: String): Cls = meta.MetaObj.clsFromFile  (schemaFilePath)
+  def fromString(value: String)         : Cls = meta.MetaObj.clsFromString(value)
+  def fromObj   (value: Obj)            : Cls = meta.MetaObj.cls          (value)
+
   // ---------------------------------------------------------------------------
   def from(keys: Seq[ Key]): Cls = from(keys.map(_.name))
   def from(keys: Seq[SKey])(implicit di: DI): Cls =

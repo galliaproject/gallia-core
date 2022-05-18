@@ -37,10 +37,13 @@ class NestedTransform(disambiguatorOpt: UnionObjectDisambiguatorOpt, adag: MetaP
   // meta
 
   def  generateMeta(c: Cls, from: KPath)  : Cls = c.forceNestedClass(from).pipe(_meta)
-  def transformMeta(c: Cls, paths: RPathz): Cls = paths.foldLeft(c) { _.transformNestedClass(disambiguatorOpt)(_)(_meta) }
+
+  // ---------------------------------------------------------------------------
+  def transformMeta(c: Cls, path : KPath) : Cls =                     c.transformNestedClass(disambiguatorOpt)(path)(_meta)
+  def transformMeta(c: Cls, paths: RPathz): Cls = paths.foldLeft(c) { _.transformNestedClass(disambiguatorOpt)(_)   (_meta) }
 
       /*private - needed for forkey */
-      def _meta(cc: Cls): Cls = adag.runMeta(rootId, cc).forceLeafClass
+      def _meta(c: Cls): Cls = adag.runMeta(rootId, c).forceLeafClass
 
   // ===========================================================================
   // meta to data

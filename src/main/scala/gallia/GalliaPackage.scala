@@ -8,10 +8,10 @@ package object gallia
     with    Annotations {
 
   private[gallia] implicit class GalliaAnything_[A](value: A) { // so as to not import chaining._ everywhere
-    def pipe[B](f: A => B)   : B =   f(value)
-    def tap [B](f: A => Unit): A = { f(value); value }
-    def _p                   : A = { System.out.println(  value ); value }
-    def _i(f: A => Any)      : A = { System.out.println(f(value)); value } }
+    private[gallia] def pipe[B](f: A => B)   : B =   f(value)
+    private[gallia] def tap [B](f: A => Unit): A = { f(value); value }
+    private[gallia] def _p                   : A = { System.out.println(  value ); value }
+    private[gallia] def _i(f: A => Any)      : A = { System.out.println(f(value)); value } }
 
   // ---------------------------------------------------------------------------
   private[gallia] implicit class GalliaSeq[T](val seq: Seq[T]) extends GalliaUtils.GalliaSeq[T] // TODO: to aptus if generalizes well?

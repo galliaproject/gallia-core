@@ -36,8 +36,8 @@ case class Fld(key: Key, ofni: Ofni) extends FldLike {
     def transformSoleContainee                             (f: Containee => Containee): Fld = transformSoleInfo(_.transformContainee(f))
 
     // ---------------------------------------------------------------------------
-    def transformNestedClasses                     (f: Cls  => Cls): Fld = transformOfni(_.transformNestedClasses      (f))
-    def transformSoleNestedClass                   (f: Cls  => Cls): Fld = transformOfni(_.transformSoleNestedClass    (f))
+    def transformNestedClasses  (f: Cls  => Cls): Fld = transformOfni(_.transformNestedClasses  (f))
+    def transformSoleNestedClass(f: Cls  => Cls): Fld = transformOfni(_.transformSoleNestedClass(f))
 
     def transformNestedClass(target   : UnionObjectDisambiguator)   (f: Cls  => Cls): Fld = transformOfni(_.transformNestedClass(target)(f))
     def transformNestedClass(targetOpt: UnionObjectDisambiguatorOpt)(f: Cls  => Cls)(implicit di: DI): Fld =

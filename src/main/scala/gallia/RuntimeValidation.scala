@@ -19,6 +19,7 @@ object RuntimeValidation { import meta._ // 210115153346 - POC
   }
 
   // ===========================================================================
+  // TODO: t220517132701 - support union types
   def validate(c: Cls)(o: Obj): Pes[ValErr] = rec(c)(o).in.noneIf(_.isEmpty)
 
     // ---------------------------------------------------------------------------

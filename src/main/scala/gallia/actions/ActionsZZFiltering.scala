@@ -4,7 +4,6 @@ package actions
 import target._
 import FunctionWrappers.{_pp11, _pp21, _pp31}
 import atoms.AtomsZZFiltering._
-import gallia.FunctionWrappers._pp21
 import gallia.Whatever._
 
 // ===========================================================================
@@ -41,7 +40,7 @@ object ActionsZZFiltering {
         def atomzz(c: Cls): AtomZZ = target.pathPairT(c).pipe(_FilterBy3(_, pred, max)) }
 
     // ===========================================================================
-    case class FilterByU[T](target: TtqKPath, pred: HeadU => HeadV[Boolean], asFind: Boolean)
+    case class FilterByU(target: TtqKPath, pred: HeadU => HeadV[Boolean], asFind: Boolean)
           extends ActionZZc with IdentityM1 with HasAsFind {
         def  vldt  (c: Cls): Errs   = Nil//TODO parseUV(pred)._vldt(nestedC)
         def  atomzz(c: Cls): AtomZZ =
@@ -53,7 +52,7 @@ object ActionsZZFiltering {
                 .pipe(_FilterBy1(pathPair, _, max)) } }
 
     // ---------------------------------------------------------------------------
-    case class FilterByZ[T](target: TtqKPath, pred: HeadZ => HeadV[Boolean], asFind: Boolean)
+    case class FilterByZ(target: TtqKPath, pred: HeadZ => HeadV[Boolean], asFind: Boolean)
           extends ActionZZc with IdentityM1 with HasAsFind {
         def  vldt  (c: Cls): Errs   = Nil//TODO parseUV(pred)._vldt(nestedC)
         def  atomzz(c: Cls): AtomZZ =

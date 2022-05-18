@@ -93,6 +93,9 @@ trait ClsLike { // read-only part
     // ===========================================================================
     private[gallia] def enmOpt(target: Key): Option[_Enm] = field(target).basicTypesOpt.toSeq.flatten.flatMap(_.enmOpt).force.option
 
+    // ---------------------------------------------------------------------------
+    def maxDepth: aptus.Depth = fields.map(_.containees.map(_.nestingOpt.map(_.maxDepth + 1).getOrElse(0)).max).max
+
     // ===========================================================================
     //TODO: get fld-like, nested cls-like
 }

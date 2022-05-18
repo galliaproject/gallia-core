@@ -162,6 +162,9 @@ import meta._
       // ---------------------------------------------------------------------------
       case class NotExactlyOneNestedClass(target: Fld) extends _Error3 { val errorId = "220517100834"; val label = "NotExactlyOneNestedClass" }
 
+      // ---------------------------------------------------------------------------
+      case class SchemaMustNotChange(c1: Cls, c2: Cls) extends _Error3 { val errorId = "220518124640"; val label = "SchemaMustNotChange" }
+
       // ===========================================================================
       object Runtime {
 

@@ -7,7 +7,7 @@ import actions.ActionsUUUnionTypes
 
 // ===========================================================================
 trait HeadCommon[F <: HeadCommon[F]]
-      extends heads.Head               [F]
+      extends heads.Head                   [F]
 
       with    HeadCommonVeryBasics         [F]
       with    HeadCommonSomewhatBasics     [F]
@@ -19,7 +19,8 @@ trait HeadCommon[F <: HeadCommon[F]]
       with    HeadCommonFission            [F]
       with    HeadCommonGenerusion         [F]
       with    HeadCommonGenerission        [F]
-      with    HeadCommonMiscTransformations[F] {
+      with    HeadCommonMiscTransformations[F]
+      with    HeadCommonTransformObjectIf  [F] {
 
     def fullDag: ActionDag = env.Env.retrieveDagFromNode(nodeId)
     def showFullGraph(): Self2 = ???//fullDag.pipe(misc.CanDot.showGraph)

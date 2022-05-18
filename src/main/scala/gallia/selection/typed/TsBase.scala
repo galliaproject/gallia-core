@@ -55,6 +55,8 @@ private[typed] trait TsBase {
     object Transform   extends TsBase { type From = TsOps.Transform  ; val from = new From {} }
     object FilterBy1   extends TsBase { type From = TsOps.FilterBy1  ; val from = new From {} }
     object FilterByT   extends TsBase { type From = TsOps.FilterByT  ; val from = new From {} }
+
+    object TransformSomeObjects extends TsBase { type From = TsOps.TransformSomeObjects; val from = new From {} }
   }
 
 // ===========================================================================

@@ -35,8 +35,13 @@ trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F]
   def transformStringToLocalTime    (k: RPathW) = transformString(k).using(_.parseLocalTime     /* from aptus */)
 
   // ---------------------------------------------------------------------------
-  def transformObject (k: RPathW) = transform(_.obj (k.value)) // TODO: rename to convey 1 (as oppose to x)
-  def transformObjects(k: RPathW) = transform(_.objz(k.value))
+  def transformObject    (k: RPathW): _TransformU = transform(_.obj (k.value)) // TODO: rename to convey 1 (as oppose to x)
+  def transformAllObjects(k: RPathW): _TransformZ = transform(_.objz(k.value))
+
+  @deprecated("use more explicit transformAllObjects") def transformObjects(k: RPathW) = transformAllObjects(k)
+
+  // ---------------------------------------------------------------------------
+  def transformSomeObjects(k: RPathW): _TransformSomeObjects = new _TransformSomeObjects(k)
 
     // ---------------------------------------------------------------------------
     def transformGroupObjectsUsing         (f: HeadZ => HeadZ)                    : Self2 = transform(_.objz(_group))   .using(f)

@@ -23,7 +23,7 @@ trait HasContainees {  // see t210125111338 (union types)
       .pipe { ncs => disambiguatorOpt.map(_.filter(ncs)).getOrElse(ncs) }
 
   // ---------------------------------------------------------------------------
-  def forceNestedClass  :     Cls  = nestedClassOpt.get
+  def forceNestedClass: Cls = nestedClassOpt.get
   def forceNestedClass(disambiguatorOpt: UnionObjectDisambiguatorOpt): Cls  = nestedClassesOpt(disambiguatorOpt).ifOneOrElse(errorMessage = _.map(_.nameOpt) -> disambiguatorOpt)
 
   // ---------------------------------------------------------------------------

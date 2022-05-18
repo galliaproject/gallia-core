@@ -1,80 +1,124 @@
 package gallia
 package meta
 
-import aptus.String_
+import aptus._
+import GalliaUtils.Seq__
 
 // ===========================================================================
-case class SubInfo(
-          multiple : Multiple,
-          valueType: ValueType)
-        extends HasSingleValueType {
+case class Info(
+       optional: Optional,
+       union   : Seq[SubInfo])
+      extends InfoLike {
 
+    override protected val _info: Info = this
+
+    // ---------------------------------------------------------------------------
+    union
+      .requireNonEmpty
+      .requireDistinct
+
+    // ===========================================================================
+    @deprecated def container1: Container = Container.from(optional, subInfo1.multiple)
+
+    // ---------------------------------------------------------------------------
+    def forceContainer: Container = Container.from(optional, union.map(_.multiple).distinct.force.one)
+    def forceInfo1     : Info1      = forceSubInfo.pipe { subInfo => Info1(optional, subInfo.multiple, subInfo.valueType) }
+
+    // ===========================================================================
     override def toString = formatDefault
-
-      // ---------------------------------------------------------------------------
       def formatDefault: String =
-        valueType match {
-          case basic: BasicType =>
-            if (multiple) s"${formatMultiple(multiple)}:${basic}"
-            else          s"${basic}"
-          case nesting: Cls => s"${formatMultiple(multiple)}\t${nesting.formatDefault.sectionAllOff}" }
+        //  see t210125111338 (union types)
+        if (optional) s"${formatOptional(optional)}\t${union.map(_.formatDefault).join("|")}"
+        else                                           union.map(_.formatDefault).join("|")
 
     // ===========================================================================
-    def transformValueType  (f: ValueType => ValueType): SubInfo = copy(valueType = f(this.valueType))
-    def transformBasicType  (f: BasicType => BasicType): SubInfo = copy(valueType = f(this.valueType.leafOpt   .get))
-    def transformNestedClass(f: Cls       => Cls      ): SubInfo = copy(valueType = f(this.valueType.nestingOpt.get))
+    private def updateSubInfos(newSubInfos: Seq[SubInfo]) = copy(union = newSubInfos.distinct)
 
-    // ---------------------------------------------------------------------------
-    def updateValueType(newValue: BasicType): SubInfo = transformValueType(_ => newValue)
-    def updateValueType(newValue: Cls)      : SubInfo = transformValueType(_ => newValue)
-    def updateValueType(newValue: ValueType): SubInfo = transformValueType(_ => newValue)
+      def toSingle  : Info = updateSubInfos(newSubInfos = union.map(_.toSingle))
+      def toMultiple: Info = updateSubInfos(newSubInfos = union.map(_.toMultiple))
 
-    // ---------------------------------------------------------------------------
-    def updateMultiple(newValue: Multiple): SubInfo = copy(multiple = newValue)
+      def toRequired: Info = copy(optional = false)
+      def toOptional: Info = copy(optional = true)
 
     // ===========================================================================
-    def isMultiple: Boolean =  multiple // for consistency
-    def isSingle  : Boolean = !multiple
+    def transformSoleSubInfo                               (f: SubInfo => SubInfo)    : Info = updateSubInfos(newSubInfos = f(subInfo1))
+    def transformAllSubInfos                               (f: SubInfo => SubInfo)    : Info = updateSubInfos(newSubInfos = union.map(f))
+    def transformSpecificSubInfo  (p: SubInfo   => Boolean)(f: SubInfo => SubInfo)    : Info = updateSubInfos(newSubInfos = union.mapAffectExactlyOne(p)(f)) // see t210125111338 (union types)
+    def transformSpecificValueType(p: ValueType => Boolean)(f: ValueType => ValueType): Info = updateSubInfos(newSubInfos = union.mapAffectExactlyOne(_.valueType.pipe(p))(_.transformValueType(f)))
 
     // ---------------------------------------------------------------------------
-    def toMultiple: SubInfo = copy(multiple = true)
-    def toSingle  : SubInfo = copy(multiple = false)
+    def transformNestedClasses                    (f: Cls  => Cls): Info = updateSubInfos(newSubInfos = union.mapIf              (_.isNesting)                     (_.transformNestedClass(f)))
+    def transformSoleNestedClass                  (f: Cls  => Cls): Info = updateSubInfos(newSubInfos = union.mapAffectExactlyOne(_.isNesting)                     (_.transformNestedClass(f)))
+    def transformNestedClass(target: Cls)         (f: Cls  => Cls): Info = updateSubInfos(newSubInfos = union.mapAffectExactlyOne(_.nestedClassOpt == Some(target))(_.transformNestedClass(f)))
+    def transformNestedClass(target: Index)       (f: Cls  => Cls): Info = updateSubInfos(newSubInfos = union.mapIndex           (__lookup(target))                (_.transformNestedClass(f)))
+    def transformNestedClass(pred: Cls => Boolean)(f: Cls  => Cls): Info = updateSubInfos(newSubInfos = union.mapAffectExactlyOne(_.nestedClassOpt.exists(pred))   (_.transformNestedClass(f)))
+
+    def transformNestedClass(target: UnionObjectDisambiguator)(f: Cls  => Cls): Info = target match {
+        case    DisambiguateByClassIndex(index) => transformNestedClass(index)(f)
+        case x: DisambiguateByClassPredicate    => transformNestedClass(x.meta) (f) }
 
     // ---------------------------------------------------------------------------
-    def isEnmMatching(multiple: Multiple): Boolean = isEnm && this.multiple == multiple
+    def updateSoleSubInfo                       (newValue: SubInfo): Info = transformSoleSubInfo                   (_ => newValue)
+    def updateSpecificSubInfo(oldValue: SubInfo, newValue: SubInfo): Info = transformSpecificSubInfo(_ == oldValue)(_ => newValue) // see t210125111338 (union types)
+
+    // ---------------------------------------------------------------------------
+    def updateValueType  (valueType: ValueType): Info = transformSoleSubInfo(_.updateValueType(valueType))
+    def updateOptionality(value: Optional)     : Info = copy(optional = value)
 
     // ===========================================================================
-    @PartialTypeMatching
-      def toBoolean: SubInfo = copy(valueType = BasicType._Boolean)
-      def toInt    : SubInfo = copy(valueType = BasicType._Int)
-      def toDouble : SubInfo = copy(valueType = BasicType._Double)
-
-    // ---------------------------------------------------------------------------
-    def info1(optional: Optional): Info1 = Info1(optional, multiple, valueType)
-
-    // ===========================================================================
-    def valuePredicate(value: Any): Boolean = valueType.valuePredicate(if (multiple) value.asInstanceOf[Seq[_]].head else value)
+    def potentiallyProcessNesting(value: AnyValue): AnyValue =
+      nestedClassOpt
+        .map { nestedClass =>
+          container1.containerWrap(nestedClass.valueToObj)(value) }
+        .getOrElse(value)
   }
 
   // ===========================================================================
-  object SubInfo {
-    def single  (basic: BasicType.type => BasicType): SubInfo = SubInfo(_Single,   basic(BasicType))
-    def multiple(basic: BasicType.type => BasicType): SubInfo = SubInfo(_Multiple, basic(BasicType))
+  object Info {
+    def required(subInfo: SubInfo) = Info(_Required, Seq(subInfo))
+    def optional(subInfo: SubInfo) = Info(_Optional, Seq(subInfo))
 
     // ---------------------------------------------------------------------------
-    def single  (c: Cls): SubInfo = SubInfo(_Single,   c)
-    def multiple(c: Cls): SubInfo = SubInfo(_Multiple, c)
+    def one(valueType: ValueType): Info = Info(_Required, Seq(SubInfo(_Single  , valueType)))
+    def opt(valueType: ValueType): Info = Info(_Optional, Seq(SubInfo(_Single, valueType)))
+    def nes(valueType: ValueType): Info = Info(_Required, Seq(SubInfo(_Multiple, valueType)))
+    def pes(valueType: ValueType): Info = Info(_Optional, Seq(SubInfo(_Multiple, valueType)))
 
     // ---------------------------------------------------------------------------
-    def string  : SubInfo = single  (_._String)
-    def int     : SubInfo = single  (_._Int)
-    def double  : SubInfo = single  (_._Double)
-    def boolean : SubInfo = single  (_._Boolean)
+    def one(basic: BasicType.type => BasicType): Info = Info(_Required, Seq(SubInfo(_Single  , basic(BasicType))))
+    def opt(basic: BasicType.type => BasicType): Info = Info(_Optional, Seq(SubInfo(_Single  , basic(BasicType))))
+    def nes(basic: BasicType.type => BasicType): Info = Info(_Required, Seq(SubInfo(_Multiple, basic(BasicType))))
+    def pes(basic: BasicType.type => BasicType): Info = Info(_Optional, Seq(SubInfo(_Multiple, basic(BasicType))))
 
-    def strings : SubInfo = multiple(_._String)
-    def ints    : SubInfo = multiple(_._Int)
-    def doubles : SubInfo = multiple(_._Double)
-    def booleans: SubInfo = multiple(_._Boolean)
+    // ---------------------------------------------------------------------------
+    def oneBoolean: Info = one(_._Boolean)
+    def oneInt    : Info = one(_._Int)
+    def oneDouble : Info = one(_._Double)
+    def oneString : Info = one(_._String)
+
+    // ---------------------------------------------------------------------------
+    def optBoolean: Info = opt(_._Boolean)
+    def optInt    : Info = opt(_._Int)
+    def optDouble : Info = opt(_._Double)
+    def optString : Info = opt(_._String)
+
+    // ===========================================================================
+    def forceFrom[T : WTT]: Info = TypeNode.parse[T].forceNonBObjInfo
+
+    // ===========================================================================
+    def combine(left: Info, right: Info): Info = { import gallia.vldt.SpecialCardiMode
+      require(
+        vldt.MetaValidationCompatibility.compatible(left, right, SpecialCardiMode.Normal),
+        (left, right))
+
+      val combinedContainer = Container.combine(left.container1, right.container1)
+
+      Info(
+        optional = combinedContainer.isOptional,
+        union    = Seq(SubInfo(
+          combinedContainer.isMultiple,
+          ValueType.combine(left.subInfo1.valueType, right.subInfo1.valueType))))
+    }
   }
 
 // ===========================================================================

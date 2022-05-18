@@ -5,9 +5,9 @@ import aptus.{String_, Seq_}
 import aptus.DebugString
 
 // ===========================================================================
-object MetaObj0 {
+object ClsToDebugString {
 
-  def formatClassDebug(value: Cls): DebugString =
+  def apply(value: Cls): DebugString =
     value
       .fields
       .map(formatFieldDebug)
@@ -35,7 +35,7 @@ object MetaObj0 {
           private def formatValueTypeDebug(value: ValueType): DebugString =
               value match {
                 case tipe   : BasicType => tipe.entryName
-                case nesting: Cls       => formatClassDebug(nesting).sectionAllOff }
+                case nesting: Cls       => apply(nesting).sectionAllOff }
 }
 
 // ===========================================================================

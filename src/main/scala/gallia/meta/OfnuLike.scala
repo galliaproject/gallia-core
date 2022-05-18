@@ -2,13 +2,13 @@ package gallia
 package meta
 
 // ===========================================================================
-trait OfnuLike
+trait Info1Like
   extends HasOptionalAndMultiple
-     with HasSingleContainee {
-  protected val _ofnu: Ofnu
+     with HasSingleValueType {
+  protected val _info1: Info1
 
   // ===========================================================================
-  def info: Info = Info(multiple, containee)
+  def subInfo: SubInfo = SubInfo(multiple, valueType)
 
   // ---------------------------------------------------------------------------
   @PartialTypeMatching

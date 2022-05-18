@@ -12,14 +12,14 @@ sealed trait ReducingType { // don't make enum (else can't use `values`)
 
     // ---------------------------------------------------------------------------
     final def field(          original: Fld): Fld = field(defaultKey, original)
-    final def field(key: Key, original: Fld): Fld = Fld(key, container.ofni(containee(original.isOptional, original.forceBasicType)))
+    final def field(key: Key, original: Fld): Fld = Fld(key, container.info(valueType(original.isOptional, original.forceBasicType)))
 
       // ---------------------------------------------------------------------------
       protected def container: Container = Container._One // only overriden by no grouping (remains Seq)
 
       // ---------------------------------------------------------------------------
-      protected def containee(optional: Boolean, originalType: BasicType): Containee =
-        ReducingTypeUtils.containee(this)(optional, originalType)
+      protected def valueType(optional: Boolean, originalType: BasicType): ValueType =
+        ReducingTypeUtils.valueType(this)(optional, originalType)
 
     // ---------------------------------------------------------------------------
     val defaultKey      : Key

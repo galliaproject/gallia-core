@@ -74,8 +74,8 @@ object RuntimeValidation { import meta._ // 210115153346 - POC
 
     // ---------------------------------------------------------------------------
     val multiplicityErrors: Option[ValErr] = {
-           if ( field.info1.isMultiple && !isMultiple) Some(ValErr(12, key, None, s"should be mult"))
-      else if (!field.info1.isMultiple &&  isMultiple) Some(ValErr(13, key, None, s"shouldn't be mult"))
+           if ( field.subInfo1.isMultiple && !isMultiple) Some(ValErr(12, key, None, s"should be mult"))
+      else if (!field.subInfo1.isMultiple &&  isMultiple) Some(ValErr(13, key, None, s"shouldn't be mult"))
       else                                             None }
 
     // ---------------------------------------------------------------------------
@@ -87,7 +87,7 @@ object RuntimeValidation { import meta._ // 210115153346 - POC
 
         // ---------------------------------------------------------------------------
         case Seq(Some(Left(() /* = object(s) */))) =>
-          field.info1.containee match {
+          field.subInfo1.valueType match {
 
             case basicTipe: BasicType => Some(ValErr(14, key, None, s"is obj but should be ${basicTipe}"))
 
@@ -110,7 +110,7 @@ object RuntimeValidation { import meta._ // 210115153346 - POC
 
         // ---------------------------------------------------------------------------
         case Seq(Some(Right(singleType))) =>
-          field.info1.containee match {
+          field.subInfo1.valueType match {
             case x: BasicType if x == singleType => None
             case e: _Enm =>
               if (singleType.isEnm)

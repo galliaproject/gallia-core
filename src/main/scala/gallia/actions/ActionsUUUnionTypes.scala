@@ -21,12 +21,12 @@ object ActionsUUUnionTypes {
         Seq(_vldt.fieldPresence(c, origin), _vldt.fieldsAbsence(c, Seq(dest1, dest2))).flatten
           .orIfEmpty(_vldt.checkIsUnionField(c)(origin))
           .orIfEmpty(c.field(origin).pipe(_Error.MoreThanOneNesting).errsIf(
-            _.infos.filter(_.isNesting).size > 1) /* TODO: t220511152605: a version that allows more (more complex) */)
+            _.union.filter(_.isNesting).size > 1) /* TODO: t220511152605: a version that allows more (more complex) */)
 
       // ---------------------------------------------------------------------------
       def _meta(c: Cls ): Cls    = c.fissionFromUnion(origin)(dest1, dest2)
-      def atomuu(c: Cls): AtomUU = c.field(origin).infos.force.tuple2.pipe { case (info1, info2) =>
-        _FissionFromUnion(origin, dest1, dest2, info1.valuePredicate, info2.valuePredicate) } }
+      def atomuu(c: Cls): AtomUU = c.field(origin).union.force.tuple2.pipe { case (subInfo1, subInfo2) =>
+        _FissionFromUnion(origin, dest1, dest2, subInfo1.valuePredicate, subInfo2.valuePredicate) } }
 
 }
 

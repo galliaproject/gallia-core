@@ -23,7 +23,7 @@ object ActionsUUGenerationOther { //TODO: t210111095156 separate all the Whateve
       protected val _trnsf: NestedTransform
 
       // ---------------------------------------------------------------------------
-      protected val metaF: Optional => Cls  => Ofni
+      protected val metaF: Optional => Cls  => Info
       protected val dataF: (Cls, PathPair) => _ff11
 
       // ---------------------------------------------------------------------------
@@ -42,7 +42,7 @@ object ActionsUUGenerationOther { //TODO: t210111095156 separate all the Whateve
     case class GenerateUU(target: TqKPath, newPath: KPath, f: HeadU => HeadU) extends _Generate(target, newPath) {
         protected val _trnsf = NestedTransform.parseUU(f)
 
-        protected val metaF = optional  => nc => Ofni(optional, Info(multiple = false, nc))
+        protected val metaF = optional  => nc => Info(optional, SubInfo(multiple = false, nc))
         protected val dataF = (nc, pair) => _trnsf.uu(nc.forceNestedClass(pair.path), pair.optional)
 
         // ---------------------------------------------------------------------------
@@ -52,7 +52,7 @@ object ActionsUUGenerationOther { //TODO: t210111095156 separate all the Whateve
       case class GenerateZZ(target: TqKPath, newPath: KPath, f: HeadZ => HeadZ) extends _Generate(target, newPath) {
         protected val _trnsf = NestedTransform.parseZZ(f)
 
-        protected val metaF = optional  => nc => Ofni(optional, Info(multiple = true, nc))
+        protected val metaF = optional  => nc => Info(optional, SubInfo(multiple = true, nc))
         protected val dataF = (c, pair) => _trnsf.zz(c.forceNestedClass(pair.path), pair.optional)
 
         // ---------------------------------------------------------------------------

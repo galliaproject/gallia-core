@@ -29,9 +29,9 @@ package object meta {
   // ===========================================================================
   /** PNF = Potentially Nested Field */
   // see t210125111338 (union types) - adapt
-  case class PNF(path: KPath, optional: Optional, multiple: Multiple, containee: Containee) extends HasKey with OfnuLike {
-    final override           val  key : Key  = path.key
-    final override protected val _ofnu: Ofnu = Ofnu(optional, multiple, containee) }
+  case class PNF(path: KPath, optional: Optional, multiple: Multiple, valueType: ValueType) extends HasKey with Info1Like {
+    final override           val  key  : Key   = path.key
+    final override protected val _info1: Info1 = Info1(optional, multiple, valueType) }
 
 }
 

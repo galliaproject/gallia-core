@@ -3,7 +3,7 @@ package actions
 
 import target._
 import FunctionWrappers._
-import meta.OfniLike
+import meta.InfoLike
 import atoms.AtomsUV._
 import atoms.AtomsAsserts._
 
@@ -21,7 +21,7 @@ object ActionsAsserts {
           _Error.MetaAssertionFailure.errsIf(test = !pred(c)) }
 
     // ---------------------------------------------------------------------------
-    case class AssertField(target: KPath, _error: _Error, pred: OfniLike => Boolean) extends IdentityM1 with IdentityUUa {
+    case class AssertField(target: KPath, _error: _Error, pred: InfoLike => Boolean) extends IdentityM1 with IdentityUUa {
           def vldt (c: Cls): Errs =
             _error.errsIf(test = !c.field_(target).exists(pred)) }
 
@@ -31,20 +31,20 @@ object ActionsAsserts {
           def vldt (c: Cls): Errs =
             _Error.ContainerAssertionFailure(target, container).errsIf(
                 !c.field_(target).exists(
-                    _.ofni.container1 == container)) }
+                    _.info.container1 == container)) }
 
       // ---------------------------------------------------------------------------
       //TODO: as predicate of rather
       case class AssertBasicType(target: KPath, basicType: BasicType) extends IdentityM1 with IdentityUUa {
             def vldt (c: Cls): Errs =
-              _Error.ContaineeAssertionFailure(target, basicType).errsIf(
+              _Error.ValueTypeAssertionFailure(target, basicType).errsIf(
                   !c.field_(target).exists(
                       _.areAllBasicType(basicType))) }
 
       // ---------------------------------------------------------------------------
       case class AssertUnionType(target: KPath, negated: Boolean) extends IdentityM1 with IdentityUUa {
             def vldt (c: Cls): Errs =
-              _Error.ContaineeAssertionFailure(target, null).errsIf(
+              _Error.ValueTypeAssertionFailure(target, null).errsIf(
                   !c.field_(target).exists(field =>
                       (!negated &&  field.isUnionType) ||
                       ( negated && !field.isUnionType))) }

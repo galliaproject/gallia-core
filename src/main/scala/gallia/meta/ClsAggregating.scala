@@ -37,7 +37,7 @@ trait ClsAggregating { self: Cls =>
     def aggregateN(rtipe: ReducingType)(groupers: Renz, groupees: Renz, as: Key): Cls =
       Cls(
           retain(groupers).fields :+
-          Fld(as, Ofni.one(retain(groupees).mapFields(_.toNonMultiple) )) )
+          Fld(as, Info.one(retain(groupees).mapFields(_.toNonMultiple) )) )
 
 
     // ---------------------------------------------------------------------------

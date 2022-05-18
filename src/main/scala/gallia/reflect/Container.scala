@@ -2,7 +2,7 @@ package gallia
 package reflect
 
 import enumeratum.{Enum, EnumEntry}
-import gallia.meta.{Ofni, Ofnu}
+import gallia.meta.{Info, Info1}
 
 // ===========================================================================
 sealed trait Container extends EnumEntry {
@@ -27,20 +27,20 @@ sealed trait Container extends EnumEntry {
         case Container._Pes => _.asInstanceOf[Option[Seq[_]]].map(_.map(f)) }
 
     // ---------------------------------------------------------------------------
-    def ofni(containee: meta.Containee): Ofni =
+    def info(valueType: meta.ValueType): Info =
       this match {
-        case Container._One => Ofni.one(containee)
-        case Container._Opt => Ofni.opt(containee)
-        case Container._Nes => Ofni.nes(containee)
-        case Container._Pes => Ofni.pes(containee) }
+        case Container._One => Info.one(valueType)
+        case Container._Opt => Info.opt(valueType)
+        case Container._Nes => Info.nes(valueType)
+        case Container._Pes => Info.pes(valueType) }
 
     // ---------------------------------------------------------------------------
-    def ofnu(containee: meta.Containee): Ofnu =
+    def info1(valueType: meta.ValueType): Info1 =
       this match {
-        case Container._One => Ofnu.one(containee)
-        case Container._Opt => Ofnu.opt(containee)
-        case Container._Nes => Ofnu.nes(containee)
-        case Container._Pes => Ofnu.pes(containee) }
+        case Container._One => Info1.one(valueType)
+        case Container._Opt => Info1.opt(valueType)
+        case Container._Nes => Info1.nes(valueType)
+        case Container._Pes => Info1.pes(valueType) }
   }
 
   // ===========================================================================

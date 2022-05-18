@@ -103,7 +103,7 @@ object ActionsUUSomewhatBasics {
         target.qpathz_(c).pipe { qpathz =>
           toOpt match {
             case None     => c.rename    (qpathz)
-            case Some(to) => c.updateOfni(qpathz, to.forceNonBObjOfni) } }
+            case Some(to) => c.updateInfo(qpathz, to.forceNonBObjInfo) } }
 
       // ---------------------------------------------------------------------------
       def atomuus(c: Cls): AtomUUs = target.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, _helper.Translate.wrap(mapping, toOpt))))

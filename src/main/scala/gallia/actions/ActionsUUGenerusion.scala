@@ -71,7 +71,7 @@ object ActionsUUGenerusion { //TODO: t210111095156 separate all the Whatever and
   // ===========================================================================
   case class GenerateWV1a(from: TqKPath, to: KPath, f: _ff11) extends ActionUUb {
       def  vldt (c: Cls) : Errs  = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c)
-      def _meta (c: Cls) : Cls   = c.add(to, from.ofni(c))
+      def _meta (c: Cls) : Cls   = c.add(to, from.info(c))
       def atomuus(c: Cls): AtomUUs = Seq(                       
           _Transform1to1 (from.pathPairT(c), to, f),
           _AssertSameType(from.pathPairT(c), to)) }
@@ -85,7 +85,7 @@ object ActionsUUGenerusion { //TODO: t210111095156 separate all the Whatever and
     // ===========================================================================    
     case class GenerateWV2a(from: TqKPath2, to: KPath, f: _ff21) extends ActionUUb {
         def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c)
-        def _meta  (c: Cls): Cls     = c.add(to, from.tq1.resolve(c).pipe(c.field).ofni) // choosing first arbitrarily (210817130604)
+        def _meta  (c: Cls): Cls     = c.add(to, from.tq1.resolve(c).pipe(c.field).info) // choosing first arbitrarily (210817130604)
         def atomuus(c: Cls): AtomUUs = Seq(
             _Transform2to1 (from    .pathPairT(c), to, f(_, _)), 
             _AssertSameType(from.tq1.pathPairT(c), to)) }
@@ -93,13 +93,13 @@ object ActionsUUGenerusion { //TODO: t210111095156 separate all the Whatever and
       // ---------------------------------------------------------------------------
       case class GenerateWV2b(from: TqKPath2, to: TtqKPath, f: _ff21) extends ActionUUc {       
           def  vldt (c: Cls): Errs   = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c)
-          def _meta (c: Cls): Cls    = c.add(to.tq.resolve(c), to.node.forceNonBObjOfni)
+          def _meta (c: Cls): Cls    = c.add(to.tq.resolve(c), to.node.forceNonBObjInfo)
           def atomuu(c: Cls): AtomUU = _Transform2to1(from.pathPairT(c), to.tq.resolve(c), f(_, _)) }
 
     // ===========================================================================    
     case class GenerateWV3a(from: TqKPath3, to: KPath, f: _ff31) extends ActionUUb {
         def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c)
-        def _meta  (c: Cls): Cls     = c.add(to, from.tq1.resolve(c).pipe(c.field).ofni) // choosing first arbitrarily (210817130604)
+        def _meta  (c: Cls): Cls     = c.add(to, from.tq1.resolve(c).pipe(c.field).info) // choosing first arbitrarily (210817130604)
         def atomuus(c: Cls): AtomUUs = Seq(
             _Transform3to1 (from    .pathPairT(c), to, f(_, _, _)), 
             _AssertSameType(from.tq1.pathPairT(c), to)) }
@@ -107,7 +107,7 @@ object ActionsUUGenerusion { //TODO: t210111095156 separate all the Whatever and
       // ---------------------------------------------------------------------------
       case class GenerateWV3b(from: TqKPath3, to: TtqKPath, f: _ff31) extends ActionUUc {       
           def  vldt (c: Cls): Errs   = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c)
-          def _meta (c: Cls): Cls    = c.add(to.tq.resolve(c), to.node.forceNonBObjOfni)
+          def _meta (c: Cls): Cls    = c.add(to.tq.resolve(c), to.node.forceNonBObjInfo)
           def atomuu(c: Cls): AtomUU = _Transform3to1(from.pathPairT(c), to.tq.resolve(c), f(_, _, _)) }
       
 }

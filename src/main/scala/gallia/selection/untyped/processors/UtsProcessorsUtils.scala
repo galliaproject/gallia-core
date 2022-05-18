@@ -6,7 +6,7 @@ private object UtsProcessorsUtils {
 
   def ifType[T: WTT](c: Cls): Seq[Key] =
     c.fields.flatMap { f =>
-      if (f.ofni.isType[T]) Some(f.key)
+      if (f.info.isType[T]) Some(f.key)
       else                  None }
 
   // ---------------------------------------------------------------------------
@@ -17,7 +17,7 @@ private object UtsProcessorsUtils {
       f.nestedClassOpt match {
         case Some(c2) => ifTypeRecursively[T](path2)(c2)
         case None     =>
-          if (f.ofni.isType[T]) Seq(path2.forcePath)
+          if (f.info.isType[T]) Seq(path2.forcePath)
           else                  Nil } }
 
   // ---------------------------------------------------------------------------

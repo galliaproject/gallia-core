@@ -19,8 +19,8 @@ trait ClsMerging { self: Cls =>
       Cls(
         field(joinKeys.left) +: // arbitrarily choosing left as the "dominant" one
         Seq(
-          Fld(as.left , Ofni(coGroupOptionality(joinType, isLeft = true) , Info.multiple(this.remove(joinKeys.left )))),
-          Fld(as.right, Ofni(coGroupOptionality(joinType, isLeft = false), Info.multiple(that.remove(joinKeys.right)))) ) )
+          Fld(as.left , Info(coGroupOptionality(joinType, isLeft = true) , SubInfo.multiple(this.remove(joinKeys.left )))),
+          Fld(as.right, Info(coGroupOptionality(joinType, isLeft = false), SubInfo.multiple(that.remove(joinKeys.right)))) ) )
 
     // ---------------------------------------------------------------------------
     private def coGroupOptionality(joinType: JoinType, isLeft: Boolean): Optional =

@@ -18,7 +18,7 @@ case class SuperMetaPair[T](
       field
         .forceBasicType /* FIXME: t220426143741 */
         .superPair(
-          field.ofni.container1,
+          field.info.container1,
           pair.descending,
           pair.missingLast)
     }

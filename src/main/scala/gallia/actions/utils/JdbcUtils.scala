@@ -19,11 +19,11 @@ object JdbcUtils {
   private def columnToFld(column: aptus.aptmisc.Rdbms.Column): Fld =
     Fld(
       key  = Symbol(column.name),
-      ofni = meta.Ofni(
+      info = meta.Info(
         optional = column.nullable,
-        infos    = Seq(meta.Info(
+        union    = Seq(meta.SubInfo(
           multiple  = _Single,
-          containee = column.typeCode.pipe(basicType)))) )
+          valueType = column.typeCode.pipe(basicType)))) )
 
   // ---------------------------------------------------------------------------
   private implicit def _toOption(value: BasicType): Option[BasicType] = Some(value)

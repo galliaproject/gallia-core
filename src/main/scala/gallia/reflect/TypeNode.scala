@@ -100,10 +100,10 @@ case class TypeNode(
     def containerType: Container = containerTypeOpt.getOrElse(Container._One)
 
     // ---------------------------------------------------------------------------
-    def enmOfnu(c: Cls, path: KPath, multiple: Multiple): Ofnu =
+    def enmInfo1(c: Cls, path: KPath, multiple: Multiple): Info1 =
       c .field(path)
-        .enmContainee(multiple)
-        .pipe(containerType.ofnu)
+        .enmValueType(multiple)
+        .pipe(containerType.info1)
 
     // ---------------------------------------------------------------------------
     def containerTypeOpt: Option[Container] = {
@@ -113,9 +113,9 @@ case class TypeNode(
       else                    None }
 
     // ===========================================================================
-    def forceNonBObjOfni                 : Ofni = this.assert(!_.isContainedBObj).pipe(InfoUtils.forceNonBObjOfni)
-    def forceNonBObjInfo                 : Info = this.assert(!_.isContainedBObj).pipe(InfoUtils.forceNonBObjInfo)
-    def forceNonBObjInfo(enmOpt: _EnmOpt): Info = this.assert(!_.isContainedBObj).pipe(InfoUtils.forceNonBObjInfo(enmOpt))
+    def forceNonBObjInfo                    : Info    = this.assert(!_.isContainedBObj).pipe(InfoUtils.forceNonBObjInfo)
+    def forceNonBObjSubInfo                 : SubInfo = this.assert(!_.isContainedBObj).pipe(InfoUtils.forceNonBObjSubInfo)
+    def forceNonBObjSubInfo(enmOpt: _EnmOpt): SubInfo = this.assert(!_.isContainedBObj).pipe(InfoUtils.forceNonBObjSubInfo(enmOpt))
   }
 
   // ===========================================================================

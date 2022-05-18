@@ -13,7 +13,7 @@ trait ClsAdvanced { self: Cls =>
         .map { thisField =>
           that.field_(thisField.key) match {
             case None            => thisField.toNonRequired
-            case Some(thatField) => Fld(thisField.key, Ofni.combine(thisField.ofni, thatField.ofni)) } } ++
+            case Some(thatField) => Fld(thisField.key, Info.combine(thisField.info, thatField.info)) } } ++
       that
         .fields
         .flatMap { thatField =>
@@ -60,7 +60,7 @@ trait ClsAdvanced { self: Cls =>
   // ===========================================================================
   def zipStrings(keys: Renz, newNestingKey : Key): Cls =
       add(  key  = newNestingKey,
-            ofni = Ofni.nes(nestedClass(keys)) )
+            info = Info.nes(nestedClass(keys)) )
         .remove(keys.froms)
 
     // ---------------------------------------------------------------------------
@@ -81,11 +81,11 @@ trait ClsAdvanced { self: Cls =>
 
     // ---------------------------------------------------------------------------
     private def untuplify(targetKey: Ren, newKeys: Keyz, f: Multiple => Multiple): Cls =
-      transformSoleInfo(targetKey) { // see 210109100250, may have to force them all to be strings
-        info => Info(
-            f(info.multiple),
+      transformSoleSubInfo(targetKey) { // see 210109100250, may have to force them all to be strings
+        subInfo => SubInfo(
+            f(subInfo.multiple),
             newKeys
-              .map(Fld(_, Ofni.oneString))
+              .map(Fld(_, Info.oneString))
               .pipe(Cls.apply)) }
 
   // ===========================================================================
@@ -104,7 +104,7 @@ trait ClsAdvanced { self: Cls =>
         .pipe { remaining =>
           newKeys
             .values
-            .map(Fld(_, Ofni.one(remaining)))
+            .map(Fld(_, Info.one(remaining)))
             .pipe(Cls.apply) }
 
   // ===========================================================================
@@ -129,18 +129,18 @@ trait ClsAdvanced { self: Cls =>
   def fuseToUnion(dest1: Key, dest2: Key)(union: Key): Cls =
       addBefore(
           field = union.requiredUnion(
-            field(dest1).infos ++
-            field(dest2).infos),
+            field(dest1).union ++
+            field(dest2).union),
           target = dest1)
         .remove(dest1)
         .remove(dest2)
 
     // ---------------------------------------------------------------------------
     def fissionFromUnion(origin: Key)(dest1: Key, dest2: Key): Cls = {
-      val (info1, info2) = field(origin).infos.force.tuple2
+      val (subInfo1, subInfo2) = field(origin).union.force.tuple2
 
-       addBefore(Fld.optional(dest1, info1), target = origin)
-      .addAfter (Fld.optional(dest2, info2), target = origin)
+       addBefore(Fld.optional(dest1, subInfo1), target = origin)
+      .addAfter (Fld.optional(dest2, subInfo2), target = origin)
       .remove(origin)
     }
 

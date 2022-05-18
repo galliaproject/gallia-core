@@ -3,19 +3,19 @@ package gallia
 // ===========================================================================
 object MetaSchema {
 
-  private def metaSchemaLeaf             : Cls = metaSchema(containee = _.string /* BasicType name, eg "_Int" */) // TODO: t220518113447 - enum
-  private def metaSchemaRec(nesting: Cls): Cls = metaSchema(containee = _.requiredUnion(meta.Info.string, meta.Info.single(nesting)))
+  private def metaSchemaLeaf             : Cls = metaSchema(valueType = _.string /* BasicType name, eg "_Int" */) // TODO: t220518113447 - enum
+  private def metaSchemaRec(nesting: Cls): Cls = metaSchema(valueType = _.requiredUnion(meta.SubInfo.string, meta.SubInfo.single(nesting)))
 
     // ---------------------------------------------------------------------------
-    private def metaSchema(containee: String => Fld): Cls =
+    private def metaSchema(valueType: String => Fld): Cls =
       cls(
         "fields".clss(
           "key".string,
-          "ofni".cls(
+          "info".cls(
             "optional".boolean,
-            "infos".clss(
+            "union"   .clss(
               "multiple".boolean,
-              containee("containee")))))
+              valueType("valueType")))))
 
   // ===========================================================================
   def apply: Cls = withDepth(3 /* arbitrarily */)

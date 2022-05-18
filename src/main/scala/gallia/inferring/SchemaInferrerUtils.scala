@@ -49,7 +49,7 @@ private object SchemaInferrerUtils {
         .map(dis.field(_))
         .map(_.toNonRequired) // because not present in that, therefore not required
         .foldLeft(dis) { (curr, field) =>
-          curr.replace(field.key, field.ofni) }
+          curr.replace(field.key, field.info) }
 
     // ---------------------------------------------------------------------------
     def addMissingFieldsFrom(that: Cls): Cls =
@@ -61,7 +61,7 @@ private object SchemaInferrerUtils {
 
   // ===========================================================================
   private def resolve(existingField: Fld, newField: Fld): Option[Fld] =
-         if (newField.info1 == existingField.info1)                 Some(existingField)
+         if (newField.subInfo1 == existingField.subInfo1)                 Some(existingField)
 
     // note: not so for multiplicity, as it requires a data change (TODO: t210802090946 - reconsider)
     else if ( existingField.isRequired && !newField.isRequired) Some(existingField.toNonRequired)

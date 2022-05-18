@@ -11,19 +11,19 @@ object ActionsCustoms {
         def _meta(c: Cls): Cls = f(c) }
 
     // ---------------------------------------------------------------------------
-    case class CustomField(target: TqRPathz, f: Ofni => Ofni) extends IdentityUUa {
+    case class CustomField(target: TqRPathz, f: Info => Info) extends IdentityUUa {
           def  vldt(c: Cls): Errs = target.vldtAsOrigin(c)
-          def _meta(c: Cls): Cls  = target(c)(c.transformOfni(_, f)) }
+          def _meta(c: Cls): Cls  = target(c)(c.transformInfo(_, f)) }
 
       // ---------------------------------------------------------------------------
       case class CustomContainer(target: TqRPathz, f: Container => Container) extends IdentityUUa { // TODO: t220427091730 - change to optional/multiple
           def  vldt(c: Cls): Errs = target.vldtAsOrigin(c)
-          def _meta(c: Cls): Cls  = ??? }//FIXME: t220426160919 - target(c)(c.transformSoleInfo(_)(_.transformContainer(f))) }
+          def _meta(c: Cls): Cls  = ??? }//FIXME: t220426160919 - target(c)(c.transformSoleSubInfo(_)(_.transformContainer(f))) }
 
       // ---------------------------------------------------------------------------
       case class CustomBasicType(target: TqRPathz, f: BasicType => BasicType) extends IdentityUUa {
           def vldt(c: Cls): Errs = target.vldtAsOrigin(c) // TODO: check not nesting
-          def _meta(c: Cls): Cls = target(c)(c.transformSoleInfo(_)(_.transformBasicType(f))) }
+          def _meta(c: Cls): Cls = target(c)(c.transformSoleSubInfo(_)(_.transformBasicType(f))) }
 
   // ===========================================================================
   class CustomUU(meta: Cls => Cls, data: Obj => Obj) extends ActionUUd with IdentityV1 {

@@ -31,22 +31,22 @@ object ObjOrdering {
             val optional = field.isOptional
             
             field
-              .ofni
-              .infos
+              .info
+              .union
               .view
-              .map(compareInfo(key, optional)(left, right))
+              .map(compareSubInfo(key, optional)(left, right))
               .find(_ != 0)        
               .getOrElse(0)
           }
 
           // ---------------------------------------------------------------------------
-          private def compareInfo(key: Key, optional: Boolean)(left: Obj, right: Obj)(info: meta.Info): Int =                 
-            info.containee match {
+          private def compareSubInfo(key: Key, optional: Boolean)(left: Obj, right: Obj)(subInfo: meta.SubInfo): Int =                 
+            subInfo.valueType match {
   
               // ---------------------------------------------------------------------------
               case tipe: BasicType =>
                 val ori = PathPair(KPath.from(key), optional)
-                val container = reflect.Container.from(optional, info.multiple)
+                val container = reflect.Container.from(optional, subInfo.multiple)
 
                 tipe.compare(container, pair.descending, pair.missingLast)(
                     ori.lookup(left),

@@ -11,11 +11,11 @@ object MetaObj { // 201222111332
 
   private val _fields   = "fields"
     private val _key      = "key"
-    private val _ofni     = "ofni"
+    private val _info     = "info"
       private val _optional = "optional"
-      private val _infos    = "infos"
+      private val _union    = "union"
         private val _multiple  = "multiple"
-        private val _containee = "containee"
+        private val _valueType = "valueType"
 
   // ===========================================================================
   def clsFromFile(schemaFilePath: String): Cls =
@@ -37,35 +37,35 @@ object MetaObj { // 201222111332
     // ---------------------------------------------------------------------------
     def fld(value: Obj): Fld = Fld(
       key  = value.string(_key).symbol,
-      ofni = value.obj(_ofni).pipe(ofni))
+      info = value.obj(_info).pipe(info))
 
     // ---------------------------------------------------------------------------
     def fld(value: Fld): Obj = obj(
         _key  -> value.key.name,
-        _ofni -> value.ofni.pipe(ofni))
+        _info -> value.info.pipe(info))
 
       // ---------------------------------------------------------------------------
-      def ofni(value: Obj): Ofni = Ofni(
+      def info(value: Obj): Info = Info(
           optional = value.boolean(_optional),
-          infos    = value.objs(_infos).map(info))
+          union    = value.objs(_union).map(subInfo))
 
         // ---------------------------------------------------------------------------
-        def ofni(value: Ofni): Obj = obj(
+        def info(value: Info): Obj = obj(
             _optional -> value.optional,
-            _infos    -> value.infos.map(info))
+            _union    -> value.union.map(subInfo))
 
           // ---------------------------------------------------------------------------
-          def info(value: Obj): Info = Info(
+          def subInfo(value: Obj): SubInfo = SubInfo(
                  value.boolean(_multiple),
-                (value.force (_containee).pipe(containee)))
+                (value.force (_valueType).pipe(valueType)))
 
               // ---------------------------------------------------------------------------
-              def info(value: Info): Obj = obj(
+              def subInfo(value: SubInfo): Obj = obj(
                 _multiple  -> value.multiple,
-                _containee -> value.containee.pipe(containee))
+                _valueType -> value.valueType.pipe(valueType))
 
             // ---------------------------------------------------------------------------
-            private def containee(value: Any) = (value match { // see 210118133408
+            private def valueType(value: Any) = (value match { // see 210118133408
                 case s: String => BasicType.withName(s)
                 case o: Obj    =>
                   o.string_(_type) match {
@@ -73,7 +73,7 @@ object MetaObj { // 201222111332
                     case None         => cls(o) } })
 
             // ---------------------------------------------------------------------------
-            private def containee(value: Containee): Any = (value match {
+            private def valueType(value: ValueType): Any = (value match {
                 case e      : BasicType._Enm => enm(e)
                 case bsc    : BasicType      => bsc.entryName
                 case nesting: Cls            => cls(nesting) })
@@ -100,20 +100,20 @@ object MetaObj { // 201222111332
           .key
           .name
           .padRight(16, ' ')
-          .tab(value.ofni.pipe(formatOfniDebug))
+          .tab(value.info.pipe(formatInfoDebug))
 
       // ---------------------------------------------------------------------------
-      def formatOfniDebug(value: Ofni): DebugString = {
-          if(value.isRequired)                              value.infos.map(formatInfoDebug).join("|")
-          else                 s"${formatOptional(true)}\t${value.infos.map(formatInfoDebug).join("|")}" }
+      def formatInfoDebug(value: Info): DebugString = {
+          if(value.isRequired)                              value.union.map(formatSubInfoDebug).join("|")
+          else                 s"${formatOptional(true)}\t${value.union.map(formatSubInfoDebug).join("|")}" }
 
         // ---------------------------------------------------------------------------
-        def formatInfoDebug(value: Info): DebugString =
-            if (value.isSingle)                              formatContaineeDebug(value.containee)
-            else                s"${formatMultiple(true)}\t${formatContaineeDebug(value.containee)}"
+        def formatSubInfoDebug(value: SubInfo): DebugString =
+            if (value.isSingle)                              formatValueTypeDebug(value.valueType)
+            else                s"${formatMultiple(true)}\t${formatValueTypeDebug(value.valueType)}"
 
           // ---------------------------------------------------------------------------
-          def formatContaineeDebug(value: Containee): DebugString =
+          def formatValueTypeDebug(value: ValueType): DebugString =
               value match {
                 case tipe   : BasicType => tipe.entryName
                 case nesting: Cls       => formatClassDebug(nesting).sectionAllOff }

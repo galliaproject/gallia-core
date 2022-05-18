@@ -3,7 +3,7 @@ package meta
 
 // ===========================================================================
 @aptus.pseudosealed /* only two: BasicType and Cls (nesting) */
-trait Containee extends reflect.HasValuePredicate {
+trait ValueType extends reflect.HasValuePredicate {
     private[gallia] def _either: Either[BasicType, Cls] = this match {
       case x: BasicType => Left (x)
       case x: Cls       => Right(x) }
@@ -25,11 +25,11 @@ trait Containee extends reflect.HasValuePredicate {
   }
 
   // ===========================================================================
-  object Containee {
+  object ValueType {
 
-    // TODO: Containee.combine: t201124151910; note for union, data would also need to be transformed (int/double)
+    // TODO: ValueType.combine: t201124151910; note for union, data would also need to be transformed (int/double)
     @NumberAbstraction
-    def combine(c1: Containee, c2: Containee): Containee = {
+    def combine(c1: ValueType, c2: ValueType): ValueType = {
       c1 // FIXME
     }
 

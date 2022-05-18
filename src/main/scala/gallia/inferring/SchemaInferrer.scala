@@ -21,25 +21,25 @@ object SchemaInferrer { // mostly for JSON for now...
   def klass(o: Obj): Cls =
     o .entries
       .map { case (key, value) =>
-        Fld(key, ofni(value)) }
+        Fld(key, info(value)) }
       .pipe(Cls.apply)
 
   // ===========================================================================
-  def ofni(value: AnyValue): Ofni =
+  def info(value: AnyValue): Info =
       value match {
         case seq: Seq[_] =>
           // a201113123227 - no heterogenous arrays
-          Ofni.nes(//FIXME: pes/nes issue?
+          Info.nes(//FIXME: pes/nes issue?
             (seq.head match {
               case _: Obj => seq.map(_.asInstanceOf[Obj]).pipe(klass)
-              case leaf   => containee(leaf) }))
+              case leaf   => valueType(leaf) }))
         case _ =>
-          Ofni.one(containee(value)) }
+          Info.one(valueType(value)) }
 
     // ---------------------------------------------------------------------------
     @PartialTypeMatching
     @NumberAbstraction
-    def containee(value: AnySingleValue): Containee =
+    def valueType(value: AnySingleValue): ValueType =
       value match {
         case x: Obj => klass(x) 
         

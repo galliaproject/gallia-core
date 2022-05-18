@@ -12,44 +12,44 @@ object ActionsUUConverts {
   // ---------------------------------------------------------------------------
   case class ConvertToString(target: TqRPathz) extends ActionUUb {
     def vldt   (c: Cls): Errs    = target.vldtAsOrigin(c) // TODO: validate can reasonably formatted to a string
-    def _meta  (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleInfo(_)(_.copy(containee = BasicType._String)) }
+    def _meta  (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleSubInfo(_)(_.copy(valueType = BasicType._String)) }
     def atomuus(c: Cls): AtomUUs = target.resolve(c).pipe(_atoms(c)(_ConvertToString)) }
 
   // ---------------------------------------------------------------------------
   case class ConvertToEnum(target: TqRPathz, values: Seq[EnumValue]) extends ActionUUb {
     def vldt   (c: Cls): Errs    = target.vldtAsOrigin(c) // TODO: validate can reasonably formatted to a string
       .orIfEmpty { _vldt.checkAreValidEnumValues(values).toSeq }
-    def _meta  (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleInfo(_)(_.copy(containee = BasicType._Enm(values))) }
+    def _meta  (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleSubInfo(_)(_.copy(valueType = BasicType._Enm(values))) }
     def atomuus(c: Cls): AtomUUs = target.resolve(c).pipe(_atoms(c)(_ConvertToEnum)) } // TODO: optim: only if not String field already
 
   // ---------------------------------------------------------------------------
   case class ConvertToInt(target: TqRPathz) extends ActionUUbb {
     def vldt                     (c: Cls): Errs    = target.vldtAsOrigin(c)
-    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleInfo(_)(_.toInt) }
+    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleSubInfo(_)(_.toInt) }
     def atomuus(origin: CallSite)(c: Cls): AtomUUs = target.resolve(c).pipe(_atoms(c)(_ConvertToInt(origin))) }
 
   // ---------------------------------------------------------------------------
   case class ConvertToDouble(target: TqRPathz) extends ActionUUbb {
     def vldt                     (c: Cls): Errs    = target.vldtAsOrigin(c)
-    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleInfo(_)(_.toDouble) }
+    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleSubInfo(_)(_.toDouble) }
     def atomuus(origin: CallSite)(c: Cls): AtomUUs = target.resolve(c).pipe(_atoms(c)(_ConvertToDouble(origin))) }
 
   // ---------------------------------------------------------------------------
   case class ConvertToFlag[T: WTT](target: TqRPathz, trueValue: T, strict: Boolean) extends ActionUUbb {
     def vldt                     (c: Cls): Errs    = target.vldtAsOrigin(c)
-    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.updateOfni(_, Ofni.optBoolean) } // TODO: t210108114447 - support own "flag" type?
+    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.updateInfo(_, Info.optBoolean) } // TODO: t210108114447 - support own "flag" type?
     def atomuus(origin: CallSite)(c: Cls): AtomUUs = target.resolve(c).pipe(_atoms(c)(_ConvertToFlag(origin)(_, trueValue, strict))) }
 
   // ---------------------------------------------------------------------------
   case class ConvertToBoolean[T: WTT](target: TqRPathz, trueValue: T, falseValue: T) extends ActionUUbb {
     def vldt                     (c: Cls): Errs    = target.vldtAsOrigin(c)
-    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleInfo(_)(_.toBoolean) }
+    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleSubInfo(_)(_.toBoolean) }
     def atomuus(origin: CallSite)(c: Cls): AtomUUs = target.resolve(c).pipe(_atoms(c)(_ConvertToBoolean(origin)(_, trueValue, falseValue))) }
 
   // ---------------------------------------------------------------------------
   case class ConvertToOptionalBoolean[T: WTT](target: TqRPathz, trueValue: T, falseValue: T, nullValue: T) extends ActionUUbb {
     def vldt                     (c: Cls): Errs    = target.vldtAsOrigin(c)
-    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.updateOfni(_, Ofni.optBoolean) }
+    def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.updateInfo(_, Info.optBoolean) }
     def atomuus(origin: CallSite)(c: Cls): AtomUUs = target.resolve(c).pipe(_atoms(c)(_ConvertToOptionalBoolean(origin)(_, trueValue, falseValue, nullValue))) }
 
   // ===========================================================================

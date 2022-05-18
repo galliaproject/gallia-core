@@ -4,7 +4,7 @@ package actions
 import target._
 import FunctionWrappers._
 import atoms.AtomsUUTransforms._
-import meta.Containee
+import meta.ValueType
 
 
 // ===========================================================================
@@ -19,7 +19,7 @@ object ActionsUUCotransforms { // TODO: t210826102833 - rework co-transforms
       private def to(c: Cls): TtqKPath1 = toEither.fold(from.fromOverride _, identity)
 
       // ---------------------------------------------------------------------------
-      def _meta(c: Cls): Cls = to(c).asMultiple.put(c, from.containee1(c))
+      def _meta(c: Cls): Cls = to(c).asMultiple.put(c, from.valueType1(c))
       def atomuu(c: Cls): AtomUU = _Transform1to1(from.pathPairT(c), to(c).kpathT(c), f) }
 
     // ---------------------------------------------------------------------------
@@ -31,7 +31,7 @@ object ActionsUUCotransforms { // TODO: t210826102833 - rework co-transforms
       private def to(c: Cls): TtqKPath2 = toEither.fold(from.fromOverride _, identity)
 
       // ---------------------------------------------------------------------------
-      def _meta(c: Cls): Cls = to(c).put(c, from.containees(c))
+      def _meta(c: Cls): Cls = to(c).put(c, from.valueTypes(c))
       def atomuu(c: Cls): AtomUU = _Transform2to2(from.pathPairT(c), to(c).kpathT(c), f) }
 
     // ---------------------------------------------------------------------------
@@ -41,7 +41,7 @@ object ActionsUUCotransforms { // TODO: t210826102833 - rework co-transforms
         to.vldtAsCotransformDestination(c, from.kpath_(c))
 
       // ---------------------------------------------------------------------------
-      def _meta(c: Cls): Cls = to.put(c, from.containee1(c))
+      def _meta(c: Cls): Cls = to.put(c, from.valueType1(c))
       def atomuu(c: Cls): AtomUU = _Transform1to2(from.pathPairT(c), to.kpathT(c), f) }
 
     // ---------------------------------------------------------------------------
@@ -51,7 +51,7 @@ object ActionsUUCotransforms { // TODO: t210826102833 - rework co-transforms
         to.vldtAsCotransformDestination(c, from.kpath_(c))
 
       // ---------------------------------------------------------------------------
-      def _meta(c: Cls): Cls = to.put(c, from.containee1(c))
+      def _meta(c: Cls): Cls = to.put(c, from.valueType1(c))
       def atomuu(c: Cls): AtomUU = _Transform1to3(from.pathPairT(c), to.kpathT(c), f) }
 
     // ---------------------------------------------------------------------------
@@ -61,7 +61,7 @@ object ActionsUUCotransforms { // TODO: t210826102833 - rework co-transforms
         to.vldtAsCotransformDestination(c, from.__kpathz(c))
 
       // ---------------------------------------------------------------------------
-      def _meta(c: Cls): Cls = to.asMultiple.put(c, from.containees(c))
+      def _meta(c: Cls): Cls = to.asMultiple.put(c, from.valueTypes(c))
       def atomuu(c: Cls): AtomUU = _Transform2to1(from.pathPairT(c), to.kpathT(c), f) }
 
     // ---------------------------------------------------------------------------
@@ -71,16 +71,16 @@ object ActionsUUCotransforms { // TODO: t210826102833 - rework co-transforms
         to.vldtAsCotransformDestination(c, from.__kpathz(c))
 
       // ---------------------------------------------------------------------------
-      def _meta(c: Cls): Cls = to.put(c, from.containees(c))
+      def _meta(c: Cls): Cls = to.put(c, from.valueTypes(c))
       def atomuu(c: Cls): AtomUU = _Transform2to3(from.pathPairT(c), to.kpathT(c), f) }
 
   // ===========================================================================
   @deprecated private implicit class HasTypedTargetQuerySeq_(u: gallia.target.HasTypedTargetQuerySeq[KPath]) {
-      @deprecated def containees(c:Cls): Seq[Containee] = u.tqs.map(_.kpath_(c)).map(c.field(_).info1.containee)
+      @deprecated def valueTypes(c:Cls): Seq[ValueType] = u.tqs.map(_.kpath_(c)).map(c.field(_).subInfo1.valueType)
     
       // ---------------------------------------------------------------------------
-      @deprecated def put(c: Cls, from:  Containee)                    : Cls = put(c, Seq(from))
-      @deprecated def put(c: Cls, froms: Seq[Containee] /* distinct */): Cls = u.ttqs.map { ttq => ttq.fieldPair(c) }.foldLeft(c)(_ put _)
+      @deprecated def put(c: Cls, from:  ValueType)                    : Cls = put(c, Seq(from))
+      @deprecated def put(c: Cls, froms: Seq[ValueType] /* distinct */): Cls = u.ttqs.map { ttq => ttq.fieldPair(c) }.foldLeft(c)(_ put _)
     }
 
     // ---------------------------------------------------------------------------

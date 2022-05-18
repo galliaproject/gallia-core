@@ -112,7 +112,7 @@ import meta._
 
       case class FieldAssertionFailure    (target: KPath) extends _Error3 { val errorId = "201014112650"; val label = "FieldAssertionFailure" }
       case class ContainerAssertionFailure(target: KPath, container: Container) extends _Error3 { val errorId = "201014112651"; val label = "ContainerAssertionFailure" }
-      case class ContaineeAssertionFailure(target: KPath, basicType: BasicType) extends _Error3 { val errorId = "201014112652"; val label = "ContaineeAssertionFailure" }
+      case class ValueTypeAssertionFailure(target: KPath, basicType: BasicType) extends _Error3 { val errorId = "201014112652"; val label = "ValueTypeAssertionFailure" }
 
       // ===========================================================================
       case class InvalidKeyReordering(origin: Seq[SKey], destination: Seq[SKey]) extends _Error3 { val errorId = "201019112159"; val label = "InvalidKeyReordering" }
@@ -121,15 +121,15 @@ import meta._
       case class Tmp (target : KPath , msg: String) extends _Error3 { val errorId = "201016153347"; val label = "TODO:201016153347" }
 
       // ---------------------------------------------------------------------------
-      // TODO: distinguish container/containee error
+      // TODO: distinguish container/valueType error
       object       TypeMismatch extends _ErrorCompanion("201101174017", "TypeMismatch")
-        case class TypeMismatch(kpath: KPath, infoA: Ofni, infoB: Ofnu, mode: SpecialCardiMode) extends _HasCompanion2(
+        case class TypeMismatch(kpath: KPath, infoA: Info, info1B: Info1, mode: SpecialCardiMode) extends _HasCompanion2(
                    TypeMismatch) with  _Error1 {
           def formatDetails =
             (Seq(
                 s"for ${kpath}:",
-                s"\texpected:\t${infoA.formatDefault},", // see t210125111338 (union types)
-                 s"\tbut got:\t${infoB.formatDefault}") ++
+                s"\texpected:\t${infoA .formatDefault},", // see t210125111338 (union types)
+                 s"\tbut got:\t${info1B.formatDefault}") ++
                (if (mode.isNormal) Nil else Seq(s"(mode: ${mode})")))
               .joinln }
 

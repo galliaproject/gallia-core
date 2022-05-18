@@ -23,9 +23,9 @@ case class TypedTargetQuery[$Target /* TODO: t210823111030 - ungenerify */]( // 
 
     // ---------------------------------------------------------------------------
     def duo      (c: Cls): Duo[$Target]    = Duo[$Target](node, tq.resolve(c))
-    def fieldPair(c: Cls): ($Target, Ofni) = (tq.resolve(c), node.forceNonBObjOfni)
+    def fieldPair(c: Cls): ($Target, Info) = (tq.resolve(c), node.forceNonBObjInfo)
     
-    def containee1(c: Cls)(implicit ev: $Target <:< KPath) = kpathT(c).pipe(c.field(_).info1.containee)
+    def valueType1(c: Cls)(implicit ev: $Target <:< KPath) = kpathT(c).pipe(c.field(_).subInfo1.valueType)
 
     def resolve(c: Cls)                                 : $Target = tq.resolve(c)
     def kpathT (c: Cls)(implicit ev: $Target <:< KPath ): KPath   = kpath_(c)

@@ -4,8 +4,8 @@ package meta
 import aptus._
 
 // ===========================================================================
-trait OfniLike extends InfosLike {
-  protected val _ofni: Ofni
+trait InfoLike extends SubInfosLike {
+  protected val _info: Info
 
   // ===========================================================================
   def isType[T: WTT]: Boolean = isType(TypeNode.parse[T])
@@ -13,7 +13,7 @@ trait OfniLike extends InfosLike {
     def isType(node: TypeNode): Boolean =
       node
         .assert(!_.isContainedBObj) // has already been validated by here (see 201014103336)
-        .forceNonBObjOfni
+        .forceNonBObjInfo
         .pipe(_ == this)
 
   // ---------------------------------------------------------------------------
@@ -24,8 +24,8 @@ trait OfniLike extends InfosLike {
   def isOneBoolean : Boolean = isRequired && areAllSingle && isBoolean
 
   // ---------------------------------------------------------------------------
-  def isRequired: Boolean = !_ofni.optional
-  def isOptional: Boolean =  _ofni.optional
+  def isRequired: Boolean = !_info.optional
+  def isOptional: Boolean =  _info.optional
 
   // ---------------------------------------------------------------------------
   def isOne: Boolean = isRequired && areAllSingle
@@ -34,12 +34,12 @@ trait OfniLike extends InfosLike {
   def isPes: Boolean = isOptional && areAllMultiple
 
   // ===========================================================================
-  def trivialContaineeOpt: Option[Containee] =  _ofni.infos.ifOneOpt.flatMap(_.inSomeIf(_ => isRequired)).map(_.containee)
+  def trivialValueTypeOpt: Option[ValueType] =  _info.union.ifOneOpt.flatMap(_.inSomeIf(_ => isRequired)).map(_.valueType)
 
   // ===========================================================================
-  private[gallia] def enmOfnu     (multiple: Boolean): Ofnu      = enmInfo(multiple).ofnu(_ofni.optional)
-  private[gallia] def enmContainee(multiple: Boolean): Containee = enmInfo(multiple).containee
-  private[gallia] def enmInfo     (multiple: Boolean): Info      =  _ofni.infos.filter(_.isEnmMatching(multiple)).force.one
+  private[gallia] def enmInfo1    (multiple: Boolean): Info1     = enmSubInfo(multiple).info1(_info.optional)
+  private[gallia] def enmValueType(multiple: Boolean): ValueType = enmSubInfo(multiple).valueType
+  private[gallia] def enmSubInfo  (multiple: Boolean): SubInfo   = _info.union.filter(_.isEnmMatching(multiple)).force.one
 }
 
 // ===========================================================================

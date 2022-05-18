@@ -60,7 +60,7 @@ sealed trait ParameterizedBasicType
 sealed trait BasicType // TODO: t210125111338 - investigate union types (coming in scala 3?)
       extends EnumEntry
       with    BasicTypeHelper
-      with    meta.Containee {
+      with    meta.ValueType {
     type T
     val  fullName: FullName }
 

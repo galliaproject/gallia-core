@@ -28,12 +28,12 @@ object AtomsUUResnesting {
               formattedKey ~> formattedTail,
                 headKey)
 
-            .transformSoleInfo(headKey) { // best to recurse *after* nesting to avoid key collisions
-              info =>
-                info
+            .transformSoleSubInfo(headKey) { // best to recurse *after* nesting to avoid key collisions
+              subInfo =>
+                subInfo
                   .forceNestedClass // since we just nested it
                   .pipe(metaRec(sep)(_, formattedTail, tailKeyItems))
-                  .pipe(info.updateContainee) } }
+                  .pipe(subInfo.updateValueType) } }
 
   // ===========================================================================
   def data(targetKeys: Keyz, sep: Separator)(value: Obj): Obj =

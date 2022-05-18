@@ -49,12 +49,12 @@ object MetaValidationHelper {
 
     // ---------------------------------------------------------------------------
     private def _typeCompatibility(c: Cls)(kpath: KPath, ht: HasTypeNode, mode: SpecialCardiMode): Err_ =
-      (   c.field_(kpath).map(_.ofni), // see t210125111338 (union types)
-          ht.ofnuOpt(isValidType))
+      (   c.field_(kpath).map(_.info), // see t210125111338 (union types)
+          ht.info1Opt(isValidType))
         .toOptionalTuple
-        .flatMap { case (ofniA, ofniB) =>
-          errIf_(!MetaValidationCompatibility.compatible(ofniA, ofniB, mode)) {
-            _Error.TypeMismatch(kpath, ofniA, ofniB, mode).err } }
+        .flatMap { case (infoA, info1B) =>
+          errIf_(!MetaValidationCompatibility.compatible(infoA, info1B, mode)) {
+            _Error.TypeMismatch(kpath, infoA, info1B, mode).err } }
 
   // ===========================================================================
   def _checkField(c: Cls)(target: TargetQuery[RPathz])(pred: Fld => Boolean)(f: KPath => _Error3): Errs =
@@ -71,7 +71,7 @@ object MetaValidationHelper {
       .resolve(c)
       .map(_.from)
       .flatMap { path =>
-        c.field(path).containees.flatMap {
+        c.field(path).valueTypes.flatMap {
           case BasicType._Enm(origin) => checkAreValidEnumValues(f(origin))
           case _                      => None } }
 

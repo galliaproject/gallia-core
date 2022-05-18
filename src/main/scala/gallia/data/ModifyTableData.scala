@@ -14,7 +14,7 @@ class ModifyTableData(conf: io.CellConf) extends atoms.utils.ModifyObj { // 2012
 
       // ===========================================================================
       override protected def transformation(qualifyingField: Fld): Any => Any =
-        any => conf.transformValue(qualifyingField.info1.isMultiple)(any.asInstanceOf[String]).fold(
+        any => conf.transformValue(qualifyingField.subInfo1.isMultiple)(any.asInstanceOf[String]).fold(
           _.map /* option's */(conf.transformBasicValue(qualifyingField.forceBasicType)),
           _.map /* seq   's */(conf.transformBasicValue(qualifyingField.forceBasicType)) )
 

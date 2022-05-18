@@ -2,7 +2,7 @@ package gallia.atoms.utils
 
 import aptus._
 import gallia.{Cls, Fld}
-import gallia.meta.Info
+import gallia.meta.SubInfo
 
 // ===========================================================================
 object ObjModifierCtxParser {
@@ -14,15 +14,15 @@ object ObjModifierCtxParser {
     c .fields
       .flatMap { field =>
         field
-          .ofni.infos.ifOne(
+          .info.union.ifOne(
             sole     => nonUnionItemOpt(qualifies)(field)(sole)    .map(ObjModifierQualifyingNonUnionFld(field.key, field.hasMultiple, _)),
             multiple =>    unionItemOpt(qualifies)(field)(multiple).map(ObjModifierQualifyingUnionFld   (field.key,                    _))) }
       .in.noneIf(_.isEmpty)
       .map(ObjModifierCtx.apply(c.nameOpt, _))
 
   // ===========================================================================
-  private def nonUnionItemOpt(qualifies: Fld => Boolean)(field: Fld)(info: Info): Option[ObjModifierItemNonUnion] =
-    info
+  private def nonUnionItemOpt(qualifies: Fld => Boolean)(field: Fld)(subInfo: SubInfo): Option[ObjModifierItemNonUnion] =
+    subInfo
       .nestedClassOpt
       .flatMap(parse(_)(qualifies).map(ObjModifierNonUnionNesting.apply))
       .orElse {
@@ -30,14 +30,14 @@ object ObjModifierCtxParser {
         else                  None }
 
   // ---------------------------------------------------------------------------
-  private def unionItemOpt(qualifies: Fld => Boolean)(field: Fld)(infos: Seq[Info]): Option[ObjModifierItemUnion] = {
+  private def unionItemOpt(qualifies: Fld => Boolean)(field: Fld)(union: Seq[SubInfo]): Option[ObjModifierItemUnion] = {
     val doesQualify = qualifies(field)
 
     val actionOpt: Option[ObjModifierItemUnion] =
       if (doesQualify) Some(ObjModifierUnionAction)
       else             None
 
-    infos
+    union
       .flatMap(_.nestedClassOpt)
        match {
         case Nil => actionOpt

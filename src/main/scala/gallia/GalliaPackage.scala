@@ -156,7 +156,7 @@ package object gallia
   implicit def _toWrappedSelection(x: selection.untyped.processors.RPathzSelection): selection.typed.TsWrapper[Whatever] = new selection.typed.TsWrapper[Whatever](x)
 
   // ---------------------------------------------------------------------------
-  private[gallia] implicit def Info_(info: meta.Info): Seq[meta.Info] = Seq(info) // see t210125111338 (union types)
+  private[gallia] implicit def SubInfo_(subInfo: meta.SubInfo): Seq[meta.SubInfo] = Seq(subInfo) // see t210125111338 (union types)
   
   // ===========================================================================
   def cls[T: WTT]                         : Cls = reflect.TypeNode.parse[T].leaf.forceDataClass

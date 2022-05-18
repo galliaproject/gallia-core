@@ -4,21 +4,21 @@ package meta
 import aptus._
 
 // ===========================================================================
-trait HasContainees {  // see t210125111338 (union types)
-  def containees: Seq[Containee]
+trait HasValueTypes {  // see t210125111338 (union types)
+  def valueTypes: Seq[ValueType]
 
   // ===========================================================================
-  def  isNesting: Boolean = containees.forall(_.isNesting)
-  def hasNesting: Boolean = containees.exists(_.isNesting)
+  def  isNesting: Boolean = valueTypes.forall(_.isNesting)
+  def hasNesting: Boolean = valueTypes.exists(_.isNesting)
 
   // ---------------------------------------------------------------------------
-  def  isBasicType: Boolean = containees.forall(_.isLeaf)
-  def hasBasicType: Boolean = containees.exists(_.isLeaf)
+  def  isBasicType: Boolean = valueTypes.forall(_.isLeaf)
+  def hasBasicType: Boolean = valueTypes.exists(_.isLeaf)
 
   // ===========================================================================
-  def nestedClassOpt                                                 : Option[Cls] = containees.flatMap(_.nestingOpt).force.option // TODO: handle unions
+  def nestedClassOpt                                                 : Option[Cls] = valueTypes.flatMap(_.nestingOpt).force.option // TODO: handle unions
   def nestedClassesOpt(disambiguatorOpt: UnionObjectDisambiguatorOpt): Seq   [Cls] =
-    containees
+    valueTypes
       .flatMap(_.nestingOpt)
       .pipe { ncs => disambiguatorOpt.map(_.filter(ncs)).getOrElse(ncs) }
 
@@ -27,8 +27,8 @@ trait HasContainees {  // see t210125111338 (union types)
   def forceNestedClass(disambiguatorOpt: UnionObjectDisambiguatorOpt): Cls  = nestedClassesOpt(disambiguatorOpt).ifOneOrElse(errorMessage = _.map(_.nameOpt) -> disambiguatorOpt)
 
   // ---------------------------------------------------------------------------
-  def basicTypeOpt  : Option[    BasicType ] = containees.flatMap(_.leafOpt).force.option
-  def basicTypesOpt : Option[Seq[BasicType]] = containees.flatMap(_.leafOpt).inNoneIfEmpty
+  def basicTypeOpt  : Option[    BasicType ] = valueTypes.flatMap(_.leafOpt).force.option
+  def basicTypesOpt : Option[Seq[BasicType]] = valueTypes.flatMap(_.leafOpt).inNoneIfEmpty
   def forceBasicType:            BasicType   = basicTypeOpt.get
 
   // ---------------------------------------------------------------------------
@@ -37,8 +37,8 @@ trait HasContainees {  // see t210125111338 (union types)
   def forceNumericalType   :        NumericalType  = numericalTypeOpt.get
 
   // ---------------------------------------------------------------------------
-  def    hasBasicType(value: BasicType): Boolean = containees.exists(_.leafOpt == Some(value))
-  def areAllBasicType(value: BasicType): Boolean = containees.forall(_.leafOpt == Some(value)) // + only 1 by design (see a220411090125)
+  def    hasBasicType(value: BasicType): Boolean = valueTypes.exists(_.leafOpt == Some(value))
+  def areAllBasicType(value: BasicType): Boolean = valueTypes.forall(_.leafOpt == Some(value)) // + only 1 by design (see a220411090125)
 
   // ---------------------------------------------------------------------------
   def isBoolean : Boolean = areAllBasicType(BasicType._Boolean)
@@ -63,7 +63,7 @@ trait HasContainees {  // see t210125111338 (union types)
 
   def isBinary: Boolean = areAllBasicType(BasicType._Binary)
 
-  def isEnum  : Boolean = containees.forall(_.leafOpt.exists(_.isEnm))
+  def isEnum  : Boolean = valueTypes.forall(_.leafOpt.exists(_.isEnm))
 
   // ---------------------------------------------------------------------------
   def hasBoolean : Boolean = hasBasicType(BasicType._Boolean)
@@ -88,26 +88,26 @@ trait HasContainees {  // see t210125111338 (union types)
 
   def hasBinary: Boolean = hasBasicType(BasicType._Binary)
 
-  def hasEnum: Boolean = containees.exists(_.leafOpt.exists(_.isEnm))
+  def hasEnum: Boolean = valueTypes.exists(_.leafOpt.exists(_.isEnm))
 
   // ===========================================================================
-  def forceBasicTypes      : Seq[BasicType      ] = containees.map(_.leafOpt.get)
-  def forceNumericalTypes  : Seq[NumericalType  ] = containees.map(_.leafOpt.get).flatMap(_.asNumericalTypeOpt)
-  def forceUnboundedNumbers: Seq[UnboundedNumber] = containees.map(_.leafOpt.get).flatMap(_.asUnboundedNumberOpt)
-  def forceBoundedNumbers  : Seq[  BoundedNumber] = containees.map(_.leafOpt.get).flatMap(_.asBoundedNumberOpt)
-  def forceIntegerLikeTypes: Seq[IntegerLikeType] = containees.map(_.leafOpt.get).flatMap(_.asIntegerLikeTypeOpt)
-  def forceRealLikeTypes   : Seq[RealLikeType   ] = containees.map(_.leafOpt.get).flatMap(_.asRealLikeTypeOpt)
+  def forceBasicTypes      : Seq[BasicType      ] = valueTypes.map(_.leafOpt.get)
+  def forceNumericalTypes  : Seq[NumericalType  ] = valueTypes.map(_.leafOpt.get).flatMap(_.asNumericalTypeOpt)
+  def forceUnboundedNumbers: Seq[UnboundedNumber] = valueTypes.map(_.leafOpt.get).flatMap(_.asUnboundedNumberOpt)
+  def forceBoundedNumbers  : Seq[  BoundedNumber] = valueTypes.map(_.leafOpt.get).flatMap(_.asBoundedNumberOpt)
+  def forceIntegerLikeTypes: Seq[IntegerLikeType] = valueTypes.map(_.leafOpt.get).flatMap(_.asIntegerLikeTypeOpt)
+  def forceRealLikeTypes   : Seq[RealLikeType   ] = valueTypes.map(_.leafOpt.get).flatMap(_.asRealLikeTypeOpt)
 
   // ===========================================================================
   /** nesting to non-(necessarily-)nesting */
   protected def __lookup: Map[Index, Index] = {
     var nestingIndex = -1
 
-    containees
+    valueTypes
       .zipWithIndex
-      .flatMap { case (info, containeeIndex) =>
-        if (info.isNesting) { nestingIndex += 1; Some(nestingIndex -> containeeIndex) }
-        else                                     None }
+      .flatMap { case (subInfo, valueTypeIndex) =>
+        if (subInfo.isNesting) { nestingIndex += 1; Some(nestingIndex -> valueTypeIndex) }
+        else                                        None }
       .toMap }
 
 }

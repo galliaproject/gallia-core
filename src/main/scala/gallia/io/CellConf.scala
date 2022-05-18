@@ -2,7 +2,7 @@ package gallia
 package io
 
 import aptus.{Anything_, String_}
-import meta.{Info, Ofni}
+import meta.{SubInfo, Info}
 import inferring.table.TypeGuessing
 import reflect.{BasicType, Container, UnparameterizedBasicType}
 
@@ -27,10 +27,10 @@ case class CellConf(
       else                     Container._One
 
   // ---------------------------------------------------------------------------
-  def inferOfni(value: String): Ofni =
-           if (isNull (value)) Ofni(_Optional, Info(_Single,   BasicType._String))
-      else if (isArray(value)) Ofni(_Required, Info(_Multiple, arrayType(splitArray(value))))
-      else                     Ofni(_Required, Info(_Single,   TypeGuessing(value)))
+  def inferInfo(value: String): Info =
+           if (isNull (value)) Info(_Optional, SubInfo(_Single,   BasicType._String))
+      else if (isArray(value)) Info(_Required, SubInfo(_Multiple, arrayType(splitArray(value))))
+      else                     Info(_Required, SubInfo(_Single,   TypeGuessing(value)))
 
     // ---------------------------------------------------------------------------
     private def arrayType(values: Seq[String]): BasicType =

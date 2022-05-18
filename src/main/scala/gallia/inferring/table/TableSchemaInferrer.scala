@@ -6,14 +6,14 @@ import aptus.Seq_
 import reflect.BasicType
 import reflect.Container
 import meta.Fld
-import meta.Ofni
+import meta.Info
 import io.CellConf
 
 // ===========================================================================
 object TableSchemaInferrer {
 
   def fullInferring(conf: CellConf, keys: Seq[Key])(z: Objs): Cls =
-      ofniLookup(conf)(
+      infoLookup(conf)(
             keySet  = keys.toSet,
             mutable = new MutableValuesSubset(keys, max = 3 /* enough for boolean detection at least */))(
           z)
@@ -23,19 +23,19 @@ object TableSchemaInferrer {
             .pipe(Cls.apply) }
 
     // ---------------------------------------------------------------------------
-    private def ofniLookup(conf: CellConf)(keySet: Set[Key], mutable: MutableValuesSubset)(z: Objs): Map[Key, Ofni] =
+    private def infoLookup(conf: CellConf)(keySet: Set[Key], mutable: MutableValuesSubset)(z: Objs): Map[Key, Info] =
       z .consume
-        .foldLeft(Set[(Key, Ofni)]()) { (curr, o) =>
+        .foldLeft(Set[(Key, Info)]()) { (curr, o) =>
           tmp(conf, keySet, mutable)(curr, o) }
         .toSeq
         .groupByKey
-        .view.mapValues(combineOfnisAll)
-        .map { case (key, ofni) =>
-          key -> mutable.potentiallyUpdateOfni(key, ofni) }
+        .view.mapValues(combineInfosAll)
+        .map { case (key, info) =>
+          key -> mutable.potentiallyUpdateInfo(key, info) }
         .toMap
 
       // ---------------------------------------------------------------------------
-      private def tmp(conf: CellConf, keySet: Set[Key], mutable: MutableValuesSubset)(curr: Set[(Key, Ofni)], o: Obj): Set[(Key, Ofni)] = {
+      private def tmp(conf: CellConf, keySet: Set[Key], mutable: MutableValuesSubset)(curr: Set[(Key, Info)], o: Obj): Set[(Key, Info)] = {
         curr ++
           keySet
             .map { key =>
@@ -45,41 +45,41 @@ object TableSchemaInferrer {
                     .valueSet(_)
                     .pipe(mutable.addValues(key, _)) }
 
-              key -> conf.inferOfni(value) } }
+              key -> conf.inferInfo(value) } }
 
   // ===========================================================================
   def stringsOnly(conf: CellConf, keys: Seq[Key])(z: Objs): Cls =
-    stringsOnlyOfniLookup(conf)(keys.toSet)(z)
+    stringsOnlyInfoLookup(conf)(keys.toSet)(z)
       .pipe { lookup =>
         keys
           .map { key => Fld(key, lookup(key)) }
           .pipe(Cls.apply) }
 
   // ---------------------------------------------------------------------------
-  private def stringsOnlyOfniLookup(conf: CellConf)(keySet: Set[Key])(z: Objs): Map[Key, Ofni] =
+  private def stringsOnlyInfoLookup(conf: CellConf)(keySet: Set[Key])(z: Objs): Map[Key, Info] =
     z .consume
-      .foldLeft(Set[(Key, Ofni)]()) { (curr, o) =>
+      .foldLeft(Set[(Key, Info)]()) { (curr, o) =>
         curr ++
           keySet
             .map { key =>
               val value = o.string(key) // guaranteed present by 201215141231
               val container = conf.inferContainerOnly(value)
-              key -> container.ofni(BasicType._String) } }
+              key -> container.info(BasicType._String) } }
       .toSeq
       .groupByKey
-      .view.mapValues(combineOfnisString)
+      .view.mapValues(combineInfosString)
       .toMap
 
   // ===========================================================================
-  private def combineOfnisAll   (values: Seq[Ofni]): Ofni = _combineOfnis(values)(_.map(_.forceBasicType).pipe(reflect.BasicTypeUtils.combine))
-  private def combineOfnisString(values: Seq[Ofni]): Ofni = _combineOfnis(values)(_ => BasicType._String)
+  private def combineInfosAll   (values: Seq[Info]): Info = _combineInfos(values)(_.map(_.forceBasicType).pipe(reflect.BasicTypeUtils.combine))
+  private def combineInfosString(values: Seq[Info]): Info = _combineInfos(values)(_ => BasicType._String)
 
     // ---------------------------------------------------------------------------
-    private def _combineOfnis(values: Seq[Ofni])(f: Seq[Ofni] => BasicType): Ofni =
+    private def _combineInfos(values: Seq[Info])(f: Seq[Info] => BasicType): Info =
       values
         .map(_.container1)
         .reduceLeft(Container.combine)
-        .ofni(f(values))
+        .info(f(values))
 }
 
 // ===========================================================================

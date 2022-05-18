@@ -6,7 +6,7 @@ private[gallia] sealed trait UnionObjectDisambiguator {
 
     // ---------------------------------------------------------------------------
     final def _vldt(f: Fld) =
-      f .containees
+      f .valueTypes
         .flatMap(_.nestingOpt)
         .pipe(filter)
         .ifOne(_ => Nil, _ => vldt._Error.NotExactlyOneNestedClass(f).errs)

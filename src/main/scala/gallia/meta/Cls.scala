@@ -7,7 +7,7 @@ import target._
 
 // ===========================================================================
 case class Cls(fields: Seq[Fld]) // TODO: as List?
-      extends meta.Containee
+      extends meta.ValueType
       with    ClsLike
 
       with    ClsHelper
@@ -116,7 +116,9 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
 
     // ===========================================================================
     //TODO: ensure not nested type?
-    def updateType(target: Key   , fromNode: TypeNode, toNode: TypeNode): Cls = transformField(target)(_.updateOptionality(toNode.isOption).updateSpecificInfo(fromNode.forceNonBObjInfo(enmOpt(target)), toNode.forceNonBObjInfo(enmOpt(target))))
+    def updateType(target: Key   , fromNode: TypeNode, toNode: TypeNode): Cls = transformField(target)(_.updateOptionality(toNode.isOption).updateSpecificSubInfo(
+       fromNode.forceNonBObjSubInfo(enmOpt(target)),
+         toNode.forceNonBObjSubInfo(enmOpt(target))))
     def updateType(target: Ren   , fromNode: TypeNode, toNode: TypeNode): Cls = rename(target).updateType(target.to, fromNode, toNode)
 
     def updateType(target: KPath , fromNode: TypeNode, toNode: TypeNode): Cls = transformx(target)(_.updateType(_, fromNode, toNode), _.updateType(_, fromNode, toNode))
@@ -127,9 +129,9 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
 
     // ---------------------------------------------------------------------------
     def updateTypex(target: Key, fromNode: TypeNode, toNode: TypeNode): Cls = transformField(target) { field =>
-      field.updateSpecificContainee(
-        fromNode.forceNonBObjInfo(enmOpt(field.key)).containee,
-          toNode.forceNonBObjInfo(enmOpt(target))   .containee) }
+      field.updateSpecificValueType(
+        fromNode.forceNonBObjSubInfo(enmOpt(field.key)).valueType,
+          toNode.forceNonBObjSubInfo(enmOpt(target))   .valueType) }
     def updateTypex(target: Ren   , fromNode: TypeNode, toNode: TypeNode): Cls = rename(target).updateTypex(target.to, fromNode, toNode)
 
     def updateTypex(target: KPath , fromNode: TypeNode, toNode: TypeNode): Cls = transformx(target)(_.updateTypex(_, fromNode, toNode), _.updateTypex(_, fromNode, toNode))
@@ -139,34 +141,34 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
     def updateTypex(target: RPathz, fromNode: TypeNode, toNode: TypeNode): Cls = target.foldLeft(this)(_.updateTypex(_, fromNode, toNode))
 
     // ---------------------------------------------------------------------------
-    def updateSpecificOfnu(target: Key   , from: Ofnu, to: Ofnu): Cls = transformField(target)(_.updateSpecificOfnu(from, to))
-    def updateSpecificOfnu(target: Ren   , from: Ofnu, to: Ofnu): Cls = rename(target).updateSpecificOfnu(target.to, from, to)
+    def updateSpecificInfo1(target: Key   , from: Info1, to: Info1): Cls = transformField(target)(_.updateSpecificInfo1(from, to))
+    def updateSpecificInfo1(target: Ren   , from: Info1, to: Info1): Cls = rename(target).updateSpecificInfo1(target.to, from, to)
 
-    def updateSpecificOfnu(target: KPath , from: Ofnu, to: Ofnu): Cls = transformx(target)(_.updateSpecificOfnu(_, from, to), _.updateSpecificOfnu(_, from, to))
-    def updateSpecificOfnu(target: RPath , from: Ofnu, to: Ofnu): Cls = transformx(target)(_.updateSpecificOfnu(_, from, to), _.updateSpecificOfnu(_, from, to))
+    def updateSpecificInfo1(target: KPath , from: Info1, to: Info1): Cls = transformx(target)(_.updateSpecificInfo1(_, from, to), _.updateSpecificInfo1(_, from, to))
+    def updateSpecificInfo1(target: RPath , from: Info1, to: Info1): Cls = transformx(target)(_.updateSpecificInfo1(_, from, to), _.updateSpecificInfo1(_, from, to))
 
-    def updateSpecificOfnu(target: KPathz, from: Ofnu, to: Ofnu): Cls = target.foldLeft(this)(_.updateSpecificOfnu(_, from, to))
-    def updateSpecificOfnu(target: RPathz, from: Ofnu, to: Ofnu): Cls = target.foldLeft(this)(_.updateSpecificOfnu(_, from, to))
-
-    // ---------------------------------------------------------------------------
-    def updateOfni(target: Key   , ofni: Ofni): Cls = transformField(target)(_.transformOfni(_ => ofni))
-    def updateOfni(target: Ren   , ofni: Ofni): Cls = rename(target).updateOfni(target.to, ofni)
-
-    def updateOfni(target: KPath , ofni: Ofni): Cls = transformx(target)(_.updateOfni(_, ofni), _.updateOfni(_, ofni))
-    def updateOfni(target: RPath , ofni: Ofni): Cls = transformx(target)(_.updateOfni(_, ofni), _.updateOfni(_, ofni))
-
-    def updateOfni(target: KPathz, ofni: Ofni): Cls = target.foldLeft(this)(_.updateOfni(_, ofni))
-    def updateOfni(target: RPathz, ofni: Ofni): Cls = target.foldLeft(this)(_.updateOfni(_, ofni))
+    def updateSpecificInfo1(target: KPathz, from: Info1, to: Info1): Cls = target.foldLeft(this)(_.updateSpecificInfo1(_, from, to))
+    def updateSpecificInfo1(target: RPathz, from: Info1, to: Info1): Cls = target.foldLeft(this)(_.updateSpecificInfo1(_, from, to))
 
     // ---------------------------------------------------------------------------
-    def transformOfni(target: Key   , f: Ofni => Ofni): Cls = transformField(target)(_.transformOfni(f))
-    def transformOfni(target: Ren   , f: Ofni => Ofni): Cls = rename(target).transformOfni(target.to, f)
+    def updateInfo(target: Key   , info: Info): Cls = transformField(target)(_.transformInfo(_ => info))
+    def updateInfo(target: Ren   , info: Info): Cls = rename(target).updateInfo(target.to, info)
 
-    def transformOfni(target: KPath , f: Ofni => Ofni): Cls = transformx(target)(_.transformOfni(_, f), _.transformOfni(_, f))
-    def transformOfni(target: RPath , f: Ofni => Ofni): Cls = transformx(target)(_.transformOfni(_, f), _.transformOfni(_, f))
+    def updateInfo(target: KPath , info: Info): Cls = transformx(target)(_.updateInfo(_, info), _.updateInfo(_, info))
+    def updateInfo(target: RPath , info: Info): Cls = transformx(target)(_.updateInfo(_, info), _.updateInfo(_, info))
 
-    def transformOfni(target: KPathz, f: Ofni => Ofni): Cls = target.foldLeft(this)(_.transformOfni(_, f))
-    def transformOfni(target: RPathz, f: Ofni => Ofni): Cls = target.foldLeft(this)(_.transformOfni(_, f))
+    def updateInfo(target: KPathz, info: Info): Cls = target.foldLeft(this)(_.updateInfo(_, info))
+    def updateInfo(target: RPathz, info: Info): Cls = target.foldLeft(this)(_.updateInfo(_, info))
+
+    // ---------------------------------------------------------------------------
+    def transformInfo(target: Key   , f: Info => Info): Cls = transformField(target)(_.transformInfo(f))
+    def transformInfo(target: Ren   , f: Info => Info): Cls = rename(target).transformInfo(target.to, f)
+
+    def transformInfo(target: KPath , f: Info => Info): Cls = transformx(target)(_.transformInfo(_, f), _.transformInfo(_, f))
+    def transformInfo(target: RPath , f: Info => Info): Cls = transformx(target)(_.transformInfo(_, f), _.transformInfo(_, f))
+
+    def transformInfo(target: KPathz, f: Info => Info): Cls = target.foldLeft(this)(_.transformInfo(_, f))
+    def transformInfo(target: RPathz, f: Info => Info): Cls = target.foldLeft(this)(_.transformInfo(_, f))
 
     // ===========================================================================
     def transformField(target: Key   )(f: Fld => Fld): Cls =               _transformField(target)(f)
@@ -181,14 +183,14 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
       // ---------------------------------------------------------------------------
       // commonly needed
 
-      def transformAllInfos     (target: RPathWz)(f: Info => Info): Cls = target.values.foldLeft(this)(_.transformAllInfos(_)(f))
-      def transformAllInfos     (target: RPathW )(f: Info => Info): Cls = transformField(target.value)(_.transformAllInfos(f))
+      def transformAllSubInfos     (target: RPathWz)(f: SubInfo => SubInfo): Cls = target.values.foldLeft(this)(_.transformAllSubInfos(_)(f))
+      def transformAllSubInfos     (target: RPathW )(f: SubInfo => SubInfo): Cls = transformField(target.value)(_.transformAllSubInfos(f))
 
-      def transformSoleInfo     (target: RPathWz)(f: Info => Info): Cls = target.values.foldLeft(this)(_.transformSoleInfo(_)(f))
-      def transformSoleInfo     (target: RPathW )(f: Info => Info): Cls = transformField(target.value)(_.transformSoleInfo(f))
+      def transformSoleSubInfo     (target: RPathWz)(f: SubInfo => SubInfo): Cls = target.values.foldLeft(this)(_.transformSoleSubInfo(_)(f))
+      def transformSoleSubInfo     (target: RPathW )(f: SubInfo => SubInfo): Cls = transformField(target.value)(_.transformSoleSubInfo(f))
 
-        def transformSoleContainee(target: RPathWz)(f: Containee => Containee): Cls = target.values.foldLeft(this)(_.transformSoleContainee(_)(f))
-        def transformSoleContainee(target: RPathW )(f: Containee => Containee): Cls = transformField(target.value)(_.transformSoleContainee(f))
+        def transformSoleValueType(target: RPathWz)(f: ValueType => ValueType): Cls = target.values.foldLeft(this)(_.transformSoleValueType(_)(f))
+        def transformSoleValueType(target: RPathW )(f: ValueType => ValueType): Cls = transformField(target.value)(_.transformSoleValueType(f))
 
       // ---------------------------------------------------------------------------
       def transformNestedClasses  (target: RPathW)(f: Cls  => Cls): Cls = transformField(target.value)(_.transformNestedClasses       (f))
@@ -198,11 +200,11 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
         transformField(target.value)(_.transformNestedClass(disambiguatorOpt)(f))
 
     // ===========================================================================
-    def    toRequired(key: RPathW): Cls = transformOfni(key.value, _.toRequired)
-    def toNonRequired(key: RPathW): Cls = transformOfni(key.value, _.toOptional)
+    def    toRequired(key: RPathW): Cls = transformInfo(key.value, _.toRequired)
+    def toNonRequired(key: RPathW): Cls = transformInfo(key.value, _.toOptional)
 
-    def    toMultiple(key: RPathW): Cls = transformAllInfos(key.value)(_.toMultiple)
-    def toNonMultiple(key: RPathW): Cls = transformAllInfos(key.value)(_.toSingle)
+    def    toMultiple(key: RPathW): Cls = transformAllSubInfos(key.value)(_.toMultiple)
+    def toNonMultiple(key: RPathW): Cls = transformAllSubInfos(key.value)(_.toSingle)
 
     // ---------------------------------------------------------------------------
     def    toRequired(path: RPath): Cls = transformx(path)(_    toRequired _, _    toRequired _)
@@ -233,8 +235,8 @@ object Cls {
   // ===========================================================================
   private[gallia] def vleInt: Cls = Cls(List(Fld.oneInt(_vle)))
 
-  private[gallia] def vle (node: TypeNode): Cls = Cls(List(Fld(_vle, node.forceNonBObjOfni)))
-  private[gallia] def vles(node: TypeNode): Cls = Cls(List(Fld(_vle, node.forceNonBObjOfni).toMultiple))
+  private[gallia] def vle (node: TypeNode): Cls = Cls(List(Fld(_vle, node.forceNonBObjInfo)))
+  private[gallia] def vles(node: TypeNode): Cls = Cls(List(Fld(_vle, node.forceNonBObjInfo).toMultiple))
 
   // ---------------------------------------------------------------------------
   @PartialTypeMatching
@@ -254,7 +256,7 @@ object Cls {
   def from(keys: Seq[SKey])(implicit di: DI): Cls =
     keys
       .toList
-      .map(skey => Fld(skey.symbol, Ofni.oneString))
+      .map(skey => Fld(skey.symbol, Info.oneString))
       .pipe(Cls.apply)
 
 }

@@ -3,8 +3,6 @@ package reflect
 
 import aptus.{String_, Seq_}
 
-import meta.InfoUtils
-
 // ===========================================================================
 case class TypeLeaf(
       name       : FullName,                // eg java.lang.String
@@ -43,7 +41,7 @@ case class TypeLeaf(
 
     // ---------------------------------------------------------------------------
     def dataClassEither: Either[Any, Cls] = // TODO: use Try until determine precise criteria (cc + not Some + valid types...)
-      util.Try(InfoUtils.forceNestedClass(this)) match {
+      util.Try(meta.InfoUtils.forceNestedClass(this)) match {
         case util.Failure(error)          => Left(s"TODO:t201015102536:${error.toString}")
         case util.Success(validDataClass) => Right(validDataClass) }
 

@@ -2,22 +2,22 @@ package gallia
 package meta
 
 // ===========================================================================
-trait HasSingleContainee {
-  protected val containee: Containee
+trait HasSingleValueType {
+  protected val valueType: ValueType
 
   // ---------------------------------------------------------------------------
-  def      nestedClassOpt: Option[Cls] = containee.nestingOpt
+  def      nestedClassOpt: Option[Cls] = valueType.nestingOpt
   def forceNestedClass   :        Cls  = nestedClassOpt.get
 
   // ---------------------------------------------------------------------------
-  def isNestingWithName(name: String): Boolean = containee.nestingOpt.exists(_.nameOpt == Some(name))
+  def isNestingWithName(name: String): Boolean = valueType.nestingOpt.exists(_.nameOpt == Some(name))
 
-  def isNesting  : Boolean = containee.nestingOpt.nonEmpty
-  def isBasicType: Boolean = containee.leafOpt   .nonEmpty
+  def isNesting  : Boolean = valueType.nestingOpt.nonEmpty
+  def isBasicType: Boolean = valueType.leafOpt   .nonEmpty
 
   // ---------------------------------------------------------------------------
-  def isBasicType(value: BasicType)          : Boolean = containee.leafOpt.exists(_ == value)
-  def isBasicType(pred: BasicType => Boolean): Boolean = containee.isBasicType(pred)
+  def isBasicType(value: BasicType)          : Boolean = valueType.leafOpt.exists(_ == value)
+  def isBasicType(pred: BasicType => Boolean): Boolean = valueType.isBasicType(pred)
 
   // ---------------------------------------------------------------------------
   def isBoolean : Boolean = isBasicType(BasicType._Boolean)

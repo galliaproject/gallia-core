@@ -14,41 +14,41 @@ private[gallia] object InfoUtils {
       .map { field =>
         Fld(
           field.key.symbol,
-          field.node.forceNonBObjOfni)
+          field.node.forceNonBObjInfo)
           .setEnumName(field.node.leaf.name) /* mostly for macros */ }
       .pipe(Cls.apply)
       .setName(leaf.name.splitBy(".").last /* TODO: see t210325105833 - need to be in scope for macros */) // mostly for macros
 
   // ---------------------------------------------------------------------------
+  def forceNonBObjSubInfo(node: TypeNode): SubInfo =
+    SubInfo(
+      node.containerType.isMultiple, // note: ignores optionality
+      valueType(None /* ok if used for comparisons only (see 220506101842) */)(
+        node.isContainedDataClass)(
+        node.forceValidContainer))
+
+  // ---------------------------------------------------------------------------
+  def forceNonBObjSubInfo(enmOpt: _EnmOpt)(node: TypeNode): SubInfo =
+    SubInfo(
+      node.containerType.isMultiple, // note: ignores optionality
+      valueType(enmOpt)(
+        node.isContainedDataClass)(
+        node.forceValidContainer))
+
+  // ---------------------------------------------------------------------------
   def forceNonBObjInfo(node: TypeNode): Info =
-    Info(
-      node.containerType.isMultiple, // note: ignores optionality
-      containee(None /* ok if used for comparisons only (see 220506101842) */)(
-        node.isContainedDataClass)(
-        node.forceValidContainer))
-
-  // ---------------------------------------------------------------------------
-  def forceNonBObjInfo(enmOpt: _EnmOpt)(node: TypeNode): Info =
-    Info(
-      node.containerType.isMultiple, // note: ignores optionality
-      containee(enmOpt)(
-        node.isContainedDataClass)(
-        node.forceValidContainer))
-
-  // ---------------------------------------------------------------------------
-  def forceNonBObjOfni(node: TypeNode): Ofni =
       node
         .forceValidContainer
-        .pipe(containee(None /* TODO? */)(node.isContainedDataClass))
-        .pipe(node.containerType.ofni)
+        .pipe(valueType(None /* TODO? */)(node.isContainedDataClass))
+        .pipe(node.containerType.info)
 
     // ---------------------------------------------------------------------------
-    private def containee(enmOpt: _EnmOpt)(isContainedDataClass: Boolean)(leaf: TypeLeaf): Containee =
+    private def valueType(enmOpt: _EnmOpt)(isContainedDataClass: Boolean)(leaf: TypeLeaf): ValueType =
          if (isContainedDataClass) forceNestedClass(leaf)
-         else                      containeeOpt(enmOpt)(leaf).get
+         else                      valueTypeOpt(enmOpt)(leaf).get
   
       // ---------------------------------------------------------------------------
-      private def containeeOpt(enmOpt: _EnmOpt)(leaf: TypeLeaf): Option[Containee] =
+      private def valueTypeOpt(enmOpt: _EnmOpt)(leaf: TypeLeaf): Option[ValueType] =
                if (leaf.enm)          enmOpt.orElse(Some(BasicType._Enm.Dummy) /* typically for validations, see 220506101842 */)
           else if (leaf.isEnumeratum) Some(BasicType._Enm(leaf.enumeratumEnum))
           else if (leaf.bytes)        Some(BasicType._Binary)

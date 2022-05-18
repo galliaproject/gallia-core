@@ -6,8 +6,8 @@ trait HasTypeNode {
     val node: TypeNode
 
     // ---------------------------------------------------------------------------
-    def ofnuOpt(validator: TypeNode => Boolean): Option[Ofnu] =
-      if (validator(node)) Some(node.forceNonBObjOfni.forceOfnu)
+    def info1Opt(validator: TypeNode => Boolean): Option[Info1] =
+      if (validator(node)) Some(node.forceNonBObjInfo.forceInfo1)
       else                 None
 
     // ---------------------------------------------------------------------------

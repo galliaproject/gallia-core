@@ -31,12 +31,12 @@ private object ReducingTypeUtils {
   private[reducing] def _strings(values: Values): List[Option[String]] = values.asInstanceOf[List[Option[String]]]
 
   // ===========================================================================
-  def containee(rtipe: ReducingType)(optional: Boolean, originalType: BasicType): Containee =
+  def valueType(rtipe: ReducingType)(optional: Boolean, originalType: BasicType): ValueType =
       if (rtipe == ReducingType.stats) stats(optional, originalType)
       else                             rtipe.returnType.newBasicTypeOpt.getOrElse(originalType)
   
     // ---------------------------------------------------------------------------    
-    private def stats(optional: Boolean, originalType: BasicType): Containee =
+    private def stats(optional: Boolean, originalType: BasicType): ValueType =
         originalType match { //FIXME
           case BasicType._String => Meta.strings     (optional)
           

@@ -2,7 +2,7 @@ package gallia
 package meta
 
 // ===========================================================================
-trait FldLike extends HasKey with OfniLike
+trait FldLike extends HasKey with InfoLike
 
   // ---------------------------------------------------------------------------
   trait HasKey {

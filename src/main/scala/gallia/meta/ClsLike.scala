@@ -76,15 +76,15 @@ trait ClsLike { // read-only part
     def areAllNonRequired(keyz: Keyz): Boolean = keyz.map(field(_)).forall(!_.isRequired)
 
     // ---------------------------------------------------------------------------
-    def hasNesting (path: KPathW): Boolean = field(path.value).ofni.hasNesting
+    def hasNesting (path: KPathW): Boolean = field(path.value).info.hasNesting
 
     // ---------------------------------------------------------------------------
-    def hasMultiple(path: KPathW): Boolean = field(path.value).ofni.hasMultiple
-    def hasSingle  (path: KPathW): Boolean = field(path.value).ofni.hasSingle
+    def hasMultiple(path: KPathW): Boolean = field(path.value).info.hasMultiple
+    def hasSingle  (path: KPathW): Boolean = field(path.value).info.hasSingle
 
     // ---------------------------------------------------------------------------
-    def isMultiple(path: KPathW): Boolean = field(path.value).ofni.areAllMultiple
-    def isSingle  (path: KPathW): Boolean = field(path.value).ofni.areAllSingle
+    def isMultiple(path: KPathW): Boolean = field(path.value).info.areAllMultiple
+    def isSingle  (path: KPathW): Boolean = field(path.value).info.areAllSingle
 
     // ---------------------------------------------------------------------------
     def isRequired(path: KPathW): Boolean = field(path.value).isRequired
@@ -94,7 +94,7 @@ trait ClsLike { // read-only part
     private[gallia] def enmOpt(target: Key): Option[_Enm] = field(target).basicTypesOpt.toSeq.flatten.flatMap(_.enmOpt).force.option
 
     // ---------------------------------------------------------------------------
-    def maxDepth: aptus.Depth = fields.map(_.containees.map(_.nestingOpt.map(_.maxDepth + 1).getOrElse(0)).max).max
+    def maxDepth: aptus.Depth = fields.map(_.valueTypes.map(_.nestingOpt.map(_.maxDepth + 1).getOrElse(0)).max).max
 
     // ===========================================================================
     //TODO: get fld-like, nested cls-like

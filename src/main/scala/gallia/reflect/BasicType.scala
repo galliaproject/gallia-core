@@ -194,18 +194,19 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
         override val parseString = _.parseLocalTime /* aptus' */
 
         private implicit val ord: Ordering[T] = CustomOrdering.localTime }
-    
-    // ===========================================================================
-    case object _Instant extends UnparameterizedBasicType with HasPair { /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse; override val valuePredicate = _.isInstanceOf[T]
-        type T        =            Instant
-        val  fullName = "java.time.Instant"
 
-        override val pair = (_.parseInstant, _.toInstant /* aptus' */)
-
-        private implicit val ord: Ordering[T] = Ordering.by(identity) /* not sure why needed */ }
-  
       // ---------------------------------------------------------------------------
-      case object _OffsetDateTime extends UnparameterizedBasicType { /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse; override val valuePredicate = _.isInstanceOf[T]
+      case object _LocalDateTime extends UnparameterizedBasicType with HasPair { /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse
+        type T        =            LocalDateTime
+        val  fullName = "java.time.LocalDateTime"
+
+        override val valuePredicate = _.isInstanceOf[T]
+        override val pair           = (_.replace(" ", "T").parseLocalDateTime, _.toLocalDateTime /* aptus' */) // see https://stackoverflow.com/questions/9531524/in-an-iso-8601-date-is-the-t-character-mandatory
+
+        private implicit val ord: Ordering[T] = CustomOrdering.localDateTime }
+
+    // ===========================================================================
+    case object _OffsetDateTime extends UnparameterizedBasicType { /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse; override val valuePredicate = _.isInstanceOf[T]
         type T        =            OffsetDateTime
         val  fullName = "java.time.OffsetDateTime"
 
@@ -221,16 +222,15 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
         override val parseString = _.parseZonedDateTime  /* aptus' */
 
         private implicit val ord: Ordering[T] = CustomOrdering.zonedDateTime }
-    
+
       // ---------------------------------------------------------------------------
-      case object _LocalDateTime extends UnparameterizedBasicType with HasPair { /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse
-        type T        =            LocalDateTime
-        val  fullName = "java.time.LocalDateTime"
+      case object _Instant extends UnparameterizedBasicType with HasPair { /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse; override val valuePredicate = _.isInstanceOf[T]
+        type T        =            Instant
+        val  fullName = "java.time.Instant"
 
-        override val valuePredicate = _.isInstanceOf[T]
-        override val pair           = (_.replace(" ", "T").parseLocalDateTime, _.toLocalDateTime /* aptus' */) // see https://stackoverflow.com/questions/9531524/in-an-iso-8601-date-is-the-t-character-mandatory
+        override val pair = (_.parseInstant, _.toInstant /* aptus' */)
 
-        private implicit val ord: Ordering[T] = CustomOrdering.localDateTime }
+        private implicit val ord: Ordering[T] = Ordering.by(identity) /* not sure why needed */ }
 
     // ===========================================================================
     case object _Binary extends UnparameterizedBasicType { /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse; override val valuePredicate = _.isInstanceOf[T]

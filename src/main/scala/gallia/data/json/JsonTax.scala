@@ -25,11 +25,10 @@ sealed trait JsonTax extends EnumEntry with HasTaxOpt
 
     case object JsonLocalDateTax      extends JsonTax { def valueOpt(c: Cls) = _tax[Any](c)(_.hasLocalDate)    (stringOrLong(BasicType._LocalDate    .pair)) }
     case object JsonLocalDateTimeTax  extends JsonTax { def valueOpt(c: Cls) = _tax[Any](c)(_.hasLocalDateTime)(stringOrLong(BasicType._LocalDateTime.pair)) }
-    case object JsonInstantTax        extends JsonTax { def valueOpt(c: Cls) = _tax[Any](c)(_.hasInstant)      (stringOrLong(BasicType._Instant      .pair)) }
-
     case object JsonLocalTimeTax      extends StringTax(BasicType._LocalTime)      with JsonTax
     case object JsonOffsetDateTimeTax extends StringTax(BasicType._OffsetDateTime) with JsonTax
     case object JsonZonedDateTimeTax  extends StringTax(BasicType._ZonedDateTime)  with JsonTax
+    case object JsonInstantTax        extends JsonTax { def valueOpt(c: Cls) = _tax[Any](c)(_.hasInstant)      (stringOrLong(BasicType._Instant      .pair)) }
 
     case object JsonBinaryTax         extends StringTax(BasicType._Binary)         with JsonTax
 

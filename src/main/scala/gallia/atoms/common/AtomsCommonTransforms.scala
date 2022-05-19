@@ -6,7 +6,7 @@ import domain._
 import FunctionWrappers._
 
 // ===========================================================================
-object AtomsUUTransforms {
+object AtomsCommonTransforms {
   case class _TransformVV(pair: PathPair, f: _ff11)                     extends AtomUU { def naive(o: Obj): Obj = o.transformPathPair        (pair, f) }  
   case class _TransformWW(pair: PathPair, f: _ff11, checkType: Boolean) extends AtomUU { def naive(o: Obj): Obj = o.transformWhateverPathPair(pair, f, checkType) }
 

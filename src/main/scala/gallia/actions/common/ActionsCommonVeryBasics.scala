@@ -8,12 +8,12 @@ import target._
 import vldt.ErrorId
 import domain.{KVEs, RVEs}
 import atoms.AtomsOthers._
-import atoms.common.AtomsUUVeryBasics._
+import atoms.common.AtomsCommonVeryBasics._
 import actions.utils.RenameDynamicallyHelper
 import actions.utils.ActionsUtils._
 
 // ===========================================================================
-object ActionsUUVeryBasics {
+object ActionsCommonVeryBasics {
 
   case object IdentityUU extends IdentityVM1 with IdentityUUa
 

@@ -3,11 +3,11 @@ package actions
 package common
 
 import target._
-import atoms.common.AtomsUUReducer0._
+import atoms.common.AtomsCommonReducer0._
 
 // ===========================================================================
 @NumberAbstraction
-@deprecated("TODO: t210122151934 - use reducer rather") object ActionsUUReducer0 {
+@deprecated("TODO: t210122151934 - use reducer rather") object ActionsCommonReducer0 {
   //TODO: vals: ensure arrays + numerical
 
   // ---------------------------------------------------------------------------

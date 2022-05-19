@@ -6,10 +6,10 @@ import aptus.Anything_
 
 import target._
 import FunctionWrappers._
-import atoms.common.AtomsUUTransforms._TransformWW
+import atoms.common.AtomsCommonTransforms._TransformWW
 
 // ===========================================================================
-object ActionsUUTransforms {
+object ActionsCommonTransforms {
   import gallia.actions.utils
   import utils.ActionsUtils._
   import utils.NestedTransform

@@ -2,8 +2,8 @@ package gallia
 package heads.common
 
 import env.ActionDag
-import actions.common.ActionsUUVeryBasics._
-import actions.common.ActionsUUUnionTypes
+import actions.common.ActionsCommonVeryBasics._
+import actions.common.ActionsCommonUnionTypes
 
 // ===========================================================================
 trait HeadCommon[F <: HeadCommon[F]]
@@ -65,12 +65,12 @@ trait HeadCommon[F <: HeadCommon[F]]
   // ===========================================================================
   def fuseToUnion(origin1: KeyW, origin2: KeyW) = new {
       def as(union: KeyW): Self2 = self2 :+
-        ActionsUUUnionTypes.FuseToUnion(origin1.value, origin2.value, union.value) }
+        ActionsCommonUnionTypes.FuseToUnion(origin1.value, origin2.value, union.value) }
 
     // ---------------------------------------------------------------------------
     def fissionFromUnion(origin: KeyW) = new {
       def as(target1: KeyW, target2: KeyW): Self2 = self2 :+
-        ActionsUUUnionTypes.FissionFromUnion(origin.value, target1.value, target2.value) }
+        ActionsCommonUnionTypes.FissionFromUnion(origin.value, target1.value, target2.value) }
 
   // ===========================================================================
   // TODO: t210127164512

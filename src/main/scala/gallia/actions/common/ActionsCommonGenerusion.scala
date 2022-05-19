@@ -4,11 +4,11 @@ package common
 
 import target._
 import FunctionWrappers._
-import atoms.common.AtomsUUTransforms._
+import atoms.common.AtomsCommonTransforms._
 import atoms.AtomsAsserts._AssertSameType
 
 // ===========================================================================
-object ActionsUUGenerusion { //TODO: t210111095156 separate all the Whatever and t210111095157 case-class versions...
+object ActionsCommonGenerusion { //TODO: t210111095156 separate all the Whatever and t210111095157 case-class versions...
 
   case class Generate1VtoV(from: TtqKPath, to: TKPath, f: _ff11) extends ActionUUc {
       def  vldt (c: Cls): Errs   = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c)

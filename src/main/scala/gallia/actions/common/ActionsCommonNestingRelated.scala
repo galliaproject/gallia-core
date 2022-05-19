@@ -6,11 +6,11 @@ import aptus.{Anything_, Seq_}
 import aptus.Separator
 
 import target._
-import atoms.common.AtomsUUSomewhatBasics._
-import atoms.common.AtomsUUResnesting
+import atoms.common.AtomsCommonSomewhatBasics._
+import atoms.common.AtomsCommonResnesting
 
 // ===========================================================================
-object ActionsUUNestingRelated {
+object ActionsCommonNestingRelated {
   import gallia.actions.utils.ActionsUtils.potentialRenaming
 
   // ===========================================================================
@@ -84,12 +84,12 @@ object ActionsUUNestingRelated {
   // ===========================================================================
   case class Renest(targets: TqKeyz, sep: Separator) extends ActionUUc with TodoV1 {
       // TODO: check for potential resulting conflicts
-      def _meta (c: Cls): Cls = targets.resolve(c).pipe(AtomsUUResnesting.meta(_, sep)(c))
+      def _meta (c: Cls): Cls = targets.resolve(c).pipe(AtomsCommonResnesting.meta(_, sep)(c))
       def atomuu(c: Cls)      = targets.resolve(c).pipe(_Renest(_, sep)) }
 
     // ---------------------------------------------------------------------------
     case class _Renest(targetKeys: Keyz, sep: Separator) extends AtomUU { def naive(o: Obj) =
-      AtomsUUResnesting.data(targetKeys, sep)(o) }
+      AtomsCommonResnesting.data(targetKeys, sep)(o) }
 
   // ===========================================================================
   @deprecated("WIP: t210109144926 - nesting-related generalization") class Move(target: RPathz, destinationOpt: Option[RPath]) extends ActionUUa {

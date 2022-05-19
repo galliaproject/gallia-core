@@ -3,7 +3,7 @@ package atoms
 package common
 
 // ===========================================================================
-object AtomsUUSomewhatBasics {
+object AtomsCommonSomewhatBasics {
 
   // ---------------------------------------------------------------------------
   case class _RemoveIf(reference: Key, target: Key, pred: AnyValue => Boolean) extends AtomUU { def naive(o: Obj) =

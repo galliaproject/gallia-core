@@ -5,8 +5,8 @@ import aptus.Tuple2_
 
 import domain.PathPair
 import atoms.AtomsOthers._Nested
-import atoms.common.AtomsUUVeryBasics._Rename
-import atoms.common.AtomsUUVeryBasics._Remove
+import atoms.common.AtomsCommonVeryBasics._Rename
+import atoms.common.AtomsCommonVeryBasics._Remove
 
 // ===========================================================================
 private[actions] object ActionsUtils {

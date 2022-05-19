@@ -1,9 +1,9 @@
 package gallia
 package plans
 
-import atoms.common.AtomsUUVeryBasics    ._RenameAll
-import atoms.common.AtomsUUSomewhatBasics._RemoveWhateverIfAll
-import atoms                             ._UWrappers
+import atoms.common.AtomsCommonVeryBasics    ._RenameAll
+import atoms.common.AtomsCommonSomewhatBasics._RemoveWhateverIfAll
+import atoms                                 ._UWrappers
 
 // ===========================================================================
 case class AtomNodes(values: Seq[AtomNode]) extends AnyVal {  

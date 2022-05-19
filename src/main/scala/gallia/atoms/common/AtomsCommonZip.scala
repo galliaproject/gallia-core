@@ -6,10 +6,10 @@ import aptus.String_
 import aptus.Separator
 import aptus.Nes
 
-import atoms.common.AtomsUUSomewhatBasics._Split
+import atoms.common.AtomsCommonSomewhatBasics._Split
 
 // ===========================================================================
-object AtomsUUZip {
+object AtomsCommonZip {
   // TODO: if any are missing? ensure add can handle None (not adding)
 
   // ---------------------------------------------------------------------------

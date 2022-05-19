@@ -4,12 +4,12 @@ package common
 
 import target._
 import FunctionWrappers._
-import atoms.common.AtomsUUTransforms._
+import atoms.common.AtomsCommonTransforms._
 import meta.ValueType
 
 
 // ===========================================================================
-object ActionsUUCotransforms { // TODO: t210826102833 - rework co-transforms
+object ActionsCommonCotransforms { // TODO: t210826102833 - rework co-transforms
 
   case class Cotransform1to1(from: TtqKPath1, toEither: Either[HasType, TtqKPath1], f: _ff11) extends ActionUUc {
       def  vldt(c: Cls): Errs  =

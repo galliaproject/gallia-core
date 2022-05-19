@@ -2,7 +2,7 @@ package gallia
 package actions.utils
 
 // ===========================================================================
-private[actions] object ActionsUUHelper {
+private[actions] object ActionsCommonHelper {
 
   object Translate {
 

@@ -5,12 +5,12 @@ package common
 import target._
 import domain._
 import FunctionWrappers._
-import atoms.common.AtomsUUTransforms._
+import atoms.common.AtomsCommonTransforms._
 import atoms.AtomsAsserts._AssertSameType
 import actions.utils.ActionsUtils
 
 // ===========================================================================
-object ActionsUUFission { import ActionsUtils.{remove, removeAll}
+object ActionsCommonFission { import ActionsUtils.{remove, removeAll}
   //TODO: t210111095156 separate all the Whatever and t210111095157 case-class versions...
 
   // ===========================================================================

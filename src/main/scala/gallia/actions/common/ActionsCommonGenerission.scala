@@ -5,10 +5,10 @@ package common
 import target._
 import domain._
 import FunctionWrappers._
-import atoms.common.AtomsUUTransforms._
+import atoms.common.AtomsCommonTransforms._
 
 // ===========================================================================
-object ActionsUUGenerission { //TODO: t210111095156 separate all the Whatever and t210111095157 case-class versions...
+object ActionsCommonGenerission { //TODO: t210111095156 separate all the Whatever and t210111095157 case-class versions...
 
   case class GenerateVto2V(from: TtqKPath, to: TKPaths2, f: _ff12) extends ActionUUc {
       def  vldt (c: Cls): Errs  = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c)

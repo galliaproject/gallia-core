@@ -8,8 +8,8 @@ import domain._
 
 // ===========================================================================
 @PartialTypeMatching
-object AtomsUUConverts {
-  import AtomsUUTransforms._TransformVV
+object AtomsCommonConverts {
+  import AtomsCommonTransforms._TransformVV
 
   // ===========================================================================
   case class _ConvertToString(target: PathPair) extends AtomUU { def naive(o: Obj) =

@@ -4,7 +4,7 @@ package heads.common
 import aptus.String_
 
 import domain._
-import actions.common.ActionsUUVeryBasics._
+import actions.common.ActionsCommonVeryBasics._
 
 // ===========================================================================
 trait HeadCommonVeryBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>

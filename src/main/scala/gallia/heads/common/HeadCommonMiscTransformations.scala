@@ -3,8 +3,8 @@ package heads.common
 
 import aptus.{String_, Double_}
 
-import actions.common.ActionsUUReducer0._
-import actions.common.ActionsUUTransforms.{TransformObjectCustom, TransformObjectsCustom}
+import actions.common.ActionsCommonReducer0._
+import actions.common.ActionsCommonTransforms.{TransformObjectCustom, TransformObjectsCustom}
 
 // ===========================================================================
 trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // TODO: t210110094731 - add selections throughout

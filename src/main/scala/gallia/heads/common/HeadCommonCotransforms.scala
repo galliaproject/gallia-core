@@ -5,7 +5,7 @@ import aptus.Anything_
 import target.{HT, HT2, TtqKPath2}
 import target.utils.TypedTargetQueryUtils._
 import FunctionWrappers._
-import actions.common.ActionsUUCotransforms._
+import actions.common.ActionsCommonCotransforms._
 
 // ===========================================================================
 trait HeadCommonCotransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // TODO: t210826102833 - rework co-transforms

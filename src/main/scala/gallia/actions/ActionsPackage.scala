@@ -68,11 +68,11 @@ package object actions { // TODO: delegate access to all of AtomsUtils._
   type _Nested = atoms.AtomsOthers._Nested
   val  _Nested = atoms.AtomsOthers._Nested
 
-  type _Rename = atoms.common.AtomsUUVeryBasics._Rename
-  val  _Rename = atoms.common.AtomsUUVeryBasics._Rename
+  type _Rename = atoms.common.AtomsCommonVeryBasics._Rename
+  val  _Rename = atoms.common.AtomsCommonVeryBasics._Rename
 
-  type _TransformVV = atoms.common.AtomsUUTransforms._TransformVV
-  val  _TransformVV = atoms.common.AtomsUUTransforms._TransformVV
+  type _TransformVV = atoms.common.AtomsCommonTransforms._TransformVV
+  val  _TransformVV = atoms.common.AtomsCommonTransforms._TransformVV
   
   // ===========================================================================
   private[actions] implicit def _atomUUToAtomUUs(value: AtomUU): Seq[AtomUU] = Seq(value)

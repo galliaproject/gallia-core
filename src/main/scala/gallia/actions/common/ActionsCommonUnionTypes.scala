@@ -3,10 +3,10 @@ package actions
 package common
 
 import aptus.Seq_
-import atoms.common.AtomsUUUnionTypes._
+import atoms.common.AtomsCommonUnionTypes._
 
 // ===========================================================================
-object ActionsUUUnionTypes {
+object ActionsCommonUnionTypes {
 
   // TODO: t220511141020 - generalize to N
   case class FuseToUnion(origin1: Key, origin2: Key, dest: Key) extends ActionUUd {

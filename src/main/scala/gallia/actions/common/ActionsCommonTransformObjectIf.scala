@@ -6,7 +6,7 @@ import target._
 import domain.PathPair
 
 // ===========================================================================
-object ActionsUUTransformObjectIf {
+object ActionsCommonTransformObjectIf {
   import gallia.actions.utils.NestedTransform._
   import gallia.atoms.AtomsCustom
 

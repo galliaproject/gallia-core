@@ -6,11 +6,11 @@ import aptus.Anything_
 import aptus.Separator
 
 import target._
-import atoms.common.AtomsUUSomewhatBasics._
+import atoms.common.AtomsCommonSomewhatBasics._
 
 // ===========================================================================
-object ActionsUUSomewhatBasics {
-  import gallia.actions.utils.{ActionsUUHelper => _helper}
+object ActionsCommonSomewhatBasics {
+  import gallia.actions.utils.{ActionsCommonHelper => _helper}
   import gallia.actions.utils.ActionsUtils._
 
   // ===========================================================================
@@ -143,7 +143,7 @@ object ActionsUUSomewhatBasics {
 
     // ---------------------------------------------------------------------------
     case class _ZipStrings(keys: Renz, sep: Separator, newNestingKey : Key) extends AtomUU { def naive(o: Obj) =
-      gallia.atoms.common.AtomsUUZip.zip(o, keys, sep, newNestingKey) }
+      gallia.atoms.common.AtomsCommonZip.zip(o, keys, sep, newNestingKey) }
 
   // ===========================================================================
   case class EnsureNumeric(targets: TqKPathz) extends IdentityM1 with IdentityUUa { // TODO: generalize to any validation

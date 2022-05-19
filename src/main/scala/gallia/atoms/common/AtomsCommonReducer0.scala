@@ -5,7 +5,7 @@ package common
 import aptus.Seq_
 
 // ===========================================================================
-@deprecated("see t210122151934") object AtomsUUReducer0 {
+@deprecated("see t210122151934") object AtomsCommonReducer0 {
 
   case class _ToSize(key: Key) extends AtomUU { def naive(o: Obj) = o.transformPath(key, _.asInstanceOf[Seq[_]].size) }
 

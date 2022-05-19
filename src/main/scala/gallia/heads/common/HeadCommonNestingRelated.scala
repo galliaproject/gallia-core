@@ -3,7 +3,7 @@ package heads.common
 
 import aptus.Separator
 
-import actions.common.ActionsUUNestingRelated._
+import actions.common.ActionsCommonNestingRelated._
 
 // ===========================================================================
 trait HeadCommonNestingRelated[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>

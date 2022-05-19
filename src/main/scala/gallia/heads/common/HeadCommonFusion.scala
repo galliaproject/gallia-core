@@ -2,7 +2,7 @@ package gallia
 package heads.common
 
 import FunctionWrappers._
-import actions.common.ActionsUUFusion._
+import actions.common.ActionsCommonFusion._
 
 // ===========================================================================
 trait HeadCommonFusion[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>

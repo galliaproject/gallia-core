@@ -3,8 +3,8 @@ package heads.common
 
 import FunctionWrappers._
 import target.utils.TypedTargetQueryUtils._
-import actions.common.ActionsUUGenerationOther
-import actions.common.ActionsUUGenerusion._
+import actions.common.ActionsCommonGenerationOther
+import actions.common.ActionsCommonGenerusion._
 
 // ===========================================================================
 trait HeadCommonGenerusion[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
@@ -38,13 +38,13 @@ trait HeadCommonGenerusion[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
       // ===========================================================================
       class _FromU1(f1: Generate1[HeadU]) {
-        def using         (f: HeadU => HeadU)                             : Self2 = self2 :+ ActionsUUGenerationOther.GenerateUU(tqkpath(f1), d, wrapUU(f))
+        def using         (f: HeadU => HeadU)                             : Self2 = self2 :+ ActionsCommonGenerationOther.GenerateUU(tqkpath(f1), d, wrapUU(f))
         def using         (f: HeadU => HeadZ)    (implicit d1: DI)        : Self2 = self2 :+ ??? /* TODO: t210202164324 */
         def using[V1: WTT](f: HeadU => HeadV[V1])(implicit d1: DI, d2: DI): Self2 = self2 :+ ??? /* TODO: t210202164324 */ }
 
       // ---------------------------------------------------------------------------
       class _FromZ1(f1: Generate1[HeadZ]) {
-        def using         (f: HeadZ => HeadZ)    (implicit d1: DI)        : Self2 = self2 :+ ActionsUUGenerationOther.GenerateZZ(tqkpath(f1), d, wrapZZ(f))
+        def using         (f: HeadZ => HeadZ)    (implicit d1: DI)        : Self2 = self2 :+ ActionsCommonGenerationOther.GenerateZZ(tqkpath(f1), d, wrapZZ(f))
         def using         (f: HeadZ => HeadU)                             : Self2 = self2 :+ ??? /* TODO: t210202164324 */
         def using[V1: WTT](f: HeadZ => HeadV[V1])(implicit d1: DI, d2: DI): Self2 = self2 :+ ??? /* TODO: t210202164324 */ }
 
@@ -66,7 +66,7 @@ trait HeadCommonGenerusion[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
       class _FromV1[O: WTT](f1: Generate1[O]) {
         def using        (f: O => HeadU)                         : Self2 = self2 :+ ???
         def using        (f: O => HeadZ)(implicit d1: DI)        : Self2 = self2 :+ ???
-        def using[D: WTT](f: O => D)    (implicit d1: DI, d2: DI): Self2 = self2 :+ ActionsUUGenerationOther.GenerateVtoV(resolve(f1), tkpath[D](d), wrap(f)) }
+        def using[D: WTT](f: O => D)    (implicit d1: DI, d2: DI): Self2 = self2 :+ ActionsCommonGenerationOther.GenerateVtoV(resolve(f1), tkpath[D](d), wrap(f)) }
 
       // ===========================================================================
       class _FromWhatever2(f1: Generate1[WV], f2: Generate1[WV]) {

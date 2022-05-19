@@ -3,11 +3,11 @@ package actions
 package common
 
 import selection.typed.TqRPathz
-import atoms.common.AtomsUUConverts._
+import atoms.common.AtomsCommonConverts._
 import atoms.AtomsAsserts._
 
 // ===========================================================================
-object ActionsUUConverts {
+object ActionsCommonConverts {
   import utils.ActionsUtils._
 
   // ---------------------------------------------------------------------------

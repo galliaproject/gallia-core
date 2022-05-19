@@ -3,7 +3,7 @@ package atoms
 package common
 
 // ===========================================================================
-object AtomsUUUnionTypes {
+object AtomsCommonUnionTypes {
 
   case class _FuseToUnion(origin1: Key, origin2: Key, dest: Key) extends AtomUU { def naive(o: Obj) =
       (o.attemptKey(origin1), o.attemptKey(origin2)) match {

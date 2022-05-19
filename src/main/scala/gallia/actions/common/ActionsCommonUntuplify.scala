@@ -2,10 +2,10 @@ package gallia
 package actions
 package common
 
-import atoms.common.AtomsUUUntuplify._
+import atoms.common.AtomsCommonUntuplify._
 
 // ===========================================================================
-object ActionsUUUntuplify {
+object ActionsCommonUntuplify {
 
   case class Untuplify1z(targetKey: Ren, keys: Keyz) extends ActionUUd with TodoV1 {
         def _meta(c: Cls): Cls = c.untuplifyz(targetKey, keys)

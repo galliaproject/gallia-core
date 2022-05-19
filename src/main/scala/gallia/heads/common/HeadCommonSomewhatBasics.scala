@@ -5,9 +5,9 @@ import aptus.{Anything_, String_}
 
 import aptus.Separator
 
-import actions.common.ActionsUUSomewhatBasics._
-import actions.common.ActionsUUConverts._
-import actions.common.ActionsUUUntuplify._
+import actions.common.ActionsCommonSomewhatBasics._
+import actions.common.ActionsCommonConverts._
+import actions.common.ActionsCommonUntuplify._
 import domain._
 import target._
 import target.utils.TypedTargetQueryUtils._

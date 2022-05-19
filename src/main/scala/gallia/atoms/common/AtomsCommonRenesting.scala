@@ -6,7 +6,7 @@ import aptus.{String_, Seq_}
 import aptus.Separator
 
 // ===========================================================================
-object AtomsUUResnesting {
+object AtomsCommonResnesting {
 
   def meta(targetKeys: Keyz, sep: Separator)(value: Cls): Cls =
       targetKeys

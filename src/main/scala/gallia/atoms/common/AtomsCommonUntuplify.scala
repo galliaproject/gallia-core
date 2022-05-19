@@ -5,7 +5,7 @@ package common
 import aptus.{String_, Seq_, Tuple2_}
 
 // ===========================================================================
-object AtomsUUUntuplify {
+object AtomsCommonUntuplify {
 
   def untuplify1z(o: Obj, targetKey: Ren, keys: Keyz): Obj =
     o .potch(targetKey.from)

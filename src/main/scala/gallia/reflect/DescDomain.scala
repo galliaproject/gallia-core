@@ -61,7 +61,7 @@ sealed trait NodeDesc
     case class  Node    (node: TypeNode)  extends NodeDesc
     case class  Nesting (nested: ClsDesc) extends NodeDesc
     case object Enumeratum                extends NodeDesc
-    case class  Other   (name: FullName)  extends NodeDesc
+    case class  Named   (name: FullName)  extends NodeDesc
 
     // ---------------------------------------------------------------------------
     def from(node: TypeNode): NodeDesc =
@@ -69,7 +69,7 @@ sealed trait NodeDesc
         case None                                        => Node(node)
         case Some(fieldType) if (fieldType.dataClass)    => Nesting(ClsDesc.from(fieldType, generic = false))
         case Some(fieldType) if (fieldType.isEnumeratum) => Enumeratum // not actually used at the moment
-        case Some(fieldType)                             => Other(fieldType.name) }
+        case Some(fieldType)                             => Named(fieldType.name) }
   }
 
 // ===========================================================================

@@ -55,16 +55,16 @@ object NodeDescUtils {
       u match {
         case Node(_)          => true
         case Enumeratum       => false
-        case Other(fullName)  => fullName != reflect._EnumValue && !BasicType.isKnown(fullName)
+        case Named(fullName)  => fullName != reflect._EnumValue && !BasicType.isKnown(fullName)
         case Nesting(nesting) => nesting.isInvalid }
 
     // ===========================================================================
     def errorMessages                : Seq[ErrorMsg] = errorMessages(Parent.Root)
     def errorMessages(parent: Parent): Seq[ErrorMsg] =
       u match {
-        case Node(node)       => s"${ErrorId.InvalidTypeNode} - ${parent} ${node.formatDefault}".in.seq
-        case Enumeratum       => Nil
-        case Other(name)      =>
+        case Node(node)  => s"${ErrorId.InvalidTypeNode} - ${parent} ${node.formatDefault}".in.seq
+        case Enumeratum  => Nil
+        case Named(name) =>
           if (BasicType.isKnown(name)) Nil
           else                         s"${ErrorId.UnsupportedTlSubtype} - ${parent} - ${name}".in.seq
         case Nesting(nesting) => nesting.errorMessages(parent) }

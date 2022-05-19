@@ -87,7 +87,7 @@ trait ActionM0 extends ActionMN {
   }
 
 // ===========================================================================
-trait ActionUU extends Action with ActionV1 with ActionM1 with AtomsCommon
+trait ActionUU extends Action with ActionV1 with ActionM1 with AtomsUU
 trait ActionZZ extends Action with ActionV1 with ActionM1 with AtomsZZ
 
   // ---------------------------------------------------------------------------

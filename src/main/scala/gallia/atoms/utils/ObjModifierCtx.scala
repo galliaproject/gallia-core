@@ -83,7 +83,7 @@ case class ObjModifierCtx(
 
       // ---------------------------------------------------------------------------
       def withTypeNameOpt(o: Obj)(typeOpt: Option[String]): Option[ObjModifierCtx] = typeOpt match {
-          case None        => ObjModifierCtxUtils.guessOpt(nestings)(o)
+          case None        => ObjModifierCtxUtils.guess(nestings)(o).in.some
           case Some(value) => nestings.find(_.nameOpt == Some(value)) }
     }
 

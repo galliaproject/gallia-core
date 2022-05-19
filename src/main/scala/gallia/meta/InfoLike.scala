@@ -34,7 +34,7 @@ trait InfoLike extends SubInfosLike {
   def isPes: Boolean = isOptional && areAllMultiple
 
   // ===========================================================================
-  def trivialValueTypeOpt: Option[ValueType] =  _info.union.ifOneOpt.flatMap(_.inSomeIf(_ => isRequired)).map(_.valueType)
+  def trivialValueTypeOpt: Option[ValueType] =  _info.union.ifOneElementOpt.flatMap(_.inSomeIf(_ => isRequired)).map(_.valueType)
 
   // ===========================================================================
   private[gallia] def enmInfo1    (multiple: Boolean): Info1     = enmSubInfo(multiple).info1(_info.optional)

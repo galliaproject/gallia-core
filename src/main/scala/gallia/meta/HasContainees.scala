@@ -24,7 +24,7 @@ trait HasValueTypes {  // see t210125111338 (union types)
 
   // ---------------------------------------------------------------------------
   def forceNestedClass: Cls = nestedClassOpt.get
-  def forceNestedClass(disambiguatorOpt: UnionObjectDisambiguatorOpt): Cls  = nestedClassesOpt(disambiguatorOpt).ifOneOrElse(errorMessage = _.map(_.nameOpt) -> disambiguatorOpt)
+  def forceNestedClass(disambiguatorOpt: UnionObjectDisambiguatorOpt): Cls  = nestedClassesOpt(disambiguatorOpt).ifOneElementOrElse(errorMessage = _.map(_.nameOpt) -> disambiguatorOpt)
 
   // ---------------------------------------------------------------------------
   def basicTypeOpt  : Option[    BasicType ] = valueTypes.flatMap(_.leafOpt).force.option

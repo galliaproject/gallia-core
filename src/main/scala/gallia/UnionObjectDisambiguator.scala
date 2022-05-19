@@ -9,7 +9,7 @@ private[gallia] sealed trait UnionObjectDisambiguator {
       f .valueTypes
         .flatMap(_.nestingOpt)
         .pipe(filter)
-        .ifOne(_ => Nil, _ => vldt._Error.NotExactlyOneNestedClass(f).errs)
+        .ifOneElement(_ => Nil, _ => vldt._Error.NotExactlyOneNestedClass(f).errs)
   }
 
   // ===========================================================================

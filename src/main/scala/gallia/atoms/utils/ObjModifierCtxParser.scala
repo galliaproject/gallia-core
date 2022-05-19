@@ -14,7 +14,7 @@ object ObjModifierCtxParser {
     c .fields
       .flatMap { field =>
         field
-          .info.union.ifOne(
+          .info.union.ifOneElement(
             sole     => nonUnionItemOpt(qualifies)(field)(sole)    .map(ObjModifierQualifyingNonUnionFld(field.key, field.hasMultiple, _)),
             multiple =>    unionItemOpt(qualifies)(field)(multiple).map(ObjModifierQualifyingUnionFld   (field.key,                    _))) }
       .in.noneIf(_.isEmpty)

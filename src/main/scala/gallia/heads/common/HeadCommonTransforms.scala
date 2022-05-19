@@ -31,9 +31,9 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
         protected val disambiguatorOpt: Option[UnionObjectDisambiguator] = None // TODO: t220517123057: support for UZ and UV
 
         // ---------------------------------------------------------------------------
-        def using         (f: HeadU => HeadU)                            : Self2 = self2 :+ TransformUU    (tqqpathz(target), disambiguatorOpt, f)
-        def using         (f: HeadU => HeadZ)    (implicit d: DI)        : Self2 = self2 :+ TransformUZ    (tqqpathz(target), f)
-        def using[V1: WTT](f: HeadU => HeadV[V1])(implicit d: DI, d2: DI): Self2 = self2 :+ TransformUV[V1](tqqpathz(target), f) }
+        def using         (f: HeadU => HeadU)                            : Self2 = self2 :+ TransformUU    (tqrpathz(target), disambiguatorOpt, f)
+        def using         (f: HeadU => HeadZ)    (implicit d: DI)        : Self2 = self2 :+ TransformUZ    (tqrpathz(target), f)
+        def using[V1: WTT](f: HeadU => HeadV[V1])(implicit d: DI, d2: DI): Self2 = self2 :+ TransformUV[V1](tqrpathz(target), f) }
 
       // ===========================================================================
       class _TransformU(val target: Transform[HeadU]) extends ___TransformU {
@@ -55,9 +55,9 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
         protected val disambiguatorOpt: Option[UnionObjectDisambiguator] = None // TODO: t220517123057: support for ZU and ZV
 
         // ---------------------------------------------------------------------------
-        def using         (f: HeadZ => HeadZ)                            : Self2 = self2 :+ TransformZZ    (tqqpathz(target), disambiguatorOpt, f)
-        def using         (f: HeadZ => HeadU)    (implicit d: DI)        : Self2 = self2 :+ TransformZU    (tqqpathz(target), f)
-        def using[D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI, d2: DI): Self2 = self2 :+ TransformZV[D1](tqqpathz(target), f) }
+        def using         (f: HeadZ => HeadZ)                            : Self2 = self2 :+ TransformZZ    (tqrpathz(target), disambiguatorOpt, f)
+        def using         (f: HeadZ => HeadU)    (implicit d: DI)        : Self2 = self2 :+ TransformZU    (tqrpathz(target), f)
+        def using[D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI, d2: DI): Self2 = self2 :+ TransformZV[D1](tqrpathz(target), f) }
 
       // ===========================================================================
       class _TransformZ(val target: Transform[HeadZ]) extends ___TransformZ {

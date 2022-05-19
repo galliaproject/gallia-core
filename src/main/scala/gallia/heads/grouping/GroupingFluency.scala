@@ -20,7 +20,7 @@ object GroupingFluency { // TODO: DWH/MDX: t210124100722
       def fields(targets: GroupeeNSelection): ByN = new ByN(resolveGroupees(targets))
 
       // ---------------------------------------------------------------------------
-      private[heads] def fields(targets: TQRenz): ByN = new ByN(targets)
+      private[heads] def fields(targets: TqRenz): ByN = new ByN(targets)
     }
 
     // ===========================================================================
@@ -30,18 +30,18 @@ object GroupingFluency { // TODO: DWH/MDX: t210124100722
         def by(groupers: GroupersSelection): End with GroupAs = new End(GroupDataCN(resolveGroupers(groupers), asOpt = None)) with GroupAs }
 
       // ===========================================================================
-      class By1(groupee: TQRen) {
+      class By1(groupee: TqRen) {
         def by(groupers: RenWz)            : End = by(_.explicit(groupers))
         def by(grouper1: RenW, more: RenW*): End = by(_.explicitFX(grouper1, more))
         def by(groupers: GroupersSelection): End = new End(GroupData1N(groupee, resolveGroupers(groupers)))
 
-        private[heads] def byN(groupers: TQRenz): End = new End(GroupData1N(groupee, groupers))
+        private[heads] def byN(groupers: TqRenz): End = new End(GroupData1N(groupee, groupers))
 
         // ---------------------------------------------------------------------------
         def byTheRest: End = new End(GroupData1C(groupee)) }
 
       // ===========================================================================
-      class ByN(groupees: TQRenz) {
+      class ByN(groupees: TqRenz) {
         def by(groupers: RenWz)            : End with GroupAs = by(_.explicit(groupers))
         def by(grouper1: RenW, more: RenW*): End with GroupAs = by(_.explicitFX(grouper1, more))
         def by(groupers: GroupersSelection): End with GroupAs = new End(GroupDataNN(groupees, resolveGroupers(groupers), asOpt = None)) with GroupAs

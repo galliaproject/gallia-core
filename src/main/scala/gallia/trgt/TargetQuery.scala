@@ -16,7 +16,7 @@ class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](
 
     def apply[A](c: Cls)(f: $Target => A): A = resolve(c).pipe(f)
 
-    def size(c: Cls): Int = __qpaths(c).size
+    def size(c: Cls): Int = __rpaths(c).size
 
     // ---------------------------------------------------------------------------
     def filterByKeys (c: Cls)(implicit ev: $Target <:< Keyz  ): Cls = resolve(c).pipe { x => c.filterFields(field => x.contains(field.key)) }
@@ -30,14 +30,14 @@ class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](
     def isOptional(c: Cls) = _is(c, _.isOptional)
 
       private def _is(c: Cls, pred: Fld => Boolean)   : Boolean =
-        __qpaths(c)
+        __rpaths(c)
           .headOption /* since all supposed to be the same: 201005113232 */
           .map(_.from.pipe(c.field(_)))
           .exists(pred)
 
     // ---------------------------------------------------------------------------
     def container1(c: Cls): Container =
-        __qpaths(c)
+        __rpaths(c)
           .head /* since all supposed to be the same: 201005113232 */
           .from.pipe(c.field(_))
           .info
@@ -47,7 +47,7 @@ class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](
     def keyz_  (c: Cls)(implicit ev: $Target <:< Keyz  ): Keyz     = resolve(c)
     def keys_  (c: Cls)(implicit ev: $Target <:< Keyz  ): Seq[Key] = resolve(c).values.toSeq
     def kpath_ (c: Cls)(implicit ev: $Target <:< KPath ): KPath    = resolve(c)
-    def qpathz_(c: Cls)(implicit ev: $Target <:< RPathz): RPathz   = resolve(c)
+    def rpathz_(c: Cls)(implicit ev: $Target <:< RPathz): RPathz   = resolve(c)
 
     // ---------------------------------------------------------------------------
     def __kpathz(c: Cls): KPathz     = KPathz(__kpaths(c))
@@ -55,27 +55,27 @@ class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](
       resolve(c) match {
         case x: KPath  => Seq(x)
         case x: Keyz   => x.kpathz.values
-        case x: Renz   => x.qpathz.fromsFX
+        case x: Renz   => x.rpathz.fromsFX
         case x: RPathz => x.fromsFX }
 
     // ---------------------------------------------------------------------------
-    def __qpathz(c: Cls): RPathz     = RPathz(__qpaths(c))
-    def __qpaths(c: Cls): Seq[RPath] =
+    def __rpathz(c: Cls): RPathz     = RPathz(__rpaths(c))
+    def __rpaths(c: Cls): Seq[RPath] =
       resolve(c) match {
         case x: Key    => RPathz.from(x).values
         case x: Ren    => RPathz.from(x).values
-        case x: KPath  => x.qpath.in.seq
-        case x: Keyz   => x.qpathz.values
-        case x: Renz   => x.qpathz.values
+        case x: KPath  => x.rpath.in.seq
+        case x: Keyz   => x.rpathz.values
+        case x: Renz   => x.rpathz.values
         case x: RPathz => x.values }
 
     // ---------------------------------------------------------------------------
-    def checkErrors(c: Cls)(f: Cls => KPathz => Errs): Errs = __qpathz(c).pipe(_.fromz).pipe { f(c) }
+    def checkErrors(c: Cls)(f: Cls => KPathz => Errs): Errs = __rpathz(c).pipe(_.fromz).pipe { f(c) }
 
     // ===========================================================================
     // vldt
 
-    def vldtAsOrigin        (c: Cls): Errs = vldtTargetQuery(c) ++ MetaValidation.fieldsRenaming(c, __qpaths(c).pipe(RPathz.apply))
+    def vldtAsOrigin        (c: Cls): Errs = vldtTargetQuery(c) ++ MetaValidation.fieldsRenaming(c, __rpaths(c).pipe(RPathz.apply))
     def vldtAsNewDestination(c: Cls): Errs = vldtTargetQuery(c) ++ MetaValidation.fieldsAbsence (c, __kpathz(c))
 
     // ---------------------------------------------------------------------------
@@ -94,11 +94,11 @@ class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](
     def fromKey(key: Key): TqRPathz = from(key)(RPathz.from)
 
     // ---------------------------------------------------------------------------
-    implicit def toTqRPathz(x: RPathW)                       : TqRPathz = from(x)(_.qpathz)
-    implicit def toTqRPathz(x: RPathWz)                      : TqRPathz = from(x)(_.qpathz)
+    implicit def toTqRPathz(x: RPathW)                       : TqRPathz = from(x)(_.rpathz)
+    implicit def toTqRPathz(x: RPathWz)                      : TqRPathz = from(x)(_.rpathz)
     implicit def toTqRPathz(x: (RPathW, RPathW, Seq[RPathW])): TqRPathz = toTqRPathz(RPathWz(Seq(x._1, x._2) ++ x._3))
 
-    implicit def toTqRPathz(f: RPathzSelection): TqRPathz = new TqRPathz(f.vldt, f.qpathz)
+    implicit def toTqRPathz(f: RPathzSelection): TqRPathz = new TqRPathz(f.vldt, f.rpathz)
 }
 
 // ===========================================================================

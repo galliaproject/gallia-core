@@ -16,30 +16,30 @@ trait SelectionValidation { def vldt(c: Cls): Errs }
   // TODO: rename the *Selection part
 
   trait RPathzSelection extends SelectionValidation {
-      def qpathz(c: Cls): RPathz
+      def rpathz(c: Cls): RPathz
 
-      def tqqpathz = new TqRPathz(this.vldt, this.qpathz) }
+      def tqrpathz = new TqRPathz(this.vldt, this.rpathz) }
 
     // ---------------------------------------------------------------------------
     trait KPathzSelection extends RPathzSelection {
             def kpaths(c: Cls): Seq[KPath] // easier to fill than than Keyz
       final def kpathz(c: Cls): KPathz = KPathz(kpaths(c))
 
-      @finl def qpathz(c: Cls): RPathz = kpathz(c).qpathz }
+      @finl def rpathz(c: Cls): RPathz = kpathz(c).rpathz }
 
       // ---------------------------------------------------------------------------
       trait RPathSelection extends RPathzSelection {
-                def qpath (c: Cls): RPath
-          @finl def qpathz(c: Cls): RPathz = RPathz(Seq(qpath(c))) }
+                def rpath (c: Cls): RPath
+          @finl def rpathz(c: Cls): RPathz = RPathz(Seq(rpath(c))) }
 
         // ---------------------------------------------------------------------------
         trait KPathSelection extends RPathSelection with KPathzSelection {
                 def kpath(c: Cls): KPath
 
-          @finl def qpath (c: Cls): RPath      = kpath(c).qpath
+          @finl def rpath (c: Cls): RPath      = kpath(c).rpath
           @finl def kpaths(c: Cls): Seq[KPath] = kpath(c).in.seq
 
-          @finl override def qpathz(c: Cls): RPathz = super[RPathSelection].qpathz(c)
+          @finl override def rpathz(c: Cls): RPathz = super[RPathSelection].rpathz(c)
 
           // ---------------------------------------------------------------------------
           def tqkpath = new TqKPath(this.vldt, this.kpath) }
@@ -47,7 +47,7 @@ trait SelectionValidation { def vldt(c: Cls): Errs }
         // ---------------------------------------------------------------------------
         trait RenzSelection extends RPathzSelection {
                   def renz  (c: Cls): Renz
-            @finl def qpathz(c: Cls): RPathz = renz(c).values.map(_.qpath).pipe(RPathz.apply) }
+            @finl def rpathz(c: Cls): RPathz = renz(c).values.map(_.rpath).pipe(RPathz.apply) }
 
           // ---------------------------------------------------------------------------
           trait KeyzSelection extends RenzSelection with KPathzSelection {
@@ -57,7 +57,7 @@ trait SelectionValidation { def vldt(c: Cls): Errs }
             @finl def renz  (c: Cls): Renz   = keyz(c).renz
             @finl def kpaths(c: Cls): Seq[KPath] = keyz(c).kpathz.values
 
-            @finl override def qpathz(c: Cls): RPathz = super[KPathzSelection].qpathz(c) }
+            @finl override def rpathz(c: Cls): RPathz = super[KPathzSelection].rpathz(c) }
 
           // ---------------------------------------------------------------------------
           trait RenSelection extends RenzSelection {
@@ -67,7 +67,7 @@ trait SelectionValidation { def vldt(c: Cls): Errs }
                         def ren_(c: Cls): Option[Ren] = ???
 
             // ---------------------------------------------------------------------------
-            def tqren = new TQRen(this.vldt, this.ren) }
+            def tqren = new TqRen(this.vldt, this.ren) }
 
           // ---------------------------------------------------------------------------
           trait KeySelection extends KeyzSelection with KPathSelection with RenSelection {
@@ -76,7 +76,7 @@ trait SelectionValidation { def vldt(c: Cls): Errs }
 
             @finl override def ren   (c: Cls): Ren    = Ren.from(key(c))
             @finl override def renz  (c: Cls): Renz   = super[RenSelection  ].renz(c)
-            @finl override def qpathz(c: Cls): RPathz = this                 .kpathz(c).qpathz
+            @finl override def rpathz(c: Cls): RPathz = this                 .kpathz(c).rpathz
             @finl override def kpaths(c: Cls): KPaths = super[KPathSelection].kpaths(c)
 
             @deprecated def key(c: Cls):         Key

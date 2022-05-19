@@ -32,7 +32,7 @@ private[actions] object RenameDynamicallyHelper {
       either
          match {
           case Left (throwables) => throwables.map(throwableHandler.tupled)
-          case Right(qpathz)     => pathsHandler(qpathz) }
+          case Right(rpathz)     => pathsHandler(rpathz) }
 
     // ---------------------------------------------------------------------------
     def forceRPathz: RPathz = results.map(_.right.get).pipe(RPathz.apply)

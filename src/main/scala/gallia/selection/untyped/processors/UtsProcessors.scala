@@ -36,7 +36,7 @@ object UtsProcessors {
     // ---------------------------------------------------------------------------
     case class ExplicitRPath(value: RPath) extends RPathSelection {
       def vldt(c: Cls): Errs = Nil//TODO:if (!c.keySet.contains(value)) err("TODO") else Nil
-      def qpath(ignored: Cls): RPath = value }
+      def rpath(ignored: Cls): RPath = value }
 
   // ===========================================================================
   case class ExplicitIndex(value: MIndex, special: Option[ExplicitIndex.Special]) extends KeySelection {
@@ -75,7 +75,7 @@ object UtsProcessors {
 
     case class ExplicitRPathz(values: RPathz) extends RPathzSelection {
       def vldt  (c: Cls): Errs = Nil
-      def qpathz(c: Cls): RPathz = values }
+      def rpathz(c: Cls): RPathz = values }
 
   // ===========================================================================
   sealed trait ExplicitIndicesBase extends KeyzSelection {

@@ -35,8 +35,8 @@ trait CanProjectFluency[Fluency] {
   // ===========================================================================
   protected def retain(values: RPathz): Fluency = project(Some(Retainees1(values)))
 
-    def retain(target1: RPathW, more: RPathW*): Fluency = retain(RPathWz._to(target1, more).qpathz)
-    def retain(targets: RPathWz)              : Fluency = retain(targets.qpathz)
+    def retain(target1: RPathW, more: RPathW*): Fluency = retain(RPathWz._to(target1, more).rpathz)
+    def retain(targets: RPathWz)              : Fluency = retain(targets.rpathz)
 
   protected def remove(values: KPathz): Fluency = project(Some(Removees1(values)))
 

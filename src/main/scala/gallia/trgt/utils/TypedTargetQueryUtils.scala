@@ -9,9 +9,9 @@ object TypedTargetQueryUtils {
   private def _tqkpath(value: KPath)  = new TqKPath (_ => Nil, _ => value) // TODO: ok to keep?
 
   // ===========================================================================
-  // ttqqpathz
+  // ttqrpathz
 
-  def ttqqpathz1[T: WTT](value: TqRPathz): TtqRPathz = new TtqRPathz(value, typeNode[T].normalizeSome, HT.instantiator[T], ignoreContainer = false)
+  def ttqrpathz1[T: WTT](value: TqRPathz): TtqRPathz = new TtqRPathz(value, typeNode[T].normalizeSome, HT.instantiator[T], ignoreContainer = false)
 
   // ===========================================================================
   // ttqkpath

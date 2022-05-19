@@ -16,11 +16,11 @@ private[actions] object ActionsUtils {
     def _atoms(value : KPath     , f: Key => AtomUU): Seq[AtomUU] = _atoms(RPath.from(value), f)
     def _atoms(value : RPath     , f: Key => AtomUU): Seq[AtomUU] = _atoms(Seq(value)       , f)
     def _atoms(values: RPathz    , f: Key => AtomUU): Seq[AtomUU] = _atoms(values.values    , f)
-    def _atoms(values: KPathz    , f: Key => AtomUU): Seq[AtomUU] = _atoms(values.qpathz    , f)
+    def _atoms(values: KPathz    , f: Key => AtomUU): Seq[AtomUU] = _atoms(values.rpathz    , f)
     def _atoms(values: Seq[RPath], f: Key => AtomUU): Seq[AtomUU] =
       values
-        .flatMap { qpath =>
-          val (parentOpt, ren) = qpath.initPair
+        .flatMap { rpath =>
+          val (parentOpt, ren) = rpath.initPair
 
           val roots = potentialRenaming(ren).toSeq :+ f(ren.to)
 
@@ -32,18 +32,18 @@ private[actions] object ActionsUtils {
   // ---------------------------------------------------------------------------
   def _atoms(c: Cls)(f: PathPair => AtomUU)(values: Seq[RPath]): Seq[AtomUU] =
     values
-      .flatMap { qpath =>
-        potentialRenaming(qpath).toSeq :+ 
-        f(PathPair(qpath.to, c.isOptional(qpath.from))) }
+      .flatMap { rpath =>
+        potentialRenaming(rpath).toSeq :+ 
+        f(PathPair(rpath.to, c.isOptional(rpath.from))) }
 
   // ---------------------------------------------------------------------------
   def _atoms2(c: Cls)(ifOne: PathPair => AtomUU, ifMultiple: PathPair => AtomUU)(values: Seq[RPath]): Seq[AtomUU] = // see t210125111338 (union types)
     values
-      .flatMap { qpath =>
-        val pair = PathPair(qpath.to, c.isOptional(qpath.from))
+      .flatMap { rpath =>
+        val pair = PathPair(rpath.to, c.isOptional(rpath.from))
 
-        potentialRenaming(qpath).toSeq :+ 
-        (if (!c.field(qpath.from).isUnionType) ifOne     (pair) 
+        potentialRenaming(rpath).toSeq :+ 
+        (if (!c.field(rpath.from).isUnionType) ifOne     (pair) 
          else                                  ifMultiple(pair))}
 
   // ===========================================================================

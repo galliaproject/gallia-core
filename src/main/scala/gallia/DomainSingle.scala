@@ -23,7 +23,7 @@ case class Ren(from: Key, to: Key /* may be the same as from */) { // TODO: t210
 
     def either: Either[Key, ActualRen] = if (from == to) Left(from) else Right(ActualRen(from, to))
 
-    def qpath: RPath = RPath(Nil, this)
+    def rpath: RPath = RPath(Nil, this)
     @deprecated def fromFX = from // FIXME: see t210110104437
 
     def renz = Renz(Seq(this))
@@ -64,10 +64,10 @@ case class KPath(parent: Seq[Key], key: Key) {
 
 
     // ---------------------------------------------------------------------------
-    def qpath           : RPath = RPath(parent, Ren.from(key))
-    def qpath(to: KeyW): RPath = RPath(parent, Ren(key, to.value))
+    def rpath           : RPath = RPath(parent, Ren.from(key))
+    def rpath(to: KeyW): RPath = RPath(parent, Ren(key, to.value))
 
-    def qpath(to: Ren  ): RPath = RPath(parent :+ key, to)
+    def rpath(to: Ren  ): RPath = RPath(parent :+ key, to)
 
     // ---------------------------------------------------------------------------
     // symbolic access
@@ -149,7 +149,7 @@ case class RPath(parent: Seq[Key], ren: Ren) {
       /*
         tailPair match {
           case Left ( renaming      ) => ???
-          case Right((parent, qpath)) => ???
+          case Right((parent, rpath)) => ???
       */
   }
 

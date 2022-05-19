@@ -64,7 +64,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   // TODO: t210129093607 - offer a setDefaults('foo -> 1, 'bar -> "baz", ...)
 
   def setDefaultFor(path : RPathW ): _SetDefaultFor = setDefaultFor(RPathWz.from(path))
-  def setDefaultFor(paths: RPathWz): _SetDefaultFor = new _SetDefaultFor(TargetQueryUtils.tqqpathz(paths.qpathz))
+  def setDefaultFor(paths: RPathWz): _SetDefaultFor = new _SetDefaultFor(TargetQueryUtils.tqrpathz(paths.rpathz))
 
   def setDefaultFor(path1: RPathW, path2: RPathW, more: RPathW*): _SetDefaultFor = setDefaultFor((path1, path2, more))
   def setDefaultFor(sel: SEL.SetDefault.Selector)               : _SetDefaultFor = new _SetDefaultFor(SEL.SetDefault.resolve(sel))
@@ -75,7 +75,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
     // ---------------------------------------------------------------------------
     final class _SetDefaultFor private[common] (targets: TqRPathz){
       def asValue[T: WTT](defaultValue: => T): Self2 =
-        SetDefaultValueFor(ttqqpathz1[Option[T]](targets), defaultValue) }
+        SetDefaultValueFor(ttqrpathz1[Option[T]](targets), defaultValue) }
 
     // ---------------------------------------------------------------------------
     final class _SetDefaultConditionally2 private[common](target: TqKey) {
@@ -166,8 +166,8 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
       // ---------------------------------------------------------------------------
       /** strict = all values are translated, therefore type can change */
-      def usingStrict [O: WTT, D : WTT](entries: Seq[(O, D)]): Self2 = self2 :+ new Translate(ttqqpathz1[O](target), typeNode[D], true , entries)
-      def usingLenient[O: WTT, D : WTT](entries: Seq[(O, D)]): Self2 = self2 :+ new Translate(ttqqpathz1[O](target), typeNode[D], false, entries)
+      def usingStrict [O: WTT, D : WTT](entries: Seq[(O, D)]): Self2 = self2 :+ new Translate(ttqrpathz1[O](target), typeNode[D], true , entries)
+      def usingLenient[O: WTT, D : WTT](entries: Seq[(O, D)]): Self2 = self2 :+ new Translate(ttqrpathz1[O](target), typeNode[D], false, entries)
     }
 
   // ===========================================================================
@@ -184,7 +184,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
       /** accounts for escaping */ def byTsv           : Self2 = by(StringSplitterFunction(_.splitXsv('\t')))
 
       // ---------------------------------------------------------------------------
-      def by(splitter: StringSplitter): Self2 = self2 :+ Split(paths.qpathz, splitter)
+      def by(splitter: StringSplitter): Self2 = self2 :+ Split(paths.rpathz, splitter)
     }
 
   // ===========================================================================

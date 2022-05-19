@@ -108,7 +108,7 @@ private[gallia] object MetaValidation {
   def fieldRenamings(c: Cls, keys: Seq[Ren]): Errs = keys.foldLeft(Seq[Err]()) { _ ++ fieldRenaming(c, _) } //TODO: disjointness
 
   // ---------------------------------------------------------------------------
-  def fieldsRenaming(c: Cls, keys : Renz  ): Errs = _helper.fieldsRenaming(c, keys.qpathz)
+  def fieldsRenaming(c: Cls, keys : Renz  ): Errs = _helper.fieldsRenaming(c, keys.rpathz)
   def fieldsRenaming(c: Cls, paths: RPathz): Errs = _helper.fieldsRenaming(c, paths)
 
   // ---------------------------------------------------------------------------

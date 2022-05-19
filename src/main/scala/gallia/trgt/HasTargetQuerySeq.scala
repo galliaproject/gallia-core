@@ -16,7 +16,7 @@ trait HasTargetQuerySeq[$Target] {
   
   // TODO: should be private
   /*private[target] */def __kpathz(c: Cls): KPathz = tqs.flatMap(_.__kpaths(c)).pipe(KPathz.apply)
-  /*private[target] */def __qpathz(c: Cls): RPathz = tqs.flatMap(_.__qpaths(c)).pipe(RPathz.apply)
+  /*private[target] */def __rpathz(c: Cls): RPathz = tqs.flatMap(_.__rpaths(c)).pipe(RPathz.apply)
   
   // ---------------------------------------------------------------------------
   def pathz(c: Cls)(implicit ev: $Target <:< KPath): KPathz = KPathz(resolve(c).asInstanceOf[Seq[KPath]])
@@ -26,11 +26,11 @@ trait HasTargetQuerySeq[$Target] {
 
   def vldtAsOrigin(c: Cls): Errs =
     tqs.foldLeft(Seq[Err]())(_ ++ _.vldtAsOrigin(c)) ++ 
-    MetaValidation.distinctRPathz(__qpathz(c))
+    MetaValidation.distinctRPathz(__rpathz(c))
 
   def vldtAsNewDestination(c: Cls): Errs =
     tqs.foldLeft(Seq[Err]())(_ ++ _.vldtAsNewDestination(c)) ++ 
-    MetaValidation.distinctRPathz(__qpathz(c))
+    MetaValidation.distinctRPathz(__rpathz(c))
 }
 
 // ===========================================================================

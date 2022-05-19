@@ -20,11 +20,11 @@ package object target { // TODO: t210202090211 - p3 - rename package and homogen
   
   // ===========================================================================
   type TqKey    = TargetQuery[Key]
-  type TQRen    = TargetQuery[Ren ]
+  type TqRen    = TargetQuery[Ren ]
 
   // ---------------------------------------------------------------------------
   type TqKeyz   = TargetQuery[Keyz]
-  type TQRenz   = TargetQuery[Renz]
+  type TqRenz   = TargetQuery[Renz]
 
   // ---------------------------------------------------------------------------
   type TqKPath  = TargetQuery[KPath]

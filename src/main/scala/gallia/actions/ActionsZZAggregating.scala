@@ -1,7 +1,7 @@
 package gallia
 package actions
 
-import target.{TQRenz, TQRen}
+import target.{TqRenz, TqRen}
 
 // ===========================================================================
 object ActionsZZAggregating {
@@ -11,7 +11,7 @@ object ActionsZZAggregating {
   // ---------------------------------------------------------------------------
   //TODO: rtipe: distinguish counts from others
 
-  case class CountBy(groupers: TQRenz, ctipe: CountLikeType, asOpt: Option[Key]) extends ActionZZc with TodoV1
+  case class CountBy(groupers: TqRenz, ctipe: CountLikeType, asOpt: Option[Key]) extends ActionZZc with TodoV1
       /* "as" boilerplate: */ with CanForceAs2[CountBy] { override val defaultKey: Key = ctipe.defaultKey; def forceAs(key: Key) = copy(asOpt = Some(key))
 
     def _meta(in: Cls ): Cls    = groupers.resolve(in).pipe(in.countAll(_, as))
@@ -24,7 +24,7 @@ object ActionsZZAggregating {
   }
 
   // ===========================================================================
-  case class Agg1(groupee: TQRen, groupers: TQRenz, rtipe: ReducingType) extends ActionZZc with TodoV1 {
+  case class Agg1(groupee: TqRen, groupers: TqRenz, rtipe: ReducingType) extends ActionZZc with TodoV1 {
 
     def _meta(in: Cls ): Cls    =  {
       val e = groupee .resolve(in)
@@ -43,7 +43,7 @@ object ActionsZZAggregating {
   }
 
   // ===========================================================================
-  case class AggN(groupees: TQRenz, rtipe: ReducingType, groupers: TQRenz, asOpt: Option[Key]) extends ActionZZc with TodoV1
+  case class AggN(groupees: TqRenz, rtipe: ReducingType, groupers: TqRenz, asOpt: Option[Key]) extends ActionZZc with TodoV1
       /* "as" boilerplate: */ with CanForceAs2[AggN] { override val defaultKey: Key = rtipe.defaultPluralKey; def forceAs(key: Key) = copy(asOpt = Some(key))
 
     def _meta(in: Cls ): Cls    =   {

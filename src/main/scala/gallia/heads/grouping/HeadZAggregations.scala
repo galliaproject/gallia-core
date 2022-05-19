@@ -21,7 +21,7 @@ trait HeadZAggregations { self: HeadZ =>
       def aggregate(pair1: ReducingPair , more: ReducingPair *): AggBy = aggregate(pair1 +: more)
     
         // ---------------------------------------------------------------------------
-        class _Aggregate1 private[HeadZAggregations] (groupee: TQRen) {
+        class _Aggregate1 private[HeadZAggregations] (groupee: TqRen) {
             def wit(f: ReducingType.type => ReducingType): __Aggregate1 = wit(f(ReducingType))
             def wit(rtipe: ReducingType)                 : __Aggregate1 = new __Aggregate1(groupee, rtipe) }
 
@@ -52,7 +52,7 @@ trait HeadZAggregations { self: HeadZ =>
       def mean (groupee: Groupee1Selection): __Aggregate1 = aggregate(groupee).wit(_.mean)
 
       // ===========================================================================
-      class __Aggregate1 private[HeadZAggregations] (groupee: TQRen, rtipe: ReducingType) {
+      class __Aggregate1 private[HeadZAggregations] (groupee: TqRen, rtipe: ReducingType) {
           def by(key : GroupersSelection): HeadZ = zz(Agg1(groupee, resolveGroupers(key), rtipe))
           def by(keys: RenWz)            : HeadZ = by(_.explicit(keys))
           def by(key1: RenW, more: RenW*): HeadZ = by(_.explicitFX(key1, more)) }
@@ -80,7 +80,7 @@ trait HeadZAggregations { self: HeadZ =>
       def meanEach(groupees: GroupersSelection)                : AggEachBy = new AggWith(resolveGroupers(groupees)).wit(ReducingType.mean)
 
       // ===========================================================================
-      class AggWith private[HeadZAggregations] (groupees: TQRenz) { // TODO: homogenize with AggBy above
+      class AggWith private[HeadZAggregations] (groupees: TqRenz) { // TODO: homogenize with AggBy above
           def wit(f: ReducingType.type => ReducingType): AggEachBy = wit(f(ReducingType))
           def wit(rtipe: ReducingType)                 : AggEachBy = new AggEachBy(groupees, rtipe) }
 
@@ -92,7 +92,7 @@ trait HeadZAggregations { self: HeadZ =>
               .groupBy(grouper.value).transformGroupObjectsUsing { _.reduce(pairs)  } } }
         
         // ===========================================================================
-        class AggEachBy private[HeadZAggregations] (groupees: TQRenz, rtipe: ReducingType) {
+        class AggEachBy private[HeadZAggregations] (groupees: TqRenz, rtipe: ReducingType) {
           def by(key : GroupersSelection): HeadZ with HasAs = zzWithAs(AggN(groupees, rtipe, resolveGroupers(key), asOpt = None))
           def by(keys: RenWz)            : HeadZ with HasAs = by(_.explicit(keys))
           def by(key1: RenW, more: RenW*): HeadZ with HasAs = by(_.explicitFX(key1, more)) }

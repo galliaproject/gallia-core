@@ -11,7 +11,7 @@ private[typed] trait TsBase {
     // ===========================================================================
     // TODO: rename
     def resolve [T: WTT](tsl: TSelector[T]): TypedTargetQuery[KPath ] = new TypedTargetQuery[KPath ](tqkpath (tsl), node[T], HT.instantiator[T], wrapper(tsl).ignoreContainer)
-    def resolves[T: WTT](tsl: TSelector[T]): TypedTargetQuery[RPathz] = new TypedTargetQuery[RPathz](tqqpathz(tsl), node[T], HT.instantiator[T], wrapper(tsl).ignoreContainer)
+    def resolves[T: WTT](tsl: TSelector[T]): TypedTargetQuery[RPathz] = new TypedTargetQuery[RPathz](tqrpathz(tsl), node[T], HT.instantiator[T], wrapper(tsl).ignoreContainer)
 
     def resolve2[T: WTT](tsl: TSelector[T]): TypedTargetQuery[Key]    = new TypedTargetQuery[Key]   (tqkey (tsl), node[T], HT.instantiator[T], wrapper(tsl).ignoreContainer)
 
@@ -19,9 +19,9 @@ private[typed] trait TsBase {
     private def wrapper[T: WTT](tsl: TSelector[T]): TsWrapper[T] = tsl.apply(from)
 
     // ---------------------------------------------------------------------------
-    def tqkey   (tsl: TSelector[_]): TqKey    = wrapper(tsl).forceTQKey
+    def tqkey   (tsl: TSelector[_]): TqKey    = wrapper(tsl).forceTqKey
     def tqkpath (tsl: TSelector[_]): TqKPath  = wrapper(tsl).forceTqKPath  // only for generate?
-    def tqqpathz(tsl: TSelector[_]): TqRPathz = wrapper(tsl).forceTqRPathz // for uu
+    def tqrpathz(tsl: TSelector[_]): TqRPathz = wrapper(tsl).forceTqRPathz // for uu
 
     // ===========================================================================
     type TSelector[T] = From => TsWrapper[T]

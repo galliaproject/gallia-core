@@ -11,10 +11,10 @@ class TsWrapper[T] private[gallia] (
 
   // ===========================================================================
   private def _tqkpath (value: KPath) = new TqKPath(_ => Nil, _ => value)
-  private def _tqkey   (value: Key)   = new TQKey  (_ => Nil, _ => value)
+  private def _tqkey   (value: Key)   = new TqKey  (_ => Nil, _ => value)
 
     // ---------------------------------------------------------------------------
-    def forceTQKey: TQKey = selection match { case x: KeyW => _tqkey(x.value) }
+    def forceTqKey: TqKey = selection match { case x: KeyW => _tqkey(x.value) }
 
     // ---------------------------------------------------------------------------
     def forceTqKPath: TqKPath =
@@ -27,30 +27,30 @@ class TsWrapper[T] private[gallia] (
         case x: KPathSelection => x.tqkpath }
 
   // ===========================================================================
-  private def _tqqpathz(value: RPathW) = new TqRPathz(_ => Nil, _ => value.qpathz)
-  private def _tqqpathz(value: RPathz) = new TqRPathz(_ => Nil, _ => value)
+  private def _tqrpathz(value: RPathW) = new TqRPathz(_ => Nil, _ => value.rpathz)
+  private def _tqrpathz(value: RPathz) = new TqRPathz(_ => Nil, _ => value)
 
     // ---------------------------------------------------------------------------
     def forceTqRPathz: TqRPathz =
       selection match {
-        case x: KeyW    => _tqqpathz(x.value)
-        case x: RenW    => _tqqpathz(x.value)
-        case x: KPathW  => _tqqpathz(x.value)
-        case x: RPathW  => _tqqpathz(x.value)
+        case x: KeyW    => _tqrpathz(x.value)
+        case x: RenW    => _tqrpathz(x.value)
+        case x: KPathW  => _tqrpathz(x.value)
+        case x: RPathW  => _tqrpathz(x.value)
 
         // ---------------------------------------------------------------------------
-        case x: RPathz => _tqqpathz(x) // from RemoveConditionally...
+        case x: RPathz => _tqrpathz(x) // from RemoveConditionally...
 
         case x: Tuple3[_, _, _] => // TODO: for?
           x._1 match {
-            case _: RPathW => _tqqpathz(qpathz(x)) }
+            case _: RPathW => _tqrpathz(rpathz(x)) }
 
-        case x: RPathzSelection => x.tqqpathz
+        case x: RPathzSelection => x.tqrpathz
       }
 
   // ===========================================================================
 //private def kpath (x: Tuple3[_, _, _]): KPath  = ((x._1.asInstanceOf[KPathW], x._2.asInstanceOf[KPathW], x._3.asInstanceOf[Seq[KPathW]]): KPathWz).kpath
-  private def qpathz(x: Tuple3[_, _, _]): RPathz = ((x._1.asInstanceOf[RPathW], x._2.asInstanceOf[RPathW], x._3.asInstanceOf[Seq[RPathW]]): RPathWz).qpathz
+  private def rpathz(x: Tuple3[_, _, _]): RPathz = ((x._1.asInstanceOf[RPathW], x._2.asInstanceOf[RPathW], x._3.asInstanceOf[Seq[RPathW]]): RPathWz).rpathz
 }
 
 // ===========================================================================

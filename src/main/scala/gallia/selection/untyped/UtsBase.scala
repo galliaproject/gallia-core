@@ -72,29 +72,29 @@ object UtsBase {
   object ReorderAsX extends KeyzBase { type Origin = Origins.ReorderAsX; val origin = new Origin {} }
 
   // ---------------------------------------------------------------------------
-  object ModifyEnumValuesFor extends QpathzBase { type Origin = Origins.ModifyEnumValuesFor; val origin = new Origin {} }
+  object ModifyEnumValuesFor extends RPathzBase { type Origin = Origins.ModifyEnumValuesFor; val origin = new Origin {} }
 
   // ---------------------------------------------------------------------------
-  object Remove     extends QpathzBase { type Origin = Origins.Remove    ; val origin = new Origin {} }
-  object Retain     extends QpathzBase { type Origin = Origins.Retain    ; val origin = new Origin {} }
-  object SetDefault extends QpathzBase { type Origin = Origins.SetDefault; val origin = new Origin {} }
-  object Convert    extends QpathzBase { type Origin = Origins.Convert   ; val origin = new Origin {} }
-  object Translate  extends QpathzBase { type Origin = Origins.Translate ; val origin = new Origin {} }
-  object Custom     extends QpathzBase { type Origin = Origins.Custom    ; val origin = new Origin {} }
+  object Remove     extends RPathzBase { type Origin = Origins.Remove    ; val origin = new Origin {} }
+  object Retain     extends RPathzBase { type Origin = Origins.Retain    ; val origin = new Origin {} }
+  object SetDefault extends RPathzBase { type Origin = Origins.SetDefault; val origin = new Origin {} }
+  object Convert    extends RPathzBase { type Origin = Origins.Convert   ; val origin = new Origin {} }
+  object Translate  extends RPathzBase { type Origin = Origins.Translate ; val origin = new Origin {} }
+  object Custom     extends RPathzBase { type Origin = Origins.Custom    ; val origin = new Origin {} }
 
-  object Nest       extends QpathzBase { type Origin = Origins.Nest      ; val origin = new Origin {} }
+  object Nest       extends RPathzBase { type Origin = Origins.Nest      ; val origin = new Origin {} }
   object Renesting  extends KeyzBase   { type Origin = Origins.Renesting ; val origin = new Origin {} }
   object UnnestFrom extends RenzBase   { type Origin = Origins.UnnestFrom; val origin = new Origin {} }
 
-  object Transform  extends KpathzBase { type Origin = Origins.Transform ; val origin = new Origin {} }
-  object FilterBy   extends KpathzBase { type Origin = Origins.FilterBy  ; val origin = new Origin {} }
+  object Transform  extends KPathzBase { type Origin = Origins.Transform ; val origin = new Origin {} }
+  object FilterBy   extends KPathzBase { type Origin = Origins.FilterBy  ; val origin = new Origin {} }
 
   // ===========================================================================
   object Reducing extends KeyzBase { type Origin = Origins.Reducing; val origin = new Origin {} }
 
   // ---------------------------------------------------------------------------
   object SortingSingle   extends KPathBase  { type Origin = Origins.SortingSingle  ; val origin = new Origin {} }
-  object SortingMultiple extends KpathzBase { type Origin = Origins.SortingMultiple; val origin = new Origin {} }
+  object SortingMultiple extends KPathzBase { type Origin = Origins.SortingMultiple; val origin = new Origin {} }
 
   // ---------------------------------------------------------------------------
   object Groupee1        extends RenBase  { type Origin = Origins.Groupee1; val origin = new Origin {} }
@@ -129,12 +129,12 @@ object UtsBase {
     }
 
     // ===========================================================================
-    trait QpathzBase extends UtsBase { val origin: Origin
+    trait RPathzBase extends UtsBase { val origin: Origin
       type Target = RPathzSelection
-      def resolve(sel: Selector): TqRPathz = sel(origin).pipe(tqqpathz) }
+      def resolve(sel: Selector): TqRPathz = sel(origin).pipe(tqrpathz) }
 
     // ---------------------------------------------------------------------------
-    trait KpathzBase extends UtsBase { val origin: Origin
+    trait KPathzBase extends UtsBase { val origin: Origin
       type Target = KPathzSelection
       def resolve(sel: Selector): TqKPathz = sel(origin).pipe(tqkpathz) }
 
@@ -151,17 +151,17 @@ object UtsBase {
     // ---------------------------------------------------------------------------
     trait RenzBase extends UtsBase { val origin: Origin
       type Target = RenzSelection
-      def resolve(sel: Selector): TQRenz = sel(origin).pipe(tqrenz) }
+      def resolve(sel: Selector): TqRenz = sel(origin).pipe(tqrenz) }
 
     // ---------------------------------------------------------------------------
     trait RenBase extends UtsBase { val origin: Origin
       type Target = RenSelection
-      def resolve(sel: Selector): TQRen = sel(origin).pipe(tqren) }
+      def resolve(sel: Selector): TqRen = sel(origin).pipe(tqren) }
 
     // ---------------------------------------------------------------------------
     trait KeyBase extends UtsBase { val origin: Origin
       type Target = KeySelection
-      def resolve(sel: Selector): TQKey = sel(origin).pipe(tqkey) }
+      def resolve(sel: Selector): TqKey = sel(origin).pipe(tqkey) }
     
 }
 

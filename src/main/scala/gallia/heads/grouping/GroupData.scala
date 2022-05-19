@@ -27,13 +27,13 @@ sealed trait GroupData {
         def as   :        Key  = asOpt.getOrElse(_group) }
 
       // ===========================================================================
-      case class GroupData1C(groupee : TQRen                                      ) extends GroupData               { def pair(in: Cls): (Ren , Renz) = groupee .resolve(in).pipe { e => e -> in.complementKeyz(e.from).renz } }
-      case class GroupData1N(groupee : TQRen , groupers: TQRenz                   ) extends GroupData               { def pair(in: Cls): (Ren , Renz) = groupee .resolve(in) -> groupers.resolve(in) }
+      case class GroupData1C(groupee : TqRen                                       ) extends GroupData               { def pair(in: Cls): (Ren , Renz) = groupee .resolve(in).pipe { e => e -> in.complementKeyz(e.from).renz } }
+      case class GroupData1N(groupee : TqRen , groupers: TqRenz                    ) extends GroupData               { def pair(in: Cls): (Ren , Renz) = groupee .resolve(in) -> groupers.resolve(in) }
 
-      case class GroupDataCN(                 groupers: TQRenz, asOpt: Option[Key]) extends GroupData with HasAsOpt { def pair(in: Cls): (Renz, Renz) = groupers.resolve(in).pipe { r =>      in.complementKeyz(r.froms).renz -> r } }
-      case class GroupDataNC(groupees: TQRenz                 , asOpt: Option[Key]) extends GroupData with HasAsOpt { def pair(in: Cls): (Renz, Renz) = groupees.resolve(in).pipe { e => e -> in.complementKeyz(e.froms).renz } }
+      case class GroupDataCN(                  groupers: TqRenz, asOpt: Option[Key]) extends GroupData with HasAsOpt { def pair(in: Cls): (Renz, Renz) = groupers.resolve(in).pipe { r =>      in.complementKeyz(r.froms).renz -> r } }
+      case class GroupDataNC(groupees: TqRenz                  , asOpt: Option[Key]) extends GroupData with HasAsOpt { def pair(in: Cls): (Renz, Renz) = groupees.resolve(in).pipe { e => e -> in.complementKeyz(e.froms).renz } }
 
-      case class GroupDataNN(groupees: TQRenz, groupers: TQRenz, asOpt: Option[Key]) extends GroupData with HasAsOpt { def pair(in: Cls): (Renz, Renz) = groupees.resolve(in) -> groupers.resolve(in) }
+      case class GroupDataNN(groupees: TqRenz, groupers: TqRenz, asOpt: Option[Key]) extends GroupData with HasAsOpt { def pair(in: Cls): (Renz, Renz) = groupees.resolve(in) -> groupers.resolve(in) }
   }
 
 // ===========================================================================

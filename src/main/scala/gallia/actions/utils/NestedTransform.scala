@@ -18,7 +18,7 @@ class NestedTransform(disambiguatorOpt: UnionObjectDisambiguatorOpt, adag: MetaP
   // ===========================================================================
   // validation
 
-  def vldt(c: Cls, qpathz: RPathz): Errs = qpathz.map(_.from).flatMap(vldt(c, _)) //FIXME: overwriting fields ok?
+  def vldt(c: Cls, rpathz: RPathz): Errs = rpathz.map(_.from).flatMap(vldt(c, _)) //FIXME: overwriting fields ok?
 
     // ---------------------------------------------------------------------------
     def vldt(c: Cls, kpath: KPath): Errs = //TODO: t220422121108 - check nesting field
@@ -82,20 +82,20 @@ class NestedTransform(disambiguatorOpt: UnionObjectDisambiguatorOpt, adag: MetaP
   // ---------------------------------------------------------------------------
   // older way (to be phased out?):
     
-    def atomuusUZ(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(new NestedPlan(_).nestedRunneru2z(optional))
-    def atomuusZU(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(new NestedPlan(_).nestedRunnerz2u(optional))
+    def atomuusUZ(c: Cls)(rpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(rpathz, optional)(new NestedPlan(_).nestedRunneru2z(optional))
+    def atomuusZU(c: Cls)(rpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(rpathz, optional)(new NestedPlan(_).nestedRunnerz2u(optional))
   
-    def atomuusUV(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(new NestedPlan(_).nestedRunneru2v(optional))
-    def atomuusZV(c: Cls)(qpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(qpathz, optional)(new NestedPlan(_).nestedRunnerz2v(optional))
+    def atomuusUV(c: Cls)(rpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(rpathz, optional)(new NestedPlan(_).nestedRunneru2v(optional))
+    def atomuusZV(c: Cls)(rpathz: RPathz, optional: Boolean): AtomUUs = atomuus(c)(rpathz, optional)(new NestedPlan(_).nestedRunnerz2v(optional))
   
       // ---------------------------------------------------------------------------
-      private def atomuus(c: Cls)(qpathz: RPathz, optional: Boolean)(f: AtomPlan => Any => Any): AtomUUs =
+      private def atomuus(c: Cls)(rpathz: RPathz, optional: Boolean)(f: AtomPlan => Any => Any): AtomUUs =
           _atoms(c)(pair => {
               assert(pair.optional == optional)
               val nestedClass = c.forceNestedClass(pair.path)
   
               _Transform1to1(pair, pair.path, f(metaToAtomPlan(nestedClass))) })(
-            qpathz.values)
+            rpathz.values)
   
     // ---------------------------------------------------------------------------
     // eg as used in generate

@@ -30,7 +30,7 @@ case class TypedTargetQuery[$Target /* TODO: t210823111030 - ungenerify */]( // 
     def resolve(c: Cls)                                 : $Target = tq.resolve(c)
     def kpathT (c: Cls)(implicit ev: $Target <:< KPath ): KPath   = kpath_(c)
     def kpath_ (c: Cls)(implicit ev: $Target <:< KPath ): KPath   = tq.resolve(c)
-    def qpathz_(c: Cls)(implicit ev: $Target <:< RPathz): RPathz  = tq.resolve(c)
+    def rpathz_(c: Cls)(implicit ev: $Target <:< RPathz): RPathz  = tq.resolve(c)
 
     def tqkpath(implicit ev: $Target <:< KPath): TqKPath = tq.asInstanceOf[TqKPath]
       

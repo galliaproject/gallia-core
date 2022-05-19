@@ -20,8 +20,8 @@ case class RenWz  (values: Seq[RenW])   extends TargetWrappers[RenW]   {
   def toz   : Keyz = Keyz(values.flatMap(_.value.toOpt  ))
 }
 
-case class       RPathWz(values: Seq[RPathW])       extends TargetWrappers[RPathW] { def qpathz = RPathz(values.map(_.value)) }
-case class ActualRPathWz(values: Seq[ActualRPathW]) extends TargetWrappers[ActualRPathW] { def qpathz = RPathz(values.map(_.value)) }
+case class       RPathWz(values: Seq[RPathW])       extends TargetWrappers[      RPathW] { def rpathz = RPathz(values.map(_.value)) }
+case class ActualRPathWz(values: Seq[ActualRPathW]) extends TargetWrappers[ActualRPathW] { def rpathz = RPathz(values.map(_.value)) }
 
 // ===========================================================================
 object KeyWz {

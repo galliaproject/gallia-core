@@ -75,8 +75,8 @@ trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F]
   def formatJsonArrayString (k: RPathW): Self2 = transformObjectsCustom(k)(_.formatCompactJson)
 
     // ---------------------------------------------------------------------------
-    def transformObjectCustom [D: WTT](k: RPathW)(f: Obj  => D): Self2 = self2 :+ TransformObjectCustom (TargetQueryUtils.tqqpathz(k), typeNode[D], f)
-    def transformObjectsCustom[D: WTT](k: RPathW)(f: Objs => D): Self2 = self2 :+ TransformObjectsCustom(TargetQueryUtils.tqqpathz(k), typeNode[D], f)
+    def transformObjectCustom [D: WTT](k: RPathW)(f: Obj  => D): Self2 = self2 :+ TransformObjectCustom (TargetQueryUtils.tqrpathz(k), typeNode[D], f)
+    def transformObjectsCustom[D: WTT](k: RPathW)(f: Objs => D): Self2 = self2 :+ TransformObjectsCustom(TargetQueryUtils.tqrpathz(k), typeNode[D], f)
 
   // ---------------------------------------------------------------------------    
   def zoomOnObject(target: KPathW): Self2 = retain(target.value).unnestAllFrom(target)
@@ -85,11 +85,11 @@ trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F]
   // array ops
 
   // TODO: use reducer rather:
-    @deprecated def toSize (key: RPathW): Self2 = self2 :+ ToSize (TargetQueryUtils.tqqpathz(key)) // or replace with eg transform(_.strings_('f)).using(_.map(_.size).getOrElse(0))
-    @deprecated def toSum  (key: RPathW): Self2 = self2 :+ ToSum  (TargetQueryUtils.tqqpathz(key))
+    @deprecated def toSize (key: RPathW): Self2 = self2 :+ ToSize (TargetQueryUtils.tqrpathz(key)) // or replace with eg transform(_.strings_('f)).using(_.map(_.size).getOrElse(0))
+    @deprecated def toSum  (key: RPathW): Self2 = self2 :+ ToSum  (TargetQueryUtils.tqrpathz(key))
 
-    @deprecated def toMean (key: RPathW): Self2 = self2 :+ ToMean (TargetQueryUtils.tqqpathz(key)) // TODO: build in max decimal
-    @deprecated def toStdev(key: RPathW): Self2 = self2 :+ ToStdev(TargetQueryUtils.tqqpathz(key)) // TODO: build in max decimal
+    @deprecated def toMean (key: RPathW): Self2 = self2 :+ ToMean (TargetQueryUtils.tqrpathz(key)) // TODO: build in max decimal
+    @deprecated def toStdev(key: RPathW): Self2 = self2 :+ ToStdev(TargetQueryUtils.tqrpathz(key)) // TODO: build in max decimal
 
   // ===========================================================================
   // string ops

@@ -55,7 +55,7 @@ case class KeyW(value: Key) {
 case class RenW(value: Ren) {
     @inline def ren = value
 
-    def qpath: RPath = value.qpath
+    def rpath: RPath = value.rpath
 
     def renz = Renz(Seq(value))
 
@@ -77,13 +77,13 @@ case class RenW(value: Ren) {
 /** remove + step 2 of 2-step-rename, generate origin */
 case class KPathW(value: KPath) {
     @inline def kpath = value
-            def qpath(newKey: KeyW): RPath = value.qpath(newKey)
+            def rpath(newKey: KeyW): RPath = value.rpath(newKey)
 
     def  key = value. key
     def skey = value.skey
 
     def kpathz = KPathz(Seq(value))
-    def qpathz = RPathz(Seq(value.qpath))
+    def rpathz = RPathz(Seq(value.rpath))
   }
 
   // ---------------------------------------------------------------------------
@@ -98,8 +98,8 @@ case class KPathW(value: KPath) {
 
 // ===========================================================================
 case class RPathW(value: RPath) {
-    @inline def qpath  = value
-            def qpathz = RPathz(Seq(value))
+    @inline def rpath  = value
+            def rpathz = RPathz(Seq(value))
   }
 
   // ---------------------------------------------------------------------------
@@ -109,19 +109,19 @@ case class RPathW(value: RPath) {
     implicit def to(x: EKey ): RPathW = RPathW(RPath.from(x))
     implicit def to(x: UKey ): RPathW = RPathW(RPath.from(x))
 
-    implicit def to(x: Ren  ): RPathW = RPathW(x.qpath)
+    implicit def to(x: Ren  ): RPathW = RPathW(x.rpath)
 
-    implicit def to(x: KPath): RPathW = RPathW(x.qpath)
+    implicit def to(x: KPath): RPathW = RPathW(x.rpath)
     implicit def to(x: RPath): RPathW = RPathW(x)
   }
 
 // ===========================================================================
 /** mostly for 1-step rename */
-case class ActualRPathW(value: RPath /* actual */) { def qpathz: RPathz = RPathz(Seq(value)) }
+case class ActualRPathW(value: RPath /* actual */) { def rpathz: RPathz = RPathz(Seq(value)) }
 
   // ---------------------------------------------------------------------------
   object ActualRPathW {
-    implicit def to(x: Ren  ): ActualRPathW = ActualRPathW(x.qpath)
+    implicit def to(x: Ren  ): ActualRPathW = ActualRPathW(x.rpath)
     implicit def to(x: RPath): ActualRPathW = ActualRPathW(x)
   }
 

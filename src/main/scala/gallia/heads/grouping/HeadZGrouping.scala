@@ -27,7 +27,7 @@ trait HeadZGrouping { self: HeadZ =>
     def group(groupees: RenWz)                            : _ByN = group(_.explicit(groupees))
     def group(groupees: GroupeeNSelection)                : _ByN = groupN(resolveGroupees(groupees))
 
-    private[heads] def groupN(groupees: TQRenz):_ByN = new _ByN(groupees)
+    private[heads] def groupN(groupees: TqRenz):_ByN = new _ByN(groupees)
 
       // ===========================================================================
       class _By1(groupee: Groupee1Selection) { // similar to conf's
@@ -36,13 +36,13 @@ trait HeadZGrouping { self: HeadZ =>
         def by(grouper1: RenW, more: RenW*): Self = by(_.explicit(RenWz(grouper1 +: more)))
         def by(groupers: GroupersSelection): Self = grouping(_.field(groupee).by(groupers))
 
-        private[heads] def byN(groupers: TQRenz) : Self = grouping(_.field(groupee).byN(groupers))
+        private[heads] def byN(groupers: TqRenz) : Self = grouping(_.field(groupee).byN(groupers))
 
         // ---------------------------------------------------------------------------
         def byTheRest: Self = self.grouping(_.field(groupee).byTheRest) }
 
       // ===========================================================================
-      class _ByN(groupees: TQRenz) { // similar to conf's
+      class _ByN(groupees: TqRenz) { // similar to conf's
         def by(groupers: RenWz)            : Self with HasAs = by(_.explicit(groupers))
         def by(grouper1: RenW, more: RenW*): Self with HasAs = by(_.explicitFX(grouper1, more))
         def by(groupers: GroupersSelection): Self with HasAs = hasAs(_.fields(groupees).by(groupers))

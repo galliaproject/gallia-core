@@ -40,7 +40,7 @@ object UtsIndividuals { // mostly meant to convey intent
 
     trait HasRepeatedExplicitRPathW {
       def explicit(x1: RPathW, x2: RPathW, more: RPathW*): RPathzSelection = explicit(RPathWz(Seq(x1, x2) ++ more))
-      def explicit(x : RPathWz)                          : RPathzSelection = ExplicitRPathz(x.qpathz) }
+      def explicit(x : RPathWz)                          : RPathzSelection = ExplicitRPathz(x.rpathz) }
 
     trait HasRepeatedExplicitIndex {
       def indices(value1: MIndex, value2: MIndex, more: MIndex*): KeyzSelection = ExplicitIndices(Seq(value1, value2) ++ more)

@@ -13,7 +13,7 @@ import actions.ActionsCustoms.CustomZZ
 class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and generally change occurrences of "z" into "s"
       protected[gallia] override val nodeId : NodeId,
       protected[gallia] override val handler: Handler)
-    extends common.HeadCommon[HeadZ]
+    extends heads.common.HeadCommon[HeadZ]
 
       with    HeadZOut
 

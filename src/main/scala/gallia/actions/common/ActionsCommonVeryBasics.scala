@@ -79,7 +79,7 @@ object ActionsCommonVeryBasics {
       def  vldt(c: Cls): Errs =
         results(c).validate(
           (path, throwable) => Err(s"${ErrorId.CouldNotRenameDynamically} - ${path} - ${throwable.getMessage}"),
-          qpathz            => _vldt.fieldsRenaming(c, qpathz))
+          rpathz            => _vldt.fieldsRenaming(c, rpathz))
 
       def _meta  (c: Cls): Cls     = results(c).forceRPathz.foldLeft(c)(_ rename _)
       def atomuus(c: Cls): AtomUUs = results(c).forceRPathz.pipe(_atoms(_, _ => _IdentityUU))
@@ -90,8 +90,8 @@ object ActionsCommonVeryBasics {
     def  vldt  (c: Cls): Errs    = target.vldtAsOrigin(c) ++ _vldt.someFieldsAreLeft (c, target.size(c)) // see 201107145004
 
     //FIXME: t220414112604 - if nesting, ensure parent is removed instead of all sub-fields being removed
-    def _meta  (c: Cls): Cls     = target.qpathz_(c).forceKPathz.foldLeft(c)(_ remove _)
-    def atomuus(c: Cls): AtomUUs = target.qpathz_(c).forceKPathz.pipe(_atoms(_, _Remove)) }
+    def _meta  (c: Cls): Cls     = target.rpathz_(c).forceKPathz.foldLeft(c)(_ remove _)
+    def atomuus(c: Cls): AtomUUs = target.rpathz_(c).forceKPathz.pipe(_atoms(_, _Remove)) }
 
   // ===========================================================================
   class Retain(target: TqRPathz) extends ActionUUb { import gallia.data.single.RetainMapping
@@ -104,7 +104,7 @@ object ActionsCommonVeryBasics {
     // ---------------------------------------------------------------------------
     def _meta(c: Cls): Cls =
       target
-        .qpathz_(c)
+        .rpathz_(c)
         .pipe { targets =>
           targets
             .fromz.pipe(c.retain)
@@ -112,8 +112,8 @@ object ActionsCommonVeryBasics {
 
     // ---------------------------------------------------------------------------
     def atomuus(c: Cls): AtomUUs =
-        target.qpathz_(c).fromz.pipe { targets => _Retain(targets, RetainMapping(targets.mapping)) } +:
-        target.qpathz_(c)      .flatMap(potentialRenaming(_).toSeq)
+        target.rpathz_(c).fromz.pipe { targets => _Retain(targets, RetainMapping(targets.mapping)) } +:
+        target.rpathz_(c)      .flatMap(potentialRenaming(_).toSeq)
   }
 
   // ===========================================================================

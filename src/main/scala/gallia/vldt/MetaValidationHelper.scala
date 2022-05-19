@@ -45,7 +45,7 @@ object MetaValidationHelper {
               case key   : Key    =>                                 _typeCompatibility(c)(KPath.from(key),      duo, mode)
               case ren   : Ren    =>                                 _typeCompatibility(c)(KPath.from(ren.from), duo, mode)
               case kpath : KPath  =>                                 _typeCompatibility(c)(kpath,                duo, mode)
-              case qpathz: RPathz => qpathz.froms.flatMap { kpath => _typeCompatibility(c)(kpath,                duo, mode) } })
+              case rpathz: RPathz => rpathz.froms.flatMap { kpath => _typeCompatibility(c)(kpath,                duo, mode) } })
 
     // ---------------------------------------------------------------------------
     private def _typeCompatibility(c: Cls)(kpath: KPath, ht: HasTypeNode, mode: SpecialCardiMode): Err_ =

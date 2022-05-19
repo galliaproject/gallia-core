@@ -76,8 +76,8 @@ trait HeadCommonNestingRelated[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
     // ---------------------------------------------------------------------------
     final class _Move(targets: RPathWz) {
-      def to(destination: RPathW): Self2 = self2 :+ new Move(targets.qpathz, Some(destination.value))
-      def toCurrent              : Self2 = self2 :+ new Move(targets.qpathz, None) }
+      def to(destination: RPathW): Self2 = self2 :+ new Move(targets.rpathz, Some(destination.value))
+      def toCurrent              : Self2 = self2 :+ new Move(targets.rpathz, None) }
 }
 
 // ===========================================================================

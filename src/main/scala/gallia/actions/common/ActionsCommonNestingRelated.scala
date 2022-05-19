@@ -37,7 +37,7 @@ object ActionsCommonNestingRelated {
   // ===========================================================================
   // TODO: split up
 
-  case class UnnestFrom(parent: KPath, target: TQRenz) extends ActionUUb { //TODO: multiple levels? mark here if one, all, ...
+  case class UnnestFrom(parent: KPath, target: TqRenz) extends ActionUUb { //TODO: multiple levels? mark here if one, all, ...
     private def fromz(nc: Cls): Keyz = target.resolve(nc).froms
 
     // ---------------------------------------------------------------------------

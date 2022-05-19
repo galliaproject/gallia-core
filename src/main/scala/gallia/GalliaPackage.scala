@@ -228,7 +228,7 @@ package gallia {
 
       // ---------------------------------------------------------------------------
       def |> (that: KeyW): KPath = KPath.from(_key).appendLevel(that.value)
-      def |> (that: Ren) : RPath = KPath.from(_key).appendLevel(that.from).qpath(that.to)
+      def |> (that: Ren) : RPath = KPath.from(_key).appendLevel(that.from).rpath(that.to)
 
       // TODO:?
       //def |> (that: KeyWz   ): SPathz = ???

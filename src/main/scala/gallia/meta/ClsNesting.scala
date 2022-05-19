@@ -21,7 +21,7 @@ trait ClsNesting { dis: Cls =>
      : Cls =
     path.tailPair match {
         case Left ( renaming      ) => root(dis, renaming)
-        case Right((parent, qpath)) => dis.transformNestedClasses(parent)(rec(_, qpath)) }
+        case Right((parent, rpath)) => dis.transformNestedClasses(parent)(rec(_, rpath)) }
 
 }
 

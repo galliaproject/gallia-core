@@ -19,15 +19,15 @@ object ActionsCommonSomewhatBasics {
         if (target.node.isNone) _Error.CantBeNone.errs //TODO: also Nil
         else                    target.vldtAsOrigin(c, mode = SpecialCardiMode.IgnoreRequiredness)
 
-      def _meta  (c: Cls): Cls     = target.tq.qpathz_(c).foldLeft(c)(_ toOptional _)
-      def atomuus(c: Cls): AtomUUs = target.tq.qpathz_(c).pipe(_atoms(x => _RemoveIf(x, x, pred ))) }
+      def _meta  (c: Cls): Cls     = target.tq.rpathz_(c).foldLeft(c)(_ toOptional _)
+      def atomuus(c: Cls): AtomUUs = target.tq.rpathz_(c).pipe(_atoms(x => _RemoveIf(x, x, pred ))) }
 
     // ===========================================================================
     case class RemoveConditionallyWhatever(target: TqRPathz, value: Any) extends ActionUUb {
       def  vldt(c: Cls): Errs = target.vldtAsOrigin(c) // TODO: no need to check if some fields are left
 
-      def _meta  (c: Cls): Cls     = target.qpathz_(c).foldLeft(c)(_ toOptional _)
-      def atomuus(c: Cls): AtomUUs = target.qpathz_(c).pipe(_atoms(_RemoveWhateverIf(_, value))) }
+      def _meta  (c: Cls): Cls     = target.rpathz_(c).foldLeft(c)(_ toOptional _)
+      def atomuus(c: Cls): AtomUUs = target.rpathz_(c).pipe(_atoms(_RemoveWhateverIf(_, value))) }
 
     // ===========================================================================
     case class RemoveConditionally2(reference: TypedTargetQuery[Key], target: TqKey, pred: Any => Boolean) extends ActionUUc {
@@ -48,8 +48,8 @@ object ActionsCommonSomewhatBasics {
           _vldt.typeCompatibility(c, target.duo(c), SpecialCardiMode.Normal)
         //TODO: check was opt? what about multiple?
 
-        def _meta  (c: Cls): Cls     = target.qpathz_(c).foldLeft(c)(_ toRequired _)
-        def atomuus(c: Cls): AtomUUs = target.qpathz_(c).pipe(_atoms(_SetDefault(_, newValue))) }
+        def _meta  (c: Cls): Cls     = target.rpathz_(c).foldLeft(c)(_ toRequired _)
+        def atomuus(c: Cls): AtomUUs = target.rpathz_(c).pipe(_atoms(_SetDefault(_, newValue))) }
 
       // ---------------------------------------------------------------------------
       case class SetDefaultConditionally2(
@@ -101,13 +101,13 @@ object ActionsCommonSomewhatBasics {
 
       // ---------------------------------------------------------------------------
       def _meta(c: Cls): Cls =
-        target.qpathz_(c).pipe { qpathz =>
+        target.rpathz_(c).pipe { rpathz =>
           toOpt match {
-            case None     => c.rename    (qpathz)
-            case Some(to) => c.updateInfo(qpathz, to.forceNonBObjInfo) } }
+            case None     => c.rename    (rpathz)
+            case Some(to) => c.updateInfo(rpathz, to.forceNonBObjInfo) } }
 
       // ---------------------------------------------------------------------------
-      def atomuus(c: Cls): AtomUUs = target.qpathz_(c).pipe(_atoms(c)(_TransformVV(_, _helper.Translate.wrap(mapping, toOpt))))
+      def atomuus(c: Cls): AtomUUs = target.rpathz_(c).pipe(_atoms(c)(_TransformVV(_, _helper.Translate.wrap(mapping, toOpt))))
     }
 
   // ===========================================================================

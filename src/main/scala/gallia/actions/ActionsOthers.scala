@@ -57,7 +57,7 @@ object ActionsOthers {
         .orIfEmpty { _vldt.checkAreValidEnumValues(c)(target)(f) }
 
     // ---------------------------------------------------------------------------
-    def _meta(c: Cls): Cls  = target.qpathz_(c).foldLeft(c) { _.transformSoleValueType(_) {
+    def _meta(c: Cls): Cls  = target.rpathz_(c).foldLeft(c) { _.transformSoleValueType(_) {
       case BasicType._Enm(values) => BasicType._Enm(f(values)) } } }
 
   // ===========================================================================

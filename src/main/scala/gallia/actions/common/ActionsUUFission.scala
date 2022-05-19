@@ -1,10 +1,11 @@
 package gallia
 package actions
+package common
 
 import target._
 import domain._
 import FunctionWrappers._
-import atoms.AtomsUUTransforms._
+import atoms.common.AtomsUUTransforms._
 import atoms.AtomsAsserts._AssertSameType
 import actions.utils.ActionsUtils
 

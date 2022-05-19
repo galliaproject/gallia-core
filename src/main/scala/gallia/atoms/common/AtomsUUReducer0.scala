@@ -1,5 +1,6 @@
 package gallia
 package atoms
+package common
 
 import aptus.Seq_
 

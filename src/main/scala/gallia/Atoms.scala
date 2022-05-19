@@ -16,14 +16,14 @@ sealed trait Atom extends ActionAN {
     // commonly used for optimizations
 
       // ---------------------------------------------------------------------------
-      def isUWrapper        : Boolean = this.isInstanceOf[gallia.atoms                      ._UWrapper]
-      def isRename          : Boolean = this.isInstanceOf[gallia.atoms.AtomsUUVeryBasics    ._Rename]
-      def isRemoveWhateverIf: Boolean = this.isInstanceOf[gallia.atoms.AtomsUUSomewhatBasics._RemoveWhateverIf]
+      def isUWrapper        : Boolean = this.isInstanceOf[gallia.atoms                             ._UWrapper]
+      def isRename          : Boolean = this.isInstanceOf[gallia.atoms.common.AtomsUUVeryBasics    ._Rename]
+      def isRemoveWhateverIf: Boolean = this.isInstanceOf[gallia.atoms.common.AtomsUUSomewhatBasics._RemoveWhateverIf]
 
       // ---------------------------------------------------------------------------
-      def asUWrapper         = this.asInstanceOf[gallia.atoms                      ._UWrapper]
-      def asRename           = this.asInstanceOf[gallia.atoms.AtomsUUVeryBasics    ._Rename]
-      def asRemoveWhateverIf = this.asInstanceOf[gallia.atoms.AtomsUUSomewhatBasics._RemoveWhateverIf]
+      def asUWrapper         = this.asInstanceOf[gallia.atoms                             ._UWrapper]
+      def asRename           = this.asInstanceOf[gallia.atoms.common.AtomsUUVeryBasics    ._Rename]
+      def asRemoveWhateverIf = this.asInstanceOf[gallia.atoms.common.AtomsUUSomewhatBasics._RemoveWhateverIf]
 
       // ===========================================================================
       def isPlaceholder: Boolean = this == NestingDataPlaceholder

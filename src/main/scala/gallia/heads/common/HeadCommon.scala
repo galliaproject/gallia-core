@@ -2,8 +2,8 @@ package gallia
 package heads.common
 
 import env.ActionDag
-import actions.ActionsUUVeryBasics._
-import actions.ActionsUUUnionTypes
+import actions.common.ActionsUUVeryBasics._
+import actions.common.ActionsUUUnionTypes
 
 // ===========================================================================
 trait HeadCommon[F <: HeadCommon[F]]

@@ -7,7 +7,7 @@ import actions._
 import FunctionWrappers._
 import dag.RootId
 import domain.PathPair
-import atoms.AtomsUUTransforms.{_Transform1to1, _Transform1to1b, _Transform1to1U, _Transform1to1Z}
+import atoms.common.AtomsUUTransforms.{_Transform1to1, _Transform1to1b, _Transform1to1U, _Transform1to1Z}
 import heads.HeadsNestingHandler
 
 // ===========================================================================

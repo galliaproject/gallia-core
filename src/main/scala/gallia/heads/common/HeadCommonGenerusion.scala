@@ -3,8 +3,8 @@ package heads.common
 
 import FunctionWrappers._
 import target.utils.TypedTargetQueryUtils._
-import actions.ActionsUUGenerationOther
-import actions.ActionsUUGenerusion._
+import actions.common.ActionsUUGenerationOther
+import actions.common.ActionsUUGenerusion._
 
 // ===========================================================================
 trait HeadCommonGenerusion[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>

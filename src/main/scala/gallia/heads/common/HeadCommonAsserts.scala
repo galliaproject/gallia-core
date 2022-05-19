@@ -66,7 +66,7 @@ trait HeadCommonAsserts[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
   // ---------------------------------------------------------------------------
   // additional validation
-  /*protected[gallia] */def ensureNumerical0(key: KeyW) = self2 :+ actions.ActionsUUSomewhatBasics.EnsureNumeric(TargetQueryUtils.tqkpathz(key)) // TODO: keep? expand?
+  /*protected[gallia] */def ensureNumerical0(key: KeyW) = self2 :+ actions.common.ActionsUUSomewhatBasics.EnsureNumeric(TargetQueryUtils.tqkpathz(key)) // TODO: keep? expand?
 }
 
 // ===========================================================================

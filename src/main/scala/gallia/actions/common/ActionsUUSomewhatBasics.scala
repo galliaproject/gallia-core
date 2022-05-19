@@ -1,11 +1,12 @@
 package gallia
 package actions
+package common
 
 import aptus.Anything_
 import aptus.Separator
 
 import target._
-import atoms.AtomsUUSomewhatBasics._
+import atoms.common.AtomsUUSomewhatBasics._
 
 // ===========================================================================
 object ActionsUUSomewhatBasics {
@@ -142,7 +143,7 @@ object ActionsUUSomewhatBasics {
 
     // ---------------------------------------------------------------------------
     case class _ZipStrings(keys: Renz, sep: Separator, newNestingKey : Key) extends AtomUU { def naive(o: Obj) =
-      gallia.atoms.AtomsUUZip.zip(o, keys, sep, newNestingKey) }
+      gallia.atoms.common.AtomsUUZip.zip(o, keys, sep, newNestingKey) }
 
   // ===========================================================================
   case class EnsureNumeric(targets: TqKPathz) extends IdentityM1 with IdentityUUa { // TODO: generalize to any validation

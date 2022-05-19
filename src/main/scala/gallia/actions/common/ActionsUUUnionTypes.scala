@@ -1,8 +1,9 @@
 package gallia
 package actions
+package common
 
 import aptus.Seq_
-import atoms.AtomsUUUnionTypes._
+import atoms.common.AtomsUUUnionTypes._
 
 // ===========================================================================
 object ActionsUUUnionTypes {

@@ -1,11 +1,12 @@
 package gallia
 package actions
+package common
 
 import aptus.Anything_
 
 import target._
 import FunctionWrappers._
-import atoms.AtomsUUTransforms._TransformWW
+import atoms.common.AtomsUUTransforms._TransformWW
 
 // ===========================================================================
 object ActionsUUTransforms {

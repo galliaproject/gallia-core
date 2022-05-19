@@ -1,11 +1,12 @@
 package gallia
 package atoms
+package common
 
 import aptus.String_
 import aptus.Separator
 import aptus.Nes
 
-import atoms.AtomsUUSomewhatBasics._Split
+import atoms.common.AtomsUUSomewhatBasics._Split
 
 // ===========================================================================
 object AtomsUUZip {

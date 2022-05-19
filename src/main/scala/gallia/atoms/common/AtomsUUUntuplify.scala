@@ -1,5 +1,6 @@
 package gallia
 package atoms
+package common
 
 import aptus.{String_, Seq_, Tuple2_}
 

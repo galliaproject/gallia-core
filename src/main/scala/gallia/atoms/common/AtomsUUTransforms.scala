@@ -1,5 +1,6 @@
 package gallia
 package atoms
+package common
 
 import domain._
 import FunctionWrappers._

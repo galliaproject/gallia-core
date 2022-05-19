@@ -1,12 +1,13 @@
 package gallia
 package actions
+package common
 
 import aptus.{Anything_, Seq_}
 import aptus.Separator
 
 import target._
-import atoms.AtomsUUSomewhatBasics._
-import atoms.AtomsUUResnesting
+import atoms.common.AtomsUUSomewhatBasics._
+import atoms.common.AtomsUUResnesting
 
 // ===========================================================================
 object ActionsUUNestingRelated {

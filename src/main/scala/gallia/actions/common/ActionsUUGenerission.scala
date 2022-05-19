@@ -1,10 +1,11 @@
 package gallia
 package actions
+package common
 
 import target._
 import domain._
 import FunctionWrappers._
-import atoms.AtomsUUTransforms._
+import atoms.common.AtomsUUTransforms._
 
 // ===========================================================================
 object ActionsUUGenerission { //TODO: t210111095156 separate all the Whatever and t210111095157 case-class versions...

@@ -1,8 +1,9 @@
 package gallia
 package actions
+package common
 
 import target._
-import atoms.AtomsUUReducer0._
+import atoms.common.AtomsUUReducer0._
 
 // ===========================================================================
 @NumberAbstraction

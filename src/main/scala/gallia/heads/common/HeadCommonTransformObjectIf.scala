@@ -2,7 +2,7 @@ package gallia
 package heads
 package common
 
-import actions.ActionsUUTransformObjectIf.{TransformObjectIf, TransformObjectIfW}
+import actions.common.ActionsUUTransformObjectIf.{TransformObjectIf, TransformObjectIfW}
 
 // ===========================================================================
 trait HeadCommonTransformObjectIf[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>

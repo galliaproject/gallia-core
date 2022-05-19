@@ -5,7 +5,7 @@ import scala.reflect.runtime.universe.weakTypeTag
 import aptus.Index
 import target.HT
 import FunctionWrappers._
-import actions.ActionsUUTransforms._
+import actions.common.ActionsUUTransforms._
 
 // ===========================================================================
 trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 220412171653

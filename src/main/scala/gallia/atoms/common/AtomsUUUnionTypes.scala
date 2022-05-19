@@ -1,5 +1,6 @@
 package gallia
 package atoms
+package common
 
 // ===========================================================================
 object AtomsUUUnionTypes {

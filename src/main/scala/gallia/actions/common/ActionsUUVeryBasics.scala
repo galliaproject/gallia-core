@@ -1,5 +1,6 @@
 package gallia
 package actions
+package common
 
 import aptus.{Anything_, String_}
 
@@ -7,7 +8,7 @@ import target._
 import vldt.ErrorId
 import domain.{KVEs, RVEs}
 import atoms.AtomsOthers._
-import atoms.AtomsUUVeryBasics._
+import atoms.common.AtomsUUVeryBasics._
 import actions.utils.RenameDynamicallyHelper
 import actions.utils.ActionsUtils._
 

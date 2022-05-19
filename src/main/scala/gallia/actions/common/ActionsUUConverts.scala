@@ -1,8 +1,9 @@
 package gallia
 package actions
+package common
 
 import selection.typed.TqRPathz
-import atoms.AtomsUUConverts._
+import atoms.common.AtomsUUConverts._
 import atoms.AtomsAsserts._
 
 // ===========================================================================

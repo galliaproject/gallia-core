@@ -1,5 +1,6 @@
 package gallia
 package actions
+package common
 
 import target._
 import domain.PathPair

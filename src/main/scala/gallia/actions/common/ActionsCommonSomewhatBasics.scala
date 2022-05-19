@@ -19,26 +19,26 @@ object ActionsCommonSomewhatBasics {
         if (target.node.isNone) _Error.CantBeNone.errs //TODO: also Nil
         else                    target.vldtAsOrigin(c, mode = SpecialCardiMode.IgnoreRequiredness)
 
-      def _meta  (c: Cls): Cls     = target.tq.qpathz_(c).foldLeft(c)(_ toNonRequired _)
+      def _meta  (c: Cls): Cls     = target.tq.qpathz_(c).foldLeft(c)(_ toOptional _)
       def atomuus(c: Cls): AtomUUs = target.tq.qpathz_(c).pipe(_atoms(x => _RemoveIf(x, x, pred ))) }
 
     // ===========================================================================
     case class RemoveConditionallyWhatever(target: TqRPathz, value: Any) extends ActionUUb {
       def  vldt(c: Cls): Errs = target.vldtAsOrigin(c) // TODO: no need to check if some fields are left
 
-      def _meta  (c: Cls): Cls     = target.qpathz_(c).foldLeft(c)(_ toNonRequired _)
+      def _meta  (c: Cls): Cls     = target.qpathz_(c).foldLeft(c)(_ toOptional _)
       def atomuus(c: Cls): AtomUUs = target.qpathz_(c).pipe(_atoms(_RemoveWhateverIf(_, value))) }
 
     // ===========================================================================
     case class RemoveConditionally2(reference: TypedTargetQuery[Key], target: TqKey, pred: Any => Boolean) extends ActionUUc {
       def  vldt (c: Cls): Errs   = reference.vldtAsOrigin(c) ++ target.vldtAsOrigin(c)
-      def _meta (c: Cls): Cls    = c.toNonRequired(target.resolve(c))
+      def _meta (c: Cls): Cls    = c.toOptional(target.resolve(c))
       def atomuu(c: Cls): AtomUU = _RemoveIf(reference.resolve(c), target.resolve(c), pred) }
 
     // ---------------------------------------------------------------------------
     case class RemoveConditionally2Whatever(reference: Key, target: TqKey, value: Any) extends ActionUUc {
       def  vldt (c: Cls): Errs   = _vldt.fieldPresence(c, reference).toSeq ++ target.vldtAsOrigin(c)
-      def _meta (c: Cls): Cls    = c.toNonRequired(target.resolve(c))
+      def _meta (c: Cls): Cls    = c.toOptional(target.resolve(c))
       def atomuu(c: Cls): AtomUU = _RemoveIf(reference, target.resolve(c), _ == value) }
 
   // ===========================================================================

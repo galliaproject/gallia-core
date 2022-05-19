@@ -12,13 +12,13 @@ trait ClsAdvanced { self: Cls =>
       fields
         .map { thisField =>
           that.field_(thisField.key) match {
-            case None            => thisField.toNonRequired
+            case None            => thisField.toOptional
             case Some(thatField) => Fld(thisField.key, Info.combine(thisField.info, thatField.info)) } } ++
       that
         .fields
         .flatMap { thatField =>
           field_(thatField.key) match {
-            case None            => Some(thatField.toNonRequired)
+            case None            => Some(thatField.toOptional)
             case Some(thatField) => None } } )
 
   // ===========================================================================
@@ -70,8 +70,8 @@ trait ClsAdvanced { self: Cls =>
         .map { entry =>
           field(entry.from)
             .updateKey(entry.to)
-            .toNonMultiple
-            .toNonRequired } // TODO: t210108203819 offer a strict version
+            .toSingle
+            .toOptional } // TODO: t210108203819 offer a strict version
         .pipe(Cls.apply)
 
   // ===========================================================================
@@ -95,7 +95,7 @@ trait ClsAdvanced { self: Cls =>
           newKeys
             .values
             .map(valueField.updateKey)
-            .map(_.toNonRequired) // pivot keys can't be required unless explicitly set so
+            .map(_.toOptional) // pivot keys can't be required unless explicitly set so
             .pipe(Cls.apply) }
 
     // ---------------------------------------------------------------------------

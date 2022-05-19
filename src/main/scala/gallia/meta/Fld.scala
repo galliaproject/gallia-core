@@ -59,11 +59,11 @@ case class Fld(key: Key, info: Info) extends FldLike {
     // ===========================================================================
     // commonly used
 
-      def    toRequired: Fld = transformInfo(_.toRequired)
-      def toNonRequired: Fld = transformInfo(_.toOptional)
+      def toRequired: Fld = transformInfo(_.toRequired)
+      def toOptional: Fld = transformInfo(_.toOptional)
 
-      def    toMultiple: Fld = transformSoleSubInfo(_.toMultiple)
-      def toNonMultiple: Fld = transformSoleSubInfo(_.toSingle)
+      def toMultiple: Fld = transformSoleSubInfo(_.toMultiple)
+      def toSingle  : Fld = transformSoleSubInfo(_.toSingle)
 
       // ---------------------------------------------------------------------------
       def toDouble: Fld = transformSoleSubInfo(_.toDouble) // see t210802091450

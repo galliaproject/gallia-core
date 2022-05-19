@@ -199,18 +199,18 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
         transformField(target.value)(_.transformNestedClass(disambiguatorOpt)(f))
 
     // ===========================================================================
-    def    toRequired(key: RPathW): Cls = transformInfo(key.value, _.toRequired)
-    def toNonRequired(key: RPathW): Cls = transformInfo(key.value, _.toOptional)
+    def toRequired(key: RPathW): Cls = transformInfo(key.value, _.toRequired)
+    def toOptional(key: RPathW): Cls = transformInfo(key.value, _.toOptional)
 
-    def    toMultiple(key: RPathW): Cls = transformAllSubInfos(key.value)(_.toMultiple)
-    def toNonMultiple(key: RPathW): Cls = transformAllSubInfos(key.value)(_.toSingle)
+    def toMultiple(key: RPathW): Cls = transformAllSubInfos(key.value)(_.toMultiple)
+    def toSingle  (key: RPathW): Cls = transformAllSubInfos(key.value)(_.toSingle)
 
     // ---------------------------------------------------------------------------
-    def    toRequired(path: RPath): Cls = transformx(path)(_    toRequired _, _    toRequired _)
-    def toNonRequired(path: RPath): Cls = transformx(path)(_ toNonRequired _, _ toNonRequired _)
+    def toRequired(path: RPath): Cls = transformx(path)(_ toRequired _, _ toRequired _)
+    def toOptional(path: RPath): Cls = transformx(path)(_ toOptional _, _ toOptional _)
 
-    def    toMultiple(path: RPath): Cls = transformx(path)(_    toMultiple _, _    toMultiple _)
-    def toNonMultiple(path: RPath): Cls = transformx(path)(_ toNonMultiple _, _ toNonMultiple _)
+    def toMultiple(path: RPath): Cls = transformx(path)(_ toMultiple _, _ toMultiple _)
+    def toSingle  (path: RPath): Cls = transformx(path)(_ toSingle   _, _ toSingle   _)
 
     // ===========================================================================
     def metaSchema: Cls  = MetaSchema.withDepth(maxDepth)

@@ -126,7 +126,7 @@ object ActionsCommonTransforms {
         target.__qpathz(c).pipe(_.fromz).pipe {
               checkZInput(c) }
 
-      def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).toNonMultiple(x.force1FX) }
+      def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).toSingle(x.force1FX) }
       def atomuus(c: Cls): AtomUUs = resolve(c).pipe {      _trnsf.atomuusZU    (c)(_, target.isOptional(c)) }
     }
 

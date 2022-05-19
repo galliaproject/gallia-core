@@ -80,8 +80,8 @@ case class TypeNode(
     def isOption      : Boolean = leaf.isOption && args.size == 1
 
     // ---------------------------------------------------------------------------
-    def isMultiple   : Boolean = isSeq || isOptionOfSeq
-    def isNotRequired: Boolean = leaf.isOption
+    def isMultiple: Boolean = isSeq || isOptionOfSeq
+    def isOptional: Boolean = leaf.isOption
 
     def isNotOne  : Boolean = isSeq || isOptionOfSeq || isOption
 

@@ -54,10 +54,10 @@ object ActionsCommonConverts {
     def atomuus(origin: CallSite)(c: Cls): AtomUUs = target.resolve(c).pipe(_atoms(c)(_ConvertToOptionalBoolean(origin)(_, trueValue, falseValue, nullValue))) }
 
   // ===========================================================================
-  case class ToNonRequired(targets: TqRPathz, strict: Boolean) extends ActionUUa with IdentityUUa {
+  case class ToOptional(targets: TqRPathz, strict: Boolean) extends ActionUUa with IdentityUUa {
     def  vldt(c: Cls): Errs = targets.vldtAsOrigin(c) ++ (if (!strict) Nil else
                               targets.resolve(c).fromz.pipe(_vldt.checkRequired(c, _)))
-    def _meta(c: Cls): Cls  = targets.resolve(c).foldLeft(c)(_ toNonRequired _) }
+    def _meta(c: Cls): Cls  = targets.resolve(c).foldLeft(c)(_ toOptional _) }
 
   // ---------------------------------------------------------------------------
   case class ToRequired(targets: TqRPathz, strict: Boolean) extends ActionUUc {
@@ -67,10 +67,10 @@ object ActionsCommonConverts {
     def atomuu(c: Cls): AtomUU = targets.resolve(c).fromz.pipe(_AssertIsDefined) }
 
   // ---------------------------------------------------------------------------
-  case class ToNonMultiple(targets: TqRPathz, strict: Boolean) extends ActionUUb {
+  case class ToSingle(targets: TqRPathz, strict: Boolean) extends ActionUUb {
     def  vldt  (c: Cls): Errs    = targets.vldtAsOrigin(c) ++ (if (!strict) Nil else
                                    targets.resolve(c).fromz.pipe(_vldt.checkMultiple(c, _)))
-    def _meta  (c: Cls): Cls     = targets.resolve(c).foldLeft(c)(_ toNonMultiple _)
+    def _meta  (c: Cls): Cls     = targets.resolve(c).foldLeft(c)(_ toSingle _)
     def atomuus(c: Cls): AtomUUs =
       if (targets.isRequired(c)) targets.resolve(c).pipe(_atoms(_, _ForceOneA))
       else                       targets.resolve(c).pipe(_atoms(_, _ForceOneB)) }

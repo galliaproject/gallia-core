@@ -47,7 +47,7 @@ private object SchemaInferrerUtils {
     def reviseRequirednessBasedOn(that: Cls): Cls =
       dis.keys.diff(that.keys)
         .map(dis.field(_))
-        .map(_.toNonRequired) // because not present in that, therefore not required
+        .map(_.toOptional) // because not present in that, therefore not required
         .foldLeft(dis) { (curr, field) =>
           curr.replace(field.key, field.info) }
 
@@ -55,7 +55,7 @@ private object SchemaInferrerUtils {
     def addMissingFieldsFrom(that: Cls): Cls =
       that.keys.diff(dis.keys)
         .map(that.field(_))
-        .map(_.toNonRequired) // because not present in this, therefore not required
+        .map(_.toOptional) // because not present in this, therefore not required
         .foldLeft(dis)(_ add _)
   }
 
@@ -64,7 +64,7 @@ private object SchemaInferrerUtils {
          if (newField.subInfo1 == existingField.subInfo1)                 Some(existingField)
 
     // note: not so for multiplicity, as it requires a data change (TODO: t210802090946 - reconsider)
-    else if ( existingField.isRequired && !newField.isRequired) Some(existingField.toNonRequired)
+    else if ( existingField.isRequired && !newField.isRequired) Some(existingField.toOptional)
     else if (!existingField.isRequired &&  newField.isRequired) Some(existingField)
 
     // will be generalized (t210802091450)

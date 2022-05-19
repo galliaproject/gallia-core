@@ -125,25 +125,17 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
       // ---------------------------------------------------------------------------
       // TODO: keep these within convert?
 
-      @deprecated
-      def toNonRequired                 : Self2 = ToNonRequired(target, strict = false)
-      def toOptional                    : Self2 = ToNonRequired(target, strict = false)
-      @deprecated
-      def toNonRequired(strict: Boolean): Self2 = ToNonRequired(target, strict)
-      def toOptional   (strict: Boolean): Self2 = ToNonRequired(target, strict)
+      def toOptional                    : Self2 = ToOptional(target, strict = false)
+      def toOptional   (strict: Boolean): Self2 = ToOptional(target, strict)
       def    toRequired                 : Self2 = ToRequired   (target, strict = false)
       def    toRequired(strict: Boolean): Self2 = ToRequired   (target, strict)
 
-      @deprecated
-      def toNonMultiple                 : Self2 = ToNonMultiple(target, strict = false) // aka force one
-      def toSingle                      : Self2 = ToNonMultiple(target, strict = false) // aka force one
-      @deprecated
-      def toNonMultiple(strict: Boolean): Self2 = ToNonMultiple(target, strict)         // aka force one
-      def toSingle     (strict: Boolean): Self2 = ToNonMultiple(target, strict)         // aka force one
+      def toSingle                      : Self2 = ToSingle(target, strict = false) // aka force one
+      def toSingle     (strict: Boolean): Self2 = ToSingle(target, strict)         // aka force one
       def    toMultiple                 : Self2 = ToMultiple   (target, strict = false) // aka in seq
       def    toMultiple(strict: Boolean): Self2 = ToMultiple   (target, strict)         // aka in seq
 
-      def toOneAndOnlyOne: Self2 = convert(target).toRequired.convert(target).toNonMultiple
+      def toOneAndOnlyOne: Self2 = convert(target).toRequired.convert(target).toSingle
     }
 
   // ===========================================================================

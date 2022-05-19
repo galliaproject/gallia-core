@@ -87,7 +87,7 @@ trait ClsNestingRelated { self: Cls =>
     //FIXME: t210122162650 - p1 - meta nest into: handle optional like nest under
     //.pipe { subInfo =>
     //  val nestedKeys: Keyz = combineNestedKeys(targetKeys, existingNestedFields)
-    //  if (c.areAllNonRequired(nestedKeys)) subInfo.toNonRequired
+    //  if (c.areAllNonRequired(nestedKeys)) subInfo.toOptional
     //  else                                 subInfo }
   }
 

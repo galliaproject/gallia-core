@@ -11,7 +11,7 @@ trait ClsMerging { self: Cls =>
   def bring(that: Cls, keys: Keyz): Cls =
     that
       .retain(keys /* already excludes join key if was selected */)
-      .mapFields(_.toNonRequired) // TODO: feature: t201124153838, bring "guaranteed" 
+      .mapFields(_.toOptional) // TODO: feature: t201124153838, bring "guaranteed" 
       .pipe(mergeDisjoint)
 
   // ---------------------------------------------------------------------------
@@ -34,14 +34,14 @@ trait ClsMerging { self: Cls =>
   def join(that: Cls)(joinType: JoinType, joinKeys: JoinKey): Cls = {
     def thisFields = 
       this
-        .mapFields(_.pipeIf(_.key != joinKeys.left)(_.toNonRequired))
+        .mapFields(_.pipeIf(_.key != joinKeys.left)(_.toOptional))
         .fields
 
     def thatFields(b: Boolean): Seq[Fld] =
       that
         .fields
         .filterNot(_.key == joinKeys.right)
-        .mapIf(_ => b)(_.toNonRequired)
+        .mapIf(_ => b)(_.toOptional)
     
     joinType match {
       case JoinType.full  => Cls(thisFields  ++ thatFields(true) )                        

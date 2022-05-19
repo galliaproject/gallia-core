@@ -75,7 +75,7 @@ object ActionsOthers {
   // ---------------------------------------------------------------------------
   abstract class FlattenBy(target: KPath) extends ActionUZ {
       def vldt (in: Cls): Errs = Nil//TODO; check was seq?; ensure only one level of multiplicity
-      def _meta(in: Cls): Cls = in.toNonMultiple(target).pipeIf(in.isOptional(target))(_.toNonRequired(target)) }
+      def _meta(in: Cls): Cls = in.toSingle(target).pipeIf(in.isOptional(target))(_.toOptional(target)) }
 
     // ---------------------------------------------------------------------------
     case class FlattenByU(target: KPath) extends FlattenBy(target) with ActionUZ {

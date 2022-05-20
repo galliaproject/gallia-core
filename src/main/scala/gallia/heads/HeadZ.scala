@@ -6,7 +6,7 @@ import data.multiple.Streamer
 import actions._
 import actions.ActionsOthers._
 import actions.ActionsZZ._
-import actions.ActionsZens._
+import actions.ActionsThns._
 import actions.ActionsCustoms.CustomZZ
 
 // ===========================================================================
@@ -89,10 +89,10 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
   def forcePopulateDataClasses[DC: WTT] = ???
 
   // ===========================================================================
-  // for consistency only, shouldn't really use outside of tests (use .pipe instead); TODO: t220425112901 - rename to `thn`
-  def zen        (f: Self => Self    ): Self     = zz(ZenZZ(f))
-  def zen        (f: Self => HeadU   ): HeadU    = zu(ZenZU(f))
-  def zen[V: WTT](f: Self => HeadV[V]): HeadV[V] = zv(ZenZV(f))
+  // for consistency only, shouldn't really use outside of tests (use .pipe instead)
+  def thn        (f: Self => Self    ): Self     = zz(ThnZZ(f))
+  def thn        (f: Self => HeadU   ): HeadU    = zu(ThnZU(f))
+  def thn[V: WTT](f: Self => HeadV[V]): HeadV[V] = zv(ThnZV(f))
 
   // ---------------------------------------------------------------------------
   // TODO: these will be very affected by t210104164036
@@ -133,8 +133,8 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
   // TODO: add more common ones
   // TODO: t210117110015 - move to common (need to abstract ForX...)
 
-  def retainFirst                : Self2 = forKey(_.firstKey).zen(_ retain _)
-  def renameSoleKey(value: KeyW): Self2 = forKey(_.soleKey).zen(_.rename(_).to(value))
+  def retainFirst               : Self2 = forKey(_.firstKey).thn(_ retain _)
+  def renameSoleKey(value: KeyW): Self2 = forKey(_.soleKey) .thn(_.rename(_).to(value))
   
   def removeRecursivelyIfValue(value: String): Self2 = forLeafPaths { _.removeIfValueFor(_).is(value) } 
 

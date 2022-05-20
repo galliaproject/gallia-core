@@ -2,7 +2,7 @@ package gallia
 package heads
 
 import actions.ActionsOthers._
-import actions.ActionsZens._
+import actions.ActionsThns._
 
 // ===========================================================================
 class HeadU private[gallia]( // TODO: t210121105809 - rename to HeadO and generally change occurrences of "u" into "o"; "u" was historical
@@ -40,10 +40,10 @@ class HeadU private[gallia]( // TODO: t210121105809 - rename to HeadO and genera
     private[heads] def uo        (action: ActionUO): HeadU    = handler.chainuo(this)(action)
 
   // ===========================================================================
-  // for consistency only, shouldn't really use outside of tests (use .pipe instead); TODO: t220425112901 - rename to `thn`
-  def zen        (f: Self => Self    ): Self     = uu(ZenUU(f))
-  def zen        (f: Self => HeadZ   ): HeadZ    = uz(ZenUZ(f))
-  def zen[V: WTT](f: Self => HeadV[V]): HeadV[V] = uv(ZenUV(f))
+  // for consistency only, shouldn't really use outside of tests (use .pipe instead)
+  def thn        (f: Self => Self    ): Self     = uu(ThnUU(f))
+  def thn        (f: Self => HeadZ   ): HeadZ    = uz(ThnUZ(f))
+  def thn[V: WTT](f: Self => HeadV[V]): HeadV[V] = uv(ThnUV(f))
 
   // ---------------------------------------------------------------------------
   def      populateDataClass[DC: WTT]: Either[Any, DC] = ??? // TODO: t210117105638 - see 210117105638@v
@@ -75,8 +75,8 @@ class HeadU private[gallia]( // TODO: t210121105809 - rename to HeadO and genera
   // ===========================================================================
   // TODO: add more common ones
   // TODO: t210117110015 - move to common (need to abstract ForX...)
-  def retainFirst               : Self2 = forKey(_.firstKey).zen(_ retain _)
-  def renameSoleKey(value: KeyW): Self2 = forKey(_.soleKey) .zen(_.rename(_).to(value))
+  def retainFirst               : Self2 = forKey(_.firstKey).thn(_ retain _)
+  def renameSoleKey(value: KeyW): Self2 = forKey(_.soleKey) .thn(_.rename(_).to(value))
   
   def removeRecursivelyIfValue(value: String): Self2 = forLeafPaths { _.removeIfValueFor(_).is(value) } 
 

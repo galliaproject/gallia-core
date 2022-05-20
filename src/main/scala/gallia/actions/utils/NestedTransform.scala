@@ -103,7 +103,7 @@ class NestedTransform(disambiguatorOpt: UnionObjectDisambiguatorOpt, adag: MetaP
     def zz(c: Cls, optional: Boolean): _ff11 = metaToAtomPlan(c).pipe(new NestedPlan(_)).nestedRunnerz2z(optional)
   
     // ---------------------------------------------------------------------------
-    // used in zen/for-key
+    // used in thn/for-key
     def dataU2U(c: Cls): Obj  => Obj  = metaToAtomPlan(c).V1.naiveRunUU _
     def dataZ2Z(c: Cls): Objs => Objs = metaToAtomPlan(c).V1.naiveRunZZ _
   

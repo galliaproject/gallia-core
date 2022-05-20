@@ -14,13 +14,13 @@ trait HeadUFors { ignored: HeadU =>
 
       // ---------------------------------------------------------------------------
       class _ForKey(sel: ForKey.Selector) { import ForKey._
-        def zen        (f: (Self, Key) => Self)                            : Self     = uu(ForPathUU   (resolve(sel), (u, p) => f(u, p.key)))
-        def zen[V: WTT](f: (Self, Key) => HeadV[V])(implicit d: DI)        : HeadV[V] = uv(ForPathUV[V](resolve(sel), (u, p) => f(u, p.key)))
-        def zen        (f: (Self, Key) => HeadZ   )(implicit d: DI, d2: DI): HeadZ    = uz(ForPathUZ   (resolve(sel), (u, p) => f(u, p.key))) }
+        def thn        (f: (Self, Key) => Self)                            : Self     = uu(ForPathUU   (resolve(sel), (u, p) => f(u, p.key)))
+        def thn[V: WTT](f: (Self, Key) => HeadV[V])(implicit d: DI)        : HeadV[V] = uv(ForPathUV[V](resolve(sel), (u, p) => f(u, p.key)))
+        def thn        (f: (Self, Key) => HeadZ   )(implicit d: DI, d2: DI): HeadZ    = uz(ForPathUZ   (resolve(sel), (u, p) => f(u, p.key))) }
 
     // ===========================================================================
     def forPath(sel: ForPath.Selector) = new { import ForPath._
-      def zen(f: (Self, KPath) => Self): Self =
+      def thn(f: (Self, KPath) => Self): Self =
         self ::+ ForPathUU(resolve(sel), f) }
 
     // ===========================================================================
@@ -31,7 +31,7 @@ trait HeadUFors { ignored: HeadU =>
 
       // ---------------------------------------------------------------------------
       class _ForEachKey(sel: ForEachKey.Selector) {
-        def zen(f: (Self, Key) => Self): Self = self ::+
+        def thn(f: (Self, Key) => Self): Self = self ::+
           ForPathsUU(ForEachKey.resolve(sel), (u, p) => f(u, p.key /* ok by design */)) }
 
     // ===========================================================================
@@ -42,14 +42,14 @@ trait HeadUFors { ignored: HeadU =>
 
       // ---------------------------------------------------------------------------
       class _ForEachPath(sel: ForEachPath.Selector) {
-        def zen(f: (Self, KPath) => Self): Self = self ::+
+        def thn(f: (Self, KPath) => Self): Self = self ::+
           ForPathsUU(ForEachPath.resolve(sel), (u, p) => f(u, p.value)) }
 
     // ===========================================================================
     // common
-    def forAllKeys  (f: (Self, Key)   => Self): Self = forEachKey (_. allKeys) .zen(f)
-    def forLeafPaths(f: (Self, KPath) => Self): Self = forEachPath(_.leafPaths).zen(f)
-    def forAllPaths (f: (Self, KPath) => Self): Self = forEachPath(_. allPaths).zen(f)
+    def forAllKeys  (f: (Self, Key)   => Self): Self = forEachKey (_. allKeys) .thn(f)
+    def forLeafPaths(f: (Self, KPath) => Self): Self = forEachPath(_.leafPaths).thn(f)
+    def forAllPaths (f: (Self, KPath) => Self): Self = forEachPath(_. allPaths).thn(f)
 
     def forKeysMatching (pred: SKey  => Boolean) = forEachKey (_.filterKeys (pred))
     def forPathsMatching(pred: KPath => Boolean) = forEachPath(_.filterPaths(pred))
@@ -66,13 +66,13 @@ trait HeadUFors { ignored: HeadU =>
 
       // ---------------------------------------------------------------------------
       class _ForKey(sel: ForKey.Selector) { import ForKey._
-        def zen        (f: (Self, Key) => Self)                            : Self     = zz(ForPathZZ   (resolve(sel), (x, p) => f(x, p.key)))
-        def zen[V: WTT](f: (Self, Key) => HeadV[V])(implicit d: DI)        : HeadV[V] = zv(ForPathZV[V](resolve(sel), (x, p) => f(x, p.key)))
-        def zen        (f: (Self, Key) => HeadU   )(implicit d: DI, d2: DI): HeadU    = zu(ForPathZU   (resolve(sel), (x, p) => f(x, p.key))) }
+        def thn        (f: (Self, Key) => Self)                            : Self     = zz(ForPathZZ   (resolve(sel), (x, p) => f(x, p.key)))
+        def thn[V: WTT](f: (Self, Key) => HeadV[V])(implicit d: DI)        : HeadV[V] = zv(ForPathZV[V](resolve(sel), (x, p) => f(x, p.key)))
+        def thn        (f: (Self, Key) => HeadU   )(implicit d: DI, d2: DI): HeadU    = zu(ForPathZU   (resolve(sel), (x, p) => f(x, p.key))) }
 
     // ===========================================================================
     def forPath(sel: ForPath.Selector) = new { import ForPath._
-      def zen(f: (Self, KPath) => Self): Self = zz(
+      def thn(f: (Self, KPath) => Self): Self = zz(
           ForPathZZ(resolve(sel), f)) } // TODO: test ok?
 
     // ===========================================================================
@@ -83,7 +83,7 @@ trait HeadUFors { ignored: HeadU =>
 
       // ---------------------------------------------------------------------------
       class _ForEachKey(sel: ForEachKey.Selector) {
-        def zen(f: (Self, Key) => Self): Self = zz(
+        def thn(f: (Self, Key) => Self): Self = zz(
           ForPathsZZ(ForEachKey.resolve(sel), (z, p) => f(z, p.key /* ok by design */))) }
 
     // ===========================================================================
@@ -94,15 +94,15 @@ trait HeadUFors { ignored: HeadU =>
 
       // ---------------------------------------------------------------------------
       class _ForEachPath(sel: ForEachPath.Selector) {
-          def zen(f: (Self, KPath) => Self): Self = zz(
+          def thn(f: (Self, KPath) => Self): Self = zz(
             ForPathsZZ(ForEachPath.resolve(sel), (z, p) => f(z, p.value))) }
 
     // ===========================================================================
     // common
 
-    def forAllKeys  (f: (Self, Key)   => Self): Self = forEachKey (_. allKeys) .zen(f)
-    def forLeafPaths(f: (Self, KPath) => Self): Self = forEachPath(_.leafPaths).zen(f)
-    def forAllPaths (f: (Self, KPath) => Self): Self = forEachPath(_. allPaths).zen(f)
+    def forAllKeys  (f: (Self, Key)   => Self): Self = forEachKey (_. allKeys) .thn(f)
+    def forLeafPaths(f: (Self, KPath) => Self): Self = forEachPath(_.leafPaths).thn(f)
+    def forAllPaths (f: (Self, KPath) => Self): Self = forEachPath(_. allPaths).thn(f)
 
     def forKeysMatching (pred: SKey  => Boolean) = forEachKey (_.filterKeys (pred))
     def forPathsMatching(pred: KPath => Boolean) = forEachPath(_.filterPaths(pred))

@@ -38,6 +38,19 @@ object ActionsCommonTransforms {
       def _meta  (c: Cls): Cls     = from.rpathz_(c).foldLeft(c)(_.transformSoleValueType(_)(_ => to.node.forceNonBObjInfo.subInfo1.valueType))
       def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.wrapxc(c, to, f) ))) }
 
+    // ===========================================================================
+    //TODO: t210111095156 separate all the Whatever and t210111095157 case-class versions...
+
+    case class TransformWW1a(from: TqRPathz, f: _ff11) extends ActionUUb with IdentityM1 {
+      def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) // TODO: t210201164749
+      def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atoms(c)(_TransformWW(_, f, checkType = true))) }
+
+    // ---------------------------------------------------------------------------
+    case class TransformWW1b(from: TtqRPathz, to: TypeNode, f: _ff11) extends ActionUUb {
+      def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) ++ to.pipe(_vldt.validType)
+      def _meta  (c: Cls): Cls     = from.rpathz_(c).foldLeft(c)(_.transformSoleValueType(_)(_ => to.forceNonBObjInfo.subInfo1.valueType))
+      def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atoms(c)(_TransformWW(_, f, checkType = false))) }
+
   // ===========================================================================
   private[actions] trait HasTqRPathzTarget { // TODO
     val target: TqRPathz
@@ -77,26 +90,6 @@ object ActionsCommonTransforms {
       def atomuus(c: Cls): AtomUUs = resolve(c).flatMap(_trnsf.transformData(c, _Multiple)) //TODO: can only be one target actualy
     }
 
-  // ===========================================================================
-  case class TransformObjectCustom[D1: WTT](from: TqRPathz, to: TypeNode, f: Obj => D1) extends ActionUUb {
-        def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.pipe(_vldt.validType) ++ Nil // TODO: more       
-          // TODO: t210202155459 - verify input is indeed u
-        def _meta  (c: Cls): Cls     = from.rpathz_(c).foldLeft(c) { _.updateInfo(_, to.forceNonBObjInfo) }
-        def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atoms(c)(_TransformVV(_, wrap(f)))) }
-    
-    // ---------------------------------------------------------------------------
-    case class TransformObjectsCustom[D1: WTT](from: TqRPathz, to: TypeNode, f: Objs => D1) extends ActionUUb {
-        def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.pipe(_vldt.validType) ++ Nil // TODO: more        
-          // TODO: t210202155459 - verify input is indeed z
-        def _meta  (c: Cls): Cls     = from.rpathz_(c).foldLeft(c) { _.updateInfo(_, to.forceNonBObjInfo) }
-        def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atoms(c)(_TransformVV(_, wrap((x: Seq[Obj]) => f(Objs.from(x)))))) }    
-
-    // ===========================================================================
-    case class TransformToObj(from: TtqRPathz, to: Cls, multiple: Boolean, f: _ff11) extends ActionUUb with TodoV1 { // TODO: split single/multiple
-      // TODO: validation, disallow '[]' (use missing field instead)
-      def _meta  (c: Cls): Cls     = from.rpathz_(c).pipe { c.transformField(_)(_.transformSoleSubInfo(_ => SubInfo(multiple, to))) }
-      def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe { _atoms(c)(_TransformVV(_, f)) } }
-    
   // ===========================================================================
   case class TransformUZ(target: TqRPathz, f: HeadU => HeadZ) extends ActionUUb with HasTqRPathzTarget {
       private val _trnsf: NestedTransform = utils.NestedTransform.parseUZ(f)
@@ -167,18 +160,26 @@ object ActionsCommonTransforms {
       def atomuus(c: Cls): AtomUUs = resolve(c).pipe { _trnsf.atomuusZV(c)(_, target.isOptional(c)) }
     }
 
-    // ===========================================================================
-    //TODO: t210111095156 separate all the Whatever and t210111095157 case-class versions...
 
-    case class TransformWW1a(from: TqRPathz, f: _ff11) extends ActionUUb with IdentityM1 {
-      def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) // TODO: t210201164749
-      def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atoms(c)(_TransformWW(_, f, checkType = true))) }
+  // ===========================================================================
+  case class TransformObjectCustom[D1: WTT](from: TqRPathz, to: TypeNode, f: Obj => D1) extends ActionUUb {
+        def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.pipe(_vldt.validType) ++ Nil // TODO: more
+          // TODO: t210202155459 - verify input is indeed u
+        def _meta  (c: Cls): Cls     = from.rpathz_(c).foldLeft(c) { _.updateInfo(_, to.forceNonBObjInfo) }
+        def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atoms(c)(_TransformVV(_, wrap(f)))) }
 
     // ---------------------------------------------------------------------------
-    case class TransformWW1b(from: TtqRPathz, to: TypeNode, f: _ff11) extends ActionUUb {
-      def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) ++ to.pipe(_vldt.validType)
-      def _meta  (c: Cls): Cls     = from.rpathz_(c).foldLeft(c)(_.transformSoleValueType(_)(_ => to.forceNonBObjInfo.subInfo1.valueType))
-      def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atoms(c)(_TransformWW(_, f, checkType = false))) }
+    case class TransformObjectsCustom[D1: WTT](from: TqRPathz, to: TypeNode, f: Objs => D1) extends ActionUUb {
+        def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.pipe(_vldt.validType) ++ Nil // TODO: more
+          // TODO: t210202155459 - verify input is indeed z
+        def _meta  (c: Cls): Cls     = from.rpathz_(c).foldLeft(c) { _.updateInfo(_, to.forceNonBObjInfo) }
+        def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atoms(c)(_TransformVV(_, wrap((x: Seq[Obj]) => f(Objs.from(x)))))) }
+
+    // ===========================================================================
+    case class TransformToObj(from: TtqRPathz, to: Cls, multiple: Boolean, f: _ff11) extends ActionUUb with TodoV1 { // TODO: split single/multiple
+      // TODO: validation, disallow '[]' (use missing field instead)
+      def _meta  (c: Cls): Cls     = from.rpathz_(c).pipe { c.transformField(_)(_.transformSoleSubInfo(_ => SubInfo(multiple, to))) }
+      def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe { _atoms(c)(_TransformVV(_, f)) } }
 
   // ===========================================================================
   // TODO: move these to validations

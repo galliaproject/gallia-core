@@ -93,12 +93,6 @@ case class Fld(key: Key, info: Info) extends FldLike {
       def oneInt    (key: Key) = Fld(key, Info.oneInt)
       def oneDouble (key: Key) = Fld(key, Info.oneDouble)
       def oneBoolean(key: Key) = Fld(key, Info.oneBoolean)
-
-    // ===========================================================================
-    @NumberAbstraction
-    def isIntAndDouble(f1: Fld, f2: Fld): Boolean = // TODO: t210802091450 generalize
-      (f1.isInt    && f2.isDouble) ||
-      (f1.isDouble && f2.isInt   )
   }
 
 // ===========================================================================

@@ -61,17 +61,20 @@ private object SchemaInferrerUtils {
 
   // ===========================================================================
   private def resolve(existingField: Fld, newField: Fld): Option[Fld] =
-         if (newField.subInfo1 == existingField.subInfo1)                 Some(existingField)
+           if (newField.subInfo1 == existingField.subInfo1)       Some(existingField)
 
-    // note: not so for multiplicity, as it requires a data change (TODO: t210802090946 - reconsider)
-    else if ( existingField.isRequired && !newField.isRequired) Some(existingField.toOptional)
-    else if (!existingField.isRequired &&  newField.isRequired) Some(existingField)
+      // note: not so for multiplicity, as it requires a data change (TODO: t210802090946 - reconsider)
+      else if ( existingField.isRequired && !newField.isRequired) Some(existingField.toOptional)
+      else if (!existingField.isRequired &&  newField.isRequired) Some(existingField)
 
-    // will be generalized (t210802091450)
-    else if (Fld.isIntAndDouble(existingField, newField))           Some(existingField.toDouble)
+      else if (areBoundedNumbers(existingField, newField))        Some(existingField.toDouble)
 
-    else                                                            None
+      else                                                        None
 
+    // ---------------------------------------------------------------------------
+    private def areBoundedNumbers(f1: Fld, f2: Fld): Boolean =
+      f1.basicTypeOpt.exists(_.isBoundedNumber) &&
+      f2.basicTypeOpt.exists(_.isBoundedNumber)
 }
 
 // ===========================================================================

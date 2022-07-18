@@ -24,7 +24,7 @@ object TableSchemaInferrer {
 
     // ---------------------------------------------------------------------------
     private def infoLookup(conf: CellConf)(keySet: Set[Key], mutable: MutableValuesSubset)(z: Objs): Map[Key, Info] =
-      z .consume
+      z .consumeSelfClosing
         .foldLeft(Set[(Key, Info)]()) { (curr, o) =>
           tmp(conf, keySet, mutable)(curr, o) }
         .toSeq
@@ -57,7 +57,7 @@ object TableSchemaInferrer {
 
   // ---------------------------------------------------------------------------
   private def stringsOnlyInfoLookup(conf: CellConf)(keySet: Set[Key])(z: Objs): Map[Key, Info] =
-    z .consume
+    z .consumeSelfClosing
       .foldLeft(Set[(Key, Info)]()) { (curr, o) =>
         curr ++
           keySet

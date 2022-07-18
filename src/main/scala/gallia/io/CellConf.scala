@@ -40,30 +40,23 @@ case class CellConf(
         .pipe(reflect.BasicTypeUtils.combine)
 
   // ===========================================================================
-  def transformValue(multiple: Boolean)(value: String): Either[Option[String], Seq[String]] =
-    if (!multiple) Left (value.in.noneIf(isNull))
-    else           Right(value.in.noneIf(isNull).toSeq.flatMap(splitArray))
-
-  // ---------------------------------------------------------------------------
   def valueSet(value: String): Set[String] =
-    transformValue(isArray(value))(value).fold(
-        _.toSeq,
-        identity)
-      .toSet
+    if (!isArray(value)) value.in.noneIf(isNull).toSet
+    else                 value.in.noneIf(isNull).toSet.flatMap(splitArray)
 
   // ===========================================================================
-  def transformBasicValue(tipe: BasicType)(value: String): Any =
+  def transformBasicValue(tipe: BasicType)(value: String): AnyValue =
     tipe match {
       case _: BasicType._Enm           => BasicType._Enm.parseString(value)
       case    BasicType._Boolean       => inferring.table.BooleanDetector.forceBoolean(value)
       case x: UnparameterizedBasicType => x.parseString(value) }
 
   // ===========================================================================
-  private def isNull (value: String): Boolean = !noNulls  && nullValueSet.contains(value) /* no trimming intentionally */
+          def isNull (value: String): Boolean = !noNulls  && nullValueSet.contains(value) /* no trimming intentionally */
   private def isArray(value: String): Boolean = !noArrays && arraySeparators.exists(value.contains)
 
   // ---------------------------------------------------------------------------
-  private def splitArray(value: String): Seq[String] =
+  def splitArray(value: String): Seq[String] =
     soleArraySeparator match {
       case Some(sep) => value.splitBy(sep)
       case None =>

@@ -16,7 +16,7 @@ object AtomsAsserts {
 
   // ===========================================================================
   case class _AssertIsDefined(paths: KPathz) extends AtomUU { def naive(o: Obj) = {
-      val undefined: Seq[KPath] = paths.values.filter(!o.contains(_)) // FIXME: t210110203020 - contains needs to be able to deal with multiplicity in nesting(s)
+      val undefined: Seq[KPath] = paths.values.filter(!o.containsPath(_)) // FIXME: t210110203020 - contains needs to be able to deal with multiplicity in nesting(s)
 
       if (undefined.nonEmpty) _Error.Runtime.NotDefined(KPathz(undefined)).throwDataError(o)
       else o
@@ -24,22 +24,22 @@ object AtomsAsserts {
   }
 
   // ===========================================================================
-  case class _ForceOneA(ori: Key) extends AtomUU { def naive(o: Obj) = o.force(ori)    .asInstanceOf[Seq[_]].force.one.pipe { v => o.put(ori, v) } }
-  case class _ForceOneB(ori: Key) extends AtomUU { def naive(o: Obj) = o.opt(ori).map(_.asInstanceOf[Seq[_]].force.one.pipe { v => o.put(ori, v) }).getOrElse(o) }
+  case class _ForceOneA(ori: Key) extends AtomUU { def naive(o: Obj) = o.forceKey  (ori)      .asInstanceOf[Seq[_]].force.one.pipe { v => o.put(ori, v) } }
+  case class _ForceOneB(ori: Key) extends AtomUU { def naive(o: Obj) = o.attemptKey(ori).map(_.asInstanceOf[Seq[_]].force.one.pipe { v => o.put(ori, v) }).getOrElse(o) }
 
   // ---------------------------------------------------------------------------
-  case class _ForceSeqA(ori: Key) extends AtomUU { def naive(o: Obj) = o.force(ori)    .in.list.pipe { v => o.put(ori, v) } }
-  case class _ForceSeqB(ori: Key) extends AtomUU { def naive(o: Obj) = o.opt(ori).map(_.in.list.pipe { v => o.put(ori, v) }).getOrElse(o) }
+  case class _ForceSeqA(ori: Key) extends AtomUU { def naive(o: Obj) = o.forceKey  (ori)      .in.list.pipe { v => o.put(ori, v) } }
+  case class _ForceSeqB(ori: Key) extends AtomUU { def naive(o: Obj) = o.attemptKey(ori).map(_.in.list.pipe { v => o.put(ori, v) }).getOrElse(o) }
 
   // ===========================================================================
   @Max5
   case class _AssertO1a(ori: KPath, pred: Any => Boolean) extends AtomUU { def naive(o: Obj) =
       _Error.Runtime.DataAssertionFailure(ori).attemptO(o) {
-        !_.force(ori).pipe(pred) } }
+        !_.forcePath(ori).pipe(pred) } }
 
     case class _AssertO1b(ori: KPath, pred: Option[Any] => Boolean) extends AtomUU { def naive(o: Obj) =
       _Error.Runtime.DataAssertionFailure(ori).attemptO(o) {
-        !_.opt(ori).pipe(pred) } }
+        !_.attemptPath(ori).pipe(pred) } }
 
   // ---------------------------------------------------------------------------
   case class _AssertO2(squasher: AtomsUV._SquashU2) extends AtomUU { def naive(o: Obj) =

@@ -1,11 +1,6 @@
 package gallia
-package data.multiple
-
-import scala.reflect.classTag
-
-import meta._
-import domain.{PathPair, SortingPair}
-import data.single.ObjOrdering
+package data
+package multiple
 
 // ===========================================================================
 trait ObjsOperations { self: Objs =>
@@ -13,7 +8,7 @@ trait ObjsOperations { self: Objs =>
   // - t210104164036 and t210104164037: renaming(s) will only be applicable to the standalone version
   // - t210104164036 and t210104164037: more generally, most of this will be rewritten in that context...
 
-  private implicit def _to(x: Seq[Obj]): Objs = Objs.from(x)
+  private implicit def _to(x: List[Obj]): Objs = Objs.from(x)
 
   // ===========================================================================
   def transformPath            (target: KPathW,   f: AnyValue => AnyValue): Objs = map(_.transformPath    (target, f)) // TODO: phase out
@@ -29,33 +24,22 @@ trait ObjsOperations { self: Objs =>
   def _transformWhateverKeyPair(key: Key, optional: Boolean, checkType: Boolean)(f: AnyValue => AnyValue): Objs = map(_._transformWhateverKeyPair(key, optional, checkType)(f)) // abstracts requiredness + optionally check resulting type
         
   // ===========================================================================
-  def distinct: Objs = self._modifyUnderlyingStreamer(_.distinct)
-
-  // ---------------------------------------------------------------------------
-  def union(that: Objs): Objs = self.values.union(that.values).pipe(Objs.build)
-
-  // ---------------------------------------------------------------------------
-  def sortBy(c: Cls, pair: SortingPair): Objs =
-    _modifyUnderlyingStreamer {
-      _.sortBy(
-            classTag[Option[Obj]],
-            ObjOrdering.optionObjOrdering(c, pair)) {
-        _.retainOpt(c.keyz) } }
+  def union(that: Objs): Objs = self.values.union(that.values)           .pipe(Objs.build)
+  def zip  (that: Objs): Objs = self.values.zip  (that.values, _ merge _).pipe(Objs.build)
 
   // ===========================================================================
-  def ensureDistinct: Either[(Int, Int), Objs] = {
+  def ensureDistinct(c: Cls): Either[(Int, Int), Objs] = {
       val originalSize  = size
-      val distinctified = distinct
+      val distinctified = distinct(c)
       val newSize       = distinctified.size
       if (newSize < originalSize) Left(originalSize, newSize)
-      else                        Right(distinctified)
-    }
+      else                        Right(distinctified) }
 
     // ---------------------------------------------------------------------------
-    def ensureDistinctBy(keys: Keyz): Either[(Int, Int), Objs] =
+    def ensureDistinctBy(c: Cls)(keys: Keyz): Either[(Int, Int), Objs] =
       self
         .fork(keys)
-        .ensureDistinct
+        .ensureDistinct(c)
         .map(_ => self)
 
       // ===========================================================================

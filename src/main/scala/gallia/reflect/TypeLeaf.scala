@@ -47,7 +47,6 @@ case class TypeLeaf(
 
     // ---------------------------------------------------------------------------
     def enumeratumEnum: Seq[EnumValue] = enumeratumValueNamesOpt.get.map(EnumValue.apply)
-.reverse /* TODO: always? */
 
     // ===========================================================================
     override def toString: String = formatDefault

@@ -1,13 +1,19 @@
 package gallia
 package data.multiple
 
-import aptus.{String_, Seq_}
+import aptus.{Seq_, String_}
 
 // ===========================================================================
 trait ObjsOut { self: Objs =>
 
   @Scalability
-  def formatDefault: String = toListAndTrash.pipe { list => list.map(_.formatDefault).section(s"#${list.size}") }
+  def formatDefault: String = {
+    (values match {
+      case x: data.multiple.streamer.IteratorStreamer[Obj] =>
+        x.formatEither match {
+          case Left (consumedOrExited) => consumedOrExited
+          case Right(r) => r  .pipe { list => list.map(_.formatDefault).section(s"#${list.size}") } }
+      case x => toListAndTrash.pipe { list => list.map(_.formatDefault).section(s"#${list.size}") } }) }
 
   // ---------------------------------------------------------------------------
   @Scalability // TODO: use Writer
@@ -18,7 +24,7 @@ trait ObjsOut { self: Objs =>
 
   // ===========================================================================
   def naiveFormatArrayLines: Iterator[String] = {
-    val itr = consume.map(_.formatCompactJson)
+    val itr = consumeSelfClosing.map(_.formatCompactJson)
 
     if (itr.isEmpty) Iterator("[]")
     else {

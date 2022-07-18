@@ -47,6 +47,7 @@ class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](
     def keyz_  (c: Cls)(implicit ev: $Target <:< Keyz  ): Keyz     = resolve(c)
     def keys_  (c: Cls)(implicit ev: $Target <:< Keyz  ): Seq[Key] = resolve(c).values.toSeq
     def kpath_ (c: Cls)(implicit ev: $Target <:< KPath ): KPath    = resolve(c)
+    def kpathz_(c: Cls)(implicit ev: $Target <:< KPathz): KPathz   = resolve(c)
     def rpathz_(c: Cls)(implicit ev: $Target <:< RPathz): RPathz   = resolve(c)
 
     // ---------------------------------------------------------------------------
@@ -67,7 +68,8 @@ class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](
         case x: KPath  => x.rpath.in.seq
         case x: Keyz   => x.rpathz.values
         case x: Renz   => x.rpathz.values
-        case x: RPathz => x.values }
+        case x: KPathz => x.rpathz.values
+        case x: RPathz => x       .values }
 
     // ---------------------------------------------------------------------------
     def checkErrors(c: Cls)(f: Cls => KPathz => Errs): Errs = __rpathz(c).pipe(_.fromz).pipe { f(c) }

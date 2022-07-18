@@ -43,7 +43,7 @@ object AtomsCommonConverts {
       private def toInt(value: Any): Any =
         util.Try {
           utils.AtomsUtils.applyx {
-              case x: String => x.stripTrailingZeros.toInt
+              case x: String => x.attemptStripTrailingZeros.toInt
               case x: Number => x.intValue()
             } (value) }
         .getOrElse {

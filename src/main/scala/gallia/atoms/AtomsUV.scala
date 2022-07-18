@@ -9,22 +9,18 @@ import FunctionWrappers._
 // ===========================================================================
 object AtomsUV {
 
-  @Distributivity case object _Size extends AtomZV { def naive(z: Objs) =
-    z.size }
+  @Distributivity case object _Size extends AtomZV { def naive(z: Objs) = z.size }
 
   // ===========================================================================
-  case class _GrabUOne(ori: KPath) extends AtomUV { def naive(o: Obj) =
-        o.force(ori) }
-
-      case class _GrabUOpt(ori: KPath) extends AtomUV { def naive(o: Obj) =
-        o.opt(ori) }
+  case class     _GrabUOne(ori: KPath) extends AtomUV { def naive(o: Obj) = o.forcePath  (ori) }
+      case class _GrabUOpt(ori: KPath) extends AtomUV { def naive(o: Obj) = o.attemptPath(ori) }
 
     // ---------------------------------------------------------------------------
     case class _GrabZOne(ori: KPath) extends AtomZV { def naive(z: Objs) =
-        z.mapToStreamer(_.force(ori)).toList }
+        z.mapToStreamer(_.forcePath(ori)).toList }
   
       case class _GrabZOpt(ori: KPath) extends AtomZV { def naive(z: Objs) =
-        z.flatMapToStreamer(_.opt(ori)).toList.in.noneIf(_.isEmpty) }
+        z.flatMapToStreamer(_.attemptPath(ori)).toList.in.noneIf(_.isEmpty) }
 
   // ===========================================================================
   case class _SquashU1(ori: PathPair1, f: _ff11) extends AtomUV { def naive(o: Obj) =

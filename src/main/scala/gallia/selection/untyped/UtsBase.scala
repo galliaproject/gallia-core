@@ -75,7 +75,7 @@ object UtsBase {
   object ModifyEnumValuesFor extends RPathzBase { type Origin = Origins.ModifyEnumValuesFor; val origin = new Origin {} }
 
   // ---------------------------------------------------------------------------
-  object Remove     extends RPathzBase { type Origin = Origins.Remove    ; val origin = new Origin {} }
+  object Remove     extends KPathzBase { type Origin = Origins.Remove    ; val origin = new Origin {} }
   object Retain     extends RPathzBase { type Origin = Origins.Retain    ; val origin = new Origin {} }
   object SetDefault extends RPathzBase { type Origin = Origins.SetDefault; val origin = new Origin {} }
   object Convert    extends RPathzBase { type Origin = Origins.Convert   ; val origin = new Origin {} }

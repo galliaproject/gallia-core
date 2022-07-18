@@ -2,7 +2,7 @@ package gallia
 package io
 
 import aptus.Anything_
-
+import aptus.aptjson.GsonFormatter
 import in._
 import out._
 
@@ -10,6 +10,7 @@ import out._
 sealed trait IoTypeU {
     def defaultRead  : (StartReadUFluency, InputUStringDrivenConf) => EndReadUFluency
     def defaultFormat: Obj => String
+    def defaultFormat2(c: Cls, o: Obj): String = defaultFormat(o)
 
     // ---------------------------------------------------------------------------
     // TODO: t210124100009 - rename "NonTable"
@@ -41,14 +42,15 @@ sealed trait IoTypeU {
 
       // ---------------------------------------------------------------------------
       case object CompactJsonObject extends IoTypeU {
-        def defaultRead   = (start, conf) => start.jsonObjectFile.schemaProvider(conf.schemaProvider)
+        def defaultRead   = (start, conf) => start.jsonObjectFile.schemaProvider(conf.schemaProvider).project(conf.projectionOpt)
+        override def defaultFormat2(c: Cls, o: Obj): String = data.json.GalliaToGsonData.convertRecursively(c)(o).pipe(GsonFormatter.compact)
         def defaultFormat = _.formatCompactJson }
 
       // ---------------------------------------------------------------------------
       case object PrettyJsonObject extends IoTypeU {
-        def defaultRead   = (start, conf) => start.jsonObjectFile.schemaProvider(conf.schemaProvider)
+        def defaultRead   = (start, conf) => start.jsonObjectFile.schemaProvider(conf.schemaProvider).project(conf.projectionOpt)
+        override def defaultFormat2(c: Cls, o: Obj): String = data.json.GalliaToGsonData.convertRecursively(c)(o).pipe(GsonFormatter.pretty)
         def defaultFormat = _.formatPrettyJson }
-      
   }
 
 // ===========================================================================
@@ -83,7 +85,7 @@ sealed trait IoTypeZ { // TODO: t210118103012 - proper handling
     // ===========================================================================
     case object RawLines extends UrlLikeIoTypeZ {
       def defaultRead   = (start, conf) => start.lines.pipeIf(!conf.inMemoryMode)(_.iteratorMode)
-      def defaultFormat = _.consume.map(_.text(_line)) }
+      def defaultFormat = _.consumeSelfClosing.map(_.text(_line)) }
 
     // ===========================================================================
     case object DirectJsonArray  extends IoTypeZ {
@@ -94,7 +96,7 @@ sealed trait IoTypeZ { // TODO: t210118103012 - proper handling
       // ---------------------------------------------------------------------------
       case object JsonLines extends UrlLikeIoTypeZ {
         def defaultRead   = (start, conf) => start.jsonLinesFile.pipeIf(!conf.inMemoryMode)(_.iteratorMode).schemaProvider(conf.schemaProvider).project(conf.projectionOpt)
-        def defaultFormat = _.consume.map(_.formatCompactJson) }
+        def defaultFormat = _.consumeSelfClosing.map(_.formatCompactJson) }
 
       // ---------------------------------------------------------------------------
       case object JsonArray extends UrlLikeIoTypeZ {
@@ -104,28 +106,13 @@ sealed trait IoTypeZ { // TODO: t210118103012 - proper handling
       // ---------------------------------------------------------------------------
       case object JsonPrettyLines extends UrlLikeIoTypeZ {
         def defaultRead   = aptus.illegalState("TODO:210118103012")
-        def defaultFormat = _.consume.map(_.formatPrettyJson) }
+        def defaultFormat = _.consumeSelfClosing.map(_.formatPrettyJson) }
       
     // ===========================================================================
     case object Table extends IoTypeZ {
       def defaultRead   = (start, conf) => start.table.pipeIf(!conf.inMemoryMode)(_.iteratorMode).schemaProvider(conf.schemaProvider).project(conf.projectionOpt)
       def defaultFormat = aptus.illegalState("TODO:210118103012")
-      def outputConf(path: String) = UrlLikeTableConf(path, io.UrlLike.Default, io.FormatConf.Default)
-    }
-
-    // ===========================================================================
-    case object Jdbc extends IoTypeZ {
-      def defaultRead   = aptus.illegalState("TODO:210118103012")
-      def defaultFormat = aptus.illegalState("TODO:210118103012")
-      def outputConf(path: String) = aptus.illegalState("TODO:210118103012")
-    }
-
-    // ---------------------------------------------------------------------------
-    case object MongoDb2 extends IoTypeZ {
-      def defaultRead   = aptus.illegalState("TODO:210118103012")
-      def defaultFormat = aptus.illegalState("TODO:210118103012")
-      def outputConf(path: String) = aptus.illegalState("TODO:210118103012")
-    }
+      def outputConf(path: String) = UrlLikeTableConf(path, io.UrlLike.Default, io.FormatConf.Default) }
   }
 
 // ===========================================================================

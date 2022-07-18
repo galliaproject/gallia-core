@@ -19,8 +19,8 @@ case class JsonObjectStringConf(inputString: InputString, schemaProvider: OtherS
 case class JsonObjectFileConf(
         inputString   : InputString,
 
-        urlLike       : UrlLike             = UrlLike.Default,
-        schemaProvider: OtherSchemaProvider = InferSchema,
+        urlLike       : UrlLike                = UrlLike.Default,
+        schemaProvider: OtherSchemaProvider    = InferSchema,
         projectionOpt : Option[ReadProjection] = None)
       extends InputConfU {
 
@@ -39,7 +39,7 @@ case class JsonObjectFileConf(
         inputString   : InputString,
 
         urlLike       : UrlLike                = UrlLike.Default,
-        inMemoryMode  : Boolean                = true,
+        inMemoryMode  : Boolean                = UrlLike.DefaultMemoryMode,
         schemaProvider: OtherSchemaProvider    = InferSchema,
         projectionOpt : Option[ReadProjection] = None)
       extends InputConfZ {
@@ -73,7 +73,7 @@ case class InputUStringDrivenConf(
 
         urlLike       : UrlLike                = UrlLike.Default,
 
-        inMemoryMode  : Boolean                = true,
+        inMemoryMode  : Boolean                = UrlLike.DefaultMemoryMode,
         schemaProvider: OtherSchemaProvider    = InferSchema,
         projectionOpt : Option[ReadProjection] = None,
         queryingOpt   : Option[ReadQuerying]   = None)
@@ -94,7 +94,7 @@ case class RawContentConf(inputString: InputString, urlLike: UrlLike = UrlLike.D
 case class RawLinesConf(
       inputString : InputString,
       urlLike     : UrlLike = UrlLike.Default,
-      inMemoryMode: Boolean = true)
+      inMemoryMode: Boolean = UrlLike.DefaultMemoryMode)
     extends InputConfZ {
   def actionZ: ActionIZ =
     RawLinesZ(
@@ -127,7 +127,7 @@ case class JsonLinesFileConf(
       inputString   : InputString,
       urlLike       : UrlLike                = UrlLike.Default,
 
-      inMemoryMode  : Boolean                = true,
+      inMemoryMode  : Boolean                = UrlLike.DefaultMemoryMode,
       schemaProvider: OtherSchemaProvider    = InferSchema,
       projectionOpt : Option[ReadProjection] = None)      
     extends InputConfZ {
@@ -156,7 +156,7 @@ case class TableConf(
       formatConf          : FormatConf             = FormatConf.Default,
       cellConf            : CellConf               = CellConf.Default,
 
-      inMemoryMode        : Boolean                = true,
+      inMemoryMode        : Boolean                = UrlLike.DefaultMemoryMode,
       indexKeysMode       : Boolean                = false,
 
       schemaProvider      : TableSchemaProvider    = TableSchemaProvider.InferSchema,

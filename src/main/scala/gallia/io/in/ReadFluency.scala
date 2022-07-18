@@ -41,6 +41,7 @@ class RawContentFluency(val conf: RawContentConf)
     override def compression(value: SupportedCompression) = conf.copy(urlLike = conf.urlLike.update(value))
 
     // ---------------------------------------------------------------------------
+    override def inMemoryMode = conf.copy(inMemoryMode  = true) // default
     override def iteratorMode = conf.copy(inMemoryMode  = false)
   }
 
@@ -154,7 +155,8 @@ class JdbcFluency(val conf: JdbcConf)
     override def compression(value: SupportedCompression) = conf.copy(urlLike = conf.urlLike.update(value))
 
     // ---------------------------------------------------------------------------
-    override def iteratorMode           = conf.copy(inMemoryMode  = false)
+    override def inMemoryMode = conf.copy(inMemoryMode  = true) // default
+    override def iteratorMode = conf.copy(inMemoryMode  = false)
 
     // ---------------------------------------------------------------------------
     override def explicitSchema(c: Cls) = conf.copy(schemaProvider = ExplicitSchema(c))
@@ -192,7 +194,8 @@ class JsonLinesFileFluency(val conf: JsonLinesFileConf)
   override def compression(value: SupportedCompression) = conf.copy(urlLike = conf.urlLike.update(value))
 
   // ---------------------------------------------------------------------------
-  override def iteratorMode           = conf.copy(inMemoryMode  = false)
+  override def inMemoryMode = conf.copy(inMemoryMode  = true) // default
+  override def iteratorMode = conf.copy(inMemoryMode  = false)
 
   // ---------------------------------------------------------------------------
   override def explicitSchema(c: Cls) = conf.copy(schemaProvider = ExplicitSchema(c))
@@ -251,7 +254,8 @@ class TableFluency(val conf: TableConf)
   override def inferSchema            = conf.copy(schemaProvider = TableSchemaProvider.InferSchema)
 
   // ---------------------------------------------------------------------------
-  override def iteratorMode           = conf.copy(inMemoryMode  = false)
+  override def inMemoryMode = conf.copy(inMemoryMode  = true) // default
+  override def iteratorMode = conf.copy(inMemoryMode  = false)
 
   // ---------------------------------------------------------------------------
   override def charset    (value: SupportedCharset)     = conf.copy(urlLike = conf.urlLike.update(value))

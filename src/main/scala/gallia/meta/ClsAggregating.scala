@@ -11,6 +11,7 @@ trait ClsAggregating { self: Cls =>
         .pipe { case (a, b) => a.fields :+ b.toMultiple }
         .pipe(Cls.apply)
 
+    // ---------------------------------------------------------------------------
     def groupNN(groupees: Renz, groupers: Renz, as: Key): Cls =
       (retain(groupers), retain(groupees))
         .pipe { case (a, b) => a.fields :+ Fld.nesCls(as, b) }

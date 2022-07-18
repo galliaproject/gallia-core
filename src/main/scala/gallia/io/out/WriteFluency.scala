@@ -96,12 +96,9 @@ class OtherFluencyU(outlet: OutletType) extends EndWriteUFluency {
       def prettyTable: PrettyTableFluency = new PrettyTableFluency(PrettyTableConf(outlet))
     
     // ---------------------------------------------------------------------------
-    def display()                   : DisplayFluencyZ = { display(n = 10) }
-    def display(n: Int)             : DisplayFluencyZ = { display(n     , forceTable = false) }
-    def display(forceTable: Boolean): DisplayFluencyZ = { display(n = 10, forceTable) }
-    def displayForceTable()         : DisplayFluencyZ = { display(        forceTable = true) }
-
-    def display(n: Int, forceTable: Boolean = false): DisplayFluencyZ = new DisplayFluencyZ(DisplayConfZ(forceTable))
+    def display()                   : DisplayFluencyZ = { display(forceTable = false) }
+    def displayForceTable()         : DisplayFluencyZ = { display(forceTable = true) }
+    def display(forceTable: Boolean): DisplayFluencyZ = new DisplayFluencyZ(DisplayConfZ(forceTable))
   }
 
 // ===========================================================================

@@ -10,7 +10,7 @@ object AtomsCommonVeryBasics {
 
   // ideally would these three be purely meta operations... (TODO: t210104164036)
   case class _ReorderKeys(f: Seq[Key] => Seq[Key]) extends AtomUU { def naive(o: Obj) =
-        o.keys.pipe(f).map(_.associateRight(o.force(_))).pipe(gallia.obj) }
+        o.keys.pipe(f).map(_.associateRight(o.forceKey(_))).pipe(gallia.obj) }
 
     // ---------------------------------------------------------------------------
     case class _ReorderKeysRecursively(f: Seq[Key] => Seq[Key]) extends AtomUU { def naive(o: Obj): Obj =

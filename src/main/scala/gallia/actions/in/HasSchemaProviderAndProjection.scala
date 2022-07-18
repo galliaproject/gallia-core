@@ -9,10 +9,13 @@ trait HasSchemaProviderZ extends HasSchemaProviderAndProjectionZ { val projectio
 
 // ===========================================================================
 trait HasSchemaProviderAndProjectionU extends HasSchemaProvider with HasProjection {
+    private[in] var protoSchema: Cls = null // pre-projection schema; TODO: t220615121216 - address hack
 
+    // ---------------------------------------------------------------------------
     def __meta: Cls =
       schemaProvider
         .resolve(default = infer())
+        .tap { protoSchema = _ }
         .pipe(projectMeta)
 
       // ---------------------------------------------------------------------------
@@ -31,10 +34,13 @@ trait HasSchemaProviderAndProjectionU extends HasSchemaProvider with HasProjecti
 
   // ===========================================================================
   trait HasSchemaProviderAndProjectionZ extends HasSchemaProvider with HasProjection {
+    private[in] var protoSchema: Cls = null // pre-projection schema; TODO: t220615121216 - address hack (also see t201214105653)
 
+    // ---------------------------------------------------------------------------
     def __meta: Cls =
       schemaProvider
         .resolve(default = infer())
+        .tap { protoSchema = _ }
         .pipe(projectMeta)
 
       // ---------------------------------------------------------------------------

@@ -38,7 +38,7 @@ object AtomsCommonZip {
         .values
         .map { key =>
           splitted
-            .opt(key)
+            .attemptKey(key)
             .map(_.asInstanceOf[Seq[_]] /* TODO: validated? */)
             .getOrElse(Nil) }
 

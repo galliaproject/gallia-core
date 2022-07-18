@@ -92,8 +92,11 @@ trait ObjOperations { self: Obj =>
         else                  _add    (key, value)
 
       // ---------------------------------------------------------------------------
-      private def _add    (key: Key, value: AnyValue) : Obj = Obj.build(data :+ (key -> value))
-      private def _replace(key: Key, value: AnyValue) : Obj =
+      def addKey  (key: Key, value: AnyValue) : Obj = Obj.build(data :+ (key -> value))
+
+      @deprecated
+      def _add    (key: Key, value: AnyValue) : Obj = Obj.build(data :+ (key -> value))
+      def _replace(key: Key, value: AnyValue) : Obj =
           data
             .map { case (k, v) => k ->
               (if (key == k) value
@@ -101,6 +104,9 @@ trait ObjOperations { self: Obj =>
             .pipe(Obj.build)
 
     // ---------------------------------------------------------------------------
+    @inline
+    def addPath(target: KPathW, value: AnyValue): Obj = add(target, value)
+    @deprecated
     def add(target: KPathW, value: AnyValue): Obj =
       target.value.initPair match {
         case (None      , leaf) =>                            _add(leaf, value)
@@ -213,7 +219,7 @@ trait ObjOperations { self: Obj =>
         }
 
     // ===========================================================================
-    def opt(target: KPathW): Option[AnyValue] =
+    def attemptPath(target: KPathW): Option[AnyValue] =
       target.value.tailPair match {
         case (leaf  , None      ) => attemptKey(leaf)
         case (parent, Some(tail)) =>
@@ -221,11 +227,11 @@ trait ObjOperations { self: Obj =>
               case None => None
               case Some(value) =>
                 value match { // TODO: could use meta (see t210115095838)
-                  case seq: Seq[_] => dataError(s"TODO:CantBeSeq-Opt:210106171801:${target}") // in theory should have been validated against..
-                  case sgl         => sgl.asInstanceOf[Obj].opt(tail) } } }
+                  case _: Seq[_] => dataError(s"TODO:CantBeSeq-Opt:210106171801:${target}") // in theory should have been validated against..
+                  case sgl       => sgl.asInstanceOf[Obj].attemptPath(tail) } } }
 
     // ---------------------------------------------------------------------------
-    def force(target: KPathW): AnyValue  =
+    def forcePath(target: KPathW): AnyValue  =
       target.value.tailPair match {
         case (leaf  , None      ) => forceKey(leaf)
         case (parent, Some(tail)) =>
@@ -233,11 +239,11 @@ trait ObjOperations { self: Obj =>
               case None        => dataError(s"TODO:CantBeNone:210106171759:${target}") // in theory should have been validated against..
               case Some(value) =>
                 value match { // TODO: could use meta (see t210115095838)
-                  case seq: Seq[_] => dataError(s"TODO:CantBeSeq-Force:210106171800:${target}") // in theory should have been validated against..
-                  case sgl         => sgl.asInstanceOf[Obj].force(tail) } } }
+                  case _: Seq[_] => dataError(s"TODO:CantBeSeq-Force:210106171800:${target}") // in theory should have been validated against..
+                  case sgl       => sgl.asInstanceOf[Obj].forcePath(tail) } } }
 
     // ---------------------------------------------------------------------------
-    private[single] def _contains(target: KPathW): Boolean =
+    private[single] def _containsPath(target: KPathW): Boolean =
       target.value.tailPair match {
         case (leaf  , None      ) => containsKey(leaf)
         case (parent, Some(tail)) =>
@@ -247,24 +253,24 @@ trait ObjOperations { self: Obj =>
                 (value match {
                     case seq: Seq[_] => seq
                     case sgl         => Seq(sgl) })
-                  .forall(_.asInstanceOf[Obj]._contains(tail)) } }   
+                  .forall(_.asInstanceOf[Obj]._containsPath(tail)) } }
     
     // ===========================================================================
     // TODO: t210116165405 - benchmark, which is faster?
     @deprecated def seq0(target: KPathW, optional: Boolean, multiple: Boolean): Seq[AnyValue] =
         (optional, multiple) match {
-          case (true , true ) => opt  (target).toSeq.flatMap(_.asSeq)
-          case (true , false) => opt  (target).toSeq
-          case (false, true ) => force(target)                .asSeq
-          case (false, false) => force(target).in.seq }
+          case (true , true ) => attemptPath(target).toSeq.flatMap(_.asSeq)
+          case (true , false) => attemptPath(target).toSeq
+          case (false, true ) => forcePath  (target)                .asSeq
+          case (false, false) => forcePath  (target).in.seq }
 
       // ===========================================================================
       def seq(target: KPathW, container: Container): Seq[AnyValue] =
         container match {
-          case Container._One => force(target).in.seq // TODO: see t210116165559 - rename to "in"?
-          case Container._Opt => opt  (target).toSeq
-          case Container._Nes => force(target)                .asSeq
-          case Container._Pes => opt  (target).toSeq.flatMap(_.asSeq) }
+          case Container._One => forcePath  (target).in.seq // TODO: see t210116165559 - rename to "in"?
+          case Container._Opt => attemptPath(target).toSeq
+          case Container._Nes => forcePath  (target)                .asSeq
+          case Container._Pes => attemptPath(target).toSeq.flatMap(_.asSeq) }
 
   // ===========================================================================
   def transformObj   (key: Key, f: Obj    => Any): Obj = transformPath(key, _.asObj   .pipe(f))
@@ -279,7 +285,7 @@ trait ObjOperations { self: Obj =>
   // more advanced
 
   def swapEntries(key1: Key, key2: Key): Obj =
-    (contains(key1),contains(key2)) match {
+    (containsKey(key1), containsKey(key2)) match {
       case (false, false) => self
       case (true , false) => rename      (key1, key2)
       case (false, true ) => rename      (key2, key1)
@@ -316,13 +322,13 @@ trait ObjOperations { self: Obj =>
   // ---------------------------------------------------------------------------
   @deprecated("still needed after 210303101932?") def unarrayCompositeKey(keys: Seq[Key], separator: Separator): Option[Key] =
     keys
-      .flatMap { keyKey => opt(keyKey).map(_.str) } /* TODO or expect default values to be set if missing? or ignore collisions? */
+      .flatMap { keyKey => attemptKey(keyKey).map(_.str) } /* TODO or expect default values to be set if missing? or ignore collisions? */
       .in.noneIf(_.isEmpty)
       .map(_.join(separator).symbol)
 
   // ---------------------------------------------------------------------------
   def unarrayCompositeKey2(key: Key): Option[Key] =
-    opt(key)
+    attemptKey(key)
       .flatMap(_.str.in.noneIf(_.isEmpty)) /* TODO or expect default values to be set if missing? or ignore collisions? */      
       .map(_.symbol)      
 

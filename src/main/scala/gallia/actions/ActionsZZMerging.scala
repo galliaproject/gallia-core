@@ -12,8 +12,17 @@ object ActionsZZMerging {
 
   case object UnionZ extends ActionZzToZ {
     def _meta (c1: Cls , c2: Cls ): Cls  = c1.unionCompatible(c2) //TODO: val
-    def dataz2(c1: Cls , c2: Cls ): Atoms = _UnionZZ.in.seq
-  }
+    def dataz2(c1: Cls , c2: Cls ): Atoms = _UnionZZ.in.seq }
+
+  // ---------------------------------------------------------------------------
+  case object ZipZ extends ActionZzToZ {
+    def _meta (c1: Cls , c2: Cls ): Cls  = c1.merge(c2) //TODO: val
+    def dataz2(c1: Cls , c2: Cls ): Atoms = _ZipZZ.in.seq }
+
+  // ===========================================================================
+  case class MergeObjsVle(f: (Objs, Vle) => Objs) extends ActionZvToZ {
+    def _meta (c1: Cls , c2: Cls): Cls  = c1 // TODO: t220718112411
+    def dataz2(c1: Cls , c2: Cls): Atoms = _MergeObjsVle(f).in.seq }
 
   // ===========================================================================
   case class Merging(data: MergingData) extends ActionZzToZ {

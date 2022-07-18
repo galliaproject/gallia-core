@@ -32,8 +32,8 @@ trait ObjsMerging { self: Objs =>
 
 // ===========================================================================
 object ObjsMerging {
-  private def pairs1(values: Streamer[Obj], joinKey: Key): Streamer[(Option[AnyValue], Option[Obj])] = values.map { o => o.opt(joinKey) -> o.removeOpt(joinKey) }
-  private def pairs2(values: Streamer[Obj], joinKey: Key): Streamer[(Option[AnyValue], Option[Obj])] = values.map { o => o.opt(joinKey) -> Some(o) }
+  private def pairs1(values: Streamer[Obj], joinKey: Key): Streamer[(Option[AnyValue], Option[Obj])] = values.map { o => o.attemptKey(joinKey) -> o.removeOpt(joinKey) }
+  private def pairs2(values: Streamer[Obj], joinKey: Key): Streamer[(Option[AnyValue], Option[Obj])] = values.map { o => o.attemptKey(joinKey) -> Some(o) }
 }
 
 // ===========================================================================

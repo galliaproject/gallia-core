@@ -173,7 +173,7 @@ object ActionsCommonTransforms {
         def  vldt(c: Cls): Errs = from.vldtAsOrigin(c) ++ to.pipe(_vldt.validType) ++ Nil // TODO: more
           // TODO: t210202155459 - verify input is indeed z
         def _meta  (c: Cls): Cls     = from.rpathz_(c).foldLeft(c) { _.updateInfo(_, to.forceNonBObjInfo) }
-        def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atoms(c)(_TransformVV(_, wrap((x: Seq[Obj]) => f(Objs.from(x)))))) }
+        def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atoms(c)(_TransformVV(_, wrap((x: List[Obj]) => f(Objs.from(x)))))) }
 
     // ===========================================================================
     case class TransformToObj(from: TtqRPathz, to: Cls, multiple: Boolean, f: _ff11) extends ActionUUb with TodoV1 { // TODO: split single/multiple

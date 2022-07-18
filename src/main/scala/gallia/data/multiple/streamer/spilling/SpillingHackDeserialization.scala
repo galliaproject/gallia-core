@@ -25,7 +25,6 @@ object SpillingHackDeserialization { // see https://github.com/galliaproject/gal
   private def deserializeSortingKey(formatted: String): Any =
     formatted
       .in.noneIf(_ == "")
-      .map(_.asInstanceOf[String])
       .map { s =>
         // no other way until homogenize classtag/typetag (see https://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210116153713)
         deserializeSortingValue(s.startsWith("{"))(s) }

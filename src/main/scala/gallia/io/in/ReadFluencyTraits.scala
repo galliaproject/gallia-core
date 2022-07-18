@@ -8,6 +8,7 @@ import ReadProjection._
 
 // ===========================================================================
 trait CanSetMemoryModeFluency[Fluency] { ignored: HasSelf[Fluency] => // TODO: t210114145059 - generalize: inMemory, iterator, RDD (StreamerType)
+  def inMemoryMode: Fluency // default
   def iteratorMode: Fluency
 }
 

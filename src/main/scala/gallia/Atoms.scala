@@ -59,11 +59,14 @@ sealed trait Atom extends ActionAN {
   // ---------------------------------------------------------------------------
   trait AtomUV extends Atom { def naive(o: Obj ): Vle }
   trait AtomZV extends Atom { def naive(o: Objs): Vle }
-  trait AtomVV extends Atom { def naive(o: Vle ): Vle }
+  trait AtomVV extends Atom { def naive(v: Vle ): Vle }
+
+trait AtomVv2V extends Atom { def naive(v1: Vle, v2: Vle): Vle }
 
   // ---------------------------------------------------------------------------
   trait AtomUUtoU extends Atom { def naive(o1: Obj , o2: Obj ): Obj  }
   trait AtomZZtoZ extends Atom { def naive(z1: Objs, z2: Objs): Objs }
+  trait AtomZVtoZ extends Atom { def naive(z : Objs, v : Vle ): Objs }
 
 // ===========================================================================
 // mostly boilerplate from this point on:
@@ -134,6 +137,16 @@ trait AtomsUU extends ActionAN {
 
   // ===========================================================================
   trait AtomsZzToZ extends ActionAN {
+    final def atoms(ctx: NodeMetaContext): Atoms = ctx.afferents.force.tuple2.pipe((dataz2 _).tupled)
+          def dataz2(c1: Cls , c2: Cls)  : Atoms }
+
+  // ---------------------------------------------------------------------------
+  trait AtomsZvToZ extends ActionAN {
+    final def atoms(ctx: NodeMetaContext): Atoms = ctx.afferents.force.tuple2.pipe((dataz2 _).tupled)
+          def dataz2(c1: Cls , c2: Cls)  : Atoms }
+
+  // ---------------------------------------------------------------------------
+  trait AtomsVvToV extends ActionAN {
     final def atoms(ctx: NodeMetaContext): Atoms = ctx.afferents.force.tuple2.pipe((dataz2 _).tupled)
           def dataz2(c1: Cls , c2: Cls)  : Atoms }
 

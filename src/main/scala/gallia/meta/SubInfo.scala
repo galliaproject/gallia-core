@@ -41,6 +41,9 @@ case class SubInfo(
     def toSingle  : SubInfo = copy(multiple = false)
 
     // ---------------------------------------------------------------------------
+    def container(optional: Optional): Container = Container.from(optional, multiple)
+
+    // ---------------------------------------------------------------------------
     def isEnmMatching(multiple: Multiple): Boolean = isEnm && this.multiple == multiple
 
     // ===========================================================================
@@ -54,6 +57,15 @@ case class SubInfo(
 
     // ===========================================================================
     def valuePredicate(value: Any): Boolean = valueType.valuePredicate(if (multiple) value.asInstanceOf[Seq[_]].head else value)
+
+    // ---------------------------------------------------------------------------
+    private[meta] def valueExtraction
+          (nesting: Cls       => Multiple => AnyValue)
+          (basic  : BasicType => Multiple => AnyValue)
+        : AnyValue =
+      valueType match {
+        case nc : Cls       => nesting(nc) (multiple)
+        case bsc: BasicType => basic  (bsc)(multiple) }
   }
 
   // ===========================================================================

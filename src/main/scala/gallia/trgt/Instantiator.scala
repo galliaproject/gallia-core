@@ -28,18 +28,18 @@ class Instantiator private (
       private def processField(o: Obj)(field: Fld): AnyRef =
         (field.nestedClassOpt match {
             case None =>
-              if (field.isRequired) o.force(field.key)
-              else                  o.opt  (field.key)
+              if (field.isRequired) o.forceKey  (field.key)
+              else                  o.attemptKey(field.key)
             case Some(c2) => processContainedObj(c2, field, o) })
           .asInstanceOf[AnyRef /* TODO: safe? */]
 
         // ---------------------------------------------------------------------------
         private def processContainedObj(c2: Cls, field: Fld, o: Obj): AnyValue =
           field.info.container1 match { // TODO: use Container.wrap now?
-            case Container._Opt => o.opt  (field.key)                           .map (processObj(c2, field))
-            case Container._Pes => o.opt  (field.key).map(_.asInstanceOf[Seq[_]].map (processObj(c2, field)))
-            case Container._One => o.force(field.key)                           .pipe(processObj(c2, field))
-            case Container._Nes => o.force(field.key)      .asInstanceOf[Seq[_]].map (processObj(c2, field)) }
+            case Container._Opt => o.attemptKey(field.key)                            .map (processObj(c2, field))
+            case Container._Pes => o.attemptKey(field.key).map(_.asInstanceOf[List[_]].map (processObj(c2, field)))
+            case Container._One => o.forceKey  (field.key)                            .pipe(processObj(c2, field))
+            case Container._Nes => o.forceKey  (field.key)      .asInstanceOf[List[_]].map (processObj(c2, field)) }
 
           // ---------------------------------------------------------------------------
           private def processObj(c2: Cls, field: gallia.meta.Fld)(value: AnyValue): Any =

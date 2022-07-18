@@ -5,8 +5,11 @@ package object data {
   type BasicType = reflect.BasicType
   val  BasicType = reflect.BasicType
 
+  type PathPair = domain.PathPair
+  val  PathPair = domain.PathPair
+
   // ---------------------------------------------------------------------------
-  trait HasTaxOpt { def valueOpt(c: Cls): Option[Obj => Obj] }
+  private[data] val Base64StringPrefix = "base64:"
 }
 
 // ===========================================================================

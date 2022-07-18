@@ -16,7 +16,7 @@ trait Action
     final val callSite : CallSite = CallSite.generate()
 
     // ---------------------------------------------------------------------------
-    var resultCls: Cls = null // t201214105653 - hack
+    var resultCls: Cls = null // t201214105653 - hack (also see t220615121216)
   }
 
   // ===========================================================================
@@ -109,8 +109,9 @@ trait ActionZZ extends Action with ActionV1 with ActionM1 with AtomsZZ
   trait ActionZO extends Action with ActionV1 with IdentityM1 with AtomsZO
 
   // ---------------------------------------------------------------------------
-  trait ActionZzToZ extends Action with ActionV2 with ActionM2 with AtomsZzToZ {
-    def vldt(c1: Cls , c2: Cls ): Errs = Nil } // TODO
+  trait ActionZzToZ extends Action with ActionV2 with ActionM2 with AtomsZzToZ { def vldt(c1: Cls , c2: Cls ): Errs = Nil } // TODO
+  trait ActionZvToZ extends Action with ActionV2 with ActionM2 with AtomsZvToZ { def vldt(c1: Cls , c2: Cls ): Errs = Nil } // TODO
+  trait ActionVvToV extends Action with ActionV2 with ActionM2 with AtomsVvToV { def vldt(c1: Cls , c2: Cls ): Errs = Nil } // TODO
 
 // ===========================================================================
 trait ActionUUa extends ActionUU with AtomsUUa
@@ -163,12 +164,6 @@ trait ActionUUbb extends ActionUU with AtomsUUbb // provides origin, TODO: t2106
   trait ActionZOa extends ActionZO with AtomsZOa
   trait ActionZOc extends ActionZO with AtomsZOc
   trait ActionZOb extends ActionZO with AtomsZOb
-
-  // ---------------------------------------------------------------------------
-//  trait ActionVOd extends ActionVO with AtomsVOd
-//  trait ActionVOa extends ActionVO with AtomsVOa
-//  trait ActionVOc extends ActionVO with AtomsVOc
-//  trait ActionVOb extends ActionVO with AtomsVOb
 
   // ===========================================================================
               trait ActionUVc  extends ActionUV with AtomsUVc

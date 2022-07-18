@@ -86,12 +86,12 @@ object ActionsCommonVeryBasics {
     }
 
   // ===========================================================================
-  class Remove(target: TqRPathz) extends ActionUUb {
+  class Remove(target: TqKPathz) extends ActionUUb {
     def  vldt  (c: Cls): Errs    = target.vldtAsOrigin(c) ++ _vldt.someFieldsAreLeft (c, target.size(c)) // see 201107145004
 
     //FIXME: t220414112604 - if nesting, ensure parent is removed instead of all sub-fields being removed
-    def _meta  (c: Cls): Cls     = target.rpathz_(c).forceKPathz.foldLeft(c)(_ remove _)
-    def atomuus(c: Cls): AtomUUs = target.rpathz_(c).forceKPathz.pipe(_atoms(_, _Remove)) }
+    def _meta  (c: Cls): Cls     = target.kpathz_(c).foldLeft(c)(_ remove _)
+    def atomuus(c: Cls): AtomUUs = target.kpathz_(c).pipe(_atoms(_, _Remove)) }
 
   // ===========================================================================
   class Retain(target: TqRPathz) extends ActionUUb { import gallia.data.single.RetainMapping

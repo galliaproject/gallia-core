@@ -42,8 +42,8 @@ case class UrlLikeTableOutput(
 
     def vldt(c: Cls): Errs = Nil // TODO: ensure no contradion with uriString? (eg '\t' vs tsv)
     def atomzos(c: Cls): AtomZOs =
-      Seq(_SchemaOutputZ     (c      , uriString, urlLike, DefaultSchemaSuffix),
-          _UrlLikeTableOutput(c.skeys, uriString, urlLike, twc))
+      Seq(_SchemaOutputZ     (c, uriString, urlLike, DefaultSchemaSuffix),
+          _UrlLikeTableOutput(c, uriString, urlLike, twc))
 
     // ===========================================================================
     private def twc = TableWritingContext(
@@ -57,7 +57,7 @@ case class UrlLikeTableOutput(
 // including JSON
 case class OtherOutputU(ioType: IoTypeU, outlet: OutletType) extends ActionUOc {
     def vldt(c: Cls): Errs = Nil //TODO
-    def atomuo(c: Cls): AtomUO = _OtherOutputU(ioType, outlet) }
+    def atomuo(c: Cls): AtomUO = _OtherOutputU(c, ioType, outlet) }
 
   // ---------------------------------------------------------------------------
   // including JSON
@@ -68,17 +68,17 @@ case class OtherOutputU(ioType: IoTypeU, outlet: OutletType) extends ActionUOc {
   // ---------------------------------------------------------------------------
   case class OtherTableOutput(outlet: OutletType, twc: TableWritingContext) extends ActionZOc {
       def vldt(c: Cls): Errs = Nil //TODO
-      def atomzo(c: Cls): AtomZO = _OtherTableOutput(c.skeys, outlet, twc) }
+      def atomzo(c: Cls): AtomZO = _OtherTableOutput(c, outlet, twc) }
 
   // ===========================================================================
   case class PrettyRowOutput(outlet: OutletType, twc: PrettyTableWritingContext) extends ActionUOc {
         def vldt(c: Cls): Errs = Nil //TODO
-        def atomuo(c: Cls): AtomUO = _PrettyRowOutput(c.skeys, outlet, twc) }
+        def atomuo(c: Cls): AtomUO = _PrettyRowOutput(c, outlet, twc) }
     
     // ---------------------------------------------------------------------------
     case class PrettyTableOutput(outlet: OutletType, twc: PrettyTableWritingContext) extends ActionZOc {
         def vldt(c: Cls): Errs = Nil //TODO
-        def atomzo(c: Cls): AtomZO = _PrettyTableOutput(c.skeys, outlet, twc) }
+        def atomzo(c: Cls): AtomZO = _PrettyTableOutput(c, outlet, twc) }
 
   // ===========================================================================
   case class DisplayOutputU(forceRow: Boolean) extends ActionUOc {
@@ -91,7 +91,7 @@ case class OtherOutputU(ioType: IoTypeU, outlet: OutletType) extends ActionUOc {
     // ---------------------------------------------------------------------------
     case class DisplayOutputZ(forceTable: Boolean) extends ActionZOc {
         def vldt  (c: Cls): Errs = Nil //TODO
-        def atomzo(c: Cls): AtomZO = 
+        def atomzo(c: Cls): AtomZO =
           ( if (forceTable || !c.hasNesting) PrettyTableOutput(                    OutletType.StandardOutput, PrettyTableWritingContext.Default)
             else                             OtherOutputZ(IoTypeZ.JsonPrettyLines, OutletType.StandardOutput))
           .atomzo(c)}

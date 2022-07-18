@@ -18,6 +18,10 @@ object AtomsZZFiltering {
 
     case class _FilterBy3[T1, T2, T3](ori: PathPair3, pred: (T1, T2, T3) => Boolean, max: Option[Int]) extends AtomZZ { def naive(z: Objs) =
       z.filter(ori.lookup(_).asInstanceOf[(T1, T2, T3)].pipe(pred.tupled)).take(max) }
+
+  // ===========================================================================
+  case class _TakeWhile(pred: Obj => Boolean) extends AtomZZ { def naive(z: Objs) = z.takeWhile(pred) }
+  case class _DropWhile(pred: Obj => Boolean) extends AtomZZ { def naive(z: Objs) = z.dropWhile(pred) }
 }
 
 // ===========================================================================

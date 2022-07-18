@@ -8,6 +8,8 @@ import actions.ActionsOthers._
 import actions.ActionsZZ._
 import actions.ActionsThns._
 import actions.ActionsCustoms.CustomZZ
+import actions.ActionsZZMerging.MergeObjsVle
+import actions.ActionsZZFiltering.{TakeWhile, DropWhile}
 
 // ===========================================================================
 class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and generally change occurrences of "z" into "s"
@@ -31,7 +33,7 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
       with    merging .HeadZMerging {
 
   private[gallia] type Self = HeadZ
-  private    val  self = this
+  private         val  self = this
 
   // ---------------------------------------------------------------------------
   override def toString: String = nodeId // TODO
@@ -64,12 +66,16 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
   private[heads] def allowAs (target: Key)     : HeadZ with HasAs = handler.chainzzWithAs(self)(AsRename(Ren.from(target)))
 
   // ---------------------------------------------------------------------------
-  private[heads] def zzToz(that: HeadZ)(action: ActionZzToZ): HeadZ = handler.joinZz2z(self, that)(action)
+  private[heads] def zzToz         (that: HeadZ)   (action: ActionZzToZ): HeadZ = handler.joinZz2z(self, that)(action)
+  private[heads] def zvToz[T : WTT](that: HeadV[T])(action: ActionZvToZ): HeadZ = handler.joinZv2z(self, that)(action)
 
   // ---------------------------------------------------------------------------
   private[heads] def zu        (action: ActionZU): HeadU    = handler.chainzu(self)(action)
   private[heads] def zv[V: WTT](action: ActionZV): HeadV[V] = handler.chainzv(self)(action)
   private[heads] def zo        (action: ActionZO): HeadZ    = handler.chainzo(self)(action)
+
+  // ===========================================================================
+  private[heads] def mergeObjsVle[V: WTT](that: HeadV[V])(f: (Objs, V) => Objs): HeadZ = zvToz(that)(MergeObjsVle((z: Objs, v: Vle) => f(z, v.asInstanceOf[V]) ))
 
   // ===========================================================================
   def     map[V: WTT](f: HeadU => HeadV[V])(implicit di: DI): HeadV[List[V]] = zv(ActionsZZ.    MapU2V(typeNode[V], f))
@@ -96,8 +102,8 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
 
   // ---------------------------------------------------------------------------
   // TODO: these will be very affected by t210104164036
-  def customZ2Z(meta: Cls => Cls, data: Objs     => Objs    ): Self = self ::+ new CustomZZ(meta, data)
-  def customS2S(meta: Cls => Cls, data: Seq[Obj] => Seq[Obj]): Self = self ::+ CustomZZ.from(meta, data)
+  def customZ2Z(meta: Cls => Cls, data: Objs      => Objs     ): Self = self ::+ new CustomZZ(meta, data)
+  def customS2S(meta: Cls => Cls, data: List[Obj] => List[Obj]): Self = self ::+ CustomZZ.from(meta, data)
 
   // ---------------------------------------------------------------------------
   def assertDataUnsafeZ(pred: Objs => Boolean): Self = self ::+
@@ -125,9 +131,8 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
 
   @aptus.fordevonly("pretty ugly...") def inspectAndAbort: Self = self ::+ InspectZ(None,      abort = true)
 
-  @deprecated
-  def asListBased: HeadZ = self ::+ AsListBased
-  def asViewBased: HeadZ = self ::+ AsListBased
+  def asViewBased    : HeadZ = self ::+ AsViewBased
+  def asIteratorBased: HeadZ = self ::+ AsIteratorBased
 
   // ===========================================================================
   // TODO: add more common ones
@@ -163,21 +168,29 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
   //def last: HeadU = takeRight(1).force.one
 
     // TODO: t210117112314
-    @Distributivity def take(n: Int): HeadZ = zz(Take(n))
+    @Distributivity def take    (n: Int): HeadZ = zz(Take(n))
+    @Distributivity def takeLeft(n: Int): HeadZ = zz(Take(n))
 
-      def take(n: Option[Int]): HeadZ = n.map(take).getOrElse(self)
-      //def drop(n: Int): HeadZ = ???
-      //def takeLeft (n: Int): HeadZ = ??? // = take
-      //def dropLeft (n: Int): HeadZ = ???
+    @Distributivity def drop    (n: Int): HeadZ = zz(Drop(n))
+    @Distributivity def dropLeft(n: Int): HeadZ = zz(Drop(n))
+
+      @Distributivity def take    (n: Option[Int]): HeadZ = n.map(take).getOrElse(self)
+      @Distributivity def takeLeft(n: Option[Int]): HeadZ = n.map(take).getOrElse(self)
+
+      @Distributivity def drop    (n: Option[Int]): HeadZ = n.map(drop).getOrElse(self)
+      @Distributivity def dropLeft(n: Option[Int]): HeadZ = n.map(drop).getOrElse(self)
+
+  @Distributivity def takeWhile(pred: HeadU => HeadV[Boolean]): HeadZ = zz(TakeWhile(pred))
+  @Distributivity def dropWhile(pred: HeadU => HeadV[Boolean]): HeadZ = zz(DropWhile(pred))
+
       //def takeRight(n: Int): HeadZ = ???
       //def dropRight(n: Int): HeadZ = ???
+
       //def reverse          : HeadZ = ???
       //def randomize        : HeadZ = ???
-      //def addIndex  : Self = ??? // adds _index
-      //def addRank   : Self = ??? // adds _rank (1-based)
 
-@Distributivity def addIndex: HeadS = zz(AddIndex(key = _index, oneBased = false))
-@Distributivity def addRank : HeadS = zz(AddIndex(key = _rank,  oneBased = true ))
+  @Distributivity def addIndex: HeadS = zz(AddIndex(key = _index, oneBased = false))
+  @Distributivity def addRank : HeadS = zz(AddIndex(key = _rank,  oneBased = true ))
 
   // ===========================================================================
   // TODO: t210205122151

@@ -163,16 +163,16 @@ trait HeadZOut extends HeadOut { self: HeadZ =>
   def printPrettyTableHead() = { take(10).write(_.stdout.prettyTable); () }
 
   // ===========================================================================
-  def display()                   : Unit = { display(n = 10) }
-  def display(n: Int)             : Unit = { display(n     , forceTable = false) }
-  def display(forceTable: Boolean): Unit = { display(n = 10, forceTable) }
-  def displayForceTable()         : Unit = { display(        forceTable = true) }
+  def display()                   : Unit = { display(max = 10) }
+  def display(max: Int)           : Unit = { display(max     , forceTable = false) }
+  def display(forceTable: Boolean): Unit = { display(max = 10, forceTable) }
+  def displayForceTable()         : Unit = { display(          forceTable = true) }
 
   /** smart display: will show schema + choose table or JSON depending on whether there is nesting */
-  def display(n: Int, forceTable: Boolean): Unit = {
+  def display(max: Int, forceTable: Boolean): Unit = {
     printSchema()
     println()
-    take(n).write(_.stdout.display(n, forceTable))
+    take(max).write(_.stdout.display(forceTable))
     ()
   }
 

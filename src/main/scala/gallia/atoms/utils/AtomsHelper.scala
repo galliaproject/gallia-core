@@ -26,7 +26,7 @@ object AtomsHelper {
       .pipe(f)
       .map { key =>
         key ->
-          (o.force(key) match { // TODO: t210115095838 - optimization: pass nesting info from meta rather
+          (o.forceKey(key) match { // TODO: t210115095838 - optimization: pass nesting info from meta rather
             case x: Obj    => reorderKeysRecursively(f)(x)
             case x: Seq[_] =>
               x.map {
@@ -44,7 +44,7 @@ object AtomsHelper {
     // ---------------------------------------------------------------------------
     def unnestOOO(o: Obj, parent: Key, key: Key): Obj =
       o .objs_(parent)
-        .map(_.map(_.force(key)))
+        .map(_.map(_.forceKey(key)))
         .map { values =>
           o .removeOpt(parent)
             .map(_    .put(key,   values))

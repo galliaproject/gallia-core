@@ -27,7 +27,7 @@ private[io] trait InputStringBase { val inputString: InputString }
       InputStringType
         .parse(inputString)
          match {
-          case InputStringType.JsonObject  => inputString.splitBy("\n").filterNot(_.trim.isEmpty).map(JsonParsing.parseObject).pipe(Objs.from)
+          case InputStringType.JsonObject  => inputString.splitBy("\n").filterNot(_.trim.isEmpty).map(JsonParsing.parseObject).toList.pipe(Objs.from)
           case InputStringType.JsonArray   => JsonParsing.parseArray(inputString).pipe(Objs.from)
           case InputStringType.Indirection =>
             val content = inputString.readFileContent // FIXME: t220315121047

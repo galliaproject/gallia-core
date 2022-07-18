@@ -3,8 +3,8 @@ package heads.common
 
 import meta._
 import reflect.{BasicType, Container}
+import actions.ActionsCustoms.{CustomMeta, CustomField}
 import actions.ActionsAsserts._
-import actions.ActionsCustoms._
 
 // ===========================================================================
 @PartialTypeMatching
@@ -37,6 +37,18 @@ trait HeadCommonAsserts[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   // ---------------------------------------------------------------------------
   def assertIsUnionType (target: KPathW): Self2 = self2 :+ AssertUnionType(target.value, negated = false)
   def assertNotUnionType(target: KPathW): Self2 = self2 :+ AssertUnionType(target.value, negated = true)
+
+  // ---------------------------------------------------------------------------
+  def assertNonEmptyString(target: KPathW): Self2 = assertString(target).isNonEmpty
+
+  def assertString(target: KPathW) = new {
+    def isNonEmpty: Self2 = assertDataU(_.stringx(target)).using(_.nonEmpty)
+
+    def startsWith    (prefix: String)                : Self2 = assertDataU(_.stringx(target)).using(_.startsWith(prefix))
+    def   endsWith    (suffix: String)                : Self2 = assertDataU(_.stringx(target)).using(_.endsWith  (suffix))
+    def surroundedWith(prefix: String, suffix: String): Self2 = assertDataU(_.stringx(target)).using(x => x.startsWith(prefix) && x.endsWith(suffix))
+
+    def matchesRegex(regex : Regex) : Self2 = assertDataU(_.stringx(target)).using(regex.matches) }
 
   // ---------------------------------------------------------------------------
   def customMeta(f: Cls => Cls): Self2 = self2 :+ CustomMeta(f)

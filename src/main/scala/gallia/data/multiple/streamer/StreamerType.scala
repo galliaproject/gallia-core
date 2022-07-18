@@ -16,7 +16,7 @@ sealed trait StreamerType extends EnumEntry {
 
     // ---------------------------------------------------------------------------
     case object ViewBased     extends StreamerType
-    case object IteratorBased extends StreamerType // relates to t210115104555
+    case object IteratorBased extends StreamerType
     case object RDDBased      extends StreamerType
 
     // ---------------------------------------------------------------------------

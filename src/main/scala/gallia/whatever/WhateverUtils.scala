@@ -2,7 +2,6 @@ package gallia
 package whatever
 
 import aptus.Seq_
-import data.DataFormatting.formatBasicValue
 
 // ===========================================================================
 object WhateverUtils {
@@ -14,10 +13,10 @@ object WhateverUtils {
       case None           => "None"
       case Nil            => "Nil"
 
-      case Some(value)    => s"Some(${formatBasicValue(value)})"
-      case values: Seq[_] => s"Seq(${values.map(formatBasicValue).join(",")})"
+      case Some(value)    => s"Some(${          data.DataDynamicFormatting.formatBasicValue(value)})"
+      case values: Seq[_] => s"Seq(${values.map(data.DataDynamicFormatting.formatBasicValue).join(",")})"
 
-      case value          => formatBasicValue(value) }
+      case value          =>                    data.DataDynamicFormatting.formatBasicValue(value) }
 
   // ===========================================================================
   private[whatever] def size(value: Any): Int =

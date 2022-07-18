@@ -29,7 +29,7 @@ object JsonParsing {
         .toList
 
   // ---------------------------------------------------------------------------
-  def parseArray(value: JsonArrayString): Seq[Obj] = // TODO: t201221175254 - stream rather than read all in memory
+  def parseArray(value: JsonArrayString): List[Obj] = // TODO: t201221175254 - stream rather than read all in memory
     util.Try(GsonToObj.fromArrayString(value)) match {
       case util.Failure(throwable) => illegal(throwable.getMessage, value)
       case util.Success(success)   => success.toListAndTrash }

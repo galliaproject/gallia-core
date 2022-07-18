@@ -15,7 +15,7 @@ private[atoms] object AtomsUtils {
       case sgl         => f(sgl) }
 
   // ===========================================================================
-  def nestingx(dis: Obj, path: KPath)
+  def nestingx(dis: Obj, path: KPath) // TODO: should use schema rather (see t210115095838)
         (f: (Obj, Key  ) => Obj)
         (g: (Obj, KPath) => Obj): Obj =
     path.tailPair match {

@@ -42,7 +42,16 @@ package object meta {
   // see t210125111338 (union types) - adapt
   case class PNF(path: KPath, optional: Optional, multiple: Multiple, valueType: ValueType) extends HasKey with Info1Like {
     final override           val  key  : Key   = path.key
-    final override protected val _info1: Info1 = Info1(optional, multiple, valueType) }
+    final override protected val _info1: Info1 = Info1(optional, multiple, valueType)
+
+    // ---------------------------------------------------------------------------
+    def info: Info = Info(optional, Seq(SubInfo(multiple, valueType)))
+
+    // ---------------------------------------------------------------------------
+    override def toString = formatDefault
+      def formatDefault: String =
+        s"${path.formatDefault}:${optional}:${multiple}:${valueType}"
+  }
 
 }
 

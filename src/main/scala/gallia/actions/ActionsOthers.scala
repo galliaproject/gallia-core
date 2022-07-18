@@ -9,7 +9,7 @@ import data.multiple.Streamer
 import atoms._UWrapper
 import atoms.AtomsOthers._
 import atoms.AtomsUV._
-import atoms.AtomsZZ._EnsureUniquenessBy
+import atoms.AtomsZZ._
 import atoms.AtomsCustom._CustomZZ
 
 // ===========================================================================
@@ -32,8 +32,8 @@ object ActionsOthers {
       def atomzz = _CustomZZ(_._modifyUnderlyingStreamer(f)) }
 
     // ---------------------------------------------------------------------------
-    case object AsListBased extends IdentityVM1 with ActionZZd {
-      def atomzz = _CustomZZ(_._asListBased) }
+    case object AsViewBased     extends IdentityVM1 with ActionZZd { def atomzz = _AsViewBased     }
+    case object AsIteratorBased extends IdentityVM1 with ActionZZd { def atomzz = _AsIteratorBased }
 
   // ===========================================================================
   //TODO: t210115175106 - versions that allows configuring more
@@ -121,10 +121,12 @@ object ActionsOthers {
       // ---------------------------------------------------------------------------
       def vldt (in: Cls)             : Errs  = Nil //TODO: t210303101704 - check reasonnably "to-textable" value
       def _meta(in: Cls)             : Cls   = resolveTargetKey(in)                     .pipe(in.unarrayEntries(newKeys, _))
-      def atoms(ctx: NodeMetaContext): Atoms = resolveTargetKey(ctx.forceSingleAfferent).pipe { key =>
+      def atoms(ctx: NodeMetaContext): Atoms = ctx.forceSingleAfferent.pipe { c =>
+        val target = resolveTargetKey(c)
+
         Seq(
-          _EnsureUniquenessBy(Keyz.from(keyKey)),
-          _Pivone(keyKey, key)) } }
+          _EnsureUniquenessBy(c, Keyz.from(keyKey)),
+          _Pivone(keyKey, target)) } }
 
     // ---------------------------------------------------------------------------
     @deprecated case class UnarrayEntries0(
@@ -136,8 +138,8 @@ object ActionsOthers {
         def vldt (in: Cls): Errs = Nil //TODO; consistency of key separator; reasonnable separator; check "textable" value; check separator availble if more than 1 keykey
         def _meta(in: Cls): Cls = valueKey.pipe(in.unarrayEntries(newKeys, _))
   
-        def atoms(ignored: NodeMetaContext): Atoms = Seq(
-            _EnsureUniquenessBy(keyKeys),
+        def atoms(ctx: NodeMetaContext): Atoms = Seq(
+            _EnsureUniquenessBy(ctx.forceSingleAfferent, keyKeys),
             _UnarrayEntries0(keyKeys, separator, valueKey) ) }
   
     // ---------------------------------------------------------------------------
@@ -148,8 +150,8 @@ object ActionsOthers {
         extends ActionZU {
       def vldt (in: Cls): Errs = Nil //TODO
       def _meta(in: Cls): Cls = in.unarrayBy0(keys, newKeys)
-      def atoms(ignored: NodeMetaContext): Atoms = Seq(
-        _EnsureUniquenessBy(keys),
+      def atoms(ctx: NodeMetaContext): Atoms = Seq(
+        _EnsureUniquenessBy(ctx.forceSingleAfferent, keys),
         _UnarrayBy0(keys, sep)) }
 
   // ===========================================================================
@@ -157,8 +159,13 @@ object ActionsOthers {
 
   case class MapV2V(to: TypeNode, f: _ff11) extends ActionVV {
     def vldt(in: Seq[Cls] ) = Nil // TODO
-    def _meta(in: Seq[Cls] ) = in.force.one//TODO: ok?
+    def _meta(in: Seq[Cls] ) = in.force.one//TODO: ok? t220627162134 - must adapt type
     def atoms (ignored: NodeMetaContext): Atoms = _MapV2V(f).in.seq }
+
+  // ---------------------------------------------------------------------------
+  case class CombineVV(x: TypeNode, y: TypeNode, f: _ff21) extends ActionVvToV {
+    def _meta(x: Cls, y: Cls) = x // FIXME: t220718112037
+    def dataz2(c1: Cls , c2: Cls) = _CombineVV(f).in.seq }
 
   // ===========================================================================
   // uv

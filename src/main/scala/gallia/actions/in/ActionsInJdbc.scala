@@ -15,7 +15,7 @@ case class JdbcInputZ1(
   def _meta: Cls  =
     AtomsIX._JdbcInputZ1(inputString, queryingOpt, None)
       .columns
-      .pipe(utils.JdbcUtils.columnsToCls)
+      .pipe(utils.JdbcMetaUtils.columnsToCls)
       .tap { c = _ }
 
   def atomiz: AtomIZ = AtomsIX._JdbcInputZ1(inputString, queryingOpt, Some(c)) }
@@ -33,7 +33,7 @@ case class JdbcInputZ2(
   def _meta: Cls  =
     AtomsIX._JdbcInputZ2(connection, querying, None)
       .columns
-      .pipe(utils.JdbcUtils.columnsToCls)
+      .pipe(utils.JdbcMetaUtils.columnsToCls)
       .tap { c = _ }
 
   def atomiz: AtomIZ = AtomsIX._JdbcInputZ2(connection, querying, Some(c)) }

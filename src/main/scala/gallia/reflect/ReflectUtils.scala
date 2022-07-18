@@ -8,7 +8,7 @@ import scala.reflect.api
 private[gallia] object ReflectUtils {
 
   /** eg "Option" from "scala.Option[String]", or "String" from "java.lang.String" */
-  def alias(tpe: UType) =
+  def alias(tpe: UType): Alias =
     tpe
       .toString
       .takeWhile(_ != '[') /* TODO: cleaner way? */
@@ -39,6 +39,11 @@ private[gallia] object ReflectUtils {
         (name, tpe2) }
 
   // ===========================================================================
+  /** enum must not be nested somehow */
+  def enumValueNames[T <: enumeratum.EnumEntry : WTT]: Seq[String] = enumValueNames(scala.reflect.runtime.universe.weakTypeTag[T].tpe)
+
+  // ---------------------------------------------------------------------------
+  /** enum must not be nested somehow */
   def enumValueNames(tpe: UType): Seq[String] =
     tpe
       .companion
@@ -48,6 +53,7 @@ private[gallia] object ReflectUtils {
       .map { symbol: api.Universe#Symbol =>
         symbol.name.decodedName.toString }
       .toList
+.reverse /* TODO: always? */
 
   // ===========================================================================
   def withEntryName[T <: EnumEntry: WTT](entryName: String) =

@@ -9,7 +9,7 @@ object SpillingHackSerialization { // see https://github.com/galliaproject/galli
 
   // =========================================================================== 
   def serializeSortingLine(valueIsObj: Boolean)(entry: (Any, Any)): Line = {         
-      val formattedKey  : String = serializeSortingKey(entry._1).getOrElse("")
+      val formattedKey  : String = serializeSortingKey1(entry._1).getOrElse("")
       val formattedValue: String = serializeSortingValue(valueIsObj)(entry._2)
 
       // ---------------------------------------------------------------------------
@@ -26,7 +26,7 @@ object SpillingHackSerialization { // see https://github.com/galliaproject/galli
     }
   
   // ===========================================================================
-  private def serializeSortingKey(raw: Any): Option[String] =
+  private def serializeSortingKey1(raw: Any): Option[String] =
     raw
       .asInstanceOf[Option[_]]
       .map { // no other way until homogenize classtag/typetag (see https://github.com/galliaproject/gallia-docs/blob/init/tasks.md#t210116153713)        
@@ -41,8 +41,8 @@ object SpillingHackSerialization { // see https://github.com/galliaproject/galli
   
   // ---------------------------------------------------------------------------
   private def serializeSortingValue(valueIsObj: Boolean)(raw: Any): String = 
-    if (valueIsObj) serializeObject(raw.asInstanceOf[Obj])
-    else            raw.toString
+    if (valueIsObj) serializeObject  (raw.asInstanceOf[Obj])
+    else            serializeRawValue(raw)
 
   // ---------------------------------------------------------------------------
   private def serializeSideSortingValue(raw: Any): Option[String] = raw.asInstanceOf[Option[Obj]].map(serializeObject)

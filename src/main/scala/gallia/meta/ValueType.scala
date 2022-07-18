@@ -9,19 +9,25 @@ trait ValueType extends reflect.HasValuePredicate {
       case x: Cls       => Right(x) }
 
     // ---------------------------------------------------------------------------
+    def formatDefault: String
+
+    // ---------------------------------------------------------------------------
     def isNesting: Boolean = _either.isRight
     def isLeaf   : Boolean = _either.isLeft
 
     // ---------------------------------------------------------------------------
-    def nestingOpt: Option[Cls      ] = _either     .toOption
-    def leafOpt   : Option[BasicType] = _either.swap.toOption
-    
+    def nestingOpt  : Option[Cls      ] = _either     .toOption
+    @deprecated
+    def leafOpt     : Option[BasicType] = _either.swap.toOption
+    def basicTypeOpt: Option[BasicType] = _either.swap.toOption
+
     // ---------------------------------------------------------------------------
     def forceBasicType: BasicType = this.asInstanceOf[BasicType]
     def forceCls      : Cls       = this.asInstanceOf[Cls]
 
     // ---------------------------------------------------------------------------
-    def isBasicType(pred: BasicType => Boolean): Boolean = leafOpt.exists(pred)
+    def isBasicType(pred: BasicType => Boolean): Boolean = basicTypeOpt.exists(pred)
+    def isBasicType(target: BasicType)         : Boolean = basicTypeOpt.exists(_ == target)
   }
 
   // ===========================================================================

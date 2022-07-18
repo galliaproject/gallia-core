@@ -3,7 +3,7 @@ package actions
 package utils
 
 // ===========================================================================
-object JdbcUtils {
+object JdbcMetaUtils {
   import java.sql.Types
   import reflect.BasicType
   import reflect.BasicType._
@@ -23,17 +23,17 @@ object JdbcUtils {
         optional = column.nullable,
         union    = Seq(meta.SubInfo(
           multiple  = _Single,
-          valueType = column.typeCode.pipe(basicType)))) )
+          valueType = basicType(debug = column.name)(column.typeCode, column.originalTypeName) ))) )
 
   // ---------------------------------------------------------------------------
   private implicit def _toOption(value: BasicType): Option[BasicType] = Some(value)
 
     // ---------------------------------------------------------------------------
     // TODO: t220513142231 - we might need to actually see the value for some? may also need to do a pre-mapping (eg for TIME_WITH_TIMEZONE)
-    private def basicType(typeCode: Int): BasicType = _basicType(typeCode).get
+    private def basicType(debug: String)(typeCode: Int, originalTypeName: String): BasicType = _basicType(debug)(typeCode, originalTypeName).get
 
     // ---------------------------------------------------------------------------
-    private def _basicType(typeCode: Int): Option[BasicType] =
+    private def _basicType(debug: String)(typeCode: Int, originalTypeName: String): Option[BasicType] = // probably also need the exact RDBMS (eg mysql vs postgres, ...)
       typeCode match { // see java.sql.Types
         case Types.BIT                      /*   -7 */ => _Boolean
 
@@ -43,9 +43,11 @@ object JdbcUtils {
 
         case Types.BIGINT                   /*   -5 */ => _Long // not to be confused with java's BigInt
 
-        case Types.FLOAT                    /*    6 */ => _Float
-
-        case Types.REAL                     /*    7 */ => _Double
+        case Types.FLOAT                    /*    6 */ => _Float // t220615101855 - to test (JDBC seems to map MySql FLOAT to Types.REAL instead of Types.FLOAT)
+        case Types.REAL                     /*    7 */ => originalTypeName match {
+                                                            case "FLOAT"           => _Float
+                                                            case "DOUBLE" | "REAL" => _Double
+                                                            case x                 => aptus.illegalState(x, debug) }
         case Types.DOUBLE                   /*    8 */ => _Double
 
         case Types.NUMERIC                  /*    2 */ => _BigDec
@@ -55,9 +57,9 @@ object JdbcUtils {
         case Types.VARCHAR                  /*   12 */ => _String
         case Types.LONGVARCHAR              /*   -1 */ => _String
 
-        case Types.DATE                     /*   91 */ => _LocalDate
-        case Types.TIME                     /*   92 */ => _LocalTime
-        case Types.TIMESTAMP                /*   93 */ => _Instant//LocalDateTime
+        case Types.DATE                     /*   91 */ => _LocalDate     // see 220615092031 for data counterpart
+        case Types.TIME                     /*   92 */ => _LocalTime     // see 220615092032 for data counterpart
+        case Types.TIMESTAMP                /*   93 */ => _LocalDateTime // see 220615092033 for data counterpart
 
         case Types.BINARY                   /*   -2 */ => _Binary
         case Types.VARBINARY                /*   -3 */ => _Binary

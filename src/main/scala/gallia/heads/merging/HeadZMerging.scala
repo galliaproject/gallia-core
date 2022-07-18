@@ -8,11 +8,14 @@ trait HeadZMerging { self: HeadZ =>
   import MergingData.JoinKey
   import MergingFluency._
 
-  // ---------------------------------------------------------------------------
+  // ===========================================================================
   // TODO: t210117143536 - move to .merging(that)(_.union)?
   @Distributivity // TODO: prepend/append if not distributed
-  def union(that: HeadU): HeadZ = that.convertToZ.pipe(union)
+  def union(that: HeadU): HeadZ = that.convertToMultiple.pipe(union)
   def union(that: HeadZ): HeadZ = zzToz(that)(UnionZ)
+
+  // ---------------------------------------------------------------------------
+  def zip(that: HeadZ): HeadZ =  zzToz(that)(ZipZ)
 
   // ===========================================================================
   def merging(that: HeadZ)(conf: Start => End): HeadZ = zzToz(that)(MergingData.from(conf).pipe(Merging))

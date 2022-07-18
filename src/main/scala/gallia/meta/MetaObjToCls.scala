@@ -41,7 +41,7 @@ object MetaObjToCls { // 201222111331
       // ---------------------------------------------------------------------------
       private def subInfo(value: Obj): SubInfo = SubInfo(
              value.boolean(_multiple),
-            (value.force (_valueType).pipe(valueType)))
+            (value.forceKey(Symbol(_valueType)).pipe(valueType)))
 
         // ---------------------------------------------------------------------------
         private def valueType(value: Any) = (value match { // see 210118133408

@@ -12,36 +12,36 @@ private[plans] object AtomProcessor {
       : NDT = { import InputData._
 
     def inputData(atom: Atom): InputData = // this is a bit of an afterthought... TODO: t210114125607 - improve
-      util.Try{
+      util.Try {
         atom match {
           case NestingDataPlaceholder => _None
   
           // ---------------------------------------------------------------------------
-          case x: AtomIU => _None
-          case x: AtomIZ => _None
-          case x: AtomIV => _None
-  
+          case _: AtomIU => _None
+          case _: AtomIZ => _None
+          case _: AtomIV => _None
+
           // ---------------------------------------------------------------------------
-          case x: AtomUO => _Obj (input.obj)
-          case x: AtomZO => _Objs(input.objs)
-          case x: AtomVO => _Vle (input.vle)
-  
+          case _: AtomUO => _Obj (input.obj)
+          case _: AtomZO => _Objs(input.objs)
+          case _: AtomVO => _Vle (input.vle)
+
           // ---------------------------------------------------------------------------
-          case x: AtomUU => _Obj (input.obj)
-          case x: AtomZZ => _Objs(input.objs)// TODO: t210114111539: identity wrapped Us vs full on Zs, so can pinpoint problematic object
-  
+          case _: AtomUU => _Obj (input.obj)
+          case _: AtomZZ => _Objs(input.objs)// TODO: t210114111539: identity wrapped Us vs full on Zs, so can pinpoint problematic object
+
           // ---------------------------------------------------------------------------
-          case x: AtomZU => _Objs(input.objs)
-          case x: AtomUZ => _Obj (input.obj)
-  
+          case _: AtomZU => _Objs(input.objs)
+          case _: AtomUZ => _Obj (input.obj)
+
           // ---------------------------------------------------------------------------
-          case x: AtomUUtoU => _Obj2 .tupled(input.obj2 )
-          case x: AtomZZtoZ => _Objs2.tupled(input.objs2)
-  
+          case _: AtomUUtoU => _Obj2 .tupled(input.obj2 )
+          case _: AtomZZtoZ => _Objs2.tupled(input.objs2)
+
           // ---------------------------------------------------------------------------
-          case x: AtomUV => _Obj (input.obj )
-          case x: AtomZV => _Objs(input.objs)
-          case x: AtomVV => _Vle (input.vle )
+          case _: AtomUV => _Obj (input.obj )
+          case _: AtomZV => _Objs(input.objs)
+          case _: AtomVV => _Vle (input.vle )
         }
       }.getOrElse(_Undetermined)
 
@@ -80,6 +80,9 @@ private[plans] object AtomProcessor {
         case x: AtomUV => x.naive(input.obj ).pipe(NDT.vle)
         case x: AtomZV => x.naive(input.objs).pipe(NDT.vle)
 
+        // ---------------------------------------------------------------------------
+        case x: AtomVv2V  => (x.naive _).tupled(input.vle2)   .pipe(NDT.vle)
+        case x: AtomZVtoZ => (x.naive _).tupled(input.objsVle)
       }): NDT
 
     } match {

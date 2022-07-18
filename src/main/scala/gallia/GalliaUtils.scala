@@ -29,17 +29,17 @@ object GalliaUtils { // consider moving those to aptus whenever generic enough
     def mapIndex(index: aptus.Index)(f: T => T): Seq[T] = { var i = -1; seq.map { x => i += 1; if (i == index) f(x) else x } } // TODO: confirm faster than zipWithIndex?
 
     // ===========================================================================
-    def ifOneElementOpt: Option[T] = seq match { case Seq(sole) => Some(sole); case _ => None }
+    def ifOneElementOpt: Option[T] = if (seq.size == 1) Some(seq.head) else None
 
     // ---------------------------------------------------------------------------
-    def ifOneElement[U](ifOne: T => U, otherwise: Seq[T] => U): U = seq match {
-      case Seq(sole) => ifOne    (sole)
-      case other     => otherwise(other) }
+    def ifOneElement[U](ifOne: T => U, otherwise: Seq[T] => U): U =
+      if (seq.size == 1) ifOne    (seq.head)
+      else               otherwise(seq)
 
     // ---------------------------------------------------------------------------
-    def ifOneElementOrElse(errorMessage: Seq[T] => Any): T = seq match {
-      case Seq(sole) => sole
-      case _         => aptus.illegalState(seq.size, errorMessage(seq)) }
+    def ifOneElementOrElse(errorMessage: Seq[T] => Any): T =
+      if (seq.size == 1) seq.head
+      else               aptus.illegalState(seq.size, errorMessage(seq))
   }
 
 }

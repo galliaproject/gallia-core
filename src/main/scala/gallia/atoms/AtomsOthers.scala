@@ -41,10 +41,11 @@ object AtomsOthers {
       assert(!z.isIteratorBased) // FIXME: t220209132326
       z } }
 
-  // ---------------------------------------------------------------------------
-  case class _MapV2V(f: _ff11) extends AtomVV { def naive(v: Any) = f(v) }
+  // ===========================================================================
+  case class _MapV2V   (f: _ff11) extends AtomVV   { def naive(v : Vle)         : Vle = f(v) }
+  case class _CombineVV(f: _ff21) extends AtomVv2V { def naive(v1: Vle, v2: Vle): Vle = f(v1, v2) }
 
-  // ---------------------------------------------------------------------------
+  // ===========================================================================
   case class _InspectU(msg: Option[String], abort: Boolean) extends AtomUU { def naive(u: Obj) =
       { msg.foreach(println); u.pp.tapIf(_ => abort) { x => x.__exit; () } } }
 
@@ -65,17 +66,16 @@ object AtomsOthers {
   // zu
 
   case object _ForceOne extends AtomZU { def naive(z: Objs) = {    
-    val itr = z.consume
-    if (!itr.hasNext) _Error.Runtime.EmptyStream.throwDataError()
+    val itr = z.closeabledIterator
+    if (!itr.hasNext) { itr.close(); _Error.Runtime.EmptyStream.throwDataError() }
     else {
-      val next = itr.next()      
-      if (itr.hasNext) _Error.Runtime.MoreThanNElements(n = 1).throwDataError()
-      else             next } }
-  }
+      val next = itr.next()
+      if (itr.hasNext) { itr.close(); _Error.Runtime.MoreThanNElements(n = 1).throwDataError() }
+      else             { itr.close(); next } } } }
 
   // ---------------------------------------------------------------------------
   case class _AsArray1(key: Key) extends AtomZU { def naive(z: Objs) =
-    obj(key -> z.toListAndTrash.map(_.force(key))) }
+    obj(key -> z.toListAndTrash.map(_.forceKey(key))) }
 
   // ---------------------------------------------------------------------------
   case class _AsArray2(newKey: Key) extends AtomZU { def naive(z: Objs) =
@@ -93,7 +93,7 @@ object AtomsOthers {
             o .unarrayCompositeKey2(keyKey)
               .getOrElse(dataError(ErrorId.Runtime.EmptyKey))
   
-          o.opt(valueKey).map(newKey -> _) }
+          o.attemptKey(valueKey).map(newKey -> _) }
        .pipe(obj) }
        // t201122154119 - if in is empty...
       
@@ -105,7 +105,7 @@ object AtomsOthers {
               o .unarrayCompositeKey(keyKeys.values, separator)
                 .getOrElse(dataError(ErrorId.Runtime.NoKeysLeft)) //TODO: or offer alterative if all missing?
     
-            o.opt(valueKey).map(newKey -> _) }
+            o.attemptKey(valueKey).map(newKey -> _) }
          .pipe(obj) }
          // t201122154119 - if in is empty...
     
@@ -137,9 +137,9 @@ object AtomsOthers {
 
     // ---------------------------------------------------------------------------
     private object _FlattenBy {
-      def apply(target: KPath)(u: Obj): Seq[Obj] =
-        u .opt(target)
-          .map(_.asInstanceOf[Seq[_]])
+      def apply(target: KPath)(u: Obj): List[Obj] =
+        u .attemptPath(target)
+          .map(_.asInstanceOf[List[_]])
           .map {
             _ .map(u.put(target, _))
               .toList }

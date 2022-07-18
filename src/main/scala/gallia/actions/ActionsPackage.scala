@@ -73,24 +73,25 @@ package object actions { // TODO: delegate access to all of AtomsUtils._
 
   type _TransformVV = atoms.common.AtomsCommonTransforms._TransformVV
   val  _TransformVV = atoms.common.AtomsCommonTransforms._TransformVV
-  
+
+  // ---------------------------------------------------------------------------
+  type PathPair = domain.PathPair
+  val  PathPair = domain.PathPair
+
   // ===========================================================================
   private[actions] implicit def _atomUUToAtomUUs(value: AtomUU): Seq[AtomUU] = Seq(value)
 
   // ---------------------------------------------------------------------------
   implicit class Seq__[A](values: Seq[A]) {
-    def orIfEmpty(generator: => Seq[A]): Seq[A] = if (values.isEmpty) generator else values // convenient for validations
-  }
+    def orIfEmpty(generator: => Seq[A]): Seq[A] = if (values.isEmpty) generator else values } // convenient for validations
   
   // ---------------------------------------------------------------------------
   implicit class KPath__(value: KPath) {
-    def vldtAsNewDestination(c: Cls) = _vldt.fieldAbsence(c, value)   
-  }
+    def vldtAsNewDestination(c: Cls) = _vldt.fieldAbsence(c, value) }
 
   // ---------------------------------------------------------------------------
   implicit class TKPath__(value: TKPath) {
-    def vldtAsNewDestination(c: Cls) = value.path.vldtAsNewDestination(c) ++ _vldt.validType(value.tipe)
-  }
+    def vldtAsNewDestination(c: Cls) = value.path.vldtAsNewDestination(c) ++ _vldt.validType(value.tipe) }
 
 }
 

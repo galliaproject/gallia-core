@@ -44,17 +44,17 @@ class NestedPlan(parent: AtomPlan) extends Serializable {
   private def _naiveRunUV (missingInput: Any): Any = parent.V1.naiveRunUV (missingInput.asInstanceOf[       Obj ])
   private def _naiveRunUV_(missingInput: Any): Any = parent.V1.naiveRunUV_(missingInput.asInstanceOf[Option[Obj]])
 
-  private def _naiveRunZV (missingInput: Any): Any = parent.V1.naiveRunZV (missingInput.asInstanceOf[       Seq[Obj] ].pipe(Objs.from))
-  private def _naiveRunZV_(missingInput: Any): Any = parent.V1.naiveRunZV_(missingInput.asInstanceOf[Option[Seq[Obj]]].map(Objs.from))
+  private def _naiveRunZV (missingInput: Any): Any = parent.V1.naiveRunZV (missingInput.asInstanceOf[       List[Obj] ].pipe(Objs.from))
+  private def _naiveRunZV_(missingInput: Any): Any = parent.V1.naiveRunZV_(missingInput.asInstanceOf[Option[List[Obj]]].map(Objs.from))
 
-  private def _naiveRunZZ (missingInput: Any): Any = parent.V1.naiveRunZZ (missingInput.asInstanceOf[       Seq[Obj] ].pipe(Objs.from))      .toListAndTrash
-  private def _naiveRunZZ_(missingInput: Any): Any = parent.V1.naiveRunZZ_(missingInput.asInstanceOf[Option[Seq[Obj]]].map(Objs.from)).map(_.toListAndTrash)
+  private def _naiveRunZZ (missingInput: Any): Any = parent.V1.naiveRunZZ (missingInput.asInstanceOf[       List[Obj] ].pipe(Objs.from))      .toListAndTrash
+  private def _naiveRunZZ_(missingInput: Any): Any = parent.V1.naiveRunZZ_(missingInput.asInstanceOf[Option[List[Obj]]].map(Objs.from)).map(_.toListAndTrash)
 
   private def _naiveRunUZ_(missingInput: Any): Any = parent.V1.naiveRunUZ_(missingInput.asInstanceOf[Option[Obj]]).toList
   private def _naiveRunUZ (missingInput: Any): Any = parent.V1.naiveRunUZ (missingInput.asInstanceOf[       Obj ]).toListAndTrash
 
-  private def _naiveRunZU_(missingInput: Any): Any = parent.V1.naiveRunZU_(missingInput.asInstanceOf[Option[Seq[Obj]]].map(Objs.from))
-  private def _naiveRunZU (missingInput: Any): Any = parent.V1.naiveRunZU (missingInput.asInstanceOf[       Seq[Obj] ].pipe(Objs.from))
+  private def _naiveRunZU_(missingInput: Any): Any = parent.V1.naiveRunZU_(missingInput.asInstanceOf[Option[List[Obj]]].map(Objs.from))
+  private def _naiveRunZU (missingInput: Any): Any = parent.V1.naiveRunZU (missingInput.asInstanceOf[       List[Obj] ].pipe(Objs.from))
 
   private def _naiveRunUu2U(missingInput1: Any, missingInput2: Any): Any = parent.V1.naiveRunUu2U(missingInput1.asInstanceOf[Obj], missingInput2.asInstanceOf[Obj])
 }

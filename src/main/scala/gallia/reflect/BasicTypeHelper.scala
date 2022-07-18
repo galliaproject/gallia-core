@@ -49,7 +49,6 @@ private[reflect] trait BasicTypeHelper { ignored: BasicType =>
   lazy val pordDF: Ordering[Option[Iterable[T]]] = optionDF(nordD)
   lazy val pordDL: Ordering[Option[Iterable[T]]] = optionDL(nordD)
 
-
   // ===========================================================================
   def isInt    : Boolean = this == BasicType._Int
   def isDouble : Boolean = this == BasicType._Double
@@ -118,6 +117,7 @@ private[reflect] trait BasicTypeHelper { ignored: BasicType =>
           case (false, true ) => pordAL
           case (false, false) => pordAF })
         .compare(x.asInstanceOf[Option[Iterable[T]]], y.asInstanceOf[Option[Iterable[T]]]) }
+
 }
 
 // ===========================================================================

@@ -3,7 +3,14 @@ package domain
 
 // ===========================================================================
 case class PathPair(path: KPath, optional: Boolean) {
-      def lookup(o: Obj ): AnyValue = if (optional) o.opt(path) else o.force(path)
+
+      override def toString: String = formatDefault
+        def formatDefault: String = s"${path.formatDefault}:${if (optional) "optional" else "required"}"
+
+      // ===========================================================================
+      def lookup(o: Obj): AnyValue =
+        if (optional) o.attemptPath(path)
+        else          o.forcePath(path)
 
       // ---------------------------------------------------------------------------
       def matching(value1: Any, value2: Any): Boolean =
@@ -12,13 +19,13 @@ case class PathPair(path: KPath, optional: Boolean) {
 
       // ===========================================================================
       def matchesU(pred: Obj => Boolean)(o: Obj): Boolean = // for union types
-        if (optional) o.opt  (path).exists { case o: Obj => pred(o); case _ => false }
-        else          o.force(path) match  { case o: Obj => pred(o); case _ => false }
+        if (optional) o.attemptPath(path).exists { case o: Obj => pred(o); case _ => false }
+        else          o.forcePath  (path) match  { case o: Obj => pred(o); case _ => false }
 
       // ---------------------------------------------------------------------------
       def matchesZ(pred: Seq[Obj] => Boolean)(o: Obj): Boolean = // for union types
-          if (optional) o.opt  (path).exists(_matchesZ(pred))
-          else          o.force(path).pipe  (_matchesZ(pred))
+          if (optional) o.attemptPath(path).exists(_matchesZ(pred))
+          else          o.forcePath  (path).pipe  (_matchesZ(pred))
 
         // ---------------------------------------------------------------------------
         private def _matchesZ(pred: Seq[Obj] => Boolean): Any => Boolean = {

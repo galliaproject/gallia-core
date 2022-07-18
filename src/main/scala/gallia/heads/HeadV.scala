@@ -1,7 +1,7 @@
 package gallia
 package heads
 
-import actions.ActionsOthers.MapV2V
+import actions.ActionsOthers.{MapV2V, CombineVV}
 
 // ===========================================================================
 class HeadV[T: WTT /* will be Vle (Any) for data phase */] private[gallia] (
@@ -10,6 +10,7 @@ class HeadV[T: WTT /* will be Vle (Any) for data phase */] private[gallia] (
     extends Head[HeadV[T]] 
     with    HeadVOut[T] {
   private[gallia] type Self = HeadV[T]
+  private         val  self = this
 
   override def toString: String = nodeId // TODO
 
@@ -20,6 +21,11 @@ class HeadV[T: WTT /* will be Vle (Any) for data phase */] private[gallia] (
   // ===========================================================================
   def mapV [         T2: WTT](f: T  => T2)                            : HeadV[    T2 ] = handler.chainvv(this)(MapV2V(typeNode[T2], (x: Any) => f(x.asInstanceOf[T]) ))
   def mapVs[T1: WTT, T2: WTT](f: T1 => T2)(implicit ev: T <:< Seq[T1]): HeadV[Seq[T2]] = mapV[Seq[T2]](_.map(f)) // worth keeping? - TODO: subclass rather?
+
+  // ---------------------------------------------------------------------------
+  def combine[T2: WTT, T3: WTT](that: HeadV[T2]) = new {
+    def using(f: (T, T2) => T3): HeadV[T3] = handler.joinVv2v[T, T2, T3](self, that)( // TODO: as "reduce"?
+      CombineVV(typeNode[T], typeNode[T2], (x: Any, y: Any) => f(x.asInstanceOf[T], y.asInstanceOf[T2]))) }
 }
 
 // ===========================================================================

@@ -2,11 +2,15 @@ package gallia
 package meta
 
 import aptus.{Seq_, Option_}
+import domain.PathPair
 
 // ===========================================================================
 trait ClsLike { // read-only part
       ignored: ClsHelper =>
     protected val fields: Seq[Fld]
+
+    // ---------------------------------------------------------------------------
+    def toPNF(path: KPath): PNF = field(path).toPNF(path.parent)
 
     // ---------------------------------------------------------------------------
     // optimization for runtime validation

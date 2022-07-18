@@ -1,14 +1,14 @@
 package gallia
 package meta
 
-import aptus.String_
+import aptus.{Seq_, String_}
 
 // ===========================================================================
 case class Fld(key: Key, info: Info) extends FldLike {
     require(key.name.nonEmpty)// TODO: validation
 
     final override protected val _info: Info         = info
-    final override           def union: Seq[SubInfo] = _info.union
+    final override           def union: Seq[SubInfo] = info.union
 
     // ---------------------------------------------------------------------------
     // mostly for macros (see t210330102827)

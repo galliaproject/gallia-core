@@ -12,12 +12,15 @@ trait HasSingleValueType {
   // ---------------------------------------------------------------------------
   def isNestingWithName(name: String): Boolean = valueType.nestingOpt.exists(_.nameOpt == Some(name))
 
-  def isNesting  : Boolean = valueType.nestingOpt.nonEmpty
-  def isBasicType: Boolean = valueType.leafOpt   .nonEmpty
+  def isNesting  : Boolean = valueType.nestingOpt  .nonEmpty
+  def isBasicType: Boolean = valueType.basicTypeOpt.nonEmpty
 
   // ---------------------------------------------------------------------------
-  def isBasicType(value: BasicType)          : Boolean = valueType.leafOpt.exists(_ == value)
+  def isBasicType(value: BasicType)          : Boolean = valueType.basicTypeOpt.exists(_ == value)
   def isBasicType(pred: BasicType => Boolean): Boolean = valueType.isBasicType(pred)
+
+  // ---------------------------------------------------------------------------
+  def isNumericalType: Boolean = valueType.basicTypeOpt.exists(_.isNumericalType)
 
   // ---------------------------------------------------------------------------
   def isBoolean : Boolean = isBasicType(BasicType._Boolean)

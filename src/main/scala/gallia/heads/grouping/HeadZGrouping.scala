@@ -9,9 +9,9 @@ trait HeadZGrouping { self: HeadZ =>
   import GroupingFluency._
 
   // ===========================================================================
-  def grouping(conf: Start => End): Self = zz(GroupData.from(conf).pipe(Grouping))
+  def grouping(conf: Start => End): Self = zz(GroupData.from(conf).pipe(GroupingAction))
 
-      private def hasAs(conf: Start => End): Self with HasAs = zzWithAs(GroupData.from(conf).pipe(Grouping))
+      private def hasAs(conf: Start => End): Self with HasAs = zzWithAs(GroupData.from(conf).pipe(GroupingAction))
 
     // ===========================================================================
     def groupBy(groupers: RenWz)            : Self with HasAs = groupBy(_.explicit(groupers))

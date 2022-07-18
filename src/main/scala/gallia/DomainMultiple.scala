@@ -64,8 +64,8 @@ case class Renz(values: Seq[Ren]) extends Seq[Ren] {
     def  append(key : Ren ): Renz = Renz(       values :+ key)
 
     // ---------------------------------------------------------------------------
-    def froms = values.map(_.from).pipe(Keyz.apply)
-    def tos   = values.map(_.to  ).pipe(Keyz.apply)
+    def froms: Keyz = values.map(_.from).pipe(Keyz.apply)
+    def tos  : Keyz = values.map(_.to  ).pipe(Keyz.apply)
 
     @deprecated def fromsFX = values.map(_.from).pipe(Keyz.apply) // FIXME: see t210110104437
 

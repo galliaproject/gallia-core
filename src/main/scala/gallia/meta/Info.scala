@@ -18,13 +18,6 @@ case class Info(
       .requireDistinct
 
     // ===========================================================================
-    @deprecated def container1: Container = Container.from(optional, subInfo1.multiple)
-
-    // ---------------------------------------------------------------------------
-    def forceContainer: Container = Container.from(optional, union.map(_.multiple).distinct.force.one)
-    def forceInfo1     : Info1      = forceSubInfo.pipe { subInfo => Info1(optional, subInfo.multiple, subInfo.valueType) }
-
-    // ===========================================================================
     override def toString = formatDefault
       def formatDefault: String =
         //  see t210125111338 (union types)

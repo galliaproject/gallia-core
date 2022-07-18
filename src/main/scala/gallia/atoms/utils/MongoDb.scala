@@ -23,8 +23,8 @@ trait MongoDb {
   // ---------------------------------------------------------------------------
   def query(uri: java.net.URI, dbOpt: Option[String])(cmd: MongoDbCmd): (Iterator[List[(Symbol, Any)]], Closeable)
 
-  final def closeableQuery(uri: java.net.URI, dbOpt: Option[String])(cmd: MongoDbCmd): Closeabled[Iterator[List[(Symbol, Any)]]] =
-    query(uri, dbOpt)(cmd).pipe(Closeabled.fromPair)
+  final def closeableQuery(uri: java.net.URI, dbOpt: Option[String])(cmd: MongoDbCmd): CloseabledIterator[List[(Symbol, Any)]] =
+    query(uri, dbOpt)(cmd).pipe(CloseabledIterator.fromPair)
 }
 
 // ===========================================================================
@@ -73,17 +73,17 @@ object MongoDb {
 
             if (!c.skeySet.forall(Supported.contains)) ??? // TODO
 
-            val filterOpt = c.opt("filter").map {
+            val filterOpt = c.attemptKey('filter).map {
                 case x: gallia.Obj => x.formatCompactJson
                 case x => ???
               }
 
-            val projectionOpt = c.opt("projection").map {
+            val projectionOpt = c.attemptKey('projection).map {
                 case x: gallia.Obj => x.formatCompactJson
                 case x => ???
               }
 
-            val sortOpt = c.opt("sort").map {
+            val sortOpt = c.attemptKey('sort).map {
                 case x: gallia.Obj => x.formatCompactJson
                 case x => ???
               }

@@ -7,10 +7,14 @@ private[plans] trait InputData { def formatDebug: String } // this is a bit of a
   // ===========================================================================
   object InputData {
       private def formatObjsDebug(values: Objs) = { // TODO: see t210114111539 (identity wrapped Us vs full on Zs)
-        val itr = values.consume /* TODO: close ... */ // safer with RDD
+        val itr = values.closeabledIterator // safer with RDD
 
-        if (!itr.hasNext) "(empty data)"
-        else              itr.take(1).toList.head.formatPrettyJson // pretty ugly...
+        try {
+          (    if (!itr.hasNext) "(empty data)"
+               else              itr.next().formatPrettyJson) // pretty ugly...
+            .tap { _ => itr.close() } }
+        catch {
+          case t: Throwable => s"Throwable: ${t.getMessage} (220623145732)" }
       }
 
       // ===========================================================================

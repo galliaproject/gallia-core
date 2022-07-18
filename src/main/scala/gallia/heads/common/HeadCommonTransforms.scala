@@ -42,7 +42,7 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
 
           // ---------------------------------------------------------------------------
           def withTypeName(value: ClsName): __TransformU = withPredicate(_.nameOpt == Some(value), _.string_(_type).exists(_ == value))
-          def withFieldHint(field: KPathW): __TransformU = withPredicate(_.contains(field.value), _.contains(field.value)) // convenient if unique to the type + required field
+          def withFieldHint(field: KPathW): __TransformU = withPredicate(_.contains(field.value), _.containsPath(field.value)) // convenient if unique to the type + required field
           def withIndex    (value: Index) : __TransformU = new __TransformU(target, DisambiguateByClassIndex(value)) }
 
         // ---------------------------------------------------------------------------
@@ -66,7 +66,7 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
 
           // ---------------------------------------------------------------------------
           def withTypeName(value: ClsName): __TransformZ = withPredicate(_.nameOpt == Some(value), _.forall(_.string_(_type).exists(_ == value)))
-          def withFieldHint(field: KPathW): __TransformZ = withPredicate(_.contains(field.value), _.exists /* one is enough */(_.contains(field.value))) // convenient if unique to the typ
+          def withFieldHint(field: KPathW): __TransformZ = withPredicate(_.contains(field.value), _.exists /* one is enough */(_.containsPath(field.value))) // convenient if unique to the typ
           def withIndex    (value: Index) : __TransformZ = new __TransformZ(target, DisambiguateByClassIndex(value)) }
 
         // ---------------------------------------------------------------------------

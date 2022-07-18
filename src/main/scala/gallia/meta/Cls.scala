@@ -42,10 +42,18 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
     // ---------------------------------------------------------------------------
     override def toString = formatDefault
 
-      def formatDefault =
+      def formatDefault: String =
         fields
           .map(_.formatDefault)
           .section(nameOpt.map(_.quote.colon).getOrElse(""))
+
+    // ---------------------------------------------------------------------------
+    def unknownKeys(o: Obj): Set[Key] = {
+      val set1 = o   .keySet
+      val set2 = this.keySet
+
+      set1.diff(set2)
+    }
 
     // ---------------------------------------------------------------------------
     def merge(that: Cls): Cls = Cls(this.fields ++ that.fields)
@@ -81,7 +89,7 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
 
     // ===========================================================================
     def aobj (o: Obj)             : AObj  = AObj (this, o)
-    def aobjs(o1: Obj, more: Obj*): AObjs = AObjs(this, Objs.from(o1 +: more))
+    def aobjs(o1: Obj, more: Obj*): AObjs = AObjs(this, Objs.from((o1 +: more).toList))
 
     // ---------------------------------------------------------------------------
     def toObj : Obj = ClsToMetaObj.clsToObj(this)

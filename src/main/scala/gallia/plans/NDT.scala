@@ -26,12 +26,12 @@ trait NDT {
              def vle(value: Vle ): NDT = new NDT.V(value) // implicit is tricky here
     
     // ===========================================================================
-    def anyToO (value: Any): O = O(          value.asInstanceOf[    Obj ])
-    def anyToZ (value: Any): Z = Z(Objs.from(value.asInstanceOf[Seq[Obj]]))
+    def anyToO (value: Any): O = O(          value.asInstanceOf[     Obj ])
+    def anyToZ (value: Any): Z = Z(Objs.from(value.asInstanceOf[Seq[Obj]].toList /* TODO: t220718111447 - some are still not List (see GeneMania processing) */))
     
     // ---------------------------------------------------------------------------
-    def anyToO_(value: Any): Option[O] = value.asInstanceOf[Option[    Obj ]]               .map(O.apply)
-    def anyToZ_(value: Any): Option[Z] = value.asInstanceOf[Option[Seq[Obj]]].map(Objs.from).map(Z.apply)    
+    def anyToO_(value: Any): Option[O] = value.asInstanceOf[Option[     Obj ]]               .map(O.apply)
+    def anyToZ_(value: Any): Option[Z] = value.asInstanceOf[Option[List[Obj]]].map(Objs.from).map(Z.apply)
   }
 
 // ===========================================================================

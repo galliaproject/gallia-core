@@ -53,6 +53,7 @@ class InputUStringDrivenFluency(val conf: InputUStringDrivenConf) // TODO: still
     override def compression(value: SupportedCompression) = conf.copy(urlLike = conf.urlLike.update(value))
 
     // ---------------------------------------------------------------------------
+    override def inMemoryMode = conf.copy(inMemoryMode  = true) // default
     override def iteratorMode = conf.copy(inMemoryMode  = false)
 
     // ---------------------------------------------------------------------------

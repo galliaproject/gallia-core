@@ -33,11 +33,11 @@ case class AObj(c: Cls, @deprecated u: Obj) { // TODO: tt210124100009 - initiall
 case class AObjs(c: Cls, z: Objs) {
     def schema = c
     def data   = z
-    
+
     // ---------------------------------------------------------------------------
     def forceAObj: AObj = AObj(c, z.toListAndTrash.force.one)
     
-    def rawData: Iterator[Seq[AnyValue]] = z.consume.map(_.values)
+    def rawData: Iterator[Seq[AnyValue]] = z.consumeSelfClosing.map(_.values)
 
     // ---------------------------------------------------------------------------
     override def toString: String = formatDefault

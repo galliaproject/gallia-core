@@ -60,7 +60,7 @@ trait ClsBasics { self: Cls =>
   @deprecated("favor combo retain+rename") def retain(key : Ren) : Cls = { requireRenamingKey(key); rewrap(field(key).in.seq) }
   @deprecated("favor combo retain+rename") def retain(keys: Renz): Cls = retain(keys.froms).pipe { x => keys.foldLeft(x)(_ rename _) }
 
-  def retain(value: Key  ): Cls = rewrap(field(value).in.seq)
+  def retain(value: Key) : Cls = rewrap(field(value).in.seq)
   def retain(value: KeyW): Cls = retain(value.value)
 
   def retain(keys: Keyz): Cls = rewrap(fields.filter(field => keys.values.contains(field.key)))

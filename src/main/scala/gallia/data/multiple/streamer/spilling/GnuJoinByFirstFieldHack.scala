@@ -6,14 +6,16 @@ import aptus.aptutils.SystemUtils
 import aptus.aptutils.JavaStreamUtils._
 
 // ===========================================================================
+// TODO: t220623113637 - reimplement in scala
 object GnuJoinByFirstFieldHack { // see https://github.com/galliaproject/gallia-core#poor-mans-scaling-spilling
   // note: nt210302124437 - GNU join needs 2 inputs, forcing us to use at least one named pipe; may be simpler to reimplement in scala (unlike sort)
   //   maybe via process substitution (but then how to provide sort inputs?)
   //   nt210302124437: won't work with windows as a result
   // =========================================================================== 
-  def apply(ec: ExecutionContext)(left: Iterator[Line], right: Iterator[Line]): Iterator[Line] = {				
-      if (IsWindows) { windowsError() }
-      
+  def apply(ec: ExecutionContext)(left: Iterator[Line], right: Iterator[Line]): Iterator[Line] = {
+      if (IsWindows) { //TODO: t210304095419 - confirm mac ok; same options for sort/join?
+        aptus.illegalState("210304095421 - cannot use Windows in hack at the moment (see t210304095420)") }
+
       // ---------------------------------------------------------------------------
       val ts = System.currentTimeMillis()
         val leftFifo  = s"/tmp/gallia.left.${ts}"

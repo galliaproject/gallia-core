@@ -1,6 +1,9 @@
 package gallia
 package io
 
+import aptus.Line
+import data.multiple.streamer.Streamer
+
 // ===========================================================================
 package object in extends _io with __io {
 
@@ -20,8 +23,7 @@ package object in extends _io with __io {
   val InferSchema    = OtherSchemaProvider.InferSchema
 
   // ===========================================================================
-  import gallia.data.multiple.streamer.Streamer
-  type LinesPreprocessing = Streamer[String] => Streamer[String] // see t210202112203
+  type LinesPreprocessing = Streamer[Line] => Streamer[Line] // see t210202112203
 }
 
 // ===========================================================================

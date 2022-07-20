@@ -83,7 +83,7 @@ private[reducing] object ReducingStats { // 210118083814
           _count_all -> values         .size,
           _distinct  -> values.distinct.size)
         .pipeIf(optional) {
-          _.add(_present, values.flatten.size) }
+          _.addKey(_present, values.flatten.size) }
 
     // ---------------------------------------------------------------------------
     // TODO: t210118084355 - _skewness, kurtosis (opt?) + mode, IQR + more percentiles + MAD/mean absolute deviation, trimmed

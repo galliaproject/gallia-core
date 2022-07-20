@@ -19,7 +19,7 @@ object AtomsCommonZip {
       .map { key => _Split(key, _.splitBy(sep)) }
         .foldLeft(o)((curr, atom) => atom.naive(curr))
       .pipe { splitted =>
-        splitted.add(
+        splitted.addKey(
           newNestingKey,
           objs(splitted, keys)) }
       .remove(keys.froms)

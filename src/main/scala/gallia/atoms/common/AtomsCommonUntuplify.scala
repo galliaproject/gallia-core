@@ -54,8 +54,8 @@ object AtomsCommonUntuplify {
   // ---------------------------------------------------------------------------
   private def update(restOpt: Option[Obj], key: Key)(value: AnyValue): Obj =
     restOpt
-      .map       { _.add(key,   value) }
-      .getOrElse {   obj(key -> value) }
+      .map       { _.addKey(key,   value) }
+      .getOrElse {   obj   (key -> value) }
 
   // ===========================================================================
   def untuplify2z(targetKey: Ren)(entrySplitter: StringSplitter)(newKeys: Set[Key])(o: Obj): Obj =
@@ -64,8 +64,8 @@ object AtomsCommonUntuplify {
         .map { o2 =>
           checkNewKeys(debug = o)(newKeys)(o2)
 
-          o .replace(targetKey.from, o2)
-            .rename(targetKey) }
+          o .replaceKey(targetKey.from, o2)
+            .rename    (targetKey) }
         .getOrElse(o)
 
     // ---------------------------------------------------------------------------
@@ -78,7 +78,7 @@ object AtomsCommonUntuplify {
 
   // ---------------------------------------------------------------------------
   def untuplify2a(targetKey: Ren)(entriesSplitter: StringSplitter, entrySplitter: StringSplitter)(newKeys: Set[Key])(o: Obj): Obj =
-      o._transformRenx(targetKey) { value =>
+      o.transformRenx(targetKey) { value =>
         _untuplify2a(entriesSplitter, entrySplitter)(value)
         .tap(checkNewKeys(debug = o)(newKeys)) }
 

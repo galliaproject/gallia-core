@@ -48,7 +48,7 @@ object AtomsCommonVeryBasics {
 
   // ---------------------------------------------------------------------------
   case class _Add(key: Key, value: AnyValue) extends AtomUU { def naive(o: Obj) =
-    o.put(key, value) } //TODO: serialization issues?...
+    o.putKey(key, value) } //TODO: serialization issues?...
 
 }
 

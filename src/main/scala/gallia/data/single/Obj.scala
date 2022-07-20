@@ -91,9 +91,6 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
     def sortedByKeys: Obj = data.sortBy(_._1.name).pipe(Obj.build)
 
     // ===========================================================================
-    @inline def containsPath   (path: KPathW): Boolean =  _containsPath(path)
-
-    // ---------------------------------------------------------------------------
     def potch(key: Key): (Option[AnyValue], Option[Obj]) = attemptKey(key) -> removeOpt(key) // totally a thing. (TODO: t210124100009)
 
       // ---------------------------------------------------------------------------

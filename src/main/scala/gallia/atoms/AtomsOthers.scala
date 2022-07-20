@@ -141,7 +141,7 @@ object AtomsOthers {
         u .attemptPath(target)
           .map(_.asInstanceOf[List[_]])
           .map {
-            _ .map(u.put(target, _))
+            _ .map(u.putPath(target, _))
               .toList }
           .getOrElse(List(u))
     }

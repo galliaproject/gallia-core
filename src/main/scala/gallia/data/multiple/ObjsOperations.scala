@@ -17,11 +17,11 @@ trait ObjsOperations { self: Objs =>
   def transformWhateverPathPair(target: PathPair, f: AnyValue => AnyValue, checkType: Boolean): Objs = map(_.transformWhateverPathPair(target, f, checkType)) // only for Whatever to Whatever transformation...
 
   // ---------------------------------------------------------------------------
-  def _transformKey            (key: Key,                                        f: AnyValue => AnyValue): Objs = map(_._transformKey(key, f))// TODO: phase out
-  def _transformKeyx           (key: Key,                                        f: AnyValue => AnyValue): Objs = map(_._transformKeyx(key, f))
-  def _transformRenx           (key: Ren)                                       (f: AnyValue => AnyValue): Objs = map(_._transformRenx(key)(f))
-  def _transformKeyPair        (key: Key, optional: Boolean)                    (f: AnyValue => AnyValue): Objs = map(_._transformKeyPair(key, optional)(f))
-  def _transformWhateverKeyPair(key: Key, optional: Boolean, checkType: Boolean)(f: AnyValue => AnyValue): Objs = map(_._transformWhateverKeyPair(key, optional, checkType)(f)) // abstracts requiredness + optionally check resulting type
+  def _transformKey            (key: Key,                                        f: AnyValue => AnyValue): Objs = map(_.transformKey(key, f))// TODO: phase out
+  def _transformKeyx           (key: Key,                                        f: AnyValue => AnyValue): Objs = map(_.transformKeyx(key, f))
+  def _transformRenx           (key: Ren)                                       (f: AnyValue => AnyValue): Objs = map(_.transformRenx(key)(f))
+  def _transformKeyPair        (key: Key, optional: Boolean)                    (f: AnyValue => AnyValue): Objs = map(_.transformKeyPair(key, optional)(f))
+  def _transformWhateverKeyPair(key: Key, optional: Boolean, checkType: Boolean)(f: AnyValue => AnyValue): Objs = map(_.transformWhateverKeyPair(key, optional, checkType)(f)) // abstracts requiredness + optionally check resulting type
         
   // ===========================================================================
   def union(that: Objs): Objs = self.values.union(that.values)           .pipe(Objs.build)
@@ -46,7 +46,7 @@ trait ObjsOperations { self: Objs =>
       private[multiple] def fork(keys: Keyz): Objs =
         self
           .map { o =>
-            o.put(
+            o.putKey(
                 _tmp,
                 o.retainOpt(keys).isDefined)
           .retain(keys) } // guaranteed always at least _tmp

@@ -24,12 +24,12 @@ object AtomsAsserts {
   }
 
   // ===========================================================================
-  case class _ForceOneA(ori: Key) extends AtomUU { def naive(o: Obj) = o.forceKey  (ori)      .asInstanceOf[Seq[_]].force.one.pipe { v => o.put(ori, v) } }
-  case class _ForceOneB(ori: Key) extends AtomUU { def naive(o: Obj) = o.attemptKey(ori).map(_.asInstanceOf[Seq[_]].force.one.pipe { v => o.put(ori, v) }).getOrElse(o) }
+  case class _ForceOneA(ori: Key) extends AtomUU { def naive(o: Obj) = o.forceKey  (ori)      .asInstanceOf[Seq[_]].force.one.pipe { v => o.putKey(ori, v) } }
+  case class _ForceOneB(ori: Key) extends AtomUU { def naive(o: Obj) = o.attemptKey(ori).map(_.asInstanceOf[Seq[_]].force.one.pipe { v => o.putKey(ori, v) }).getOrElse(o) }
 
   // ---------------------------------------------------------------------------
-  case class _ForceSeqA(ori: Key) extends AtomUU { def naive(o: Obj) = o.forceKey  (ori)      .in.list.pipe { v => o.put(ori, v) } }
-  case class _ForceSeqB(ori: Key) extends AtomUU { def naive(o: Obj) = o.attemptKey(ori).map(_.in.list.pipe { v => o.put(ori, v) }).getOrElse(o) }
+  case class _ForceSeqA(ori: Key) extends AtomUU { def naive(o: Obj) = o.forceKey  (ori)      .in.list.pipe { v => o.putKey(ori, v) } }
+  case class _ForceSeqB(ori: Key) extends AtomUU { def naive(o: Obj) = o.attemptKey(ori).map(_.in.list.pipe { v => o.putKey(ori, v) }).getOrElse(o) }
 
   // ===========================================================================
   @Max5

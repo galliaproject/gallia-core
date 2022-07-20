@@ -13,7 +13,7 @@ case class GenericInputU(schema: Cls, datum : Obj)
   // ---------------------------------------------------------------------------
   case class GenericInputZ(
           schema: Cls,
-          data  : aptus.CloseabledIterator[Obj])
+          data  : DataRegenerationClosure[Obj])
         extends ActionIZd with TodoV0 {
       def _meta  = schema
       def atomiz = _GenericInputZb(data) }

@@ -121,6 +121,9 @@ package object gallia
   // ---------------------------------------------------------------------------
   private[gallia] type ActionVMN = ActionVN with ActionMN
 
+  // ---------------------------------------------------------------------------
+  private[gallia] type DataRegenerationClosure[T] = gallia.data.DataRegenerationClosure[T]
+
   // ===========================================================================
   private[gallia] def dataError(anys: Any*): Nothing = throw new RuntimeError(anys.mkString(","))
 

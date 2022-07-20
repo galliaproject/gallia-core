@@ -19,7 +19,7 @@ object AtomsIX { import utils.JdbcDataUtils
     case class _GenericInputZ(data: Objs) extends AtomIZ { def naive: Option[Objs] = Some(data) }
 
     // ---------------------------------------------------------------------------
-    case class _GenericInputZb(data: aptus.CloseabledIterator[Obj]) extends AtomIZ {
+    case class _GenericInputZb(data: DataRegenerationClosure[Obj]) extends AtomIZ {
       def naive: Option[Objs] = Some(InputUrlLike.streamer(inMemoryMode = false)(data).pipe(Objs.build)) }
 
   // ===========================================================================

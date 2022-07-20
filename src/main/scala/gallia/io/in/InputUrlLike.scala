@@ -74,9 +74,10 @@ object InputUrlLike {
   private def normalize(value: String): String = SupportedUriScheme.file.normalizeOpt(value).getOrElse(value)
   
   // ---------------------------------------------------------------------------
-  def streamer[T](inMemoryMode: Boolean)(iter: CloseabledIterator[T]): Streamer[T] = // TODO: move + include hack above properly?
-    if (inMemoryMode)     ViewStreamer.from(iter.consumeAll)
-    else              IteratorStreamer.from(iter)
+  def streamer[T](inMemoryMode: Boolean)(iter: DataRegenerationClosure[T]): Streamer[T] = // TODO: move + include hack above properly?
+    if (inMemoryMode) iter.regenerate().consumeAll.pipe(ViewStreamer.from)
+    else              IteratorStreamer.from4(iter)
+
 }
 
 // ===========================================================================

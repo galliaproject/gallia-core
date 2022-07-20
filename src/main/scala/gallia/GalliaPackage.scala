@@ -7,11 +7,19 @@ package object gallia
     with    Aliases
     with    Annotations {
 
+  // ---------------------------------------------------------------------------
   private[gallia] implicit class GalliaAnything_[A](value: A) { // so as to not import chaining._ everywhere
     private[gallia] def pipe[B](f: A => B)   : B =   f(value)
     private[gallia] def tap [B](f: A => Unit): A = { f(value); value }
-    private[gallia] def _p                   : A = { System.out.println(  value ); value }
-    private[gallia] def _i(f: A => Any)      : A = { System.out.println(f(value)); value } }
+
+    // ---------------------------------------------------------------------------
+    // to save some common imports
+    private[gallia] def _assert(p: A => Boolean):              A = new aptus.Anything_(value).assert(p)
+    private[gallia] def _assert(p: A => Boolean, f: A => Any): A = new aptus.Anything_(value).assert(p, f)
+
+    private[gallia] def p___           : A = new aptus.Anything_(value).p__
+    private[gallia] def p_             : A = new aptus.Anything_(value).p
+    private[gallia] def i_(f: A => Any): A = new aptus.Anything_(value).i(f) }
 
   // ---------------------------------------------------------------------------
   private[gallia] implicit class GalliaSeq[T](val seq: Seq[T]) extends GalliaUtils.GalliaSeq[T] // TODO: to aptus if generalizes well?
@@ -20,7 +28,7 @@ package object gallia
   // TODO: t210121105809 - rename to HeadU->HeadO and HeadZ->HeadS (historical names)
   type HeadO = heads.HeadU
   val  HeadO = heads.HeadU
-  
+
   type HeadS = heads.HeadZ
   val  HeadS = heads.HeadZ
 
@@ -49,7 +57,7 @@ package object gallia
 
   type Objs = gallia.data.multiple.Objs
   val  Objs = gallia.data.multiple.Objs
-  
+
   // ---------------------------------------------------------------------------
   type     Cls = meta.Cls
   lazy val Cls = meta.Cls
@@ -71,7 +79,7 @@ package object gallia
     override def toString: String = stringValue /* used by convert(myEnum).toStr */ }
 
   // ---------------------------------------------------------------------------
-  implicit class ByteBuffer__(bb: ByteBuffer) {    
+  implicit class ByteBuffer__(bb: ByteBuffer) {
     def mapBytes(f: Array[Byte] => Array[Byte]): ByteBuffer = bb.array.pipe(f).pipe(byteBuffer)  }
 
   // ===========================================================================
@@ -79,14 +87,14 @@ package object gallia
 
   // ---------------------------------------------------------------------------
   private[gallia] type Temporal = java.time.temporal.Temporal
-    
+
     private[gallia] type LocalTime      = java.time. LocalTime
     private[gallia] type LocalDate      = java.time. LocalDate
-    
+
     private[gallia] type LocalDateTime  = java.time. LocalDateTime
     private[gallia] type OffsetDateTime = java.time.OffsetDateTime
     private[gallia] type ZonedDateTime  = java.time. ZonedDateTime
-    
+
     private[gallia] type Instant        = java.time.Instant
 
   // ---------------------------------------------------------------------------
@@ -131,7 +139,7 @@ package object gallia
 
   // ===========================================================================
   implicit class InputString__     (val inputString: InputString)         extends ReadObjFromString with StreamObjsFromString with ReadHeadFromString with StreamHeadFromString
-  implicit class InputIterable__[T](val values     : Iterable[T])         extends StreamObjsFromIterable[T]  
+  implicit class InputIterable__[T](val values     : Iterable[T])         extends StreamObjsFromIterable[T]
   implicit class InputConnection__ (val connection : java.sql.Connection) extends StreamConnection
 
   // ---------------------------------------------------------------------------
@@ -157,7 +165,7 @@ package object gallia
 
   // ---------------------------------------------------------------------------
   private[gallia] implicit def SubInfo_(subInfo: meta.SubInfo): Seq[meta.SubInfo] = Seq(subInfo) // see t210125111338 (union types)
-  
+
   // ===========================================================================
   def cls[T: WTT]                         : Cls = reflect.TypeNode.parse[T].leaf.forceDataClass
   def cls(schemaFilePath: String)         : Cls = Cls.fromFile(schemaFilePath) // TODO: or also detect file vs direct object?
@@ -171,7 +179,7 @@ package object gallia
   def obj(entries: Seq[(SKey, AnyValue)])(implicit di: DI): Obj = Obj.fromIterable(entries.map { case (k, v) => Symbol(k) -> v })
 
   def objFromDataClass[T  <: Product : WTT](value: T): Obj = data.single.ObjIn.fromDataClassInstance(value)
-  
+
   // ---------------------------------------------------------------------------
   def objs(values: Obj*): Objs = Objs.from(values.toList)
 
@@ -180,7 +188,7 @@ package object gallia
 
     def aobj(c: Cls)                 (u: Obj): AObj = AObj(c, u)
     def aobj(field1: Fld, more: Fld*)(u: Obj): AObj = AObj(cls(field1, more:_*), u) // can't have both meta and data be varargs...
-    
+
     def aobjFromDataClass[T <: Product : WTT](value: T): AObj = AObj(cls[T], objFromDataClass(value))
 
   // ---------------------------------------------------------------------------
@@ -196,13 +204,6 @@ package object gallia
   // ===========================================================================
   def indexToKey(i: Int): Key = rankToKey(i + 1)
   def  rankToKey(i: Int): Key = Symbol(s"_${i}")
-
-  // ===========================================================================
-  private[gallia] val closeables = cross.MutList[java.io.Closeable]()
-
-  // ---------------------------------------------------------------------------
-  sys.addShutdownHook {
-    closeables.foreach { _.close() /* idempotent */ } }
 }
 
 // ===========================================================================

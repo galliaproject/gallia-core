@@ -134,6 +134,8 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
   def asViewBased    : HeadZ = self ::+ AsViewBased
   def asIteratorBased: HeadZ = self ::+ AsIteratorBased
 
+  def _asBased(inMemory: Boolean): HeadZ = if (inMemory) asViewBased else asIteratorBased // mostly for tests
+
   // ===========================================================================
   // TODO: add more common ones
   // TODO: t210117110015 - move to common (need to abstract ForX...)

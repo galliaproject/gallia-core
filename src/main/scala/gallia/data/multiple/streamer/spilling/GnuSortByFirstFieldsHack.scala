@@ -33,9 +33,7 @@ object GnuSortByFirstFieldsHack { // see https://github.com/galliaproject/gallia
     Future { writeLinesToStream(os, debug = "sort")(input.underlying) }(ec)
 
     // ---------------------------------------------------------------------------
-    new CloseabledIterator(
-      underlying = scala.io.Source.fromInputStream(is).getLines(),
-      cls        = () => { input.close(); is.close() })
+    new CloseabledIterator(readLines(is), () => { input.close(); is.close() })
   }
 
 }

@@ -20,10 +20,10 @@ trait ObjsMerging { self: Objs =>
         (that: Objs)
         : Objs =
       if (this.isIteratorBased && that.isIteratorBased) spillingJoin(leftCls, rightCls)(joinType, joinKeys)(that)
-      else                                              inMemoryjoin                   (joinType, joinKeys)(that)
+      else                                              streamerJoin                   (joinType, joinKeys)(that)
 
     // ---------------------------------------------------------------------------
-    private def inMemoryjoin(joinType: JoinType, joinKeys: JoinKey)(that: Objs): Objs =
+    private def streamerJoin(joinType: JoinType, joinKeys: JoinKey)(that: Objs): Objs =
        (  ObjsMerging.pairs2(this.values, joinKeys.left),
           ObjsMerging.pairs2(that.values, joinKeys.right) )
         .pipe { case (left, right) => left.join(joinType, single.ObjUtils.combine(joinKeys.right) _)(right) }

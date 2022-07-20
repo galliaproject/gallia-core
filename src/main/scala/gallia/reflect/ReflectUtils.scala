@@ -5,7 +5,7 @@ import aptus.Name
 import scala.reflect.api
 
 // ===========================================================================
-private[gallia] object ReflectUtils {
+object ReflectUtils {
 
   /** eg "Option" from "scala.Option[String]", or "String" from "java.lang.String" */
   def alias(tpe: UType): Alias =

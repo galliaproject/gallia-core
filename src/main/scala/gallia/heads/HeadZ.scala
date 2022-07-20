@@ -131,10 +131,11 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
 
   @aptus.fordevonly("pretty ugly...") def inspectAndAbort: Self = self ::+ InspectZ(None,      abort = true)
 
-  def asViewBased    : HeadZ = self ::+ AsViewBased
-  def asIteratorBased: HeadZ = self ::+ AsIteratorBased
+  // ===========================================================================
+  def toViewBased    : HeadZ = self ::+ ToViewBased
+  def toIteratorBased: HeadZ = self ::+ ToIteratorBased
 
-  def _asBased(inMemory: Boolean): HeadZ = if (inMemory) asViewBased else asIteratorBased // mostly for tests
+  def _toBased(inMemory: Boolean): HeadZ = if (inMemory) toViewBased else toIteratorBased // mostly for tests
 
   // ===========================================================================
   // TODO: add more common ones

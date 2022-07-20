@@ -23,13 +23,13 @@ class ViewStreamer[A](view: ViewRepr[A]) extends Streamer[A] { // TODO: add a Li
   override def toList  : List    [A] = view.toList
 
   // ---------------------------------------------------------------------------
-  override def asViewBased    : Streamer[A] = this
-  override def asIteratorBased: Streamer[A] =
+  override def toViewBased    : Streamer[A] = this
+  override def toIteratorBased: Streamer[A] =
     IteratorStreamer.from4(
       new data.DataRegenerationClosure[A] {
         def regenerate = () => closeabledIterator })
 
-  override def asMeBased [B >: A : CT](that: Streamer[B]): Streamer[B] = that.asViewBased
+  override def toMeBased [B >: A : CT](that: Streamer[B]): Streamer[B] = that.toViewBased
 
   // ===========================================================================
   override def     map[B: CT](f: A =>      B ): Streamer[B] = view.    map(f).toSeq.view.pipe(_rewrap)

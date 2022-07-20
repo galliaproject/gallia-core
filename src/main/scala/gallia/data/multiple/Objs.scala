@@ -30,8 +30,8 @@ case class Objs private (  // TODO: two versions, see t210104164036
     private[gallia] def _modifyUnderlyingStreamer(f: Streamer[Obj] => Streamer[Obj]): Objs = _rewrap(f(values)) // eg to modify spark RDD
 
     // ---------------------------------------------------------------------------
-    def _asViewBased    : Objs = values.asViewBased    .pipe(_rewrap)
-    def _asIteratorBased: Objs = values.asIteratorBased.pipe(_rewrap)
+    def _toViewBased    : Objs = values.toViewBased    .pipe(_rewrap)
+    def _toIteratorBased: Objs = values.toIteratorBased.pipe(_rewrap)
 
     // ===========================================================================
     def     mapToStreamer[A: ClassTag](f: Obj =>      A ): Streamer[A] = values.    map(f)

@@ -62,11 +62,11 @@ final class IteratorStreamer[A](gen: () => CloseabledIterator[A]) extends Stream
   override def toList  : List    [A] =  _consume(_.consumeAll)
 
   // ---------------------------------------------------------------------------
-  override def asViewBased    : Streamer[A] = ViewStreamer.from(toList)
-  override def asIteratorBased: Streamer[A] = this
+  override def toViewBased    : Streamer[A] = ViewStreamer.from(toList)
+  override def toIteratorBased: Streamer[A] = this
 
   // ---------------------------------------------------------------------------
-  override def asMeBased [B >: A : CT](that: Streamer[B]): Streamer[B] = that.asIteratorBased
+  override def toMeBased [B >: A : CT](that: Streamer[B]): Streamer[B] = that.toIteratorBased
 
   // ===========================================================================
   override def     map[B: CT](f: A =>      B ): Streamer[B] = _alter(_.map(f))

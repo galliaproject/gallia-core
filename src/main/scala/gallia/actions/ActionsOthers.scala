@@ -32,8 +32,8 @@ object ActionsOthers {
       def atomzz = _CustomZZ(_._modifyUnderlyingStreamer(f)) }
 
     // ---------------------------------------------------------------------------
-    case object AsViewBased     extends IdentityVM1 with ActionZZd { def atomzz = _AsViewBased     }
-    case object AsIteratorBased extends IdentityVM1 with ActionZZd { def atomzz = _AsIteratorBased }
+    case object ToViewBased     extends IdentityVM1 with ActionZZd { def atomzz = _ToViewBased     }
+    case object ToIteratorBased extends IdentityVM1 with ActionZZd { def atomzz = _ToIteratorBased }
 
   // ===========================================================================
   //TODO: t210115175106 - versions that allows configuring more

@@ -27,7 +27,7 @@ case class InputUrlLike( // TODO: t210115193904 - check URI, regular file vs sym
       .from4(
         new data.DataRegenerationClosure[Line] {
           def regenerate = () => lines() })
-      .pipeOpt(linesPreprocessing)(f => (x: Streamer[Line]) => f(x).asIteratorBased.asInstanceOfIteratorStreamer)
+      .pipeOpt(linesPreprocessing)(f => (x: Streamer[Line]) => f(x).toIteratorBased.asInstanceOfIteratorStreamer)
       .firstOpt() // will close
       .get // TODO: see t210114154924
 

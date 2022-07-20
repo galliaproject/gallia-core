@@ -7,8 +7,8 @@ import domain.GroupingPair._
 object AtomsZZ {
 
   // ---------------------------------------------------------------------------
-  case object _AsViewBased     extends AtomZZ { def naive(z: Objs) = z._asViewBased     }
-  case object _AsIteratorBased extends AtomZZ { def naive(z: Objs) = z._asIteratorBased }
+  case object _ToViewBased     extends AtomZZ { def naive(z: Objs) = z._toViewBased     }
+  case object _ToIteratorBased extends AtomZZ { def naive(z: Objs) = z._toIteratorBased }
 
   // ===========================================================================
   case class _MapU2U(o2o: Obj => Obj) extends AtomZZ { def naive(z: Objs) = z.map          (o2o) }

@@ -36,7 +36,7 @@ object ViewStreamerUtils {
         val right: Streamer[B] = that.asInstanceOf[Streamer[B]]
 
         left
-          .pipe(right.asMeBased)
+          .pipe(right.toMeBased)
           .union(right)
     }
 
@@ -55,7 +55,7 @@ object ViewStreamerUtils {
         val right: Streamer[B] = that.asInstanceOf[Streamer[B]]
 
         left
-          .pipe(right.asMeBased)
+          .pipe(right.toMeBased)
           .zip (right, combiner)
     }
 
@@ -74,7 +74,7 @@ object ViewStreamerUtils {
         // ---------------------------------------------------------------------------
         case StreamerType.IteratorBased | StreamerType.RDDBased => // delegate
           left
-            .pipe(right.asMeBased)
+            .pipe(right.toMeBased)
             .coGroup(joinType)(right)
       }
 

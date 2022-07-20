@@ -25,7 +25,7 @@ object AtomsZZMerging {
 
     // ---------------------------------------------------------------------------
     case class _CoGroup(leftCls: Cls, rightCls: Cls, joinType: JoinType, joinKeys: JoinKey, as: AsKeys) extends AtomZZtoZ { def naive(z1: Objs, z2: Objs) =
-      z1.coGroup(joinType, joinKeys, as)(z2) }
+      z1.coGroup(leftCls, rightCls)(joinType, joinKeys, as)(z2) }
 
 }
 

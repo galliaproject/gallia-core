@@ -14,12 +14,12 @@ trait ObjsMerging { self: Objs =>
   // ---------------------------------------------------------------------------
   // note, if reuse cogroup then must reinsert join key in its original place (TODO: worth bothering?)
   def join
-        (leftCls: Cls, rightCls: Cls)
-        (joinType: JoinType, joinKeys: JoinKey)
-        (that: Objs)
+          (leftCls: Cls, rightCls: Cls)
+          (joinType: JoinType, joinKeys: JoinKey)
+          (that: Objs)
         : Objs =
-      if (this.isIteratorBased && that.isIteratorBased) spillingJoin(leftCls, rightCls)(joinType, joinKeys)(that)
-      else                                              streamerJoin                   (joinType, joinKeys)(that)
+      if ( this.isIteratorBased &&  that.isIteratorBased) spillingJoin(leftCls, rightCls)(joinType, joinKeys)(that)
+      else                                                streamerJoin                   (joinType, joinKeys)(that)
 
     // ---------------------------------------------------------------------------
     private def streamerJoin(joinType: JoinType, joinKeys: JoinKey)(that: Objs): Objs =
@@ -42,7 +42,16 @@ trait ObjsMerging { self: Objs =>
     }
 
   // ===========================================================================
-  def coGroup(joinType: JoinType, joinKeys: JoinKey, as: AsKeys)(that: Objs): Objs =
+  def coGroup
+          (leftCls: Cls, rightCls: Cls)
+          (joinType: JoinType, joinKeys: JoinKey, as: AsKeys)
+          (that: Objs)
+        : Objs =
+      if (this.isIteratorBased && that.isIteratorBased) spillingCoGroup(leftCls, rightCls)(joinType, joinKeys, as)(that)
+      else                                              streamerCoGroup                   (joinType, joinKeys, as)(that)
+
+  // ---------------------------------------------------------------------------
+  private def streamerCoGroup(joinType: JoinType, joinKeys: JoinKey, as: AsKeys)(that: Objs): Objs =
      (ObjsMerging.pairs1(this.values, joinKeys.left),
       ObjsMerging.pairs1(that.values, joinKeys.right) )
         .pipe { case (left, right) => left.coGroup(joinType)(right) }
@@ -54,6 +63,19 @@ trait ObjsMerging { self: Objs =>
               as.left  -> left .flatten,
               as.right -> right.flatten) }
         .pipe(Objs.build)
+
+    // ---------------------------------------------------------------------------
+    private def spillingCoGroup(leftCls: Cls, rightCls: Cls)(joinType: JoinType, joinKeys: JoinKey, as: AsKeys)(that: Objs): Objs = {
+      val  leftPair = GroupingPair1N( leftCls.field(joinKeys.left) , groupees =  leftCls)
+      val rightPair = GroupingPair1N(rightCls.field(joinKeys.right), groupees = rightCls)
+
+      // ---------------------------------------------------------------------------
+      GalliaSpilling.spillingCoGroup(leftPair, rightPair, joinKeys, as)(
+        this.values.map { o => o.attemptKey( leftPair.grouper.key) -> o.in.some },
+        that.values.map { o => o.attemptKey(rightPair.grouper.key) -> o.in.some } )
+      .pipe(Objs.build)
+    }
+
 }
 
 // ===========================================================================

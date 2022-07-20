@@ -185,15 +185,15 @@ class SpillingSortSerDes(pnfs: Seq[PNF], c: Cls) extends GalliaSpillingSerDes { 
   }
 
   // ===========================================================================
-  class SpillingJoinDeserializer(leftGroupees: Cls, rightGroupees: Cls, rightGrouper: Key) extends GalliaSpillingDes { import SpillingJoinDeserializer.SecondarySeparator
+  class SpillingJoinDeserializer(leftGroupees: Cls, rightGroupees: Cls) extends GalliaSpillingDes { import SpillingJoinDeserializer.SecondarySeparator
       type Row = (List[Obj], List[Obj])
 
       // ---------------------------------------------------------------------------
-      override def _deserialize(line: Line): Row = {
+      override def _deserialize(line: Line): (List[Obj], List[Obj]) = {
         val (left, right) = line.span(_ != '\t')
 
         left .splitBy(SecondarySeparator).map(GsonToGalliaData.parseRecursively(leftGroupees,  _)).toList ->
-        right.splitBy(SecondarySeparator).map(GsonToGalliaData.parseRecursively(rightGroupees, _)).toList.map(_.remove(rightGrouper)) }
+        right.splitBy(SecondarySeparator).map(GsonToGalliaData.parseRecursively(rightGroupees, _)).toList }
     }
 
     // ===========================================================================

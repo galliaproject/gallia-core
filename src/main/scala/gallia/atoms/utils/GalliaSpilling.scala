@@ -4,6 +4,7 @@ package utils
 
 import aptus._
 import domain.GroupingPair._
+import heads.merging.MergingData.{AsKeys, JoinKey}
 import meta.PNF
 import streamer.{IteratorStreamer, Streamer}
 import spilling._
@@ -58,39 +59,64 @@ object GalliaSpilling {
 
   // ===========================================================================
   def spillingJoin
-        (leftPair: GroupingPair1N, rightPair: GroupingPair1N)
-        (left: Streamer[(OVle, OObj)], right: Streamer[(OVle, OObj)])
-      : Streamer[Obj] = {
+          (leftPair: GroupingPair1N, rightPair: GroupingPair1N)
+          (left: Streamer[(OVle, OObj)], right: Streamer[(OVle, OObj)])
+        : Streamer[Obj] = {
+      val rightGrouper = rightPair.grouper.key
 
-    val     leftSerializer = new SpillingGroupByN1SerDes(leftPair)
-    val    rightSerializer = new SpillingGroupByN1SerDes(rightPair)
-    val outputDeserializer = new SpillingJoinDeserializer(leftPair.groupees, rightPair.groupees, rightPair.grouper.key)
+      // ---------------------------------------------------------------------------
+      _spillingJoinOrCoGroup(leftPair, rightPair)(left, right) {
+        _.flatMap { case (ls, rs) =>
+          for (l <- ls; r <- rs.map(_.remove(rightGrouper))) yield
+            l merge r } } }
 
     // ---------------------------------------------------------------------------
-    new data.DataRegenerationClosure[Obj] {
-        def regenerate = { () =>
+    def spillingCoGroup
+          (leftPair: GroupingPair1N, rightPair: GroupingPair1N, joinKeys: JoinKey, as: AsKeys)
+          (left: Streamer[(OVle, OObj)], right: Streamer[(OVle, OObj)])
+        : Streamer[Obj] = {
+      val  leftGrouper =  leftPair.grouper.key
+      val rightGrouper = rightPair.grouper.key
+
+      // ---------------------------------------------------------------------------
+      _spillingJoinOrCoGroup(leftPair, rightPair)(left, right) {
+        _.map { case (ls, rs) =>
+          obj(joinKeys.key -> ls.head.attemptKey(leftGrouper),
+            as.left  -> ls.map(_.remove( leftGrouper)),
+            as.right -> rs.map(_.remove(rightGrouper))) } } }
+
+    // ---------------------------------------------------------------------------
+    private def _spillingJoinOrCoGroup
+          (leftPair: GroupingPair1N, rightPair: GroupingPair1N)
+          (left: Streamer[(OVle, OObj)], right: Streamer[(OVle, OObj)])
+          (f: CloseabledIterator[(List[Obj], List[Obj])] => CloseabledIterator[Obj])
+        : Streamer[Obj] = {
+      val     leftSerializer = new SpillingGroupByN1SerDes(leftPair)
+      val    rightSerializer = new SpillingGroupByN1SerDes(rightPair)
+      val outputDeserializer = new SpillingJoinDeserializer(leftPair.groupees, rightPair.groupees)
+
+      // ---------------------------------------------------------------------------
+      new data.DataRegenerationClosure[Obj] {
+
+          def regenerate = { () =>
+            GnuJoinByFirstFieldHack
+              .apply(Hacks.ExecutionContext)( // will schedule to close inputs accordingly
+                sideInput( leftSerializer)(left) .closeabledIterator,
+                sideInput(rightSerializer)(right).closeabledIterator)
+              .map(outputDeserializer._deserialize)
+              .pipe(f) }
 
           // ---------------------------------------------------------------------------
-          GnuJoinByFirstFieldHack
-            .apply(Hacks.ExecutionContext)( // will schedule to close inputs accordingly
-              sideInput( leftSerializer)(left) .closeabledIterator,
-              sideInput(rightSerializer)(right).closeabledIterator)
-            .map(outputDeserializer._deserialize)
-            .flatMap { case (ls, rs) =>
-              for (l <- ls; r <- rs) yield
-                l merge r } }
+          def sideInput(serializer: SpillingGroupByN1SerDes)(input : Streamer[(OVle, OObj)]): IteratorStreamer[String] =
+            input
+                .asInstanceOfIteratorStreamer
+                ._map  (serializer._serialize)
+                ._alter(GnuSortByFirstFieldsHack.default(Hacks.ExecutionContext, debug = "220720113328"))
+                ._map  (_.splitBy(serializer.pairSeparator).force.tuple2)
+                ._alter(_.groupByPreSortedKey)
+                ._map  ((SpillingJoinDeserializer.postGroupingSerialization _).tupled) }
+        .pipe(IteratorStreamer.from) }
 
-        // ---------------------------------------------------------------------------
-        def sideInput(serializer: SpillingGroupByN1SerDes)(input : Streamer[(OVle, OObj)]): IteratorStreamer[String] =
-          input
-              .asInstanceOfIteratorStreamer
-              ._map  (serializer._serialize)
-              ._alter(GnuSortByFirstFieldsHack.default(Hacks.ExecutionContext, debug = "220720113328"))
-              ._map  (_.splitBy(serializer.pairSeparator).force.tuple2)
-              ._alter(_.groupByPreSortedKey)
-              ._map  ((SpillingJoinDeserializer.postGroupingSerialization _).tupled) }
-      .pipe(IteratorStreamer.from)
-  }
 }
 
 // ===========================================================================

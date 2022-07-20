@@ -1,5 +1,6 @@
 package gallia
-package data.json
+package data
+package json
 
 import aptus._
 import data.DataFormatting
@@ -11,7 +12,6 @@ object ObjToGson {
   private lazy val Gson = new GsonBuilder().create()
 
   // ===========================================================================
-  // TODO: t210115095838 - optimization: use schema (no need to pattern match seq/nesting, can use addElement, ...)!
   def apply(o: Obj): JsonObject = // TODO: t201230140315 - hopefully there's a more efficient way (no access to "members"?)...
       new JsonObject()
         .tap { mut =>
@@ -34,35 +34,38 @@ object ObjToGson {
     private def element(value: Any): JsonElement =
       Gson.toJsonTree(
         value match { // see BasicType
-  
+
           case x: String     => x
           case x: Int        => x
           case x: Double     => x
           case x: Boolean    => x
-          
+
+          // ---------------------------------------------------------------------------
           case x: Obj        => apply(x)
-  
+
           // ---------------------------------------------------------------------------
-          case x: EnumEntry  => x.entryName
-  
-          // ---------------------------------------------------------------------------
-          case x: BigInt     => DataFormatting.formatBigInt(x)
-          case x: BigDec     => DataFormatting.formatBigDec(x)
-  
+          case x: EnumValue   => x.stringValue
+
           // ---------------------------------------------------------------------------
           case x: Byte       => x
           case x: Short      => x
           case x: Long       => x
           case x: Float      => x
-          
-          // ---------------------------------------------------------------------------
-          case x: Temporal   => DataFormatting.formatTemporal(x)
-          
-          // ---------------------------------------------------------------------------
-          case x: ByteBuffer => DataFormatting.formatBinary(x)
 
           // ---------------------------------------------------------------------------
-          case x: EnumValue   => x.stringValue
+          case x: BigInt     => DataFormatting.formatBigInt(x) // can't trust JSON with bignums
+          case x: BigDec     => DataFormatting.formatBigDec(x) // can't trust JSON with bignums
+
+          // ---------------------------------------------------------------------------
+          case x: LocalDate      => DataFormatting.formatLocalDate(x)
+          case x: LocalTime      => DataFormatting.formatLocalTime(x)
+          case x: LocalDateTime  => DataFormatting.formatLocalDateTime (x)
+          case x: OffsetDateTime => DataFormatting.formatOffsetDateTime(x)
+          case x: ZonedDateTime  => DataFormatting.formatZonedDateTime (x)
+          case x: Instant        => DataFormatting.formatInstant(x)
+
+          // ---------------------------------------------------------------------------
+          case x: ByteBuffer => DataFormatting.formatBinary(x)
 
           // ---------------------------------------------------------------------------
           case x => illegalState(x.getClass, x) })

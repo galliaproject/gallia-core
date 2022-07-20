@@ -2,26 +2,28 @@ package gallia
 package atoms
 
 import aptus.{Anything_, String_}
-import aptus.aptmisc.Rdbms
+import aptus.aptmisc.{CloseabledIterator, Rdbms}
 import io._
 import io.in._
 import actions.in.HasProjection
-import data.json.{JsonTax, JsonParsing}
-import data.ModifyTableData
-import data.multiple.streamer.Streamer
+import data.json
+import data.multiple.streamer.{IteratorStreamer, Streamer}
+import data.TableToGalliaData
+import atoms.utils.MongoDb
+import atoms.utils.MongoDb.MongoDbCmd
 
 // ===========================================================================
-object AtomsIX { import utils.JdbcUtils
+object AtomsIX { import utils.JdbcDataUtils
 
   case   class _GenericInputU(datum: Obj) extends AtomIU { def naive: Option[Obj] = Some(datum) }
     case class _GenericInputZ(data: Objs) extends AtomIZ { def naive: Option[Objs] = Some(data) }
 
     // ---------------------------------------------------------------------------
-    case class _GenericInputZb(data: aptus.Closeabled[Iterator[Obj]]) extends AtomIZ {
+    case class _GenericInputZb(data: aptus.CloseabledIterator[Obj]) extends AtomIZ {
       def naive: Option[Objs] = Some(InputUrlLike.streamer(inMemoryMode = false)(data).pipe(Objs.build)) }
 
   // ===========================================================================
-    case class _InMemoryInputUb(value: BObj) extends AtomIU {
+  case class _InMemoryInputUb(value: BObj) extends AtomIU {
       def naive: Option[Obj] = Some(value.forceObj) }
 
     // ---------------------------------------------------------------------------
@@ -34,7 +36,7 @@ object AtomsIX { import utils.JdbcUtils
 
   // ===========================================================================
   case class _RawContentU(input: InputUrlLike) extends AtomIU {
-      def naive: Option[Obj] = Some(input.content.pipe(Obj.content)) }
+      def naive: Option[Obj] = Some(input.content().pipe(Obj.content)) }
 
     // ---------------------------------------------------------------------------
     case class _RawLinesZ(input: InputUrlLike, inMemoryMode: Boolean) extends AtomIZ {
@@ -47,12 +49,15 @@ object AtomsIX { import utils.JdbcUtils
   // ===========================================================================
   case class _JsonObjectString(inputString: InputString, ignored /* TODO: t211231112700 - investigate */: OtherSchemaProvider, c: Cls) extends HasCommonObj {
       def naive: Option[Obj] = Some(commonObj)
-      
+
       // ---------------------------------------------------------------------------
-      def commonObj: Obj = 
-        JsonParsing
-          .parseObject(inputString)
-          .pipeIf(c != null /* TODO: see 211230183100 */)(JsonTax.payUp(c)) }
+      def commonObj: Obj = {
+          val o = json.JsonParsing.parseObject(inputString)
+
+          Option(c)/* TODO: see 211230183100 - may be null */
+            .map { schema => o.pipe(json.GsonToGalliaData.convertRecursively(schema)) }
+            .getOrElse(o)
+        } }
 
     // ---------------------------------------------------------------------------  
     object _JsonObjectString {
@@ -62,14 +67,12 @@ object AtomsIX { import utils.JdbcUtils
   // ---------------------------------------------------------------------------
   case class _JsonArrayString(inputString: InputString, ignored /* TODO: t211231112700 - investigate */: OtherSchemaProvider, c: Cls) extends HasCommonObjs {
       def naive: Option[Objs] = Some(commonObjs)
-  
-      // ---------------------------------------------------------------------------
-      def commonObjs: Objs =
-        JsonParsing
-          .parseArray(inputString)
-          .pipe(Objs.from)
-          .pipe { z => if (c == null)  /* TODO: see 211230183100 */ z else JsonTax.payUp(c, z) }
-    }
+        def commonObjs: Objs = {
+          val z = json.JsonParsing.parseArray(inputString).pipe(Objs.from)
+
+          Option(c)/* TODO: see 211230183100 - may be null  */
+            .map { schema => z.map(json.GsonToGalliaData.convertRecursively(schema)) }
+            .getOrElse(z) } }
 
     // ---------------------------------------------------------------------------  
     object _JsonArrayString {
@@ -77,30 +80,46 @@ object AtomsIX { import utils.JdbcUtils
     }
 
   // ===========================================================================
-  case class _JsonObjectFileInputU(input: InputUrlLike, c: Cls) extends HasCommonObj {
-    def commonObj: Obj = input.content.pipe(JsonParsing.parseObject)
-      def naive: Option[Obj] = Some(commonObj.pipe(JsonTax.payUp(c)))
-  }
+  case class _JsonObjectFileInputU(
+        input        : InputUrlLike,
+        projectionOpt: Option[ReadProjection],
+        protoSchema  : Cls, // pre-projection
+        schema       : Cls)
+      extends HasCommonObj
+         with HasProjection {
+
+    def commonObj: Obj =
+      input
+        .content()
+        .pipe(json.JsonParsing.parseObject)
+
+    def naive: Option[Obj] =
+      commonObj
+        .pipe(json.GsonToGalliaData.convertRecursively(protoSchema))
+        .pipe(projectData(schema, _))
+        .in.some }
 
   // ===========================================================================
   case class _JsonLinesFileInputZ(
           input        : InputUrlLike,
           inMemoryMode : Boolean,
           projectionOpt: Option[ReadProjection],
+          protoSchema  : Cls, // pre-projection
           schema       : Cls)
-        extends HasCommonObjs with HasProjection {
+        extends HasCommonObjs
+           with HasProjection {
 
       def commonObjs: Objs =
           input
             .streamLines(inMemoryMode)
             .filterNot(_.trim.isEmpty) //TODO or only if last one?
-            .map(JsonParsing.parseObject)
+            .map(json.JsonParsing.parseObject)
             .pipe(Objs.build)
 
       // ---------------------------------------------------------------------------
       def naive: Option[Objs] = 
         commonObjs
-          .pipe(JsonTax.payUp(schema, _))
+          .map(json.GsonToGalliaData.convertRecursively(protoSchema))
           .pipe(projectData(schema))
           .in.some
     }
@@ -115,13 +134,13 @@ object AtomsIX { import utils.JdbcUtils
       def commonObjs: Objs =
           input
             .streamLines(inMemoryMode)
-.toList.mkString.pipe(JsonParsing.parseArray) // TODO: t201221175254 - actually stream array...
+.toList.mkString.pipe(json.JsonParsing.parseArray) // TODO: t201221175254 - actually stream array...
             .pipe(Objs.from)
 
       // ---------------------------------------------------------------------------
       def naive: Option[Objs] = 
         commonObjs
-          .pipe(JsonTax.payUp(schema, _))
+          .map(json.GsonToGalliaData.convertRecursively(schema))
           .pipe(projectData(schema))
           .in.some
     }
@@ -134,7 +153,7 @@ object AtomsIX { import utils.JdbcUtils
         extends AtomIZ {
 
       def columns: Rdbms.Columns = {
-        val sqlQuery = tmp.map(_.query).get// TODO: t210114202848 - validate
+        val sqlQuery = readQueryingOpt.map(_.query).get// TODO: t210114202848 - validate
 
         aptus.aptmisc
           .Rdbms (new java.net.URI(inputString))
@@ -142,18 +161,20 @@ object AtomsIX { import utils.JdbcUtils
 
       // ---------------------------------------------------------------------------
       def naive: Option[Objs] = {
-        val sqlQuery = tmp.map(_.query).get// TODO: t210114202848 - validate
-  
-        aptus.aptmisc
-          .Rdbms(new java.net.URI(inputString))
-          .query2(sqlQuery)
-          .pipe(JdbcUtils.objsOpt(schemaOpt)) }
+        val uri = new java.net.URI(inputString)
+        val sqlQuery = readQueryingOpt.map(_.query).get// TODO: t210114202848 - validate
+
+        Objs
+          .from4 {
+            new data.DataRegenerationClosure[Obj] {
+              def regenerate = () => JdbcDataUtils.jdbcData(uri)(schemaOpt)(sqlQuery) } }
+          .in.some }
 
       // ---------------------------------------------------------------------------
-      private def tmp: Option[ReadQuerying] =
+      private def readQueryingOpt: Option[ReadQuerying] =
           queryingOpt
         .orElse {
-          JdbcUtils
+          JdbcDataUtils
             .extractTableNameOpt(inputString, "table")
             .map(ReadQuerying.All) }
     }
@@ -172,10 +193,11 @@ object AtomsIX { import utils.JdbcUtils
 
       // ---------------------------------------------------------------------------
       def naive: Option[Objs] =
-        aptus.aptmisc
-          .Rdbms (connection)
-          .query2(querying.query)
-          .pipe(JdbcUtils.objsOpt(schemaOpt)) }
+        Objs
+          .from4 {
+            new data.DataRegenerationClosure[Obj] {
+              def regenerate = () => JdbcDataUtils.jdbcData(connection)(schemaOpt)(querying.query) } }
+          .in.some }
 
   // ===========================================================================
   case class _MongodbInputZ(
@@ -188,35 +210,36 @@ object AtomsIX { import utils.JdbcUtils
 
       def naive: Option[Objs] = 
         commonObjs
-          .map(JsonTax.payUp(c)) // TODO: confirm need to pay tax here?
+          .map(json.GsonToGalliaData.convertRecursively(c)) // TODO: confirm need to pay tax here?
           .in.some
 
       // ===========================================================================
       // t210114153517 - must use jongo+find until figure out
       //   https://stackoverflow.com/questions/35771369/mongo-java-driver-how-to-create-cursor-in-mongodb-by-cusor-id-returned-by-a-db
       def commonObjs: Objs = {
-          mongoDb.disableLogs()
+          mongoDb().disableLogs()
           val cmd = cmdOpt.get // TODO: t210114152901 - validate
 
-          mongoDb
-            .query(new java.net.URI(inputString), None)(cmd)
-            .pipe { case (iter, cls) =>
-              Streamer.fromIterator((iter, cls)) }
-            .map(obj)
-            .pipe(Objs.build)
+          Objs.from4 {
+            mongoData(mongoDb)(new java.net.URI(inputString))(cmd) }
         }
+
+        // ===========================================================================
+        def mongoData(mongoDb: MongoDb)(uri: java.net.URI)(cmd: MongoDbCmd): data.DataRegenerationClosure[Obj] =
+          new data.DataRegenerationClosure[Obj] {
+            def regenerate = () => mongoDb.closeableQuery(uri, None)(cmd).map(obj) }
 
         // ===========================================================================
         private def cmdOpt =
           tmp.flatMap {
-             case ReadQuerying.All  (collection) => mongoDb.allFrom(collection).in.some
-             case ReadQuerying.Query(query)      => mongoDb.query(query) }
+             case ReadQuerying.All  (collection) => mongoDb().allFrom(collection).in.some
+             case ReadQuerying.Query(query)      => mongoDb().query(query) }
 
         // ---------------------------------------------------------------------------
         private def tmp: Option[ReadQuerying] =
             queryingOpt
           .orElse {
-            mongoDb.uriCollectionOpt(inputString).map(ReadQuerying.All) }// TODO: t210115205723 - validate URI earlier
+            mongoDb().uriCollectionOpt(inputString).map(ReadQuerying.All) }// TODO: t210115205723 - validate URI earlier
     }
 
     // ===========================================================================
@@ -254,25 +277,23 @@ object AtomsIX { import utils.JdbcUtils
     override def formatSuccinct1 = s"${className}(${input._inputString})"    
 
     // ---------------------------------------------------------------------------
-    def naive: Option[Objs] =
-      aobjs(
-           c =                                     projectMeta(defaultSchema).assert(!_.hasNesting),
-           z = stringObjs(defaultSchema.keys).pipe(projectData(defaultSchema)) ) // see t210106120036 (project ealier)
-        .pipe { x =>
-          schemaProvider match {
-            case TableSchemaProvider.NoInferring => x.z // nothing to do
-            case _                               => new ModifyTableData(cellConf).modify(x) }}
-        .in.some
+    def naive: Option[Objs] = {
+      val schema =                                     projectMeta(defaultSchema).assert(!_.hasNesting)
+      val data   = stringObjs(defaultSchema.keys).pipe(projectData(defaultSchema)) // see t210106120036 (project ealier)
+
+      Some(schemaProvider match {
+        case TableSchemaProvider.NoInferring => data // nothing to do
+        case _                               => data.map(TableToGalliaData.convert(cellConf)(schema)) }) }
 
     // ---------------------------------------------------------------------------
     def stringObjs(keys: Seq[Key]): Objs =
         dataRows
-          .pipe(_.map(datum(cellConf.nullValues)(keys)))
+          .pipe(_.map(datum(keys)))
           .pipe(Objs.build)
 
       // ---------------------------------------------------------------------------
       /** 201215141231 - null values are not handled here (see 201231113658 rather) */
-      private def datum(nullValues: Seq[String])(keys: Seq[Key])(values: Seq[String]): Obj =
+      private def datum(keys: Seq[Key])(values: Seq[String]): Obj =
         keys
            // TODO throw proper error if duplicates
           .zip(values)   // TODO: check same size + charset and so on

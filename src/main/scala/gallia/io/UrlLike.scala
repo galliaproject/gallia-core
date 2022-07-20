@@ -40,7 +40,7 @@ case class UrlLike(
       
     val Default = Plain
 
-    val DefaultMemoryMode = true
+    var DefaultMemoryMode = true
   }
 
 // ===========================================================================

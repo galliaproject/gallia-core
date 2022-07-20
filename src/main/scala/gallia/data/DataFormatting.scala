@@ -6,80 +6,37 @@ import java.time.format._
 import aptus.{String_, Double_, ArrayByte_}
 
 // ===========================================================================
-@TypeMatching object DataFormatting {
-  private val Base64StringPrefix = "base64:"
-  
+@TypeMatching private[gallia] object DataFormatting {
+  @inline def formatBoolean(value: Boolean): String = value.toString /* to "true" or "false" */
+
+  // ---------------------------------------------------------------------------
+  // TODO: stick to printf way? must still trim spaces with %d and trailing zeros with %f
+  def formatInt   (value: Int)   : String  = value         .formatExplicit
+  def formatByte  (value: Byte)  : String  = value.toInt   .formatExplicit
+  def formatShort (value: Short) : String  = value.toInt   .formatExplicit
+  def formatLong  (value: Long)  : String  = value         .formatExplicit
+
+  def formatDouble(value: Double): String  = value         .formatExplicit
+  def formatFloat (value: Float) : String  = value.toDouble.formatExplicit
+
   // ===========================================================================
-  def formatBasicValue: PartialFunction[Any, String] =
-      formatString
-        .orElse {
-      formatNumber }
-        .orElse {
-      formatTemporal }
-        .orElse {
-      formatOther }
+  def formatBigInt(value: BigInt): String = value.bigInteger.toString /* stable */
+  def formatBigDec(value: BigDec): String = value.bigDecimal.toString /* stable */
 
-    // ===========================================================================
-    private[gallia] def formatString: PartialFunction[Any, String] = {
-      case x: String    => x
+  // ===========================================================================
+  def formatLocalDate     (value: LocalDate)     : String = DateTimeFormatter.ISO_DATE            .format(value)
+  def formatLocalTime     (value: LocalTime)     : String = DateTimeFormatter.ISO_TIME            .format(value)
+  def formatLocalDateTime (value: LocalDateTime) : String = DateTimeFormatter.ISO_LOCAL_DATE_TIME .format(value)
+  def formatOffsetDateTime(value: OffsetDateTime): String = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(value)
+  def formatZonedDateTime (value: ZonedDateTime) : String = DateTimeFormatter.ISO_ZONED_DATE_TIME .format(value)
+  def formatInstant       (value: Instant)       : String = DateTimeFormatter.ISO_INSTANT         .format(value)
 
-      case x: EnumEntry => x.entryName
-      case x: Symbol    => x.name     /* keep? */
-      case x: Char      => x.toString /* keep? */}
-
-    // ---------------------------------------------------------------------------
-    private[gallia] def formatNumber: PartialFunction[Any, String] = { // as in java.lang.Number
-      case x: Int       => x.formatExplicit
-      case x: Double    => x.formatExplicit
-
-      case x: Long      => x.formatExplicit
-      case x: Float     => x.formatExplicit
-
-      case x: Short     => x.formatExplicit
-      case x: Byte      => x.formatExplicit
-      
-      case x: BigInt    => formatBigInt(x)
-      case x: BigDec    => formatBigDec(x) }
-
-    // ---------------------------------------------------------------------------
-    private[gallia] def formatTemporal: PartialFunction[Any, String] = {
-      case x: LocalDate      => DateTimeFormatter.ISO_DATE            .format(x)
-      case x: LocalTime      => DateTimeFormatter.ISO_TIME            .format(x)
-      case x: LocalDateTime  => DateTimeFormatter.ISO_LOCAL_DATE_TIME .format(x)
-      case x: OffsetDateTime => DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(x)
-      case x: ZonedDateTime  => DateTimeFormatter.ISO_ZONED_DATE_TIME .format(x)
-      case x: Instant        => DateTimeFormatter.ISO_INSTANT         .format(x) }
-      
-    // ---------------------------------------------------------------------------
-    private[gallia] def formatOther: PartialFunction[Any, String] = {
-      case x: Boolean         => x.toString
-      case x: ByteBuffer      => formatBinary(x)
-      case x: Unit            => "()".quote // TODO: keep?
-      case x: gallia.Whatever => aptus.illegalState()
-
-      case gallia.none        => "null" // TODO: t210115144940
-      case x =>
-        // "The only difference between Java strings and Json strings is that in Json, forward-slash (/) is escaped."
-        org.apache.commons.lang3.StringEscapeUtils.escapeJava(x.toString ).quote // risky... error out rather?
-    }
-
-    // ===========================================================================    
-    private[gallia] def formatBigInt(value: BigInt): String = value.bigInteger.toString /* stable */
-    private[gallia] def formatBigDec(value: BigDec): String = value.bigDecimal.toString /* stable */
-      
-    // ===========================================================================
-    private[gallia] def formatBinary(bytes: ByteBuffer): String =
-      bytes
-        .array
-        .toBase64
-        .prepend(Base64StringPrefix)
-
-    // ---------------------------------------------------------------------------
-    def parseBinaryString(value: String): ByteBuffer =
-      value
-        .stripPrefixGuaranteed(Base64StringPrefix)
-        .unBase64
-        .pipe(byteBuffer)
+  // ===========================================================================
+  def formatBinary(bytes: ByteBuffer): String =
+    bytes
+      .array
+      .toBase64
+      .prepend(Base64StringPrefix)
 }
 
 // ===========================================================================

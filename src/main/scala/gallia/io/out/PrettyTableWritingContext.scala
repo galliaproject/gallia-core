@@ -7,50 +7,47 @@ case class PrettyTableWritingContext(
         hasHeader     : Boolean,
         nullValue     : String) {
 
-	  /* only to be used on small amount of data... */  
-    def formatTable(keys: Seq[String])(data: gallia.Objs): Iterator[String] = {      
-      val _data: Seq[Seq[String]] = data.toListAndTrash.map(formatRowValues(keys))
+    /* only to be used on small amount of data... */
+    def formatTable(c: Cls)(z: gallia.Objs): Iterator[String] = {
+      val _data: Seq[Seq[String]] =
+        z .consumeSelfClosing
+          .map(data.GalliaToTableData.convert(nullValue, arraySeparator)(c))
+          .toList
 
+      // ---------------------------------------------------------------------------
+      val skeys = c.skeys
+
+      // ---------------------------------------------------------------------------
       val transposed: Seq[Seq[String]] = 
-        ((if (hasHeader) keys else Nil) +:
+        ((if (hasHeader) skeys else Nil) +:
             _data)
           .transpose
 
-      val maxes: Vector[aptus.Size] = transposed.map(_.map(_.size).max).toVector      
-      
+      // ---------------------------------------------------------------------------
+      val maxes: Vector[aptus.Size] =
+        transposed
+          .map(_.map(_.size).max)
+          .toVector
+
       // ---------------------------------------------------------------------------
       (  (if (hasHeader) Seq(
-             keys.zipWithIndex.map(formatPaddedValue(maxes)), 
-             keys.zipWithIndex.map { case (_, i) => Seq.fill(maxes(i))("-").mkString })
+             skeys.zipWithIndex.map { case (k, i) => k .padTo(maxes(i), ' ') },
+             skeys.zipWithIndex.map { case (_, i) => Seq.fill(maxes(i))("-").mkString })
             else Nil) ++
-          _data.map(_.zipWithIndex.map(formatPaddedValue(maxes))))
+          _data.map(_.zipWithIndex.map { case (k, i) => k.padTo(maxes(i), ' ') }))
         .map(_.mkString(" | "))
-        .iterator ++ 
-        Iterator("") // trailing newline        
+        .iterator
     }
 
-    // ===========================================================================
-    private def formatRowValues(keys: Seq[String])(o: gallia.Obj): Seq[String] =
-      keys
-        .map { key =>    
-          o .opt(key)
-            .map(TableWritingContext.formatValue(arraySeparator))
-            .getOrElse(nullValue) }
-
-    // ---------------------------------------------------------------------------
-    private def formatPaddedValue(maxes: Vector[Int])(pair: (String /* value */, aptus.Index)): String =
-      maxes(pair._2).pipe { max => pair._1.padTo(max, ' ') }
   }
 
   // ===========================================================================
   object PrettyTableWritingContext {
-    
     val Default =
       PrettyTableWritingContext(
         arraySeparator = "|",
         hasHeader      = true,
         nullValue      = "")
-
   }
 
 // ===========================================================================

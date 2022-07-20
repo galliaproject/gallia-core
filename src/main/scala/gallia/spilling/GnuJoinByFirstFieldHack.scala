@@ -1,13 +1,7 @@
 package gallia
-package data
-package multiple
-package streamer
 package spilling
 
 import scala.language.postfixOps
-import aptus.CloseabledIterator
-import aptus.aptutils.SystemUtils
-import aptus.aptutils.JavaStreamUtils._
 
 // ===========================================================================
 // TODO: t220623113637 - reimplement in scala
@@ -33,7 +27,7 @@ object GnuJoinByFirstFieldHack { // see https://github.com/galliaproject/gallia-
 
       // ---------------------------------------------------------------------------
       // pipe removal procedure: to be executed after reading is done
-      val removeFifos: Closeable = () => { s"rm ${leftFifo} ${rightFifo}" !; () }
+      val removeFifos: java.io.Closeable = () => { s"rm ${leftFifo} ${rightFifo}" !; () }
     
       // ---------------------------------------------------------------------------
       val (_, is) = SystemUtils.streamSystemCall(ec)( // TODO: t210308150015 - look into https://github.com/com-lihaoyi/os-lib - especially for named pipes
@@ -46,11 +40,11 @@ object GnuJoinByFirstFieldHack { // see https://github.com/galliaproject/gallia-
 
       // ---------------------------------------------------------------------------
       // write input to pipes asynchronously
-      Future { writeLinesToPath(leftFifo , "left" )(left .underlying) }(ec)
-      Future { writeLinesToPath(rightFifo, "right")(right.underlying) }(ec)
+      Future { JavaStreamUtils.writeLinesToPath(leftFifo , "left" )(left .underlying) }(ec)
+      Future { JavaStreamUtils.writeLinesToPath(rightFifo, "right")(right.underlying) }(ec)
 
       // ---------------------------------------------------------------------------
-      new CloseabledIterator(readLines(is), () => {
+      new CloseabledIterator(JavaStreamUtils.readLines(is), () => {
         removeFifos.close();
         left.close(); right.close()
         is.close() })

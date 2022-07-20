@@ -1,7 +1,4 @@
 package gallia
-package data
-package multiple
-package streamer
 package spilling
 
 import aptus.Index

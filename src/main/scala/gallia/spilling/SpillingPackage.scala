@@ -1,31 +1,36 @@
 package gallia
-package data
-package multiple
-package streamer
 
 // ===========================================================================
 package object spilling {
   val IsWindows: Boolean = Option(System.getProperty("os.name")).exists(_.toLowerCase.startsWith("windows")) // should cover most cases?
 
   // ---------------------------------------------------------------------------
-  type Line = String
+  private[spilling] type CloseabledIterator[T] = aptus.CloseabledIterator[T]
+  private[spilling] val  CloseabledIterator    = aptus.CloseabledIterator
 
   // ---------------------------------------------------------------------------
-  type Obj       = gallia.Obj
-  val  GsonToObj = gallia.data.json.GsonToObj
+  private[spilling] val SystemUtils     = aptus.aptutils.SystemUtils
+  private[spilling] val JavaStreamUtils = aptus.aptutils.JavaStreamUtils
+
+  // ---------------------------------------------------------------------------
+  private[spilling] type Line = aptus.Line
+
+  // ---------------------------------------------------------------------------
+  private[spilling] type Obj       = gallia.Obj
+  private[spilling] val  GsonToObj = gallia.data.json.GsonToObj
   
   // ---------------------------------------------------------------------------  
-  implicit def stringToProcess: String => sys.process.ProcessBuilder = sys.process.stringToProcess _
+  private[spilling] implicit def stringToProcess: String => sys.process.ProcessBuilder = sys.process.stringToProcess _
   
   // ---------------------------------------------------------------------------  
-  type Future[T] = scala.concurrent.Future[T]
-  val  Future    = scala.concurrent.Future
+  private[spilling] type Future[T] = scala.concurrent.Future[T]
+  private[spilling] val  Future    = scala.concurrent.Future
   
   // ---------------------------------------------------------------------------
-  type ExecutionContext = scala.concurrent.ExecutionContext
+  private[spilling] type ExecutionContext = scala.concurrent.ExecutionContext
   
   // ---------------------------------------------------------------------------
-  def closeable(f: => Unit) = new java.io.Closeable { def close() = { f } }
+  private[spilling] def closeable(f: => Unit) = new java.io.Closeable { def close() = { f } }
 
   // ===========================================================================
   trait SortWrapper {

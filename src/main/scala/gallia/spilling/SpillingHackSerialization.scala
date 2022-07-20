@@ -1,5 +1,5 @@
 package gallia
-package data.multiple.streamer.spilling
+package spilling
 
 // ===========================================================================
 object SpillingHackSerialization { // see https://github.com/galliaproject/gallia-core#poor-mans-scaling-spilling

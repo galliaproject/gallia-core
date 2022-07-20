@@ -2,10 +2,11 @@ package gallia
 package atoms
 package utils
 
+import aptus.Line
 import domain.GroupingPair._
 import meta.PNF
 import data.multiple.streamer._
-import data.multiple.streamer.spilling._
+import spilling._
 
 // ===========================================================================
 object GalliaSpilling {

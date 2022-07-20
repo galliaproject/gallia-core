@@ -3,7 +3,6 @@ package actions
 
 import atoms._UWrappers
 import atoms.AtomsZZ._
-import atoms.AtomsCustom.{_CustomZZ, _CustomZV}
 
 // ===========================================================================
 object ActionsZZ {
@@ -11,20 +10,17 @@ object ActionsZZ {
   case class LogProgress(nOpt: Option[Int], debug: Obj => String) extends ActionZZd with IdentityVM1 { // TODO: version with AObj debug
     def  atomzz: AtomZZ = _LogProgress(nOpt, debug) }
 
-  // ---------------------------------------------------------------------------
-  case object Distinct extends ActionZZd with IdentityVM1 {
-    def  atomzz = _Distinct }
-
-  // ---------------------------------------------------------------------------
-  case class EnsureUniqueness(keysOpt: Option[Keyz] /* None = all */) extends ActionZZd with IdentityVM1 {
-    //TODO: validate keys
-    def atomzz = keysOpt match {
-      case None       => _EnsureUniqueness
-      case Some(keys) => _EnsureUniquenessBy(keys) } }
+  // ===========================================================================
+  case class Distinct() extends ActionZZc with IdentityVM1 {
+    def atomzz(c: Cls) = _Distinct(c) }
 
   // ===========================================================================
   @Distributivity case class Take(n: Int) extends ActionZZd with IdentityVM1 { // TODO: validate n
     def atomzz = _Take(n) }
+
+  // ---------------------------------------------------------------------------
+  @Distributivity case class Drop(n: Int) extends ActionZZd with IdentityVM1 { // TODO: validate n
+    def atomzz = _Drop(n) }
 
   // ---------------------------------------------------------------------------
   @Distributivity case class AddIndex(key: Key, oneBased: Boolean) extends ActionZZd with IdentityV1 {
@@ -39,7 +35,7 @@ object ActionsZZ {
   case class MapU2V[V: WTT](to: TypeNode, f: HeadU => HeadV[V]) extends ActionZVc with ActionVM1 {
         def  vldt (c: Cls): Errs   = Nil//TODO: make sure V not a List already
         def _meta (c: Cls): Cls    = c//FIXME
-        def atomzv(c: Cls): AtomZV = parseUV(f).dataU2V(c).pipe { o2v => _CustomZV(_.mapToStreamer(o2v).toList) } }
+        def atomzv(c: Cls): AtomZV = parseUV(f).dataU2V(c).pipe(_MapU2V) }
 
     // ---------------------------------------------------------------------------
     case class MapU2U(f: HeadU => HeadU) extends ActionZZc {
@@ -49,13 +45,13 @@ object ActionsZZ {
         val plan = parseUU(f).metaToAtomPlan(c)
 
         if (plan.dag.isChain) _UWrappers.fromMapU2U(plan)      
-        else                  _CustomZZ(_.map(plan.V1.naiveRunUU)) } }
+        else                  _MapU2U(o2o = plan.V1.naiveRunUU _) } }
 
     // ---------------------------------------------------------------------------
     case class FlatMap(f: HeadU => HeadZ) extends ActionZZc {
       def  vldt  (c: Cls): Errs   = parseUZ(f)._vldt(c)
       def _meta  (c: Cls): Cls    = parseUZ(f)._meta(c)
-      def  atomzz(c: Cls): AtomZZ = parseUZ(f).dataU2Z(c).pipe { g => _CustomZZ(_.flatMap(g(_).toListAndTrash)) } }
+      def  atomzz(c: Cls): AtomZZ = parseUZ(f).dataU2Z(c).pipe(_FlatMap) }
 
 }
 

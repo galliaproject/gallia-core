@@ -1,10 +1,11 @@
 package gallia
 package actions
 
+import aptus.Anything_
 import target._
 import FunctionWrappers.{_pp11, _pp21, _pp31}
 import atoms.AtomsZZFiltering._
-import gallia.Whatever._
+import Whatever._
 
 // ===========================================================================
 object ActionsZZFiltering {
@@ -40,33 +41,82 @@ object ActionsZZFiltering {
         def atomzz(c: Cls): AtomZZ = target.pathPairT(c).pipe(_FilterBy3(_, pred, max)) }
 
     // ===========================================================================
+    @Distributivity case class TakeWhile(pred: HeadU => HeadV[Boolean]) extends ActionZZc with IdentityM1 {
+        private val _trsf = parseUV(pred)
+
+        // ---------------------------------------------------------------------------
+        def vldt  (c: Cls): Errs   = _trsf._vldt(c)
+        def atomzz(c: Cls): AtomZZ = _TakeWhile(_trsf.dataU2B(c)) }
+
+      // ---------------------------------------------------------------------------
+      @Distributivity case class DropWhile(pred: HeadU => HeadV[Boolean]) extends ActionZZc with IdentityM1 {
+        private val _trsf = parseUV(pred)
+
+        // ---------------------------------------------------------------------------
+        def vldt  (c: Cls): Errs   = _trsf._vldt(c)
+        def atomzz(c: Cls): AtomZZ = _DropWhile(_trsf.dataU2B(c)) }
+
+  // ===========================================================================
     case class FilterByU(target: TtqKPath, pred: HeadU => HeadV[Boolean], asFind: Boolean)
           extends ActionZZc with IdentityM1 with HasAsFind {
-        def  vldt  (c: Cls): Errs   = Nil//TODO parseUV(pred)._vldt(nestedC)
+        private val _trsf = parseUV(pred)
+
+        // ---------------------------------------------------------------------------
+        def vldt(c: Cls): Errs   =
+          target.tq.vldtAsOrigin(c)
+            .orIfEmpty { target.resolve(c).pipe(checkUInput(c)) }
+            .orIfEmpty { target.resolve(c).pipe(_trsf.vldt(c, _)) }
+
+        // ---------------------------------------------------------------------------
         def  atomzz(c: Cls): AtomZZ =
           target
             .pathPairT(c)
             .pipe { pathPair =>
-              parseUV(pred)
+              _trsf
                 .dataU2B(c.forceNestedClass(pathPair.path))
                 .pipe(_FilterBy1(pathPair, _, max)) } }
 
     // ---------------------------------------------------------------------------
     case class FilterByZ(target: TtqKPath, pred: HeadZ => HeadV[Boolean], asFind: Boolean)
           extends ActionZZc with IdentityM1 with HasAsFind {
-        def  vldt  (c: Cls): Errs   = Nil//TODO parseUV(pred)._vldt(nestedC)
+        private val _trsf = parseZV(pred)
+
+        // ---------------------------------------------------------------------------
+        def vldt(c: Cls): Errs   =
+          target.tq.vldtAsOrigin(c)
+            .orIfEmpty { target.resolve(c).pipe(checkZInput(c)) }
+            .orIfEmpty { target.resolve(c).pipe(_trsf.vldt(c, _)) }
+
+        // ---------------------------------------------------------------------------
         def  atomzz(c: Cls): AtomZZ =
           target
             .pathPairT(c)
             .pipe { pathPair =>
-              parseZV(pred)
+              _trsf
                 .dataZ2B(c.forceNestedClass(pathPair.path))
                 .pipe(wrap)
                 .pipe(_FilterBy1(pathPair, _, max)) }
 
         // ---------------------------------------------------------------------------
-        private def wrap(f: Objs => Boolean): Seq[Obj] => Boolean = (x: Seq[Obj]) => f(Objs.from(x))
+        private def wrap(f: Objs => Boolean): List[Obj] => Boolean = (x: List[Obj]) => f(Objs.from(x))
     }
+
+    // ===========================================================================
+    private[actions] def checkUInput(c: Cls)(path: KPath): Errs = checkUOrZInput(c, multiple = false, KPathz(Seq(path)))
+    private[actions] def checkZInput(c: Cls)(path: KPath): Errs = checkUOrZInput(c, multiple = true , KPathz(Seq(path)))
+
+      // ---------------------------------------------------------------------------
+      private def checkUOrZInput(c: Cls, multiple: Boolean, paths: KPathz): Errs =
+        paths
+          .filterNot { path =>
+            (!multiple && c.hasSingle  (path) ||
+              multiple && c.hasMultiple(path)) &&
+            // FIXME: t220517120657 - ensure rightcombination
+            c.hasNesting(path) }
+          .in.noneIf(_.isEmpty).toSeq
+          .flatMap { invalidPaths =>
+            if (multiple) errs(s"210110194028:NotObjsOrObjs_:${KPathz(invalidPaths)}")
+            else          errs(s"210110194029:NotObjOrObj_:${  KPathz(invalidPaths)}") }
 
     // ===========================================================================
     case class FilterByWV(target: TqKPath, pred: WV => Boolean, asFind: Boolean)
@@ -98,4 +148,3 @@ object ActionsZZFiltering {
 }
 
 // ===========================================================================
-

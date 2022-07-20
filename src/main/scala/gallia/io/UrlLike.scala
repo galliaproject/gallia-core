@@ -39,6 +39,8 @@ case class UrlLike(
       explicitCompression = Some(SupportedCompression.Gzip))
       
     val Default = Plain
+
+    val DefaultMemoryMode = true
   }
 
 // ===========================================================================

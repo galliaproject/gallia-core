@@ -28,7 +28,7 @@ object ViewStreamerUtils {
     that.tipe match {
       case StreamerType.ViewBased =>
         //Streamer.fromView(dis.toView ++ that.toView) - FIXME: 2.13 issues
-        Streamer.fromList(dis.toList ++ that.toList)
+        ViewStreamer.from(dis.toList ++ that.toList)
 
       // ---------------------------------------------------------------------------
       case StreamerType.IteratorBased | StreamerType.RDDBased => // delegate
@@ -41,6 +41,25 @@ object ViewStreamerUtils {
     }
 
   // ===========================================================================
+  private[streamer] def zip[B: CT](dis: ViewStreamer[B], that: Streamer[B], combiner: (B, B) => B): Streamer[B] =
+    that.tipe match {
+      case StreamerType.ViewBased =>
+        //Streamer.fromView(dis.toView ++ that.toView) - FIXME: 2.13 issues
+        ViewStreamer
+          .from(dis.toList zip that.toList)
+          .map(combiner.tupled)
+
+      // ---------------------------------------------------------------------------
+      case StreamerType.IteratorBased | StreamerType.RDDBased => // delegate
+        val left : Streamer[B] = this.asInstanceOf[Streamer[B]]
+        val right: Streamer[B] = that.asInstanceOf[Streamer[B]]
+
+        left
+          .pipe(right.asMeBased)
+          .zip (right, combiner)
+    }
+
+  // ===========================================================================
   private[streamer] def coGroup[K: CT, V: CT]
           (joinType: JoinType)
           (left: Streamer[(K, V)], right: Streamer[(K, V)])
@@ -48,8 +67,8 @@ object ViewStreamerUtils {
       right.tipe match {
         case StreamerType.ViewBased =>
             _coGroup(joinType)(
-                keyGrouping(left .iterator),
-                keyGrouping(right.iterator))
+                keyGrouping(left .selfClosingIterator),
+                keyGrouping(right.selfClosingIterator))
               .pipe(new ViewStreamer(_))
 
         // ---------------------------------------------------------------------------
@@ -68,8 +87,8 @@ object ViewStreamerUtils {
 
         case StreamerType.ViewBased =>
           _join(joinType, combine)(
-                keyGrouping(left .iterator),
-                keyGrouping(right.iterator))
+                keyGrouping(left .selfClosingIterator),
+                keyGrouping(right.selfClosingIterator))
             .pipe(new ViewStreamer(_))
 
         // ---------------------------------------------------------------------------

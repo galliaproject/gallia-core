@@ -2,10 +2,9 @@ package gallia
 package io.in
 
 import java.net.URL
-
 import aptus._
 import aptus.aptutils.InputStreamUtils
-import gallia.data.multiple.streamer.Streamer
+import data.multiple.streamer.{IteratorStreamer, Streamer, ViewStreamer}
 
 // ===========================================================================
 case class InputUrlLike( // TODO: t210115193904 - check URI, regular file vs symlink, ...
@@ -23,22 +22,14 @@ case class InputUrlLike( // TODO: t210115193904 - check URI, regular file vs sym
 
   // ---------------------------------------------------------------------------
   @Distributivity
-  def firstLine(): Line = { // TODO: t210114154924 - generalize to n lines + make optional + cache
-    val itr = linesPair()
-
-    val streamer =
-      Streamer
-        .fromIterator(itr)
-        .pipeOpt(linesPreprocessing)(f => _.pipe(f))
-
-    val first: Line =
-      if (streamer.nonEmpty) streamer.iterator.next()
-      else                   ??? // TODO: see t210114154924
-
-    itr.close()
-
-    first
-  }
+  def firstLine(): Line = // TODO: t210114154924 - generalize to n lines + make optional + cache
+    IteratorStreamer
+      .from4(
+        new data.DataRegenerationClosure[Line] {
+          def regenerate = () => lines() })
+      .pipeOpt(linesPreprocessing)(f => (x: Streamer[Line]) => f(x).asIteratorBased.asInstanceOfIteratorStreamer)
+      .firstOpt() // will close
+      .get // TODO: see t210114154924
 
   // ---------------------------------------------------------------------------
   def streamLines(inMemoryMode: Boolean): Streamer[Line] =
@@ -46,12 +37,13 @@ case class InputUrlLike( // TODO: t210115193904 - check URI, regular file vs sym
       .hackOpt
       .map(_.apply(this))
       .getOrElse {
-        linesPair()
-          .pipe(InputUrlLike.streamer(inMemoryMode)) }
+        if (inMemoryMode)
+          ViewStreamer.from(lines().consumeAll)
+        else
+          IteratorStreamer.from4(
+            new data.DataRegenerationClosure[Line] {
+              def regenerate = () => lines() }) }
       .pipeOpt(linesPreprocessing)(f => _.pipe(f))
-
-  // ===========================================================================
-  private def linesPair(): Closeabled[Iterator[Line]] = _inputString.pipe(new URL(_)).pipe(_lines())
 
   // ===========================================================================
   private def _content()(url: URL): Content =
@@ -64,10 +56,12 @@ case class InputUrlLike( // TODO: t210115193904 - check URI, regular file vs sym
         url.toExternalForm().stripPrefix("file:") /* FIXME? */.pipe(aptus.aptmisc.Zip.content) }
 
   // ===========================================================================
-  private def _lines()(url: URL): Closeabled[Iterator[Line]] =
+  private def lines(): CloseabledIterator[Line] =
     compression match {
       case SupportedCompression.NoCompression | SupportedCompression.Gzip | SupportedCompression.Bzip2 =>
-        InputStreamUtils.lines(url, charset.charset)        
+        InputStreamUtils.lines(
+          new URL(_inputString),
+          charset.charset)
 
       case SupportedCompression.Zip => ??? /* TODO */ }
 }
@@ -80,10 +74,9 @@ object InputUrlLike {
   private def normalize(value: String): String = SupportedUriScheme.file.normalizeOpt(value).getOrElse(value)
   
   // ---------------------------------------------------------------------------
-  def streamer[T](inMemoryMode: Boolean)(iter: Closeabled[Iterator[T]]): Streamer[T] = // TODO: move + include hack above properly?
-    if (inMemoryMode) Streamer.fromList    (iter.consume(_.toList))
-    else              Streamer.fromIterator(iter)
-
+  def streamer[T](inMemoryMode: Boolean)(iter: CloseabledIterator[T]): Streamer[T] = // TODO: move + include hack above properly?
+    if (inMemoryMode)     ViewStreamer.from(iter.consumeAll)
+    else              IteratorStreamer.from(iter)
 }
 
 // ===========================================================================

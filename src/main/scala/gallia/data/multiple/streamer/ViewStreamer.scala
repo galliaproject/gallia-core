@@ -1,62 +1,82 @@
 package gallia
-package data.multiple.streamer
+package data.multiple
+package streamer
 
 import scala.reflect.{ClassTag => CT}
-
 import heads.merging.MergingData._
 import data.multiple.streamer.{ViewStreamerUtils => _utils}
 
 // ===========================================================================
-class ViewStreamer[A](view: ViewRepr[A]) extends Streamer[A] {
-  val tipe = StreamerType.ViewBased
+class ViewStreamer[A](view: ViewRepr[A]) extends Streamer[A] { // TODO: add a ListStreamer purely for tests
+  override val tipe = StreamerType.ViewBased
 
   // ---------------------------------------------------------------------------
-  private def _rewrap[B](newView: ViewRepr[B]): Streamer[B] = new ViewStreamer(newView)
-
-  protected def egal(that: Streamer[A]): Boolean = this.toList == that.toList
-
-  // ===========================================================================
-  def iteratorAndCloseable: (Iterator[A], java.io.Closeable) = (iterator, new java.io.Closeable { def close() = {} })
-
-  def iterator: Iterator[A] = view.iterator
-  def toList  : List    [A] = view.force.toList
-  def toView  : ViewRepr[A] = view
-
-  def     map[B: CT](f: A =>      B ): Streamer[B] = view.    map(f).toSeq.view.pipe(_rewrap)
-  def flatMap[B: CT](f: A => Coll[B]): Streamer[B] = view.flatMap(f).toSeq.view.pipe(_rewrap)
-
-  def filter(p: A => Boolean): Streamer[A] = view.filter(p).toSeq.view.pipe(_rewrap)
-
-  def size: Int = view.force.size
-
-  def isEmpty: Boolean = view.isEmpty
-
-  def take(n: Int): Streamer[A] = view.take(n).pipe(_rewrap)
-  def drop(n: Int): Streamer[A] = view.drop(n).pipe(_rewrap)
+  private   def _rewrap[B](newView: ViewRepr[B]): Streamer[B] = new ViewStreamer(newView)
+  protected def egal      (that: Streamer[A]): Boolean = this.toList == that.toList
 
   // ===========================================================================
-  def reduce(op: (A, A) => A): A = view.reduce(op)
-
-  // ===========================================================================
-  def sortBy[K](ignored: CT[K], ord: Ordering[K])(f: A => K): Streamer[A] = view.sortBy(f)(ord).toSeq.view.pipe(_rewrap)
+  private[gallia] def selfClosingIterator:                  Iterator[A] =                                          view.iterator  // nothing to close
+  private[gallia] def closeabledIterator  : aptus.CloseabledIterator[A] = aptus.CloseabledIterator.fromUncloseable(view.iterator) // nothing to close
 
   // ---------------------------------------------------------------------------
-  def distinct: Streamer[A] = view.distinct.toSeq.view.pipe(_rewrap)
+//override def toView  : ViewRepr[A] = view
+  override def toList  : List    [A] = view.toList
 
   // ---------------------------------------------------------------------------
-  def groupByKey[K: CT, V: CT](implicit ev: A <:< (K, V)): Streamer[(K, List[V])] =
+  override def asViewBased    : Streamer[A] = this
+  override def asIteratorBased: Streamer[A] =
+    IteratorStreamer.from4(
+      new data.DataRegenerationClosure[A] {
+        def regenerate = () => closeabledIterator })
+
+  override def asMeBased [B >: A : CT](that: Streamer[B]): Streamer[B] = that.asViewBased
+
+  // ===========================================================================
+  override def     map[B: CT](f: A =>      B ): Streamer[B] = view.    map(f).toSeq.view.pipe(_rewrap)
+  override def flatMap[B: CT](f: A => Coll[B]): Streamer[B] = view.flatMap(f).toSeq.view.pipe(_rewrap)
+
+  override def filter(p: A => Boolean): Streamer[A] = view.filter(p).toSeq.view.pipe(_rewrap)
+  override def find  (p: A => Boolean): Option  [A] = view.find  (p)
+
+  override def size: Int = view.size
+
+  override def isEmpty: Boolean = view.isEmpty
+
+  override def take(n: Int): Streamer[A] = view.take(n).pipe(_rewrap)
+  override def drop(n: Int): Streamer[A] = view.drop(n).pipe(_rewrap)
+
+  override def takeWhile(p: A => Boolean): Streamer[A] = view.takeWhile(p).iterator.to(LazyList).view.pipe(_rewrap) // TODO: better way?
+  override def dropWhile(p: A => Boolean): Streamer[A] = view.dropWhile(p).iterator.to(LazyList).view.pipe(_rewrap) // TODO: better way?
+
+  // ===========================================================================
+  override def reduce(op: (A, A) => A): A = view.reduce(op)
+
+  // ===========================================================================
+  override def sortBy[K](meta: SuperMetaPair[K])(f: A => K): Streamer[A] = view.sortBy(f)(meta.ord).toSeq.view.pipe(_rewrap)
+
+  // ---------------------------------------------------------------------------
+  override def distinct: Streamer[A] = view.distinct.toSeq.view.pipe(_rewrap)
+
+  // ---------------------------------------------------------------------------
+  override def groupByKey[K: CT, V: CT](implicit ev: A <:< (K, V)): Streamer[(K, List[V])] =
     view.asInstanceOf[ViewRepr[(K, V)]].pipe(_utils.groupByKey).pipe(_rewrap)
 
   // ===========================================================================
-  def union[B >: A : CT](that: Streamer[B]): Streamer[B] = _utils.union(this.asInstanceOf[ViewStreamer[B]], that)
+  override def union[B >: A : CT](that: Streamer[B])                       : Streamer[B] = _utils.union(this.asInstanceOf[ViewStreamer[B]], that)
+  override def zip  [B >: A : CT](that: Streamer[B], combiner: (B, B) => B): Streamer[B] = _utils.zip  (this.asInstanceOf[ViewStreamer[B]], that, combiner)
 
   // ===========================================================================
-  def coGroup[K: CT, V: CT](joinType: JoinType)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[(K, (Iterable[V], Iterable[V]))] =
+  override def coGroup[K: CT, V: CT](joinType: JoinType)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[(K, (Iterable[V], Iterable[V]))] =
     _utils.coGroup(joinType)(this.asInstanceOf[Streamer[(K, V)]], that)
 
   // ---------------------------------------------------------------------------
-  def join[K: CT, V: CT](joinType: JoinType, combine: (V, V) => V)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[V] =
+  override def join[K: CT, V: CT](joinType: JoinType, combine: (V, V) => V)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[V] =
     _utils.join(joinType, combine)(this.asInstanceOf[Streamer[(K, V)]], that)
+}
+
+// ---------------------------------------------------------------------------
+object ViewStreamer {
+  def from[T](data: List[T]): ViewStreamer[T] = new ViewStreamer(data.view)
 }
 
 // ===========================================================================

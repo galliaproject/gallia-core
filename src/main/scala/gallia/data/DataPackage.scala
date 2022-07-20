@@ -10,6 +10,10 @@ package object data {
 
   // ---------------------------------------------------------------------------
   private[data] val Base64StringPrefix = "base64:"
+
+  // ---------------------------------------------------------------------------
+  /** mostly for Iterator based processing */
+  trait DataRegenerationClosure[T] { def regenerate: () => aptus.CloseabledIterator[T] }
 }
 
 // ===========================================================================

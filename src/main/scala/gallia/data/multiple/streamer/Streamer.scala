@@ -66,9 +66,8 @@ trait Streamer[A] { // note: not necessarily bothering with genericity (in the g
     def groupByKey[K: CT, V: CT](implicit ev: A <:< (K, V)): Streamer[(K, List[V])]
 
     // ===========================================================================
-    def union[B >: A : CT](that: Streamer[B]): Streamer[B] //TODO: use implicit ev
-
-    def zip[B >: A : CT](that: Streamer[B], x: (B, B) => B): Streamer[B] = ???
+    def union[B >: A : CT](that: Streamer[B])                       : Streamer[B] //TODO: use implicit ev
+    def zip  [B >: A : CT](that: Streamer[B], combiner: (B, B) => B): Streamer[B]
 
     // ---------------------------------------------------------------------------
     def join   [K: CT, V: CT](joinType: JoinType, combiner: (V, V) => V)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[              V]

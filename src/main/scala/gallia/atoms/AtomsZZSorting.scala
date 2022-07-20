@@ -2,57 +2,36 @@ package gallia
 package atoms
 
 import scala.reflect.ClassTag
-
 import domain._
+import atoms.utils.SortWrapping._
 
 // ===========================================================================
 @Max5
-object AtomsZZSorting {
-  import gallia.atoms.utils.SuperMetaPair
+object AtomsZZSorting { import utils.SuperMetaPair
 
   // ---------------------------------------------------------------------------
-  @deprecated("use SuperMetaPair now?") private def ctag[T1, T2] = implicitly[ClassTag[(T1, T2)]]/* TODO: t201130102656 - check ok with spark */
-
-  // ===========================================================================
-  case class _SortUnsafe[T: ClassTag](f: Obj => T, ctag: ClassTag[T], ord: Ordering[T]) extends AtomZZ { def naive(z: Objs) =
-       z._modifyUnderlyingStreamer(_.sortBy(ctag, ord)(f)) }
+  case class _SortUnsafe[T: ClassTag](f: Obj => T, meta: SuperMetaPair[T]) extends AtomZZ { def naive(z: Objs) =
+    z.sortUnsafe(f, meta) }
 
   // ===========================================================================
   case class _SortByAll(c: Cls, pair: SortingPair) extends AtomZZ { def naive(z: Objs) =
-        z.sortBy(c, pair) }
-
-      @deprecated case class __SortByAll(c: Cls, targets: KPathz, pairs: Either[SortingPair, Map[KPath, SortingPair]]) extends AtomZZ { def naive(z: Objs) =
-        ??? } // TODO: may be too costly? have to use ObjOrdering.optionObjOrdering(c, pair))
+      z.sortByAll(c, pair) }
 
     // ---------------------------------------------------------------------------
-    case class _SortBy1[T](ori: PathPair1, meta: SuperMetaPair[T]) extends AtomZZ { def naive(z: Objs) =
-        z._modifyUnderlyingStreamer(_.sortBy(meta.ctag, meta.ord)(ori.lookup(_).asInstanceOf[T])) }
-
-      // ---------------------------------------------------------------------------
-      case class _SortBy2[T1, T2](
-              ori1: PathPair1, meta1: SuperMetaPair[T1],
-              ori2: PathPair1, meta2: SuperMetaPair[T2])
-            extends AtomZZ { def naive(z: Objs) = {
-          val g: Obj => (T1, T2) = PathPair2(ori1, ori2).lookup(_).asInstanceOf[(T1, T2)]
-
-          z._modifyUnderlyingStreamer(_.sortBy(
-              ctag[T1, T2],
-              Ordering.Tuple2(meta1.ord, meta2.ord))(g))
-        }
-      }
-
-      // ---------------------------------------------------------------------------
-      // _SortByN attempt: see 210116115250@w
+    case class _SortBy1[K]         (c: Cls, sortWrapper: SortWrapper1[K])          extends AtomZZ { def naive(z: Objs) = z.sort(c, sortWrapper) }
+    case class _SortBy2[K1, K2]    (c: Cls, sortWrapper: SortWrapper2[K1, K2])     extends AtomZZ { def naive(z: Objs) = z.sort(c, sortWrapper) }
+    case class _SortBy3[K1, K2, K3](c: Cls, sortWrapper: SortWrapper3[K1, K2, K3]) extends AtomZZ { def naive(z: Objs) = z.sort(c, sortWrapper) }
+    // _SortByN attempt: see 210116115250@w
 
   // ===========================================================================
-  case class _CustomSort1[T](ori: PathPair1, f: _ff11, ctag: ClassTag[T], ord: Ordering[T]) extends AtomZZ { def naive(z: Objs) = {
+  case class _CustomSort1[T](ori: PathPair1, f: _ff11, meta: SuperMetaPair[T]) extends AtomZZ { def naive(z: Objs) = {
       val g: Obj => T = ori.lookup(_).pipe(f).asInstanceOf[T]
-      implicit val x = ctag; z._modifyUnderlyingStreamer(_.sortBy(ctag, ord)(g)) } }
+      z._modifyUnderlyingStreamer(_.sortBy(meta)(g)) } }
 
     // ---------------------------------------------------------------------------
-    case class _CustomSort2[T](ori: PathPair2, f: _ff21, ctag: ClassTag[T], ord: Ordering[T]) extends AtomZZ { def naive(z: Objs) = {
+    case class _CustomSort2[T](ori: PathPair2, f: _ff21, meta: SuperMetaPair[T]) extends AtomZZ { def naive(z: Objs) = {
       val g: Obj => T = ori.lookup(_).pipe(f.tupled).asInstanceOf[T]
-      z._modifyUnderlyingStreamer(_.sortBy(ctag, ord)(g)) } }
+      z._modifyUnderlyingStreamer(_.sortBy(meta)(g)) } }
 
 }
 

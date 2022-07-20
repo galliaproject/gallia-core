@@ -7,26 +7,45 @@ import actions.ActionsOthers._
 // ===========================================================================
 trait HeadZOperations { self: HeadZ =>
 
-  def distinct: Self = zz(Distinct)
+  def distinct: Self = zz(Distinct())
 
   @Distributivity def distinctByAdjacency: Self = ??? //TODO: t210117113705 - convenient if mostly grouped already; for distributivity, do at least per partition
 
   // ===========================================================================
   def force = new { // TODO: t201016121417 - or as convert... [term:x]
-    def one     : HeadU = zu(ForceOne)
+      def one: HeadU = zu(ForceOne)
 
+      // ---------------------------------------------------------------------------
+      /** very costly if not checkpointed first (unless in-memory) ... */
+      def distinct: HeadZ = _ensureUniqueness(None)
+    }
+
+    // ---------------------------------------------------------------------------
+    // TODO: t201016122408 - or "assertUniqueness"? [term:x]
     /** can be very costly ... */
-    def distinct: HeadZ = zz(EnsureUniqueness(None /* = all */)) }
+    def ensureUniqueness: Self = force.distinct // for good measure
 
-  // ---------------------------------------------------------------------------
-  // TODO: t201016122408 - or "assertUniqueness"? [term:x]
-  /** can be very costly ... */
-  def ensureUniqueness: Self = force.distinct // for good measure
+      def ensureUniquenessById                                   : Self =  ensureUniquenessBy(_id)
+      def ensureUniquenessBy(key : KeyW)                         : Self =  ensureUniquenessBy(Keyz.from(key))
+      def ensureUniquenessBy(key1: KeyW, key2: KeyW, more: KeyW*): Self =  ensureUniquenessBy(Keyz.from(key1, key2, more))
+      def ensureUniquenessBy(keys: KeyWz)                        : Self = _ensureUniqueness(Some(keys.keyz))
 
-    def ensureUniquenessById                                   : Self = ensureUniquenessBy(_id)
-    def ensureUniquenessBy(key : KeyW)                         : Self = zz(EnsureUniqueness(Some(Keyz.from(key))))
-    def ensureUniquenessBy(key1: KeyW, key2: KeyW, more: KeyW*): Self = zz(EnsureUniqueness(Some(Keyz.from(key1, key2, more))))
-    def ensureUniquenessBy(keys: KeyWz)                        : Self = zz(EnsureUniqueness(Some(keys.keyz)))
+      // ---------------------------------------------------------------------------
+      private def _ensureUniqueness(keyzOpt: Option[Keyz]) =
+        mergeObjsVle(isDistinctHead(keyzOpt)) { (z, distinct) =>
+          if (!distinct) atoms.AtomsZZ._EnsureUniquenessBy.error(0, 0)(z) else z } // TODO: provide sizes instead of just boolean
+
+      // ---------------------------------------------------------------------------
+      private def isDistinctHead(keyzOpt: Option[Keyz]): HeadV[Boolean] = {
+        val tmp = keyzOpt
+          .map(_.rpathz)
+          .map      (self.retain(_))
+          .getOrElse(self)
+
+        val         sizeHead: HeadV[Int] = tmp.distinct.size
+        val distinctSizeHead: HeadV[Int] = tmp         .size
+
+        sizeHead.combine(distinctSizeHead).using(_ - _ == 0) }
 
   // ===========================================================================
   // TODO:

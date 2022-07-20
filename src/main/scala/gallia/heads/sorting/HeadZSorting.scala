@@ -2,10 +2,10 @@ package gallia
 package heads.sorting
 
 import scala.reflect.ClassTag
-
 import FunctionWrappers._
 import actions.ActionsZZSorting._
 import domain.{Sorter, SortingPair}
+import gallia.atoms.utils.SuperMetaPair
 
 // ===========================================================================
 @Max5
@@ -19,39 +19,56 @@ trait HeadZSorting { self: HeadZ =>
 
   // ===========================================================================
   /** may be costly, favor using a subset whenever possible */
-  def sort(descending: Boolean = false, missingLast: Boolean = false): Self = zz(SortByAll(SortingPair(descending, missingLast)))
+  def sort(descending: Boolean, missingLast: Boolean): Self = zz(SortByAll(SortingPair(descending, missingLast)))
 
   def sort(pair: SortingPair): Self = zz(SortByAll(pair))
 
     def sort: Self = sortAscending
-      def sortAscending : Self = sort(descending = false)
-      def sortDescending: Self = sort(descending = true)
+      def sortAscending : Self = sort(descending = false, missingLast = false)
+      def sortDescending: Self = sort(descending = true , missingLast = true)
 
   // ===========================================================================
   // sort by 1
 
-  def sortBy(f: KPathW, descending: Boolean = false, missingLast: Boolean = false): Self =
-        zz(SortBy1(Sorter.from(f.value, descending, missingLast)))
+  def sortBy(f: KPathW): Self =
+          zz(SortBy1(Sorter.from(f.value, descending = false, missingLast = false)))
+
+        def sortBy(f: KPathW, descending: Boolean): Self =
+          zz(SortBy1(Sorter.from(f.value, descending, missingLast = descending /* match behavior */)))
+
+        def sortBy(f: KPathW, descending: Boolean, missingLast: Boolean): Self =
+         zz(SortBy1(Sorter.from(f.value, descending, missingLast)))
 
       // ---------------------------------------------------------------------------
       def sortBy(s1: Sorter): Self = zz(SortBy1(s1))
-        def sortBy(sel: SingleSelection): Self = sortBy(Sorter(resolve1(sel)))
-          def sortBy(f: KPathW): Self = sortBy(_.explicit(f))
+        def sortBy(sel: SingleSelection): Self = sortBy(Sorter(resolve1(sel), descending = false, missingLast = false))
 
         // ---------------------------------------------------------------------------
-        def sortByAscending(sel: SingleSelection): Self = zz(SortBy1(Sorter(resolve1(sel), descending = false)))
+        def sortByAscending(sel: SingleSelection): Self = zz(SortBy1(Sorter(resolve1(sel), descending = false, missingLast = false)))
           def sortByAscending(f1: KPathW): Self = sortByAscending(_.explicit(f1.value))
 
         // ---------------------------------------------------------------------------
-        def sortByDescending(sel: SingleSelection): Self = zz(SortBy1(Sorter(resolve1(sel), descending = true)))
+        def sortByDescending(sel: SingleSelection): Self = zz(SortBy1(Sorter(resolve1(sel), descending = true, missingLast = true)))
           def sortByDescending(f1: KPathW): Self = sortByDescending(_.explicit(f1.value))
 
     // ---------------------------------------------------------------------------
     // sort by 2
     def sortBy(s1: Sorter, s2: Sorter): Self = zz(SortBy2(s1, s2))
-      def sortBy(sel1: SingleSelection, sel2: SingleSelection): Self = sortBy(Sorter(resolve1(sel1)), Sorter(resolve1(sel2)))
+      def sortBy(sel1: SingleSelection, sel2: SingleSelection): Self = sortBy(
+          Sorter(resolve1(sel1), descending = false, missingLast = false),
+          Sorter(resolve1(sel2), descending = false, missingLast = false))
         def sortBy(f1: KPathW, f2: KPathW): Self = sortBy(_.explicit(f1), _.explicit(f2))
 
+    // ---------------------------------------------------------------------------
+    // sort by 3
+    def sortBy(s1: Sorter, s2: Sorter, s3: Sorter): Self = zz(SortBy3(s1, s2, s3))
+      def sortBy(sel1: SingleSelection, sel2: SingleSelection, sel3: SingleSelection): Self = sortBy(
+          Sorter(resolve1(sel1), descending = false, missingLast = false),
+          Sorter(resolve1(sel2), descending = false, missingLast = false),
+          Sorter(resolve1(sel3), descending = false, missingLast = false))
+        def sortBy(f1: KPathW, f2: KPathW, f3: KPathW): Self = sortBy(_.explicit(f1), _.explicit(f2), _.explicit(f3))
+
+    // ---------------------------------------------------------------------------
     // TODO: more
 
     // ---------------------------------------------------------------------------
@@ -64,14 +81,14 @@ trait HeadZSorting { self: HeadZ =>
 
   // sort using 1
   def sortUsing[O1: WTT](f1: SortingT[O1]) = new {
-      def using[D: WTT: Ordering](f: O1 => D): Self = zz(CustomSort1(resolve(f1), wrap(f), ctag[D], implicitly[Ordering[D]])) }
+      def using[D: WTT: Ordering](f: O1 => D): Self = zz(CustomSort1(resolve(f1), wrap(f), SuperMetaPair(ctag[D], implicitly[Ordering[D]]))) }
 
     // ---------------------------------------------------------------------------
     // sort using 2
 
     def sortUsing[O1: WTT, O2: WTT](f1: SortingT[O1], f2: SortingT[O2]) = new {
       def using[D: WTT: Ordering](f: (O1, O2) => D): Self =
-        zz(CustomSort2(resolve2(f1, f2), wrap21(f), ctag[D], implicitly[Ordering[D]])) }
+        zz(CustomSort2(resolve2(f1, f2), wrap21(f), SuperMetaPair(ctag[D], implicitly[Ordering[D]]))) }
 
     // TODO: more
 
@@ -96,8 +113,8 @@ trait HeadZSorting { self: HeadZ =>
 
   // ---------------------------------------------------------------------------
   def sortByCount: Self = sortByAscendingCount
-    def sortByAscendingCount : Self = sortBy(Sorter.from(_count_all, descending = false))
-    def sortByDescendingCount: Self = sortBy(Sorter.from(_count_all, descending = true ))
+    def sortByAscendingCount : Self = sortBy(Sorter.from(_count_all, descending = false, missingLast = false))
+    def sortByDescendingCount: Self = sortBy(Sorter.from(_count_all, descending = true , missingLast = true))
 
   def sortByGroupSize: Self = sortByAscendingGroupSize
     def sortByAscendingGroupSize : Self = ???//TODO: sortBy(Sorter.from(_count, descending = false))

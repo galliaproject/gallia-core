@@ -1,31 +1,50 @@
 package gallia
 package domain
 
+import aptus.Anything_
 import target.utils.TargetQueryUtils.tqkpath
 import target.TqKPath
+import atoms.utils.SortWrapping.SortWrapper1
+import atoms.utils.SuperMetaPair
 
 // ===========================================================================
 case class Sorter(
       target     : TqKPath,
-      descending : Boolean = false,
-      missingLast: Boolean = false) {
-    def pair = SortingPair(descending, missingLast)
+      descending : Boolean,
+      missingLast: Boolean) {
+
+    def sortWrapper(c: Cls) = {
+      val path = target.resolve(c)
+      val info = target.info(c)
+      val si = info.subInfo1
+
+      SortWrapper1(
+        ori       = domain.PathPair(path, info.optional),
+        meta      = SuperMetaPair.parse(c, path, SortingPair(descending, missingLast)),
+        multiple  = si.multiple,
+        numerical = si.isNumericalType,
+        reverse   = descending,
+        missingLast)
+    }
   }
 
   // ===========================================================================
   object Sorter {
-    implicit def to(target:  Key ): Sorter = from(target)
-    implicit def to(target: SKey ): Sorter = from(target)
-    implicit def to(target: EKey ): Sorter = from(target)
-    implicit def to(target: UKey ): Sorter = from(target)
-    implicit def to(target: KPath): Sorter = from(target)
-    implicit def to(target: KPathW): Sorter = from(target)
+    implicit def to(target:  Key ) : Sorter = default(target)
+    implicit def to(target: SKey ) : Sorter = default(target)
+    implicit def to(target: EKey ) : Sorter = default(target)
+    implicit def to(target: UKey ) : Sorter = default(target)
+    implicit def to(target: KPath) : Sorter = default(target)
+    implicit def to(target: KPathW): Sorter = default(target)
+
+    // ---------------------------------------------------------------------------
+    def default(target: KPathW) = from(target, descending = false, missingLast = false)
 
     // ---------------------------------------------------------------------------
     def from(
         target     : KPathW,
-        descending : Boolean = false,
-        missingLast: Boolean = false)
+        descending : Boolean,
+        missingLast: Boolean)
       : Sorter =
         Sorter(
             tqkpath(target.value),
@@ -58,8 +77,21 @@ case class Sorter(
 
 // ===========================================================================
 case class SortingPair(
-    descending : Boolean,
-    missingLast: Boolean)
+      descending : Boolean,
+      missingLast: Boolean) {
+
+    override def toString: String = formatDefault
+      def formatDefault: String =
+        s"${if (descending) "DSC" else "ASC"}:${if (missingLast) "L" else "F"}"
+
+    def validSpillingCombo: Boolean =
+      (!descending && !missingLast) ||
+      ( descending &&  missingLast)
+
+    def descendingSpilling: Boolean = this.assert(_.validSpillingCombo, _.errorMessage).descending
+
+    def errorMessage: String = s"220624173138 - spilling does not support putting blank values at the end unless descending (${formatDefault})"
+  }
 
   // ---------------------------------------------------------------------------
   object SortingPair {

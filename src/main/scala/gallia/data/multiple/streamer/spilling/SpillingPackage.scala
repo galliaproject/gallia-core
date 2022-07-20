@@ -1,5 +1,7 @@
 package gallia
-package data.multiple.streamer
+package data
+package multiple
+package streamer
 
 // ===========================================================================
 package object spilling {
@@ -24,6 +26,17 @@ package object spilling {
   
   // ---------------------------------------------------------------------------
   def closeable(f: => Unit) = new java.io.Closeable { def close() = { f } }
+
+  // ===========================================================================
+  trait SortWrapper {
+    val multiple   : Boolean
+    val numerical  : Boolean
+    val reverse    : Boolean
+    val missingLast: Boolean
+
+    // ---------------------------------------------------------------------------
+    def sortingPair = domain.SortingPair(descending  = reverse, missingLast)
+  }
 }
 
 // ===========================================================================

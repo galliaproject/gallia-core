@@ -1,5 +1,6 @@
 package gallia
-package heads.common
+package heads
+package common
 
 import FunctionWrappers._
 import actions.common.ActionsCommonGenerission._

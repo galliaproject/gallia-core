@@ -1,5 +1,6 @@
 package gallia
-package selection.untyped
+package selection
+package untyped
 
 // ===========================================================================
 package object processors { // TODO: rename...

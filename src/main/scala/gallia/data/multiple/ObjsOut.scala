@@ -1,5 +1,6 @@
 package gallia
-package data.multiple
+package data
+package multiple
 
 import aptus.{Seq_, String_}
 

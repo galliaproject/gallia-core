@@ -1,5 +1,6 @@
 package gallia
-package inferring.table
+package inferring
+package table
 
 // ===========================================================================
 object BooleanDetector {

@@ -1,5 +1,7 @@
 package gallia
-package selection.untyped.processors
+package selection
+package untyped
+package processors
 
 import aptus.{Anything_, String_, Seq_}
 import aptus.Option_

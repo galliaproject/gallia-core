@@ -1,9 +1,10 @@
 package gallia
-package heads.pivoting
+package heads
+package pivoting
 
 import aptus.Seq_
 
-import heads.common.{WV, Pivot}
+import heads.common.Pivot
 
 // ===========================================================================
 trait HeadZPivoting { self: HeadZ =>

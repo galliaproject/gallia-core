@@ -1,5 +1,6 @@
 package gallia
-package target.utils
+package target
+package utils
 
 import target._
 import selection.typed._

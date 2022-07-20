@@ -1,5 +1,7 @@
 package gallia
-package selection.untyped.fluency
+package selection
+package untyped
+package fluency
 
 import meta.ClsLike
 import selection.untyped.processors._

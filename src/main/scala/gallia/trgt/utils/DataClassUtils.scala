@@ -1,5 +1,6 @@
 package gallia
-package target.utils
+package target
+package utils
 
 import meta.SubInfo
 import meta.Info

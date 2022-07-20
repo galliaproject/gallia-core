@@ -1,6 +1,7 @@
 package gallia
 package selection
-package typed.fluency
+package typed
+package fluency
 
 // ===========================================================================
 @TypeMatching // very boilerplatey; TODO: t210124092716 - codegen (very boilerplaty)

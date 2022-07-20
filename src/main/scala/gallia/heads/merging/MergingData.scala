@@ -1,5 +1,6 @@
 package gallia
-package heads.merging
+package heads
+package merging
 
 import enumeratum.{Enum, EnumEntry}
 

@@ -1,5 +1,6 @@
 package gallia
-package io.out
+package io
+package out
 
 // ===========================================================================
 class StartWriteUFluency() extends EndWriteUFluency {

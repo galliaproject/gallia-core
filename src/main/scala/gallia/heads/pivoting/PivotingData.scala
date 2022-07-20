@@ -1,5 +1,6 @@
 package gallia
-package heads.pivoting
+package heads
+package pivoting
 
 import heads.TSL.Squash
 import actions.ActionsOthers  

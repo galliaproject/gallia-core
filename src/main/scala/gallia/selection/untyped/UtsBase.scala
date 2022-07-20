@@ -1,5 +1,6 @@
 package gallia
-package selection.untyped
+package selection
+package untyped
 
 import target._
 import target.utils.TargetQueryValidation._

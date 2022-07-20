@@ -1,5 +1,6 @@
 package gallia
-package heads.sorting
+package heads
+package sorting
 
 import scala.reflect.ClassTag
 import FunctionWrappers._

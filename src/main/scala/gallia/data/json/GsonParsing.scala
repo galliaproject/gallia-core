@@ -1,5 +1,6 @@
 package gallia
-package data.json
+package data
+package json
 
 import com.google.gson.{JsonObject, JsonArray}
 import scala.collection.JavaConverters._

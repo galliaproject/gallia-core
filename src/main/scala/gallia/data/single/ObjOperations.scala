@@ -1,5 +1,6 @@
 package gallia
-package data.single
+package data
+package single
 
 import aptus.{Anything_, String_, Seq_}
 import aptus.Separator

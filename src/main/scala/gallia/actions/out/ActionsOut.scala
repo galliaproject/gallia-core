@@ -1,5 +1,6 @@
 package gallia
-package actions.out
+package actions
+package out
 
 import io.out._
 import atoms.AtomsXO._

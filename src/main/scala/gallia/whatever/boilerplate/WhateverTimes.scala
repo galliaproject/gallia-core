@@ -1,5 +1,6 @@
 package gallia
-package whatever.boilerplate
+package whatever
+package boilerplate
 
 // ===========================================================================
 object WhateverTimes {

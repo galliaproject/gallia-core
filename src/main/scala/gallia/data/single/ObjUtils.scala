@@ -1,5 +1,6 @@
 package gallia
-package data.single
+package data
+package single
 
 // ===========================================================================
 object ObjUtils {

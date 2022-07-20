@@ -1,5 +1,6 @@
 package gallia
-package actions.in
+package actions
+package in
 
 // ===========================================================================
 case class RawContentU(input: InputUrlLike) extends ActionIUd with TodoV0 {

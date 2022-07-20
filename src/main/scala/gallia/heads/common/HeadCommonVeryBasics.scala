@@ -1,5 +1,6 @@
 package gallia
-package heads.common
+package heads
+package common
 
 import aptus.String_
 

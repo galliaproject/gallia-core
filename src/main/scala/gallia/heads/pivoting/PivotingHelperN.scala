@@ -1,5 +1,6 @@
 package gallia
-package heads.pivoting
+package heads
+package pivoting
 
 import aptus.Separator
 

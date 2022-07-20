@@ -1,4 +1,7 @@
-package gallia.selection.typed.fluency
+package gallia
+package selection
+package typed
+package fluency
 
 // ===========================================================================
 object TsSelBundles {

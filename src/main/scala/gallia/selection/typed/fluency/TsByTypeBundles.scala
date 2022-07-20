@@ -1,5 +1,7 @@
 package gallia
-package selection.typed.fluency
+package selection
+package typed
+package fluency
 
 // ===========================================================================
 @TypeMatching

@@ -1,5 +1,6 @@
 package gallia
-package io.in
+package io
+package in
 
 import aptus.{Name, QueryString}
 

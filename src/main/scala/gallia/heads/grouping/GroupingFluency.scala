@@ -1,5 +1,6 @@
 package gallia
-package heads.grouping
+package heads
+package grouping
 
 import target._
 

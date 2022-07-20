@@ -1,5 +1,6 @@
 package gallia
-package heads.merging
+package heads
+package merging
 
 import actions.ActionsZZMerging._
 

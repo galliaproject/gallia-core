@@ -1,5 +1,6 @@
 package gallia
-package actions.utils
+package actions
+package utils
 
 // ===========================================================================
 private[actions] object ActionsCommonHelper {

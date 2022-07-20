@@ -1,5 +1,6 @@
 package gallia
-package heads.reducing
+package heads
+package reducing
 
 import aptus.{String_, Seq_}
 

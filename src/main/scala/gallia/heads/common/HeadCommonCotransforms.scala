@@ -1,5 +1,6 @@
 package gallia
-package heads.common
+package heads
+package common
 
 import aptus.Anything_
 import target.{HT, HT2, TtqKPath2}

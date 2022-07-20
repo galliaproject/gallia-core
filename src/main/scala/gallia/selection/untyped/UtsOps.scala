@@ -1,5 +1,6 @@
 package gallia
-package selection.untyped
+package selection
+package untyped
 
 // ===========================================================================
 /** must repeat for object else error "class type required but X with Y found" (TODO:?) */

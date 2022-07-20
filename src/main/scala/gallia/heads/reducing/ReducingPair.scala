@@ -1,5 +1,6 @@
 package gallia
-package heads.reducing
+package heads
+package reducing
 
 // ===========================================================================
 case class ReducingPairs(values: Seq[ReducingPair]) { def keyz: Keyz = Keyz(values.map(_.target.value)) }

@@ -1,5 +1,6 @@
 package gallia
-package atoms.utils
+package atoms
+package utils
 
 import scala.reflect.ClassTag
 import domain.SortingPair

@@ -1,5 +1,6 @@
 package gallia
-package actions.in
+package actions
+package in
 
 import aptus.{Anything_, String_}
 import aptus.Size

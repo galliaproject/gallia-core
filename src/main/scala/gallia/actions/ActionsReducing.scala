@@ -3,7 +3,6 @@ package actions
 
 import atoms.AtomsReducing._
 import heads.reducing._
-import heads.reducing.ReducingPair
 
 // ===========================================================================
 @NumberAbstraction

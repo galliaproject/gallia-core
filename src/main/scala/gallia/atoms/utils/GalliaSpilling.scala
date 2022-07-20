@@ -89,7 +89,7 @@ object GalliaSpilling {
               ._map  (_.splitBy(serializer.pairSeparator).force.tuple2)
               ._alter(_.groupByPreSortedKey)
               ._map  ((SpillingJoinDeserializer.postGroupingSerialization _).tupled) }
-      .pipe(IteratorStreamer.from4)
+      .pipe(IteratorStreamer.from)
   }
 }
 

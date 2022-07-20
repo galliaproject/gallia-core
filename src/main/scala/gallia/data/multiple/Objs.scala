@@ -4,7 +4,6 @@ package multiple
 
 import scala.reflect.ClassTag
 import aptus.Seq_
-import aptus.CloseabledIterator
 import streamer.{IteratorStreamer, ViewStreamer}
 
 // ===========================================================================
@@ -82,11 +81,11 @@ case class Objs private (  // TODO: two versions, see t210104164036
     def splat(value1: Obj, more: Obj*)       : Objs = from(value1 +: more.toList)
 
     // ---------------------------------------------------------------------------
-    def from(values: List[Obj])              : Objs = Objs.build(    ViewStreamer.from(values))
-    def from(values: CloseabledIterator[Obj]): Objs = Objs.build(IteratorStreamer.from(values))
+    def from(values: List[Obj])                 : Objs = Objs.build(    ViewStreamer.from(values))
+    def from(data: DataRegenerationClosure[Obj]): Objs = Objs.build(IteratorStreamer.from(data))
 
     // ---------------------------------------------------------------------------
-    def from4(gen: DataRegenerationClosure[Obj]): Objs = Objs.build(IteratorStreamer.from4(gen))
+    def streamFromFile(path: String): Objs = ObjsIn.streamFromFile(path)
   }
 
 // ===========================================================================

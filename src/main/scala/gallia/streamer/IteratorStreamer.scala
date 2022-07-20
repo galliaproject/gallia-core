@@ -10,10 +10,7 @@ import streamer.{IteratorStreamerUtils => _utils}
 
 // ===========================================================================
 object IteratorStreamer {
-  def from[T](data: CloseabledIterator[T]): IteratorStreamer[T] = ???//new IteratorStreamer(data)
-
-  def from2[T](data: () => CloseabledIterator[T]): IteratorStreamer[T] = new IteratorStreamer(data)
-  def from4[T](gen: data.DataRegenerationClosure[T]): IteratorStreamer[T] = IteratorStreamer.from2(gen.regenerate)
+  def from [T](gen: DataRegenerationClosure[T]): IteratorStreamer[T] = new IteratorStreamer(gen.regenerate)
 }
 
 // ===========================================================================
@@ -30,7 +27,7 @@ final class IteratorStreamer[A](gen: () => CloseabledIterator[A]) extends Stream
   // ---------------------------------------------------------------------------
   private def itr: CloseabledIterator[A] = { ensureStillUsable(); underlying }
 
-          def _alter  [B](f: CloseabledIterator[A] => CloseabledIterator[B]): IteratorStreamer[B] = f(itr).pipe(x => IteratorStreamer.from2(() => x))
+          def _alter  [B](f: CloseabledIterator[A] => CloseabledIterator[B]): IteratorStreamer[B] = new DataRegenerationClosure[B] { def regenerate = () => f(itr) }.pipe(IteratorStreamer.from)
   private def _consume[B](f: CloseabledIterator[A] => B)                    : B                   = f(itr).tap { _ => consumed = true; underlying.close() }
 
     // ---------------------------------------------------------------------------

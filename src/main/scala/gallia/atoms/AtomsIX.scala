@@ -165,8 +165,8 @@ object AtomsIX { import utils.JdbcDataUtils
         val sqlQuery = readQueryingOpt.map(_.query).get// TODO: t210114202848 - validate
 
         Objs
-          .from4 {
-            new data.DataRegenerationClosure[Obj] {
+          .from {
+            new DataRegenerationClosure[Obj] {
               def regenerate = () => JdbcDataUtils.jdbcData(uri)(schemaOpt)(sqlQuery) } }
           .in.some }
 
@@ -194,8 +194,8 @@ object AtomsIX { import utils.JdbcDataUtils
       // ---------------------------------------------------------------------------
       def naive: Option[Objs] =
         Objs
-          .from4 {
-            new data.DataRegenerationClosure[Obj] {
+          .from {
+            new DataRegenerationClosure[Obj] {
               def regenerate = () => JdbcDataUtils.jdbcData(connection)(schemaOpt)(querying.query) } }
           .in.some }
 
@@ -220,14 +220,11 @@ object AtomsIX { import utils.JdbcDataUtils
           mongoDb().disableLogs()
           val cmd = cmdOpt.get // TODO: t210114152901 - validate
 
-          Objs.from4 {
-            mongoData(mongoDb)(new java.net.URI(inputString))(cmd) }
+          Objs.from {
+            new data.DataRegenerationClosure[Obj] {
+              def regenerate = () =>
+                mongoDb.closeableQuery(new java.net.URI(inputString), None)(cmd).map(obj) } }
         }
-
-        // ===========================================================================
-        def mongoData(mongoDb: MongoDb)(uri: java.net.URI)(cmd: MongoDbCmd): data.DataRegenerationClosure[Obj] =
-          new data.DataRegenerationClosure[Obj] {
-            def regenerate = () => mongoDb.closeableQuery(uri, None)(cmd).map(obj) }
 
         // ===========================================================================
         private def cmdOpt =

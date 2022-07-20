@@ -25,7 +25,7 @@ case class InputUrlLike( // TODO: t210115193904 - check URI, regular file vs sym
   @Distributivity
   def firstLine(): Line = // TODO: t210114154924 - generalize to n lines + make optional + cache
     IteratorStreamer
-      .from4(
+      .from(
         new data.DataRegenerationClosure[Line] {
           def regenerate = () => lines() })
       .pipeOpt(linesPreprocessing)(f => (x: Streamer[Line]) => f(x).toIteratorBased.asInstanceOfIteratorStreamer)
@@ -41,7 +41,7 @@ case class InputUrlLike( // TODO: t210115193904 - check URI, regular file vs sym
         if (inMemoryMode)
           ViewStreamer.from(lines().consumeAll)
         else
-          IteratorStreamer.from4(
+          IteratorStreamer.from(
             new data.DataRegenerationClosure[Line] {
               def regenerate = () => lines() }) }
       .pipeOpt(linesPreprocessing)(f => _.pipe(f))
@@ -75,9 +75,9 @@ object InputUrlLike {
   private def normalize(value: String): String = SupportedUriScheme.file.normalizeOpt(value).getOrElse(value)
   
   // ---------------------------------------------------------------------------
-  def streamer[T](inMemoryMode: Boolean)(iter: DataRegenerationClosure[T]): Streamer[T] = // TODO: move + include hack above properly?
-    if (inMemoryMode) iter.regenerate().consumeAll.pipe(ViewStreamer.from)
-    else              IteratorStreamer.from4(iter)
+  def streamer[T](inMemoryMode: Boolean)(data: DataRegenerationClosure[T]): Streamer[T] = // TODO: move + include hack above properly?
+    if (inMemoryMode) data.regenerate().consumeAll.pipe(ViewStreamer.from)
+    else              IteratorStreamer.from(data)
 
 }
 

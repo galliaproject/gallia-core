@@ -19,8 +19,10 @@ object IteratorStreamerUtils {
     that.tipe match {  
       case StreamerType.ViewBased | StreamerType.IteratorBased =>
         new data.DataRegenerationClosure[B] {
-            def regenerate = () => dis.closeabledIterator.union(that.closeabledIterator) }
-          .pipe(IteratorStreamer.from4)
+            def regenerate = () =>
+              dis .closeabledIterator union
+              that.closeabledIterator }
+          .pipe(IteratorStreamer.from)
 
       // ---------------------------------------------------------------------------
       case StreamerType.RDDBased => ??? /* TODO */ }
@@ -30,8 +32,11 @@ object IteratorStreamerUtils {
     that.tipe match {
       case StreamerType.ViewBased | StreamerType.IteratorBased =>
         new data.DataRegenerationClosure[B] {
-            def regenerate = () => dis.closeabledIterator.zipSameSize(that.closeabledIterator).map(x => combiner(x._1, x._2)) }
-          .pipe(IteratorStreamer.from4)
+            def regenerate = () =>
+              (   dis .closeabledIterator zipSameSize
+                  that.closeabledIterator)
+                .map(x => combiner(x._1, x._2)) }
+          .pipe(IteratorStreamer.from)
 
       // ---------------------------------------------------------------------------
       case StreamerType.RDDBased => ??? /* TODO */ }
@@ -94,7 +99,7 @@ object IteratorStreamerUtils {
             GnuJoinByFirstFieldHack(Hacks.ExecutionContext)(sortedLeft, sortedRight)
               .map(deserializeJoiningLine[V])
               .map(combine.tupled) } }
-        .pipe(IteratorStreamer.from4)
+        .pipe(IteratorStreamer.from)
     }
 
 }

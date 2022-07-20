@@ -10,7 +10,7 @@ object GsonToGalliaData {
 
   def parseRecursively(c: Cls, jsonString: String): Obj =
     jsonString
-      .pipe(JsonParsing.parseObject)
+      .pipe(GsonParsing.parseObject)
       .pipe(GsonToGalliaData.convertRecursively(c))
 
   // ---------------------------------------------------------------------------

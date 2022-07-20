@@ -6,7 +6,7 @@ import aptus.String_
 import aptus.{TableName, QueryString}
 
 import heads.Head
-import data.json.JsonParsing
+import data.json.GsonParsing
 
 // ===========================================================================
 private[io] trait InputStringBase { val inputString: InputString }
@@ -18,8 +18,8 @@ private[io] trait InputStringBase { val inputString: InputString }
       InputStringType
         .parse(inputString)
          match {
-          case InputStringType.JsonObject => JsonParsing.parseObject(inputString)
-          case _                          => inputString.readFileContent.pipe(JsonParsing.parseObject) } }
+          case InputStringType.JsonObject => GsonParsing.parseObject(inputString)
+          case _                          => inputString.readFileContent.pipe(GsonParsing.parseObject) } }
 
   // ---------------------------------------------------------------------------
   trait StreamObjsFromString extends InputStringBase {
@@ -27,13 +27,13 @@ private[io] trait InputStringBase { val inputString: InputString }
       InputStringType
         .parse(inputString)
          match {
-          case InputStringType.JsonObject  => inputString.splitBy("\n").filterNot(_.trim.isEmpty).map(JsonParsing.parseObject).toList.pipe(Objs.from)
-          case InputStringType.JsonArray   => JsonParsing.parseArray(inputString).pipe(Objs.from)
+          case InputStringType.JsonObject  => inputString.splitBy("\n").filterNot(_.trim.isEmpty).map(GsonParsing.parseObject).toList.pipe(Objs.from)
+          case InputStringType.JsonArray   => GsonParsing.parseArray(inputString).pipe(Objs.from)
           case InputStringType.Indirection =>
             val content = inputString.readFileContent // FIXME: t220315121047
 
-           (if (InputStringType.parse(content).isJsonObject) JsonParsing.parseObject(content).pipe(Objs.splat(_))
-            else                                             JsonParsing.parseArray (content).pipe(Objs.from))
+           (if (InputStringType.parse(content).isJsonObject) GsonParsing.parseObject(content).pipe(Objs.splat(_))
+            else                                             GsonParsing.parseArray (content).pipe(Objs.from))
           }
   }
 

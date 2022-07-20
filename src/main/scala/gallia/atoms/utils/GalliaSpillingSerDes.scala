@@ -7,7 +7,7 @@ import aptus.aptjson.GsonFormatter
 
 import domain.GroupingPair._
 import meta.PNF
-import data.json.{GalliaToGsonData, GsonToGalliaData, JsonParsing}
+import data.json.{GalliaToGsonData, GsonToGalliaData, GsonParsing}
 import data.multiple.streamer.{Streamer, IteratorStreamer}
 
 // ===========================================================================
@@ -60,7 +60,7 @@ class SpillingSortSerDes(pnfs: Seq[PNF], c: Cls) extends GalliaSpillingSerDes { 
         line
           .splitBy("\t")
           .last // only keep last (value)
-          .pipe(JsonParsing.parseObject)
+          .pipe(GsonParsing.parseObject)
           .pipe(GsonToGalliaData.convertRecursively(c) /* 220623171056 */)
     }
 
@@ -85,7 +85,7 @@ class SpillingSortSerDes(pnfs: Seq[PNF], c: Cls) extends GalliaSpillingSerDes { 
     // ---------------------------------------------------------------------------
     override def _deserialize(line: Line): Obj =
       line
-        .pipe(JsonParsing.parseObject)
+        .pipe(GsonParsing.parseObject)
         .pipe(GsonToGalliaData.convertRecursively(c) /* 220623171056 */)
   }
 

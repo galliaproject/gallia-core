@@ -15,7 +15,7 @@ trait HeadZMerging { self: HeadZ =>
   def union(that: HeadZ): HeadZ = zzToz(that)(UnionZ)
 
   // ---------------------------------------------------------------------------
-  def zip(that: HeadZ): HeadZ =  zzToz(that)(ZipZ)
+  def zipSameSize(that: HeadZ): HeadZ =  zzToz(that)(ZipZ)
 
   // ===========================================================================
   def merging(that: HeadZ)(conf: Start => End): HeadZ = zzToz(that)(MergingData.from(conf).pipe(Merging))

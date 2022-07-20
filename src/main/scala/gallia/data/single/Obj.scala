@@ -122,7 +122,7 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
     private[gallia] def fromIterable(data: Iterable[UEntry]): Obj = build (data.toArray)
     
     // ---------------------------------------------------------------------------
-    def fromJsonString(value: String): Obj = json.JsonParsing.parseObject(value)
+    def fromJsonString(value: String): Obj = json.GsonParsing.parseObject(value)
   }
 
 // ===========================================================================

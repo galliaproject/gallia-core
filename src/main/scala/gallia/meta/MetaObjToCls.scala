@@ -2,7 +2,7 @@ package gallia
 package meta
 
 import aptus.String_
-import data.json.JsonParsing
+import data.json.GsonParsing
 
 // ===========================================================================
 object MetaObjToCls { // 201222111331
@@ -12,13 +12,13 @@ object MetaObjToCls { // 201222111331
   def clsFromFile(schemaFilePath: String): Cls =
     schemaFilePath
       .readFileContent()
-      .pipe(JsonParsing.parseObject) // TODO: support more than just JSON
+      .pipe(GsonParsing.parseObject) // TODO: support more than just JSON
       .pipe(clsFromObj)
 
   // ---------------------------------------------------------------------------
   def clsFromString(value: String): Cls =
     value
-      .pipe(JsonParsing.parseObject) // TODO: support more than just JSON
+      .pipe(GsonParsing.parseObject) // TODO: support more than just JSON
       .pipe(clsFromObj)
 
   // ---------------------------------------------------------------------------

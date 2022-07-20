@@ -64,7 +64,7 @@ object MongoDb {
 
       // ===========================================================================
       def parseOpt(command: String): Option[MongoDbCmd] = { // TODO: t210110112325 - cleaner version
-        val c = gallia.data.json.JsonParsing.parseObject(command) // TODO: wrap...
+        val c = gallia.data.json.GsonParsing.parseObject(command) // TODO: wrap...
 
         // TODO: a basic gson version?
         c.string_("find")

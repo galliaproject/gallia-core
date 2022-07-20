@@ -52,7 +52,7 @@ object AtomsIX { import utils.JdbcDataUtils
 
       // ---------------------------------------------------------------------------
       def commonObj: Obj = {
-          val o = json.JsonParsing.parseObject(inputString)
+          val o = json.GsonParsing.parseObject(inputString)
 
           Option(c)/* TODO: see 211230183100 - may be null */
             .map { schema => o.pipe(json.GsonToGalliaData.convertRecursively(schema)) }
@@ -68,7 +68,7 @@ object AtomsIX { import utils.JdbcDataUtils
   case class _JsonArrayString(inputString: InputString, ignored /* TODO: t211231112700 - investigate */: OtherSchemaProvider, c: Cls) extends HasCommonObjs {
       def naive: Option[Objs] = Some(commonObjs)
         def commonObjs: Objs = {
-          val z = json.JsonParsing.parseArray(inputString).pipe(Objs.from)
+          val z = json.GsonParsing.parseArray(inputString).pipe(Objs.from)
 
           Option(c)/* TODO: see 211230183100 - may be null  */
             .map { schema => z.map(json.GsonToGalliaData.convertRecursively(schema)) }
@@ -91,7 +91,7 @@ object AtomsIX { import utils.JdbcDataUtils
     def commonObj: Obj =
       input
         .content()
-        .pipe(json.JsonParsing.parseObject)
+        .pipe(json.GsonParsing.parseObject)
 
     def naive: Option[Obj] =
       commonObj
@@ -113,7 +113,7 @@ object AtomsIX { import utils.JdbcDataUtils
           input
             .streamLines(inMemoryMode)
             .filterNot(_.trim.isEmpty) //TODO or only if last one?
-            .map(json.JsonParsing.parseObject)
+            .map(json.GsonParsing.parseObject)
             .pipe(Objs.build)
 
       // ---------------------------------------------------------------------------
@@ -134,7 +134,7 @@ object AtomsIX { import utils.JdbcDataUtils
       def commonObjs: Objs =
           input
             .streamLines(inMemoryMode)
-.toList.mkString.pipe(json.JsonParsing.parseArray) // TODO: t201221175254 - actually stream array...
+.toList.mkString.pipe(json.GsonParsing.parseArray) // TODO: t201221175254 - actually stream array...
             .pipe(Objs.from)
 
       // ---------------------------------------------------------------------------

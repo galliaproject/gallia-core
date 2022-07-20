@@ -7,7 +7,7 @@ import scala.collection.JavaConverters._
 import aptus.{JsonObjectString, JsonArrayString}
 
 // ===========================================================================
-object JsonParsing {
+object GsonParsing {
   private def illegal(anys: Any*) = throw new IllegalArgumentException(anys.mkString(","))
 
   // ===========================================================================

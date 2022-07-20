@@ -1,13 +1,17 @@
 package gallia
-package data.multiple
+package data
+package multiple
 
 import scala.reflect.ClassTag
 import aptus.Seq_
+import aptus.CloseabledIterator
+import data.multiple.streamer.{IteratorStreamer, ViewStreamer}
 
 // ===========================================================================
 case class Objs private (  // TODO: two versions, see t210104164036
     private[gallia] val values: Streamer[Obj])
        extends ObjsOperations
+       with    ObjsSorting
        with    ObjsAggregations
        with    ObjsMerging
        with    ObjsOut {
@@ -25,27 +29,32 @@ case class Objs private (  // TODO: two versions, see t210104164036
     // ===========================================================================
     private[gallia] def _modifyUnderlyingStreamer(f: Streamer[Obj] => Streamer[Obj]): Objs = _rewrap(f(values)) // eg to modify spark RDD
 
-    private[gallia] def _asListBased: Objs = values.asListBased.pipe(_rewrap)
+    // ---------------------------------------------------------------------------
+    def _asViewBased    : Objs = values.asViewBased    .pipe(_rewrap)
+    def _asIteratorBased: Objs = values.asIteratorBased.pipe(_rewrap)
 
     // ===========================================================================
     def     mapToStreamer[A: ClassTag](f: Obj =>      A ): Streamer[A] = values.    map(f)
     def flatMapToStreamer[A: ClassTag](f: Obj => Coll[A]): Streamer[A] = values.flatMap(f)
 
-    def consume: Iterator[Obj] = values.iterator // more for intent; FIXME: check usage ok througout... - relates to t210115104555
+    // ---------------------------------------------------------------------------
+    def consumeSelfClosing:                 Iterator[Obj] = values.selfClosingIterator
+    def closeabledIterator: aptus.CloseabledIterator[Obj] = values. closeabledIterator
 
+    // ---------------------------------------------------------------------------
     /** in this case wrapper not to be reused */
     def toListAndTrash: List[Obj] = values.toList // no mercy.
 
     // ---------------------------------------------------------------------------
-    def reduce(op: (Obj, Obj) => Obj): Obj = values.reduce(op)
+    //def reduce(op: (Obj, Obj) => Obj): Obj = values.reduce(op) - not used?
 
     // ===========================================================================
     /*@Narrow */
-    def map      (f: Obj =>      Obj ): Objs = values.    map(f).pipe(_rewrap)
-    def flatMap  (f: Obj => Coll[Obj]): Objs = values.flatMap(f).pipe(_rewrap)
+    def     map(f: Obj =>      Obj ): Objs = values.    map(f).pipe(_rewrap)
+    def flatMap(f: Obj => Coll[Obj]): Objs = values.flatMap(f).pipe(_rewrap)
 
     def filter(p: Obj => Boolean):        Objs = values.filter(p).pipe(_rewrap)
-  //def find  (p: Obj => Boolean): Option[Obj] = values.find  (p) // TODO: t210204105730 - offer streamer find?
+    def find  (p: Obj => Boolean): Option[Obj] = values.find  (p)
 
     // ===========================================================================
     def force = new { def one: Obj = toListAndTrash.force.one }
@@ -56,8 +65,13 @@ case class Objs private (  // TODO: two versions, see t210104164036
     def size: Int = values.size
 
     def take(n: Option[Int]): Objs = n.map(values.take).getOrElse(values).pipe(_rewrap)
+    def drop(n: Option[Int]): Objs = n.map(values.drop).getOrElse(values).pipe(_rewrap)
 
     final def take(n: Int): Objs = take(Some(n))
+    final def drop(n: Int): Objs = drop(Some(n))
+
+    final def takeWhile(p: Obj => Boolean): Objs = values.takeWhile(p).pipe(_rewrap)
+    final def dropWhile(p: Obj => Boolean): Objs = values.dropWhile(p).pipe(_rewrap)
   }
 
   // ===========================================================================
@@ -65,11 +79,14 @@ case class Objs private (  // TODO: two versions, see t210104164036
     private[gallia] def build(values: Streamer[Obj]) = new Objs(values)
 
     // ---------------------------------------------------------------------------
-    def splat(value1: Obj, more: Obj*)               : Objs = from(value1 +: more.toList)
-    def from(values: Seq [Obj])                      : Objs = from(values.toList)
-    def from(values: List[Obj])                      : Objs = Streamer.fromList(values).pipe(Objs.build)
-    def from(values: aptus.Closeabled[Iterator[Obj]]): Objs = Objs.build(Streamer.fromIterator(values))
-    def from(values: aptus.CloseabledIterator[Obj])  : Objs = Objs.build(Streamer.fromIterator(values))
+    def splat(value1: Obj, more: Obj*)       : Objs = from(value1 +: more.toList)
+
+    // ---------------------------------------------------------------------------
+    def from(values: List[Obj])              : Objs = Objs.build(    ViewStreamer.from(values))
+    def from(values: CloseabledIterator[Obj]): Objs = Objs.build(IteratorStreamer.from(values))
+
+    // ---------------------------------------------------------------------------
+    def from4(gen: DataRegenerationClosure[Obj]): Objs = Objs.build(IteratorStreamer.from4(gen))
   }
 
 // ===========================================================================

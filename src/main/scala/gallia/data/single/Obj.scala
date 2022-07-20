@@ -5,8 +5,6 @@ package single
 import aptus._
 import aptus.aptjson.GsonFormatter
 
-import data.json.ObjToGson
-
 // ===========================================================================
 class Obj private ( /* must not expose apply: see 210102140902, mostly so can use .obj(...) accessor */   
         protected[data] val data: UData) // TODO: two versions, see t210104164036
@@ -30,8 +28,8 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
 
       // TODO: should use Key, Ren, ... directly for performance
       // ---------------------------------------------------------------------------
-      if (data.isEmpty)     vldt._Error.ObjCantBeEmpty                   .throwDataError()
-      if (!keys.isDistinct) vldt._Error.ObjDuplicateKeys(keyz.duplicates).throwDataError()
+      if (data.isEmpty)     vldt._Error.ObjCantBeEmpty                   .throwDataError() // a210113121804
+      if (!keys.isDistinct) vldt._Error.ObjDuplicateKeys(keyz.duplicates).throwDataError() // a201026170344
 
       // ---------------------------------------------------------------------------
       // TODO: to proper errors
@@ -66,8 +64,8 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
       def formatDefault : String = formatCompactJson
       def printDefault(): Unit   = printCompactJson()
 
-    def formatPrettyJson  : String = ObjToGson(this).pipe(GsonFormatter.pretty)
-    def formatCompactJson : String = ObjToGson(this).pipe(GsonFormatter.compact)
+    def formatPrettyJson  : String = json.ObjToGson(this).pipe(GsonFormatter.pretty)  // schema-unaware
+    def formatCompactJson : String = json.ObjToGson(this).pipe(GsonFormatter.compact) // schema-unaware
 
     def printPrettyJson (): Unit = { println(formatPrettyJson) }
     def printCompactJson(): Unit = { println(formatCompactJson) }
@@ -93,11 +91,10 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
     def sortedByKeys: Obj = data.sortBy(_._1.name).pipe(Obj.build)
 
     // ===========================================================================
-    def contains   (path: KPathW): Boolean =  _contains(path)
-    def containsNot(path: KPathW): Boolean = !_contains(path)
+    @inline def containsPath   (path: KPathW): Boolean =  _containsPath(path)
 
-    // ===========================================================================
-    def potch(key: Key): (Option[AnyValue], Option[Obj]) = opt(key) -> removeOpt(key) // totally a thing. (TODO: t210124100009)
+    // ---------------------------------------------------------------------------
+    def potch(key: Key): (Option[AnyValue], Option[Obj]) = attemptKey(key) -> removeOpt(key) // totally a thing. (TODO: t210124100009)
 
       // ---------------------------------------------------------------------------
       def retainOpt(target : Key)  : Option[Obj] = data.filter   (_._1 == target).in.noneIf(_.isEmpty).map(Obj.build)
@@ -106,6 +103,9 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
       // ---------------------------------------------------------------------------
       def retainOpt(targets: Keyz): Option[Obj] = data.filter   (_._1.containedIn(targets)).in.noneIf(_.isEmpty).map(Obj.build)
       def removeOpt(targets: Keyz): Option[Obj] = data.filterNot(_._1.containedIn(targets)).in.noneIf(_.isEmpty).map(Obj.build)
+
+      // ---------------------------------------------------------------------------
+      def retainOpt(targets: Renz): Option[Obj] = retainOpt(targets.froms).map(_.rename(targets))
   }
 
   // ===========================================================================

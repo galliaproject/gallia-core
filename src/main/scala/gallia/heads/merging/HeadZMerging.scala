@@ -51,7 +51,10 @@ trait HeadZMerging { self: HeadZ =>
         def innerCoGroup(that: HeadZ, on: KeyW, asLeft: KeyW = _left, asRight: KeyW = _right): HeadZ = innerCoGroup(that)(_.on(on).as(asLeft, asRight))
 
       // ===========================================================================
-      def join(that: HeadZ)(conf: Join => End) = merging(that)(_.join.pipe(conf))
+      def join(that: HeadZ)(conf: Join => End): HeadZ = merging(that)(_.join.pipe(conf))
+
+      def join(that: HeadZ, on: KeyW)   : HeadZ = join(that)(_.inner.on(on))
+      def join(that: HeadZ, on: JoinKey): HeadZ = join(that)(_.inner.on(on))
 
         def  fullJoin(that: HeadZ): HeadZ =  join(that)(_. full.onCommonKey)
         def  leftJoin(that: HeadZ): HeadZ =  join(that)(_. left.onCommonKey)

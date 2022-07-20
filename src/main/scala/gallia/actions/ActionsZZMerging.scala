@@ -53,9 +53,9 @@ object ActionsZZMerging {
         .joinKeys(c1, c2)
         .pipe { joinKeys =>
           data match {
-            case bring  : BringData   => _Bring  (bring.targetKeys(c1, c2), joinKeys)
-            case join   : JoinData    => _Join   (join   .joinType        , joinKeys)
-            case coGroup: CoGroupData => _CoGroup(coGroup.joinType        , joinKeys, coGroup.as) } }
+            case bring  : BringData   => _Bring  (c1, c2, bring.targetKeys(c1, c2), joinKeys)
+            case join   : JoinData    => _Join   (c1, c2, join   .joinType        , joinKeys)
+            case coGroup: CoGroupData => _CoGroup(c1, c2, coGroup.joinType        , joinKeys, coGroup.as) } }
         .in.seq }
 
 }

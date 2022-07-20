@@ -4,7 +4,8 @@ package reflect
 import scala.reflect.{classTag, ClassTag}
 import java.time._
 
-import aptus.{Anything_, Seq_, String_, Long_}
+import data.{DataParsing, DataFormatting}
+import aptus._
 
 // ===========================================================================
 sealed trait NumericalType extends BasicType
@@ -24,23 +25,44 @@ sealed trait NumericalType extends BasicType
         def toRealLike(value: Double): Any /* eg value.toDouble for _Float */ }
 
 // ===========================================================================
-sealed trait HasParseString { type T; def parseString: String => T }
-
-  // ---------------------------------------------------------------------------
-  sealed trait HasParseDouble { type T; def parseDouble: Double => T }
-
-  // ---------------------------------------------------------------------------
-  sealed trait HasPair { x: HasParseString =>
+sealed trait HasParseString {
     type T
-    def pair: (String => T, Long => T)
-    final override def parseString = { val (ifString, ifLong) = pair; BasicTypeUtils.stringOrLong(ifString, ifLong)(_) }
+
+    // ---------------------------------------------------------------------------
+          def parseString     : String => T
+    final def parseStringAsAny: Any    => T = value => parseString(value.asInstanceOf[String])
   }
 
-  // ---------------------------------------------------------------------------
-  sealed trait HasFieldHasType { def has: Fld => Boolean }
+  // ===========================================================================
+  sealed trait HasParseDouble {
+    type T
+
+    // ---------------------------------------------------------------------------
+          def parseDouble     : Double => T
+    final def parseAnyToDouble: Any    => T = value => parseDouble(value.asInstanceOf[Double])
+  }
+
+// ===========================================================================
+sealed trait HasFormatString {
+  type T
 
   // ---------------------------------------------------------------------------
-  trait HasValuePredicate { def valuePredicate: AnyValue => Boolean }
+        def formatString     : T   => String
+  final def formatStringAsAny: Any => String = value => formatString(value.asInstanceOf[T])
+}
+
+// ===========================================================================
+sealed trait HasPair { x: HasParseString =>
+  type T
+  def pair: (String => T, Long => T)
+  final override def parseString = { val (ifString, ifLong) = pair; BasicTypeUtils.stringOrLong(ifString, ifLong)(_) }
+}
+
+// ---------------------------------------------------------------------------
+sealed trait HasFieldHasType { def has: Fld => Boolean }
+
+// ---------------------------------------------------------------------------
+trait HasValuePredicate { def valuePredicate: AnyValue => Boolean }
 
 // ===========================================================================
 sealed trait ParameterizedBasicType
@@ -60,9 +82,12 @@ sealed trait ParameterizedBasicType
 sealed trait BasicType // TODO: t210125111338 - investigate union types (coming in scala 3?)
       extends EnumEntry
       with    BasicTypeHelper
+      with    HasFormatString
       with    meta.ValueType {
     type T
-    val  fullName: FullName }
+    val  fullName: FullName
+
+    def formatDefault: String = entryName }
 
   // ===========================================================================
   @TypeMatching object BasicType extends Enum[BasicType]  {
@@ -75,6 +100,10 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
 
     // ---------------------------------------------------------------------------
       private val lookup: Map[FullName, BasicType] = BasicTypeUtils.createLookup(values)
+
+    // ---------------------------------------------------------------------------
+    @inline def matchingSubinfos(info: meta.InfoLike)(multiple: Multiple)(value: Any): Seq[meta.SubInfo] =
+      BasicTypeUtils.matchingSubinfos(info)(multiple)(value)
 
     // ===========================================================================
     // TODO:
@@ -89,7 +118,8 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
     case object _String extends UnparameterizedBasicType {
       override type T              =            String
       override val  fullName       = "java.lang.String"
-      override val  parseString    = identity
+      override val   parseString   = identity
+      override val  formatString   = identity
       override val  valuePredicate = _.isInstanceOf[T]
 
       // ---------------------------------------------------------------------------
@@ -110,23 +140,26 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
       type T        =        Boolean
       val  fullName = "scala.Boolean"
 
-      override val parseString = _.toBoolean }
+      override val formatString = DataFormatting.formatBoolean
+      override val parseString  = _.toBoolean }
 
     // ===========================================================================
     case object _Int extends UnparameterizedBasicType with IntegerLikeType { /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse; def toIntegerLike(value: Double) = value.toInt; override val valuePredicate = _.isInstanceOf[T]
       type T        =        Int
       val  fullName = "scala.Int"
 
-      override val parseString = _.toInt
-      override val parseDouble = d => d.toInt.assert(_.toDouble == d) }
+      override val formatString = DataFormatting.formatInt
+      override val parseString  = _.toInt
+      override val parseDouble  = d => d.toInt.assert(_.toDouble == d) }
 
     // ---------------------------------------------------------------------------
     case object _Double extends UnparameterizedBasicType with RealLikeType { /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse; def toRealLike   (value: Double) = value; override val valuePredicate = _.isInstanceOf[T]
       type T        =        Double
       val  fullName = "scala.Double"
 
-      override val parseString = _.toDouble
-      override val parseDouble = identity }
+      override val formatString = DataFormatting.formatDouble
+      override val parseString  = _.toDouble
+      override val parseDouble  = identity }
 
     // ===========================================================================
     //TODO: rename these to Int{8, 16, 64}?
@@ -134,46 +167,52 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
       type T        =        Byte
       val  fullName = "scala.Byte"
 
-      override val parseString = _.toByte
-      override val parseDouble = d => d.toByte.assert(_.toDouble == d) }
+      override val formatString = DataFormatting.formatByte
+      override val parseString  = _.toByte
+      override val parseDouble  = d => d.toByte.assert(_.toDouble == d) }
 
     // ---------------------------------------------------------------------------
     case object _Short extends UnparameterizedBasicType with IntegerLikeType   { /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse; def toIntegerLike(value: Double) = value.toShort; override val valuePredicate = _.isInstanceOf[T]
       type T        =        Short
       val  fullName = "scala.Short"
 
-      override val parseString = _.toShort
-      override val parseDouble = d => d.toShort.assert(_.toDouble == d) }
+      override val formatString = DataFormatting.formatShort
+      override val parseString  = _.toShort
+      override val parseDouble  = d => d.toShort.assert(_.toDouble == d) }
 
     // ---------------------------------------------------------------------------
     case object _Long  extends UnparameterizedBasicType with IntegerLikeType   { /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse; def toIntegerLike(value: Double) = value.toLong; override val valuePredicate = _.isInstanceOf[T]
       type T        =        Long
       val  fullName = "scala.Long"
 
-      override val parseString = _.toLong
-      override val parseDouble = d => d.assert(BasicTypeUtils.doubleFitsLong) .toLong.assert(_.toDouble == d) }
+      override val formatString = DataFormatting.formatLong
+      override val parseString  = _.toLong
+      override val parseDouble  = d => d.assert(BasicTypeUtils.doubleFitsLong) .toLong.assert(_.toDouble == d) }
 
     // ---------------------------------------------------------------------------
     case object _Float extends UnparameterizedBasicType with RealLikeType      { /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse; def toRealLike   (value: Double) = value.toFloat; override val valuePredicate = _.isInstanceOf[T]
       type T        =        Float
       val  fullName = "scala.Float"
 
-      override val parseString = _.toFloat
-      override val parseDouble = _.assert(BasicTypeUtils.doubleFitsFloat).toFloat /* note: precision may also be affected */ }
+      override val formatString = DataFormatting.formatFloat
+      override val parseString  = _.toFloat
+      override val parseDouble  = _.assert(BasicTypeUtils.doubleFitsFloat).toFloat /* note: precision may also be affected */ }
 
     // ===========================================================================
     case object _BigInt extends UnparameterizedBasicType with UnboundedNumber { /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse; override val valuePredicate = _.isInstanceOf[T]
       type T        =             BigInt
       val  fullName = "scala.math.BigInt"
 
-      override val parseString = BigInt.apply }
+      override val  parseString = BigInt.apply
+      override val formatString = DataFormatting.formatBigInt }
 
     // ---------------------------------------------------------------------------
     case object _BigDec extends UnparameterizedBasicType with UnboundedNumber { /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse; override val valuePredicate = _.isInstanceOf[T]
       type T        =             BigDecimal
       val  fullName = "scala.math.BigDecimal"
 
-      override val parseString = BigDecimal.apply
+      override val  parseString = BigDecimal.apply
+      override val formatString = DataFormatting.formatBigDec
 
       override protected def accessorNameModifier(value: FullName): String = value.replace("imal", "") }
 
@@ -182,7 +221,8 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
         type T        =            LocalDate
         val  fullName = "java.time.LocalDate"
 
-        override val pair = (_.parseLocalDate, _.toLocalDate /* aptus' */)
+        override val pair         = (DataParsing   . parseLocalDate, _.toLocalDate /* aptus' */)
+        override val formatString =  DataFormatting.formatLocalDate
 
         private implicit val ord: Ordering[T] = CustomOrdering.localDate }
 
@@ -191,7 +231,8 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
         type T        =            LocalTime
         val  fullName = "java.time.LocalTime"
 
-        override val parseString = _.parseLocalTime /* aptus' */
+        override val  parseString = DataParsing   . parseLocalTime
+        override val formatString = DataFormatting.formatLocalTime
 
         private implicit val ord: Ordering[T] = CustomOrdering.localTime }
 
@@ -201,7 +242,8 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
         val  fullName = "java.time.LocalDateTime"
 
         override val valuePredicate = _.isInstanceOf[T]
-        override val pair           = (_.replace(" ", "T").parseLocalDateTime, _.toLocalDateTime /* aptus' */) // see https://stackoverflow.com/questions/9531524/in-an-iso-8601-date-is-the-t-character-mandatory
+        override val pair           = (DataParsing   . parseLocalDateTime, _.toLocalDateTime /* aptus' */)
+        override val formatString   =  DataFormatting.formatLocalDateTime
 
         private implicit val ord: Ordering[T] = CustomOrdering.localDateTime }
 
@@ -210,7 +252,8 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
         type T        =            OffsetDateTime
         val  fullName = "java.time.OffsetDateTime"
 
-        override val parseString = _.parseOffsetDateTime /* aptus' */
+        override val  parseString = DataParsing   . parseOffsetDateTime
+        override val formatString = DataFormatting.formatOffsetDateTime
 
         private implicit val ord: Ordering[T] = CustomOrdering.offsetDateTime }
     
@@ -219,7 +262,8 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
         type T        =            ZonedDateTime
         val  fullName = "java.time.ZonedDateTime"
 
-        override val parseString = _.parseZonedDateTime  /* aptus' */
+        override val  parseString = DataParsing   . parseZonedDateTime
+        override val formatString = DataFormatting.formatZonedDateTime
 
         private implicit val ord: Ordering[T] = CustomOrdering.zonedDateTime }
 
@@ -228,7 +272,8 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
         type T        =            Instant
         val  fullName = "java.time.Instant"
 
-        override val pair = (_.parseInstant, _.toInstant /* aptus' */)
+        override val pair         = (DataParsing   . parseInstant, _.toInstant /* aptus' */)
+        override val formatString =  DataFormatting.formatInstant
 
         private implicit val ord: Ordering[T] = Ordering.by(identity) /* not sure why needed */ }
 
@@ -237,7 +282,8 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
       type T        =           ByteBuffer
       val  fullName = "java.nio.ByteBuffer"
 
-      override val parseString = data.DataFormatting.parseBinaryString
+      override val  parseString = DataParsing   . parseBinary
+      override val formatString = DataFormatting.formatBinary
 
       private implicit val ord: Ordering[T] = CustomOrdering.byteBuffer }
 
@@ -247,12 +293,15 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
     case class _Enm(values: Seq[EnumValue]) extends ParameterizedBasicType { /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse
         vldt.MetaValidation.checkAreValidEnumValues(values).require(_.isEmpty /* ie no errors reported */)
 
-        type T        =             Seq[EnumValue]
+        override def formatDefault: String = entryName.colon(values.map(_.stringValue.surroundWith("|")).join(","))
+
+        type T        = EnumValue
         val  fullName = gallia.reflect._EnumValue
 
         def stringValues: Seq[EnumStringValue] = values.map(_.stringValue)
 
         override val valuePredicate = _.isInstanceOf[EnumValue]
+        override val formatString   = _.stringValue
 
         // ---------------------------------------------------------------------------
         override protected def accessorNameModifier(value: FullName): String = "enm"

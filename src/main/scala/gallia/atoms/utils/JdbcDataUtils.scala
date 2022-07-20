@@ -4,7 +4,6 @@ package utils
 
 import aptus._
 import aptus.ResultSet_
-import data.multiple.streamer.IteratorStreamer
 
 // ===========================================================================
 private[atoms] object JdbcDataUtils {

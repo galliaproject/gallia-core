@@ -5,7 +5,6 @@ package utils
 import scala.reflect.ClassTag
 import domain.{PathPair1, PathPair2, PathPair3, Sorter}
 import meta.PNF
-import data.multiple.streamer._
 
 // ===========================================================================
 object SortWrapping {

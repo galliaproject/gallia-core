@@ -3,11 +3,10 @@ package data
 package multiple
 
 import aptus.Anything_
-import aptus.Line
 
 import domain.GroupingPair.GroupingPair1N
 import heads.merging.MergingData._
-import atoms.utils.{GalliaSpilling, SpillingJoinSerializer, SpillingJoinDeserializer}
+import atoms.utils.GalliaSpilling
 
 // ===========================================================================
 trait ObjsMerging { self: Objs =>
@@ -32,37 +31,14 @@ trait ObjsMerging { self: Objs =>
 
     // ---------------------------------------------------------------------------
     private def spillingJoin(leftCls: Cls, rightCls: Cls)(joinType: JoinType, joinKeys: JoinKey)(that: Objs): Objs = {
-
       val  leftPair = GroupingPair1N( leftCls.field(joinKeys.left) , groupees =  leftCls)
       val rightPair = GroupingPair1N(rightCls.field(joinKeys.right), groupees = rightCls)
 
       // ---------------------------------------------------------------------------
-      val  leftSerializer = new SpillingJoinSerializer(joinKeys.left .pipe( leftCls.field), leftCls)
-      val rightSerializer = new SpillingJoinSerializer(joinKeys.right.pipe(rightCls.field), rightCls)
-
-      val deserializer    = new SpillingJoinDeserializer(leftPair.groupees, rightPair.groupees, rightPair.grouper.key)
-
-      // ===========================================================================
-      new DataRegenerationClosure[Obj] {
-
-        // ---------------------------------------------------------------------------
-        def inputLines(pair: GroupingPair1N, serializer: SpillingJoinSerializer, rhs: Boolean)(input: Streamer[Obj]): Streamer[Line] =
-          input
-            .map { o =>
-              o.attemptKey(pair.grouper.key) ->
-              o.in.some }
-            .pipe(GalliaSpilling.spillingGroupBy1N(pair))
-            .map(serializer._serialize)
-
-        // ---------------------------------------------------------------------------
-        def regenerate: () => aptus.CloseabledIterator[Obj] = () =>
-          (   inputLines(leftPair,  leftSerializer , rhs = false)(self.values),
-              inputLines(rightPair, rightSerializer, rhs = true )(that.values))
-            .pipe((GalliaSpilling.spillingJoin _).tupled)
-            .map(deserializer._deserialize)
-            .flatMap { case (ls, rs) =>
-              for (l <- ls; r <- rs) yield (l.merge(r)) } }
-          .pipe(Objs.from4)
+      GalliaSpilling.spillingJoin(leftPair, rightPair)(
+        this.values.map { o => o.attemptKey( leftPair.grouper.key) -> o.in.some },
+        that.values.map { o => o.attemptKey(rightPair.grouper.key) -> o.in.some } )
+      .pipe(Objs.build)
     }
 
   // ===========================================================================

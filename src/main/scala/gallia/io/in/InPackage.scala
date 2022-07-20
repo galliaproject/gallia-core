@@ -2,7 +2,7 @@ package gallia
 package io
 
 import aptus.Line
-import data.multiple.streamer.Streamer
+import streamer.Streamer
 
 // ===========================================================================
 package object in extends _io with __io {

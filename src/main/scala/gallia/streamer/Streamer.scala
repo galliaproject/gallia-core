@@ -1,6 +1,4 @@
 package gallia
-package data
-package multiple
 package streamer
 
 import scala.reflect.{ClassTag => CT}

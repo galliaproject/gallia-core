@@ -9,7 +9,7 @@ trait ObjsOut { self: Objs =>
   @Scalability
   def formatDefault: String = {
     (values match {
-      case x: data.multiple.streamer.IteratorStreamer[Obj] =>
+      case x: streamer.IteratorStreamer[Obj] =>
         x.formatEither match {
           case Left (consumedOrExited) => consumedOrExited
           case Right(r) => r  .pipe { list => list.map(_.formatDefault).section(s"#${list.size}") } }

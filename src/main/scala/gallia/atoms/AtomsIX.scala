@@ -7,8 +7,8 @@ import io._
 import io.in._
 import actions.in.HasProjection
 import data.json
-import data.multiple.streamer.{IteratorStreamer, Streamer}
 import data.TableToGalliaData
+import streamer.{IteratorStreamer, Streamer}
 import atoms.utils.MongoDb
 import atoms.utils.MongoDb.MongoDbCmd
 

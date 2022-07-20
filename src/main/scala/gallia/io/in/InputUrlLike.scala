@@ -4,7 +4,7 @@ package io.in
 import java.net.URL
 import aptus._
 import aptus.aptutils.InputStreamUtils
-import data.multiple.streamer.{IteratorStreamer, Streamer, ViewStreamer}
+import streamer.{IteratorStreamer, Streamer, ViewStreamer}
 
 // ===========================================================================
 case class InputUrlLike( // TODO: t210115193904 - check URI, regular file vs symlink, ...

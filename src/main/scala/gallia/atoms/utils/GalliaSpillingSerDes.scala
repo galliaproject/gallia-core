@@ -8,7 +8,7 @@ import aptus.aptjson.GsonFormatter
 import domain.GroupingPair._
 import meta.PNF
 import data.json.{GalliaToGsonData, GsonToGalliaData, GsonParsing}
-import data.multiple.streamer.{Streamer, IteratorStreamer}
+import streamer.{Streamer, IteratorStreamer}
 
 // ===========================================================================
 trait GalliaSpillingSer { type Row; def _serialize  (pair: Row) : Line }
@@ -42,6 +42,10 @@ trait GalliaSpillingSerDes extends GalliaSpillingSer with GalliaSpillingDes {
       // ---------------------------------------------------------------------------
       protected def   serialize(pair: (Option[K], Option[V])): Line
       protected def deserialize(line: Line)                  : (Option[K], Option[V])
+
+      // ---------------------------------------------------------------------------
+      val pairSeparatorChar = '\t'
+      val pairSeparator     = pairSeparatorChar.toString
     }
 
 // ===========================================================================
@@ -98,12 +102,12 @@ class SpillingSortSerDes(pnfs: Seq[PNF], c: Cls) extends GalliaSpillingSerDes { 
       val keyString  : String = keyOpt.map(GalliaToGsonData.formatGsonJsonElement(ctx.grouper)).getOrElse("")
       val valueString: String = valOpt.map(GalliaToGsonData.formatGsonJsonElement(ctx.groupee)).getOrElse("")
 
-      s"${keyString}\t${valueString}" }
+      s"${keyString}${pairSeparator}${valueString}" }
 
     // ---------------------------------------------------------------------------
     override def deserialize(line: Line): (OVle, OVle) =
       line
-        .span(_ != '\t')
+        .span(_ != pairSeparatorChar)
         .pipe { case (keyString, valueString) =>
           val key  : OVle = keyString                      .inNoneIf(_.isEmpty).map(GsonToGalliaData.parseGsonJsonElement(ctx.grouper))
           val value: OVle = valueString.tail /* drop tab */.inNoneIf(_.isEmpty).map(GsonToGalliaData.parseGsonJsonElement(ctx.groupee))
@@ -120,19 +124,18 @@ class SpillingSortSerDes(pnfs: Seq[PNF], c: Cls) extends GalliaSpillingSerDes { 
       val keyString  : String = keyOpt.map(GalliaToGsonData.formatRecursively(c = ctx.groupers, _)).getOrElse("")
       val valueString: String = valOpt.map(GalliaToGsonData.formatGsonJsonElement(ctx.groupee)).getOrElse("")
 
-      s"${keyString}\t${valueString}" }
+      s"${keyString}${pairSeparator}${valueString}" }
 
     // ---------------------------------------------------------------------------
     override def deserialize(line: Line): (OObj, OVle) =
       line
-        .span(_ != '\t')
+        .span(_ != pairSeparatorChar)
         .pipe { case (keyString, valueString) =>
           val key  : OObj = keyString                      .inNoneIf(_.isEmpty).map(GsonToGalliaData.parseRecursively    (ctx.groupers, _))
           val value: OVle = valueString.tail /* drop tab */.inNoneIf(_.isEmpty).map(GsonToGalliaData.parseGsonJsonElement(ctx.groupee))
 
           key -> value }
   }
-
 
   // ===========================================================================
   class SpillingGroupByN1SerDes(override val ctx: GroupingPair1N) extends GalliaSpillingPairSerDes[GroupingPair1N, Vle, Obj] {
@@ -143,12 +146,12 @@ class SpillingSortSerDes(pnfs: Seq[PNF], c: Cls) extends GalliaSpillingSerDes { 
       val keyString: String = keyOpt.map(GalliaToGsonData.formatGsonJsonElement(ctx.grouper))    .getOrElse("")
       val valString: String = valOpt.map(GalliaToGsonData.formatRecursively    (ctx.groupees, _)).getOrElse("")
 
-      s"${keyString}\t${valString}" }
+      s"${keyString}${pairSeparator}${valString}" }
 
     // ---------------------------------------------------------------------------
     override def deserialize(line: Line): (OVle, OObj) =
       line
-        .span(_ != '\t')
+        .span(_ != pairSeparatorChar)
         .pipe { case (keyString, valString) =>
 
           val key  : OVle = keyString                    .inNoneIf(_.isEmpty).map(GsonToGalliaData.parseGsonJsonElement(ctx.grouper))
@@ -166,12 +169,12 @@ class SpillingSortSerDes(pnfs: Seq[PNF], c: Cls) extends GalliaSpillingSerDes { 
       val keyString: String = keyOpt.map(GalliaToGsonData.formatRecursively(ctx.groupers, _)).getOrElse("")
       val valString: String = valOpt.map(GalliaToGsonData.formatRecursively(ctx.groupees, _)).getOrElse("")
 
-      s"${keyString}\t${valString}" }
+      s"${keyString}${pairSeparator}${valString}" }
 
     // ---------------------------------------------------------------------------
     override def deserialize(line: Line): (OObj, OObj) =
       line
-        .span(_ != '\t')
+        .span(_ != pairSeparatorChar)
         .pipe { case (keyString, valString) =>
 
           val key  : OObj = keyString                    .inNoneIf(_.isEmpty).map(GsonToGalliaData.parseRecursively(ctx.groupers, _))
@@ -182,36 +185,23 @@ class SpillingSortSerDes(pnfs: Seq[PNF], c: Cls) extends GalliaSpillingSerDes { 
   }
 
   // ===========================================================================
-  class SpillingJoinSerializer(groupee: Fld, c: Cls) extends GalliaSpillingSer { import SpillingJoinSerializer.SecondarySeparator
-      type Row = (OVle, List[OObj])
+  class SpillingJoinDeserializer(leftGroupees: Cls, rightGroupees: Cls, rightGrouper: Key) extends GalliaSpillingDes { import SpillingJoinDeserializer.SecondarySeparator
+      type Row = (List[Obj], List[Obj])
 
       // ---------------------------------------------------------------------------
-      override def _serialize(pair: Row): aptus.Line = {
-        val (keyOpt, values) = pair
+      override def _deserialize(line: Line): Row = {
+        val (left, right) = line.span(_ != '\t')
 
-        val keyString: String = keyOpt      .map(GalliaToGsonData.formatGsonJsonElement(groupee)).getOrElse("")
-        val valString: String = values.map(_.map(GalliaToGsonData.formatRecursively(c, _))       .getOrElse("")).mkString(SecondarySeparator)
-
-        s"${keyString}\t${valString}"
-      }
+        left .splitBy(SecondarySeparator).map(GsonToGalliaData.parseRecursively(leftGroupees,  _)).toList ->
+        right.splitBy(SecondarySeparator).map(GsonToGalliaData.parseRecursively(rightGroupees, _)).toList.map(_.remove(rightGrouper)) }
     }
 
-    // ---------------------------------------------------------------------------
-    object SpillingJoinSerializer {
-      val SecondarySeparator = "\u0000" // TODO: disallow in data
+    // ===========================================================================
+    object SpillingJoinDeserializer {
+      def postGroupingSerialization(key: String, values: Seq[String]): String = s"${key}\t${values.mkString(SecondarySeparator)}"
+
+      // ---------------------------------------------------------------------------
+      private val SecondarySeparator = "\u0000" // TODO: disallow in data
     }
-
-  // ===========================================================================
-  class SpillingJoinDeserializer(leftGroupees: Cls, rightGroupees: Cls, rightGrouper: Key) extends GalliaSpillingDes { import SpillingJoinSerializer.SecondarySeparator
-    type Row = (List[Obj], List[Obj])
-
-    // ---------------------------------------------------------------------------
-    override def _deserialize(line: Line): Row = {
-      val (left, right) = line.span(_ != '\t')
-
-      left .splitBy(SecondarySeparator).map(GsonToGalliaData.parseRecursively(leftGroupees,  _)).toList ->
-      right.splitBy(SecondarySeparator).map(GsonToGalliaData.parseRecursively(rightGroupees, _)).toList.map(_.remove(rightGrouper)) }
-
-  }
 
 // ===========================================================================

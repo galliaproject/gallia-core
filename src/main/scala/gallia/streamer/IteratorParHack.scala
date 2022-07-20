@@ -1,5 +1,5 @@
 package gallia
-package data.multiple.streamer
+package streamer
 
 import scala.collection.parallel.CollectionConverters._ // for 2.13 only
 

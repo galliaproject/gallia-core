@@ -1,10 +1,9 @@
 package gallia
-package data.multiple
 package streamer
 
 import scala.reflect.{ClassTag => CT}
 import heads.merging.MergingData._
-import data.multiple.streamer.{ViewStreamerUtils => _utils}
+import streamer.{ViewStreamerUtils => _utils}
 
 // ===========================================================================
 class ViewStreamer[A](view: ViewRepr[A]) extends Streamer[A] { // TODO: add a ListStreamer purely for tests

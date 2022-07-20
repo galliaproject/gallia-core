@@ -2,10 +2,10 @@ package gallia
 package atoms
 package utils
 
-import aptus.Line
+import aptus._
 import domain.GroupingPair._
 import meta.PNF
-import data.multiple.streamer._
+import streamer.{IteratorStreamer, Streamer}
 import spilling._
 
 // ===========================================================================
@@ -57,11 +57,40 @@ object GalliaSpilling {
       .groupByPreSortedKey
 
   // ===========================================================================
-  def spillingJoin(left: Streamer[Line], right: Streamer[Line]): aptus.CloseabledIterator[Line] =
-    GnuJoinByFirstFieldHack.apply(Hacks.ExecutionContext)(
-      left .closeabledIterator,
-      right.closeabledIterator)
+  def spillingJoin
+        (leftPair: GroupingPair1N, rightPair: GroupingPair1N)
+        (left: Streamer[(OVle, OObj)], right: Streamer[(OVle, OObj)])
+      : Streamer[Obj] = {
 
+    val     leftSerializer = new SpillingGroupByN1SerDes(leftPair)
+    val    rightSerializer = new SpillingGroupByN1SerDes(rightPair)
+    val outputDeserializer = new SpillingJoinDeserializer(leftPair.groupees, rightPair.groupees, rightPair.grouper.key)
+
+    // ---------------------------------------------------------------------------
+    new data.DataRegenerationClosure[Obj] {
+        def regenerate = { () =>
+
+          // ---------------------------------------------------------------------------
+          GnuJoinByFirstFieldHack
+            .apply(Hacks.ExecutionContext)( // will schedule to close inputs accordingly
+              sideInput( leftSerializer)(left) .closeabledIterator,
+              sideInput(rightSerializer)(right).closeabledIterator)
+            .map(outputDeserializer._deserialize)
+            .flatMap { case (ls, rs) =>
+              for (l <- ls; r <- rs) yield
+                l merge r } }
+
+        // ---------------------------------------------------------------------------
+        def sideInput(serializer: SpillingGroupByN1SerDes)(input : Streamer[(OVle, OObj)]): IteratorStreamer[String] =
+          input
+              .asInstanceOfIteratorStreamer
+              ._map  (serializer._serialize)
+              ._alter(GnuSortByFirstFieldsHack.default(Hacks.ExecutionContext, debug = "220720113328"))
+              ._map  (_.splitBy(serializer.pairSeparator).force.tuple2)
+              ._alter(_.groupByPreSortedKey)
+              ._map  ((SpillingJoinDeserializer.postGroupingSerialization _).tupled) }
+      .pipe(IteratorStreamer.from4)
+  }
 }
 
 // ===========================================================================

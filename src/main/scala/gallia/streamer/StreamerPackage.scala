@@ -1,6 +1,4 @@
 package gallia
-package data
-package multiple
 
 // ===========================================================================
 package object streamer {

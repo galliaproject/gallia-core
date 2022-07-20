@@ -1,6 +1,4 @@
 package gallia
-package data
-package multiple
 package streamer
 
 import scala.reflect.{ClassTag => CT}
@@ -15,7 +13,7 @@ object IteratorStreamer {
   def from[T](data: CloseabledIterator[T]): IteratorStreamer[T] = ???//new IteratorStreamer(data)
 
   def from2[T](data: () => CloseabledIterator[T]): IteratorStreamer[T] = new IteratorStreamer(data)
-  def from4[T](gen: DataRegenerationClosure[T]): IteratorStreamer[T] = IteratorStreamer.from2(gen.regenerate)
+  def from4[T](gen: data.DataRegenerationClosure[T]): IteratorStreamer[T] = IteratorStreamer.from2(gen.regenerate)
 }
 
 // ===========================================================================

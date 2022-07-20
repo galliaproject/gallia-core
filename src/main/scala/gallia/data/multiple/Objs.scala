@@ -5,7 +5,7 @@ package multiple
 import scala.reflect.ClassTag
 import aptus.Seq_
 import aptus.CloseabledIterator
-import data.multiple.streamer.{IteratorStreamer, ViewStreamer}
+import streamer.{IteratorStreamer, ViewStreamer}
 
 // ===========================================================================
 case class Objs private (  // TODO: two versions, see t210104164036

@@ -131,6 +131,8 @@ class Whatever(private[gallia] val any: Any) extends AnyVal with Serializable { 
   @IntSize
   def  sizeString   : TypedWhatever[Int]     = _string(_.size)
 
+  def sizeList      : TypedWhatever[Int]     = _seq(_.size)
+
   def  isEmptyString: TypedWhatever[Boolean] = _string(_.isEmpty)
   def nonEmptyString: TypedWhatever[Boolean] = _string(_.nonEmpty)
 
@@ -162,7 +164,11 @@ class Whatever(private[gallia] val any: Any) extends AnyVal with Serializable { 
   // ---------------------------------------------------------------------------
   def stringValue: TypedWhatever[String] = _enm(_.stringValue)
 
-  // ===========================================================================  
+  // ===========================================================================
+private def _seq[T](f: Seq[_] => T): TypedWhatever[T] = any match {
+        case x: Seq[_] => f(x)
+        case x         => dataError(matchError("220725141231", x)) }
+
   private def _string[T](f: String => T): TypedWhatever[T] = any match {
         case x: String => f(x)
         case x         => dataError(matchError("210112163810", x)) }
@@ -202,7 +208,7 @@ object Whatever {
       value match {
         case None    => None
         case Some(x) => Some(new Whatever(x))
-        case      x  => Some(new Whatever(x)) }       
+        case      x  => Some(new Whatever(x)) }
 
     // ---------------------------------------------------------------------------  
     private[gallia] def whatever2Opt(x: Any, y: Any): Option[(Whatever, Whatever)] =

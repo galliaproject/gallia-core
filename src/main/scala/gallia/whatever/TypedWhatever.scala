@@ -20,18 +20,40 @@ class TypedWhatever[+T](val typed: T) extends Serializable { // can't be AnyVal 
     private[gallia] def mapBoolean[T2](f: Boolean   => T2): TypedWhatever[T2] = map { x => f(x.boolean) }
     private[gallia] def mapString [T2](f: String    => T2): TypedWhatever[T2] = map { x => f(x.string) }
     private[gallia] def mapEnm    [T2](f: EnumValue => T2): TypedWhatever[T2] = map { x => f(x.enm) }
+    private[gallia] def mapSeq    [T2](f: Seq[_]    => T2): TypedWhatever[T2] = map { x => f(x.seq) }
   
   // ===========================================================================
   def unary_!                       (implicit ev: T <:< Boolean): TypedWhatever[Boolean] = mapBoolean { !_ }
 
+  // ---------------------------------------------------------------------------
   def && (y: TypedWhatever[Boolean])(implicit ev: T <:< Boolean): TypedWhatever[Boolean] = mapBoolean { _ && y.typed.boolean }
   def || (y: TypedWhatever[Boolean])(implicit ev: T <:< Boolean): TypedWhatever[Boolean] = mapBoolean { _ || y.typed.boolean }
 
   // ---------------------------------------------------------------------------
+  def == (that: Int)     : TypedWhatever[Boolean] = map(_.any == that)
+  def == (that: Double)  : TypedWhatever[Boolean] = map(_.any == that)
+  def == (that: String)  : TypedWhatever[Boolean] = map(_.any == that)
+  def == (that: Boolean) : TypedWhatever[Boolean] = map(_.any == that)
   def == (that: Whatever): TypedWhatever[Boolean] = map(_.any == that.any)
+
+  // ---------------------------------------------------------------------------
+  def != (that: Int)     : TypedWhatever[Boolean] = map(_.any != that)
+  def != (that: Double)  : TypedWhatever[Boolean] = map(_.any != that)
+  def != (that: String)  : TypedWhatever[Boolean] = map(_.any != that)
+  def != (that: Boolean) : TypedWhatever[Boolean] = map(_.any != that)
   def != (that: Whatever): TypedWhatever[Boolean] = map(_.any != that.any)
 
   // ---------------------------------------------------------------------------
+  def <  [$Number >: T](that: $Number)(implicit ev: Numeric[$Number]): TypedWhatever[Boolean] = map(_.any.number.doubleValue <  that.number.doubleValue)
+  def >  [$Number >: T](that: $Number)(implicit ev: Numeric[$Number]): TypedWhatever[Boolean] = map(_.any.number.doubleValue >  that.number.doubleValue)
+  def <= [$Number >: T](that: $Number)(implicit ev: Numeric[$Number]): TypedWhatever[Boolean] = map(_.any.number.doubleValue <= that.number.doubleValue)
+  def >= [$Number >: T](that: $Number)(implicit ev: Numeric[$Number]): TypedWhatever[Boolean] = map(_.any.number.doubleValue >= that.number.doubleValue)
+
+  def <  (that: String): TypedWhatever[Boolean] = map(_.any.string <  that)
+  def >  (that: String): TypedWhatever[Boolean] = map(_.any.string >  that)
+  def <= (that: String): TypedWhatever[Boolean] = map(_.any.string <= that)
+  def >= (that: String): TypedWhatever[Boolean] = map(_.any.string >= that)
+
   def <  (that: Whatever): TypedWhatever[Boolean] = map(_.any.number.doubleValue <  that.any.number.doubleValue)
   def >  (that: Whatever): TypedWhatever[Boolean] = map(_.any.number.doubleValue >  that.any.number.doubleValue)
   def <= (that: Whatever): TypedWhatever[Boolean] = map(_.any.number.doubleValue <= that.any.number.doubleValue)
@@ -56,17 +78,18 @@ class TypedWhatever[+T](val typed: T) extends Serializable { // can't be AnyVal 
     def % (value: TypedWhatever[_ >: Number]): TypedWhatever[T] = this.%(new Whatever(value.typed))
 
       // ---------------------------------------------------------------------------
-      def + (value: Number): TypedWhatever[T] = this.+(new Whatever(value))
-      def * (value: Number): TypedWhatever[T] = this.*(new Whatever(value))
+      def + [$Number >: T](value: $Number)(implicit ev: Numeric[$Number]): TypedWhatever[T] = this.+(new Whatever(value))
+      def * [$Number >: T](value: $Number)(implicit ev: Numeric[$Number]): TypedWhatever[T] = this.*(new Whatever(value))
   
-      def - (value: Number): TypedWhatever[T] = this.-(new Whatever(value))
-      def / (value: Number): TypedWhatever[T] = this./(new Whatever(value))
+      def - [$Number >: T](value: $Number)(implicit ev: Numeric[$Number]): TypedWhatever[T] = this.-(new Whatever(value))
+      def / [$Number >: T](value: $Number)(implicit ev: Numeric[$Number]): TypedWhatever[T] = this./(new Whatever(value))
   
-      def % (value: Number): TypedWhatever[T] = this.%(new Whatever(value))
+      def % [$Number >: T](value: $Number)(implicit ev: Numeric[$Number]): TypedWhatever[T] = this.%(new Whatever(value))
 
   // ---------------------------------------------------------------------------
   @IntSize
-  def  sizeString   : TypedWhatever[Int]     = mapString(_.size)
+  def  sizeString: TypedWhatever[Int]        = mapString(_.size)
+  def  sizeList  : TypedWhatever[Int]        = mapSeq   (_.size)
 
   def  isEmptyString: TypedWhatever[Boolean] = mapString(_.isEmpty)
   def nonEmptyString: TypedWhatever[Boolean] = mapString(_.nonEmpty)
@@ -92,6 +115,8 @@ class TypedWhatever[+T](val typed: T) extends Serializable { // can't be AnyVal 
 
   // ---------------------------------------------------------------------------
   def enmStringValue: TypedWhatever[String] = mapEnm(_.stringValue)
+
+def isZero(implicit ev: T <:< Int): TypedWhatever[Boolean] = mapNumber(_ == 0) // FIXME: Double...
 }
 
 // ===========================================================================

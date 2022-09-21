@@ -23,9 +23,9 @@ object WhateverUtils {
     value match {
       case x: Whatever => size(x.any)      
       case None | Nil  => 0
-      case y: Some[_]  => y.size
-      case y: Seq [_]  => y.size
-      case y           => 1 }
+      case y: Seq[_]   => y.size
+      case Some(y)     => size(y)
+      case _           => 1 }
 
 }
 

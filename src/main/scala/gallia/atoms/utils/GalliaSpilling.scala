@@ -19,13 +19,13 @@ object GalliaSpilling {
   def spillingSort(pnfs: Seq[PNF], sortFields: GnuSortFields)(c: Cls)(input: Streamer[Obj]): Streamer[Obj] =
     new SpillingSortSerDes(pnfs, c)
       .apply(input) {
-        GnuSortByFirstFieldsHack.apply(Hacks.ExecutionContext, debug = "220705162301")(sortFields) }
+        GnuSortByFirstFieldsHack.apply(Hacks.galliaExecutionContext.forceValue, debug = "220705162301")(sortFields) }
 
   // ---------------------------------------------------------------------------
   def spillingSortAll(c: Cls)(descending: Boolean)(input: Streamer[Obj]): Streamer[Obj] =
     new SpillingSortAllSerDes(c)
       .apply(input) {
-        GnuSortByAllHack.apply(Hacks.ExecutionContext, debug = "220705162302")(descending) }
+        GnuSortByAllHack.apply(Hacks.galliaExecutionContext.forceValue, debug = "220705162302")(descending) }
 
   // ---------------------------------------------------------------------------
   def spillingSortUnsafe(c: Cls)(descending: Boolean)(input: Streamer[Obj]): Streamer[Obj] = ??? // TODO
@@ -34,27 +34,27 @@ object GalliaSpilling {
   def spillingSortDistinct(c: Cls)(input: Streamer[Obj]): Streamer[Obj] =
     new SpillingSortAllSerDes(c) // can reuse this serdes
       .apply(input) {
-        GnuSortUniqHack.apply(Hacks.ExecutionContext, debug = "220705162303") }
+        GnuSortUniqHack.apply(Hacks.galliaExecutionContext.forceValue, debug = "220705162303") }
 
   // ===========================================================================
   def spillingGroupBy1N(pair: GroupingPairN1)(input: Streamer[(OObj, OVle)]): Streamer[(OObj, List[OVle])] =
     new SpillingGroupBy1NSerDes(pair)
       .apply(input) {
-        GnuSortByFirstFieldsHack.default(Hacks.ExecutionContext, debug = "220705162304") }
+        GnuSortByFirstFieldsHack.default(Hacks.galliaExecutionContext.forceValue, debug = "220705162304") }
       .groupByPreSortedKey
 
   // ---------------------------------------------------------------------------
   def spillingGroupBy1N(pair: GroupingPair1N)(input: Streamer[(OVle, OObj)]): Streamer[(OVle, List[OObj])] =
     new SpillingGroupByN1SerDes(pair)
       .apply(input) {
-        GnuSortByFirstFieldsHack.default(Hacks.ExecutionContext, debug = "220705162305") }
+        GnuSortByFirstFieldsHack.default(Hacks.galliaExecutionContext.forceValue, debug = "220705162305") }
       .groupByPreSortedKey
 
   // ---------------------------------------------------------------------------
   def spillingGroupByNN(pair: GroupingPairNN)(input: Streamer[(OObj, OObj)]): Streamer[(OObj, List[OObj])] =
     new SpillingGroupByNNSerDes(pair)
       .apply(input) {
-        GnuSortByFirstFieldsHack.default(Hacks.ExecutionContext, debug = "220705162306") }
+        GnuSortByFirstFieldsHack.default(Hacks.galliaExecutionContext.forceValue, debug = "220705162306") }
       .groupByPreSortedKey
 
   // ===========================================================================
@@ -100,7 +100,7 @@ object GalliaSpilling {
 
           def regenerate = { () =>
             GnuJoinByFirstFieldHack
-              .apply(Hacks.ExecutionContext)( // will schedule to close inputs accordingly
+              .apply(Hacks.galliaExecutionContext.forceValue)( // will schedule to close inputs accordingly
                 sideInput( leftSerializer)(left) .closeabledIterator,
                 sideInput(rightSerializer)(right).closeabledIterator)
               .map(outputDeserializer._deserialize)
@@ -111,7 +111,7 @@ object GalliaSpilling {
             input
                 .asInstanceOfIteratorStreamer
                 ._map  (serializer._serialize)
-                ._alter(GnuSortByFirstFieldsHack.default(Hacks.ExecutionContext, debug = "220720113328"))
+                ._alter(GnuSortByFirstFieldsHack.default(Hacks.galliaExecutionContext.forceValue, debug = "220720113328"))
                 ._map  (_.splitBy(serializer.pairSeparator).force.tuple2)
                 ._alter(_.groupByPreSortedKey)
                 ._map  ((SpillingJoinDeserializer.postGroupingSerialization _).tupled) }

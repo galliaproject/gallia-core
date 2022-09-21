@@ -18,13 +18,13 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
 
     // ---------------------------------------------------------------------------
     override def equals(that: Any): Boolean = that match {
-        case that: Obj => { 
+        case that: Obj =>
           this.data.toList.sortBy(_._1.name) == // TODO: t210611121237 - not relying on sorting...
-          that.data.toList.sortBy(_._1.name) }
+          that.data.toList.sortBy(_._1.name)
         case _ => false }
 
     // ===========================================================================
-    if (!Hacks.DisableRuntimeChecks) { // t210107094406 - possibility to opt out of the checks (for performance) - should opt out by default in prod
+    if (!Hacks.disableRuntimeChecks.test()) { // t210107094406 - possibility to opt out of the checks (for performance) - should opt out by default in prod
 
       // TODO: should use Key, Ren, ... directly for performance
       // ---------------------------------------------------------------------------
@@ -83,9 +83,10 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
     final lazy val skeySet: Set[SKey] = data.map(_._1).map(_.name).toSet
 
     // ---------------------------------------------------------------------------
-    private[gallia] def forceKey   (key: Key):        AnyValue  = data.find  (_._1 == key).map(_._2).get
-    private[gallia] def attemptKey (key: Key): Option[AnyValue] = data.find  (_._1 == key).map(_._2)    
     private[gallia] def containsKey(key: Key):        Boolean   = data.exists(_._1 == key)
+    private[gallia] def attemptKey (key: Key): Option[AnyValue] = data.find  (_._1 == key).map(_._2)
+    private[gallia] def forceKey   (key: Key):        AnyValue  = data.find  (_._1 == key).map(_._2)
+      .getOrElse(aptus.illegalArgument(s"could not force value for key ${key.name.quote}: ${formatPrettyJson.take(1000)}"))
 
     // ---------------------------------------------------------------------------
     def sortedByKeys: Obj = data.sortBy(_._1.name).pipe(Obj.build)

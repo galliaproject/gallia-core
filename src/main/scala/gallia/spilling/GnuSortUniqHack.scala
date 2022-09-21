@@ -12,7 +12,7 @@ object GnuSortUniqHack { // see https://github.com/galliaproject/gallia-core#poo
     // call sort-by-first-field ("key" here) and stream results lines
     val (os, is) = SystemUtils.streamSystemCall(ec)(Seq( // TODO: t210308150015 - look into https://github.com/com-lihaoyi/os-lib
       "sort", "-u") ++
-          Hacks.ExtraGnuSortOptions // empty by default
+          Hacks.extraGnuSortOptions.getValueOpt().getOrElse(Nil) // empty by default
         :_*) // TODO: t210304095755 - set locale?
 
     // ---------------------------------------------------------------------------

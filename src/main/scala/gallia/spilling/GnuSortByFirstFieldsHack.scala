@@ -18,7 +18,7 @@ object GnuSortByFirstFieldsHack { // see https://github.com/galliaproject/gallia
       "sort",
             "-t", SpillingHackSerialization.FieldSeparator) ++
             sortFields.formatOptions ++
-          Hacks.ExtraGnuSortOptions // empty by default
+          Hacks.extraGnuSortOptions.getValueOpt().getOrElse(Nil) // empty by default
         :_*) // TODO: t210304095755 - set locale?
 
     // ---------------------------------------------------------------------------

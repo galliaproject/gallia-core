@@ -24,7 +24,7 @@ import env._
 
   // ===========================================================================
   object Head {
-    def inputV[T: WTT](a: T): HeadV[T] = inputV[T](new gallia.actions.in.InMemoryInputV(a))
+    def inputV[T: WTT](a: T): HeadV[T] = inputV[T](gallia.actions.in.InMemoryInputV(a))
 
     // ===========================================================================
     // also for nesting

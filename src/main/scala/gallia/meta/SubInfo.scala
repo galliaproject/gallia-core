@@ -51,6 +51,9 @@ case class SubInfo(
       def toBoolean: SubInfo = copy(valueType = BasicType._Boolean)
       def toInt    : SubInfo = copy(valueType = BasicType._Int)
       def toDouble : SubInfo = copy(valueType = BasicType._Double)
+      def toStr    : SubInfo = copy(valueType = BasicType._String)
+
+      def toCls(nc: Cls): SubInfo = copy(valueType = nc)
 
     // ---------------------------------------------------------------------------
     def info1(optional: Optional): Info1 = Info1(optional, multiple, valueType)

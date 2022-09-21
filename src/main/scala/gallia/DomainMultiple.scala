@@ -116,7 +116,7 @@ case class KPathz(values: Seq[KPath]) extends Seq[KPath] {
       values
         .map(_.tailPair)
         .groupByKey
-        .mapValues {
+        .view.mapValues {
           case Seq(None) => None
           case multiple  => Some(KPathz(multiple.flatten)) }
         .toMap
@@ -124,7 +124,8 @@ case class KPathz(values: Seq[KPath]) extends Seq[KPath] {
 
   // ===========================================================================
   object KPathz {
-    def from(key: KeyW): KPathz = KPathz(List(KPath.from(key)))
+    def from(key : KeyW) : KPathz = KPathz(List(KPath.from(key)))
+    def from(path: KPath): KPathz = KPathz(List(path))
 
     // ===========================================================================
     object Implicits {

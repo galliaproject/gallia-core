@@ -70,6 +70,7 @@ trait HeadZSquashing { ignored: HeadZ =>
   private[heads]
   def typeds [T: WTT](key: KPathW, checkOrigin: Boolean): HeadV[Nes[T]] = zv(GrabZ(ttqkpath1[       T ](key), checkOrigin))
 
+  // TODO: t220916114113 - version that keeps original Streamer (especially for RddStreamer if big)
   def typeds [T: WTT](key: KPathW)                      : HeadV[Nes[T]] = zv(GrabZ(ttqkpath1[       T ](key), checkOrigin = true))
   def typeds_[T: WTT](key: KPathW)                      : HeadV[Pes[T]] = zv(GrabZ(ttqkpath1[Option[T]](key), checkOrigin = true)) // try and read this one out loud
 

@@ -30,8 +30,8 @@ object ActionsCommonNestingRelated {
         def _meta(c: Cls): Cls  = target.resolve(c).map(_.renFX).pipe(Renz.apply).pipe(c.nest(_, destination.from)).rename(destination)
         def atomuus(c: Cls)     = target.resolve(c).pipe { rpathz =>
           (_Nest(rpathz.fromz.forceKeyz /*FIXME*/, destination.from) +:
-            rpathz.map(_.prepend(destination.from)).flatMap(potentialRenaming(_).toSeq).toSeq) ++ 
-            potentialRenaming(destination) }          
+            rpathz.map(_.prepend(destination.from)).flatMap(potentialRenaming(_).toSeq).toSeq) ++
+            potentialRenaming(destination) }
     }
 
   // ===========================================================================

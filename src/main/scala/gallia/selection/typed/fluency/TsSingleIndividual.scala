@@ -10,7 +10,10 @@ object TsSingleIndividual {
   // ---------------------------------------------------------------------------
   //TODO: rename, these also abstract requiredness
   trait HasSingleObj [$Wrap] { def obj  (target: $Wrap) = new One_[gallia.HeadU](target) }
-  trait HasSingleObjz[$Wrap] { def objz (target: $Wrap) = new One_[gallia.HeadZ](target) }
+  trait HasSingleObjz[$Wrap] {
+    @deprecated("use objs now")
+    def objz (target: $Wrap) = new One_[gallia.HeadZ](target)
+    def objs (target: $Wrap) = new One_[gallia.HeadZ](target) }
   
   // ===========================================================================  
   trait HasSingleNonXTyped[$Wrap] { def typed [T: WTT](target: $Wrap) = new One_[T](target) } // TODO: t210201103739 - validate T for .typed

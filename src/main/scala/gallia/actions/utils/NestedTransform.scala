@@ -76,7 +76,7 @@ class NestedTransform(disambiguatorOpt: UnionObjectDisambiguatorOpt, adag: MetaP
           case DisambiguateByClassIndex     (_)       => _Transform1to1b.replace(      f)(pair) // costly
           case DisambiguateByClassPredicateU(_, data) => _Transform1to1U.replace(data, f)(pair)
           case DisambiguateByClassPredicateZ(_, data) => _Transform1to1Z.replace(data, f)(pair) }
-        .getOrElse {                                     _Transform1to1 .replace(      f)(pair) }
+        .getOrElse                                     { _Transform1to1 .replace(      f)(pair) }
   }  
   
   // ---------------------------------------------------------------------------

@@ -38,6 +38,7 @@ trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F]
   // ---------------------------------------------------------------------------
   def transformObject    (k: RPathW): _TransformU = transform(_.obj (k.value)) // TODO: rename to convey 1 (as oppose to x)
   def transformAllObjects(k: RPathW): _TransformZ = transform(_.objz(k.value))
+  def transformAllObjectsTmp        : _TransformZ = transform(_.objz(_tmp))
 
   @deprecated("use more explicit transformAllObjects") def transformObjects(k: RPathW) = transformAllObjects(k)
 

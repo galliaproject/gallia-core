@@ -4,7 +4,8 @@ package gallia
 trait Reserved {
   val _id    = Symbol("_id")
 
-  val _group  = Symbol("_group")
+  val _group = Symbol("_group")
+  val _agg   = Symbol("_agg")
 
   val _count_all              = Symbol("_count_all")
   val _count_present          = Symbol("_count_present")
@@ -31,6 +32,8 @@ trait Reserved {
   val _tmp1 = Symbol("_tmp1")
   val _tmp2 = Symbol("_tmp2")
   val _tmp3 = Symbol("_tmp3")
+
+  val _nonEmpty  = Symbol("_nonEmpty")
 
   val _type = Symbol("_type")
 

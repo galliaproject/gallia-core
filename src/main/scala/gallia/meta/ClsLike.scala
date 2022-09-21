@@ -9,6 +9,8 @@ trait ClsLike { // read-only part
       ignored: ClsHelper =>
     protected val fields: Seq[Fld]
 
+    def fieldLikes: Seq[FldLike] = fields
+
     // ---------------------------------------------------------------------------
     def toPNF(path: KPath): PNF = field(path).toPNF(path.parent)
 
@@ -33,8 +35,9 @@ trait ClsLike { // read-only part
     def soleField: Fld = fields.force.one
 
     // ---------------------------------------------------------------------------
-    def forceNestedClass(key: Key  ): Cls = field(key).forceNestedClass
-    def forceNestedClass(key: KPath): Cls = field(key).forceNestedClass
+    def forceNestedClass(key: Key  ) : Cls = field(key).forceNestedClass
+    def forceNestedClass(key: KPath) : Cls = field(key).forceNestedClass
+    def forceNestedClass(key: KPathW): Cls = field(key.value).forceNestedClass
 
     def forceBasicType(key: Key  ): BasicType = field(key).forceBasicType
     def forceBasicType(key: KPath): BasicType = field(key).forceBasicType

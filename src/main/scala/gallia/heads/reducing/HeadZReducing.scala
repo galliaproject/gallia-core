@@ -51,7 +51,9 @@ trait HeadZReducing { ignored: HeadZ =>
     def reduce(pair1: ReducingPair1, more: ReducingPair1*): HeadU = reduce(pair1 +: more)
     def reduce(pair1: ReducingPair , more: ReducingPair *): HeadU = reduce(pair1 +: more)
 
-  // TODO: custom reduce
+  // ===========================================================================
+  // for good measure; TODO: warn unnecessary (see t220916134808)?
+  def reduceAll[T](f: HeadZ => T): T = f(this)
 }
 
 // ===========================================================================

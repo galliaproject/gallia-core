@@ -66,12 +66,26 @@ case class Fld(key: Key, info: Info) extends FldLike {
       def toSingle  : Fld = transformSoleSubInfo(_.toSingle)
 
       // ---------------------------------------------------------------------------
-      def toDouble: Fld = transformSoleSubInfo(_.toDouble) // see t210802091450
+      def toDouble : Fld = transformSoleSubInfo(_.toDouble) // see t210802091450
+      def toInt    : Fld = transformSoleSubInfo(_.toInt)
+      def toStr    : Fld = transformSoleSubInfo(_.toStr)
+      def toBoolean: Fld = transformSoleSubInfo(_.toBoolean)
+
+      def toCls(nc: Cls): Fld = transformSoleSubInfo(_.toCls(nc))
+
+      // ---------------------------------------------------------------------------
+      def toSoleFieldCls: Cls = Cls(Seq(this))
   }
 
   // ===========================================================================
   object Fld {
     val Dummy = Fld(Symbol("_dummy"), Info.oneString)
+
+    // ---------------------------------------------------------------------------
+    def fld[T: WTT](key: KeyW): Fld =
+      typeNode[T]
+        .forceNonBObjInfo
+        .toFld(key.value)
 
     // ---------------------------------------------------------------------------
     def one(key: Key, valueType: ValueType) = Fld(key, Info.one(valueType))

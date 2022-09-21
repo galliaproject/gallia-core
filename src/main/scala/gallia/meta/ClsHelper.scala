@@ -26,6 +26,10 @@ trait ClsHelper { ignored: Cls =>
         case Right((parent, tail)) => field_(parent).flatMap(_.nestedClassOpt).flatMap(_.field_(tail)) }
 
   // ===========================================================================
+  def pathPair(key: Key): domain.PathPair = domain.PathPair.from(key, field(key).isOptional)
+  // TODO: more alternatives
+
+  // ===========================================================================
   def _leafPaths(parent: Seq[Key]): Seq[Seq[Key]] =
       fields
         .flatMap { f =>

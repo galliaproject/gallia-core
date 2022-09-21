@@ -43,6 +43,10 @@ object ReflectUtils {
   def enumValueNames[T <: enumeratum.EnumEntry : WTT]: Seq[String] = enumValueNames(scala.reflect.runtime.universe.weakTypeTag[T].tpe)
 
   // ---------------------------------------------------------------------------
+  def     name[T : WTT]: String = scala.reflect.runtime.universe.weakTypeTag[T].tpe.typeSymbol.name.decodedName.toString
+  def fullName[T : WTT]: String = scala.reflect.runtime.universe.weakTypeTag[T].tpe.typeSymbol.fullName
+
+  // ---------------------------------------------------------------------------
   /** enum must not be nested somehow */
   def enumValueNames(tpe: UType): Seq[String] =
     tpe

@@ -37,8 +37,8 @@ case class PathPair(path: KPath, optional: Boolean) {
 
     // ===========================================================================
     object PathPair {
-      def from(key: KeyW): PathPair = PathPair(KPath.from(key), optional = false)
-    }
+      def from(key: KeyW)                   : PathPair = from(key, optional = false)
+      def from(key: KeyW, optional: Boolean): PathPair = PathPair(KPath.from(key), optional) }
 
   // ===========================================================================
   case class PathPair2(pair1: PathPair, pair2: PathPair) {

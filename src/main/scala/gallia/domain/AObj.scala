@@ -49,17 +49,22 @@ case class AObjs(c: Cls, z: Objs) {
   // ===========================================================================
   object AObjs {
     implicit def toHead(value: AObjs): HeadZ =
-      new actions.in
+      actions.in
         .InMemoryInputZa(value)
         .pipe(Head.inputZ)
 
     // ---------------------------------------------------------------------------
     def combineCls(values: Seq[Cls]): Cls = values.reduceLeft(_ unionCompatible _)
 
+    // ---------------------------------------------------------------------------
     def from(values: Seq[AObj]): AObjs =
       AObjs(
         c = values.map(_.c).pipe(combineCls),
         z = values.map(_.o).toList.pipe(Objs.from))
+
+    // ---------------------------------------------------------------------------
+    lazy val Empty             : AObjs = empty(Cls.Line)
+         def empty(schema: Cls): AObjs = AObjs(schema, Objs.empty)
   }
 
 

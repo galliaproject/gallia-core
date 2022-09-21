@@ -63,7 +63,7 @@ trait Aliases {
   // ---------------------------------------------------------------------------
   type  Key = Symbol
   type SKey = String
-  type EKey = Enumeration#Value    // dotty will hopefully help with this
+  type EKey = Enumeration#Value    // dotty will hopefully help with this - TODO: t220921125205 - phase out support for EKey
   type UKey = enumeratum.EnumEntry // dotty will hopefully help with this
 }
 

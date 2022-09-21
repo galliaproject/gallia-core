@@ -29,6 +29,8 @@ trait ClsBasics { self: Cls =>
     if (contains(key)) replace(key, info)
     else               add    (key, info)
 
+  def putField(fld: Fld): Cls = put(fld.key, fld.info)
+
   // ---------------------------------------------------------------------------
   def replace(path: RPath, info: Info): Cls = transformx(path)(_.replace(_, info), _.replace(_, info))
 
@@ -45,6 +47,7 @@ trait ClsBasics { self: Cls =>
 
   // ---------------------------------------------------------------------------
   def add      (field: Fld)             : Cls = { requireNewKey(field.key); rewrap(fields :+ field) }
+  def addField (field: Fld)             : Cls = { requireNewKey(field.key); rewrap(fields :+ field) }
   def addBefore(field: Fld, target: Key): Cls = { requireNewKey(field.key); val index = indexOf(target).assert(_ >= 0); rewrap(fields.take(index)     ++ List(field) ++ fields.drop(index)) }
   def addAfter (field: Fld, target: Key): Cls = { requireNewKey(field.key); val index = indexOf(target).assert(_ >= 0); rewrap(fields.take(index + 1) ++ List(field) ++ fields.drop(index + 1)) }
 
@@ -55,6 +58,8 @@ trait ClsBasics { self: Cls =>
   def add(pair: (KPath, Info))(implicit di: DI): Cls = add(pair._1, pair._2)
 
   def add(pairs: Seq[(Key, Info)])             : Cls = pairs.foldLeft(this)(_ add _)
+
+  def add(field1: Fld, field2: Fld, more: Fld*): Cls = Cls(this.fields ++ (Seq(field1, field2) ++ more).toList)
 
   // ===========================================================================
   @deprecated("favor combo retain+rename") def retain(key : Ren) : Cls = { requireRenamingKey(key); rewrap(field(key).in.seq) }
@@ -78,10 +83,12 @@ trait ClsBasics { self: Cls =>
   // ===========================================================================
   def remove(key: Key): Cls = { requireKnownKey(key); rewrap(fields.filterNot(_.key == key)) }
 
-  def remove(keys: Keyz   ): Cls = remove(keys.values)
-  def remove(keys: Seq[Key]): Cls = keys.foldLeft(this)(_ remove _)
+  def remove     (keys: Keyz   ): Cls = remove(keys.values)
+  def remove     (keys: Seq[Key]): Cls = keys.foldLeft(this)(_ remove _)
 
-  def remove(path: KPath): Cls = transformx(path)(_ remove _, _ remove _)
+  def remove     (path: KPath): Cls = transformx(path)(_ remove _, _ remove _)
+  def remove     (path: KPathW): Cls = transformx(path.value)(_ remove _, _ remove _)
+  def removeField(path: KPathW): Cls = transformx(path.value)(_ remove _, _ remove _)
 
   def remove(paths: KPathz): Cls = paths.foldLeft(this)(_ remove _)
 }

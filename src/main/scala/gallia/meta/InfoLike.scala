@@ -15,6 +15,9 @@ trait InfoLike extends SubInfosLike {
   def forceContainer: Container = Container.from(optional, union.map(_.multiple).distinct.force.one)
   def forceInfo1     : Info1      = forceSubInfo.pipe { subInfo => Info1(optional, subInfo.multiple, subInfo.valueType) }
 
+  // ---------------------------------------------------------------------------
+  def toFld(key: KeyW): Fld = Fld(key.value, _info)
+
   // ===========================================================================
   def isType[T: WTT]: Boolean = isType(TypeNode.parse[T])
 

@@ -104,7 +104,8 @@ object HeadZPair { // TODO: t201123125604 - why implicit not picked up?
     // ---------------------------------------------------------------------------
     def merging(conf: Start => End): HeadZ = left.merging(right)(conf)
 
-      def union: HeadZ = left.union(right)
+      def union      : HeadZ = left.union      (right)
+      def zipSameSize: HeadZ = left.zipSameSize(right)
 
       // ---------------------------------------------------------------------------
       def coGroup(conf: CoGroup => End): HeadZ = merging(_.coGroup.pipe(conf))

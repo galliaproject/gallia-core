@@ -51,6 +51,18 @@ object ActionsCustoms {
               _.toListAndTrash.pipe(data).pipe(Objs.from))
       }
 
+    // ===========================================================================
+    class CustomZU(meta: Cls => Cls, data: Objs => Obj) extends ActionZUd with IdentityV1 {
+        def _meta(in: Cls): Cls    = meta(in)
+        def atomzu        : AtomZU = _CustomZO(data) }
+
+      // ---------------------------------------------------------------------------
+      object CustomZU {
+        def from(meta: Cls => Cls, data: List[Obj] => Obj): CustomZU =
+          new CustomZU(
+            meta, _.toListAndTrash.pipe(data))
+      }
+
 }
 
 // ===========================================================================

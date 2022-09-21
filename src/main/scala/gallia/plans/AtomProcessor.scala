@@ -42,6 +42,10 @@ private[plans] object AtomProcessor {
           case _: AtomUV => _Obj (input.obj )
           case _: AtomZV => _Objs(input.objs)
           case _: AtomVV => _Vle (input.vle )
+
+          // ---------------------------------------------------------------------------
+          case _: AtomVU => _Vle (input.obj )
+          case _: AtomVZ => _Vle (input.objs)
         }
       }.getOrElse(_Undetermined)
 
@@ -79,6 +83,10 @@ private[plans] object AtomProcessor {
         case x: AtomVV => x.naive(input.vle ).pipe(NDT.vle)
         case x: AtomUV => x.naive(input.obj ).pipe(NDT.vle)
         case x: AtomZV => x.naive(input.objs).pipe(NDT.vle)
+
+        // ---------------------------------------------------------------------------
+        case x: AtomVU => x.naive(input.vle)//.pipe(NDT.to)
+        case x: AtomVZ => x.naive(input.vle)//.pipe(NDT.to)
 
         // ---------------------------------------------------------------------------
         case x: AtomVv2V  => (x.naive _).tupled(input.vle2)   .pipe(NDT.vle)

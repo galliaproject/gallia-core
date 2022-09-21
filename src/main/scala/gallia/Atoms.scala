@@ -47,6 +47,10 @@ sealed trait Atom extends ActionAN {
   trait AtomZO extends Atom { def naive(z: Objs): Unit }
   trait AtomVO extends Atom { def naive(v: Vle ): Unit } // TODO: used?
 
+// ---------------------------------------------------------------------------
+trait AtomVU extends Atom { def naive(v: Vle): Obj  }
+trait AtomVZ extends Atom { def naive(v: Vle): Objs }
+
   // ---------------------------------------------------------------------------
   trait AtomUorZ[T] { def naive(t: T): T }
     trait AtomUU extends Atom with AtomUorZ[Obj]  { def naive(o: Obj ): Obj  }
@@ -109,6 +113,16 @@ trait AtomsUU extends ActionAN {
     trait AtomsVO extends ActionAN {
         final def atoms  (ctx: NodeMetaContext): Atoms = atomvos(ctx)
               def atomvos(ctx: NodeMetaContext): AtomVOs }
+
+  // ===========================================================================
+  trait AtomsVU extends ActionAN {
+        final def atoms  (ctx: NodeMetaContext): Atoms = atomvus(ctx)
+              def atomvus(ctx: NodeMetaContext): AtomVUs }
+
+    // ---------------------------------------------------------------------------
+    trait AtomsVZ extends ActionAN {
+        final def atoms  (ctx: NodeMetaContext): Atoms = atomvzs(ctx)
+              def atomvzs(ctx: NodeMetaContext): AtomVZs }
 
   // ===========================================================================
   trait AtomsUZ extends ActionAN {
@@ -320,6 +334,46 @@ trait AtomsUOd extends AtomsUO {
     trait AtomsVOb extends AtomsVO {
       final def atomvos(ctx: NodeMetaContext): AtomVOs = atomvos(ctx.forceSingleAfferent)
             def atomvos(afferent: Cls       ): AtomVOs }
+
+  // ===========================================================================
+  trait AtomsVUd extends AtomsVU {
+      final def atomvus(ignored: NodeMetaContext): AtomVUs = atomvu.in.seq
+            def atomvu                           : AtomVU }
+
+    // ---------------------------------------------------------------------------
+    trait AtomsVUa extends AtomsVU {
+      final def atomvus(ignored: NodeMetaContext): AtomVUs = atomvus
+            def atomvus                          : AtomVUs }
+
+    // ---------------------------------------------------------------------------
+    trait AtomsVUc extends AtomsVU {
+      final def atomvus(ctx: NodeMetaContext): AtomVUs = atomvu(ctx.forceSingleAfferent).in.seq
+            def atomvu (afferent: Cls       ): AtomVU }
+
+    // ---------------------------------------------------------------------------
+    trait AtomsVUb extends AtomsVU {
+      final def atomvus(ctx: NodeMetaContext): AtomVUs = atomvus(ctx.forceSingleAfferent)
+            def atomvus(afferent: Cls       ): AtomVUs }
+
+  // ===========================================================================
+  trait AtomsVZd extends AtomsVZ {
+      final def atomvzs(ignored: NodeMetaContext): AtomVZs = atomvz.in.seq
+            def atomvz                           : AtomVZ }
+
+    // ---------------------------------------------------------------------------
+    trait AtomsVZa extends AtomsVZ {
+      final def atomvzs(ignored: NodeMetaContext): AtomVZs = atomvzs
+            def atomvzs                          : AtomVZs }
+
+    // ---------------------------------------------------------------------------
+    trait AtomsVZc extends AtomsVZ {
+      final def atomvzs(ctx: NodeMetaContext): AtomVZs = atomvz(ctx.forceSingleAfferent).in.seq
+            def atomvz (afferent: Cls       ): AtomVZ }
+
+    // ---------------------------------------------------------------------------
+    trait AtomsVZb extends AtomsVZ {
+      final def atomvzs(ctx: NodeMetaContext): AtomVZs = atomvzs(ctx.forceSingleAfferent)
+            def atomvzs(afferent: Cls       ): AtomVZs }
 
 // ===========================================================================
 trait AtomsUZd extends AtomsUZ {

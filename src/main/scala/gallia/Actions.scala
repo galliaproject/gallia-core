@@ -107,6 +107,11 @@ trait ActionZZ extends Action with ActionV1 with ActionM1 with AtomsZZ
   // ---------------------------------------------------------------------------
   trait ActionUO extends Action with ActionV1 with IdentityM1 with AtomsUO
   trait ActionZO extends Action with ActionV1 with IdentityM1 with AtomsZO
+  trait ActionVO extends Action with ActionV1 with IdentityM1 with AtomsVO
+
+  // ---------------------------------------------------------------------------
+  trait ActionVU extends Action with ActionV1 with ActionM1 with AtomsVU
+  trait ActionVZ extends Action with ActionV1 with ActionM1 with AtomsVZ
 
   // ---------------------------------------------------------------------------
   trait ActionZzToZ extends Action with ActionV2 with ActionM2 with AtomsZzToZ { def vldt(c1: Cls , c2: Cls ): Errs = Nil } // TODO
@@ -164,6 +169,24 @@ trait ActionUUbb extends ActionUU with AtomsUUbb // provides origin, TODO: t2106
   trait ActionZOa extends ActionZO with AtomsZOa
   trait ActionZOc extends ActionZO with AtomsZOc
   trait ActionZOb extends ActionZO with AtomsZOb
+
+  // ---------------------------------------------------------------------------
+  trait ActionVOd extends ActionVO with AtomsVOd
+  trait ActionVOa extends ActionVO with AtomsVOa
+  trait ActionVOc extends ActionVO with AtomsVOc
+  trait ActionVOb extends ActionVO with AtomsVOb
+
+  // ---------------------------------------------------------------------------
+  trait ActionVUd extends ActionVU with AtomsVUd
+  trait ActionVUa extends ActionVU with AtomsVUa
+  trait ActionVUc extends ActionVU with AtomsVUc
+  trait ActionVUb extends ActionVU with AtomsVUb
+
+  // ---------------------------------------------------------------------------
+  trait ActionVZd extends ActionVZ with AtomsVZd
+  trait ActionVZa extends ActionVZ with AtomsVZa
+  trait ActionVZc extends ActionVZ with AtomsVZc
+  trait ActionVZb extends ActionVZ with AtomsVZb
 
   // ===========================================================================
               trait ActionUVc  extends ActionUV with AtomsUVc

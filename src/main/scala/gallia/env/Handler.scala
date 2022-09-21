@@ -34,6 +34,10 @@ class Handler() { // TODO: t210128152949 - add missing cycle detection
   def chainzv[T : WTT](head: HeadZ)(action: ActionZV): HeadV[T] = head.headV[T ](_helper.chain(head.nodeId, action))
 
   // ---------------------------------------------------------------------------
+  def chainvu[T : WTT](head: HeadV[T])(action: ActionVU): HeadU = head.headU(_helper.chain(head.nodeId, action))
+  def chainvz[T : WTT](head: HeadV[T])(action: ActionVZ): HeadZ = head.headZ(_helper.chain(head.nodeId, action))
+
+  // ---------------------------------------------------------------------------
   def joinuu2u         (dis: HeadU,     that: HeadU)                         : HeadU = dis.rewrap(_helper.join2(dis.nodeId, that.nodeId)(ActionsOthers.UnionUU))
   def joinZz2z         (dis: HeadZ,     that: HeadZ)    (action: ActionZzToZ): HeadZ = dis.rewrap(_helper.join2(dis.nodeId, that.nodeId)(action))
   def joinZv2z[T : WTT](dis: HeadZ,     that: HeadV[T]) (action: ActionZvToZ): HeadZ = dis.rewrap(_helper.join2(dis.nodeId, that.nodeId)(action))
@@ -43,8 +47,9 @@ class Handler() { // TODO: t210128152949 - add missing cycle detection
     dis.rewrap(_helper.join2(dis.nodeId, that.nodeId)(action))
 
   // ---------------------------------------------------------------------------
-  def chainuo(head: HeadU)(action: ActionUO): HeadU = head.rewrap(_helper.chain(head.nodeId, action))
-  def chainzo(head: HeadZ)(action: ActionZO): HeadZ = head.rewrap(_helper.chain(head.nodeId, action))
+  def chainuo        (head: HeadU)   (action: ActionUO): HeadU    = head.rewrap(_helper.chain(head.nodeId, action))
+  def chainzo        (head: HeadZ)   (action: ActionZO): HeadZ    = head.rewrap(_helper.chain(head.nodeId, action))
+  def chainvo[T: WTT](head: HeadV[T])(action: ActionVO): HeadV[T] = head.rewrap(_helper.chain(head.nodeId, action))
 
   // ---------------------------------------------------------------------------
   def end(head: heads.Head[_]): HeadEnd = HeadEnd(_helper.chain(head.nodeId, ActionsOthers.Output))

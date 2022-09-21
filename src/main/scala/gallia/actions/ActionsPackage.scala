@@ -64,6 +64,10 @@ package object actions { // TODO: delegate access to all of AtomsUtils._
     type AtomZOs = Seq[AtomZO]
     type AtomVOs = Seq[AtomVO]
 
+    // ---------------------------------------------------------------------------
+    type AtomVUs = Seq[AtomVU]
+    type AtomVZs = Seq[AtomVZ]
+
   // ---------------------------------------------------------------------------
   type _Nested = atoms.AtomsOthers._Nested
   val  _Nested = atoms.AtomsOthers._Nested

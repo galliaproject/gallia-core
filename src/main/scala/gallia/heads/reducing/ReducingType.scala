@@ -122,12 +122,13 @@ sealed trait ReducingType { // don't make enum (else can't use `values`)
     }
 
     // ===========================================================================
-    case object values /* = no aggregation (just flattening) */ extends ReducingType {
+    case object flattened /* = no aggregation (just flattening) */ extends ReducingType {
       val defaultKey = _values
       override protected def container = Container._Nes
       def returnType = ReduceReturnType.unchanged
       def data(ignored1: Boolean, ignored2: Option[NumericalType]) = _.flatten
     }
+    @deprecated val values = flattened
 
     // ===========================================================================
     private def countAll              (values: Values): Int = values                             .size

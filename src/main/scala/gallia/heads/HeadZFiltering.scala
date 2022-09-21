@@ -24,6 +24,10 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
                   def findUnsafe(pred: Obj => Boolean): Self = zz(FilterUnsafe(pred, asFind = true))
 
                   // ===========================================================================
+                  def findByPresent(target: KPathW) = findBy(target).isPresent
+                  def findByMissing(target: KPathW) = findBy(target).isMissing
+
+                  // ---------------------------------------------------------------------------
                   def findBy        (target: KPathW)    : __FindBy1WV   = new __FindBy1WV (target)
                   def findBy[O: WTT](target: FindBy1[O]): __FindBy1[O]  = new __FindBy1[O](target)
                 
@@ -33,12 +37,15 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
                 
                       class __FindBy1[O: WTT](target: FindBy1[O]) {
                         def hasValue(a: O): Self2 = matches(_ == a)
-                        def matches(f: O => Boolean): Self = zz(FilterByV(resolve(target), f, asFind = true))
-                      }
+                        def matches(f: O => Boolean): Self = zz(FilterByV(resolve(target), f, asFind = true)) }
                 
                       // ---------------------------------------------------------------------------
                       class __FindBy1WV(target: KPathW) { import gallia.target.utils.TargetQueryUtils.tqkpath
-                
+
+                        def isPresent: Self = zz(FilterByPresence(tqkpath(target.value), negate = false, asFind = true))
+                        def isMissing: Self = zz(FilterByPresence(tqkpath(target.value), negate = true,  asFind = true))
+
+                        // ---------------------------------------------------------------------------
                         def matches(f: WV => TWV[Boolean])                 : Self = zz(FilterByWV(tqkpath(target.value), f(_).typed, asFind = true))
                         def matches(f: WV =>     Boolean) (implicit di: DI): Self = zz(FilterByWV(tqkpath(target.value), f,          asFind = true))
                 
@@ -50,19 +57,15 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
                         def hasValue(value: Any): Self2 = matches(_.any == value)
                         def notValue(value: Any): Self2 = matches(_.any != value)
                 
-                        def isPresent      : Self = hasSize(1)
-                        def isMissing      : Self = hasSize(1)
-                
-                        /** does not work for String.size (will return 1) */
-                        def hasSize(n: Int): Self = matches(Whatever.size(_) == n)
+                        def hasSizeString(n: Int): Self = matches(_.sizeString == n)
+                        def hasSizeList  (n: Int): Self = matches(_.sizeList   == n)
                 
                         // ---------------------------------------------------------------------------
                         def greaterThan     [N: Numeric](value: N): Self = matches(_ >  value.asInstanceOf[Number])
                         def greaterOrEqualTo[N: Numeric](value: N): Self = matches(_ >= value.asInstanceOf[Number])
                 
                         def lessThan        [N: Numeric](value: N): Self = matches(_ <  value.asInstanceOf[Number])
-                        def lessOrEqualTo   [N: Numeric](value: N): Self = matches(_ <= value.asInstanceOf[Number])
-                      }
+                        def lessOrEqualTo   [N: Numeric](value: N): Self = matches(_ <= value.asInstanceOf[Number]) }
 
                       // ---------------------------------------------------------------------------
                       def findBy(target: FindBy1[HeadU])(implicit di: DI) = new { // trade-off: pre-process for more more than 1
@@ -86,7 +89,7 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
                     def findBy[O1: WTT, O2: WTT, O3: WTT](f1: FindByT[O1], f2: FindByT[O2], f3: FindByT[O3]): _FindBy3[O1, O2, O3] = new _FindBy3(f1, f2, f3)
                 
                     // ===========================================================================
-                    class __FindBy2WV(target1: KPathW, target2: KPathW) { import gallia.target.utils.TargetQueryUtils.tqkpath2    
+                    class __FindBy2WV(target1: KPathW, target2: KPathW) { import gallia.target.utils.TargetQueryUtils.tqkpath2
                         def hasValues(value1: Any, value2: Any): Self = matches { (x, y) => x.any == value1 && y.any == value2 }
                         def notValues(value1: Any, value2: Any): Self = matches { (x, y) => x.any != value1 && y.any != value2 }
                     
@@ -104,7 +107,7 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
                         def matches(f: (WV, WV, WV) =>     Boolean) (implicit di: DI): Self = zz(FilterByWV3(tqkpath3(target1.value, target2.value, target3.value), f,                asFind = true)) }
                 
                     // ===========================================================================  
-                    class _FindBy2[O1: WTT, O2: WTT](f1: FindByT[O1], f2: FindByT[O2]) { 
+                    class _FindBy2[O1: WTT, O2: WTT](f1: FindByT[O1], f2: FindByT[O2]) {
                       //TODO: areAllMissing/areAllPresent, ...
                       def matches(f: (O1, O2) => Boolean): Self =
                         zz(FilterByV2(resolve2(f1, f2), f, asFind = true)) }
@@ -118,6 +121,10 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
   def filterUnsafe(pred: Obj => Boolean): Self = zz(FilterUnsafe(pred, asFind = false))
 
   // ===========================================================================
+  def filterByPresent(target: KPathW) = filterBy(target).isPresent
+  def filterByMissing(target: KPathW) = filterBy(target).isMissing
+
+  // ---------------------------------------------------------------------------
   def filterBy        (target: KPathW)      : __FilterBy1WV   = new __FilterBy1WV (target)
   def filterBy[O: WTT](target: FilterBy1[O]): __FilterBy1[O]  = new __FilterBy1[O](target)
 
@@ -127,12 +134,15 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
 
       class __FilterBy1[O: WTT](target: FilterBy1[O]) {
         def hasValue(a: O): Self2 = matches(_ == a)
-        def matches(f: O => Boolean): Self = zz(FilterByV(resolve(target), f, asFind = false))
-      }
+        def matches(f: O => Boolean): Self = zz(FilterByV(resolve(target), f, asFind = false)) }
 
       // ---------------------------------------------------------------------------
       class __FilterBy1WV(target: KPathW) { import gallia.target.utils.TargetQueryUtils.tqkpath
 
+        def isPresent: Self = zz(FilterByPresence(tqkpath(target.value), negate = false, asFind = false))
+        def isMissing: Self = zz(FilterByPresence(tqkpath(target.value), negate = true,  asFind = false))
+
+        // ---------------------------------------------------------------------------
         def matches(f: WV => TWV[Boolean])                 : Self = zz(FilterByWV(tqkpath(target.value), f(_).typed, asFind = false))
         def matches(f: WV =>     Boolean) (implicit di: DI): Self = zz(FilterByWV(tqkpath(target.value), f,          asFind = false))
 
@@ -144,19 +154,15 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
         def hasValue(value: Any): Self2 = matches(_.any == value)
         def notValue(value: Any): Self2 = matches(_.any != value)
 
-        def isPresent      : Self = hasSize(1)
-        def isMissing      : Self = hasSize(1)
-
-        /** does not work for String.size (will return 1) */
-        def hasSize(n: Int): Self = matches(Whatever.size(_) == n)
+        def hasSizeString(n: Int): Self = matches(_.sizeString == n)
+        def hasSizeList  (n: Int): Self = matches(_.sizeList   == n)
 
         // ---------------------------------------------------------------------------
         def greaterThan     [N: Numeric](value: N): Self = matches(_ >  value.asInstanceOf[Number])
         def greaterOrEqualTo[N: Numeric](value: N): Self = matches(_ >= value.asInstanceOf[Number])
 
         def lessThan        [N: Numeric](value: N): Self = matches(_ <  value.asInstanceOf[Number])
-        def lessOrEqualTo   [N: Numeric](value: N): Self = matches(_ <= value.asInstanceOf[Number])
-      }
+        def lessOrEqualTo   [N: Numeric](value: N): Self = matches(_ <= value.asInstanceOf[Number]) }
 
       // ---------------------------------------------------------------------------
       def filterBy(target: FilterBy1[HeadU])(implicit di: DI) = new { // trade-off: pre-process for more more than 1

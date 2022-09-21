@@ -119,6 +119,19 @@ object ActionsZZFiltering {
             else          errs(s"210110194029:NotObjOrObj_:${  KPathz(invalidPaths)}") }
 
     // ===========================================================================
+    case class FilterByPresence(target: TqKPath, negate: Boolean, asFind: Boolean)
+      extends ActionZZc with IdentityM1 with HasAsFind {
+        def vldt(c: Cls): Errs   =
+          target.vldtAsOrigin(c)
+            .orIfEmpty(_vldt.checkNonRequired(c, target.resolve(c).pipe(KPathz.from)))
+
+        // ---------------------------------------------------------------------------
+        def atomzz(c: Cls): AtomZZ = target.pathPairT(c).pipe(_FilterBy1(_,
+            if (negate) (x: Any) => x match { case None => true ; case Some(_) => false }
+            else        (x: Any) => x match { case None => false; case Some(_) => true },
+          max)) }
+
+    // ===========================================================================
     case class FilterByWV(target: TqKPath, pred: WV => Boolean, asFind: Boolean)
       extends ActionZZc with IdentityM1 with HasAsFind {
         def vldt  (c: Cls): Errs   = target.vldtAsOrigin(c)

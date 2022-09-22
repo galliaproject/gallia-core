@@ -48,8 +48,8 @@ object IteratorStreamerUtils {
         : Streamer[V] =
       right.tipe match {
         case StreamerType.ViewBased =>
-          if (joinType.isInner || joinType.isLeft) hashJoin(Hacks.LoseOrderOnGrouping)(joinType, combine)(left, right) // TODO: also do right version at least
-          else                                     spillingJoin                       (joinType, combine)(left, right)
+          if (joinType.isInner || joinType.isLeft) hashJoin(Hacks.loseOrderOnGrouping.test())(joinType, combine)(left, right) // TODO: also do right version at least
+          else                                     spillingJoin                              (joinType, combine)(left, right)
   
         // ---------------------------------------------------------------------------
         case StreamerType.IteratorBased => spillingJoin(joinType, combine)(left, right)          
@@ -82,7 +82,7 @@ object IteratorStreamerUtils {
       def sortByKey(debug: String)(input: CloseabledIterator[(K, V)]): CloseabledIterator[Line] =
         input
           .map(serializeSideSortingLine)
-            .pipe(GnuSortByFirstFieldsHack.default(Hacks.ExecutionContext, debug)) // TODO: allow numerical here?
+            .pipe(GnuSortByFirstFieldsHack.default(Hacks.galliaExecutionContext.forceValue, debug)) // TODO: allow numerical here?
   
       // ---------------------------------------------------------------------------
       val leftItr  = left .closeabledIterator
@@ -96,7 +96,7 @@ object IteratorStreamerUtils {
             val sortedRight: CloseabledIterator[Line] = sortByKey(debug = "rite")(rightItr)
 
             // ---------------------------------------------------------------------------
-            GnuJoinByFirstFieldHack(Hacks.ExecutionContext)(sortedLeft, sortedRight)
+            GnuJoinByFirstFieldHack(Hacks.galliaExecutionContext.forceValue)(sortedLeft, sortedRight)
               .map(deserializeJoiningLine[V])
               .map(combine.tupled) } }
         .pipe(IteratorStreamer.from)

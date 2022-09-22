@@ -18,7 +18,7 @@ trait Streamer[A] { // note: not necessarily bothering with genericity (in the g
   final override def equals(that: Any): Boolean = egal(that.asInstanceOf[Streamer[A]])
 
   // ---------------------------------------------------------------------------
-  protected def egal(that: Streamer[A]): Boolean // TODO: only for tests?
+  protected final def egal(that: Streamer[A]): Boolean = this.toList == that.toList // only for tests
 
   // ===========================================================================
   private[gallia] def selfClosingIterator:                 Iterator[A] // must not reuse streamer afterward

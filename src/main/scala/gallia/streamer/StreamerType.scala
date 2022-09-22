@@ -27,6 +27,21 @@ sealed trait StreamerType extends EnumEntry {
         case StreamerType.RDDBased      => ???
      }
     */
+
+    // ---------------------------------------------------------------------------
+    def spillingTriplet(left: Objs, right: Objs): (Boolean /* use spilling? */, (Objs, Objs)) =
+      (left.values.tipe, right.values.tipe) match {
+        case (ViewBased,     ViewBased    ) => (false, left                  -> right)
+        case (ViewBased,     RDDBased     ) => (false, left._toRddBased      -> right)
+        case (ViewBased,     IteratorBased) => (true,  left._toIteratorBased -> right)
+
+        case (IteratorBased, ViewBased )    => (true,  left                  -> right._toIteratorBased)
+        case (IteratorBased, IteratorBased) => (true,  left                  -> right)
+        case (IteratorBased, RDDBased     ) => aptus.illegalState(data.multiple.CantMixIteratorAndRddProcessing)
+
+        case (RDDBased,      ViewBased    ) => (false, left                  -> right._toRddBased)
+        case (RDDBased,      RDDBased     ) => (false, left                  -> right)
+        case (RDDBased,      IteratorBased) => aptus.illegalState(data.multiple.CantMixIteratorAndRddProcessing) }
   }
 
 // ===========================================================================

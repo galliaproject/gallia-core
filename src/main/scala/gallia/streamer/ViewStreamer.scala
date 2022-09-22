@@ -10,8 +10,7 @@ class ViewStreamer[A](view: ViewRepr[A]) extends Streamer[A] { // TODO: add a Li
   override val tipe = StreamerType.ViewBased
 
   // ---------------------------------------------------------------------------
-  private   def _rewrap[B](newView: ViewRepr[B]): Streamer[B] = new ViewStreamer(newView)
-  protected def egal      (that: Streamer[A]): Boolean = this.toList == that.toList
+  private def _rewrap[B](newView: ViewRepr[B]): Streamer[B] = new ViewStreamer(newView)
 
   // ===========================================================================
   private[gallia] def selfClosingIterator:                  Iterator[A] =                                          view.iterator  // nothing to close

@@ -12,8 +12,8 @@ object ViewStreamerUtils {
 
   // note: n210302094313 - the ListMap aspect comes with a 50% time increase...  
   @inline private def keyGrouping[K, V](itr: Iterator[(K, V)]): Map[K, Seq[V]] =
-    if (gallia.Hacks.LoseOrderOnGrouping) itr.groupByKey
-    else                                  itr.groupByKeyWithListMap
+    if (gallia.Hacks.loseOrderOnGrouping.test()) itr.groupByKey
+    else                                         itr.groupByKeyWithListMap
 
   // ===========================================================================
   private[streamer] def groupByKey[K, V](view: ViewRepr[(K, V)]): ViewRepr[(K, List[V])] =

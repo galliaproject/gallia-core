@@ -46,9 +46,6 @@ final class IteratorStreamer[A](gen: () => CloseabledIterator[A]) extends Stream
       else               Right(toList)
 
   // ===========================================================================
-  protected def egal(that: Streamer[A]): Boolean = this.toList == that.toList // for tests
-
-  // ---------------------------------------------------------------------------
   private[gallia] def selfClosingIterator:                 Iterator[A] = { exited = true; underlying.toSelfClosing }
   private[gallia] def closeabledIterator : aptus.CloseabledIterator[A] = { exited = true; underlying }
 
@@ -61,14 +58,15 @@ final class IteratorStreamer[A](gen: () => CloseabledIterator[A]) extends Stream
   override def toIteratorBased: Streamer[A] = this
 
   // ---------------------------------------------------------------------------
-  override def toMeBased [B >: A : CT](that: Streamer[B]): Streamer[B] = that.toIteratorBased
+  override def toMeBased[B >: A : CT](that: Streamer[B]): Streamer[B] = that.toIteratorBased
 
   // ===========================================================================
-  override def     map[B: CT](f: A =>      B ): Streamer[B] = _alter(_.map(f))
-  override def flatMap[B: CT](f: A => Coll[B]): Streamer[B] = _alter(_.flatMap(f)) //IteratorParHack.flatMap(itr)(f).pipe(_rewrap)
+  override def     map[B: CT](f: A =>      B ): Streamer[B] = _alter(IteratorParHack.    map(f))
+  override def flatMap[B: CT](f: A => Coll[B]): Streamer[B] = _alter(IteratorParHack.flatMap(f))
 
-  private[gallia] def     _map[B](f: A =>      B) : IteratorStreamer[B] = _alter(_.    map(f)) //IteratorParHack.map(itr)(f).pipe(_rewrap)
-  private[gallia] def _flatMap[B](f: A => Coll[B]): IteratorStreamer[B] = _alter(_.flatMap(f))
+  // ---------------------------------------------------------------------------
+  private[gallia] def     _map[B](f: A =>      B) : IteratorStreamer[B] = _alter(IteratorParHack.    map(f))
+  private[gallia] def _flatMap[B](f: A => Coll[B]): IteratorStreamer[B] = _alter(IteratorParHack.flatMap(f))
 
   // ---------------------------------------------------------------------------
   override def filter(p: A => Boolean): Streamer[A] = _alter  (_.filter(p))

@@ -5,18 +5,26 @@ package single
 // ===========================================================================
 object ObjIn {
 
-  def fromDataClassInstance[T <: Product : WTT](value: T): Obj = reflect.TypeNode.parse[T].leaf.forceDataClass.valueToObj(value).asInstanceOf[Obj]
-  
-  private[single] def normalize(data: UData): UData =
-    data
-      .flatMap { case (key, value) =>
-        value match { // 201029155019
-          case null | None | gallia.none | Seq() => None // see t210115144940
+  def fromDataClassInstance[T <: Product : WTT](value: T): Obj =
+    reflect.TypeNode
+      .parse[T]
+      .leaf
+      .forceDataClass
+      .valueToObj(value)
+      .asInstanceOf[Obj]
 
-          case z: multiple.Objs => Some(key -> z.toListAndTrash) // TODO: keep? c210110112244
+  // ===========================================================================
+  private[single] def normalize(data: UData): UData = data.flatMap(normalizeEntry)
 
-          case Some(x) => Some(key -> x)
-          case x       => Some(key -> x) } }
+  // ---------------------------------------------------------------------------
+  private[gallia] def normalizeEntry(entry: UEntry): Option[UEntry] =
+    entry._2 match { // 201029155019
+      case null | None | gallia.none | Seq() => None // see t210115144940
+
+      case z: multiple.Objs => Some(entry._1 -> z.toListAndTrash) // TODO: keep? c210110112244
+
+      case Some(x) => Some(entry._1 -> x)
+      case x       => Some(entry._1 -> x) }
 
 }
 

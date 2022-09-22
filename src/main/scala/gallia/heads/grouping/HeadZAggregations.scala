@@ -156,15 +156,41 @@ trait HeadZAggregations { self: HeadZ =>
       def medianAllBy(grouper1: RenW, grouper2: RenW, more: RenW*): Self with HasAs = medianAllBy(grouper1, grouper2, more:_*)      
      
     // ===========================================================================
-    def aggregateBy(key : GroupersSelection): _AggregateBy = new _AggregateBy(key)
+    def aggregateBy(key : GroupersSelection): _AggregateBy = new _AggregateBy(key, _agg)
     def aggregateBy(keys: RenWz)            : _AggregateBy = aggregateBy(_.explicit(keys))
     def aggregateBy(key1: RenW, more: RenW*): _AggregateBy = aggregateBy(_.explicitFX(key1, more))
 
       // ---------------------------------------------------------------------------
-      class _AggregateBy private[HeadZAggregations] (key : GroupersSelection) {
+      class _AggregateBy private[HeadZAggregations] (groupers: GroupersSelection, as: Key) {
+        def as(as: KeyW) = new _AggregateBy(groupers, as.value)
+
+        // ---------------------------------------------------------------------------
+        def using[T: WTT](f: HeadZ => HeadV[T]): HeadS =
+          self
+            .groupBy(groupers).as(as)
+            .transformAllObjects (as).using(f)
+
+        // ---------------------------------------------------------------------------
+        def using(f: HeadZ => HeadU)(implicit d: DI): HeadS =
+          self
+            .groupBy(groupers).as(as)
+            .transformAllObjects (as).using(f)
+            .unnestAllFrom       (as)
+
+        // ---------------------------------------------------------------------------
+        import aptus.{Tuple2_, Tuple3_, Tuple4_, Tuple5_}
+        private type P = KeyWPair2[HeadV[_]]
+          def using(f: HeadZ =>  P)             (implicit d1: DI, d2: DI)                                : HeadS = using { x => Seq(f(x)).pipe(gallia.headO) }(d1)
+          def using(f: HeadZ => (P, P))         (implicit d1: DI, d2: DI, d3: DI)                        : HeadS = using { f(_).toSeq.pipe(gallia.headO) }(d1)
+          def using(f: HeadZ => (P, P, P))      (implicit d1: DI, d2: DI, d3: DI, d4: DI)                : HeadS = using { f(_).toSeq.pipe(gallia.headO) }(d1)
+          def using(f: HeadZ => (P, P, P, P))   (implicit d1: DI, d2: DI, d3: DI, d4: DI, d5: DI)        : HeadS = using { f(_).toSeq.pipe(gallia.headO) }(d1)
+          def using(f: HeadZ => (P, P, P, P, P))(implicit d1: DI, d2: DI, d3: DI, d4: DI, d5: DI, d6: DI): HeadS = using { f(_).toSeq.pipe(gallia.headO) }(d1)
+          // for >5: use gallia.mergeAll explicitly
+
+        // ---------------------------------------------------------------------------
         def using(pair1: ReducingPair, more: ReducingPair*): HeadS =
           self
-            .groupBy(key)
+            .groupBy(groupers)
             .transformGroupObjectsUsing { 
               _.reduce(pair1, more:_*) }
       	    .unnestAllFromGroup }

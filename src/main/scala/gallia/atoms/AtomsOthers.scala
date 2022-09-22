@@ -20,7 +20,24 @@ object AtomsOthers {
 
   // ===========================================================================
   case class _Unpivot(keyz: Keyz) extends AtomUU { def naive(o: Obj) =
-    o.unpivot(keyz) }
+      o.unpivot(keyz) }
+
+    // ---------------------------------------------------------------------------
+    //TODO: t220914144753 - generalize as unpivot of some keys
+    case class _UnpivotOneItem(key1: Key, key2: Key, targetStringValue: String) extends AtomUU { def naive(o: Obj) = { import aptus._
+      o .objs_(key1)
+        .map { objs =>
+          val (target: Obj, rest: Seq[Obj]) =
+            objs
+              .partition(_.basicValue(key2) == targetStringValue)
+              .mapFirst(_.force.one.remove(key2)) // TODO: if more or zero?
+
+          o .addKey(targetStringValue, target)
+            .replaceKey(key1, rest) }
+        .getOrElse(o)
+    }
+  }
+
 
   // ===========================================================================
   case object _IdentityUU extends AtomUU { @inline def naive(o: Obj ) = o }
@@ -69,9 +86,9 @@ object AtomsOthers {
     val itr = z.closeabledIterator
     if (!itr.hasNext) { itr.close(); _Error.Runtime.EmptyStream.throwDataError() }
     else {
-      val next = itr.next()
+      val first = itr.next()
       if (itr.hasNext) { itr.close(); _Error.Runtime.MoreThanNElements(n = 1).throwDataError() }
-      else             { itr.close(); next } } } }
+      else             { itr.close(); first } } } }
 
   // ---------------------------------------------------------------------------
   case class _AsArray1(key: Key) extends AtomZU { def naive(z: Objs) =

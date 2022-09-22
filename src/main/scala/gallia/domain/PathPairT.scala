@@ -2,6 +2,8 @@ package gallia
 package domain
 
 // ===========================================================================
+case class KeyPair (key: Key, optional: Boolean)
+
 case class PathPair(path: KPath, optional: Boolean) {
 
       override def toString: String = formatDefault

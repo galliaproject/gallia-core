@@ -45,8 +45,27 @@ object ActionsOthers {
 
   // ===========================================================================  
   case class Unpivot(keyz: Keyz) extends ActionUUd with TodoV1 /* origins + check compatible infos */ {
-    def _meta(c: Cls): Cls    = c.unpivot(keyz)        
-    def atomuu       : AtomUU =  _Unpivot(keyz) }
+      def _meta(c: Cls): Cls    = c.unpivot(keyz)
+      def atomuu       : AtomUU =  _Unpivot(keyz) }
+
+    // ---------------------------------------------------------------------------
+    //TODO: t220914144753 - generalize as unpivot of some keys
+    case class UnpivotOneItem(key1: Key, key2: Key, targetStringValue: String) extends ActionUUc {
+      def  vldt(c: Cls): Errs = Nil // TODO
+
+      // ---------------------------------------------------------------------------
+      def _meta(c: Cls): Cls = {
+        val f = c.field(key1)
+
+        f .subInfo1
+          .forceNestedClass
+          .remove(key2)
+          .pipe { nc => c.add(
+            if (f.isOptional) targetStringValue.cls_(nc)
+            else              targetStringValue.cls (nc)) } }
+
+      // ---------------------------------------------------------------------------
+      def atomuu(c: Cls): AtomUU = _UnpivotOneItem(key1, key2, targetStringValue) }
 
   // ===========================================================================
   /** a purely meta operation */

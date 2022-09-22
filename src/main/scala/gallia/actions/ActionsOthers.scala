@@ -187,6 +187,12 @@ object ActionsOthers {
     def dataz2(c1: Cls , c2: Cls) = _CombineVV(f).in.seq }
 
   // ===========================================================================
+  // vu
+  case class DressUp[T: WTT](key: Key) extends TodoV1 with ActionVUd {
+    def _meta(ignored: Cls): Cls = Fld.fld[T](key).toSoleFieldCls
+    def atomvu = new AtomVU { def naive(v: Vle): Obj = obj(key -> v) } }
+
+  // ===========================================================================
   // uv
 
   case class GrabU(from: TtqKPath1, checkOrigin: Boolean /* not for V=Any */) 

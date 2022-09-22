@@ -5,6 +5,7 @@ package pivoting
 import aptus.Separator
 
 import actions.ActionsOthers._
+import reflect.ReflectUtils
 
 // ===========================================================================
 @deprecated trait HeadZUnarraying /* "pivone" */ { self: HeadZ =>
@@ -22,8 +23,9 @@ import actions.ActionsOthers._
 
     // ---------------------------------------------------------------------------
     class _UnarrayEntries1(keyKeys: Keyz) {
-      def asNewKeys(x1: KeyW, xs: KeyW*) = new __UnarrayEntries1(Keyz.from(x1, xs))
-      def asNewKeys(xs: KeyWz)           = new __UnarrayEntries1(xs.keyz)
+      def asNewKeys[E <: EnumEntry : WTT]: __UnarrayEntries1 = asNewKeys(ReflectUtils.enumValueNames[E])
+      def asNewKeys(x1: KeyW, xs: KeyW*) : __UnarrayEntries1 = asNewKeys(Keyz.from(x1, xs))
+      def asNewKeys(xs: KeyWz)           : __UnarrayEntries1 = new __UnarrayEntries1(xs.keyz)
 
       // ---------------------------------------------------------------------------
       class __UnarrayEntries1 protected[HeadZUnarraying] (newKeys: Keyz) {
@@ -31,8 +33,9 @@ import actions.ActionsOthers._
 
     // ---------------------------------------------------------------------------
     class _UnarrayEntriesN(keyKeys: Keyz) {
-      def asNewKeys(x1: KeyW, xs: KeyW*) = new __UnarrayEntriesN(Keyz.from(x1, xs))
-      def asNewKeys(xs: KeyWz)           = new __UnarrayEntriesN(xs.keyz)
+      def asNewKeys[E <: EnumEntry : WTT]: __UnarrayEntriesN = asNewKeys(ReflectUtils.enumValueNames[E])
+      def asNewKeys(x1: KeyW, xs: KeyW*) : __UnarrayEntriesN = asNewKeys(Keyz.from(x1, xs))
+      def asNewKeys(xs: KeyWz)           : __UnarrayEntriesN = new __UnarrayEntriesN(xs.keyz)
 
       // ---------------------------------------------------------------------------
       // TODO: t210228112738 - keep these or force manual fuse ahead of time?      
@@ -53,13 +56,15 @@ import actions.ActionsOthers._
 
     // ---------------------------------------------------------------------------
     class _UnarrayBy1(keyKeys: Keyz) {
-      def asNewKeys(x1: KeyW, xs: KeyW*) = zu(UnarrayBy0(Keyz.from(x1, xs), keyKeys, sep = null /* ignored by design */))
-      def asNewKeys(xs: KeyWz)           = zu(UnarrayBy0(xs.keyz          , keyKeys, sep = null /* ignored by design */)) }
+      def asNewKeys[E <: EnumEntry : WTT]: HeadU = asNewKeys(ReflectUtils.enumValueNames[E])
+      def asNewKeys(x1: KeyW, xs: KeyW*) : HeadU = asNewKeys(Keyz.from(x1, xs))
+      def asNewKeys(xs: KeyWz)           : HeadU = zu(UnarrayBy0(xs.keyz          , keyKeys, sep = null /* ignored by design */)) }
 
     // ---------------------------------------------------------------------------
     class _UnarrayByN(keyKeys: Keyz) {
-      def asNewKeys(x1: KeyW, xs: KeyW*) = new __UnarrayByN(Keyz.from(x1, xs))
-      def asNewKeys(xs: KeyWz)           = new __UnarrayByN(xs.keyz)
+      def asNewKeys[E <: EnumEntry : WTT]: __UnarrayByN = asNewKeys(ReflectUtils.enumValueNames[E])
+      def asNewKeys(x1: KeyW, xs: KeyW*) : __UnarrayByN = asNewKeys(Keyz.from(x1, xs))
+      def asNewKeys(xs: KeyWz)           : __UnarrayByN = new __UnarrayByN(xs.keyz)
 
       // ---------------------------------------------------------------------------
       // TODO: t210228112738 - keep these or force manual fuse ahead of time?

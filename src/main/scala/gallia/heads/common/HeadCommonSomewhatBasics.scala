@@ -12,6 +12,7 @@ import actions.common.ActionsCommonUntuplify._
 import domain._
 import target._
 import target.utils.TypedTargetQueryUtils._
+import reflect.ReflectUtils
 
 // ===========================================================================
 trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
@@ -43,7 +44,8 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
     // ===========================================================================
     final class _RemoveConditionallyWhatever private[common](target: TqRPathz) {
-      def is(value: Any): Self2 = RemoveConditionallyWhatever(target, value) }
+      def is   (value: Any): Self2 = RemoveConditionallyWhatever(target, value)
+      def isNot(value: Any): Self2 = RemoveConditionallyWhatever(target, value) }
 
     // ===========================================================================
     final class _RemoveConditionally2 private[common] (target: TqKey) {
@@ -204,6 +206,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
     // ---------------------------------------------------------------------------
     class _Copy(target: RPath) {
+      def asTmp: Self2 = as(_tmp)
       def as(newKey : KeyW)             : Self2 = self2 :+ new CopyEntries(target,  newKey.value.in.seq)
       def as(newKey1: KeyW, more: KeyW*): Self2 = self2 :+ new CopyEntries(target, (newKey1 +: more).map(_.value)) }
 
@@ -246,7 +249,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   /** eg for: {"f": ["str=foo", "int=3"]} */
   def untuplify2z(targetKey: RenW) = new _Untuplify2z(targetKey.value)
 
-  /** eg for: {"f": "str=foo|int=3"}  or {"f": [ "str=foo|int=3", "str=..." ]} */  
+  /** eg for: {"f": "str=foo|int=3"}  or {"f": [ "str=foo|int=3", "str=..." ]} */
   def untuplify2a(targetKey: RenW) = new _Untuplify2a(targetKey.value)
 
   /** eg for: {"f": "str=foo;int=3,str=bar;int=4,str=baz;int=5"} */
@@ -254,6 +257,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
     // ===========================================================================
     class _Untuplify1z(targetKey: Ren) {
+          def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(ReflectUtils.enumValueNames[E])
           def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
           def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
             Untuplify1z(targetKey, keys.keyz) }
@@ -261,6 +265,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
     // ---------------------------------------------------------------------------
     class _Untuplify1a(targetKey: Ren) {
       def withSplitter(entriesSplitter: StringSplitter) = new {
+          def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(ReflectUtils.enumValueNames[E])
           def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
           def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
             Untuplify1a(targetKey, entriesSplitter, keys.keyz) } }
@@ -268,6 +273,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
     // ---------------------------------------------------------------------------
     class _Untuplify1b(targetKey: Ren) {
       def withSplitters(arraySplitter: StringSplitter, entriesSplitter: StringSplitter) = new {
+          def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(ReflectUtils.enumValueNames[E])
           def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
           def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
             Untuplify1b(targetKey, arraySplitter, entriesSplitter, keys.keyz) } }
@@ -275,6 +281,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
     // ===========================================================================
     final class _Untuplify2z(targetKey: Ren) {
         def withSplitter(entrySplitter: StringSplitter) = new {
+            def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(ReflectUtils.enumValueNames[E])
             def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
             def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
               Untuplify2z(targetKey, entrySplitter, keys.keyz) } }
@@ -282,6 +289,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
       // ---------------------------------------------------------------------------
       final class _Untuplify2a(targetKey: Ren) {
         def withSplitters(entriesSplitter: StringSplitter, entrySplitter: StringSplitter) = new {
+            def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(ReflectUtils.enumValueNames[E])
             def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
             def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
               Untuplify2a(targetKey, entriesSplitter, entrySplitter, keys.keyz) } }
@@ -289,8 +297,9 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
       // ---------------------------------------------------------------------------
       final class _Untuplify2b(targetKey: Ren) {
         def withSplitters(arraySplitter: StringSplitter, entriesSplitter: StringSplitter, entrySplitter: StringSplitter) = new {
-            def asNewKeys(key1: KeyW,  more: KeyW*): Self2 = asNewKeys((key1, more))
-            def asNewKeys(keys: KeyWz)             : Self2 = self2 :+
+            def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(ReflectUtils.enumValueNames[E])
+            def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
+            def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
               Untuplify2b(targetKey, arraySplitter, entriesSplitter, entrySplitter, keys.keyz) } }
 
   // ===========================================================================
@@ -298,6 +307,11 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   // TODO: t210608090944 - allow selection + customization
   def unpivot(key1: KeyW, more: KeyW*): Self2 = self2 :+ actions.ActionsOthers.Unpivot(Keyz.from(key1, more))
 
+  // ---------------------------------------------------------------------------
+  // TODO: t220914144753 - generalize as unpivot of some keys
+  def unpivotOneItem(key1: KeyW, key2: KeyW) = new {
+    def withValue(targetValue: Any): Self2 = self2 :+
+      actions.ActionsOthers.UnpivotOneItem(key1.value, key2.value, targetValue.toString) }
 }
 
 // ===========================================================================

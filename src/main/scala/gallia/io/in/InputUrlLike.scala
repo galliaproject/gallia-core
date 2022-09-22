@@ -34,9 +34,8 @@ case class InputUrlLike( // TODO: t210115193904 - check URI, regular file vs sym
 
   // ---------------------------------------------------------------------------
   def streamLines(inMemoryMode: Boolean): Streamer[Line] =
-    InputUrlLike
-      .hackOpt
-      .map(_.apply(this))
+    gallia.Hacks.sparkRddHack.getValueOpt() // see 220721104754 in gallia-spark
+      .map(_.streamRddLines(this))
       .getOrElse {
         if (inMemoryMode)
           ViewStreamer.from(lines().consumeAll)
@@ -69,9 +68,6 @@ case class InputUrlLike( // TODO: t210115193904 - check URI, regular file vs sym
 
 // ===========================================================================
 object InputUrlLike {
-  var hackOpt: Option[InputUrlLike => Streamer[Line]] = None // until dust settles and we do proper injection
-
-  // ---------------------------------------------------------------------------
   private def normalize(value: String): String = SupportedUriScheme.file.normalizeOpt(value).getOrElse(value)
   
   // ---------------------------------------------------------------------------

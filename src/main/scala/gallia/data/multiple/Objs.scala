@@ -4,7 +4,7 @@ package multiple
 
 import scala.reflect.ClassTag
 import aptus.Seq_
-import streamer.{IteratorStreamer, ViewStreamer}
+import streamer.{IteratorStreamer, StreamerType, ViewStreamer}
 
 // ===========================================================================
 case class Objs private (  // TODO: two versions, see t210104164036
@@ -31,6 +31,13 @@ case class Objs private (  // TODO: two versions, see t210104164036
     // ---------------------------------------------------------------------------
     def _toViewBased    : Objs = values.toViewBased    .pipe(_rewrap)
     def _toIteratorBased: Objs = values.toIteratorBased.pipe(_rewrap)
+
+    // ---------------------------------------------------------------------------
+    def _toRddBased: Objs =
+      values.tipe match {
+        case StreamerType.ViewBased     => values.asInstanceOf[ViewStreamer[Obj]].pipe(Objs.toRddHack).getOrElse(aptus.illegalState("220721100024 - no spark context registered"))
+        case StreamerType.IteratorBased => aptus.illegalState(data.multiple.CantMixIteratorAndRddProcessing)
+        case StreamerType.RDDBased      => this }
 
     // ===========================================================================
     def     mapToStreamer[A: ClassTag](f: Obj =>      A ): Streamer[A] = values.    map(f)
@@ -81,11 +88,21 @@ case class Objs private (  // TODO: two versions, see t210104164036
     def splat(value1: Obj, more: Obj*)       : Objs = from(value1 +: more.toList)
 
     // ---------------------------------------------------------------------------
+    lazy val empty: Objs = from(Nil)
+
+    // ---------------------------------------------------------------------------
     def from(values: List[Obj])                 : Objs = Objs.build(    ViewStreamer.from(values))
     def from(data: DataRegenerationClosure[Obj]): Objs = Objs.build(IteratorStreamer.from(data))
 
     // ---------------------------------------------------------------------------
     def streamFromFile(path: String): Objs = ObjsIn.streamFromFile(path)
+
+    // ===========================================================================
+    private[gallia] def toRddHack(streamer: ViewStreamer[Obj]): Option[Objs] =
+      gallia.Hacks.sparkRddHack.getValueOpt() // see 220721104754 in gallia-spark
+        .map {
+          _ .toRddStreamer(streamer)
+            .pipe(Objs.build) }
   }
 
 // ===========================================================================

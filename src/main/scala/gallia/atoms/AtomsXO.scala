@@ -58,6 +58,39 @@ object AtomsXO {
     case class _PrettyTableOutput(schema: Cls, outlet: OutletType, twc: PrettyTableWritingContext) extends AtomZO {
       def naive(z: Objs) = { twc.formatTable(schema)(z).pipe(outlet.writeLines) } }
 
+  // ===========================================================================
+  // TODO: t220916113454 - separate HeadV[T] from HeadV[Seq[U]]
+  case class _NakedValueOutput(
+        eitherOpt: Option[Either[aptus.OutputFilePath, StringWriter]],
+        f        : Vle => (Multiple, aptus.CloseabledIterator[String]))
+      extends AtomVO {
+
+    import aptus.aptutils.FileUtils
+    import aptus._
+
+    // ---------------------------------------------------------------------------
+    def naive(v: Vle)  = {
+      val (multiple, result) = f(v)
+
+      if (multiple) processMultipleValues(result)
+      else          processSingleValue   (result.consumeAll.force.one)
+    }
+
+    // ---------------------------------------------------------------------------
+    def processSingleValue(value: String): Unit =
+      eitherOpt match {
+        case Some(Left(path)) => value.pipe(CloseabledIterator.fromSole).writeGzipLines(path, 100, None)
+        case Some(Right(sw))  => value.tap(sw.write); sw.close()
+        case None             => value.tap(println) }
+
+    // ---------------------------------------------------------------------------
+    def processMultipleValues(values: aptus.CloseabledIterator[String]): Unit =
+      eitherOpt match {
+        case Some(Left(path)) => values.writeGzipLines(path, 100, None)
+        case Some(Right(sw))  => values.map(_.newline).consume(_.foreach(sw.write)); sw.close()
+        case None             => values               .consume(_.foreach(println)) }
+  }
+
 }
 
 // ===========================================================================

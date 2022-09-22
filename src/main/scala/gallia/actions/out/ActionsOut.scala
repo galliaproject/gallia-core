@@ -96,5 +96,13 @@ case class OtherOutputU(ioType: IoTypeU, outlet: OutletType) extends ActionUOc {
           ( if (forceTable || !c.hasNesting) PrettyTableOutput(                    OutletType.StandardOutput, PrettyTableWritingContext.Default)
             else                             OtherOutputZ(IoTypeZ.JsonPrettyLines, OutletType.StandardOutput))
           .atomzo(c)}
-  
+
+// ===========================================================================
+// TODO: t220916113454 - separate HeadV[T] from HeadV[Seq[U]]
+case class NakedValueOutput(
+       eitherOpt: Option[Either[aptus.OutputFilePath, StringWriter]],
+       f        : Vle => (Multiple, aptus.CloseabledIterator[String]))
+    extends IdentityV1 with ActionVOd {
+  def atomvo = _NakedValueOutput(eitherOpt, f) }
+
 // ===========================================================================

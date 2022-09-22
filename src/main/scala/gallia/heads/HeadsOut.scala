@@ -1,8 +1,8 @@
 package gallia
 package heads
 
-import aptus.{UriString, One, Opt, Nes, Pes}
-
+import aptus.{Nes, One, Opt, Pes, UriString}
+import gallia.data.DataFormatting
 import io.out._
 
 // ===========================================================================
@@ -17,19 +17,12 @@ trait HeadOut { self: Head[_] =>
 }
 
 // ===========================================================================
-trait HeadVOut[T] extends HeadOut { self: HeadV[T] =>
-  private[heads] def forceValue  [T: WTT]: One[T] = end().runv[One[T]]().forceData2(_.value)
-  private[heads] def forceValue_ [T: WTT]: Opt[T] = end().runv[Opt[T]]().forceData2(_.value)  
-  private[heads] def forceValues [T: WTT]: Nes[T] = end().runv[Nes[T]]().forceData2(_.value)
-  private[heads] def forceValues_[T: WTT]: Pes[T] = end().runv[Pes[T]]().forceData2(_.value) }
-
-// ===========================================================================
 trait HeadUOut extends HeadOut { self: HeadU =>
 
   private[heads] def _all: Unit =
     self.end.runu().either match {
       case Left (errors)  => throw errors.metaErrorOpt.get
-      case Right(success) => () }
+      case Right(_)       => () }
 
   // ===========================================================================
   def runGeneric(action: ActionUO): Unit = self.uo(action)._all
@@ -108,7 +101,7 @@ trait HeadZOut extends HeadOut { self: HeadZ =>
   private[heads] def _all: Unit =
     self.end.runz().either match {
       case Left (errors)  => throw errors.metaErrorOpt.get
-      case Right(success) => () }
+      case Right(_)       => () }
 
   // ===========================================================================
   def runGeneric(action: ActionZO): Unit = self.zo(action)._all
@@ -147,7 +140,7 @@ trait HeadZOut extends HeadOut { self: HeadZ =>
   // ===========================================================================
   /** will *not* process all the data (assuming input schema does not need to be inferred) */
   def printSchema() = { showSchema()._metaOnly() }
-  
+
   // ---------------------------------------------------------------------------
   def printDefault  () = { printJsonLines }
   def printString   () = { printJsonLines }
@@ -183,6 +176,37 @@ trait HeadZOut extends HeadOut { self: HeadZ =>
   def writeFile(path: String) = { write(_.file(path)); () }
   def writeDefaultFile        = { write(_.file(HeadZ.DefaultOutputFile)); () }
   //TODO: t211220134905 - write pretty table?  
+}
+
+// ===========================================================================
+trait HeadVOut[T] extends HeadOut { self: HeadV[T] => import data.DataDynamicFormatting.formatBasicValue
+
+  private[heads] def forceValue  [T: WTT]: One[T] = end().runv[One[T]]().forceData2(_.value)
+  private[heads] def forceValue_ [T: WTT]: Opt[T] = end().runv[Opt[T]]().forceData2(_.value)
+  private[heads] def forceValues [T: WTT]: Nes[T] = end().runv[Nes[T]]().forceData2(_.value)
+  private[heads] def forceValues_[T: WTT]: Pes[T] = end().runv[Pes[T]]().forceData2(_.value)
+
+  // ===========================================================================
+  private[heads] def _all: Unit =
+    self.end.runv[T]().either match {
+      case Left (errors) => throw errors.metaErrorOpt.get
+      case Right(_)      => () }
+
+  // ===========================================================================
+  import actions.out.NakedValueOutput
+
+    // ---------------------------------------------------------------------------
+    def display()          : Unit = { println() }
+
+    def write(path: String): HeadV[T] =                     { NakedValueOutput(Some(Left(path)), pair).pipe(vo).tap(_._all); self }
+    def println()          : HeadV[T] =                     { NakedValueOutput(None,             pair).pipe(vo).tap(_._all); self }
+
+    def format: String = { val sw = new java.io.StringWriter; NakedValueOutput(Some(Right(sw)) , pair).pipe(vo).tap(_._all); sw.toString }
+
+    // ---------------------------------------------------------------------------
+    private def pair: Vle => (Multiple, aptus.CloseabledIterator[aptus.StringValue]) = {
+        case seq: Seq[_] => _Multiple -> seq.iterator.map(formatBasicValue).pipe(aptus.CloseabledIterator.fromUncloseable(_))
+        case sgl         => _Single   -> Seq(sgl)    .map(formatBasicValue).pipe(aptus.CloseabledIterator.fromSeq(_)) }
 }
 
 // ===========================================================================

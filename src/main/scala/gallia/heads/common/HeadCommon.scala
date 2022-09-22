@@ -41,6 +41,9 @@ trait HeadCommon[F <: HeadCommon[F]]
   /** "Computer, I know better than you" */
   def customU2U(meta: Cls => Cls, data: Obj => Obj) = self2 :+ new actions.ActionsCustoms.CustomUU(meta, data)
 
+  /** "Computer, I know better than you" */
+  def custom(x: ObjToObj) = self2 :+ new actions.ActionsCustoms.CustomUU(x.meta, x.data)
+
   // ---------------------------------------------------------------------------
   def showSchema()        :  Self2 = self2 :+ ShowSchema(abort = false)
   def showSchemaAndAbort():  Self2 = self2 :+ ShowSchema(abort = true )

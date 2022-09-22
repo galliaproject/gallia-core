@@ -7,7 +7,7 @@ import actions._
 import actions.ActionsOthers._
 import actions.ActionsZZ._
 import actions.ActionsThns._
-import actions.ActionsCustoms.CustomZZ
+import actions.ActionsCustoms.{CustomZZ, CustomZU, TransformBaz}
 import actions.ActionsZZMerging.MergeObjsVle
 import actions.ActionsZZFiltering.{TakeWhile, DropWhile}
 
@@ -100,12 +100,18 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
   def thn        (f: Self => HeadU   ): HeadU    = zu(ThnZU(f))
   def thn[V: WTT](f: Self => HeadV[V]): HeadV[V] = zv(ThnZV(f))
 
-  // ---------------------------------------------------------------------------
+  // ===========================================================================
   // TODO: these will be very affected by t210104164036
-  def customZ2Z(meta: Cls => Cls, data: Objs      => Objs     ): Self = self ::+ new CustomZZ(meta, data)
-  def customS2S(meta: Cls => Cls, data: List[Obj] => List[Obj]): Self = self ::+ CustomZZ.from(meta, data)
+  def customS2SDataOnly(                  data: List[Obj] => List[Obj]): Self = self ::+ CustomZZ.from(meta = c => c, data)
+  def customZ2Z        (meta: Cls => Cls, data:      Objs =>      Objs): Self = self ::+ new CustomZZ(meta, data)
+  def customS2S        (meta: Cls => Cls, data: List[Obj] => List[Obj]): Self = self ::+ CustomZZ.from(meta, data)
+  def custom           (meta: Cls => Cls, data: List[Obj] => List[Obj]): Self = self ::+ CustomZZ.from(meta, data)
 
-  // ---------------------------------------------------------------------------
+  def custom(x: ObjsToObj) : HeadU =       zu(CustomZU.from(x.meta,           x.data))
+  def custom(x: ObjToObjs) : HeadZ = self ::+ CustomZZ.from(x.meta, _.flatMap(x.data))
+  def custom(x: ObjsToObjs): HeadZ = self ::+ CustomZZ.from(x.meta,           x.data )
+
+  // ===========================================================================
   def assertDataUnsafeZ(pred: Objs => Boolean): Self = self ::+
     actions.ActionsAsserts.AssertDataUnsafeZ(pred) // beware costly operation (distribution), eg size
 
@@ -204,6 +210,10 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
 // ===========================================================================
 object HeadZ extends HeadZIn {
   lazy val Dummy: HeadZ = """[{"foo":1, "bar": "baz1"}, {"foo":2, "bar": "baz2"}]""".stream()
+
+  // ---------------------------------------------------------------------------
+  lazy val Empty             : HeadZ =  empty(Cls.Line)
+       def empty(schema: Cls): HeadZ =  AObjs.empty(schema)
 
   // ---------------------------------------------------------------------------
   val DefaultOutputFile = "/tmp/out.jsonl.gz"

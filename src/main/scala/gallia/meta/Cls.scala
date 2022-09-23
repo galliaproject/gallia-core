@@ -116,13 +116,24 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
     def valueFromObjs_(instantiator: Instantiator)(value: Any): Any = value.asInstanceOf[Option[Seq   [Obj]]].map(_.map (instantiator.instantiateRecursively(this, _)))
 
     // ---------------------------------------------------------------------------
-    def valueToObj  (value: Any): Any = value.asInstanceOf[              Product  ]            .productIterator.pipe(ClsUtils.valuesToObj(this))
-    def valueToObjs (value: Any): Any = value.asInstanceOf[       Seq   [Product] ]      .map(_.productIterator.pipe(ClsUtils.valuesToObj(this)))
-    def valueToObj_ (value: Any): Any = value.asInstanceOf[       Option[Product] ]      .map(_.productIterator.pipe(ClsUtils.valuesToObj(this)))
-    def valueToObjs_(value: Any): Any = value.asInstanceOf[Option[Seq   [Product]]].map(_.map(_.productIterator.pipe(ClsUtils.valuesToObj(this))))
+    def valueToObj  (value: Any): Any = value.asInstanceOf[              Product  ]            .productIterator.pipe(ClsUtils.valuesToObjOpt(this)).getOrElse(None)
+    def valueToObjs (value: Any): Any = value.asInstanceOf[       Seq   [Product] ]      .map(_.productIterator.pipe(ClsUtils.valuesToObjOpt(this)).getOrElse(None))
+    def valueToObj_ (value: Any): Any = value.asInstanceOf[       Option[Product] ]      .map(_.productIterator.pipe(ClsUtils.valuesToObjOpt(this)).getOrElse(None))
+    def valueToObjs_(value: Any): Any = value.asInstanceOf[Option[Seq   [Product]]].map(_.map(_.productIterator.pipe(ClsUtils.valuesToObjOpt(this)).getOrElse(None)))
 
     // ===========================================================================
     //TODO: ensure not nested type?
+
+    def updateSoleType(target: Key   , toNode: TypeNode): Cls = transformField(target)(_.updateOptionality(toNode.isOption).updateSoleSubInfo(toNode.forceNonBObjSubInfo(enmOpt(target))))
+    def updateSoleType(target: Ren   , toNode: TypeNode): Cls = rename(target).updateSoleType(target.to, toNode)
+
+    def updateSoleType(target: KPath , toNode: TypeNode): Cls = transformx(target)(_.updateSoleType(_, toNode), _.updateSoleType(_, toNode))
+    def updateSoleType(target: RPath , toNode: TypeNode): Cls = transformx(target)(_.updateSoleType(_, toNode), _.updateSoleType(_, toNode))
+
+    def updateSoleType(target: KPathz, toNode: TypeNode): Cls = target.foldLeft(this)(_.updateSoleType(_, toNode))
+    def updateSoleType(target: RPathz, toNode: TypeNode): Cls = target.foldLeft(this)(_.updateSoleType(_, toNode))
+
+    // ---------------------------------------------------------------------------
     def updateType(target: Key   , fromNode: TypeNode, toNode: TypeNode): Cls = transformField(target)(_.updateOptionality(toNode.isOption).updateSpecificSubInfo(
        fromNode.forceNonBObjSubInfo(enmOpt(target)),
          toNode.forceNonBObjSubInfo(enmOpt(target))))
@@ -221,6 +232,34 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
     def toSingle  (path: RPath): Cls = transformx(path)(_ toSingle   _, _ toSingle   _)
 
     // ===========================================================================
+    // common ones
+
+    def toOneCls(target: RPathW, nc: Cls): Cls = transformField(target.value)(_.toCls(nc).toSingle  .toRequired)
+    def toOptCls(target: RPathW, nc: Cls): Cls = transformField(target.value)(_.toCls(nc).toSingle  .toOptional)
+    def toNesCls(target: RPathW, nc: Cls): Cls = transformField(target.value)(_.toCls(nc).toMultiple.toRequired)
+    def toPesCls(target: RPathW, nc: Cls): Cls = transformField(target.value)(_.toCls(nc).toMultiple.toOptional)
+
+      def toOneBoolean(target: RPathW): Cls = transformField(target.value)(_.toBoolean.toSingle.toRequired)
+      def toOneInt    (target: RPathW): Cls = transformField(target.value)(_.toInt    .toSingle.toRequired)
+      def toOneDouble (target: RPathW): Cls = transformField(target.value)(_.toDouble .toSingle.toRequired)
+      def toOneStr    (target: RPathW): Cls = transformField(target.value)(_.toStr    .toSingle.toRequired)
+
+      def toOptBoolean(target: RPathW): Cls = transformField(target.value)(_.toBoolean.toSingle.toOptional)
+      def toOptInt    (target: RPathW): Cls = transformField(target.value)(_.toInt    .toSingle.toOptional)
+      def toOptDouble (target: RPathW): Cls = transformField(target.value)(_.toDouble .toSingle.toOptional)
+      def toOptStr    (target: RPathW): Cls = transformField(target.value)(_.toStr    .toSingle.toOptional)
+
+      def toNesBoolean(target: RPathW): Cls = transformField(target.value)(_.toBoolean.toMultiple.toRequired)
+      def toNesInt    (target: RPathW): Cls = transformField(target.value)(_.toInt    .toMultiple.toRequired)
+      def toNesDouble (target: RPathW): Cls = transformField(target.value)(_.toDouble .toMultiple.toRequired)
+      def toNesStr    (target: RPathW): Cls = transformField(target.value)(_.toStr    .toMultiple.toRequired)
+
+      def toPesBoolean(target: RPathW): Cls = transformField(target.value)(_.toBoolean.toMultiple.toOptional)
+      def toPesInt    (target: RPathW): Cls = transformField(target.value)(_.toInt    .toMultiple.toOptional)
+      def toPesDouble (target: RPathW): Cls = transformField(target.value)(_.toDouble .toMultiple.toOptional)
+      def toPesStr    (target: RPathW): Cls = transformField(target.value)(_.toStr    .toMultiple.toOptional)
+
+    // ===========================================================================
     def metaSchema: Cls  = MetaSchema.withDepth(maxDepth)
     def metaAObj  : AObj = AObj(metaSchema, toObj)
   }
@@ -244,6 +283,9 @@ object Cls {
 
   private[gallia] def vle (node: TypeNode): Cls = Cls(List(Fld(_vle, node.forceNonBObjInfo)))
   private[gallia] def vles(node: TypeNode): Cls = Cls(List(Fld(_vle, node.forceNonBObjInfo).toMultiple))
+
+  // ---------------------------------------------------------------------------
+  def soleField(field: Fld): Cls = Cls(Seq(field))
 
   // ---------------------------------------------------------------------------
   @PartialTypeMatching

@@ -34,7 +34,7 @@ object ActionsCustoms {
       object CustomUU {
         def accessor[T: WTT](f: Obj => T) =
           new CustomUU(
-              _ => cls(???),//_accessor.typed[T]), - FIXME: t210115174930
+              _ => ???,//_accessor.typed[T]), - FIXME: t210115174930
               o => ???/*obj(_accessor -> f(o))*/)
       }
 

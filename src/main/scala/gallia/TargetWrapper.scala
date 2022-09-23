@@ -8,47 +8,41 @@ case class KeyW(value: Key) {
     def ren(to: KeyW): Ren   = Ren(value, to.value)
     def kpath        : KPath = KPath.from(value)
 
-    def keyz = Keyz(Seq(value))
-  }
+    def keyz = Keyz(Seq(value)) }
 
   // ===========================================================================
   object KeyW {
     implicit def to(x:  Key ): KeyW = KeyW(x)
     implicit def to(x: SKey ): KeyW = KeyW(Symbol(x          ))
     implicit def to(x: UKey ): KeyW = KeyW(Symbol(x.entryName))
-    implicit def to(x: EKey ): KeyW = KeyW(Symbol(x.toString ))
-  }
+    implicit def to(x: EKey ): KeyW = KeyW(Symbol(x.toString )) }
 
-  // ===========================================================================
-  case class KeyWPair(value: (Key, Key)) // for eg swapEntries
+// ===========================================================================
+case class GenericEntry[T](value: (Key, T)) // for eg swapEntries (Key, Key), aggregateBy (Key, HeadV[T])
+
+  // ---------------------------------------------------------------------------
+  object GenericEntry {
+    private implicit def _to(x: SKey): Key = Symbol(x)
+    private implicit def _to(x: UKey): Key = Symbol(x.entryName)
+    private implicit def _to(x: EKey): Key = Symbol(x.toString)
 
     // ---------------------------------------------------------------------------
-    object KeyWPair {
-      private implicit def _to(x: SKey): Key = Symbol(x)
-      private implicit def _to(x: UKey): Key = Symbol(x.entryName)
-      private implicit def _to(x: EKey): Key = Symbol(x.toString)
+    implicit def _toKK[T](x: ( Key, T)): GenericEntry[T] = GenericEntry(       x._1,            x._2)
+    implicit def _toSK[T](x: (SKey, T)): GenericEntry[T] = GenericEntry(Symbol(x._1),           x._2)
+    implicit def _toUK[T](x: (UKey, T)): GenericEntry[T] = GenericEntry(Symbol(x._1.entryName), x._2)
+    implicit def _toEK[T](x: (EKey, T)): GenericEntry[T] = GenericEntry(Symbol(x._1.toString),  x._2) }
 
-      // ---------------------------------------------------------------------------
-      implicit def _toKK(x: ( Key,   Key)): KeyWPair = KeyWPair(x._1, x._2)
-      implicit def _toKS(x: ( Key,  SKey)): KeyWPair = KeyWPair(x._1, x._2)
-      implicit def _toKU(x: ( Key,  UKey)): KeyWPair = KeyWPair(x._1, x._2)
-      implicit def _toKE(x: ( Key,  EKey)): KeyWPair = KeyWPair(x._1, x._2)
+  // ---------------------------------------------------------------------------
+  trait GenericEntryImplicits {
+    private type P =       (SKey, HeadV[_])
+    private type E = GenericEntry[HeadV[_]]
 
-      implicit def _toSK(x: (SKey,   Key)): KeyWPair = KeyWPair(x._1, x._2)
-      implicit def _toSS(x: (SKey,  SKey)): KeyWPair = KeyWPair(x._1, x._2)
-      implicit def _toSU(x: (SKey,  UKey)): KeyWPair = KeyWPair(x._1, x._2)
-      implicit def _toSE(x: (SKey,  EKey)): KeyWPair = KeyWPair(x._1, x._2)
-
-      implicit def _toUK(x: (UKey,   Key)): KeyWPair = KeyWPair(x._1, x._2)
-      implicit def _toUS(x: (UKey,  SKey)): KeyWPair = KeyWPair(x._1, x._2)
-      implicit def _toUU(x: (UKey,  UKey)): KeyWPair = KeyWPair(x._1, x._2)
-      implicit def _toUE(x: (UKey,  EKey)): KeyWPair = KeyWPair(x._1, x._2)
-
-      implicit def _toEK(x: (EKey,   Key)): KeyWPair = KeyWPair(x._1, x._2)
-      implicit def _toES(x: (EKey,  SKey)): KeyWPair = KeyWPair(x._1, x._2)
-      implicit def _toEU(x: (EKey,  UKey)): KeyWPair = KeyWPair(x._1, x._2)
-      implicit def _toEE(x: (EKey,  EKey)): KeyWPair = KeyWPair(x._1, x._2)
-    }
+    // ---------------------------------------------------------------------------
+    implicit def _genericEntry1(_f: HeadZ =>  P)             : HeadZ =>  E              = x => { val  (k1, v1)                                          = _f(x);  (k1, v1) }
+    implicit def _genericEntry2(_f: HeadZ => (P, P))         : HeadZ => (E, E)          = x => { val ((k1, v1), (k2, v2))                               = _f(x); ((k1, v1), (k2, v2)) }
+    implicit def _genericEntry3(_f: HeadZ => (P, P, P))      : HeadZ => (E, E, E)       = x => { val ((k1, v1), (k2, v2), (k3, v3))                     = _f(x); ((k1, v1), (k2, v2), (k3, v3)) }
+    implicit def _genericEntry4(_f: HeadZ => (P, P, P, P))   : HeadZ => (E, E, E, E)    = x => { val ((k1, v1), (k2, v2), (k3, v3), (k4, v4))           = _f(x); ((k1, v1), (k2, v2), (k3, v3), (k4, v4)) }
+    implicit def _genericEntry5(_f: HeadZ => (P, P, P, P, P)): HeadZ => (E, E, E, E, E) = x => { val ((k1, v1), (k2, v2), (k3, v3), (k4, v4), (k5, v5)) = _f(x); ((k1, v1), (k2, v2), (k3, v3), (k4, v4), (k5, v5)) } }
 
 // ===========================================================================
 /** for has explicit RKey(s) */

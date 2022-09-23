@@ -6,9 +6,8 @@ package object gallia
     extends Reserved
     with    Aliases
     with    Annotations
-    with GalliaSelectors
-    with GenericEntryImplicits
-    with CustomTraits {
+    with    CustomTraits
+    with    GenericEntryImplicits {
 
   // ---------------------------------------------------------------------------
   private[gallia] implicit class GalliaAnything_[A](value: A) { // so as to not import chaining._ everywhere
@@ -161,7 +160,7 @@ package object gallia
 
   // ===========================================================================
   implicit class InputString__     (val inputString: InputString)         extends ReadObjFromString with StreamObjsFromString with ReadHeadFromString with StreamHeadFromString
-  implicit class InputIterable__[T](val xvalues     : Iterable[T])         extends StreamObjsFromIterable[T]
+  implicit class InputIterable__[T](val data       : Iterable[T])         extends StreamObjsFromIterable[T]
   implicit class InputConnection__ (val connection : java.sql.Connection) extends StreamConnection
   implicit class InputIterator__[T](val values     : DataRegenerationClosure[Obj]) { def stream(schema: Cls): HeadS = actions.in.GenericInputZ(schema, values).pipe(heads.Head.inputZ) }
 

@@ -17,6 +17,9 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
   // ===========================================================================
   def transform        (f1: Transform[HeadU])                          : _TransformU     = new _TransformU(f1)
   def transform        (f1: Transform[HeadZ])(implicit di: DI)         : _TransformZ     = new _TransformZ(f1)
+
+  // TODO: t220923095400 - offer transform(_.dataClass[Foo]("foo")).using { ... - dataClass, dataClass_, dataClasses and dataClasses_
+  //   workaround: use transformDataClass along with a wrapping case class
   def transform[O: WTT](f1: Transform[O])    (implicit di: DI, di2: DI): _TransformVV[O] = new _TransformVV(f1)
 
   // ---------------------------------------------------------------------------
@@ -102,6 +105,7 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
         if (!dest.isContainedDataClass)
           if (!ttq.ignoreContainer) TransformVV (ttq, dest, wrap(f), wtto.ifApplicable(f))
           else                      TransformVVx(ttq, dest, wrap(f), wtto.ifApplicable(f))
+        // deprecated way now, c220914145147 or t220914144458 instead
         else
           if (!ttq.ignoreContainer) TransformVVc (ttq, to = HT.parse[D], wrap(f))
           else                      TransformVVxc(ttq, to = HT.parse[D], wrap(f)) } }

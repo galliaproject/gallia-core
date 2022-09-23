@@ -39,10 +39,10 @@ private[io] trait InputStringBase { val inputString: InputString }
 
   // ===========================================================================
   trait StreamObjsFromIterable[T] {
-    val values: Iterable[T]
+    protected val data: Iterable[T]
     
     // ---------------------------------------------------------------------------
-    def toHead(f: T => BObj): HeadZ = values.toSeq.map(f).pipe(BObjs(_))              
+    def toHead(f: T => BObj): HeadZ = data.toSeq.map(f).pipe(BObjs(_))
   }
   
   // ===========================================================================
@@ -84,6 +84,10 @@ private[io] trait InputStringBase { val inputString: InputString }
     def stream[T: WTT]                                 : HeadZ = stream(_.schema[T])
     def stream(field1: Fld, more: Fld*)                : HeadZ = stream(_.schema(field1, more:_*))
     def stream(schemaFilePath: String)                 : HeadZ = stream(_.schema(schemaFilePath))
+
+def streamx(a: Any) = {
+  ???
+}
 
     def stream(f: StartReadZFluency => EndReadZFluency): HeadZ =
         inputString

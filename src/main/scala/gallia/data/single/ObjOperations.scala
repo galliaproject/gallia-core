@@ -35,6 +35,7 @@ trait ObjOperations { self: Obj =>
       .pipe(Obj.build)
 
   // ===========================================================================
+  /** will override in this if conflict */
   def merge(that: Obj): Obj = {
     val set = that.keySet
 
@@ -71,8 +72,8 @@ trait ObjOperations { self: Obj =>
 
   // ===========================================================================
     @deprecated("very inefficient")
-    private[single] def _retainPaths(paths: KPathz)                        : Obj = retain(paths, RetainMapping(paths.mapping))
-                    def retain      (paths: KPathz, mapping: RetainMapping): Obj =    
+    private[single] def _retainPaths(paths: KPathz)         : Obj = retain(RetainMapping(paths.mapping))
+                    def retain      (mapping: RetainMapping): Obj =
         data
           .flatMap { case (key, value) =>            
               mapping
@@ -88,39 +89,65 @@ trait ObjOperations { self: Obj =>
           .pipe(Obj.build)
 
   // ===========================================================================
-  def putKey(key: Key, value: AnyValue) : Obj = // TODO: distinction only necessary until t201208103121 is done (Seq vs Map for Obj)
-        if (containsKey(key)) replaceKey(key, value)
-        else                      addKey(key, value)
-
-      // ---------------------------------------------------------------------------
-      def     addKey(key: Key, value: AnyValue) : Obj = Obj.build(data :+ (key -> value))
-      def replaceKey(key: Key, value: AnyValue) : Obj =
-          data
-            .map { case (k, v) => k ->
-              (if (key == k) value
-               else          v ) }
-            .pipe(Obj.build)
-
-    // ---------------------------------------------------------------------------
-    def addPath(target: KPathW, value: AnyValue): Obj =
-      target.value.initPair match {
-        case (None      , leaf) =>                             addKey(leaf, value)
-        case (Some(tail), leaf) => transformPath(tail, _.asObj.addKey(leaf, value)) }
-
-    def replacePath(target: KPathW, value: AnyValue): Obj =
-      target.value.initPair match {
-        case (None      , leaf) =>                             replaceKey(leaf, value)
-        case (Some(tail), leaf) => transformPath(tail, _.asObj.replaceKey(leaf, value)) }
-
-    def putPath(target: KPathW, value: AnyValue): Obj =
-      target.value.initPair match {
-        case (None      , leaf) =>                             putKey(leaf, value)
-        case (Some(tail), leaf) => transformPath(tail, _.asObj.putKey(leaf, value)) }
+  def putEntry(key:  Key, value: AnyValue) : Obj = // TODO: distinction only necessary until t201208103121 is done (Seq vs Map for Obj)
+      if (containsKey(key)) replaceEntry(key, value)
+      else                      addEntry(key, value)
+    def putEntry(key: KeyW, value: AnyValue) : Obj = putEntry(key.value, value)  // must come *after* the non-KeyW version
 
     // ---------------------------------------------------------------------------
     def putEntries(entries: Seq[(KPath, AnyValue)]): Obj = // TODO: quite inefficient
       entries.foldLeft(self){ case (curr, (path, value)) =>
         curr.putPath(path, value) }
+
+    // ---------------------------------------------------------------------------
+    def putEntries(entry1: DataEntry, entry2: DataEntry, more: DataEntry*): Obj = putEntries(Seq(entry1, entry2) ++ more) // TODO: quite inefficient
+    def putEntries(entries: Seq[DataEntry])(implicit di: DI)              : Obj =                                         // TODO: quite inefficient
+      entries.foldLeft(self){ case (curr, entry) =>
+        curr.putEntry(entry.key, entry.value) }
+
+  // ---------------------------------------------------------------------------
+  def addEntry(key: Key , value: AnyValue): Obj = Obj.build(data :+ (key -> value))
+  def addEntry(key: KeyW, value: AnyValue): Obj = addEntry(key.value, value) // must come *after* the non-KeyW version
+
+    // ---------------------------------------------------------------------------
+    def addEntries(entry1: DataEntry, entry2: DataEntry, more: DataEntry*): Obj = addEntries(Seq(entry1, entry2) ++ more) // TODO: quite inefficient
+    def addEntries(entries: Seq[DataEntry])(implicit di: DI)              : Obj =                                         // TODO: quite inefficient
+      entries.foldLeft(self){ case (curr, entry) =>
+        curr.addEntry(entry.key, entry.value) }
+
+  // ---------------------------------------------------------------------------
+  def replaceEntry(key: Key, value: AnyValue) : Obj =
+        data
+          .map { case (k, v) => k ->
+            (if (key == k) value
+             else          v ) }
+          .pipe(Obj.build)
+
+      def replaceEntry(key: KeyW, value: AnyValue) : Obj = replaceEntry(key.value, value) // must come *after* the non-KeyW version
+
+    // ---------------------------------------------------------------------------
+    def replaceEntries(entry1: DataEntry, entry2: DataEntry, more: DataEntry*): Obj = replaceEntries(Seq(entry1, entry2) ++ more) // TODO: quite inefficient
+    def replaceEntries(entries: Seq[DataEntry])(implicit di: DI)              : Obj =                                         // TODO: quite inefficient
+      entries.foldLeft(self){ case (curr, entry) =>
+        curr.replaceEntry(entry.key, entry.value) }
+
+  // ===========================================================================
+  def addPath(target: KPathW, value: AnyValue): Obj =
+      target.value.initPair match {
+        case (None      , leaf) =>                             addEntry(leaf, value)
+        case (Some(tail), leaf) => transformPath(tail, _.asObj.addEntry(leaf, value)) }
+
+    // ---------------------------------------------------------------------------
+    def replacePath(target: KPathW, value: AnyValue): Obj =
+      target.value.initPair match {
+        case (None      , leaf) =>                             replaceEntry(leaf, value)
+        case (Some(tail), leaf) => transformPath(tail, _.asObj.replaceEntry(leaf, value)) }
+
+    // ---------------------------------------------------------------------------
+    def putPath(target: KPathW, value: AnyValue): Obj =
+      target.value.initPair match {
+        case (None      , leaf) =>                             putEntry(leaf, value)
+        case (Some(tail), leaf) => transformPath(tail, _.asObj.putEntry(leaf, value)) }
 
   // ===========================================================================
   def transformPath(target: KPathW, f: AnyValue => AnyValue): Obj = // TODO: phase out
@@ -129,7 +156,7 @@ trait ObjOperations { self: Obj =>
           case (parent, Some(tail)) =>
             (attemptKey(parent) match {
               case None        => self
-              case Some(value) => replaceKey(parent, value match { // TODO: could use meta
+              case Some(value) => replaceEntry(parent, value match { // TODO: could use meta
                   case seq: Seq[_] => seq.asInstanceOf[Seq[Obj]].map(_.transformPath(tail, f))
                   case sgl         => sgl.asInstanceOf[    Obj ]      .transformPath(tail, f) }) }) }
 
@@ -140,7 +167,7 @@ trait ObjOperations { self: Obj =>
           case (parent, Some(tail)) =>
             (attemptKey(parent) match {
               case None        => self
-              case Some(value) => replaceKey(parent, value match { // TODO: could use meta
+              case Some(value) => replaceEntry(parent, value match { // TODO: could use meta
                   case seq: Seq[_] => seq.asInstanceOf[Seq[Obj]].map(_.transformPathx(tail, f))
                   case sgl         => sgl.asInstanceOf[    Obj ]      .transformPathx(tail, f) }) }) }
 
@@ -152,7 +179,7 @@ trait ObjOperations { self: Obj =>
             val tail = PathPair(tail0, target.optional)
             (attemptKey(parent) match {
               case None        => self
-              case Some(value) => replaceKey(parent, value match { // TODO: could use meta
+              case Some(value) => replaceEntry(parent, value match { // TODO: could use meta
                   case seq: Seq[_] => seq.asInstanceOf[Seq[Obj]].map(_.transformPathPair(tail, f))
                   case sgl         => sgl.asInstanceOf[    Obj ]      .transformPathPair(tail, f) }) }) }
 
@@ -165,14 +192,14 @@ trait ObjOperations { self: Obj =>
             val tail = PathPair(tail0, target.optional)
             (attemptKey(parent) match {
               case None        => self
-              case Some(value) => replaceKey(parent, value match { // TODO: could use meta
+              case Some(value) => replaceEntry(parent, value match { // TODO: could use meta
                   case seq: Seq[_] => seq.asInstanceOf[Seq[Obj]].map(_.transformWhateverPathPair(tail, f, checkType))
                   case sgl         => sgl.asInstanceOf[    Obj ]      .transformWhateverPathPair(tail, f, checkType) }) }) }
     
       // ===========================================================================
       def transformKey(key: Key, f: AnyValue => AnyValue): Obj = // TODO: phase out
           attemptKey(key)
-            .map { value => putKey(key, f(value)) }
+            .map { value => putEntry(key, f(value)) }
             .getOrElse(self)
 
       // ---------------------------------------------------------------------------
@@ -180,17 +207,17 @@ trait ObjOperations { self: Obj =>
       def transformRenx(key: Ren)(f: AnyValue => AnyValue): Obj =
           attemptKey(key.from) // TODO: could use meta
             .map {
-              case seq: Seq[_] => putKey(key.from, seq.map(f))
-              case sgl         => putKey(key.from, f(sgl)) }
+              case seq: Seq[_] => putEntry(key.from, seq.map(f))
+              case sgl         => putEntry(key.from, f(sgl)) }
             .map(_.rename(key))
             .getOrElse(self)
 
       // ---------------------------------------------------------------------------
       def transformKeyPair(key: Key, optional: Boolean)(f: AnyValue => AnyValue): Obj =
         (if (optional) attemptKey(key) // TODO: could use meta
-         else          attemptKey(key).get)
+         else          attemptKey(key).getOrElse(aptus.illegalState(key, optional, self.formatPrettyJson.take(1000))))
           .pipe(f)
-          .pipe(putKey(key, _))
+          .pipe(putEntry(key, _))
 
       // ---------------------------------------------------------------------------
       // abstracts requiredness + optionally check resulting type
@@ -198,12 +225,12 @@ trait ObjOperations { self: Obj =>
           if (optional)
             attemptKey(key)
               .map(_computeNewValue(f, checkType))
-              .map(putKey(key, _))
+              .map(putEntry(key, _))
               .getOrElse(self)            
           else
             attemptKey(key).get
               .pipe(_computeNewValue(f, checkType))
-              .pipe(putKey(key, _))
+              .pipe(putEntry(key, _))
 
         // ---------------------------------------------------------------------------
         private def _computeNewValue(f: AnyValue => AnyValue, checkType: Boolean)(value: Any): Any = {
@@ -296,7 +323,7 @@ trait ObjOperations { self: Obj =>
   def copyEntries(original: Key, newKey: Key): Obj =
     attemptKey(original) match {
       case None    => self
-      case Some(x) => addKey(newKey, x) }
+      case Some(x) => addEntry(newKey, x) }
 
   // ---------------------------------------------------------------------------
   def nest(target: Key, nestingKey: Key): Obj = nest(Keyz.from(target), nestingKey)
@@ -307,9 +334,11 @@ trait ObjOperations { self: Obj =>
         case (None        , _         ) => self
         case (Some(target), None      ) => gallia.obj(nestingKey -> target)
         case (Some(target), Some(rest)) =>
-          attemptKey(nestingKey) match {
-            case None                   => rest.putKey(nestingKey,                      target )
-            case Some(existing)         => rest.putKey(nestingKey, existing.asObj.merge(target)) } }
+          attemptKey(nestingKey)
+            .map {
+              case seq: Seq[_] => rest.putEntry(nestingKey, seq.map(_.asObj.merge(target))) // note: denormalizes
+              case sgl         => rest.putEntry(nestingKey,       sgl.asObj.merge(target)) }
+            .getOrElse {          rest.putEntry(nestingKey,                       target ) } }
 
   // ---------------------------------------------------------------------------
   def split(key: Key, splitter: String => Seq[String]): Obj = transformKey(key, _.toString.pipe(splitter.apply))
@@ -338,7 +367,7 @@ trait ObjOperations { self: Obj =>
         .map { case (k, v) => 
           gallia.obj(_id -> k.name, _vle -> v) }
 
-    rest.addKey(_group, value)
+    rest.addEntry(_group, value)
   }
 
   // ===========================================================================
@@ -370,7 +399,7 @@ trait ObjOperations { self: Obj =>
   def setDefault2(reference: Key, target: Key, pred: AnyValue => Boolean, newValue: AnyValue): Obj =
     attemptKey(reference)
       .map { value =>
-        if (pred(value) && !containsKey(target)) addKey(target, newValue)
+        if (pred(value) && !containsKey(target)) addEntry(target, newValue)
         else                                     self }
       .getOrElse(self)
 }

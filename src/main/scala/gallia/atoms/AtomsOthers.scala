@@ -32,8 +32,8 @@ object AtomsOthers {
               .partition(_.basicValue(key2) == targetStringValue)
               .mapFirst(_.force.one.remove(key2)) // TODO: if more or zero?
 
-          o .addKey(targetStringValue, target)
-            .replaceKey(key1, rest) }
+          o .    addEntry(targetStringValue, target)
+            .replaceEntry(key1,              rest) }
         .getOrElse(o)
     }
   }

@@ -112,7 +112,7 @@ object ActionsCommonVeryBasics {
 
     // ---------------------------------------------------------------------------
     def atomuus(c: Cls): AtomUUs =
-      target.rpathz_(c).fromz.pipe { targets => _Retain(targets, RetainMapping(targets.mapping)) } +:
+      target.rpathz_(c).fromz.pipe { targets => _Retain(RetainMapping(targets.mapping)) } +:
       target.rpathz_(c)      .flatMap(potentialRenaming(_).toSeq)
   }
 

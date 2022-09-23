@@ -15,4 +15,7 @@ import aptus.String_
     implicit def toDataEntry(pair: (KeyW, AnyValue)): DataEntry = DataEntry(pair._1.value            , pair._2)
   }
 
+// ---------------------------------------------------------------------------
+/** for use by .obj(...) */ case class DataEntryP(path: KPath, value: AnyValue)
+
 // ===========================================================================

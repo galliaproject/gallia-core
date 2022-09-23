@@ -48,8 +48,8 @@ object AtomsHelper {
         .map(_.map(_.forceKey(key)))
         .map { values =>
           o .removeOpt(parent)
-            .map(_    .putKey(key,   values))
-            .getOrElse(obj   (key -> values)) }
+            .map(_    .putEntry(key,   values))
+            .getOrElse(obj     (key -> values)) }
         .getOrElse(o)
 
     // ---------------------------------------------------------------------------

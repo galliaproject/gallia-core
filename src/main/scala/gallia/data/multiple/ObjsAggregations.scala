@@ -67,8 +67,8 @@ object ObjsAggregations {
   // ---------------------------------------------------------------------------
   def recombine[T, U](as: Key, f: List[Option[T]] => U)(value: (Option[Obj], List[Option[T]])): Obj =
     value match {
-      case (Some(o), v) => o.addKey(as,   f(v))
-      case (None,    v) =>      obj(as -> f(v)) }
+      case (Some(o), v) => o.addEntry(as,   f(v))
+      case (None,    v) =>        obj(as -> f(v)) }
 
 }
 

@@ -46,7 +46,7 @@ trait ObjsOperations { self: Objs =>
       private[multiple] def fork(keys: Keyz): Objs =
         self
           .map { o =>
-            o.putKey(
+            o.putEntry(
                 _tmp,
                 o.retainOpt(keys).isDefined)
           .retain(keys) } // guaranteed always at least _tmp

@@ -32,7 +32,7 @@ object AtomsZZ {
       z .toListAndTrash
         .zipWithIndex
         .map { case (o, value) => 
-          o.addKey(key, if (oneBased) value + 1 else value) }
+          o.addEntry(key, if (oneBased) value + 1 else value) }
         .pipe(Objs.from) }
 
   // ===========================================================================

@@ -42,12 +42,12 @@ object AtomsCommonVeryBasics {
     o.remove(key) }
 
   // ---------------------------------------------------------------------------
-  case class _Retain(paths: KPathz, mapping: data.single.RetainMapping) extends AtomUU { def naive(o: Obj) =
-    o.retain(paths, mapping) }
+  case class _Retain(mapping: data.single.RetainMapping) extends AtomUU { def naive(o: Obj) =
+    o.retain(mapping) }
 
   // ---------------------------------------------------------------------------
   case class _Add(key: Key, value: AnyValue) extends AtomUU { def naive(o: Obj) =
-    o.putKey(key, value) } //TODO: serialization issues?...
+    o.putEntry(key, value) } //TODO: serialization issues?...
 
 }
 

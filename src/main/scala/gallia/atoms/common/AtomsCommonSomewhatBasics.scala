@@ -27,7 +27,7 @@ object AtomsCommonSomewhatBasics {
 
   // ===========================================================================
   case class _SetDefault(key: Key, value: AnyValue) extends AtomUU { def naive(o: Obj) =
-      if (o.containsKey(key)) o else o.addKey(key, value) }
+      if (o.containsKey(key)) o else o.addEntry(key, value) }
 
     // ---------------------------------------------------------------------------
     case class _SetDefault2(reference: Key, target: Key, pred: AnyValue => Boolean, newValue: Any) extends AtomUU { def naive(o: Obj) =

@@ -75,7 +75,7 @@ case class KPath(parent: Seq[Key], key: Key) {
     def |> (that: KeyW): KPath = appendLevel(that.value)
     def |> (that: Ren  ): RPath = RPath(parent :+ key, that)
 
-    def ||> (that: KeyWPair): SPathz = ???
+    def ||> (that: KeyPair): SPathz = ???
 
     // ---------------------------------------------------------------------------
     def tailPair : (Key, Option[KPath]) = (first, tail)

@@ -5,12 +5,15 @@ import gallia.domain._
 package object gallia
     extends Reserved
     with    Aliases
-    with    Annotations {
+    with    Annotations
+    with GalliaSelectors
+    with GenericEntryImplicits
+    with CustomTraits {
 
   // ---------------------------------------------------------------------------
   private[gallia] implicit class GalliaAnything_[A](value: A) { // so as to not import chaining._ everywhere
     private[gallia] def pipe[B](f: A => B)   : B =   f(value)
-    private[gallia] def tap [B](f: A => Unit): A = { f(value); value }
+    private[gallia] def tap    (f: A => Unit): A = { f(value); value }
 
     // ---------------------------------------------------------------------------
     // to save some common imports
@@ -70,6 +73,19 @@ package object gallia
   val  BigDec = scala.BigDecimal
 
   // ---------------------------------------------------------------------------
+  private[gallia] type KeyPair = GenericEntry[Key]
+  private         type VEntry  = GenericEntry[HeadV[_]]
+
+  // ===========================================================================
+  def headV[T: WTT](value1: T, value2: T, more: T*): HeadV[Seq[T]] = heads.Head.inputV(Seq(value1, value2) ++ more)
+  def headV[T: WTT](values: Seq[T])                : HeadV[Seq[T]] = heads.Head.inputV(values)
+  def headV[T: WTT](value :     T )                : HeadV[    T ] = heads.Head.inputV(value)
+
+  // ---------------------------------------------------------------------------
+                  def headO(first: VEntry, second: VEntry, more: VEntry*): HeadU = headO(Seq(first, second) ++ more)
+  private[gallia] def headO(pairs: Seq[VEntry])                          : HeadU = pairs.map { x => x.value._2.dressUp(x.value._1) } .reduceLeft(_ merge _)
+
+  // ===========================================================================
   def byteBuffer(byte1: Byte, more: Byte*): ByteBuffer = java.nio.ByteBuffer.wrap((byte1 +: more).toArray)
   def byteBuffer(value: String)           : ByteBuffer = java.nio.ByteBuffer.wrap(value.getBytes)
   def byteBuffer(bytes: Array[Byte])      : ByteBuffer = java.nio.ByteBuffer.wrap(bytes)
@@ -124,6 +140,9 @@ package object gallia
   // ---------------------------------------------------------------------------
   private[gallia] type DataRegenerationClosure[T] = gallia.data.DataRegenerationClosure[T]
 
+  // ---------------------------------------------------------------------------
+  private[gallia] type DataClass = Product with Equals // TODO: no way to make it more specific for case class?
+
   // ===========================================================================
   private[gallia] def dataError(anys: Any*): Nothing = throw new RuntimeError(anys.mkString(","))
 
@@ -142,8 +161,9 @@ package object gallia
 
   // ===========================================================================
   implicit class InputString__     (val inputString: InputString)         extends ReadObjFromString with StreamObjsFromString with ReadHeadFromString with StreamHeadFromString
-  implicit class InputIterable__[T](val values     : Iterable[T])         extends StreamObjsFromIterable[T]
+  implicit class InputIterable__[T](val xvalues     : Iterable[T])         extends StreamObjsFromIterable[T]
   implicit class InputConnection__ (val connection : java.sql.Connection) extends StreamConnection
+  implicit class InputIterator__[T](val values     : DataRegenerationClosure[Obj]) { def stream(schema: Cls): HeadS = actions.in.GenericInputZ(schema, values).pipe(heads.Head.inputZ) }
 
   // ---------------------------------------------------------------------------
   implicit class  Key_(val u:  Key) extends Key__ { val _key = u }
@@ -177,9 +197,10 @@ package object gallia
   def cls(name: ClsName, fields: Seq[Fld]): Cls = meta.Cls(fields.toList).setName(name)
 
   // ---------------------------------------------------------------------------
-  def obj(entry1: DataEntry, more: DataEntry*)            : Obj = Obj.fromIterable((entry1 +: more).toList.map(_.pair))
-  def obj(entries: Seq[( Key, AnyValue)])                 : Obj = Obj.fromIterable(entries)
-  def obj(entries: Seq[(SKey, AnyValue)])(implicit di: DI): Obj = Obj.fromIterable(entries.map { case (k, v) => Symbol(k) -> v })
+  def obj(entry1: DataEntry, more: DataEntry*)                    : Obj = Obj.fromIterable((entry1 +: more).toList.map(_.pair))
+  def obj(entries: Seq[( Key, AnyValue)])                         : Obj = Obj.fromIterable(entries)
+  def obj(entries: Seq[(SKey, AnyValue)])(implicit d : DI)        : Obj = Obj.fromIterable(entries.map { case (k, v) => Symbol(k) -> v })
+  def obj(entries: Seq[(UKey, AnyValue)])(implicit d1: DI, d2: DI): Obj = Obj.fromIterable(entries.map { case (k, v) => Symbol(k.entryName) -> v })
 
   def objFromDataClass[T  <: Product : WTT](value: T): Obj = data.single.ObjIn.fromDataClassInstance(value)
 

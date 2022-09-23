@@ -19,7 +19,7 @@ object AtomsCommonResnesting {
     // ---------------------------------------------------------------------------
     private def metaRec(sep: Separator)(o: Cls, formattedKey: Key, keyItems: Seq[SKey]): Cls =
       keyItems match {
-        case Seq(one) => o // eg just baz
+        case Seq(_) => o // eg just baz
 
         case headSkey +: tailKeyItems =>
           val headKey = headSkey.symbol

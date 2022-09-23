@@ -3,7 +3,6 @@ package atoms
 package common
 
 import aptus.Anything_
-import data.single.RetainMapping
 
 // ===========================================================================
 object AtomsCommonVeryBasics {
@@ -43,7 +42,7 @@ object AtomsCommonVeryBasics {
     o.remove(key) }
 
   // ---------------------------------------------------------------------------
-  case class _Retain(paths: KPathz, mapping: RetainMapping) extends AtomUU { def naive(o: Obj) =
+  case class _Retain(paths: KPathz, mapping: data.single.RetainMapping) extends AtomUU { def naive(o: Obj) =
     o.retain(paths, mapping) }
 
   // ---------------------------------------------------------------------------

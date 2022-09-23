@@ -4,8 +4,6 @@ package common
 
 import aptus.String_
 
-import domain._
-
 // ===========================================================================
 @PartialTypeMatching
 object AtomsCommonConverts {

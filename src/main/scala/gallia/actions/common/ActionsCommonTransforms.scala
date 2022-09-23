@@ -29,11 +29,13 @@ object ActionsCommonTransforms {
       def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atoms2(c)(_TransformVV(_, from.wrapx(c, f)), _TransformVV(_, g))) }
 
     // ---------------------------------------------------------------------------
+//TODO: these should also handle origin as cc..
     case class TransformVVc(from: TtqRPathz, to: HT, f: _ff11) extends ActionUUb with TodoV1 {
       def _meta  (c: Cls): Cls     = from.rpathz_(c).foldLeft(c) { _.updateInfo(_, to.node.forceNonBObjInfo) }
       def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.wrapc(to, f) ))) }
 
     // ---------------------------------------------------------------------------
+//TODO: these should also handle origin as cc..
     case class TransformVVxc(from: TtqRPathz, to: HT, f: _ff11) extends ActionUUb with TodoV1 {
       def _meta  (c: Cls): Cls     = from.rpathz_(c).foldLeft(c)(_.transformSoleValueType(_)(_ => to.node.forceNonBObjInfo.subInfo1.valueType))
       def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.wrapxc(c, to, f) ))) }

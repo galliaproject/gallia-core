@@ -2,20 +2,14 @@ package gallia
 package data
 package single
 
-import reflect.BasicType
+import reflect.{Container, BasicType}
 import domain.PathPair
 import domain.SortingPair
 
 // ===========================================================================
 object ObjOrdering {
 
-  def optionObjOrdering(c: Cls, pair: SortingPair): Ordering[Option[Obj]] = {
-    implicit val ord = objOrdering(c, pair)
-    implicitly[Ordering[Option[Obj]]]
-  }
-
-  // ===========================================================================
-  def objOrdering(c: Cls, pair: SortingPair): Ordering[Obj] =
+  def oneObjOrdering(c: Cls, pair: SortingPair): Ordering[Obj] =
     new Ordering[Obj] {
 
       def compare(left: Obj, right: Obj): Int = // TODO: worth trying to optimize? (eg trivial cases, ...)
@@ -27,7 +21,7 @@ object ObjOrdering {
               .getOrElse(0)
 
        // ---------------------------------------------------------------------------
-       def compareField(left: Obj, right: Obj)(field: Fld): Int = {
+       private def compareField(left: Obj, right: Obj)(field: Fld): Int = {
             val key      = field.key
             val optional = field.isOptional
             
@@ -54,8 +48,50 @@ object ObjOrdering {
                     ori.lookup(right))
   
               // ---------------------------------------------------------------------------
-              case c: Cls => ??? // FIXME: recurse
-            }
+              case nc: Cls =>
+                val ori      : PathPair  = PathPair(KPath.from(key), optional)
+                val container: Container = reflect.Container.from(optional, subInfo.multiple)
+
+                container match {
+                  case Container._One =>
+                    oneObjOrdering(nc, pair)
+                      .compare(
+                        ori.lookup(left) .asInstanceOf[Obj],
+                        ori.lookup(right).asInstanceOf[Obj])
+                  case Container._Opt =>
+                    optObjOrdering(nc, pair)
+                      .compare(
+                        ori.lookup(left) .asInstanceOf[Option[Obj]],
+                        ori.lookup(right).asInstanceOf[Option[Obj]])
+                  case Container._Nes =>
+                    nesObjOrdering(nc, pair)
+                      .compare(
+                        ori.lookup(left) .asInstanceOf[Seq[Obj]],
+                        ori.lookup(right).asInstanceOf[Seq[Obj]])
+                  case Container._Pes =>
+                    pesObjOrdering(nc, pair)
+                      .compare(
+                        ori.lookup(left) .asInstanceOf[Option[Seq[Obj]]],
+                        ori.lookup(right).asInstanceOf[Option[Seq[Obj]]]) } } }
+
+  // ===========================================================================
+  def optObjOrdering(c: Cls, pair: SortingPair): Ordering[Option[Obj]] = {
+    implicit val ord = oneObjOrdering(c, pair)
+    implicitly[Ordering[Option[Obj]]]
+  }
+
+  // ---------------------------------------------------------------------------
+  def nesObjOrdering(c: Cls, pair: SortingPair): Ordering[Seq[Obj]] = {
+    implicit val ord1 = oneObjOrdering(c, pair)
+    implicit val ord2 = aptus.seqOrdering
+    implicitly[Ordering[Seq[Obj]]]
+  }
+
+  // ---------------------------------------------------------------------------
+  def pesObjOrdering(c: Cls, pair: SortingPair): Ordering[Option[Seq[Obj]]] = {
+    implicit val ord1 = oneObjOrdering(c, pair)
+    implicit val ord2 = aptus.seqOrdering
+    implicitly[Ordering[Option[Seq[Obj]]]]
   }
 
 }

@@ -2,10 +2,10 @@ package gallia
 package heads
 
 import aptus.Seq_
-import actions.ActionsOthers.{MapV2V, CombineVV}
+import actions.ActionsOthers.{MapV2V, CombineVV, DressUp}
 
 // ===========================================================================
-class HeadV[T: WTT /* will be Vle (Any) for data phase */] private[gallia] (
+class HeadV[T: WTT /* will be Vle (Any) for data phase */] private[gallia] ( // TODO: t220916113454 - separate HeadV[T] from HeadV[Seq[U]]
       override val nodeId : NodeId,
       override val handler: Handler)
     extends Head[HeadV[T]] 
@@ -33,7 +33,7 @@ class HeadV[T: WTT /* will be Vle (Any) for data phase */] private[gallia] (
   private[gallia] def rewrap[T2: WTT](newNodeId: NodeId): HeadV[T2] = new HeadV[T2](newNodeId, handler)
 
   // ---------------------------------------------------------------------------
-  def dressUp(key: KeyW): HeadU = actions.out.DressUp[T](key.value).pipe(vu) // "dress up" because naked value
+  def dressUp(key: KeyW): HeadO = DressUp[T](key.value).pipe(vu) // "dress up" because naked value otherwise
 
   // ===========================================================================
   def mapV [         T2: WTT](f: T  => T2)                            : HeadV[    T2 ] = handler.chainvv(this)(MapV2V(typeNode[T2], (x: Any) => f(x.asInstanceOf[T]) ))
@@ -64,7 +64,8 @@ class HeadV[T: WTT /* will be Vle (Any) for data phase */] private[gallia] (
   // ---------------------------------------------------------------------------
   def combine[T2: WTT](that: HeadV[T2]) = new {
       def using[T3: WTT](f: (T, T2) => T3): HeadV[T3] = handler.joinVv2v[T, T2, T3](self, that)( // TODO: as "reduce"?
-        CombineVV(typeNode[T], typeNode[T2], (x: Any, y: Any) => f(x.asInstanceOf[T], y.asInstanceOf[T2]))) }
+        CombineVV(typeNode[T], typeNode[T2], result = typeNode[T3],
+          (x: Any, y: Any) => f(x.asInstanceOf[T], y.asInstanceOf[T2]))) }
 
     // ---------------------------------------------------------------------------
     // combining String

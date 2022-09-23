@@ -5,9 +5,9 @@ import heads.grouping.HasAs
 import data.multiple.Streamer
 import actions._
 import actions.ActionsOthers._
-import actions.ActionsZZ._
+import actions.ActionsZZ.{Take, Drop, AddIndex}
 import actions.ActionsThns._
-import actions.ActionsCustoms.{CustomZZ, CustomZU, TransformBaz}
+import actions.ActionsCustoms.{CustomZZ, CustomZU}
 import actions.ActionsZZMerging.MergeObjsVle
 import actions.ActionsZZFiltering.{TakeWhile, DropWhile}
 

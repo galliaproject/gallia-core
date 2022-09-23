@@ -179,12 +179,13 @@ trait HeadZAggregations { self: HeadZ =>
 
         // ---------------------------------------------------------------------------
         import aptus.{Tuple2_, Tuple3_, Tuple4_, Tuple5_}
-        private type P = KeyWPair2[HeadV[_]]
-          def using(f: HeadZ =>  P)             (implicit d1: DI, d2: DI)                                : HeadS = using { x => Seq(f(x)).pipe(gallia.headO) }(d1)
-          def using(f: HeadZ => (P, P))         (implicit d1: DI, d2: DI, d3: DI)                        : HeadS = using { f(_).toSeq.pipe(gallia.headO) }(d1)
-          def using(f: HeadZ => (P, P, P))      (implicit d1: DI, d2: DI, d3: DI, d4: DI)                : HeadS = using { f(_).toSeq.pipe(gallia.headO) }(d1)
-          def using(f: HeadZ => (P, P, P, P))   (implicit d1: DI, d2: DI, d3: DI, d4: DI, d5: DI)        : HeadS = using { f(_).toSeq.pipe(gallia.headO) }(d1)
-          def using(f: HeadZ => (P, P, P, P, P))(implicit d1: DI, d2: DI, d3: DI, d4: DI, d5: DI, d6: DI): HeadS = using { f(_).toSeq.pipe(gallia.headO) }(d1)
+        private type E = GenericEntry[HeadV[_]]
+
+          def using(f: HeadZ =>  E)             (implicit d1: DI, d2: DI)                                : HeadS = using { x => Seq(f(x)).pipe(gallia.headO) }(d1)
+          def using(f: HeadZ => (E, E))         (implicit d1: DI, d2: DI, d3: DI)                        : HeadS = using { f(_).toSeq.pipe(gallia.headO) }(d1)
+          def using(f: HeadZ => (E, E, E))      (implicit d1: DI, d2: DI, d3: DI, d4: DI)                : HeadS = using { f(_).toSeq.pipe(gallia.headO) }(d1)
+          def using(f: HeadZ => (E, E, E, E))   (implicit d1: DI, d2: DI, d3: DI, d4: DI, d5: DI)        : HeadS = using { f(_).toSeq.pipe(gallia.headO) }(d1)
+          def using(f: HeadZ => (E, E, E, E, E))(implicit d1: DI, d2: DI, d3: DI, d4: DI, d5: DI, d6: DI): HeadS = using { f(_).toSeq.pipe(gallia.headO) }(d1)
           // for >5: use gallia.mergeAll explicitly
 
         // ---------------------------------------------------------------------------

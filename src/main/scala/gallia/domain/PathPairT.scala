@@ -2,9 +2,10 @@ package gallia
 package domain
 
 // ===========================================================================
-case class KeyPair (key: Key, optional: Boolean)
+case class KPair (key: Key, optional: Boolean) // can't call it KeyPair... - TODO: rename
 
-case class PathPair(path: KPath, optional: Boolean) {
+// ---------------------------------------------------------------------------
+case class PathPair(path: KPath, optional: Boolean) { // TODO: rename
 
       override def toString: String = formatDefault
         def formatDefault: String = s"${path.formatDefault}:${if (optional) "optional" else "required"}"

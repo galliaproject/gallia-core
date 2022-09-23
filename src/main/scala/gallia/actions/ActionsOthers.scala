@@ -182,7 +182,8 @@ object ActionsOthers {
     def atoms (ignored: NodeMetaContext): Atoms = _MapV2V(f).in.seq }
 
   // ---------------------------------------------------------------------------
-  case class CombineVV(x: TypeNode, y: TypeNode, f: _ff21) extends ActionVvToV {
+  case class CombineVV(x: TypeNode, y: TypeNode, result: TypeNode, f: _ff21) extends ActionVvToV {
+    //FIXME: validate valid result type (result)
     def _meta(x: Cls, y: Cls) = x // FIXME: t220718112037
     def dataz2(c1: Cls , c2: Cls) = _CombineVV(f).in.seq }
 

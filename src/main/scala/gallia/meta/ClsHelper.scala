@@ -26,6 +26,7 @@ trait ClsHelper { ignored: Cls =>
         case Right((parent, tail)) => field_(parent).flatMap(_.nestedClassOpt).flatMap(_.field_(tail)) }
 
   // ===========================================================================
+  def keyPair (key: Key): domain.KPair    = domain.KPair        (key, field(key).isOptional)
   def pathPair(key: Key): domain.PathPair = domain.PathPair.from(key, field(key).isOptional)
   // TODO: more alternatives
 

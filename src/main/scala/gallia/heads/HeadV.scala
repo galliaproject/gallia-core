@@ -77,7 +77,7 @@ class HeadV[T: WTT /* will be Vle (Any) for data phase */] private[gallia] ( // 
     // ---------------------------------------------------------------------------
     // need to provide common combinations, unless there's a way to reconcile two different Numeric[_] somehow? (t220920111256)
 
-    // FIXME: see https://users.scala-lang.org/t/ambiguous-reference-to-overloaded-definition-with/8817
+    // FIXME: t220920155343 - see https://users.scala-lang.org/t/ambiguous-reference-to-overloaded-definition-with/8817
     def plus(that: HeadV[Int])   (implicit ev: T =:= Int)                           : HeadV[Int]    = combine(that).using(_ + _)
   //def plus(that: HeadV[Int])   (implicit ev: T =:= Double, d1: DI)                : HeadV[Double] = combine(that).using(_ + _)
   //def plus(that: HeadV[Double])(implicit ev: T =:= Int,    d1: DI, d2: DI)        : HeadV[Double] = combine(that).using(_ + _)

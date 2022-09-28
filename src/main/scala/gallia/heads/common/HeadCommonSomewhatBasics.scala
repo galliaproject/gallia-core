@@ -235,25 +235,33 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   // - TODO: t210124100009 - odd suffices (1a, 2z, ...), but not easy to find meaningful names here so for now...
 
   /** eg for: {"f": ["foo", "3"]} */
-  def untuplify1z(targetKey: RenW) = new _Untuplify1z(targetKey.value)
+  def deserialize1z(targetKey: RenW) = new _Untuplify1z(targetKey.value)
 
   /** eg for: {"f": "foo|3"} or {"f": ["foo|3", "bar|4"]} */
-  def untuplify1a(targetKey: RenW) = new _Untuplify1a(targetKey.value)
+  def deserialize1a(targetKey: RenW) = new _Untuplify1a(targetKey.value)
 
   /** eg for: {"f": "foo|3,bar|4"} */
-  def untuplify1b(targetKey: RenW) = new _Untuplify1b(targetKey.value)
+  def deserialize1b(targetKey: RenW) = new _Untuplify1b(targetKey.value)
 
   // ---------------------------------------------------------------------------
   // TODO: handle escaping?
 
   /** eg for: {"f": ["str=foo", "int=3"]} */
-  def untuplify2z(targetKey: RenW) = new _Untuplify2z(targetKey.value)
+  def deserialize2z(targetKey: RenW) = new _Untuplify2z(targetKey.value)
 
   /** eg for: {"f": "str=foo|int=3"}  or {"f": [ "str=foo|int=3", "str=..." ]} */
-  def untuplify2a(targetKey: RenW) = new _Untuplify2a(targetKey.value)
+  def deserialize2a(targetKey: RenW) = new _Untuplify2a(targetKey.value)
 
   /** eg for: {"f": "str=foo;int=3,str=bar;int=4,str=baz;int=5"} */
-  def untuplify2b(targetKey: RenW) = new _Untuplify2b(targetKey.value)
+  def deserialize2b(targetKey: RenW) = new _Untuplify2b(targetKey.value)
+
+      // ---------------------------------------------------------------------------
+      /** eg for: {"f": ["foo", "3"]} */                                              @deprecated def untuplify1z(targetKey: RenW) = deserialize1z(targetKey)
+      /** eg for: {"f": "foo|3"} or {"f": ["foo|3", "bar|4"]} */                      @deprecated def untuplify1a(targetKey: RenW) = deserialize1a(targetKey)
+      /** eg for: {"f": "foo|3,bar|4"} */                                             @deprecated def untuplify1b(targetKey: RenW) = deserialize1b(targetKey)
+      /** eg for: {"f": ["str=foo", "int=3"]} */                                      @deprecated def untuplify2z(targetKey: RenW) = deserialize2z(targetKey)
+      /** eg for: {"f": "str=foo|int=3"}  or {"f": [ "str=foo|int=3", "str=..." ]} */ @deprecated def untuplify2a(targetKey: RenW) = deserialize2a(targetKey)
+      /** eg for: {"f": "str=foo;int=3,str=bar;int=4,str=baz;int=5"} */               @deprecated def untuplify2b(targetKey: RenW) = deserialize2b(targetKey)
 
     // ===========================================================================
     class _Untuplify1z(targetKey: Ren) {

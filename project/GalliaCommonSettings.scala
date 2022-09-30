@@ -14,7 +14,7 @@ object GalliaCommonSettings {
         email = "contact.galliaproject@gmail.com",
         url   = url("https://github.com/anthony-cros") )),
 
-    // ---------------------------------------------------------------------------		  
+    // ---------------------------------------------------------------------------
          scalaVersion  := GalliaScalaVersions.supported.head,
     crossScalaVersions := GalliaScalaVersions.supported)
 

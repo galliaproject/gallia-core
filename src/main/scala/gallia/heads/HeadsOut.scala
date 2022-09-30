@@ -2,12 +2,14 @@ package gallia
 package heads
 
 import aptus.{Nes, One, Opt, Pes, UriString}
-import gallia.data.DataFormatting
 import io.out._
 
 // ===========================================================================
 trait HeadOut { self: Head[_] =>
 
+  // t220930115036 - add feature to dump intermediate meta/data like in towardsdatascience article (https://towardsdatascience.com/gallia-a-library-for-data-transformation-3fafaaa2d8b9)
+
+  // ---------------------------------------------------------------------------
   /** will *not* process all the data (assuming input schema does not need to be inferred) */
   def forceSchema: Cls =
     self.end.runMetaOnly().either match {

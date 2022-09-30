@@ -26,7 +26,7 @@ private[pivoting] case class PivotingData[O1: WTT, D: WTT](
   def pivot[O1: WTT, D: WTT](input: HeadZ): HeadZ =
     input // TODO: use cascade group by rather once done (see t210124100722)
       .groupBy(rows).as( _tmp1)
-      .transform(_.objz(_tmp1)).using {
+      .transform(_.entities(_tmp1)).using {
         _ .groupBy(column).as(_tmp2) // 200930125015 - this flattens, so must set defaults ahead of time if needed
 
           .pipe { headZ =>            
@@ -34,7 +34,7 @@ private[pivoting] case class PivotingData[O1: WTT, D: WTT](
               case None      => headZ.unnestOOO(_tmp2)
               case Some(agg) =>
                 headZ
-                  .transform(_.objz(_tmp2)).using {
+                  .transform(_.entities(_tmp2)).using {
                   _.squash(target) // compatible because of 200924162200
                     .using(agg) } } }
 

@@ -20,9 +20,9 @@ object GnuJoinByFirstFieldHack { // see https://github.com/galliaproject/gallia-
         val leftFifo  = s"/tmp/gallia.left.${ts}"
         val rightFifo = s"/tmp/gallia.right.${ts}"
 
-      // ---------------------------------------------------------------------------  	    
+      // ---------------------------------------------------------------------------
       // create named pipes
-      (s"mkfifo ${leftFifo}"  !)	    
+      (s"mkfifo ${leftFifo}"  !)
       (s"mkfifo ${rightFifo}" !)
 
       // ---------------------------------------------------------------------------

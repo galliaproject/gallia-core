@@ -35,29 +35,42 @@ trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F]
   def transformStringToLocalDate    (k: RPathW) = transformString(k).using(_.parseLocalDate     /* from aptus */)
   def transformStringToLocalTime    (k: RPathW) = transformString(k).using(_.parseLocalTime     /* from aptus */)
 
-  // ---------------------------------------------------------------------------
-  def transformObject    (k: RPathW): _TransformU = transform(_.obj (k.value)) // TODO: rename to convey 1 (as oppose to x)
-  def transformAllObjects(k: RPathW): _TransformZ = transform(_.objz(k.value))
-  def transformAllObjectsTmp        : _TransformZ = transform(_.objz(_tmp))
+  // ===========================================================================
+  @deprecated def transformObject        (k: RPathW): _TransformU = transform(_.entity  (k.value)) // TODO: rename to convey 1 (as oppose to x)
+              def transformEntity        (k: RPathW): _TransformU = transform(_.entity  (k.value)) // TODO: rename to convey 1 (as oppose to x)
+  @deprecated def transformAllObjects    (k: RPathW): _TransformZ = transform(_.entities(k.value))
+              def transformAllEntities   (k: RPathW): _TransformZ = transform(_.entities(k.value))
+  @deprecated def transformAllObjectsTmp            : _TransformZ = transform(_.entities(_tmp))
+              def transformAllEntitiesTmp           : _TransformZ = transform(_.entities(_tmp))
 
-  @deprecated("use more explicit transformAllObjects") def transformObjects(k: RPathW) = transformAllObjects(k)
+  @deprecated("use more explicit transformAllEntities") def transformObjects(k: RPathW) = transformAllEntities(k)
 
   // ---------------------------------------------------------------------------
-  def transformSomeObjects(k: RPathW): _TransformSomeObjects = new _TransformSomeObjects(k)
+  @deprecated def transformSomeObjects (k: RPathW): _TransformSomeObjects = new _TransformSomeObjects(k)
+              def transformSomeEntities(k: RPathW): _TransformSomeObjects = new _TransformSomeObjects(k)
 
     // ---------------------------------------------------------------------------
-    def transformGroupObjectsUsing         (f: HeadZ => HeadZ)                    : Self2 = transform(_.objz(_group))   .using(f)
-    def transformGroupObjectsUsing         (f: HeadZ => HeadU)    (implicit d: DI): Self2 = transform(_.objz(_group))   .using(f)
-    def transformGroupObjectsUsing[D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI): Self2 = transform(_.objz(_group))(d).using(f)
+    @deprecated def transformGroupObjectsUsing          (f: HeadZ => HeadZ)                    : Self2 = transform(_.entities(_group))   .using(f)
+                def transformGroupEntitiesUsing         (f: HeadZ => HeadZ)                    : Self2 = transform(_.entities(_group))   .using(f)
+    @deprecated def transformGroupObjectsUsing          (f: HeadZ => HeadU)    (implicit d: DI): Self2 = transform(_.entities(_group))   .using(f)
+                def transformGroupEntitiesUsing         (f: HeadZ => HeadU)    (implicit d: DI): Self2 = transform(_.entities(_group))   .using(f)
+    @deprecated def transformGroupObjectsUsing [D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI): Self2 = transform(_.entities(_group))(d).using(f)
+                def transformGroupEntitiesUsing[D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI): Self2 = transform(_.entities(_group))(d).using(f)
 
-    def transformLeftObjectsUsing         (f: HeadZ => HeadZ)                    : Self2 = transform(_.objz(_left))   .using(f)
-    def transformLeftObjectsUsing         (f: HeadZ => HeadU)    (implicit d: DI): Self2 = transform(_.objz(_left))   .using(f)
-    def transformLeftObjectsUsing[D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI): Self2 = transform(_.objz(_left))(d).using(f)
+    @deprecated def transformLeftObjectsUsing          (f: HeadZ => HeadZ)                    : Self2 = transform(_.entities(_left))   .using(f)
+                def transformLeftEntitiesUsing         (f: HeadZ => HeadZ)                    : Self2 = transform(_.entities(_left))   .using(f)
+    @deprecated def transformLeftObjectsUsing          (f: HeadZ => HeadU)    (implicit d: DI): Self2 = transform(_.entities(_left))   .using(f)
+                def transformLeftEntitiesUsing         (f: HeadZ => HeadU)    (implicit d: DI): Self2 = transform(_.entities(_left))   .using(f)
+    @deprecated def transformLeftObjectsUsing [D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI): Self2 = transform(_.entities(_left))(d).using(f)
+                def transformLeftEntitiesUsing[D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI): Self2 = transform(_.entities(_left))(d).using(f)
 
-    def transformRightObjectsUsing         (f: HeadZ => HeadZ)                    : Self2 = transform(_.objz(_right))   .using(f)
-    def transformRightObjectsUsing         (f: HeadZ => HeadU)    (implicit d: DI): Self2 = transform(_.objz(_right))   .using(f)
-    def transformRightObjectsUsing[D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI): Self2 = transform(_.objz(_right))(d).using(f)
-    
+    @deprecated def transformRightObjectsUsing          (f: HeadZ => HeadZ)                    : Self2 = transform(_.entities(_right))   .using(f)
+                def transformRightEntitiesUsing         (f: HeadZ => HeadZ)                    : Self2 = transform(_.entities(_right))   .using(f)
+    @deprecated def transformRightObjectsUsing          (f: HeadZ => HeadU)    (implicit d: DI): Self2 = transform(_.entities(_right))   .using(f)
+                def transformRightEntitiesUsing         (f: HeadZ => HeadU)    (implicit d: DI): Self2 = transform(_.entities(_right))   .using(f)
+    @deprecated def transformRightObjectsUsing [D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI): Self2 = transform(_.entities(_right))(d).using(f)
+                def transformRightEntitiesUsing[D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI): Self2 = transform(_.entities(_right))(d).using(f)
+
   // ===========================================================================
   // to/from JSON
 
@@ -72,16 +85,18 @@ trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F]
         atoms.AtomsIX._JsonArrayString.toObjs(c)) }
   
   // ---------------------------------------------------------------------------
-  /** uses compact form */
-  def formatJsonObjectString(k: RPathW): Self2 = transformObjectCustom (k)(_.formatCompactJson)   
-  def formatJsonArrayString (k: RPathW): Self2 = transformObjectsCustom(k)(_.formatCompactJson)
+  /** uses compact form */ def formatJsonObjectString(k: RPathW): Self2 = transformEntityCustom  (k)(_.formatCompactJson)
+  /** uses compact form */ def formatJsonArrayString (k: RPathW): Self2 = transformEntitiesCustom(k)(_.formatCompactJson)
 
     // ---------------------------------------------------------------------------
-    def transformObjectCustom [D: WTT](k: RPathW)(f: Obj  => D): Self2 = self2 :+ TransformObjectCustom (TargetQueryUtils.tqrpathz(k), typeNode[D], f)
-    def transformObjectsCustom[D: WTT](k: RPathW)(f: Objs => D): Self2 = self2 :+ TransformObjectsCustom(TargetQueryUtils.tqrpathz(k), typeNode[D], f)
+    @deprecated def transformObjectCustom  [D: WTT](k: RPathW)(f: Obj  => D): Self2 = self2 :+ TransformObjectCustom (TargetQueryUtils.tqrpathz(k), typeNode[D], f)
+                def transformEntityCustom  [D: WTT](k: RPathW)(f: Obj  => D): Self2 = self2 :+ TransformObjectCustom (TargetQueryUtils.tqrpathz(k), typeNode[D], f)
+    @deprecated def transformObjectsCustom [D: WTT](k: RPathW)(f: Objs => D): Self2 = self2 :+ TransformObjectsCustom(TargetQueryUtils.tqrpathz(k), typeNode[D], f)
+                def transformEntitiesCustom[D: WTT](k: RPathW)(f: Objs => D): Self2 = self2 :+ TransformObjectsCustom(TargetQueryUtils.tqrpathz(k), typeNode[D], f)
 
   // ---------------------------------------------------------------------------    
-  def zoomOnObject(target: KPathW): Self2 = retain(target.value).unnestAllFrom(target)
+  @deprecated def zoomOnObject(target: KPathW): Self2 = retain(target.value).unnestAllFrom(target)
+              def zoomOnEntity(target: KPathW): Self2 = retain(target.value).unnestAllFrom(target)
 
   // ===========================================================================
   // array ops

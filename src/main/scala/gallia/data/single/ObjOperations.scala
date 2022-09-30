@@ -289,7 +289,7 @@ trait ObjOperations { self: Obj =>
       // ===========================================================================
       def seq(target: KPathW, container: Container): Seq[AnyValue] =
         container match {
-          case Container._One => forcePath  (target).in.seq // TODO: see t210116165559 - rename to "in"?
+          case Container._One => forcePath  (target).in.seq
           case Container._Opt => attemptPath(target).toSeq
           case Container._Nes => forcePath  (target)                .asSeq
           case Container._Pes => attemptPath(target).toSeq.flatMap(_.asSeq) }

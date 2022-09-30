@@ -4,7 +4,7 @@ package meta
 import aptus.String_
 
 // ===========================================================================
-case class SubInfo(
+case class SubInfo( // see https://github.com/galliaproject/gallia-docs/blob/master/union_types.md
           multiple : Multiple,
           valueType: ValueType)
         extends HasSingleValueType {

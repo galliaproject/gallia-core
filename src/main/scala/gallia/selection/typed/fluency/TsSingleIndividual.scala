@@ -9,12 +9,16 @@ object TsSingleIndividual {
 
   // ---------------------------------------------------------------------------
   //TODO: rename, these also abstract requiredness
-  trait HasSingleObj [$Wrap] { def obj  (target: $Wrap) = new One_[gallia.HeadU](target) }
-  trait HasSingleObjz[$Wrap] {
-    @deprecated("use objs now")
-    def objz (target: $Wrap) = new One_[gallia.HeadZ](target)
-    def objs (target: $Wrap) = new One_[gallia.HeadZ](target) }
-  
+  trait HasSingleObj [$Wrap] {
+      @deprecated def obj   (target: $Wrap) = new One_[HeadU](target)
+                  def entity(target: $Wrap) = new One_[HeadU](target) }
+
+    // ---------------------------------------------------------------------------
+    trait HasSingleObjz[$Wrap] {
+      @deprecated def objz    (target: $Wrap) = new One_[HeadZ](target)
+      @deprecated def objs    (target: $Wrap) = new One_[HeadZ](target)
+                  def entities(target: $Wrap) = new One_[HeadZ](target) }
+
   // ===========================================================================  
   trait HasSingleNonXTyped[$Wrap] { def typed [T: WTT](target: $Wrap) = new One_[T](target) } // TODO: t210201103739 - validate T for .typed
   trait HasSingleXTyped   [$Wrap] { def typedx[T: WTT](target: $Wrap) = new One_[T](target, ignoreContainer = true) }

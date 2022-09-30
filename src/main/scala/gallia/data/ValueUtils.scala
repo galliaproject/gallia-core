@@ -34,7 +34,7 @@ object ValueUtils {
       def success(from: Any, to: Any) = assert(util.Try { checkSameTypes(from, to) }.isSuccess)
       def failure(from: Any, to: Any) = assert(util.Try { checkSameTypes(from, to) }.isFailure)  
     
-  		success(None, None)
+      success(None, None)
       success(1, 2)
       success(Seq(1, 2), Seq(3))    
       success(Some(1), Some(2))

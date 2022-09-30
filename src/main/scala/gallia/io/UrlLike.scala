@@ -40,7 +40,7 @@ case class UrlLike(
       
     val Default = Plain
 
-    var DefaultMemoryMode = true
+    var DefaultMemoryMode = in.DefaultStreamMode
   }
 
 // ===========================================================================

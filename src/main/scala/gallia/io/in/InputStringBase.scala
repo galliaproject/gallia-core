@@ -85,10 +85,6 @@ private[io] trait InputStringBase { val inputString: InputString }
     def stream(field1: Fld, more: Fld*)                : HeadZ = stream(_.schema(field1, more:_*))
     def stream(schemaFilePath: String)                 : HeadZ = stream(_.schema(schemaFilePath))
 
-def streamx(a: Any) = {
-  ???
-}
-
     def stream(f: StartReadZFluency => EndReadZFluency): HeadZ =
         inputString
           .pipe(in.startZ)

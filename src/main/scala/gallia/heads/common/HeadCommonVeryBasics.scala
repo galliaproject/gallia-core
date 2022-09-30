@@ -17,12 +17,14 @@ trait HeadCommonVeryBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   def reorderKeysRecursively(f: Seq[SKey] => Seq[SKey]): Self2 = self2 :+ ReorderKeys(f, recursively = true )
 
   // ---------------------------------------------------------------------------
+  def reorderAsFirstKey (target : KeyW)             : Self2 = reorderAsFirstKeys(_.explicit(target))
   def reorderAsFirstKeys(target1: KeyW, more: KeyW*): Self2 = reorderAsFirstKeys(_.explicit(target1 -> more)) 
   def reorderAsFirstKeys(targets: KeyWz)            : Self2 = reorderAsFirstKeys(_.explicit(targets))
   def reorderAsFirstKeys(selector: SEL.ReorderAsX.Selector): Self2 = 
     self2 :+ ReorderSelectedKeys(SEL.ReorderAsX.resolve(selector), f = (allKeys, targetKeys) => targetKeys ++ allKeys.diff(targetKeys))
 
   // ---------------------------------------------------------------------------
+  def reorderAsLastKey (target : KeyW)             : Self2 = reorderAsLastKeys(_.explicit(target))
   def reorderAsLastKeys(target1: KeyW, more: KeyW*): Self2 = reorderAsLastKeys(_.explicit(target1 -> more)) 
   def reorderAsLastKeys(targets: KeyWz)            : Self2 = reorderAsLastKeys(_.explicit(targets))    
   def reorderAsLastKeys(selector: SEL.ReorderAsX.Selector): Self2 = 

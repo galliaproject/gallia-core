@@ -17,7 +17,7 @@ trait HeadCommonFission[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
       // ---------------------------------------------------------------------------
       def as(d1: KPathW, d2: KPathW) = new {
-    	  // TODO: t210816120207 - should this also abstract multiplicity?
+        // TODO: t210816120207 - should this also abstract multiplicity?
         private def wrap[T, U](f: WV => (T, T))(g: T => U) = (x: Any) => { val (y1, y2) = f(new WV(x)); (g(y1), g(y2)) }
         
         // ---------------------------------------------------------------------------
@@ -32,7 +32,7 @@ trait HeadCommonFission[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
       // ---------------------------------------------------------------------------  
       def as(d1: KPathW, d2: KPathW, d3: KPathW) = new {
-    	  // TODO: t210816120207 - should this also abstract multiplicity?
+        // TODO: t210816120207 - should this also abstract multiplicity?
         private def wrap[T, U](f: WV => (T, T, T))(g: T => U) = (x: Any) => { val (y1, y2, y3) = f(new WV(x)); (g(y1), g(y2), g(y3)) }
 
         // ---------------------------------------------------------------------------

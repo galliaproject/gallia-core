@@ -8,7 +8,7 @@ case class Fld(key: Key, info: Info) extends FldLike {
     require(key.name.nonEmpty)// TODO: validation
 
     final override protected val _info: Info         = info
-    final override           def union: Seq[SubInfo] = info.union
+    final override           def union: Seq[SubInfo] = info.union // see https://github.com/galliaproject/gallia-docs/blob/master/union_types.md
 
     // ---------------------------------------------------------------------------
     // mostly for macros (see t210330102827)

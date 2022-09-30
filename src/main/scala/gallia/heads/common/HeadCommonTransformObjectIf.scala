@@ -22,18 +22,20 @@ trait HeadCommonTransformObjectIf[F <: HeadCommon[F]] { ignored: HeadCommon[F] =
     // ---------------------------------------------------------------------------
     class __TransformSomeObjects[O: WTT] private[heads] (field: RPathW, target: TransformSomeObjects[O], pred: O => Boolean) {
       def using(f: HeadU => HeadU): Self2 =
-        transformAllObjects(field).using {
-          _.transformObjectIf(target).matches(pred).using(f) } }
+        transformAllEntities(field).using {
+          _.transformEntityIf(target).matches(pred).using(f) } }
 
     // ---------------------------------------------------------------------------
     class __TransformSomeObjectsW private[heads] (field: RPathW, target: KPathW, value: AnyValue) {
       def using(f: HeadU => HeadU): Self2 =
-        transformAllObjects(field).using {
-          _.transformObjectIf(target.value).hasValue(value).using(f) } }
+        transformAllEntities(field).using {
+          _.transformEntityIf(target.value).hasValue(value).using(f) } }
 
   // ===========================================================================
-  def transformObjectIf        (target: KPath)                  : _TransformObjectIfW   = new _TransformObjectIfW  (target)
-  def transformObjectIf[O: WTT](target: TransformSomeObjects[O]): _TransformObjectIf[O] = new _TransformObjectIf[O](target)
+  @deprecated def transformObjectIf        (target: KPath)                  : _TransformObjectIfW   = new _TransformObjectIfW  (target)
+              def transformEntityIf        (target: KPath)                  : _TransformObjectIfW   = new _TransformObjectIfW  (target)
+  @deprecated def transformObjectIf[O: WTT](target: TransformSomeObjects[O]): _TransformObjectIf[O] = new _TransformObjectIf[O](target)
+              def transformEntityIf[O: WTT](target: TransformSomeObjects[O]): _TransformObjectIf[O] = new _TransformObjectIf[O](target)
 
     // ===========================================================================
     class _TransformObjectIf[O: WTT] private[heads] (target: TransformSomeObjects[O]) {

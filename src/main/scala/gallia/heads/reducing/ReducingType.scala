@@ -33,6 +33,10 @@ sealed trait ReducingType { // don't make enum (else can't use `values`)
   // ===========================================================================
   object ReducingType { // don't make enum (else can't use `values`)
 
+    @deprecated val values = flattened
+    @deprecated val count  = count_all
+
+    // ---------------------------------------------------------------------------
     protected sealed trait Base[T] extends ReducingType {
         final def data(ignored1: Boolean, ignored2: Option[NumericalType]) = data
         def data: Values => T
@@ -128,7 +132,6 @@ sealed trait ReducingType { // don't make enum (else can't use `values`)
       def returnType = ReduceReturnType.unchanged
       def data(ignored1: Boolean, ignored2: Option[NumericalType]) = _.flatten
     }
-    @deprecated val values = flattened
 
     // ===========================================================================
     private def countAll              (values: Values): Int = values                             .size

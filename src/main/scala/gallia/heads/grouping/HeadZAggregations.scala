@@ -90,7 +90,7 @@ trait HeadZAggregations { self: HeadZ =>
           def by(grouper: KeyW): HeadZ = { // TODO: add with HasAs
             self
               .retain(pairs.keyz.append(grouper.value))
-              .groupBy(grouper.value).transformGroupObjectsUsing { _.reduce(pairs)  } } }
+              .groupBy(grouper.value).transformGroupEntitiesUsing { _.reduce(pairs)  } } }
         
         // ===========================================================================
         class AggEachBy private[HeadZAggregations] (groupees: TqRenz, rtipe: ReducingType) {
@@ -168,13 +168,13 @@ trait HeadZAggregations { self: HeadZ =>
         def using[T: WTT](f: HeadZ => HeadV[T]): HeadS =
           self
             .groupBy(groupers).as(as)
-            .transformAllObjects (as).using(f)
+            .transformAllEntities(as).using(f)
 
         // ---------------------------------------------------------------------------
         def using(f: HeadZ => HeadU)(implicit d: DI): HeadS =
           self
             .groupBy(groupers).as(as)
-            .transformAllObjects (as).using(f)
+            .transformAllEntities(as).using(f)
             .unnestAllFrom       (as)
 
         // ---------------------------------------------------------------------------
@@ -192,9 +192,9 @@ trait HeadZAggregations { self: HeadZ =>
         def using(pair1: ReducingPair, more: ReducingPair*): HeadS =
           self
             .groupBy(groupers)
-            .transformGroupObjectsUsing { 
+            .transformGroupEntitiesUsing { 
               _.reduce(pair1, more:_*) }
-      	    .unnestAllFromGroup }
+            .unnestAllFromGroup }
 
 }
 

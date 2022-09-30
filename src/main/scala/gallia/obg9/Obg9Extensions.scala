@@ -52,7 +52,7 @@ object Obg9Extensions {
 
   // ===========================================================================
   implicit class Fld9_(field: Fld) {
-	  def ppair(index: Index): PPair = PPair(index, field.isOptional, field.subInfo1.isMultiple)
+    def ppair(index: Index): PPair = PPair(index, field.isOptional, field.subInfo1.isMultiple)
   }
       
   // ---------------------------------------------------------------------------

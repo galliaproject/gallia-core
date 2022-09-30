@@ -318,9 +318,9 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
 
     // ===========================================================================
     /*
-  		note: scala vs java:
-    		assert(new java.lang.String("foo") == "foo")
-    		assert(new java.lang.Boolean(true) == true)
+         note: scala vs java:
+            assert(new java.lang.String("foo") == "foo")
+            assert(new java.lang.Boolean(true) == true)
 
         assert(new java.lang.Integer(1)   == 1)
         assert(new java.lang.Double (1.1) == 1.1)

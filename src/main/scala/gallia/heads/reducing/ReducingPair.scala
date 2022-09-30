@@ -37,7 +37,7 @@ trait ReducingPair {
 
         // ---------------------------------------------------------------------------
         /** note: flattens None (must pre-process if need to account for them */
-        def values: ReducingPair1 = ReducingType.values.pair(_key)
+        def flattened: ReducingPair1 = ReducingType.flattened.pair(_key)
 
         def count_all                : ReducingPair1 = ReducingType.count_all             .pair(_key)
           def count_present          : ReducingPair1 = ReducingType.count_present         .pair(_key)
@@ -52,6 +52,10 @@ trait ReducingPair {
         def median: ReducingPair1 = ReducingType.median.pair(_key)
 
         def stats: ReducingPair1  = ReducingType.stats .pair(_key)
+
+        // ---------------------------------------------------------------------------
+        @deprecated def count  = count_all
+        @deprecated def values = flattened
       }
 
     }

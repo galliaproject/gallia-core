@@ -5,14 +5,14 @@ package obg9
 import gallia.domain.KPaths2
 
 // ===========================================================================
-object Obg9Utils { import Obg9Creators._	
+object Obg9Utils { import Obg9Creators._
   def hack = obg9.hack
 
   // ===========================================================================
   def rename(c1: Cls, c2: Cls): _Generic9 = generic(c1, c2)(identity)
 
-	// ---------------------------------------------------------------------------
-	def reorderKey(c1: Cls, c2: Cls)(recursively: Boolean, f: Seq[SKey] => Seq[SKey]): _Generic9 =
+    // ---------------------------------------------------------------------------
+    def reorderKey(c1: Cls, c2: Cls)(recursively: Boolean, f: Seq[SKey] => Seq[SKey]): _Generic9 =
       if (recursively)    RecursiveReorderingCreator(c1)(f).pipe { reordering => generic(c1, c2) { _.reorderKeysRecursively   (reordering) } }
       else             NonRecursiveReorderingCreator(c1)(f).pipe { reordering => generic(c1, c2) { _.reorderKeysNonRecursively(reordering) } }
 
@@ -85,7 +85,7 @@ object Obg9Utils { import Obg9Creators._
         else                     generic(c1, c2)(_.removeConditionallyRX(target, pred))
       case None => c1.pathIndices(path).pipe { indices => generic(c1, c2)(_.removeConditionallyOX2(indices, pred)) }}
 
-	// ===========================================================================
+  // ===========================================================================
   def transform(c1: Cls, c2: Cls, optional2: Boolean)(f: _ff11)(values: Seq[KPath]): Seq[_Generic9] =
     values
       .map { path =>

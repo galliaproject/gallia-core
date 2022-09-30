@@ -7,13 +7,13 @@ import GalliaUtils.Seq__
 // ===========================================================================
 case class Info(
        optional: Optional,
-       union   : Seq[SubInfo])
+       union   : Seq[SubInfo] /* see https://github.com/galliaproject/gallia-docs/blob/master/union_types.md */)
       extends InfoLike {
 
     override protected val _info: Info = this
 
     // ---------------------------------------------------------------------------
-    union
+    union // see https://github.com/galliaproject/gallia-docs/blob/master/union_types.md
       .requireNonEmpty
       .requireDistinct
 

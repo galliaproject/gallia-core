@@ -14,7 +14,7 @@ trait SubInfosLike extends HasValueTypes {
   // ---------------------------------------------------------------------------
   @deprecated def subInfo1: SubInfo = union match {  // see t210125111338 (union types)
     case Seq(sole) => sole
-    case _         => aptus.unsupportedOperation("limited support for union types (see t210125111338)") }
+    case _         => aptus.unsupportedOperation("limited support for union types (see t210125111338 and see https://github.com/galliaproject/gallia-docs/blob/master/union_types.md)") }
 
   // ===========================================================================
   def isUnionType: Boolean = union.size > 1 // see t210125111338 (union types)

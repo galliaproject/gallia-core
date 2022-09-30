@@ -160,8 +160,8 @@ trait Obg9Helper { self: Obg9 =>
     (optional, multiple) match {
       case (false, false) => value.asInstanceOf[           Obg9  ]      .pipe(f)            
       case (true,  false) => value.asInstanceOf[Option[    Obg9 ]].map(       f ) .orNull
-  		case (false, true ) => value.asInstanceOf[       Seq[Obg9] ]      .map (f )
-  		case (true , true ) => value.asInstanceOf[Option[Seq[Obg9]]].map(_.map (f)).orNull }
+      case (false, true ) => value.asInstanceOf[       Seq[Obg9] ]      .map (f )
+      case (true , true ) => value.asInstanceOf[Option[Seq[Obg9]]].map(_.map (f)).orNull }
 
 
   // ===========================================================================

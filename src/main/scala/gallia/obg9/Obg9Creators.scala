@@ -6,8 +6,8 @@ import aptus._
 
 // ===========================================================================
 object Obg9Creators {
-	import Obg9Contexts._
-	
+  import Obg9Contexts._
+
   // ---------------------------------------------------------------------------
   def tryRetainContiguous(totalSize: Size, indices: Seq[Index] /* sorted + distinct already */) =
     _tryContiguous(totalSize, indices)

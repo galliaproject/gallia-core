@@ -99,7 +99,7 @@ class StartReadZFluency(private[io] val inputString: InputString)
     override def compression(value: SupportedCompression) = inputDriven.compression(value)
 
     // ---------------------------------------------------------------------------
-    override def inMemoryMode = conf.copy(inMemoryMode  = true) // default
+    override def inMemoryMode = conf.copy(inMemoryMode  = true) // default (see gallia.io.in package)
     override def iteratorMode = conf.copy(inMemoryMode  = false)
 
     // ---------------------------------------------------------------------------

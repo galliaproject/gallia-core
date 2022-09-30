@@ -46,7 +46,7 @@ trait HeadCommonNestingRelated[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
     /** uses nesting name; OOO = Objects Of Ones, eg {"a": [{"b": 1}, {"b": 2}]} */
     def unnestOOO(key: KPathW): F = // TODO: t210109144447 - too convoluted, create dedicated action
       self2
-        .transform(_.objz(key.value))
+        .transform(_.entities(key.value))
           .using(_.renameSoleKey(key.value.key)) // TODO: validate only one key
         .rename(key).to(_tmp)
         .unnestAllFrom(_tmp)

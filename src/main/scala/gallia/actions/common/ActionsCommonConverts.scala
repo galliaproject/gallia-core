@@ -27,7 +27,7 @@ object ActionsCommonConverts {
   case class ConvertToInt(target: TqRPathz) extends ActionUUbb {
     def vldt                     (c: Cls): Errs    = target.vldtAsOrigin(c)
     def _meta                    (c: Cls): Cls     = target.resolve(c).foldLeft(c) { _.transformSoleSubInfo(_)(_.toInt) }
-    def atomuus(origin: CallSite)(c: Cls): AtomUUs = target.resolve(c).pipe(_atoms(c)(_ConvertToInt(origin))) }
+    def atomuus(origin: CallSite)(c: Cls): AtomUUs = target.resolve(c).pipe(_atoms(c)(_ConvertToInt(origin))) } // TODO: t220929161636 - generalize callsite mechanism
 
   // ---------------------------------------------------------------------------
   case class ConvertToDouble(target: TqRPathz) extends ActionUUbb {

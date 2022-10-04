@@ -19,8 +19,8 @@ package object grouping extends _heads {
 
   // ===========================================================================
   trait HasAs { self: HeadZ => // TODO: t210116192032 - generalize
-    def asDefault            : HeadZ = self
-    def as(newKey: gallia.KeyW): HeadZ = self.updateAs1(newKey.value) }
+    def asDefault       : HeadZ = self
+    def as(newKey: KeyW): HeadZ = self.updateAs1(newKey.value) }
 
 }
 

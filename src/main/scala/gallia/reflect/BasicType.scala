@@ -112,7 +112,7 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
     // - t210110094829 - accept Obj as value, albeit the standalone version (see t210104164037)
     // - t210110095252 - CLOB
     // - change names upon serialization (eg "string" instead of _String)
-    // - t220513135713 - provide built-in "Char" enum
+    // - t220513135713 - provide built-in enum: "Char", gender, nucleotides, ...
 
     // ---------------------------------------------------------------------------
     case object _String extends UnparameterizedBasicType {

@@ -101,15 +101,17 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
   def thn[V: WTT](f: Self => HeadV[V]): HeadV[V] = zv(ThnZV(f))
 
   // ===========================================================================
-  // TODO: these will be very affected by t210104164036
-  def customS2SDataOnly(                  data: List[Obj] => List[Obj]): Self = self ::+ CustomZZ.from(meta = c => c, data)
-  def customZ2Z        (meta: Cls => Cls, data:      Objs =>      Objs): Self = self ::+ new CustomZZ(meta, data)
-  def customS2S        (meta: Cls => Cls, data: List[Obj] => List[Obj]): Self = self ::+ CustomZZ.from(meta, data)
-  def custom           (meta: Cls => Cls, data: List[Obj] => List[Obj]): Self = self ::+ CustomZZ.from(meta, data)
+  // custom: consider using 220412171654 instead (data classes
+      // TODO: these will be very affected by t210104164036
 
-  def custom(x: ObjsToObj) : HeadU =       zu(CustomZU.from(x.meta,           x.data))
-  def custom(x: ObjToObjs) : HeadZ = self ::+ CustomZZ.from(x.meta, _.flatMap(x.data))
-  def custom(x: ObjsToObjs): HeadZ = self ::+ CustomZZ.from(x.meta,           x.data )
+    /** "Computer, I know better than you" */ def customS2SDataOnly(                  data: List[Obj] => List[Obj]): Self = self ::+ CustomZZ.from(meta = c => c, data)
+    /** "Computer, I know better than you" */ def customZ2Z        (meta: Cls => Cls, data:      Objs =>      Objs): Self = self ::+ new CustomZZ(meta, data)
+    /** "Computer, I know better than you" */ def customS2S        (meta: Cls => Cls, data: List[Obj] => List[Obj]): Self = self ::+ CustomZZ.from(meta, data)
+    /** "Computer, I know better than you" */ def custom           (meta: Cls => Cls, data: List[Obj] => List[Obj]): Self = self ::+ CustomZZ.from(meta, data)
+
+    /** "Computer, I know better than you" */ def custom(x: ObjsToObj) : HeadU =       zu(CustomZU.from(x.meta,           x.data))
+    /** "Computer, I know better than you" */ def custom(x: ObjToObjs) : HeadZ = self ::+ CustomZZ.from(x.meta, _.flatMap(x.data))
+    /** "Computer, I know better than you" */ def custom(x: ObjsToObjs): HeadZ = self ::+ CustomZZ.from(x.meta,           x.data )
 
   // ===========================================================================
   def assertDataUnsafeZ(pred: Objs => Boolean): Self = self ::+

@@ -5,6 +5,7 @@ package common
 import env.ActionDag
 import actions.common.ActionsCommonVeryBasics._
 import actions.common.ActionsCommonUnionTypes
+import actions.ActionsCustoms.CustomUU
 
 // ===========================================================================
 trait HeadCommon[F <: HeadCommon[F]]
@@ -37,15 +38,18 @@ trait HeadCommon[F <: HeadCommon[F]]
   // ===========================================================================
   def identity: Self2 = self2 :+ IdentityUU
 
-  // ---------------------------------------------------------------------------
-  // TODO: this will be very affected by t210104164036
-  /** "Computer, I know better than you" */
-  def customU2U(meta: Cls => Cls, data: Obj => Obj) = self2 :+ new actions.ActionsCustoms.CustomUU(meta, data)
+  // ===========================================================================
+  // custom: consider using 220412171654 instead (data classes
+  // TODO: these will be very affected by t210104164036
 
-  /** "Computer, I know better than you" */
-  def custom(x: ObjToObj) = self2 :+ new actions.ActionsCustoms.CustomUU(x.meta, x.data)
+    /** "Computer, I know better than you" */ def customO2ODataOnly(data: Obj => Obj) = self2 :+ new CustomUU(x => x, data)
+    /** "Computer, I know better than you" */ def custom(x: ObjToObj)                 = self2 :+ new CustomUU(x.meta, x.data)
 
-  // ---------------------------------------------------------------------------
+    @deprecated
+    /** "Computer, I know better than you" */ def customU2U(meta: Cls => Cls, data: Obj => Obj) = self2 :+ new CustomUU(meta, data)
+    /** "Computer, I know better than you" */ def customO2O(meta: Cls => Cls, data: Obj => Obj) = self2 :+ new CustomUU(meta, data)
+
+  // ===========================================================================
   def showSchema()        :  Self2 = self2 :+ ShowSchema(abort = false)
   def showSchemaAndAbort():  Self2 = self2 :+ ShowSchema(abort = true )
 

@@ -112,7 +112,7 @@ object AtomsIX { import utils.JdbcDataUtils
       def commonObjs: Objs =
           input
             .streamLines(inMemoryMode)
-            .filterNot(_.trim.isEmpty) //TODO or only if last one?
+            .filterNot(_.trim.isEmpty) // a220930162941 - for better or worse, we ignore those (ideally we'd only ignore the last one)
             .map(json.GsonParsing.parseObject)
             .pipe(Objs.build)
 
@@ -301,6 +301,7 @@ object AtomsIX { import utils.JdbcDataUtils
       input
         .streamLines(inMemoryMode)
         .pipeIf(hasHeader)(_.drop(1)) // TODO: t210116110159 for n >= 1?
+        .filterNot(_.trim.isEmpty) // a220930162941 - for better or worse, we ignore those (ideally we'd only ignore the last one)
         .map(_.splitXsv(sep))
   }
 

@@ -51,9 +51,11 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
                 
                         // ---------------------------------------------------------------------------
                         /** similar to SQL's WHERE X IN Y clause */ // TODO: toSet if big enough? use bloom if very big?
-                        def    in[T:WTT](coll: Seq[T]): Self = matches({ wv =>  coll.contains(wv.any) })
-                        def notIn[T:WTT](coll: Seq[T]): Self = matches({ wv => !coll.contains(wv.any) })
-                
+                        def    in[T:WTT](coll: Seq[T])       : Self = matches({ wv =>  coll.contains(wv.any) })
+                        def notIn[T:WTT](coll: Seq[T])       : Self = matches({ wv => !coll.contains(wv.any) })
+                        def    in[T:WTT](value1: T, more: T*): Self =    in(value1 +: more)
+                        def notIn[T:WTT](value1: T, more: T*): Self = notIn(value1 +: more)
+
                         def hasValue(value: Any): Self2 = matches(_.any == value)
                         def notValue(value: Any): Self2 = matches(_.any != value)
                 
@@ -125,7 +127,8 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
   def filterByMissing(target: KPathW) = filterBy(target).isMissing
 
   // ---------------------------------------------------------------------------
-  def filterBy        (target: KPathW)      : __FilterBy1WV   = new __FilterBy1WV (target)
+  // TODO: t221004095843 - filterByAndRemove and .filterBy(...).matches(...).andRemove
+  def filterBy        (target: KPathW)      : __FilterBy1WV   = new __FilterBy1WV (target.value)
   def filterBy[O: WTT](target: FilterBy1[O]): __FilterBy1[O]  = new __FilterBy1[O](target)
 
       // ---------------------------------------------------------------------------
@@ -137,19 +140,21 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
         def matches(f: O => Boolean): Self = zz(FilterByV(resolve(target), f, asFind = false)) }
 
       // ---------------------------------------------------------------------------
-      class __FilterBy1WV(target: KPathW) { import gallia.target.utils.TargetQueryUtils.tqkpath
+      class __FilterBy1WV(target: KPath) { import gallia.target.utils.TargetQueryUtils.tqkpath
 
-        def isPresent: Self = zz(FilterByPresence(tqkpath(target.value), negate = false, asFind = false))
-        def isMissing: Self = zz(FilterByPresence(tqkpath(target.value), negate = true,  asFind = false))
+        def isPresent: Self = zz(FilterByPresence(tqkpath(target), negate = false, asFind = false))
+        def isMissing: Self = zz(FilterByPresence(tqkpath(target), negate = true,  asFind = false))
 
         // ---------------------------------------------------------------------------
-        def matches(f: WV => TWV[Boolean])                 : Self = zz(FilterByWV(tqkpath(target.value), f(_).typed, asFind = false))
-        def matches(f: WV =>     Boolean) (implicit di: DI): Self = zz(FilterByWV(tqkpath(target.value), f,          asFind = false))
+        def matches(f: WV => TWV[Boolean])                 : Self = zz(FilterByWV(tqkpath(target), f(_).typed, asFind = false))
+        def matches(f: WV =>     Boolean) (implicit di: DI): Self = zz(FilterByWV(tqkpath(target), f,          asFind = false))
 
         // ---------------------------------------------------------------------------
         /** similar to SQL's WHERE X IN Y clause */ // TODO: toSet if big enough? use bloom if very big?
-        def    in[T:WTT](coll: Seq[T]): Self = matches({ wv =>  coll.contains(wv.any) })
-        def notIn[T:WTT](coll: Seq[T]): Self = matches({ wv => !coll.contains(wv.any) })
+        def    in[T:WTT](coll: Seq[T])       : Self = matches({ wv =>  coll.contains(wv.any) })
+        def notIn[T:WTT](coll: Seq[T])       : Self = matches({ wv => !coll.contains(wv.any) })
+        def    in[T:WTT](value1: T, more: T*): Self =    in(value1 +: more)
+        def notIn[T:WTT](value1: T, more: T*): Self = notIn(value1 +: more)
 
         def hasValue(value: Any): Self2 = matches(_.any == value)
         def notValue(value: Any): Self2 = matches(_.any != value)
@@ -213,6 +218,10 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
     class _FilterBy3[O1: WTT, O2: WTT, O3: WTT](f1: FilterByT[O1], f2: FilterByT[O2], f3: FilterByT[O3]) {
       def matches(f: (O1, O2, O3) => Boolean): Self =
         zz(FilterByV3(resolve3(f1, f2, f3), f, asFind = false)) }
+
+  // ===========================================================================
+  def filterOutEmptyLines              : Self = filterOutEmptyLines(_line)
+  def filterOutEmptyLines(target: KeyW): Self = filterBy(_.string(target.value)).matches(_.trim.nonEmpty)
 
 }
 

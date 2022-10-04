@@ -26,6 +26,9 @@ package object gallia
   // ---------------------------------------------------------------------------
   private[gallia] implicit class GalliaSeq[T](val seq: Seq[T]) extends GalliaUtils.GalliaSeq[T] // TODO: to aptus if generalizes well?
 
+  // ---------------------------------------------------------------------------
+  private[gallia] implicit class Map__[K, V](map: Map[K, V]) { def mapValues0[V2](f: V => V2): Map[K, V2] = map.map { case (k, v) => k -> f(v) } } // because of scala 2.12
+
   // ===========================================================================
   // TODO: t210121105809 - rename to HeadU->HeadO and HeadZ->HeadS (historical names)
   type HeadO = heads.HeadU

@@ -106,14 +106,12 @@ object Obg9Creators {
           .values
           .map { path => path.first -> path.tail }
           .groupByKey
-          .view
-          .mapValues(_.flatten.distinct)
+          .mapValues0(_.flatten.distinct)
           .filterNot(_._2.isEmpty)
-          .map { case (key, subPaths) =>         
+          .map { case (key, subPaths) =>
             c.ppair(key) -> 
               (c.field(key).forceNestedClass, 
                KPathz(subPaths).distinct /* should already but in case */) }
-          .toMap
       
   }
 

@@ -30,10 +30,9 @@ object TableSchemaInferrer {
           tmp(conf, keySet, mutable)(curr, o) }
         .toSeq
         .groupByKey
-        .view.mapValues(combineInfosAll)
+        .mapValues0(combineInfosAll)
         .map { case (key, info) =>
           key -> mutable.potentiallyUpdateInfo(key, info) }
-        .toMap
 
       // ---------------------------------------------------------------------------
       private def tmp(conf: CellConf, keySet: Set[Key], mutable: MutableValuesSubset)(curr: Set[(Key, Info)], o: Obj): Set[(Key, Info)] = {
@@ -68,8 +67,7 @@ object TableSchemaInferrer {
               key -> container.info(BasicType._String) } }
       .toSeq
       .groupByKey
-      .view.mapValues(combineInfosString)
-      .toMap
+      .mapValues0(combineInfosString)
 
   // ===========================================================================
   private def combineInfosAll   (values: Seq[Info]): Info = _combineInfos(values)(_.map(_.forceBasicType).pipe(reflect.BasicTypeUtils.combine))

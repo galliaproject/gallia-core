@@ -22,14 +22,14 @@ private[atoms] object JdbcDataUtils {
         .pipe(JdbcDataUtils.objs(schemaOpt))
 
     // ---------------------------------------------------------------------------
-    private def objs(schemaOpt: Option[Cls])(rs: aptus.Closeabled[java.sql.ResultSet]): CloseabledIterator[Obj] = //: Objs =
-      rs
-        .map(_.rawRdbmsEntries)
-        .toCloseabledIterator
+    private def objs(schemaOpt: Option[Cls])(rs: aptus.Closeabled[java.sql.ResultSet]): CloseabledIterator[Obj] = {
+      val tmp: Closeabled[Iterator[RawRdbmsEntries]] = rs.map(_.rawRdbmsEntries)
+
+      new CloseabledIterator(tmp.underlying, tmp.cls) // can't use .toCloseabledIterator, causes issues with scala 2.12: "Cannot prove that Iterator[aptus.RawRdbmsEntries] =:= Iterator[U]"
         .map { entries => obj(entries.toList /* from Map */) }
         .map { o => schemaOpt match {
           case None         =>                                                  o
-          case Some(schema) => data.JdbcToGalliaData.convertRecursively(schema)(o) } }
+          case Some(schema) => data.JdbcToGalliaData.convertRecursively(schema)(o) } } }
 
   // ===========================================================================
   def extractTableNameOpt(inputString: String, param: String): Option[String] = // not standard...

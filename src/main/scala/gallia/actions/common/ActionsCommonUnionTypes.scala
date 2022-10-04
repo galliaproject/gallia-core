@@ -10,7 +10,7 @@ object ActionsCommonUnionTypes {
 
   // TODO: t220511141020 - generalize to N
   case class FuseToUnion(origin1: Key, origin2: Key, dest: Key) extends ActionUUd {
-      def  vldt(c: Cls ): Errs   = Seq(_vldt.fieldsPresence(c, Seq(origin1, origin2)), _vldt.fieldAbsence(c, dest)).flatten
+      def  vldt(c: Cls ): Errs   = Seq(_vldt.fieldsPresence(c, Seq(origin1, origin2)), _vldt.fieldAbsence(c, dest). /* for scala 2.12 */ toSeq).flatten
         // TODO: validate would make a valid union
       def _meta(c: Cls ): Cls    = c.fuseToUnion(origin1, origin2)(dest)
       def atomuu        : AtomUU =  _FuseToUnion(origin1, origin2, dest) }
@@ -18,8 +18,7 @@ object ActionsCommonUnionTypes {
     // ---------------------------------------------------------------------------
     // TODO: t220511141021 - generalize to N
     case class FissionFromUnion(origin: Key, dest1: Key, dest2: Key) extends ActionUUc {
-      def  vldt(c: Cls ): Errs =
-        Seq(_vldt.fieldPresence(c, origin), _vldt.fieldsAbsence(c, Seq(dest1, dest2))).flatten
+      def  vldt(c: Cls ): Errs = Seq(_vldt.fieldPresence(c, origin). /* for scala 2.12 */ toSeq, _vldt.fieldsAbsence(c, Seq(dest1, dest2))).flatten
           .orIfEmpty(_vldt.checkIsUnionField(c)(origin))
           .orIfEmpty(c.field(origin).pipe(_Error.MoreThanOneNesting).errsIf(
             _.union.filter(_.isNesting).size > 1) /* TODO: t220511152605: a version that allows more (more complex) */)

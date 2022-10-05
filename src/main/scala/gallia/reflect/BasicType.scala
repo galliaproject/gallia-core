@@ -150,7 +150,7 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
 
       override val formatString = DataFormatting.formatInt
       override val parseString  = _.toInt
-      override val parseDouble  = d => d.toInt.assert(_.toDouble == d) }
+      override val parseDouble  = d => d.toInt.ensuring(_.toDouble == d) }
 
     // ---------------------------------------------------------------------------
     case object _Double extends UnparameterizedBasicType with RealLikeType { /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse; def toRealLike   (value: Double) = value; override val valuePredicate = _.isInstanceOf[T]
@@ -169,7 +169,7 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
 
       override val formatString = DataFormatting.formatByte
       override val parseString  = _.toByte
-      override val parseDouble  = d => d.toByte.assert(_.toDouble == d) }
+      override val parseDouble  = d => d.toByte.ensuring(_.toDouble == d) }
 
     // ---------------------------------------------------------------------------
     case object _Short extends UnparameterizedBasicType with IntegerLikeType   { /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse; def toIntegerLike(value: Double) = value.toShort; override val valuePredicate = _.isInstanceOf[T]
@@ -178,7 +178,7 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
 
       override val formatString = DataFormatting.formatShort
       override val parseString  = _.toShort
-      override val parseDouble  = d => d.toShort.assert(_.toDouble == d) }
+      override val parseDouble  = d => d.toShort.ensuring(_.toDouble == d) }
 
     // ---------------------------------------------------------------------------
     case object _Long  extends UnparameterizedBasicType with IntegerLikeType   { /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse; def toIntegerLike(value: Double) = value.toLong; override val valuePredicate = _.isInstanceOf[T]
@@ -187,7 +187,7 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
 
       override val formatString = DataFormatting.formatLong
       override val parseString  = _.toLong
-      override val parseDouble  = d => d.assert(BasicTypeUtils.doubleFitsLong) .toLong.assert(_.toDouble == d) }
+      override val parseDouble  = d => d.ensuring(BasicTypeUtils.doubleFitsLong(_)) .toLong.ensuring(_.toDouble == d) }
 
     // ---------------------------------------------------------------------------
     case object _Float extends UnparameterizedBasicType with RealLikeType      { /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse; def toRealLike   (value: Double) = value.toFloat; override val valuePredicate = _.isInstanceOf[T]
@@ -196,7 +196,7 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
 
       override val formatString = DataFormatting.formatFloat
       override val parseString  = _.toFloat
-      override val parseDouble  = _.assert(BasicTypeUtils.doubleFitsFloat).toFloat /* note: precision may also be affected */ }
+      override val parseDouble  = _.ensuring(BasicTypeUtils.doubleFitsFloat(_)).toFloat /* note: precision may also be affected */ }
 
     // ===========================================================================
     case object _BigInt extends UnparameterizedBasicType with UnboundedNumber { /* boilerplate: */ override lazy val ctag: ClassTag[T] = classTag[T]; override lazy val nctag: ClassTag[Iterable[T]] = classTag[Iterable[T]]; override lazy val octag: ClassTag[Option [T]] = classTag[Option [T]]; override lazy val pctag: ClassTag[Option[Iterable[T]]] = classTag[Option[Iterable[T]]]; override lazy val ordA: Ordering[T] = implicitly[Ordering[T]]; override lazy val ordD: Ordering[T] = implicitly[Ordering[T]].reverse; override val valuePredicate = _.isInstanceOf[T]

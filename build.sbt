@@ -8,7 +8,7 @@ lazy val root = (project in file("."))
     organizationName     := "Gallia Project",
     organization         := "io.github.galliaproject", // *must* match groupId for sonatype
     name                 := "gallia-core",
-    version              := "0.3.2",    
+    version              := GalliaCommonSettings.CurrentGalliaVersion,
     homepage             := Some(url("https://github.com/galliaproject/gallia-core")),
     scmInfo              := Some(ScmInfo(
         browseUrl  = url("https://github.com/galliaproject/gallia-core"),
@@ -20,7 +20,7 @@ lazy val root = (project in file("."))
 // ===========================================================================    
 // see https://github.com/aptusproject/aptus-core
 //   our own utilities library, bundles low level library such as commons-{io,lang3,math3,csv}, gson, enumeratum, ...
-lazy val aptusVersion      = "0.4"
+lazy val aptusVersion      = "0.4.0"
 
 lazy val enumeratumVersion = "1.5.13"
 

@@ -37,7 +37,7 @@ The library is available for both Scala 2.12 and 2.13 (3.0 will be more [challen
 <a name="sbt"></a><a name="210121153201"></a>
 Include the following in your `build.sbt` file:
 ```
-libraryDependencies += "io.github.galliaproject" %% "gallia-core" % "0.3.1"
+libraryDependencies += "io.github.galliaproject" %% "gallia-core" % "0.4.0"
 ```
 
 <a name="210121153200"></a>
@@ -192,9 +192,9 @@ Likewise applicable for both `.read()` and `.stream()`
 val obj = """{"foo": "hi", "bar": 1, "baz": true, "qux": "you"}""".read()
 
 // can't use "then" (reserved in scala)
-obj.forKey    ('foo)      .zen(_ toUpperCase _) // { "foo": "HI", ...
-obj.forEachKey('foo)      .zen(_ toUpperCase _)
-obj.forEachKey('foo, 'bar).zen(_ toUpperCase _)
+obj.forKey    ('foo)      .thn(_ toUpperCase _) // { "foo": "HI", ...
+obj.forEachKey('foo)      .thn(_ toUpperCase _)
+obj.forEachKey('foo, 'bar).thn(_ toUpperCase _)
 
 obj.forAllKeys((o, k) => o.rename(k).using(_.toUpperCase)) //{"FOO":"hi",..
 // ... likewise with forPath, forEachPath, forAllPaths, forLeafPaths, ...
@@ -342,7 +342,7 @@ people.stats('age).by('city) // descriptive statistics (minimal for now)
 ```scala
 people
   .groupBy('city)
-  .transformGroupObjectsUsing {
+  .transformGroupEntitiesUsing {
     _.squash(_.string('name), _.int('age))
       // random nonsensical aggregation for demonstration purpose only
       .using(_.map { case (n, a) => n.size + a }.sum) }
@@ -555,7 +555,7 @@ See Apache Spark's <a href="https://spark.apache.org/docs/latest/rdd-programming
 This module requires
 
 ```
-libraryDependencies += "org.gallia" %% "gallia-spark" % "0.0.1"
+libraryDependencies += "org.gallia" %% "gallia-spark" % "0.4.0"
 ```
 
 And the following import:
@@ -859,7 +859,7 @@ aobj( // the "a" in aobj stands for "Annotated"
     cls('p   .cls_('f.string  , 'g.int ), 'z.boolean))(
     obj('p -> obj ('f -> "foo", 'g -> 1), 'z -> true) )
   .generate('h)
-    .from(_.obj('p))
+    .from(_.entity('p))
     .using {
         _ .translate('f ~> 'F).using("foo" -> "oof")
           .remove('g) }

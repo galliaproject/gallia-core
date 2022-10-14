@@ -64,7 +64,7 @@ it can also cater to the more trivial cases such as the ones presented below as 
 The same paradigm can therefore handle all (most) of your data manipulation needs.
 
 
-### Process individual object
+### Process individual entity
 ```scala
 """{"foo": "hello", "bar": 1, "baz": true, "qux": "world"}"""
   .read() // will infer schema if none is provided
@@ -108,13 +108,13 @@ Notes:
 * The error mechanisms works at any level of nesting/multiplicity
 * Of course, some errors cannot be caught until the data is actually seen (e.g. IndexOutOfBounds types of checks)
 
-### Process collection of objects
+### Process collection of entities
 ```scala
 // INPUT:
 //    {"first": "John", "last": "Johnson", "DOB": "1986-02-04", ...}\n
 //    {"first": "Kate", ...
 "/data/protopeople.jsonl.gz"
-  .stream() // vs .read() for single object
+  .stream() // vs .read() for single entity
 
     .generate('username).from(_.string('first), _.string('last))
       .using { (f, l) => s"${f.head}${l}".toLowerCase } // -> "jjohnson"
@@ -177,7 +177,7 @@ Paths can be referenced conveniently via the "pipe+greater-than" (`|>`) [notatio
  Note that a _key_ is therefore just a trivial _path_.
 
 ### Target selection (keys/paths)
-Applicable for both `.read()` and `.stream()` (one vs multiple objects)
+Applicable for both `.read()` and `.stream()` (one vs multiple entities)
 ```scala
 // INPUT: {"foo": "hello", "bar": 1, "baz": true, "qux": "world"}
 data.retain(_.firstKey) // {"foo": "hello"}
@@ -245,9 +245,9 @@ Note that this is functionally equivalent too:
   .rename   ('foo ~> 'FOO)
 ```
 
-## Single vs Multiple objects
+## Single vs Multiple entities
 
- _Gallia_ does not necessarily expect its elements ("objects") to come in multiples, it is capable of processing them as individuals.
+ _Gallia_ does not necessarily expect its elements ("entities") to come in multiples, it is capable of processing them as individuals.
 
  Example of going from one to the other, then back:
 ```scala
@@ -259,7 +259,7 @@ Note that this is functionally equivalent too:
  There are other ways to go back and forth between the two (e.g. [reducing](#210120142925) as shown below)
 
 <a name="210121153206"></a>
-Internally, all object-wise operations on "streams" are actually just implicit MAP-pings, so that the following two expressions are equivalent
+Internally, all entity-wise operations on "streams" are actually just implicit MAP-pings, so that the following two expressions are equivalent
 ```scala
 """[{"foo": "bar1"}, {"foo": "bar2"}]""".stream()      .toUpperCase('foo)
 """[{"foo": "bar1"}, {"foo": "bar2"}]""".stream().map(_.toUpperCase('foo))
@@ -272,10 +272,10 @@ The Head type models a leaf in the DAG(s) that underlies the execution plan.
 Internally, heads comes in as three flavors, each offering a different and relevant subset of operations:
 1. _HeadO_: For single __O__-bject manipulation
 2. _HeadS_: For multiple object-__S__ manipulation
-3. _HeadV[T]_: For _"orphan"_ __V__-alues manipulation (_HeadV_ is typically not encountered in client code)
+3. _HeadV[T]_: For _"naked"_ __V__-alues manipulation (_HeadV_ is rarely encountered explicitly in client code)
 
 Notes:
-- _"Orphan"_ values are more conceptually relevant to nested subgraphs, not commonly manipulated by client code. It represents values that are not part of a structured object, e.g the string `"foo"` alone as opposed to the same string `"foo`" within an object `{"key1": 1, "key2": "foo", ...}`.
+- _"Naked"_ values are more conceptually relevant to nested subgraphs, not commonly manipulated by client code. It represents values that are not part of a structured entity, e.g the string `"foo"` alone as opposed to the same string `"foo`" within an entity `{"key1": 1, "key2": "foo", ...}`.
 - The DAGs/heads concepts will be discussed in more details in a future article dedicated to design.
 
 <a name="201118133206"></a>
@@ -407,7 +407,7 @@ The opposite operation (_flattening_) is [scheduled](http://github.com/galliapro
 <a name="210120155618"></a>
 ### Input
 
-`.read()` (single object) and `.stream()` (multiple objects) guess as much about the input format as they can from the input `String` provided:
+`.read()` (single entity) and `.stream()` (multiple entities) guess as much about the input format as they can from the input `String` provided:
 - JSON markers, e.g. `{`, `[`, ...
 - extensions, e.g. `.json`, `.tsv`, `.gz`, ...
 - URI schemes, e.g. `file://`, `http://`, `jdbc://`, ..
@@ -492,8 +492,19 @@ val data =
 <a name="210121153214"></a>
 Note that `_` here stands for `?`, meaning optional. For instance `'f7.strings_` would be represented as `Option[Seq[String]]` in Scala.
 
+<a name="avro"></a><a name="221014125512"></a>
+#### Apache Avro
+
+Avro read/write support was added in `0.4.0`, see [CHANGELOG.md#avro](https://github.com/galliaproject/gallia-core/blob/master/CHANGELOG.md#221014125247)
+
+<a name="parquet"></a><a name="221014125513"></a>
+#### Apache Parquet
+
+Likewise, Parquet read/write support was added in `0.4.0`, see [CHANGELOG.md#parquet](https://github.com/galliaproject/gallia-core/blob/master/CHANGELOG.md#221014125248)
+
 <a name="210121153215"></a>
- Additional modules using a similar paradigm could be added in the future, e.g.:
+#### Additional sources/destinations
+ Additional modules using a similar paradigm will be added in the future, e.g.:
 ```scala
 // NEO4J
 "neo4j+s://demo.neo4jlabs.com".stream(
@@ -512,9 +523,6 @@ Note that `_` here stands for `?`, meaning optional. For instance `'f7.strings_`
 "https://swapi.com/graphql".stream(
     _.query(
         """{user (id: 1) { firstname } }"""))
-
-// Parquet / Avro / ...
-"/data/test.parquet".stream()
 
 // Excel (if sheet contains a single table)
 "/data/doc.xlsx".stream(_.allFrom("Some Sheet Name"))
@@ -682,6 +690,10 @@ Where "/meta/myschema.json" contains: `{"fields":[{"key":"foo","info":...`
 <a name="210121153233"></a>
 More interactions with case classes are available (e.g. in transformations); they will be detailed in a future article.
 
+__Note__: Gallia schemas are mostly meant to be descriptive, but they can be prescriptive in the case of 
+looser formats such as JSON or {T,C}SV files. For instance a field defined as an `_Int` in a schema describing 
+a numerical JSON entry will be interpreted as an `_Int` instead of a `_Double` (as would be expected from the JSON specification).
+
 <a name="macros"></a><a name="210326142045"></a>
 ## Macros
 
@@ -693,7 +705,7 @@ See dedicated [repo](https://github.com/galliaproject/gallia-macros), which cont
 
 I am providing a [link](http://github.com/galliaproject/gallia-dbnsfp/blob/init/src/main/scala/galliaexample/dbnsfp/DbNsfp.scala#L26) to one of the full blow examples I've written using _Gallia_: turning the big
 <a href="https://sites.google.com/site/jpopgen/dbNSFP" target="_blank">dbNSFP</a> tables into a corresponding nested structure more conducive to querying (_mongodb_, _elasticsearch_, ...).
-See the example [input row](https://github.com/galliaproject/gallia-dbnsfp/blob/init/src/main/scala/galliaexample/dbnsfp/DbNsfpDriver.scala#L19-L20) and example [output object](https://github.com/galliaproject/gallia-dbnsfp/blob/init/src/main/scala/galliaexample/dbnsfp/DbNsfpDriver.scala#L31-L348).
+See the example [input row](https://github.com/galliaproject/gallia-dbnsfp/blob/init/src/main/scala/galliaexample/dbnsfp/DbNsfpDriver.scala#L19-L20) and example [output entity](https://github.com/galliaproject/gallia-dbnsfp/blob/init/src/main/scala/galliaexample/dbnsfp/DbNsfpDriver.scala#L31-L348).
 
 It is in no way complete or 100% correct in its current form, as it is primarily designed to showcase _Gallia_.
 I only tested it on a small subset of the data, and I expect unfortunate surprises would arise from processing the entire dataset.
@@ -797,8 +809,9 @@ Once a definitive license is chosen, code contributions will be more than welcom
 
 <a name="210127134033"></a>
 ### What are the biggest limitations by design?
-At this point, a given field can only be of a given type. Ironically this prevents _Gallia_ from having its own metaschema specified in _Gallia_ terms.
-See problem in action in the [code](http://github.com/galliaproject/gallia-core/blob/init/src/main/scala/gallia/meta/MetaObj.scala#L35) . A more thorough discussion of design choices and trade-offs/limitations will come in a future article.
+~At this point, a given field can only be of a given type. Ironically this prevents _Gallia_ from having its own metaschema specified in _Gallia_ terms.~ (see [metaschema](https://github.com/galliaproject/gallia-core/blob/master/CHANGELOG.md#221013105445), made possible by [(partial) union types](https://github.com/galliaproject/gallia-core/blob/master/CHANGELOG.md#221013103753)). 
+~See problem in action in the [code](http://github.com/galliaproject/gallia-core/blob/init/src/main/scala/gallia/meta/MetaObj.scala#L35)~
+A more thorough discussion of design choices and trade-offs/limitations will come in a future article.
 
 Another potential trick is that there can be only one meaning to a missing value. For instance `[{"foo": null}, {"foo": []}, {}]` would all collapse to the same absence of a value: `{}`.
 Note that overloading the various `null`/`Nil` mechanisms with alternative meanings is probably not great data modeling practise in the first place.

@@ -8,13 +8,13 @@ import meta.{Cls => _, Fld => _, _}
 // ===========================================================================
 private object SchemaInferrerUtils {
   class IncompatibleInfoException(pairs: Seq[FldPair]) extends Exception {
-    override def getMessage: String = pairs.map(_.formatDefault).section2 }
+    override def getMessage: String = pairs.map(_.formatDefault).section2(pairs.size.str) }
 
   // ===========================================================================
   implicit class Cls_(dis: Cls) {
 
     def combine(that: Cls): Cls = {
-      val conflictingPairs = this.conflictingPairs(that)
+      val conflictingPairs: Seq[FldPair] = this.conflictingPairs(that)
       
       if (conflictingPairs.nonEmpty) { // 210802094043
         throw new IncompatibleInfoException(conflictingPairs) }
@@ -61,15 +61,18 @@ private object SchemaInferrerUtils {
 
   // ===========================================================================
   private def resolve(existingField: Fld, newField: Fld): Option[Fld] =
-           if (newField.subInfo1 == existingField.subInfo1)       Some(existingField)
+    (existingField.nestedClassOpt, newField.nestedClassOpt).toOptionalTuple match {
+      case Some((e, n)) => e.combine(n).pipe(existingField.updateSoleNestedClass).in.some
+      case None =>
+             if (newField.subInfo1 == existingField.subInfo1)       Some(existingField)
 
-      // note: not so for multiplicity, as it requires a data change (TODO: t210802090946 - reconsider)
-      else if ( existingField.isRequired && !newField.isRequired) Some(existingField.toOptional)
-      else if (!existingField.isRequired &&  newField.isRequired) Some(existingField)
+        // note: not so for multiplicity, as it requires a data change (TODO: t210802090946 - reconsider)
+        else if ( existingField.isRequired && !newField.isRequired) Some(existingField.toOptional)
+        else if (!existingField.isRequired &&  newField.isRequired) Some(existingField)
 
-      else if (areBoundedNumbers(existingField, newField))        Some(existingField.toDouble)
+        else if (areBoundedNumbers(existingField, newField))        Some(existingField.toDouble)
 
-      else                                                        None
+        else                                                        None }
 
     // ---------------------------------------------------------------------------
     private def areBoundedNumbers(f1: Fld, f2: Fld): Boolean =

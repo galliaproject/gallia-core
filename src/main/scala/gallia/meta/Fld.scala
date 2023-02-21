@@ -51,6 +51,7 @@ case class Fld(key: Key, info: Info) extends FldLike {
     def updateOptionality(value: Optional): Fld = updateInfo(info.updateOptionality(value))
 
     // ---------------------------------------------------------------------------
+    def updateSoleNestedClass                       (newValue: Cls)      : Fld = transformSoleNestedClass                         (_ => newValue)
     def updateSoleSubInfo                           (newValue: SubInfo)  : Fld = transformSoleSubInfo                             (_ => newValue)
     def updateSpecificSubInfo  (oldValue: SubInfo,   newValue: SubInfo)  : Fld = transformSpecificSubInfo  (_ == oldValue)        (_ => newValue)
     def updateSpecificValueType(oldValue: ValueType, newValue: ValueType): Fld = transformSpecificValueType(_ == oldValue)        (_ => newValue)

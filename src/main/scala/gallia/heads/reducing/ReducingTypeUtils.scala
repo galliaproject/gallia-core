@@ -82,7 +82,8 @@ private object ReducingTypeUtils {
 
         case BasicType._BigInt => (x: Values) => _flattenedBigInts(x).pipe(bigInts)        
         case BasicType._BigDec => (x: Values) => _flattenedBigDecs(x).pipe(bigDecs) }
-      .getOrElse { ??? }//FIXME: t210118084833 - dates, strings...
+      .getOrElse {
+        aptus.illegalArgument("210118084833 - Not a numerical type") } // FIXME: t210118084833 - dates, strings...
 
   // ---------------------------------------------------------------------------
   def statsData(optional: Boolean, numTypeOpt: Option[NumericalType]):  Values => Obj =

@@ -54,6 +54,7 @@ trait HeadZOperations { self: HeadZ =>
   def flattenBy(target: RPathW): HeadZ = rename(target.value).zz(FlattenByZ(target.value.to))
 
   def flattenAndUnnestBy(target: RPathW): HeadZ = flattenBy(target).unnestAllFrom(target.value.to)
+  def flattenAndUnnestByGroup           : HeadZ = flattenAndUnnestBy(_group)
 
     def flattenByBoth : HeadZ = flattenByLeft.flattenByRight
     def flattenByLeft : HeadZ = flattenBy(_left)

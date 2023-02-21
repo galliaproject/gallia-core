@@ -44,6 +44,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
     // ===========================================================================
     final class _RemoveConditionallyWhatever private[common](target: TqRPathz) {
+      def isEmptyString    : Self2 = is("")
       def is   (value: Any): Self2 = RemoveConditionallyWhatever(target, value)
       def isNot(value: Any): Self2 = RemoveConditionallyWhatever(target, value) }
 

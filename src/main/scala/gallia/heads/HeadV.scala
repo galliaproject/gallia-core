@@ -40,7 +40,8 @@ class HeadV[T: WTT /* will be Vle (Any) for data phase */] private[gallia] ( // 
   def mapVs[T1: WTT, T2: WTT](f: T1 => T2)(implicit ev: T <:< Seq[T1]): HeadV[Seq[T2]] = mapV[Seq[T2]](_.map(f)) // worth keeping? - TODO: subclass rather?
 
   // ---------------------------------------------------------------------------
-  def toDouble(implicit ev: T =:= Int): HeadV[Double] = mapV(_.toDouble)
+  def toInt   (implicit ev: T =:= Double): HeadV[Int]    = mapV(_.toInt)
+  def toDouble(implicit ev: T =:= Int)   : HeadV[Double] = mapV(_.toDouble)
 
   // ---------------------------------------------------------------------------
   // TODO: t220916113454 - separate HeadV[T] from HeadV[Seq[U]]
@@ -72,7 +73,8 @@ class HeadV[T: WTT /* will be Vle (Any) for data phase */] private[gallia] ( // 
     def concatenate(that: HeadV[_])(implicit ev1: T <:< String): HeadV[String] = combine(that).using(_ + _.toString)
     def concatenate(that: Any)     (implicit ev1: T <:< String): HeadV[String] = concatenate(headV[String](that.toString))
 
-    def concatenateStrings(implicit ev1: T <:< Iterable[String]): HeadV[String] = mapV(_.reduceLeft(_ + _))
+    def concatenateStrings             (implicit ev1: T <:< Iterable[String]): HeadV[String] = mapV(_.reduceLeft(_ + _))
+    def concatenateStrings(sep: String)(implicit ev1: T <:< Iterable[String]): HeadV[String] = mapV(_.reduceLeft(_ + sep + _))
 
     // ---------------------------------------------------------------------------
     // need to provide common combinations, unless there's a way to reconcile two different Numeric[_] somehow? (t220920111256)

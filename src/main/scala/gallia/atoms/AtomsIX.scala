@@ -113,7 +113,7 @@ object AtomsIX { import utils.JdbcDataUtils
           input
             .streamLines(inMemoryMode)
             .filterNot(_.trim.isEmpty) // a220930162941 - for better or worse, we ignore those (ideally we'd only ignore the last one)
-            .map(json.GsonParsing.parseObject)
+            .map(json.GsonParsing.parseObject) // TODO: t230112130056 - detect if documents are pretty printed (and disallow)
             .pipe(Objs.build)
 
       // ---------------------------------------------------------------------------

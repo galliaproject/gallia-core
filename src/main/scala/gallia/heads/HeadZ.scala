@@ -200,8 +200,10 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
       //def reverse          : HeadZ = ???
       //def randomize        : HeadZ = ???
 
-  @Distributivity def addIndex: HeadS = zz(AddIndex(key = _index, oneBased = false))
-  @Distributivity def addRank : HeadS = zz(AddIndex(key = _rank,  oneBased = true ))
+  @Distributivity def addIndex          : HeadS = zz(AddIndex(key = _index,   oneBased = false))
+  @Distributivity def addIndex(as: KeyW): HeadS = zz(AddIndex(key = as.value, oneBased = false))
+  @Distributivity def addRank           : HeadS = zz(AddIndex(key = _rank,    oneBased = true ))
+  @Distributivity def addRank(as: KeyW) : HeadS = zz(AddIndex(key = as.value, oneBased = true ))
 
   // ===========================================================================
   // TODO: t210205122151

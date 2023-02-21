@@ -136,8 +136,10 @@ trait HeadZOut extends HeadOut { self: HeadZ =>
   def formatPrettyJsons: String = format(_.prettyJsons)
 
   // ---------------------------------------------------------------------------
-  def formatTable      : String = format(_.tsv)
   def formatPrettyTable: String = format(_.prettyTable)
+  def formatTable      : String = formatTsv
+  def formatTsv        : String = format(_.tsv)
+  def formatCsv        : String = format(_.csv)
 
   // ===========================================================================
   /** will *not* process all the data (assuming input schema does not need to be inferred) */
@@ -149,8 +151,10 @@ trait HeadZOut extends HeadOut { self: HeadZ =>
 
   def printJsonl      () = { printJsonLines }
   def printJsonLines  () = { write(_.stdout.jsonLines)  ; () }
-  def printJsonArray  () = { write(_.stdout.jsonArray)  ; () }  
+  def printJsonArray  () = { write(_.stdout.jsonArray)  ; () }
   def printPrettyJsons() = { write(_.stdout.prettyJsons); () }
+
+  def printJsonlWithSchema() = { printSchema(); printJsonl(); }
 
   // ---------------------------------------------------------------------------
   def printTable()           = {          write(_.stdout.tsv); () }

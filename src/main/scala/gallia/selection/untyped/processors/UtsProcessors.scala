@@ -106,8 +106,13 @@ object UtsProcessors {
 
   // ===========================================================================
   case class AllButKeys(values: Keyz) extends KeyzSelection { //TODO: specials: allbut first/last
-    def vldt(c: Cls): Errs = Nil //TODO: check duplicates + check some left?
-    def keys(c: Cls): Keys = c.keys.diff(values.values) }
+      def vldt(c: Cls): Errs = Nil //TODO: check duplicates + check some left?
+      def keys(c: Cls): Keys = c.keys.diff(values.values) }
+
+    // ---------------------------------------------------------------------------
+    case class AllButKeys2(groupee: target.TqRen) extends KeyzSelection {
+      def vldt(c: Cls): Errs = Nil //TODO: check duplicates + check some left?
+      def keys(c: Cls): Keys = groupee.resolve(c).from.pipe { x => c.keys.filterNot(_ == x) } }
 
   // ===========================================================================
   case object AllKeys   extends Errorless with KeyzSelection   { def keys  (c: Cls): Keys   = c.keys }

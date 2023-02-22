@@ -84,6 +84,7 @@ object UtsIndividuals { // mostly meant to convey intent
 
   // ---------------------------------------------------------------------------
   trait HasAllButKeys {
+    def allBut(groupee: target.TqRen)          : KeyzSelection = AllButKeys2(groupee)
     def allBut(w: KeyW )                       : KeyzSelection = AllButKeys(w.keyz)
     def allBut(w: KeyWz)                       : KeyzSelection = AllButKeys(w.keyz)
     def allBut(w1: KeyW, w2: KeyW, more: KeyW*): KeyzSelection = allBut(KeyWz(Seq(w1, w2) ++ more)) }

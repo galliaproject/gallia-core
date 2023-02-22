@@ -35,6 +35,13 @@ trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F]
   def transformStringToLocalDate    (k: RPathW) = transformString(k).using(_.parseLocalDate     /* from aptus */)
   def transformStringToLocalTime    (k: RPathW) = transformString(k).using(_.parseLocalTime     /* from aptus */)
 
+  // ---------------------------------------------------------------------------
+  // enum:
+  def transformEnumStringValue(k: RPathW) = new {
+    def using(f: EnumStringValue => EnumStringValue) =
+      transform(_.enm(k)).using {
+        _.stringValue.pipe(f).pipe(EnumValue.apply) } }
+
   // ===========================================================================
   @deprecated def transformObject        (k: RPathW): _TransformU = transform(_.entity  (k.value)) // TODO: rename to convey 1 (as oppose to x)
               def transformEntity        (k: RPathW): _TransformU = transform(_.entity  (k.value)) // TODO: rename to convey 1 (as oppose to x)

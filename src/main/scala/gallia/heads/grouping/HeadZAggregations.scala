@@ -197,6 +197,26 @@ trait HeadZAggregations { self: HeadZ =>
               _.reduce(pair1, more:_*) }
             .unnestAllFromGroup }
 
+  // ===========================================================================
+  // TODO: t221227114326 - further generalize
+  def rankBy(ranker: KeyW) = new _RankBy(ranker.value)
+
+    // ---------------------------------------------------------------------------
+    class _RankBy private[HeadZAggregations] (ranker: Key) {
+        def  ascending(rankee: KeyW) = new __RankBy(ranker, rankee.value, descending = false)
+        def descending(rankee: KeyW) = new __RankBy(ranker, rankee.value, descending = true) }
+
+      // ---------------------------------------------------------------------------
+      class __RankBy private[HeadZAggregations] (ranker: Key, rankee: Key, descending: Boolean) {
+          def asDefault   : Self = as(_rank)
+          def as(as: KeyW): Self = // TODO: t221227103528 - create specialized version for efficiency
+            self
+              .groupBy(ranker)
+                .transformGroupEntitiesUsing {
+                  _ .sortBy(rankee, descending)
+                    .addRank(as.value) }
+              .flattenAndUnnestByGroup }
+
 }
 
 // ===========================================================================

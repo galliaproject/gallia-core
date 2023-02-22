@@ -1,6 +1,7 @@
 package gallia
 package heads
 
+import aptus.Anything_ // pipeIf
 import actions.ActionsZZFiltering._
 
 // ===========================================================================
@@ -67,7 +68,10 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
                         def greaterOrEqualTo[N: Numeric](value: N): Self = matches(_ >= value.asInstanceOf[Number])
                 
                         def lessThan        [N: Numeric](value: N): Self = matches(_ <  value.asInstanceOf[Number])
-                        def lessOrEqualTo   [N: Numeric](value: N): Self = matches(_ <= value.asInstanceOf[Number]) }
+                        def lessOrEqualTo   [N: Numeric](value: N): Self = matches(_ <= value.asInstanceOf[Number])
+
+                        // ---------------------------------------------------------------------------
+                        def isCurrentDate: Self = hasValue(java.time.LocalDate.now()) }
 
                       // ---------------------------------------------------------------------------
                       def findBy(target: FindBy1[HeadU])(implicit di: DI) = new { // trade-off: pre-process for more more than 1
@@ -127,9 +131,11 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
   def filterByMissing(target: KPathW) = filterBy(target).isMissing
 
   // ---------------------------------------------------------------------------
-  // TODO: t221004095843 - filterByAndRemove and .filterBy(...).matches(...).andRemove
-  def filterBy        (target: KPathW)      : __FilterBy1WV   = new __FilterBy1WV (target.value)
-  def filterBy[O: WTT](target: FilterBy1[O]): __FilterBy1[O]  = new __FilterBy1[O](target)
+  // TODO: t221004095843 - improve filterByAndRemove + .filterBy(...).matches(...).andRemove
+
+  def filterByThenRemove(target: KPathW)      : __FilterBy1WV   = new __FilterBy1WV (target.value, alsoRemove = true)
+  def filterBy          (target: KPathW)      : __FilterBy1WV   = new __FilterBy1WV (target.value, alsoRemove = false)
+  def filterBy[O: WTT]  (target: FilterBy1[O]): __FilterBy1[O]  = new __FilterBy1[O](target)
 
       // ---------------------------------------------------------------------------
       //def filterBy2(k: KeyW) = new {  } // eg "init" def filterByInclusion[T: WTT](k: KeyW, coll: Iterable[T]): HeadZ
@@ -140,14 +146,14 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
         def matches(f: O => Boolean): Self = zz(FilterByV(resolve(target), f, asFind = false)) }
 
       // ---------------------------------------------------------------------------
-      class __FilterBy1WV(target: KPath) { import gallia.target.utils.TargetQueryUtils.tqkpath
+      class __FilterBy1WV(target: KPath, alsoRemove: Boolean) { import gallia.target.utils.TargetQueryUtils.tqkpath
 
-        def isPresent: Self = zz(FilterByPresence(tqkpath(target), negate = false, asFind = false))
-        def isMissing: Self = zz(FilterByPresence(tqkpath(target), negate = true,  asFind = false))
+        def isPresent: Self = zz(FilterByPresence(tqkpath(target), negate = false, asFind = false)).pipeIf(alsoRemove)(_.remove(target))
+        def isMissing: Self = zz(FilterByPresence(tqkpath(target), negate = true,  asFind = false)).pipeIf(alsoRemove)(_.remove(target))
 
         // ---------------------------------------------------------------------------
-        def matches(f: WV => TWV[Boolean])                 : Self = zz(FilterByWV(tqkpath(target), f(_).typed, asFind = false))
-        def matches(f: WV =>     Boolean) (implicit di: DI): Self = zz(FilterByWV(tqkpath(target), f,          asFind = false))
+        def matches(f: WV => TWV[Boolean])                 : Self = zz(FilterByWV(tqkpath(target), f(_).typed, asFind = false)).pipeIf(alsoRemove)(_.remove(target))
+        def matches(f: WV =>     Boolean) (implicit di: DI): Self = zz(FilterByWV(tqkpath(target), f,          asFind = false)).pipeIf(alsoRemove)(_.remove(target))
 
         // ---------------------------------------------------------------------------
         /** similar to SQL's WHERE X IN Y clause */ // TODO: toSet if big enough? use bloom if very big?
@@ -167,9 +173,12 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
         def greaterOrEqualTo[N: Numeric](value: N): Self = matches(_ >= value.asInstanceOf[Number])
 
         def lessThan        [N: Numeric](value: N): Self = matches(_ <  value.asInstanceOf[Number])
-        def lessOrEqualTo   [N: Numeric](value: N): Self = matches(_ <= value.asInstanceOf[Number]) }
+        def lessOrEqualTo   [N: Numeric](value: N): Self = matches(_ <= value.asInstanceOf[Number])
 
-      // ---------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------
+        def isCurrentDate: Self = hasValue(java.time.LocalDate.now()) }
+
+      // ===========================================================================
       def filterBy(target: FilterBy1[HeadU])(implicit di: DI) = new { // trade-off: pre-process for more more than 1
         //TODO: add isPresent/...
         def matches(f: HeadU => HeadV[Boolean]): Self =

@@ -68,7 +68,7 @@ object AtomsHelper {
           o2.retainOpt(keyz)
             .map(o.merge)
             .map(_.transformObj(parent, _.remove(keyz)))
-            .getOrElse(o2) }
+            .getOrElse(o) }
         .getOrElse(o)
 
 }

@@ -167,7 +167,7 @@ package object gallia
 
   // ===========================================================================
   implicit class InputString__     (val inputString: InputString)         extends ReadObjFromString with StreamObjsFromString with ReadHeadFromString with StreamHeadFromString
-  implicit class InputIterable__[T](val data       : Iterable[T])         extends StreamObjsFromIterable[T]
+  implicit class InputIterable__[T](val data       : Iterable[T])         extends StreamObjsFromIterable[T] /* TODO: t230620092637 - rename as _data (else causes conflicts) */
   implicit class InputConnection__ (val connection : java.sql.Connection) extends StreamConnection
   implicit class InputIterator__[T](val values     : DataRegenerationClosure[Obj]) { def stream(schema: Cls): HeadS = actions.in.GenericInputZ(schema, values).pipe(heads.Head.inputZ) }
 

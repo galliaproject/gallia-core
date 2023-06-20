@@ -75,7 +75,7 @@ trait HeadZOperations { self: HeadZ =>
 
   // ---------------------------------------------------------------------------
   // TODO: t210124100009 - better names [term:x]...
-  def asArray1               : HeadU = zu(AsArray1)
+  def asArray1                      : HeadU = zu(AsArray1)
   def asArray1(target: ActualRPathW): HeadU = rename(target.value).asArray1
 
   def asArray2              : HeadU = asArray2(_array)

@@ -207,7 +207,8 @@ package object gallia
   def objFromDataClass[T  <: Product : WTT](value: T): Obj = data.single.ObjIn.fromDataClassInstance(value)
 
   // ---------------------------------------------------------------------------
-  def objs(values: Obj*): Objs = Objs.from(values.toList)
+  def objs(values: Obj*)                     : Objs = Objs.from(values.toList)
+  def objs(values: Seq[Obj])(implicit di: DI): Objs = Objs.from(values.toList)
 
   // ===========================================================================
   def bobj(entry1: KVE, more: KVE*): BObj = BObj(KVEs((entry1 +: more).toList))
@@ -225,7 +226,8 @@ package object gallia
     def aobjs(c: Cls)                 (values: Obj*): AObjs = AObjs(c, values.toList.pipe(Objs.from))
     def aobjs(c: Cls, z: Objs)                      : AObjs = AObjs(c, z)
 
-    def aobjsFromDataClasses[T <: Product : WTT](values: Seq[T]): AObjs = AObjs(cls[T], values.toList.map(objFromDataClass[T]).pipe(Objs.from))
+    def aobjsFromDataClasses[T <: Product : WTT](value1: T, more: T*): AObjs = aobjsFromDataClasses(value1 +: more)
+    def aobjsFromDataClasses[T <: Product : WTT](values: Seq[T])     : AObjs = AObjs(cls[T], values.toList.map(objFromDataClass[T]).pipe(Objs.from))
 
   // ===========================================================================
   def indexToKey(i: Int): Key = rankToKey(i + 1)

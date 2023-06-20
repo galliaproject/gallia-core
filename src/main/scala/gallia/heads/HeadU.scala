@@ -58,6 +58,9 @@ class HeadU private[gallia]( // TODO: t210121105809 - rename to HeadO and genera
   def convertToZ               : HeadZ = uz(ConvertUtoZ)
   def convertToMultiple        : HeadZ = uz(ConvertUtoZ)
 
+  def union(that: HeadU)       : HeadZ = convertToMultiple.union(that)
+  def union(that: HeadZ)       : HeadZ = convertToMultiple.union(that)
+
   // ===========================================================================
   def merge(that: HeadU): Self = handler.joinuu2u(this, that)
 

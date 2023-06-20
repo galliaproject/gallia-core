@@ -93,10 +93,20 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
       private val wtto = new WeakTypeTagDecorator(weakTypeTag[O])
 
       // ---------------------------------------------------------------------------
-      def toObjsUsing(c: Cls)(f: O => Objs): Self2 = self2 :+ TransformToObj(ttq, c, multiple = true , wrap(f)) // TODO: rename
-      def toObjUsing (c: Cls)(f: O => Obj ): Self2 = self2 :+ TransformToObj(ttq, c, multiple = false, wrap(f)) // TODO: rename
-      
-      //TODO: opaque counteparts (see t210110094829)
+      def withSchema(field1: Fld, more: Fld*): _UsingSchema = new _UsingSchema(cls(field1 +: more))
+      def withSchema(c: Cls)                 : _UsingSchema = new _UsingSchema(c)
+          @deprecated("see withSchema below") def toObjsUsing(c: Cls)(f: O => Objs): Self2 = self2 :+ TransformToObj(ttq, c, multiple = true , wrap(f))
+          @deprecated("see withSchema below") def toObjUsing (c: Cls)(f: O => Obj ): Self2 = self2 :+ TransformToObj(ttq, c, multiple = false, wrap(f))
+
+        // ---------------------------------------------------------------------------
+        class _UsingSchema private[HeadCommonTransforms] (c: Cls) {
+          def using(f: O => Obj)                              : Self2 = self2 :+ TransformToObj(ttq, c, multiple = false, wrap(f))
+          def using(f: O => Objs)    (implicit d1: DI)        : Self2 = self2 :+ TransformToObj(ttq, c, multiple = true , wrap(f))
+          def using(f: O => Seq[Obj])(implicit d1: DI, d2: DI): Self2 = self2 :+ TransformToObj(ttq, c, multiple = true , wrap((x: Any) => f(x.asInstanceOf[O]).toList.pipe(Objs.from(_)) )) }
+
+      // ---------------------------------------------------------------------------
+      //TODO: "opaque" counteparts (see t210110094829)
+
 
       // ---------------------------------------------------------------------------
       def using[D: WTT](f: O => D): Self2 = self2 :+ {
@@ -105,6 +115,8 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
         if (!dest.isContainedDataClass)
           if (!ttq.ignoreContainer) TransformVV (ttq, dest, wrap(f), wtto.ifApplicable(f))
           else                      TransformVVx(ttq, dest, wrap(f), wtto.ifApplicable(f))
+
+        // ---------------------------------------------------------------------------
         // deprecated way now, c220914145147 or t220914144458 instead
         else
           if (!ttq.ignoreContainer) TransformVVc (ttq, to = HT.parse[D], wrap(f))

@@ -56,71 +56,18 @@ class Instantiator private (
     def fromFirstTypeArgFirstTypeArg[T: WTT]: Instantiator =
         scala.reflect.runtime.universe
           .weakTypeTag[T]
-          .pipe { tag => rec(tag.mirror)(tag.tpe.typeArgs.head.typeArgs.head) }
+          .pipe { tag => reflect.InstantiatorUtils.rec(new Instantiator(_, _, _))(tag.mirror)(tag.tpe.typeArgs.head.typeArgs.head) }
 
     // ---------------------------------------------------------------------------
     def fromFirstTypeArg[T: WTT]: Instantiator =
         scala.reflect.runtime.universe
           .weakTypeTag[T]
-          .pipe { tag => rec(tag.mirror)(tag.tpe.typeArgs.head) }
+          .pipe { tag => reflect.InstantiatorUtils.rec(new Instantiator(_, _, _))(tag.mirror)(tag.tpe.typeArgs.head) }
 
     // ---------------------------------------------------------------------------
     def fromType[T: WTT]: Instantiator =
         scala.reflect.runtime.universe
           .weakTypeTag[T]
-          .pipe { tag => rec(tag.mirror)(tag.tpe) }
-
-      // ===========================================================================
-      private def rec(mirror: universe.Mirror)(tpe: universe.Type): Instantiator = {
-
-        val methodSymbols = // TODO: refactor with other reflect's occurence
-          tpe
-            .decls
-            .filter((x: scala.reflect.api.Symbols#SymbolApi) => x.isMethod)
-            .map   (_.asMethod)
-            .filter(_.isCaseAccessor)
-            .toSeq
-
-        // ---------------------------------------------------------------------------
-        val node = gallia.reflect.TypeNode.parse(tpe)
-
-        val nestedObjs: Map[Key, Instantiator] =
-           methodSymbols
-            .zip(node.leaf.fields)
-            .flatMap { case (methodSymbol, f) =>
-              if (!f.node.isContainedDataClass) None
-              else
-                methodSymbol
-                  .typeSignature
-                  .resultType
-                  .pipe(subInstantiator(mirror, f.node.containerType, _))
-                  .pipe(instantiator => Some(f.key.symbol -> instantiator)) }
-            .force.map
-
-        // ---------------------------------------------------------------------------
-        new Instantiator(
-            target = node.leaf.name, // for debugging only
-            nestedObjs,
-            mirror.runtimeClass(tpe).mainConstructor)
-      }
-
-      // ---------------------------------------------------------------------------
-      private def subInstantiator(mirror: universe.Mirror, containerType: Container, resultType: universe.Type): Instantiator =
-        containerType match {
-            case Container._One => rec(mirror)(resultType)
-            case Container._Pes => rec(mirror)(resultType.typeArgs.head.typeArgs.head)
-            case Container._Opt => rec(mirror)(resultType.typeArgs.head)
-            case Container._Nes => rec(mirror)(resultType.typeArgs.head) }
-
-    // ===========================================================================
-    implicit class Class__(u: Class[_]) {
-      def mainConstructor =
-        u
-          .getConstructors
-          .headOption // t200720101733 - establish always safe or add corresponding validation
-          .getOrElse(null) // TODO: handle better (happens with eg .removeIf('f).hasValue(None))
-    }
-
-  }
+          .pipe { tag => reflect.InstantiatorUtils.rec(new Instantiator(_, _, _))(tag.mirror)(tag.tpe) } }
 
 // ===========================================================================

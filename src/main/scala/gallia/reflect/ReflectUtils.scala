@@ -8,11 +8,15 @@ import scala.reflect.api
 object ReflectUtils {
 
   /** eg "Option" from "scala.Option[String]", or "String" from "java.lang.String" */
-  def alias(tpe: UType): Alias =
+  private[reflect] def alias(tpe: UType): Alias =
     tpe
       .toString
       .takeWhile(_ != '[') /* TODO: cleaner way? */
       .pipe(simplify)
+
+  // ---------------------------------------------------------------------------
+  def fullNameFromType (tpe: UType): FullName = tpe.typeSymbol.fullName
+  def fullNameFromValue(value: Any): FullName = value.getClass.getName.pipe(BasicTypeUtils.normalizeFullName) // TODO: t220411094433 - hopefully there's a cleaner way...
 
   // ---------------------------------------------------------------------------
   def simplify(value: FullName): Alias =
@@ -26,17 +30,30 @@ object ReflectUtils {
 
   // ===========================================================================
   def parseFields(tpe: UType): List[(Name, UType)] =
-    tpe
-      .decls
-      .filter((x: api.Symbols#SymbolApi) => x.isMethod)
-      .map   (_.asMethod)
-      .filter(_.isCaseAccessor)
-      .toList
-      .map { method =>
-        val name = method.name.decodedName.toString
-        val tpe2 = method.typeSignature.resultType
+      _methodSymbols(tpe)
+        .map { method =>
+          val name = method.name.decodedName.toString
+          val tpe2 = method.typeSignature.resultType
 
-        (name, tpe2) }
+          (name, tpe2) }
+
+    // ---------------------------------------------------------------------------
+    private def _methodSymbols(tpe: UType) =
+      tpe
+        .decls
+        .filter((x: api.Symbols#SymbolApi) => x.isMethod)
+        .map   (_.asMethod)
+        .filter(_.isCaseAccessor)
+        .toList
+
+    // ---------------------------------------------------------------------------
+    def methodSymbols(tpe: scala.reflect.runtime.universe.Type) = // can't easily refactor with above, so at least keep them together
+      tpe
+        .decls
+        .filter((x: api.Symbols#SymbolApi) => x.isMethod)
+        .map   (_.asMethod)
+        .filter(_.isCaseAccessor)
+        .toList
 
   // ===========================================================================
   /** enum must not be nested somehow */

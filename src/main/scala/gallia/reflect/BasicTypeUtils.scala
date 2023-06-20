@@ -13,7 +13,7 @@ object BasicTypeUtils {
       .withDefault { value => aptus.illegalState(s"TODO:CantFindType:201013093225:${value}") }
 
   // ===========================================================================
-  def normalizeFullName(value: FullName): FullName =
+  private[reflect] def normalizeFullName(value: FullName): FullName =
          if (value == "java.lang.Integer") "scala.Int"
     else if (value == "java.lang.String")   value
     else                                    value.replace("java.lang.", "scala.") // not so for java.math (not equivalent at runtime)

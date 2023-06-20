@@ -20,9 +20,10 @@ lazy val root = (project in file("."))
 // ===========================================================================    
 // see https://github.com/aptusproject/aptus-core
 //   our own utilities library, bundles low level library such as commons-{io,lang3,math3,csv}, gson, enumeratum, ...
-lazy val aptusVersion      = "0.4.1"
 
+lazy val aptusVersion      = "0.4.1-SNAPSHOT"
 lazy val enumeratumVersion = "1.5.13"
+lazy val uTestVersion      = "0.8.1"
 
 // ---------------------------------------------------------------------------
 libraryDependencies ++=
@@ -31,8 +32,15 @@ libraryDependencies ++=
     "io.github.aptusproject" %% "aptus-core"    % aptusVersion,
     "com.beachape"           %% "enumeratum"    % enumeratumVersion)
 
+// ===========================================================================
+// testing
+
+libraryDependencies += "com.lihaoyi" %% "utest" % uTestVersion % "test" withSources() withJavadoc()
+
+testFrameworks += new TestFramework("utest.runner.Framework")
+
 // ---------------------------------------------------------------------------
-// tests: see https://github.com/galliaproject/gallia-testing
+// more tests: see https://github.com/galliaproject/gallia-testing
 
 // ===========================================================================
 sonatypeRepository     := "https://s01.oss.sonatype.org/service/local"

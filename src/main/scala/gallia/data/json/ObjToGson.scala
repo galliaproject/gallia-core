@@ -6,7 +6,7 @@ import aptus._
 import data.DataFormatting
 
 // ===========================================================================
-object ObjToGson {
+object ObjToGson { // TODO: t214360121145 - switch from gson to lihaoyi's ujson
   import com.google.gson._
 
   private lazy val Gson = new GsonBuilder().create()

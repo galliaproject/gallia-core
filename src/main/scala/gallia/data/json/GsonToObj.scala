@@ -10,7 +10,7 @@ import com.google.gson._
 // ===========================================================================
 /* important note: 201117103600 - JsonObject maintains its entries in a com.google.gson.internal.LinkedTreeMap
  * which despite its name maintains element order, though it requires a trick (see 201117103735) */
-object GsonToObj {
+object GsonToObj { // TODO: t214360121145 - switch from gson to lihaoyi's ujson
   protected type AnyPrimitiveValue = Any
 
   // ---------------------------------------------------------------------------

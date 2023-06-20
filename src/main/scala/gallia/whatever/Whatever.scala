@@ -142,6 +142,8 @@ class Whatever(private[gallia] val any: Any) extends AnyVal with Serializable { 
   def  toLowerCase: TypedWhatever[String] = _string(_.toLowerCase)
   def  toUpperCase: TypedWhatever[String] = _string(_.toUpperCase)
 
+  def  capitalize: TypedWhatever[String] = _string(_.capitalize)
+
   //TODO: replace, remove, stripPrefix, ...
 
   // ---------------------------------------------------------------------------

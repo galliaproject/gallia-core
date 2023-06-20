@@ -31,19 +31,23 @@ package object gallia
 
   // ===========================================================================
   // TODO: t210121105809 - rename to HeadU->HeadO and HeadZ->HeadS (historical names)
-  type HeadO = heads.HeadU
-  val  HeadO = heads.HeadU
-
-  type HeadS = heads.HeadZ
-  val  HeadS = heads.HeadZ
-
-  type HeadU = gallia.heads.HeadU
-  val  HeadU = gallia.heads.HeadU
-
-  type HeadZ = gallia.heads.HeadZ
-  val  HeadZ = gallia.heads.HeadZ
 
   type HeadV[T] = heads.HeadV[T]
+
+  type HeadO = heads.HeadU // "O" for "one"
+  val  HeadO = heads.HeadU // "O" for "one"
+
+  type HeadM = heads.HeadU // "M" for "multiple"
+  val  HeadM = heads.HeadU // "M" for "multiple"
+
+    type HeadU = gallia.heads.HeadU // will deprecate (legacy name)
+    val  HeadU = gallia.heads.HeadU // will deprecate (legacy name)
+
+    type HeadZ = gallia.heads.HeadZ // will deprecate (legacy name)
+    val  HeadZ = gallia.heads.HeadZ // will deprecate (legacy name)
+
+    type HeadS = heads.HeadZ // will deprecate (legacy name)
+    val  HeadS = heads.HeadZ // will deprecate (legacy name)
 
   // ---------------------------------------------------------------------------
   type AObj  = gallia.domain.AObj
@@ -118,7 +122,7 @@ package object gallia
   // ---------------------------------------------------------------------------
   private[gallia] type ByteBuffer    = java.nio.ByteBuffer // note: use ByteBuffer.wrap(_: Array[Byte])
 
-  // ---------------------------------------------------------------------------  
+  // ---------------------------------------------------------------------------
   private[gallia] type EnumEntry            = enumeratum.EnumEntry
   private[gallia] type Enum[T <: EnumEntry] = enumeratum.Enum[T]
 
@@ -243,7 +247,7 @@ package gallia {
 
   /** those can't be called until we have the actual data's (eg ensure uniqueness, pivot for new keys, ...) */
   case class RuntimeError   (details: Any) extends RuntimeException(details.toString)
-  
+
   case class ToBeImplemented(details: Any) extends RuntimeException(details.toString)
 
   // ===========================================================================

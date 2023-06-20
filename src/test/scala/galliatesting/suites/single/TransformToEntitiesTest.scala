@@ -16,7 +16,7 @@ object TransformToEntitiesTest extends utest.TestSuite with GalliaTestSuite { im
         .check(bobj(f -> bobj("size" -> 3, "letters" -> "FO"), g -> 1)) }
 
     // ---------------------------------------------------------------------------
-    // TODO: t230619162239 - offer shorthand version like so (will need intermediate class):
+    // TODO: t230619162239 - offer shorthand version like so (will need intermediate class) + a CC version
     //    test("transform to entity 2") {
     //      TestDataO.Default01.transform(_.string("f"))
     //          .using(

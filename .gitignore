@@ -1,0 +1,7 @@
+.gitignore
+.idea/
+.bsp/
+bin/
+target/
+project/project/
+project/target/

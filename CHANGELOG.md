@@ -16,7 +16,7 @@ Note: this is not an exhaustive list of the changes, but the most important ones
 		- New data-class based construct, eg:
 			```scala
 			case class Foo(s: String, i: Int)
-			aobj(Foo("hello", 3)).[...]
+			aobjFromCaseClass(Foo("hello", 3)).[...]
 			```
 		- Homogenization of the "tax mechanism" for JSON/Table streaming (eg automatic Int conversion), see [GsonToGalliaData.scala](https://github.com/galliaproject/gallia-core/blob/v0.4.0/src/main/scala/gallia/data/json/GsonToGalliaData.scala)
 	- Output:

@@ -1,0 +1,185 @@
+{ "leaf": {
+    "name": "galliatesting.TestMeta.MyComplexData",
+    "dataClass": true,
+    "fields": [
+      { "key": "b",
+        "node": {
+          "leaf": {
+            "name": "scala.Boolean",
+            "alias": "Boolean",
+            "dataClass": false } }},
+      { "key": "myString",
+        "node": {
+          "leaf": {
+            "name": "java.lang.String",
+            "alias": "String",
+            "dataClass": false } }},
+      { "key": "myOptInt",
+        "node": {
+          "leaf": {
+            "name": "scala.Option",
+            "alias": "Option",
+            "dataClass": false
+          },
+          "args": [
+            {
+              "leaf": {
+                "name": "scala.Int",
+                "alias": "Int",
+                "dataClass": false }}]}
+      },
+      { "key": "myDoubles",
+        "node": {
+          "leaf": {
+            "name": "scala.collection.immutable.Seq",
+            "alias": "Seq",
+            "dataClass": false
+          },
+          "args": [
+            { "leaf": {
+                "name": "scala.Double",
+                "alias": "Double",
+                "dataClass": false}}]}},
+      { "key": "myOptBooleans",
+        "node": {
+          "leaf": {
+            "name": "scala.Option",
+            "alias": "Option",
+            "dataClass": false },
+          "args": [
+            { "leaf": {
+                "name": "scala.collection.immutable.Seq",
+                "alias": "Seq",
+                "dataClass": false },
+              "args": [
+                {
+                  "leaf": {
+                    "name": "scala.Boolean",
+                    "alias": "Boolean",
+                    "dataClass": false }}]}]}},
+      { "key": "myObj",
+        "node": {
+          "leaf": {
+            "name": "galliatesting.TestMeta.MyComplexSubData",
+            "dataClass": true,
+            "fields": [
+              {
+                "key": "mySubString",
+                "node": {
+                  "leaf": {
+                    "name": "java.lang.String",
+                    "alias": "String",
+                    "dataClass": false}}},
+              {
+                "key": "mySubInt",
+                "node": {
+                  "leaf": {
+                    "name": "scala.Int",
+                    "alias": "Int",
+                    "dataClass": false}}}
+            ] } }},
+      { "key": "myOptObj",
+        "node": {
+          "leaf": {
+            "name": "scala.Option",
+            "alias": "Option",
+            "dataClass": false
+          },
+          "args": [
+            {
+              "leaf": {
+                "name": "galliatesting.TestMeta.MyComplexSubData",
+                "dataClass": true,
+                "fields": [
+                  { "key": "mySubString",
+                    "node": {
+                      "leaf": {
+                        "name": "java.lang.String",
+                        "alias": "String",
+                        "dataClass": false }}},
+                  { "key": "mySubInt",
+                    "node": {
+                      "leaf": {
+                        "name": "scala.Int",
+                        "alias": "Int",
+                        "dataClass": false
+                      }
+                    }
+                  }
+                ]}}]}},
+      { "key": "myObjs",
+        "node": {
+          "leaf": {
+            "name": "scala.collection.immutable.Seq",
+            "alias": "Seq",
+            "dataClass": false
+          },
+          "args": [
+            {
+              "leaf": {
+                "name": "galliatesting.TestMeta.MyComplexSubData",
+                "dataClass": true,
+                "fields": [
+                  { "key": "mySubString",
+                    "node": {
+                      "leaf": {
+                        "name": "java.lang.String",
+                        "alias": "String",
+                        "dataClass": false
+                      }
+                    }
+                  },
+                  { "key": "mySubInt",
+                    "node": {
+                      "leaf": {
+                        "name": "scala.Int",
+                        "alias": "Int",
+                        "dataClass": false
+                      }
+                    }
+                  }
+                ]}}]}},
+      { "key": "myOptObjs",
+        "node": {
+          "leaf": {
+            "name": "scala.Option",
+            "alias": "Option",
+            "dataClass": false
+          },
+          "args": [
+            {
+              "leaf": {
+                "name": "scala.collection.immutable.Seq",
+                "alias": "Seq",
+                "dataClass": false
+              },
+              "args": [
+                {
+                  "leaf": {
+                    "name": "galliatesting.TestMeta.MyComplexSubData",
+                    "dataClass": true,
+                    "fields": [
+                      {
+                        "key": "mySubString",
+                        "node": {
+                          "leaf": {
+                            "name": "java.lang.String",
+                            "alias": "String",
+                            "dataClass": false
+                          }
+                        }
+                      },
+                      {
+                        "key": "mySubInt",
+                        "node": {
+                          "leaf": {
+                            "name": "scala.Int",
+                            "alias": "Int",
+                            "dataClass": false}}}]}}]}]}},
+      { "key": "myClosing",
+        "node": {
+          "leaf": {
+            "name": "scala.Boolean",
+            "alias": "Boolean",
+            "dataClass": false } }}]}}
+

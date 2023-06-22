@@ -3,6 +3,9 @@ package object galliatesting {
   type GalliaTestSuite = gallia.testing.Suite
 
   // ---------------------------------------------------------------------------
+  private[galliatesting] type WTT[A] = scala.reflect.runtime.universe.WeakTypeTag[A]
+
+  // ---------------------------------------------------------------------------
   @deprecated type _Error = gallia.vldt._Error
   @deprecated val  _Error = gallia.vldt._Error
 

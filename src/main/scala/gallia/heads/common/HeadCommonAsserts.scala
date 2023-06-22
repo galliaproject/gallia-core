@@ -43,7 +43,7 @@ trait HeadCommonAsserts[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   def assertNonEmptyString(target: KPathW): Self2 = assertString(target).isNonEmpty
 
   @deprecated("see t230620091941")
-  def assertHasValue[T : WTT](value: T): Self2 = assertDataU(_.typed[Any](target)).using(_ == value)
+  def assertHasValue[T : WTT](value: T): Self2 = ???//assertDataU(_.typed[Any](target)).using(_ == value)
 
   def assertString(target: KPathW) = new {
     def isNonEmpty: Self2 = assertDataU(_.stringx(target)).using(_.nonEmpty)

@@ -9,8 +9,11 @@ package object galliatesting {
   @deprecated type _Error = gallia.vldt._Error
   @deprecated val  _Error = gallia.vldt._Error
 
+  @deprecated val ErrorId = gallia.vldt.ErrorId
+
   // ===========================================================================
   private[galliatesting] val f  = "f"
+  private[galliatesting] val F  = "F"
   private[galliatesting] val f1 = "f1"
   private[galliatesting] val f2 = "f2"
   private[galliatesting] val g  = "g"
@@ -18,7 +21,11 @@ package object galliatesting {
   private[galliatesting] val p  = "p"
   private[galliatesting] val z  = "z"
 
-  // ===========================================================================
+  // ---------------------------------------------------------------------------
+  private[galliatesting] val _t  = true
+  private[galliatesting] val _f  = false
+
+  // ---------------------------------------------------------------------------
   private[galliatesting] val foo = "foo"
 
     private[galliatesting] val foo1 = "foo1"

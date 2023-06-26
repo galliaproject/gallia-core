@@ -16,6 +16,7 @@ package object galliatesting {
   private[galliatesting] val F  = "F"
   private[galliatesting] val f1 = "f1"
   private[galliatesting] val f2 = "f2"
+  private[galliatesting] val f3 = "f3"
   private[galliatesting] val g  = "g"
   private[galliatesting] val h  = "h"
   private[galliatesting] val p  = "p"

@@ -21,7 +21,7 @@ lazy val root = (project in file("."))
 // see https://github.com/aptusproject/aptus-core
 //   our own utilities library, bundles low level library such as commons-{io,lang3,math3,csv}, gson, enumeratum, ...
 
-lazy val aptusVersion      = "0.4.1"
+lazy val aptusVersion      = "0.5.1"
 lazy val enumeratumVersion = "1.5.13"
 lazy val uTestVersion      = "0.8.1"
 

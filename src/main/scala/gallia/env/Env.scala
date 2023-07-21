@@ -21,13 +21,13 @@ private[gallia] object Env extends Env
     private[gallia] def nextNodeId(): NodeId = synchronized { nodeId  += 1; nodeId .toString.padLeft(9, '0').prepend("N") }
   
     // ---------------------------------------------------------------------------
-    def retrieveDagId(nodeId: NodeId): DagId      = _nodes(nodeId)
-    def retrieveDag  (dagId : NodeId): ActionDag  = _dags(dagId)
+    def retrieveDagId(nodeId: NodeId): DagId      = synchronized { _nodes(nodeId) }
+    def retrieveDag  (dagId : NodeId): ActionDag  = synchronized { _dags (dagId)  }
   
     // ---------------------------------------------------------------------------
-    def associateNode(pair: (NodeId, DagId))     = { _nodes += pair }
-    def associateDag (pair: (DagId , ActionDag)) = { _dags  += pair }
-    def dissociateDag(dagId: DagId)              = { _dags  -= dagId }
+    def associateNode(pair: (NodeId, DagId))     = synchronized { _nodes += pair }
+    def associateDag (pair: (DagId , ActionDag)) = synchronized { _dags  += pair }
+    def dissociateDag(dagId: DagId)              = synchronized { _dags  -= dagId }
   
     // ---------------------------------------------------------------------------
     def retrieveDagFromNode(nodeId: NodeId):         ActionDag  =  retrieveDag(retrieveDagId(nodeId))

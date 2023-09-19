@@ -3,7 +3,7 @@ import sbt.Keys._
 
 // ===========================================================================
 object GalliaCommonSettings {
-  val CurrentGalliaVersion = "0.4.1-SNAPSHOT"
+  val CurrentGalliaVersion = "0.5.0"
 
   // ---------------------------------------------------------------------------
   val mainSettings = Seq(

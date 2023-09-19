@@ -37,7 +37,7 @@ The library is available for both Scala 2.12 and 2.13 (3.0 will be more [challen
 <a name="sbt"></a><a name="210121153201"></a>
 Include the following in your `build.sbt` file:
 ```
-libraryDependencies += "io.github.galliaproject" %% "gallia-core" % "0.4.0"
+libraryDependencies += "io.github.galliaproject" %% "gallia-core" % "0.5.0"
 ```
 
 <a name="210121153200"></a>
@@ -800,11 +800,6 @@ Gallia's main strengths can be summed up like so:
 Not even remotely. There are known bugs, blatantly missing features, a lot of missing validation, and most importantly it performs rather slowly at the moment.
 There is a lot planned in the way of addressing these issues, but it will require more resources than the author working alone. In particular, performance has
 a prominent place in the task [list](http://github.com/galliaproject/gallia-docs/blob/master/tasks.md#t210121095401).
-
-<a name="license"></a><a name="bsl"></a><a name="210127134031"></a><a name="210223092122"></a>
-### Why the Business Source License (BSL)?
-
-The [terms](https://github.com/galliaproject/gallia-core/blob/master/LICENSE#L9) of the license make Gallia free for any essential OR small entity. For more information, see the [F.A.Q](https://github.com/galliaproject/gallia-docs/blob/master/bsl.md)
 
 <a name="210127134032"></a>
 ### How can I help?

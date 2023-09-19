@@ -46,17 +46,22 @@ trait HeadCommonAsserts[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   def assertHasValue[T : WTT](value: T): Self2 = ???//assertDataU(_.typed[Any](target)).using(_ == value)
 
   def assertString(target: KPathW) = new {
-    def isNonEmpty: Self2 = assertDataU(_.stringx(target)).using(_.nonEmpty)
+      def isNonEmpty: Self2 = assertDataU(_.stringx(target)).using(_.nonEmpty)
 
-    // TODO: t230620091941 - other types...
-    def hasValue(value: String): Self2 = assertDataU(_.stringx(target)).using(_ == value)
+      // TODO: t230620091941 - other types...
+      def hasValue(value: String): Self2 = assertDataU(_.stringx(target)).using(_ == value)
 
-    def startsWith    (prefix: String)                : Self2 = assertDataU(_.stringx(target)).using(_.startsWith(prefix))
-    def   endsWith    (suffix: String)                : Self2 = assertDataU(_.stringx(target)).using(_.endsWith  (suffix))
-    def surroundedWith(prefix: String, suffix: String): Self2 = assertDataU(_.stringx(target)).using(x => x.startsWith(prefix) && x.endsWith(suffix))
-    def matchesRegex  (regex : Regex)                 : Self2 = assertDataU(_.stringx(target)).using(regex
-      // matches - causes issues with scala 2.12: "value matches is not a member of scala.util.matching.Regex"
-      .pattern.matcher(_).matches()) }
+      def startsWith    (prefix: String)                : Self2 = assertDataU(_.stringx(target)).using(_.startsWith(prefix))
+      def   endsWith    (suffix: String)                : Self2 = assertDataU(_.stringx(target)).using(_.endsWith  (suffix))
+      def surroundedWith(prefix: String, suffix: String): Self2 = assertDataU(_.stringx(target)).using(x => x.startsWith(prefix) && x.endsWith(suffix))
+      def matchesRegex  (regex : Regex)                 : Self2 = assertDataU(_.stringx(target)).using(regex
+        // matches - causes issues with scala 2.12: "value matches is not a member of scala.util.matching.Regex"
+        .pattern.matcher(_).matches()) }
+
+    // ---------------------------------------------------------------------------
+    def assertBoolean(target: KPathW) = new { def hasValue(value: Boolean): Self2 = assertDataU(_.booleanx(target)).using(_ == value) }
+    def assertInt    (target: KPathW) = new { def hasValue(value: Int)    : Self2 = assertDataU(_.intx    (target)).using(_ == value) }
+    def assertDouble (target: KPathW) = new { def hasValue(value: Double) : Self2 = assertDataU(_.doublex (target)).using(_ == value) }
 
   // ---------------------------------------------------------------------------
   def customMeta(f: Cls => Cls): Self2 = self2 :+ CustomMeta(f)

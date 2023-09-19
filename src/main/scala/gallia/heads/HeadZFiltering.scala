@@ -38,6 +38,7 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
                 
                       class __FindBy1[O: WTT](target: FindBy1[O]) {
                         def hasValue(a: O): Self2 = matches(_ == a)
+                        def notValue(a: O): Self2 = matches(_ != a)
                         def matches(f: O => Boolean): Self = zz(FilterByV(resolve(target), f, asFind = true)) }
                 
                       // ---------------------------------------------------------------------------
@@ -143,6 +144,7 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
 
       class __FilterBy1[O: WTT](target: FilterBy1[O]) {
         def hasValue(a: O): Self2 = matches(_ == a)
+        def notValue(a: O): Self2 = matches(_ != a)
         def matches(f: O => Boolean): Self = zz(FilterByV(resolve(target), f, asFind = false)) }
 
       // ---------------------------------------------------------------------------

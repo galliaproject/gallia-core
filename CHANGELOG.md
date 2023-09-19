@@ -1,6 +1,13 @@
+# v0.5.0
+
+- Switched to Apache 2 license
+- Minor changes
+
+
 # v0.4.0
 
-Note: this is not an exhaustive list of the changes, but the most important ones
+Note: this is not an exhaustive list of the changes, but the most important ones.
+See Towards Data Science article for more details: https://towardsdatascience.com/data-transformations-in-scala-with-gallia-version-0-4-0-is-out-f0b8df3e48f3
 
 - <a name="221013105445"></a> Metaschema: see [MetaSchema.scala](https://github.com/galliaproject/gallia-core/blob/v0.4.0/src/main/scala/gallia/MetaSchema.scala) and example usage in [MetaSchemaTest.scala](https://github.com/galliaproject/gallia-testing/blob/v0.4.0/src/main/scala/galliatest/suites/MetaSchemaTest.scala)
 - <a name="221013103753"></a> Union Types: limited support

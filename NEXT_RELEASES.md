@@ -1,4 +1,14 @@
+# Current
+
 Upcoming releases of Gallia will focus on the following aspects:
+
+- Migration to Scala 3
+- Optimization: via (optional) code generation + more reliance on macros (thanks to Scala 3 migration)
+- Support for flagship project: https://github.com/anthony-cros/scalabix (Bioinformatics library in Scala), especially "trio" genetic variants portal.
+
+
+# Formerly:
+
 - Misc:
 	- Address known bugs (mostly corner cases now)
 	- Splitting `gallia.heads.HeadV` in four separate cases: single vs multiple values, and numerical vs non-numerical values; this will allow appropriate operations to be defined on each combination more seamlessly (rather than relying on implicit evidences)

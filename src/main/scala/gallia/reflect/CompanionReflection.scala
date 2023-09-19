@@ -5,7 +5,7 @@ import scala.reflect.runtime.{universe => RuntimeUniverse}
 import scala.reflect.internal.Symbols
 
 // ===========================================================================
-object CompanionReflection {
+private object CompanionReflection {
   
   private val RuntimeMirror  = RuntimeUniverse.runtimeMirror(getClass.getClassLoader)
   private val RuntimeMirror2 = RuntimeMirror.asInstanceOf[{ def methodToJava(sym: Symbols#MethodSymbol): java.lang.reflect.Method }] // see https://stackoverflow.com/a/16791962/4228079

@@ -10,7 +10,7 @@ object ObjIn {
       .parse[T]
       .leaf
       .forceDataClass
-      .valueToObj(value)
+      .pipe(target.Instantiator.valueToObj(_)(value))
       .asInstanceOf[Obj]
 
   // ===========================================================================

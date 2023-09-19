@@ -4,10 +4,7 @@ package target
 import FunctionWrappers._
 
 // ===========================================================================
-trait HasType extends HasTypeNode with HasTypeSeq {
-    val instantiator: Instantiator
-
-    // ---------------------------------------------------------------------------
+trait HasType extends HasTypeNode with HasTypeSeq with HasInstantiator {
     def hts: Seq[HasType] = Seq(this)
 
     // ===========================================================================
@@ -30,8 +27,12 @@ trait HasType extends HasTypeNode with HasTypeSeq {
       if (node.isContainedWhatever)
         if (node.isNotOne) ??? //TODO:?
         else               new gallia.Whatever(value)
-      else                 DataClassUtils._in(node, instantiator)(value)
-  }
+      else if (!node.isContainedDataClass) value
+      // wouldn't need to recompute info if we had result cls here (TODO: t230822103631)
+      else                                 node.forceNonBObjInfo.pipe(instantiator.in(value)) }
+
+  // ===========================================================================
+  trait HasInstantiator { val instantiator: Instantiator }
 
   // ===========================================================================
   trait HasTypes2 extends HasTypeSeq {
@@ -80,11 +81,11 @@ trait HasType extends HasTypeNode with HasTypeSeq {
     def ht1: HasType; def ht2: HasType; def ht3: HasType; def ht4: HasType; def ht5: HasType; def ht6: HasType; def ht7: HasType; def ht8: HasType; def ht9: HasType
     def hts: Seq[HasType] = Seq(ht1, ht2, ht3, ht4, ht5, ht6, ht7, ht8, ht9)
     def wrapc(thatHt: HasTypeNode, f: _ff91): _ff91 = (x1, x2, x3, x4, x5, x6, x7, x8, x9) => thatHt._out( f(ht1._in(x1), ht2._in(x2), ht3._in(x3), ht4._in(x4), ht5._in(x5), ht6._in(x6), ht7._in(x7), ht8._in(x8), ht9._in(x9)) ) }
-  
+
   // ===========================================================================
   trait HasTypes10 extends HasTypeSeq {
     def ht1: HasType; def ht2: HasType; def ht3: HasType; def ht4: HasType; def ht5: HasType; def ht6: HasType; def ht7: HasType; def ht8: HasType; def ht9: HasType; def ht10: HasType
     def hts: Seq[HasType] = Seq(ht1, ht2, ht3, ht4, ht5, ht6, ht7, ht8, ht9, ht10)
     def wrapc(thatHt: HasTypeNode, f: _ffA1): _ffA1 = (x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) => thatHt._out( f(ht1._in(x1), ht2._in(x2), ht3._in(x3), ht4._in(x4), ht5._in(x5), ht6._in(x6), ht7._in(x7), ht8._in(x8), ht9._in(x9), ht10._in(x10)) ) }
-    
+
 // ===========================================================================

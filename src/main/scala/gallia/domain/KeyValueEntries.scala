@@ -53,14 +53,13 @@ sealed trait KVE { // Key-Value Entry
       def metaEntry: (Key, Info) = key -> node.forceNonBObjInfo
 
       def dataEntry: (Key, AnyValue) = key ->
-        (node
+        node
           .forceNonBObjInfo
           .nestedClassOpt
           .map { c =>
-              if (node.isMultiple) c.valueToObjs(value)
-              else                 c.valueToObj (value) }
-          .getOrElse(value) )
-    }
+              if (node.isMultiple) target.Instantiator.valueToObjs(c)(value)
+              else                 target.Instantiator.valueToObj (c)(value) }
+          .getOrElse(value) }
 
   // ===========================================================================
   object KVE {

@@ -19,10 +19,9 @@ class HT(
       private def instantiator[T: WTT](to: TypeNode): Instantiator = {
         if (!to.isContainedDataClass) null // TODO
         else {
-               if (to.isOptionOfSeq)        Instantiator.fromFirstTypeArgFirstTypeArg[T]     // eg Option[Seq[MyCc]]
-          else if (to.isSeq || to.isOption) Instantiator.fromFirstTypeArg            [T]     // eg Option[    MyCc ]
-          else                              Instantiator.fromType                    [T] } } // eg            MyCc
-    }
+               if (to.isOptionOfSeq)        Instantiator.fromFirstTypeArgFirstTypeArg[T]       // eg Option[Seq[MyCc]]
+          else if (to.isSeq || to.isOption) Instantiator.fromFirstTypeArg            [T]       // eg Option[    MyCc ]
+          else                              Instantiator.fromTypeDirectly            [T] } } } // eg            MyCc
 
   // ===========================================================================
   class HT2(val ht1: HT, val ht2: HT) extends HasTypes2

@@ -15,9 +15,7 @@ package object target { // TODO: t210202090211 - p3 - rename package and homogen
   private[target] val  Container = gallia.reflect.Container
 
   private[target] type TQ[$Target] = TargetQuery[$Target]
-  
-  private[target] val DataClassUtils = gallia.target.utils.DataClassUtils
-  
+
   // ===========================================================================
   type TqKey    = TargetQuery[Key]
   type TqRen    = TargetQuery[Ren ]

@@ -110,18 +110,6 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
     def writeFull (out: String) = { formatFull .writeFileContent(out); () }
 
     // ===========================================================================
-    def valueFromObj  (instantiator: Instantiator)(value: Any): Any = value.asInstanceOf[              Obj  ]      .pipe(instantiator.instantiateRecursively(this, _))
-    def valueFromObjs (instantiator: Instantiator)(value: Any): Any = value.asInstanceOf[       Seq   [Obj] ]      .map (instantiator.instantiateRecursively(this, _))
-    def valueFromObj_ (instantiator: Instantiator)(value: Any): Any = value.asInstanceOf[       Option[Obj] ]      .map (instantiator.instantiateRecursively(this, _))
-    def valueFromObjs_(instantiator: Instantiator)(value: Any): Any = value.asInstanceOf[Option[Seq   [Obj]]].map(_.map (instantiator.instantiateRecursively(this, _)))
-
-    // ---------------------------------------------------------------------------
-    def valueToObj  (value: Any): Any = value.asInstanceOf[              Product  ]            .productIterator.pipe(ClsUtils.valuesToObjOpt(this)).getOrElse(None)
-    def valueToObjs (value: Any): Any = value.asInstanceOf[       Seq   [Product] ]      .map(_.productIterator.pipe(ClsUtils.valuesToObjOpt(this)).getOrElse(None))
-    def valueToObj_ (value: Any): Any = value.asInstanceOf[       Option[Product] ]      .map(_.productIterator.pipe(ClsUtils.valuesToObjOpt(this)).getOrElse(None))
-    def valueToObjs_(value: Any): Any = value.asInstanceOf[Option[Seq   [Product]]].map(_.map(_.productIterator.pipe(ClsUtils.valuesToObjOpt(this)).getOrElse(None)))
-
-    // ===========================================================================
     //TODO: ensure not nested type?
 
     def updateSoleType(target: Key   , toNode: TypeNode): Cls = transformField(target)(_.updateOptionality(toNode.isOption).updateSoleSubInfo(toNode.forceNonBObjSubInfo(enmOpt(target))))

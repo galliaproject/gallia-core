@@ -14,6 +14,9 @@ object ReflectUtils {
       .takeWhile(_ != '[') /* TODO: cleaner way? */
       .pipe(simplify)
 
+  def     name[T : WTT]: String = scala.reflect.runtime.universe.weakTypeTag[T].tpe.typeSymbol.name.decodedName.toString
+  def fullName[T : WTT]: String = scala.reflect.runtime.universe.weakTypeTag[T].tpe.typeSymbol.fullName
+
   // ---------------------------------------------------------------------------
   def fullNameFromType (tpe: UType): FullName = tpe.typeSymbol.fullName
   def fullNameFromValue(value: Any): FullName = value.getClass.getName.pipe(BasicTypeUtils.normalizeFullName) // TODO: t220411094433 - hopefully there's a cleaner way...
@@ -60,10 +63,6 @@ object ReflectUtils {
   def enumValueNames[T <: enumeratum.EnumEntry : WTT]: Seq[String] = enumValueNames(scala.reflect.runtime.universe.weakTypeTag[T].tpe)
 
   // ---------------------------------------------------------------------------
-  def     name[T : WTT]: String = scala.reflect.runtime.universe.weakTypeTag[T].tpe.typeSymbol.name.decodedName.toString
-  def fullName[T : WTT]: String = scala.reflect.runtime.universe.weakTypeTag[T].tpe.typeSymbol.fullName
-
-  // ---------------------------------------------------------------------------
   /** enum must not be nested somehow */
   def enumValueNames(tpe: UType): Seq[String] =
     tpe
@@ -77,8 +76,8 @@ object ReflectUtils {
 .reverse /* TODO: always? */
 
   // ===========================================================================
-  def withEntryName[T <: EnumEntry: WTT](entryName: String) =
-    CompanionReflection[T](methodName = "withName")(
+  def withEntryName[$EnumEntry <: EnumEntry: WTT](entryName: String): $EnumEntry =
+    CompanionReflection[$EnumEntry](methodName = "withName")(
         /* args */ entryName)
 
 }

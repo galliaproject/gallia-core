@@ -44,7 +44,8 @@ trait HeadCommonVeryBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   def rename(x: ActualRPathW )                                       : Self2 = self2 :+ new Rename(x.rpathz)
   def rename(x: ActualRPathWz)                                       : Self2 = self2 :+ new Rename(RPathz(x.values.map(_.value)))
   def rename(x1: ActualRPathW, x2: ActualRPathW, more: ActualRPathW*): Self2 = self2 :+ new Rename(RPathz((Seq(x1, x2) ++ more).map(_.value)))
-  def renameTmpTo(x: KeyW)                                           : Self2 = rename(_tmp ~> x.value)
+  def renameTmpTo  (x: KeyW)                                           : Self2 = rename(_tmp   ~> x.value)
+  def renameGroupTo(x: KeyW)                                           : Self2 = rename(_group ~> x.value)
 
   // ---------------------------------------------------------------------------
   // TODO: validate no duplicates...

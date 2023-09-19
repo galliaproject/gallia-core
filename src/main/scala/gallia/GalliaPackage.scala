@@ -37,8 +37,8 @@ package object gallia
   type HeadO = heads.HeadU // "O" for "one"
   val  HeadO = heads.HeadU // "O" for "one"
 
-  type HeadM = heads.HeadU // "M" for "multiple"
-  val  HeadM = heads.HeadU // "M" for "multiple"
+  type HeadM = heads.HeadZ // "M" for "multiple"
+  val  HeadM = heads.HeadZ // "M" for "multiple"
 
     type HeadU = gallia.heads.HeadU // will deprecate (legacy name)
     val  HeadU = gallia.heads.HeadU // will deprecate (legacy name)

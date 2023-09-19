@@ -13,7 +13,7 @@ trait HeadCommonDataClasses[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 2
   // TODO: t220923095400 - in the future .transform(_.dataClass[Foo]("foo"))
   def transformDataClass[O: WTT](target: KeyW) = new { // TODO: better name?
     def using[D: WTT](f: O => D): Self2 = self2 :+
-      TransformDataClass(target.value, HT.parse[O], HT.parse[D], wrap(f)) }
+      TransformDataClass(target.value, from = HT.parse[O], to = HT.parse[D], wrap(f)) }
 
   // ===========================================================================
   /** does not *have* to be co-transform, can also only use one field (convenient for encapsulation) */

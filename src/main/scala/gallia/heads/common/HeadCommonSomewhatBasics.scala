@@ -134,8 +134,11 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
       def    toRequired                 : Self2 = ToRequired   (target, strict = false)
       def    toRequired(strict: Boolean): Self2 = ToRequired   (target, strict)
 
+      // TODO: t230919102023 only on headM
       def toSingle                      : Self2 = ToSingle(target, strict = false) // aka force one
       def toSingle     (strict: Boolean): Self2 = ToSingle(target, strict)         // aka force one
+
+      // TODO: t230919102023 only on headO
       def    toMultiple                 : Self2 = ToMultiple   (target, strict = false) // aka in seq
       def    toMultiple(strict: Boolean): Self2 = ToMultiple   (target, strict)         // aka in seq
 

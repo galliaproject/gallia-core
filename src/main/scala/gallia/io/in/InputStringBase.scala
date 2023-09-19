@@ -63,7 +63,11 @@ private[io] trait InputStringBase { val inputString: InputString }
         .actionU
         .pipe(Head.inputU)
 
-    // ---------------------------------------------------------------------------        
+    // ---------------------------------------------------------------------------
+    /** expects valid schema to be at $inputString.schema.json */
+    def readWithSchema(): HeadU = read(_.schema(inputString + gallia.atoms.AtomsXO.DefaultSchemaSuffix))
+
+    // ---------------------------------------------------------------------------
     def uncheckpointSingle(): HeadO = {      
       val schemaPath = s"${inputString}.checkpoint.schema.json"
       val dataPath   = s"${inputString}.checkpoint.data.json"
@@ -92,6 +96,10 @@ private[io] trait InputStringBase { val inputString: InputString }
           .conf
           .actionZ
           .pipe(Head.inputZ)
+
+    // ---------------------------------------------------------------------------
+    /** expects valid schema to be at $inputString.schema.json */
+    def streamWithSchema(): HeadZ = stream(_.schema(inputString + gallia.atoms.AtomsXO.DefaultSchemaSuffix))
 
     // ---------------------------------------------------------------------------
     def uncheckpoint(): HeadZ = {

@@ -96,12 +96,12 @@ trait HeadCommonVeryBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   // - t210111113206 - support adding path, eg: .replace('p |> 'f -> "foo")
   // - t210125111338 - investigate union types to restrict T at compile-time (coming in scala 3?)
 
-  def replace[T1: WTT](e1: RVE): Self2 = self2 :+ new Replace(e1)
+  def replace(e1: RVE): Self2 = self2 :+ new Replace(e1)
 
-    def replace[T1: WTT, T2: WTT                           ](e1: RVE, e2: RVE                           ): Self2 = self2 :+ new Replace(e1, e2)
-    def replace[T1: WTT, T2: WTT, T3: WTT                  ](e1: RVE, e2: RVE, e3: RVE                  ): Self2 = self2 :+ new Replace(e1, e2, e3)
-    def replace[T1: WTT, T2: WTT, T3: WTT, T4: WTT         ](e1: RVE, e2: RVE, e3: RVE, e4: RVE         ): Self2 = self2 :+ new Replace(e1, e2, e3, e4)
-    def replace[T1: WTT, T2: WTT, T3: WTT, T4: WTT, T5: WTT](e1: RVE, e2: RVE, e3: RVE, e4: RVE, e5: RVE): Self2 = self2 :+ new Replace(e1, e2, e3, e4, e5)
+    def replace(e1: RVE, e2: RVE                           ): Self2 = self2 :+ new Replace(e1, e2)
+    def replace(e1: RVE, e2: RVE, e3: RVE                  ): Self2 = self2 :+ new Replace(e1, e2, e3)
+    def replace(e1: RVE, e2: RVE, e3: RVE, e4: RVE         ): Self2 = self2 :+ new Replace(e1, e2, e3, e4)
+    def replace(e1: RVE, e2: RVE, e3: RVE, e4: RVE, e5: RVE): Self2 = self2 :+ new Replace(e1, e2, e3, e4, e5)
 
   // ===========================================================================
   // shorthands

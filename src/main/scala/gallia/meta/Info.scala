@@ -14,8 +14,8 @@ case class Info(
 
     // ---------------------------------------------------------------------------
     union // see https://github.com/galliaproject/gallia-docs/blob/master/union_types.md
-      .requireNonEmpty
-      .requireDistinct
+      .requireNonEmpty()
+      .requireDistinct()
 
     // ===========================================================================
     override def toString = formatDefault
@@ -96,7 +96,7 @@ case class Info(
     def optString : Info = opt(_._String)
 
     // ===========================================================================
-    def forceFrom[T : WTT]: Info = TypeNode.parse[T].forceNonBObjInfo
+    def forceFrom[T : WTT]: Info = typeNode[T].forceNonBObjInfo
 
     // ===========================================================================
     def combine(left: Info, right: Info): Info = { import gallia.vldt.SpecialCardiMode

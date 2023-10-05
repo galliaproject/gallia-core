@@ -19,7 +19,7 @@ private[io] trait InputStringBase { val inputString: InputString }
         .parse(inputString)
          match {
           case InputStringType.JsonObject => GsonParsing.parseObject(inputString)
-          case _                          => inputString.readFileContent.pipe(GsonParsing.parseObject) } }
+          case _                          => inputString.readFileContent().pipe(GsonParsing.parseObject) } }
 
   // ---------------------------------------------------------------------------
   trait StreamObjsFromString extends InputStringBase {
@@ -30,12 +30,10 @@ private[io] trait InputStringBase { val inputString: InputString }
           case InputStringType.JsonObject  => inputString.splitBy("\n").filterNot(_.trim.isEmpty).map(GsonParsing.parseObject).toList.pipe(Objs.from)
           case InputStringType.JsonArray   => GsonParsing.parseArray(inputString).pipe(Objs.from)
           case InputStringType.Indirection =>
-            val content = inputString.readFileContent // FIXME: t220315121047
+            val content = inputString.readFileContent() // FIXME: t220315121047
 
-           (if (InputStringType.parse(content).isJsonObject) GsonParsing.parseObject(content).pipe(Objs.splat(_))
-            else                                             GsonParsing.parseArray (content).pipe(Objs.from))
-          }
-  }
+            if (InputStringType.parse(content).isJsonObject) GsonParsing.parseObject(content).pipe(Objs.splat(_))
+            else                                             GsonParsing.parseArray (content).pipe(Objs.from) } }
 
   // ===========================================================================
   trait StreamObjsFromIterable[T] {

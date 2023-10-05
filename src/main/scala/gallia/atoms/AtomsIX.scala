@@ -223,7 +223,7 @@ object AtomsIX { import utils.JdbcDataUtils
           Objs.from {
             new data.DataRegenerationClosure[Obj] {
               def regenerate = () =>
-                mongoDb.closeableQuery(new java.net.URI(inputString), None)(cmd).map(obj) } }
+                mongoDb().closeableQuery(new java.net.URI(inputString), None)(cmd).map(obj) } }
         }
 
         // ===========================================================================
@@ -271,7 +271,7 @@ object AtomsIX { import utils.JdbcDataUtils
       // ---------------------------------------------------------------------------
       defaultSchema: Cls)
   extends AtomIZ with HasProjection {
-    override def formatSuccinct1 = s"${className}(${input._inputString})"    
+    override def formatSuccinct1 = s"${className}(${input._inputString})"
 
     // ---------------------------------------------------------------------------
     def naive: Option[Objs] = {

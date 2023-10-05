@@ -87,7 +87,7 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
   def collectValues[V: WTT](f: HeadU => HeadV[V]): List[V] = map(f).forceValue
 
   // TODO: t201016114103 - or as "toList"?
-  def collectObjects: List[Obj] = end.runz().forceData2(_.data.toListAndTrash)
+  def collectObjects: List[Obj] = end().runz().forceData2(_.data.toListAndTrash)
   def collectObjectz:      Objs = collectObjects.pipe(Objs.from)
 
   // ===========================================================================

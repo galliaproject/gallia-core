@@ -1,8 +1,6 @@
 package gallia
 package streamer
 
-import scala.reflect.{ClassTag => CT}
-
 import aptus._
 
 import spilling.SpillingHackSerialization._
@@ -82,7 +80,7 @@ object IteratorStreamerUtils {
       def sortByKey(debug: String)(input: CloseabledIterator[(K, V)]): CloseabledIterator[Line] =
         input
           .map(serializeSideSortingLine)
-            .pipe(GnuSortByFirstFieldsHack.default(Hacks.galliaExecutionContext.forceValue, debug)) // TODO: allow numerical here?
+            .pipe(GnuSortByFirstFieldsHack.default(Hacks.galliaExecutionContext.forceValue(), debug)) // TODO: allow numerical here?
   
       // ---------------------------------------------------------------------------
       val leftItr  = left .closeabledIterator
@@ -96,7 +94,7 @@ object IteratorStreamerUtils {
             val sortedRight: CloseabledIterator[Line] = sortByKey(debug = "rite")(rightItr)
 
             // ---------------------------------------------------------------------------
-            GnuJoinByFirstFieldHack(Hacks.galliaExecutionContext.forceValue)(sortedLeft, sortedRight)
+            GnuJoinByFirstFieldHack(Hacks.galliaExecutionContext.forceValue())(sortedLeft, sortedRight)
               .map(deserializeJoiningLine[V])
               .map(combine.tupled) } }
         .pipe(IteratorStreamer.from)

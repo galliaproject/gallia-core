@@ -12,7 +12,7 @@ trait HeadOut { self: Head[_] =>
   // ---------------------------------------------------------------------------
   /** will *not* process all the data (assuming input schema does not need to be inferred) */
   def forceSchema: Cls =
-    self.end.runMetaOnly().either match {
+    self.end().runMetaOnly().either match {
       case Left (errors)  => throw errors.metaErrorOpt.get
       case Right(success) => success.meta.forceLeafClass }
 
@@ -22,7 +22,7 @@ trait HeadOut { self: Head[_] =>
 trait HeadUOut extends HeadOut { self: HeadU =>
 
   private[heads] def _all: Unit =
-    self.end.runu().either match {
+    self.end().runu().either match {
       case Left (errors)  => throw errors.metaErrorOpt.get
       case Right(_)       => () }
 
@@ -63,16 +63,16 @@ trait HeadUOut extends HeadOut { self: HeadU =>
   def printSchema() = { showSchema()._metaOnly() }
   
   // ---------------------------------------------------------------------------
-  def printDefault   () = { printJson }
-  def printString    () = { printJson }
+  def printDefault   () = { printJson() }
+  def printString    () = { printJson() }
   
-  def printJson         () = { printPrettyJson }  
+  def printJson         () = { printPrettyJson() }
     def printCompactJson() = { write(_.stdout.compactJson); () }
     def printPrettyJson () = { write(_.stdout.prettyJson);  () }
 
   // ---------------------------------------------------------------------------
-  def printRow()       { self.convertToMultiple.printTable()      ; () }
-  def printPrettyRow() { self.convertToMultiple.printPrettyTable(); () }    
+  def printRow()       = { self.convertToMultiple.printTable()      ; () }
+  def printPrettyRow() = { self.convertToMultiple.printPrettyTable(); () }
 
   // ===========================================================================
   def writeFile(path: String) = { write(_.file(path)); () }
@@ -94,14 +94,14 @@ trait HeadUOut extends HeadOut { self: HeadU =>
   }
   
   // ===========================================================================
-  def foreach(f: Obj => Unit) { write(_.foreach(f)); () }
+  def foreach(f: Obj => Unit) = { write(_.foreach(f)); () }
 }
 
 // ===========================================================================
 trait HeadZOut extends HeadOut { self: HeadZ =>
 
   private[heads] def _all: Unit =
-    self.end.runz().either match {
+    self.end().runz().either match {
       case Left (errors)  => throw errors.metaErrorOpt.get
       case Right(_)       => () }
 
@@ -146,10 +146,10 @@ trait HeadZOut extends HeadOut { self: HeadZ =>
   def printSchema() = { showSchema()._metaOnly() }
 
   // ---------------------------------------------------------------------------
-  def printDefault  () = { printJsonLines }
-  def printString   () = { printJsonLines }
+  def printDefault  () = { printJsonLines() }
+  def printString   () = { printJsonLines() }
 
-  def printJsonl      () = { printJsonLines }
+  def printJsonl      () = { printJsonLines() }
   def printJsonLines  () = { write(_.stdout.jsonLines)  ; () }
   def printJsonArray  () = { write(_.stdout.jsonArray)  ; () }
   def printPrettyJsons() = { write(_.stdout.prettyJsons); () }
@@ -176,7 +176,7 @@ trait HeadZOut extends HeadOut { self: HeadZ =>
   }
 
   // ---------------------------------------------------------------------------
-  def foreach(f: Obj => Unit) { write(_.foreach(f)); () }
+  def foreach(f: Obj => Unit) = { write(_.foreach(f)); () }
   
   // ===========================================================================
   def writeFile(path: String) = { write(_.file(path)); () }
@@ -194,7 +194,7 @@ trait HeadVOut[T] extends HeadOut { self: HeadV[T] => import data.DataDynamicFor
 
   // ===========================================================================
   private[heads] def _all: Unit =
-    self.end.runv[T]().either match {
+    self.end().runv[T]().either match {
       case Left (errors) => throw errors.metaErrorOpt.get
       case Right(_)      => () }
 

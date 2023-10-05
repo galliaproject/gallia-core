@@ -22,7 +22,9 @@ package object testing {
   // ===========================================================================
   /** typically those are private so users don't shoot themselves in the foot */
   object accessPrivate {
-    def useWeakTypeTagDecorator[T: WTT, A](wtt: WTT[T])(f: WeakTypeTagDecorator[T] => A) = f(new WeakTypeTagDecorator(wtt)) }
+    def useWeakTypeTagDecorator[T: WTT, A](wtt: WTT[T])(f: WeakTypeTagDecorator[T] => A) =
+      f(new WeakTypeTagDecorator(
+        wtt.tpe.pipe(reflect.ReflectUtils.fullNameFromType) )) }
 }
 
 // ===========================================================================

@@ -2,7 +2,6 @@ package gallia
 package heads
 package common
 
-import scala.reflect.runtime.universe.weakTypeTag
 import aptus.Index
 import target.HT
 import FunctionWrappers._
@@ -90,7 +89,8 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
 
     // ===========================================================================
     class _TransformVV[O: WTT](f1: Transform[O]) { val ttq = resolves(f1)
-      private val wtto = new WeakTypeTagDecorator(weakTypeTag[O])
+      private val wtto = new WeakTypeTagDecorator(
+        reflect.ReflectUtils.fullName[O])
 
       // ---------------------------------------------------------------------------
       def withSchema(field1: Fld, more: Fld*): _UsingSchema = new _UsingSchema(cls(field1 +: more))

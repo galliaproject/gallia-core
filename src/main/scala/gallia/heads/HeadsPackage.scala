@@ -6,30 +6,22 @@ package object heads extends _heads
   // ---------------------------------------------------------------------------
   package heads {
     trait _heads { // TODO: generalize
-      type WTT[T] = scala.reflect.runtime.universe.WeakTypeTag[T]
+      type NodeId  = dag.NodeId
+      type Handler = env.Handler
 
-      type NodeId  = gallia.dag.NodeId
-      type Handler = gallia.env.Handler
+      type  WV    = whatever.Whatever
+      type  W     = whatever.Whatever
+      type TWV[T] = whatever.TypedWhatever[T]
 
-      type  WV    = gallia.whatever.Whatever
-      type  W     = gallia.whatever.Whatever
-      type TWV[T] = gallia.whatever.TypedWhatever[T]
-
-      val _Error = gallia.vldt._Error
+      val _Error = vldt._Error
 
       // ---------------------------------------------------------------------------
-      private[heads] type TypedTargetQuery[T] = gallia.target.TypedTargetQuery[T]
-      private[heads] val  TypedTargetQuery    = gallia.target.TypedTargetQuery
+      private[gallia] val TSL = selection.typed  . TsBoilerplate
+      private[gallia] val SEL = selection.untyped.UtsBoilerplate
 
       // ---------------------------------------------------------------------------
-      private[gallia] val TSL = gallia.selection.typed  . TsBoilerplate
-      private[gallia] val SEL = gallia.selection.untyped.UtsBoilerplate
-
-      // ---------------------------------------------------------------------------
-      type TqRPathz = gallia.selection.typed.TqRPathz
-      type TqKeyz   = gallia.selection.typed.TqKeyz
-      type TqKPath  = gallia.selection.typed.TqKPath
-    }
-  }
+      type TqRPathz = selection.typed.TqRPathz
+      type TqKeyz   = selection.typed.TqKeyz
+      type TqKPath  = selection.typed.TqKPath } }
 
 // ===========================================================================

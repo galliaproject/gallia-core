@@ -4,7 +4,6 @@ package gallia
 trait Aliases {
 
   private[gallia] type DI     = DummyImplicit
-  private[gallia] type WTT[A] = scala.reflect.runtime.universe.WeakTypeTag[A]
 
   private[gallia] type Vle = Any // as in HeadV's during data phase
 

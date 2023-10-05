@@ -5,6 +5,7 @@ import gallia.domain._
 package object gallia
     extends Reserved
     with    Aliases
+    with    WttAbstraction
     with    Annotations
     with    CustomTraits
     with    GenericEntryImplicits {
@@ -159,7 +160,7 @@ package object gallia
   private[gallia] def errs  (any: Any)             : Errs = Seq(Err(any))
 
   // ---------------------------------------------------------------------------
-  private[gallia] def typeNode[T: WTT] = gallia.reflect.TypeNode.parse[T]
+  private[gallia] def typeNode[T: WTT] = reflect.TypeLeafParser.parseTypeNode[T]
 
   // ===========================================================================
   /** until/unless sure what we'll use - only to be used in non-object arrays/matrices/tensors */
@@ -196,7 +197,7 @@ package object gallia
   private[gallia] implicit def SubInfo_(subInfo: meta.SubInfo): Seq[meta.SubInfo] = Seq(subInfo) // see t210125111338 (union types)
 
   // ===========================================================================
-  def cls[T: WTT]                         : Cls = reflect.TypeNode.parse[T].leaf.forceDataClass
+  def cls[T: WTT]                         : Cls = typeNode[T].leaf.forceDataClass
   def cls(schemaFilePath: String)         : Cls = Cls.fromFile(schemaFilePath) // TODO: or also detect file vs direct object?
   def cls(field1: Fld, more: Fld*)        : Cls = cls((field1 +: more).toList)
   def cls               (fields: Seq[Fld]): Cls = meta.Cls(fields.toList)

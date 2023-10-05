@@ -4,9 +4,7 @@ import aptus.Class_
 
 // ===========================================================================
 package object reflect {
-  type UType = scala.reflect.api.Universe#Type
-
-  // ---------------------------------------------------------------------------
+  /** eg           "String" */ type     Name = String
   /** eg "java.lang.String" */ type FullName = String
   /** eg "String"           */ type Alias    = String
 

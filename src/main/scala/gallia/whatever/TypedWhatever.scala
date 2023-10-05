@@ -49,10 +49,10 @@ class TypedWhatever[+T](val typed: T) extends Serializable { // can't be AnyVal 
   def <= [$Number >: T](that: $Number)(implicit ev: Numeric[$Number]): TypedWhatever[Boolean] = map(_.any.number.doubleValue <= that.number.doubleValue)
   def >= [$Number >: T](that: $Number)(implicit ev: Numeric[$Number]): TypedWhatever[Boolean] = map(_.any.number.doubleValue >= that.number.doubleValue)
 
-  def <  (that: String): TypedWhatever[Boolean] = map(_.any.string <  that)
-  def >  (that: String): TypedWhatever[Boolean] = map(_.any.string >  that)
-  def <= (that: String): TypedWhatever[Boolean] = map(_.any.string <= that)
-  def >= (that: String): TypedWhatever[Boolean] = map(_.any.string >= that)
+  def <  (that: String): TypedWhatever[Boolean] = map(x => StringOrdering.lt  (x.any.string ,  that))
+  def >  (that: String): TypedWhatever[Boolean] = map(x => StringOrdering.gt  (x.any.string ,  that))
+  def <= (that: String): TypedWhatever[Boolean] = map(x => StringOrdering.lteq(x.any.string ,  that))
+  def >= (that: String): TypedWhatever[Boolean] = map(x => StringOrdering.gteq(x.any.string ,  that))
 
   def <  (that: Whatever): TypedWhatever[Boolean] = map(_.any.number.doubleValue <  that.any.number.doubleValue)
   def >  (that: Whatever): TypedWhatever[Boolean] = map(_.any.number.doubleValue >  that.any.number.doubleValue)

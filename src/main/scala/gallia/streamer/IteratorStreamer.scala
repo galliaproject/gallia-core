@@ -1,7 +1,6 @@
 package gallia
 package streamer
 
-import scala.reflect.{ClassTag => CT}
 import aptus.Anything_
 
 import aptus.CloseabledIterator
@@ -42,7 +41,7 @@ final class IteratorStreamer[A](gen: () => CloseabledIterator[A]) extends Stream
 
     // ---------------------------------------------------------------------------
     def formatEither: Either[String, List[A]] =
-           if (consumed) Left ("consumed")
+      /**/ if (consumed) Left ("consumed")
       else if (exited)   Left ("exited")
       else               Right(toList)
 
@@ -90,7 +89,7 @@ final class IteratorStreamer[A](gen: () => CloseabledIterator[A]) extends Stream
 
   // ---------------------------------------------------------------------------
   override def union[B >: A : CT](that: Streamer[B]): Streamer[B] = {
-    ensureStillUsable(); _utils.union(this.asInstanceOf[IteratorStreamer[B]], that) }
+    ensureStillUsable(); _utils.union[B](this.asInstanceOf[IteratorStreamer[B]], that) }
 
   // ---------------------------------------------------------------------------
   override def zip[B >: A : CT](that: Streamer[B], combiner: (B, B) => B): Streamer[B] = {

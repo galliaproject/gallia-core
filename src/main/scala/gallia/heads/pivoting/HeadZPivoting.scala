@@ -66,7 +66,7 @@ trait HeadZPivoting { self: HeadZ =>
       class NewKeysT[O1: WTT, D: WTT] private[pivoting] (data: PivotingData[O1, D]) {
           def asNewKeys[E <: EnumEntry : WTT]     : HeadZ = asNewKeys(ReflectUtils.enumValueNames[E])
           def asNewKeys(value1: KeyW, more: KeyW*): HeadZ = asNewKeys(Keyz.from(value1, more))
-          def asNewKeys(values: KeyWz)            : HeadZ = data.copy(newKeys = values.keyz).pivot(self) }           
+          def asNewKeys(values: KeyWz)            : HeadZ = data.copy(newKeys = values.keyz).pivot[O1, D](self) }
 
 }
 

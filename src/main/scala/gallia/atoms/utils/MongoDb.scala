@@ -46,6 +46,11 @@ object MongoDb {
       private val Supported = Set("find", "filter", "projection", "sort", "limit")
 
       // ---------------------------------------------------------------------------
+      private val filter     = Symbol("filter")
+      private val projection = Symbol("projection")
+      private val sort       = Symbol("sort")
+
+      // ---------------------------------------------------------------------------
       val Dummy =
           MongoDbCmd(
             collection = "coll1",
@@ -74,20 +79,17 @@ object MongoDb {
 
             if (!c.skeySet.forall(Supported.contains)) ??? // TODO
 
-            val filterOpt = c.attemptKey('filter).map {
+            val filterOpt = c.attemptKey(filter).map {
                 case x: gallia.Obj => x.formatCompactJson
-                case x => ???
-              }
+                case x => ??? }
 
-            val projectionOpt = c.attemptKey('projection).map {
+            val projectionOpt = c.attemptKey(projection).map {
                 case x: gallia.Obj => x.formatCompactJson
-                case x => ???
-              }
+                case x => ??? }
 
-            val sortOpt = c.attemptKey('sort).map {
+            val sortOpt = c.attemptKey(sort).map {
                 case x: gallia.Obj => x.formatCompactJson
-                case x => ???
-              }
+                case x => ??? }
 
             val limitOpt =
               c

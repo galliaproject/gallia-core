@@ -52,7 +52,7 @@ class Handler() { // TODO: t210128152949 - add missing cycle detection
   def chainvo[T: WTT](head: HeadV[T])(action: ActionVO): HeadV[T] = head.rewrap(_helper.chain(head.nodeId, action))
 
   // ---------------------------------------------------------------------------
-  def end(head: heads.Head[_]): HeadEnd = HeadEnd(_helper.chain(head.nodeId, ActionsOthers.Output))
+  def end(head: heads.Head[_]): HeadEnd = HeadEnd.build(_helper.chain(head.nodeId, ActionsOthers.Output))
 }
 
 // ===========================================================================

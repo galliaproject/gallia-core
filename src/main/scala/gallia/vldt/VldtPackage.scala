@@ -12,7 +12,7 @@ package object vldt {
   private[vldt] type BasicType = gallia.reflect.BasicType
 
   // ===========================================================================
-  case class Err private (details: Any) { def format = s"ERROR: ${details}" } //TODO: more structure
+  case class Err private[gallia] (details: Any) { def format = s"ERROR: ${details}" } //TODO: more structure
 }
 
 // ===========================================================================

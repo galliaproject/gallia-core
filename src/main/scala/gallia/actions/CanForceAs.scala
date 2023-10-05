@@ -9,22 +9,20 @@ trait CanForceAs1[T] { def forceAs(key: Key): T } // TODO: t201208111414 - macro
 
   // ===========================================================================
   // TODO: reuse Rename?
-  case class AsRename private (target: Ren) extends ActionZZa with CanForceAs1[AsRename] {
+  case class AsRename private[gallia] (target: Ren) extends ActionZZa with CanForceAs1[AsRename] {
     override def forceAs(key: Key): AsRename = AsRename(target.assert(!_.isActual /* see 201203143058 */).from ~> key)
 
     // ---------------------------------------------------------------------------
     def  vldt(c: Cls): Errs    = Nil//TODO
     def _meta(c: Cls): Cls     = c.pipeIf(target.isActual)(_.rename(target))
-    def atomzzs      : AtomZZs = target.actualOpt.map(_Rename).map(_UWrapper).toSeq
-  }
+    def atomzzs      : AtomZZs = target.actualOpt.map(_Rename.apply).map(_UWrapper).toSeq }
 
   // ===========================================================================
   trait CanForceAs2[T] extends CanForceAs1[T] {
     val asOpt: Option[Key]
     @aptus.nonfinl val defaultKey: Key = _count_all
 
-    final def as: Key = asOpt.getOrElse(defaultKey)
-  }
+    final def as: Key = asOpt.getOrElse(defaultKey) }
 
 
 // ===========================================================================

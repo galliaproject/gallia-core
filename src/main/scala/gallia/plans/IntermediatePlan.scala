@@ -8,7 +8,7 @@ import dag._
 import env.ActionDag
 
 // ===========================================================================
-case class IntermediatePlan private (dag: ActionDag) {
+case class IntermediatePlan private[plans] (dag: ActionDag) {
 
     def run(): IntermediateMetaResult = {
       val mut = collection.mutable.Map[NodeId, ResultSchema]()

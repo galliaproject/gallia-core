@@ -15,8 +15,7 @@ object RuntimeValidation { import meta._ // 210115153346 - POC
       key: Key,
       index: Option[Int],
       details: Any) {
-    def format = s"VALIDATION ERROR for ${key}: ${details}"
-  }
+    def format = s"VALIDATION ERROR for ${key}: ${details}" }
 
   // ===========================================================================
   // TODO: t220517132701 - support union types
@@ -137,13 +136,12 @@ object RuntimeValidation { import meta._ // 210115153346 - POC
   }
 
   // ===========================================================================
-  trait HasKey { val key: Key }
+  trait HasKey { def key: Key }
 
   // ---------------------------------------------------------------------------
   trait HasField extends HasKey {
     val field: Fld
-    final lazy val key = field.key // TODO: late init
-  }
+    final val key = field.key /* t231003141803 - scala 2 had late init issues, ok now? */ }
 
   // ---------------------------------------------------------------------------
   case class UnknownField(key: Key, tipe: BasicType) extends HasKey
@@ -151,10 +149,10 @@ object RuntimeValidation { import meta._ // 210115153346 - POC
   case class MissingRequiredField(field: Fld, keysPresent: Seq[Key]) extends HasField
 
   case class NonMultipleField(key: Key) extends HasKey
-  case class NonSingleField(key: Key) extends HasKey
+  case class NonSingleField  (key: Key) extends HasKey
 
   case class    NonBasicType(key: Key) extends HasKey
-  case class    NonObjType(key: Key) extends HasKey
+  case class    NonObjType  (key: Key) extends HasKey
 
   // ===========================================================================
   import BasicType._

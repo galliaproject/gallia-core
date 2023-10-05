@@ -13,11 +13,8 @@ object IntermediatePlanPopulator {
     dag
       .nodes
       .foreach { // TODO: move to transform3 (else may fail at runtime); may need classtag
-         _.assert(!_._2.isInstanceOf[NestingMetaPlaceholder]) }
+         _.ensuring(!_._2.isInstanceOf[NestingMetaPlaceholder]) }
 
-    IntermediatePlan(dag)
-  }
-
-}
+    IntermediatePlan(dag) } }
 
 // ===========================================================================

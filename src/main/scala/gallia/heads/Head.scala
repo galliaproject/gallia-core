@@ -19,8 +19,7 @@ import env._
           node.isInstanceOf[ActionZO] }
 
     // ---------------------------------------------------------------------------
-    private def retrieveDag: ActionDag = Env.retrieveDagFromNode(nodeId)
-  }
+    private def retrieveDag: ActionDag = Env.retrieveDagFromNode(nodeId) }
 
   // ===========================================================================
   object Head {

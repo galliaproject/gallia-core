@@ -1,8 +1,6 @@
 package gallia
 package dag
 
-import scala.collection.compat._
-
 // ===========================================================================
 object GraphUtils {
 

@@ -1,8 +1,6 @@
 package gallia
 package data
 
-import aptus.Anything_
-
 // ===========================================================================
 object JdbcToGalliaData {
 
@@ -10,7 +8,7 @@ object JdbcToGalliaData {
       schema
         .fields
         .flatMap { field =>
-          schema.unknownKeys(o).assert(_.isEmpty) // necessary for union types (see 220615165554)
+          schema.unknownKeys(o).ensuring(_.isEmpty) // necessary for union types (see 220615165554)
 
           o .attemptKey(field.key)
             .map { value =>

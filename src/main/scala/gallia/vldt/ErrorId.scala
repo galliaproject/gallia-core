@@ -77,7 +77,7 @@ import meta._
       def formatDetails2: Option[String]
 
       // ---------------------------------------------------------------------------
-      def err = Err(s"${errorId} - ${label}".append(formatDetails2.map(_.prepend(": ")).getOrElse("")))
+      def err  = Err(s"${errorId} - ${label}".append(formatDetails2.map(_.prepend(": ")).getOrElse("")))
       def errs = Seq(err)
       def err_ = Some(err)
 

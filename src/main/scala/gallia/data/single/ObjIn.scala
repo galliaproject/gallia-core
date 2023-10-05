@@ -6,8 +6,7 @@ package single
 object ObjIn {
 
   def fromDataClassInstance[T <: Product : WTT](value: T): Obj =
-    reflect.TypeNode
-      .parse[T]
+    typeNode[T]
       .leaf
       .forceDataClass
       .pipe(target.Instantiator.valueToObj(_)(value))

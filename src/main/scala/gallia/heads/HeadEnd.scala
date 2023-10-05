@@ -16,7 +16,7 @@ case class HeadEnd private (leafId : LeafId) {
     def runMetaOnly(): RunResultM =
       adagm
         .run().either
-        .map(SuccessResultM.tupled)
+        .map((SuccessResultM.apply _).tupled)
         .pipe(RunResultM)
 
     // ===========================================================================
@@ -32,7 +32,7 @@ case class HeadEnd private (leafId : LeafId) {
         adagm
           .run().either
           .map(_.mapSecond(_.atomPlan.naiveRun().forceO))
-          .map(SuccessResultU.tupled)
+          .map((SuccessResultU.apply _).tupled)
           .pipe(RunResultU)
   
       // ---------------------------------------------------------------------------
@@ -40,7 +40,7 @@ case class HeadEnd private (leafId : LeafId) {
         adagm
           .run().either
           .map(_.mapSecond(_.atomPlan.naiveRun().forceZ))
-          .map(SuccessResultZ.tupled)
+          .map((SuccessResultZ.apply _).tupled)
           .pipe(RunResultZ)
   
       // ---------------------------------------------------------------------------
@@ -59,5 +59,9 @@ case class HeadEnd private (leafId : LeafId) {
         .pipe(IntermediatePlanPopulator.apply)
 
   }
+
+  // ---------------------------------------------------------------------------
+  object HeadEnd {
+    def build(leafId: LeafId): HeadEnd = HeadEnd(leafId) }
 
 // ===========================================================================

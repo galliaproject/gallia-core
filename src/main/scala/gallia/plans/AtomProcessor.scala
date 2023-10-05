@@ -35,8 +35,8 @@ private[plans] object AtomProcessor {
           case _: AtomUZ => _Obj (input.obj)
 
           // ---------------------------------------------------------------------------
-          case _: AtomUUtoU => _Obj2 .tupled(input.obj2 )
-          case _: AtomZZtoZ => _Objs2.tupled(input.objs2)
+          case _: AtomUUtoU => (_Obj2 .apply _).tupled(input.obj2 )
+          case _: AtomZZtoZ => (_Objs2.apply _).tupled(input.objs2)
 
           // ---------------------------------------------------------------------------
           case _: AtomUV => _Obj (input.obj )

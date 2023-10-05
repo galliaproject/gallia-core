@@ -123,7 +123,7 @@ object ActionsCommonVeryBasics {
         _vldt.validateKVEs (   entries) // TODO: t210128155944 - validate new key names
 
       def _meta  (c: Cls): Cls     = entries.forceMetaEntries.foldLeft(c)(_ add _)
-      def atomuus(c: Cls): AtomUUs = entries.forceDataEntries.map(_Add.tupled) }
+      def atomuus(c: Cls): AtomUUs = entries.forceDataEntries.map((_Add.apply _).tupled) }
 
     // ---------------------------------------------------------------------------
     class Replace(entries: RVEs) extends ActionUUb {

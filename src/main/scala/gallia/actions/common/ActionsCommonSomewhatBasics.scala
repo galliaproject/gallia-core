@@ -122,7 +122,7 @@ object ActionsCommonSomewhatBasics {
     // ---------------------------------------------------------------------------
     class MultiSwap(targets: Seq[KeyPair]) extends ActionUUa with TodoV1 {
       def _meta(c: Cls): Cls = targets.map(_.value).foldLeft(c)((curr, x) => curr.swapFields(None, x._1, x._2))
-      def atomuus            = targets.map(_.value).map(_Swap.tupled) }
+      def atomuus            = targets.map(_.value).map((_Swap.apply _).tupled) }
 
   // ---------------------------------------------------------------------------
   class CopyEntries(origin: RPath, destinations: Seq[Key]) extends ActionUUa with TodoV1 {

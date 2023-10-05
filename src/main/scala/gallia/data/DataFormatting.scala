@@ -3,7 +3,7 @@ package data
 
 import java.time.format._
 
-import aptus.{String_, Double_, ArrayByte_}
+import aptus.{String_, Int_, Long_, Double_, ArrayByte_}
 
 // ===========================================================================
 @TypeMatching private[gallia] object DataFormatting {

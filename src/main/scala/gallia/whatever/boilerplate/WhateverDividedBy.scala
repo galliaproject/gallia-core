@@ -45,8 +45,8 @@ object WhateverModulo {
 
         case y: Float  => (x % y): Float
 
-        case y: BigInt => (x % y): BigInt
-        case y: BigDec => (x % y): BigDec }
+        case y: BigInt => BigInt(x) % y
+        case y: BigDec => BigDec(x) % y }
       
       // ---------------------------------------------------------------------------
       case x: Short => second match {
@@ -59,8 +59,8 @@ object WhateverModulo {
 
         case y: Float  => (x % y): Float
 
-        case y: BigInt => (x % y): BigInt
-        case y: BigDec => (x % y): BigDec }
+        case y: BigInt => BigInt(x) % y
+        case y: BigDec => BigDec(x) % y }
       
       // ---------------------------------------------------------------------------
       case x: Long => second match {
@@ -76,22 +76,22 @@ object WhateverModulo {
       case x: Float => second match {
         case y: Double => (x % y): Double
 
-        case y: BigInt => (BigDec    (x) % BigDec    (y)): BigDec    
-        case y: BigDec => (x % y)                        : BigDec    
+        case y: BigInt => (BigDec(x) % BigDec(y)): BigDec
+        case y: BigDec => (BigDec(x) %        y ): BigDec
         
         case y: Number => (x % y.floatValue()): Float }
 
       // ---------------------------------------------------------------------------
       case x: BigInt => second match {          
-        case y: Int    => (x % y): BigInt          
-        case y: Byte   => (x % y): BigInt
-        case y: Short  => (x % y): BigInt
-        case y: Long   => (x % y): BigInt
-        case y: BigInt => (x % y): BigInt
+        case y: Int    => (x %        y ): BigInt          
+        case y: Byte   => (x % BigInt(y)): BigInt
+        case y: Short  => (x % BigInt(y)): BigInt
+        case y: Long   => (x %        y ): BigInt
+        case y: BigInt => (x %        y ): BigInt
 
-        case y: Double => (BigDec    (x) % y): BigDec    
-        case y: Float  => (BigDec    (x) % y): BigDec    
-        case y: BigDec => (BigDec    (x) % y): BigDec }
+        case y: Double => (BigDec    (x) %        y ): BigDec    
+        case y: Float  => (BigDec    (x) % BigDec(y)): BigDec
+        case y: BigDec => (BigDec    (x) %        y ): BigDec }
       
       // ---------------------------------------------------------------------------
       case x: BigDec     => second match {

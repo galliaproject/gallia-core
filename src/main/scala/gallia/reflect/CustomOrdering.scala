@@ -3,7 +3,7 @@ package reflect
 
 // ===========================================================================
 object CustomOrdering {
-  private implicit val _arrayOrdering = aptus.arrayOrdering[Byte]
+  private implicit val _arrayOrdering: Ordering[Array[Byte]] = aptus.arrayOrdering[Byte]
 
   // ---------------------------------------------------------------------------
   def localDate    : Ordering[LocalDate]       = Ordering.by(_.toEpochDay)

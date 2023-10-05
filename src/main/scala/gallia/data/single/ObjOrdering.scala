@@ -76,21 +76,21 @@ object ObjOrdering {
 
   // ===========================================================================
   def optObjOrdering(c: Cls, pair: SortingPair): Ordering[Option[Obj]] = {
-    implicit val ord = oneObjOrdering(c, pair)
+    implicit val ord: Ordering[Obj] = oneObjOrdering(c, pair)
     implicitly[Ordering[Option[Obj]]]
   }
 
   // ---------------------------------------------------------------------------
   def nesObjOrdering(c: Cls, pair: SortingPair): Ordering[Seq[Obj]] = {
-    implicit val ord1 = oneObjOrdering(c, pair)
-    implicit val ord2 = aptus.seqOrdering
+    implicit val ord1: Ordering[    Obj ] = oneObjOrdering(c, pair)
+    implicit val ord2: Ordering[Seq[Obj]] = aptus.seqOrdering
     implicitly[Ordering[Seq[Obj]]]
   }
 
   // ---------------------------------------------------------------------------
   def pesObjOrdering(c: Cls, pair: SortingPair): Ordering[Option[Seq[Obj]]] = {
-    implicit val ord1 = oneObjOrdering(c, pair)
-    implicit val ord2 = aptus.seqOrdering
+    implicit val ord1: Ordering[    Obj ] = oneObjOrdering(c, pair)
+    implicit val ord2: Ordering[Seq[Obj]] = aptus.seqOrdering
     implicitly[Ordering[Option[Seq[Obj]]]]
   }
 

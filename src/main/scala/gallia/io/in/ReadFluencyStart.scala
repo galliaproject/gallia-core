@@ -15,8 +15,8 @@ class StartReadUFluency(val inputString: InputString) // note: no querying
 
     with    EndReadUFluency {
 
-  val self = inputDriven
-  val conf = self.conf
+  val self: InputUStringDrivenFluency = inputDriven
+  val conf: InputUStringDrivenConf    = self.conf
 
   // ---------------------------------------------------------------------------
   private[gallia] def inputDriven: InputUStringDrivenFluency =
@@ -63,8 +63,8 @@ class StartReadZFluency(private[io] val inputString: InputString)
     with    EndReadZFluency {
   private[gallia] val _inputString = inputString // FIXME: hack for mongodb...
 
-  val self = inputDriven
-  val conf = self.conf
+  val self: InputZStringDrivenFluency = inputDriven
+  val conf: InputZStringDrivenConf    = self.conf
 
   // ---------------------------------------------------------------------------
   private[gallia] def inputDriven: InputZStringDrivenFluency =

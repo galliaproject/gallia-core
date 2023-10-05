@@ -17,17 +17,18 @@ package object obg9 {
   type Size  = aptus.Size
 
   // ===========================================================================
-  implicit def _Option9_[T](x: Option[T])  = new Obg9Extensions.Option9_[T](x)
-  implicit def _ArrayAny9_ (x: Array[Any]) = new Obg9Extensions.ArrayAny9_(x)
+  import Obg9Extensions._
+  implicit def _Option9_[T](x: Option[T]) : Option9_  [T] = new Option9_[T](x)
+  implicit def _ArrayAny9_ (x: Array[Any]): ArrayAny9_    = new ArrayAny9_(x)
 
   // ---------------------------------------------------------------------------
-  implicit def _Cls9_   (x: Cls)    = new Obg9Extensions.Cls9_   (x)
-  implicit def _Fld9_   (x: Fld)    = new Obg9Extensions.Fld9_   (x)
-  implicit def _KPath9_ (x: KPath)  = new Obg9Extensions.KPath9_ (x)
-  implicit def _KPathz9_(x: KPathz) = new Obg9Extensions.KPathz9_(x)
+  implicit def _Cls9_   (x: Cls)   : Cls9_    = new Cls9_   (x)
+  implicit def _Fld9_   (x: Fld)   : Fld9_    = new Fld9_   (x)
+  implicit def _KPath9_ (x: KPath) : KPath9_  = new KPath9_ (x)
+  implicit def _KPathz9_(x: KPathz): KPathz9_ = new KPathz9_(x)
 
   // ---------------------------------------------------------------------------
-  implicit def _Obj9_   (x: Obj) = new Obg9Extensions.Obj9_(x)
+  implicit def _Obj9_   (x: Obj): Obj9_ = new Obj9_(x)
 
   // ===========================================================================
   // TODO: thread locality - see aptus.aptmisc.ThreadLocalWrapper now

@@ -1,6 +1,8 @@
 package gallia
 package heads
 
+import gallia.FunctionWrappers._pp11
+
 // ===========================================================================
 package object common extends _heads {
   val      TargetQueryUtils = gallia.target.utils.     TargetQueryUtils
@@ -10,7 +12,7 @@ package object common extends _heads {
   type StringSplitter = gallia.domain.StringSplitter
 
   // ---------------------------------------------------------------------------
-  val pwrap = gallia.FunctionWrappers.pwrap _
+  def pwrap[T]: (T => Boolean) => _pp11 = gallia.FunctionWrappers.pwrap _
 
   // ===========================================================================
   import gallia.domain._
@@ -20,7 +22,7 @@ package object common extends _heads {
   def kpaths3(path1: KPathW, path2: KPathW, path3: KPathW) = KPaths3(path1.value, path2.value, path3.value)
 
   // ---------------------------------------------------------------------------  
-  def tkpath[T: WTT](path : KPathW) = gallia.TKPath(path.value, gallia.reflect.TypeNode.parse[T])
+  def tkpath[T: WTT](path : KPathW) = gallia.TKPath(path.value, typeNode[T])
   
     def tkpaths2 [T1: WTT, T2: WTT](path1: KPathW, path2: KPathW) = TKPaths2(tkpath[T1](path1), tkpath[T2](path2))
 

@@ -77,6 +77,15 @@ object ActionsAsserts {
         def  vldt (c: Cls): Errs   = from.vldtAsOrigin(c)
         def atomuu(c: Cls): AtomUU = _SquashU3(from.pathPairT(c), pwrap31(pred)).pipe(_AssertO3) }
 
+      // ---------------------------------------------------------------------------
+      case class AssertDataU4[I1, I2, I3, I4](from: TtqKPath4, pred: (I1, I2, I3, I4) => Boolean) extends ActionUUc with IdentityM1 {
+        def  vldt (c: Cls): Errs   = from.vldtAsOrigin(c)
+        def atomuu(c: Cls): AtomUU = _SquashU4(from.pathPairT(c), pwrap41(pred)).pipe(_AssertO4) }
+
+      // ---------------------------------------------------------------------------
+      case class AssertDataU5[I1, I2, I3, I4, I5](from: TtqKPath5, pred: (I1, I2, I3, I4, I5) => Boolean) extends ActionUUc with IdentityM1 {
+        def  vldt (c: Cls): Errs   = from.vldtAsOrigin(c)
+        def atomuu(c: Cls): AtomUU = _SquashU5(from.pathPairT(c), pwrap51(pred)).pipe(_AssertO5) }
 }
 
 // ===========================================================================

@@ -51,6 +51,16 @@ object AtomsAsserts {
     _Error.Runtime.DataAssertionFailure(squasher.ori).attemptO(o){
         !squasher.naive(_).asInstanceOf[Boolean] /* by design */ } }
 
+  // ---------------------------------------------------------------------------
+  case class _AssertO4(squasher: AtomsUV._SquashU4) extends AtomUU { def naive(o: Obj) =
+    _Error.Runtime.DataAssertionFailure(squasher.ori).attemptO(o){
+        !squasher.naive(_).asInstanceOf[Boolean] /* by design */ } }
+
+  // ---------------------------------------------------------------------------
+  case class _AssertO5(squasher: AtomsUV._SquashU5) extends AtomUU { def naive(o: Obj) =
+    _Error.Runtime.DataAssertionFailure(squasher.ori).attemptO(o){
+        !squasher.naive(_).asInstanceOf[Boolean] /* by design */ } }
+
   // ===========================================================================
   case class _AssertSameType(from: PathPair, to: KPath) extends AtomUU { def naive(o: Obj) = {
       gallia.data.ValueUtils.checkSameTypes(

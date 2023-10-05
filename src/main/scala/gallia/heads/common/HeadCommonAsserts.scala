@@ -45,7 +45,9 @@ trait HeadCommonAsserts[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   @deprecated("see t230620091941")
   def assertHasValue[T : WTT](value: T): Self2 = ???//assertDataU(_.typed[Any](target)).using(_ == value)
 
-  def assertString(target: KPathW) = new {
+  def assertString(target: KPathW) = new _AssertString(target)
+
+    class _AssertString private[HeadCommonAsserts] (target: KPathW) {
       def isNonEmpty: Self2 = assertDataU(_.stringx(target)).using(_.nonEmpty)
 
       // TODO: t230620091941 - other types...
@@ -83,9 +85,18 @@ trait HeadCommonAsserts[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   def assertDataUnsafeU(valid: Obj => Boolean): Self2 = self2 :+ AssertDataUnsafeU(valid)
 
     @Max5
-    def assertDataU[T1: WTT]                  (f1: AssertData[T1])                                         = new { def using(f:  T1          => Boolean): Self2 = self2 :+ AssertDataU1(resolve (f1    ), f) }
-    def assertDataU[T1: WTT, T2: WTT]         (f1: AssertData[T1], f2: AssertData[T2])                     = new { def using(f: (T1, T2)     => Boolean): Self2 = self2 :+ AssertDataU2(resolve2(f1, f2), f) }
-    def assertDataU[T1: WTT, T2: WTT, T3: WTT](f1: AssertData[T1], f2: AssertData[T2], f3: AssertData[T3]) = new { def using(f: (T1, T2, T3) => Boolean): Self2 = ??? }
+    def assertDataU[T1: WTT]                                    (f1: AssertData[T1])                                                                                 = new _AssertDataO1(f1)
+    def assertDataU[T1: WTT, T2: WTT]                           (f1: AssertData[T1], f2: AssertData[T2])                                                             = new _AssertDataO2(f1, f2)
+    def assertDataU[T1: WTT, T2: WTT, T3: WTT]                  (f1: AssertData[T1], f2: AssertData[T2], f3: AssertData[T3])                                         = new _AssertDataO3(f1, f2, f3)
+    def assertDataU[T1: WTT, T2: WTT, T3: WTT, T4: WTT]         (f1: AssertData[T1], f2: AssertData[T2], f3: AssertData[T3], f4: AssertData[T4])                     = new _AssertDataO4(f1, f2, f3, f4)
+    def assertDataU[T1: WTT, T2: WTT, T3: WTT, T4: WTT, T5: WTT](f1: AssertData[T1], f2: AssertData[T2], f3: AssertData[T3], f4: AssertData[T4], f5: AssertData[T5]) = new _AssertDataO5(f1, f2, f3, f4, f5)
+
+    @Max5
+    class _AssertDataO1[T1: WTT]                                     private[HeadCommonAsserts] (f1: AssertData[T1])                                                                                 { def using(f:  T1                  => Boolean): Self2 = self2 :+ AssertDataU1(resolve (f1), f) }
+    class _AssertDataO2[T1: WTT, T2: WTT]                            private[HeadCommonAsserts] (f1: AssertData[T1], f2: AssertData[T2])                                                             { def using(f: (T1, T2)             => Boolean): Self2 = self2 :+ AssertDataU2(resolve2(f1, f2), f) }
+    class _AssertDataO3[T1: WTT, T2: WTT, T3: WTT]                   private[HeadCommonAsserts] (f1: AssertData[T1], f2: AssertData[T2], f3: AssertData[T3])                                         { def using(f: (T1, T2, T3)         => Boolean): Self2 = self2 :+ AssertDataU3(resolve3(f1, f2, f3), f) }
+    class _AssertDataO4[T1: WTT, T2: WTT, T3: WTT, T4: WTT]          private[HeadCommonAsserts] (f1: AssertData[T1], f2: AssertData[T2], f3: AssertData[T3], f4: AssertData[T4])                     { def using(f: (T1, T2, T3, T4)     => Boolean): Self2 = self2 :+ AssertDataU4(resolve4(f1, f2, f3, f4), f) }
+    class _AssertDataO5[T1: WTT, T2: WTT, T3: WTT, T4: WTT, T5: WTT] private[HeadCommonAsserts] (f1: AssertData[T1], f2: AssertData[T2], f3: AssertData[T3], f4: AssertData[T4], f5: AssertData[T5]) { def using(f: (T1, T2, T3, T4, T5) => Boolean): Self2 = self2 :+ AssertDataU5(resolve5(f1, f2, f3, f4, f5), f) }
 
   def assertDataClass[DC: WTT]: Self2 = self2 :+ AssertDataClass(typeNode[DC])
 

@@ -1,7 +1,7 @@
 package gallia
 package spilling
 
-import scala.language.postfixOps
+import aptus.String_
 
 // ===========================================================================
 // TODO: t220623113637 - reimplement in scala
@@ -22,12 +22,12 @@ object GnuJoinByFirstFieldHack { // see https://github.com/galliaproject/gallia-
 
       // ---------------------------------------------------------------------------
       // create named pipes
-      (s"mkfifo ${leftFifo}"  !)
-      (s"mkfifo ${rightFifo}" !)
+      s"mkfifo ${leftFifo}" .systemCall()
+      s"mkfifo ${rightFifo}".systemCall()
 
       // ---------------------------------------------------------------------------
       // pipe removal procedure: to be executed after reading is done
-      val removeFifos: java.io.Closeable = () => { s"rm ${leftFifo} ${rightFifo}" !; () }
+      val removeFifos: java.io.Closeable = () => { s"rm ${leftFifo} ${rightFifo}".systemCall(); () }
     
       // ---------------------------------------------------------------------------
       val (_, is) = SystemUtils.streamSystemCall(ec)( // TODO: t210308150015 - look into https://github.com/com-lihaoyi/os-lib - especially for named pipes

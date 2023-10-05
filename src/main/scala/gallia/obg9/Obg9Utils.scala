@@ -106,34 +106,31 @@ object Obg9Utils { import Obg9Creators._
 
   // ===========================================================================
   def generate(c1: Cls, c2: Cls)(path: KPath, optionalOutput: Boolean)(f: _ff11): _Generic9 =
-    c1.either(path) match {
+      c1.either(path) match {
 
-      case Left (index) =>
-        (c1.isOptional(path), optionalOutput) match {
-          case (false, false) => generic(c1, c2)(_.generateWithoutNestingAsLastRR(index, f))
-          case (false, true)  => generic(c1, c2)(_.generateWithoutNestingAsLastRO(index, f))
+        case Left (index) =>
+          (c1.isOptional(path), optionalOutput) match {
+            case (false, false) => generic(c1, c2)(_.generateWithoutNestingAsLastRR(index, f))
+            case (false, true)  => generic(c1, c2)(_.generateWithoutNestingAsLastRO(index, f))
 
-          case (true,  false) => generic(c1, c2)(_.generateWithoutNestingAsLastOR(index, f))
-          case (true,  true)  => generic(c1, c2)(_.generateWithoutNestingAsLastOO(index, f)) }
+            case (true,  false) => generic(c1, c2)(_.generateWithoutNestingAsLastOR(index, f))
+            case (true,  true)  => generic(c1, c2)(_.generateWithoutNestingAsLastOO(index, f)) }
 
-      // ---------------------------------------------------------------------------
-      case Right(drilled) =>
-        // input optionality is handled by the drilling process
-        if (optionalOutput) generic(c1, c2)(_.generateWithNestingAsLastXO(drilled, f))
-        else                generic(c1, c2)(_.generateWithNestingAsLastXR(drilled, f))
-    }
+        // ---------------------------------------------------------------------------
+        case Right(drilled) =>
+          // input optionality is handled by the drilling process
+          if (optionalOutput) generic(c1, c2)(_.generateWithNestingAsLastXO(drilled, f))
+          else                generic(c1, c2)(_.generateWithNestingAsLastXR(drilled, f)) }
 
     // ---------------------------------------------------------------------------
     def generate2to1(c1: Cls, c2: Cls)(path: KPaths2)(f: _ff21): _Generic9 = {
       val (target1, target2) = c1.pathIndicess(path)
-      generic(c1, c2)(_.generate2to1(target1, target2, f))
-    }
+      generic(c1, c2)(_.generate2to1(target1, target2, f)) }
 
     // ---------------------------------------------------------------------------
     def generate1to2(c1: Cls, c2: Cls)(path: KPath)(f: _ff12): _Generic9 = {
       val target = c1.pathIndices(path)
-      generic(c1, c2)(_.generate1to2(target, f))
-    }
+      generic(c1, c2)(_.generate1to2(target, f)) }
 
     // ---------------------------------------------------------------------------
     def fuse2to1(c1: Cls, c2: Cls)(path: KPaths2)(f: _ff21): _Generic9 = {
@@ -149,17 +146,15 @@ object Obg9Utils { import Obg9Creators._
             .add (_tmp.boolean) /* temporary dummy field */
             .pipe(_remove(_)(path.pathz))
 
-        generic(c1, c2)(_.fuse2to1(target1, target2, removal, f))
-      }
-    }
+        generic(c1, c2)(_.fuse2to1(target1, target2, removal, f)) } }
 
-    // ---------------------------------------------------------------------------
-    private def _outputIndex(c: Cls)(paths: Seq[KPath]): Index =
-      paths
-        .find     (_.isLeaf)
-        .map      (_.forceLeaf)
-        .map      (c.keyIndex)
-        .getOrElse(c.size)
+      // ---------------------------------------------------------------------------
+      private def _outputIndex(c: Cls)(paths: Seq[KPath]): Index =
+        paths
+          .find     (_.isLeaf)
+          .map      (_.forceLeaf)
+          .map      (c.keyIndex)
+          .getOrElse(c.size)
 
   // ---------------------------------------------------------------------------
   def fission1to2(c1: Cls, c2: Cls)(path: KPath)(f: _ff12): _Generic9 = {

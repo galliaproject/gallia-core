@@ -8,10 +8,10 @@ import aptus.DebugString
 object ClsToDebugString {
 
   def apply(value: Cls): DebugString =
-    value
-      .fields
-      .map(formatFieldDebug)
-      .joinln
+      value
+        .fields
+        .map(formatFieldDebug)
+        .joinln
 
     // ---------------------------------------------------------------------------
     private def formatFieldDebug(value: Fld): DebugString =

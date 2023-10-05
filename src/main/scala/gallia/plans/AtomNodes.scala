@@ -9,18 +9,17 @@ import atoms                                 ._UWrappers
 case class AtomNodes(values: Seq[AtomNode]) extends AnyVal {  
         
   def pruneChain: AtomNodes =
-    this
-      .combine(_.isUWrapper)        (_.asUWrapper)        (_UWrappers          .from)
-      .combine(_.isRename)          (_.asRename)          (_RenameAll          .from)
-      .combine(_.isRemoveWhateverIf)(_.asRemoveWhateverIf)(_RemoveWhateverIfAll.from) // FIXME: t210727091024 - only if same level        
+      this
+        .combine(_.isUWrapper)        (_.asUWrapper)        (_UWrappers          .from)
+        .combine(_.isRename)          (_.asRename)          (_RenameAll          .from)
+        .combine(_.isRemoveWhateverIf)(_.asRemoveWhateverIf)(_RemoveWhateverIfAll.from) // FIXME: t210727091024 - only if same level
         
     // ===========================================================================  
     def combine[$Atom <: Atom](pred: Atom => Boolean)(specifier: Atom => $Atom)(combiner: Seq[$Atom] => AtomCombiner[$Atom]): AtomNodes =
       values
           .pipe(AdjacencyGrouping.apply(_)(_.atom.pipe(pred)))
           .pipe(_.flatMap(AtomNodes._combineAtomNodes(_.map(_.atom.pipe(specifier)).pipe(combiner))))
-        .pipe(AtomNodes.apply)
-}  
+        .pipe(AtomNodes.apply) }
 
 // ===========================================================================
 object AtomNodes {
@@ -41,7 +40,7 @@ object AtomNodes {
                 
   // ===========================================================================
   def combineUWrapping(values: Seq[Atom]): Seq[Atom] =
-    values
+      values
         .pipe(AdjacencyGrouping.apply(_)(_.isRename))
         .pipe(_combineUWrapping(_.map(_.asRename).pipe(_RenameAll.from)))
 

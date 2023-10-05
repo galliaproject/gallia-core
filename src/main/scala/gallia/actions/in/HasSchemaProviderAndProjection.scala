@@ -14,10 +14,10 @@ trait HasSchemaProviderAndProjectionU extends HasSchemaProvider with HasProjecti
 
     // ---------------------------------------------------------------------------
     def __meta: Cls =
-      schemaProvider
-        .resolve(default = infer())
-        .tap { protoSchema = _ }
-        .pipe(projectMeta)
+        schemaProvider
+          .resolve(default = infer())
+          .tap { protoSchema = _ }
+          .pipe(projectMeta)
 
       // ---------------------------------------------------------------------------
       // TODO: t210115194646 - check if file size > x
@@ -39,10 +39,10 @@ trait HasSchemaProviderAndProjectionU extends HasSchemaProvider with HasProjecti
 
     // ---------------------------------------------------------------------------
     def __meta: Cls =
-      schemaProvider
-        .resolve(default = infer())
-        .tap { protoSchema = _ }
-        .pipe(projectMeta)
+        schemaProvider
+          .resolve(default = infer())
+          .tap { protoSchema = _ }
+          .pipe(projectMeta)
 
       // ---------------------------------------------------------------------------
       // TODO: t210115194646: check if file size > x

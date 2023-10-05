@@ -25,11 +25,11 @@ object AtomsCommonZip {
 
   // ===========================================================================
   private def objs(splitted: Obj, keys: Renz): Seq[Obj] =
-    valuess(splitted, keys.froms)
-      .pipe(preTranspose)
-      .transpose
-      .map(keys.tos.values.zip(_))
-      .map(obj)
+      valuess(splitted, keys.froms)
+        .pipe(preTranspose)
+        .transpose
+        .map(keys.tos.values.zip(_))
+        .map(obj)
 
     // ===========================================================================
     private def valuess(splitted: Obj, keys: Keyz): Nes[Seq[Any]] =

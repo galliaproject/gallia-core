@@ -39,7 +39,7 @@ trait ObjOperations { self: Obj =>
   def merge(that: Obj): Obj = {
     val set = that.keySet
 
-    (self.data.filterNot(_._1.containedIn(set)) ++ that.data)
+    (self.data.filterNot(x => set.contains(x._1)) ++ that.data)
       .pipe(Obj.build0)    
   }
   
@@ -67,8 +67,8 @@ trait ObjOperations { self: Obj =>
   
   // ---------------------------------------------------------------------------
   // TODO: optim: t210611121945 - if big enough switch to set (benchmark first)
-  private def _remove(keys: Seq[Key]) : Obj = data.filterNot(_._1.containedIn(keys)).pipe(Obj.build0)
-  private def _retain(keys: Seq[Key]) : Obj = data.filter   (_._1.containedIn(keys)).pipe(Obj.build0)    
+  private def _remove(keys: Seq[Key]) : Obj = data.filterNot(x => keys.contains(x._1)).pipe(Obj.build0)
+  private def _retain(keys: Seq[Key]) : Obj = data.filter   (x => keys.contains(x._1)).pipe(Obj.build0)
 
   // ===========================================================================
     @deprecated("very inefficient")
@@ -186,16 +186,16 @@ trait ObjOperations { self: Obj =>
     // ---------------------------------------------------------------------------
     // only for Whatever to Whatever transformation...
     def transformWhateverPathPair(target: PathPair, f: AnyValue => AnyValue, checkType: Boolean): Obj =
-      target.path.tailPair match {
-          case (leaf  , None       ) => transformWhateverKeyPair(leaf, target.optional, checkType)(f)
-          case (parent, Some(tail0)) =>
-            val tail = PathPair(tail0, target.optional)
-            (attemptKey(parent) match {
-              case None        => self
-              case Some(value) => replaceEntry(parent, value match { // TODO: could use meta
-                  case seq: Seq[_] => seq.asInstanceOf[Seq[Obj]].map(_.transformWhateverPathPair(tail, f, checkType))
-                  case sgl         => sgl.asInstanceOf[    Obj ]      .transformWhateverPathPair(tail, f, checkType) }) }) }
-    
+        target.path.tailPair match {
+            case (leaf  , None       ) => transformWhateverKeyPair(leaf, target.optional, checkType)(f)
+            case (parent, Some(tail0)) =>
+              val tail = PathPair(tail0, target.optional)
+              (attemptKey(parent) match {
+                case None        => self
+                case Some(value) => replaceEntry(parent, value match { // TODO: could use meta
+                    case seq: Seq[_] => seq.asInstanceOf[Seq[Obj]].map(_.transformWhateverPathPair(tail, f, checkType))
+                    case sgl         => sgl.asInstanceOf[    Obj ]      .transformWhateverPathPair(tail, f, checkType) }) }) }
+
       // ===========================================================================
       def transformKey(key: Key, f: AnyValue => AnyValue): Obj = // TODO: phase out
           attemptKey(key)
@@ -222,23 +222,23 @@ trait ObjOperations { self: Obj =>
       // ---------------------------------------------------------------------------
       // abstracts requiredness + optionally check resulting type
       def transformWhateverKeyPair(key: Key, optional: Boolean, checkType: Boolean)(f: AnyValue => AnyValue): Obj =
-          if (optional)
-            attemptKey(key)
-              .map(_computeNewValue(f, checkType))
-              .map(putEntry(key, _))
-              .getOrElse(self)            
-          else
-            attemptKey(key).get
-              .pipe(_computeNewValue(f, checkType))
-              .pipe(putEntry(key, _))
+        if (optional)
+          attemptKey(key)
+            .map(_computeNewValue(f, checkType))
+            .map(putEntry(key, _))
+            .getOrElse(self)
+        else
+          attemptKey(key).get
+            .pipe(_computeNewValue(f, checkType))
+            .pipe(putEntry(key, _))
 
-        // ---------------------------------------------------------------------------
-        private def _computeNewValue(f: AnyValue => AnyValue, checkType: Boolean)(value: Any): Any = {
-          val newValue = f(value)
-          if (checkType) ValueUtils.checkSameTypes(value, newValue)
+      // ---------------------------------------------------------------------------
+      private def _computeNewValue(f: AnyValue => AnyValue, checkType: Boolean)(value: Any): Any = {
+        val newValue = f(value)
+        if (checkType) ValueUtils.checkSameTypes(value, newValue)
 
-          newValue            
-        }
+        newValue
+      }
 
     // ===========================================================================
     def attemptPath(target: KPathW): Option[AnyValue] =

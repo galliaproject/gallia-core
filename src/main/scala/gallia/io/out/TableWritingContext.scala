@@ -32,11 +32,11 @@ case class TableWritingContext( // 220623164424
   object TableWritingContext {
 
     val Default =
-      TableWritingContext(
-        fieldSeparator = '\t',
-        arraySeparator = "|",
-        hasHeader      = true,
-        nullValue      = "")
+        TableWritingContext(
+          fieldSeparator = '\t',
+          arraySeparator = "|",
+          hasHeader      = true,
+          nullValue      = "")
 
       // ---------------------------------------------------------------------------
       private def formatLine(format: CSVFormat)(values: Seq[String]): String = {

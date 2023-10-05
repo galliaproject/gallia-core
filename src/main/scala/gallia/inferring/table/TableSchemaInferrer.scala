@@ -25,14 +25,14 @@ object TableSchemaInferrer {
 
     // ---------------------------------------------------------------------------
     private def infoLookup(conf: CellConf)(keySet: Set[Key], mutable: MutableValuesSubset)(z: Objs): Map[Key, Info] =
-      z .consumeSelfClosing
-        .foldLeft(Set[(Key, Info)]()) { (curr, o) =>
-          tmp(conf, keySet, mutable)(curr, o) }
-        .toSeq
-        .groupByKey
-        .mapValues0(combineInfosAll)
-        .map { case (key, info) =>
-          key -> mutable.potentiallyUpdateInfo(key, info) }
+        z .consumeSelfClosing
+          .foldLeft(Set[(Key, Info)]()) { (curr, o) =>
+            tmp(conf, keySet, mutable)(curr, o) }
+          .toSeq
+          .groupByKey
+          .mapValues0(combineInfosAll)
+          .map { case (key, info) =>
+            key -> mutable.potentiallyUpdateInfo(key, info) }
 
       // ---------------------------------------------------------------------------
       private def tmp(conf: CellConf, keySet: Set[Key], mutable: MutableValuesSubset)(curr: Set[(Key, Info)], o: Obj): Set[(Key, Info)] = {

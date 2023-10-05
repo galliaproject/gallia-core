@@ -22,16 +22,16 @@ class NestedTransform(disambiguatorOpt: UnionObjectDisambiguatorOpt, adag: MetaP
 
     // ---------------------------------------------------------------------------
     def vldt(c: Cls, kpath: KPath): Errs = //TODO: t220422121108 - check nesting field
-      kpath
-        .pipe(c.field_).toSeq
-        .flatMap { f =>
-          disambiguatorOpt
-            .map    (_._vldt(f))
-            .getOrElse(_vldt(f.forceNestedClass)) }
+        kpath
+          .pipe(c.field_).toSeq
+          .flatMap { f =>
+            disambiguatorOpt
+              .map    (_._vldt(f))
+              .getOrElse(_vldt(f.forceNestedClass)) }
 
-      // ---------------------------------------------------------------------------
-      /*private - needed for forkey */
-      def _vldt(c: Cls): Errs = adag.runMeta(rootId, c).allErrors
+    // ---------------------------------------------------------------------------
+    /*private - needed for forkey */
+    def _vldt(c: Cls): Errs = adag.runMeta(rootId, c).allErrors
 
   // ===========================================================================
   // meta

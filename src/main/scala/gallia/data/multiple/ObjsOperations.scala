@@ -37,10 +37,10 @@ trait ObjsOperations { self: Objs =>
 
     // ---------------------------------------------------------------------------
     def ensureDistinctBy(c: Cls)(keys: Keyz): Either[(Int, Int), Objs] =
-      self
-        .fork(keys)
-        .ensureDistinct(c)
-        .map(_ => self)
+        self
+          .fork(keys)
+          .ensureDistinct(c)
+          .map(_ => self)
 
       // ===========================================================================
       private[multiple] def fork(keys: Keyz): Objs =

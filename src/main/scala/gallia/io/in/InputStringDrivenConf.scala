@@ -19,13 +19,13 @@ trait InputStringDrivenConfHelper[InputAction, IoType] {
 
     // ===========================================================================
     def _action: InputAction =
-      InputStringType
-        .parse(inputString)
-         match {
-          // TODO: forbid Projection + check not querying
-          case InputStringType.JsonObject  => jsonStringAction
-          case InputStringType.JsonArray   => jsonStringAction
-          case InputStringType.Indirection => indirection }
+        InputStringType
+          .parse(inputString)
+           match {
+            // TODO: forbid Projection + check not querying
+            case InputStringType.JsonObject  => jsonStringAction
+            case InputStringType.JsonArray   => jsonStringAction
+            case InputStringType.Indirection => indirection }
 
       // ===========================================================================
       protected def indirection: InputAction =

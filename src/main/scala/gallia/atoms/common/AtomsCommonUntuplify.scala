@@ -8,13 +8,13 @@ import aptus.{String_, Seq_, Tuple2_}
 object AtomsCommonUntuplify {
 
   def untuplify1z(o: Obj, targetKey: Ren, keys: Keyz): Obj =
-    o .potch(targetKey.from)
-      .mapFirst(_.map(_.asInstanceOf[Seq[_]].map(_.toString)))
-      .pipe { case (targetOpt, restOpt) =>
-        targetOpt
-          .map(_untuplify1z(keys))
-          .map(update(restOpt, targetKey.to))
-          .getOrElse(o) }
+      o .potch(targetKey.from)
+        .mapFirst(_.map(_.asInstanceOf[Seq[_]].map(_.toString)))
+        .pipe { case (targetOpt, restOpt) =>
+          targetOpt
+            .map(_untuplify1z(keys))
+            .map(update(restOpt, targetKey.to))
+            .getOrElse(o) }
 
     // ---------------------------------------------------------------------------
     private def _untuplify1z(keys: Keyz)(values: Seq[Any]): Obj = {
@@ -95,10 +95,9 @@ object AtomsCommonUntuplify {
       .pipe(untuplify2a(targetKey)(entriesSplitter, entrySplitter)(newKeys))
 
   // ===========================================================================
-  private def checkNewKeys(debug: Obj)(newKeys: Set[Key])(o2: Obj) {
+  private def checkNewKeys(debug: Obj)(newKeys: Set[Key])(o2: Obj) = {
     if (o2.keySet.diff(newKeys).nonEmpty)
-      dataError(s"TODO:NotNewKeys:210110142505:${o2.keys.#@@}:${o2.keySet.diff(newKeys).map(_.name).toSeq.sorted.#@@}:${newKeys.map(_.name).toSeq.sorted.#@@}:${debug.formatCompactJson}")
-  }
+      dataError(s"TODO:NotNewKeys:210110142505:${o2.keys.#@@}:${o2.keySet.diff(newKeys).map(_.name).toSeq.sorted.#@@}:${newKeys.map(_.name).toSeq.sorted.#@@}:${debug.formatCompactJson}") }
 
 }
 

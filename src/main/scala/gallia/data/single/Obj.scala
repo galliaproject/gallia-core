@@ -99,12 +99,11 @@ class Obj private ( /* must not expose apply: see 210102140902, mostly so can us
       def removeOpt(target : Key)  : Option[Obj] = data.filterNot(_._1 == target).in.noneIf(_.isEmpty).map(Obj.build)
 
       // ---------------------------------------------------------------------------
-      def retainOpt(targets: Keyz): Option[Obj] = data.filter   (_._1.containedIn(targets)).in.noneIf(_.isEmpty).map(Obj.build)
-      def removeOpt(targets: Keyz): Option[Obj] = data.filterNot(_._1.containedIn(targets)).in.noneIf(_.isEmpty).map(Obj.build)
+      def retainOpt(targets: Keyz): Option[Obj] = data.filter   (x => targets.contains(x._1)).in.noneIf(_.isEmpty).map(Obj.build)
+      def removeOpt(targets: Keyz): Option[Obj] = data.filterNot(x => targets.contains(x._1)).in.noneIf(_.isEmpty).map(Obj.build)
 
       // ---------------------------------------------------------------------------
-      def retainOpt(targets: Renz): Option[Obj] = retainOpt(targets.froms).map(_.rename(targets))
-  }
+      def retainOpt(targets: Renz): Option[Obj] = retainOpt(targets.froms).map(_.rename(targets)) }
 
   // ===========================================================================
   object Obj { import ObjIn.normalize

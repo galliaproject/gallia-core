@@ -46,14 +46,12 @@ private[gallia] object InfoUtils {
     private def valueType(enmOpt: _EnmOpt)(isContainedDataClass: Boolean)(leaf: TypeLeaf): ValueType =
          if (isContainedDataClass) forceNestedClass(leaf)
          else                      valueTypeOpt(enmOpt)(leaf).get
-  
+
       // ---------------------------------------------------------------------------
       private def valueTypeOpt(enmOpt: _EnmOpt)(leaf: TypeLeaf): Option[ValueType] =
-               if (leaf.enm)          enmOpt.orElse(Some(BasicType._Enm.Dummy) /* typically for validations, see 220506101842 */)
-          else if (leaf.isEnumeratum) Some(BasicType._Enm(leaf.enumeratumEnum))
-          else if (leaf.bytes)        Some(BasicType._Binary)
-          else                        BasicType.fromFullNameOpt(leaf.name)
-
-}
+        /**/ if (leaf.enm)          enmOpt.orElse(Some(BasicType._Enm.Dummy) /* typically for validations, see 220506101842 */)
+        else if (leaf.isEnumeratum) Some(BasicType._Enm(leaf.enumeratumEnum))
+        else if (leaf.bytes)        Some(BasicType._Binary)
+        else                        BasicType.fromFullNameOpt(leaf.name) }
 
 // ===========================================================================

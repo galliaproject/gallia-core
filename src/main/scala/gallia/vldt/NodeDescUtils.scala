@@ -15,11 +15,11 @@ object NodeDescUtils {
   private implicit class ClsDesc_(u: ClsDesc) { import u._
 
     def isInvalid: Boolean =
-      name.invalid   ||
-      generic        ||
-      fields.isEmpty ||
-     !fields.map(_.key).isDistinct ||
-      fields.exists(_.isInvalid)
+     /**/ name.invalid   ||
+     /**/ generic        ||
+     /**/ fields.isEmpty ||
+     /**/!fields.map(_.key).isDistinct ||
+     /**/ fields.exists(_.isInvalid)
 
     // ---------------------------------------------------------------------------
     def errorMessages                : Seq[ErrorMsg] = errorMessages(Parent.Root)

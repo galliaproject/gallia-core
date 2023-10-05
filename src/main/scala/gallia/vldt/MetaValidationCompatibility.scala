@@ -7,13 +7,13 @@ import meta._
 object MetaValidationCompatibility {
 
   def compatible(x: Info, y: Info, mode: SpecialCardiMode): Boolean =
-         if (mode == SpecialCardiMode.IgnoreAltogether)   compatible(x.toRequired.toSingle, y.toRequired.toSingle)
+    /**/ if (mode == SpecialCardiMode.IgnoreAltogether)   compatible(x.toRequired.toSingle, y.toRequired.toSingle)
     else if (mode == SpecialCardiMode.IgnoreRequiredness) compatible(x.toRequired,          y.toRequired)
     else                                                  compatible(x,                     y)
 
   // ===========================================================================
   def compatible(x: Info, y: Info1, mode: SpecialCardiMode): Boolean =
-         if (mode == SpecialCardiMode.IgnoreAltogether)                               oneCompatible(x.toSingle.union, y.toSingle.subInfo)
+    /**/ if (mode == SpecialCardiMode.IgnoreAltogether)                               oneCompatible(x.toSingle.union, y.toSingle.subInfo)
     else if (mode == SpecialCardiMode.IgnoreRequiredness)                             oneCompatible(x         .union, y         .subInfo)
     else                                                  x.optional == y.optional && oneCompatible(x         .union, y         .subInfo)
 

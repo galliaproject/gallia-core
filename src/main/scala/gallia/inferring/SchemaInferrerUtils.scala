@@ -61,18 +61,18 @@ private object SchemaInferrerUtils {
 
   // ===========================================================================
   private def resolve(existingField: Fld, newField: Fld): Option[Fld] =
-    (existingField.nestedClassOpt, newField.nestedClassOpt).toOptionalTuple match {
-      case Some((e, n)) => e.combine(n).pipe(existingField.updateSoleNestedClass).in.some
-      case None =>
-             if (newField.subInfo1 == existingField.subInfo1)       Some(existingField)
+      (existingField.nestedClassOpt, newField.nestedClassOpt).toOptionalTuple match {
+        case Some((e, n)) => e.combine(n).pipe(existingField.updateSoleNestedClass).in.some
+        case None =>
+          /**/ if (newField.subInfo1 == existingField.subInfo1)       Some(existingField)
 
-        // note: not so for multiplicity, as it requires a data change (TODO: t210802090946 - reconsider)
-        else if ( existingField.isRequired && !newField.isRequired) Some(existingField.toOptional)
-        else if (!existingField.isRequired &&  newField.isRequired) Some(existingField)
+          // note: not so for multiplicity, as it requires a data change (TODO: t210802090946 - reconsider)
+          else if ( existingField.isRequired && !newField.isRequired) Some(existingField.toOptional)
+          else if (!existingField.isRequired &&  newField.isRequired) Some(existingField)
 
-        else if (areBoundedNumbers(existingField, newField))        Some(existingField.toDouble)
+          else if (areBoundedNumbers(existingField, newField))        Some(existingField.toDouble)
 
-        else                                                        None }
+          else                                                        None }
 
     // ---------------------------------------------------------------------------
     private def areBoundedNumbers(f1: Fld, f2: Fld): Boolean =

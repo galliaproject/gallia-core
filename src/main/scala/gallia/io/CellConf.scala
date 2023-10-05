@@ -22,13 +22,13 @@ case class CellConf(
 
   // ===========================================================================
   def inferContainerOnly(value: String): Container =
-           if (isNull (value)) Container._Opt
+      /**/ if (isNull (value)) Container._Opt
       else if (isArray(value)) Container._Nes
       else                     Container._One
 
   // ---------------------------------------------------------------------------
   def inferInfo(value: String): Info =
-           if (isNull (value)) Info(_Optional, SubInfo(_Single,   BasicType._String))
+      /**/ if (isNull (value)) Info(_Optional, SubInfo(_Single,   BasicType._String))
       else if (isArray(value)) Info(_Required, SubInfo(_Multiple, arrayType(splitArray(value))))
       else                     Info(_Required, SubInfo(_Single,   TypeGuessing(value)))
 
@@ -52,7 +52,7 @@ case class CellConf(
       case x: UnparameterizedBasicType => x.parseString(value) }
 
   // ===========================================================================
-          def isNull (value: String): Boolean = !noNulls  && nullValueSet.contains(value) /* no trimming intentionally */
+  /*   */ def isNull (value: String): Boolean = !noNulls  && nullValueSet.contains(value) /* no trimming intentionally */
   private def isArray(value: String): Boolean = !noArrays && arraySeparators.exists(value.contains)
 
   // ---------------------------------------------------------------------------
@@ -65,8 +65,6 @@ case class CellConf(
 }
 
 // ===========================================================================
-object CellConf {
-  val Default = CellConf()
-}
+object CellConf { val Default = CellConf() }
 
 // ===========================================================================

@@ -2,13 +2,12 @@ package gallia
 package atoms
 package utils
 
-import scala.reflect.ClassTag
 import domain.SortingPair
 import data.single.ObjOrdering
 
 // ===========================================================================
 case class SuperMetaPair[T]( // TODO: rename...
-      ctag: ClassTag[T], // required by Spark RDD for sorting
+      ctag: CT      [T], // required by Spark RDD for sorting
       ord : Ordering[T])
 
   // ===========================================================================
@@ -28,7 +27,7 @@ case class SuperMetaPair[T]( // TODO: rename...
     // ---------------------------------------------------------------------------
     def optionObjSuperMetaPair(c: Cls, pair: domain.SortingPair): SuperMetaPair[Option[Obj]] =
       SuperMetaPair(
-        ctag = scala.reflect.classTag[Option[Obj]],
+        ctag = reflect.ReflectUtils.ctag[Option[Obj]],
         ord  = ObjOrdering.optObjOrdering(c, pair))
   }
 

@@ -1,7 +1,6 @@
 package gallia
 package streamer
 
-import scala.reflect.{ClassTag => CT}
 import heads.merging.MergingData._
 import atoms.utils.SuperMetaPair
 

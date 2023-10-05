@@ -1,10 +1,7 @@
 package gallia
 package streamer
 
-import scala.reflect.{ClassTag => CT}
-
 import aptus.Iterator_
-
 import heads.merging.MergingData._
 
 // ===========================================================================

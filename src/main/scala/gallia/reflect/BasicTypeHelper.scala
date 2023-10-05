@@ -1,7 +1,6 @@
 package gallia
 package reflect
 
-import scala.reflect.ClassTag
 import aptus.{Anything_, String_}
 import atoms.utils.SuperMetaPair
 
@@ -27,27 +26,27 @@ private[reflect] trait BasicTypeHelper { ignored: BasicType =>
       _compare(container, descending, missingLast)(x, y)
 
   // ===========================================================================
-  val  ctag: ClassTag[                T ]
-  val nctag: ClassTag[       Iterable[T] ]
-  val octag: ClassTag[       Option  [T] ]
-  val pctag: ClassTag[Option[Iterable[T]]]
+  def  ctag: CT[                T ]
+  def nctag: CT[       Iterable[T] ]
+  def octag: CT[       Option  [T] ]
+  def pctag: CT[Option[Iterable[T]]]
 
   // ===========================================================================
-       val  ordA: Ordering[                 T ]
-       val  ordD: Ordering[                 T ]
+  def  ordA: Ordering[                 T ]
+  def  ordD: Ordering[                 T ]
 
-  lazy val nordA: Ordering[       Iterable [T]] = Ordering.Iterable(ordA)
-  lazy val nordD: Ordering[       Iterable [T]] = Ordering.Iterable(ordD)
+  def nordA: Ordering[       Iterable [T]] = Ordering.Iterable(ordA)
+  def nordD: Ordering[       Iterable [T]] = Ordering.Iterable(ordD)
 
-  lazy val oordAF: Ordering[       Option  [T]] = optionAF(ordA)
-  lazy val oordAL: Ordering[       Option  [T]] = optionAL(ordA)
-  lazy val oordDF: Ordering[       Option  [T]] = optionDF(ordD)
-  lazy val oordDL: Ordering[       Option  [T]] = optionDL(ordD)
+  def oordAF: Ordering[       Option  [T]] = optionAF(ordA)
+  def oordAL: Ordering[       Option  [T]] = optionAL(ordA)
+  def oordDF: Ordering[       Option  [T]] = optionDF(ordD)
+  def oordDL: Ordering[       Option  [T]] = optionDL(ordD)
 
-  lazy val pordAF: Ordering[Option[Iterable[T]]] = optionAF(nordA)
-  lazy val pordAL: Ordering[Option[Iterable[T]]] = optionAL(nordA)
-  lazy val pordDF: Ordering[Option[Iterable[T]]] = optionDF(nordD)
-  lazy val pordDL: Ordering[Option[Iterable[T]]] = optionDL(nordD)
+  def pordAF: Ordering[Option[Iterable[T]]] = optionAF(nordA)
+  def pordAL: Ordering[Option[Iterable[T]]] = optionAL(nordA)
+  def pordDF: Ordering[Option[Iterable[T]]] = optionDF(nordD)
+  def pordDL: Ordering[Option[Iterable[T]]] = optionDL(nordD)
 
   // ===========================================================================
   def isInt    : Boolean = this == BasicType._Int

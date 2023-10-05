@@ -5,10 +5,6 @@ package object actions { // TODO: delegate access to all of AtomsUtils._
   private[gallia] val dense = atoms.obg9.Obg9Utils.hack // obg9 is codename for memory-optimized Obj counterpart (not in use yet) - good for dense data
 
   // ---------------------------------------------------------------------------
-  def  classTag[T : ClassTag] = scala.reflect.classTag[T]
-  type ClassTag[T]            = scala.reflect.ClassTag[T]
-
-  // ---------------------------------------------------------------------------
   type TypeNode  = reflect.TypeNode
 
   type BasicType = reflect.BasicType

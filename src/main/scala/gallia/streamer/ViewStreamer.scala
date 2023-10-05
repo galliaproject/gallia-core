@@ -1,7 +1,6 @@
 package gallia
 package streamer
 
-import scala.reflect.{ClassTag => CT}
 import scala.collection.compat.immutable.LazyList // need compat version for 2.12
 import heads.merging.MergingData._
 import atoms.utils.SuperMetaPair

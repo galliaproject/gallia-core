@@ -2,7 +2,6 @@ package gallia
 package data
 package multiple
 
-import scala.reflect.ClassTag
 import aptus.Seq_
 import streamer.{IteratorStreamer, StreamerType, ViewStreamer}
 
@@ -40,8 +39,8 @@ case class Objs private (  // TODO: two versions, see t210104164036
         case StreamerType.RDDBased      => this }
 
     // ===========================================================================
-    def     mapToStreamer[A: ClassTag](f: Obj =>      A ): Streamer[A] = values.    map(f)
-    def flatMapToStreamer[A: ClassTag](f: Obj => Coll[A]): Streamer[A] = values.flatMap(f)
+    def     mapToStreamer[A: CT](f: Obj =>      A ): Streamer[A] = values.    map(f)
+    def flatMapToStreamer[A: CT](f: Obj => Coll[A]): Streamer[A] = values.flatMap(f)
 
     // ---------------------------------------------------------------------------
     def consumeSelfClosing:                 Iterator[Obj] = values.selfClosingIterator

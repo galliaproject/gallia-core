@@ -37,7 +37,7 @@ object Obg9Creators {
       c .skeys
         .zipWithIndex
         .toMap
-        .pipe { lookup: Map[SKey, Index] =>
+        .pipe { (lookup: Map[SKey, Index]) =>
           f(c.skeys).map(lookup.apply) }
 
   }

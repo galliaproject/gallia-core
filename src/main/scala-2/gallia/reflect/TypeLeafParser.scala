@@ -4,8 +4,16 @@ package reflect
 import aptus.Anything_
 
 // ===========================================================================
-private object TypeLeafParser {
+object TypeLeafParser {
 
+  def parseTypeNode[A: WTT]: TypeNode = parseNode(scala.reflect.runtime.universe.weakTypeTag[A].tpe)
+
+  def parseNode(tpe: UType): TypeNode =
+    TypeNode(
+        leaf = TypeLeafParser(tpe),
+        args = tpe.typeArgs.map(parseNode))
+
+  // ===========================================================================
   def apply(tpe: UType): TypeLeaf = {
     val symbol = tpe.typeSymbol
 
@@ -36,10 +44,10 @@ private object TypeLeafParser {
 
     // ---------------------------------------------------------------------------
     val dataClass =
-         caseClass &&
-        !enm &&
-         enumeratumValueNamesOpt.isEmpty &&
-        !fullName.startsWith("scala.")
+      /**/  caseClass &&
+      /**/ !enm &&
+      /**/  enumeratumValueNamesOpt.isEmpty &&
+      /**/ !fullName.startsWith("scala.")
 
     // ---------------------------------------------------------------------------
     TypeLeaf(
@@ -55,9 +63,16 @@ private object TypeLeafParser {
       enumeratumValueNamesOpt = enumeratumValueNamesOpt,
 
       fields      =
-        if (caseClass) Field.parseAll(tpe) // may in theory be empty
+        if (caseClass) parseFields(tpe) // may in theory be empty
         else           Nil)
   }
+
+  // ===========================================================================
+  private def parseFields(tpe: UType): Seq[Field] =
+    ReflectUtils
+      .parseFields(tpe)
+      .map { case (name, returnTpe) =>
+        Field(name, reflect.TypeLeafParser.parseNode(returnTpe)) }
 
 }
 

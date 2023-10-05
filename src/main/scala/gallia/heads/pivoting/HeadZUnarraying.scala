@@ -41,9 +41,12 @@ import reflect.ReflectUtils
       // TODO: t210228112738 - keep these or force manual fuse ahead of time?      
       class __UnarrayEntriesN protected[HeadZUnarraying] (newKeys: Keyz) {
         def withDefaultKeySeparator = withKeySeparator("_")
-        def withKeySeparator(value: Separator) =
-          new { def valueKey(y: KeyW): HeadU = zu(UnarrayEntries0(newKeys, keyKeys, separator = value, y.value)) } }
-    }
+        def withKeySeparator(value: Separator) = new _WithKeySeparator(value)
+
+        // ---------------------------------------------------------------------------
+        class _WithKeySeparator private[HeadZUnarraying] (value: Separator) {
+          def valueKey(y: KeyW): HeadU =
+            zu(UnarrayEntries0(newKeys, keyKeys, separator = value, y.value)) } } }
 
   // ===========================================================================
   // nt210303104417 - may not be kept altogether

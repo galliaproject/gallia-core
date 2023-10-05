@@ -31,16 +31,18 @@ trait HeadCommonNestingRelated[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   def unnestAllFromGroup           : Self2 = unnestAllFrom(_group) // common after custom aggregations
 
     // ===========================================================================
-    def unnestFrom(parent: KPathW) = new {
-      /** uses nested name(s) */
-      def field(key: RenW): Self2 = fields(_.explicit(key))
+    def unnestFrom(parent: KPathW) = new _UnnestFrom(parent)
 
-      // ---------------------------------------------------------------------------
-      def fields(key1: RenW, key2: RenW, more: RenW*): Self2 = fields(_.explicit(key1, key2, more:_*))
-      def fields(keys: RenWz)                        : Self2 = fields(_.explicit(keys))
+      class _UnnestFrom private[HeadCommonNestingRelated] (parent: KPathW) {
+        /** uses nested name(s) */
+        def field(key: RenW): Self2 = fields(_.explicit(key))
 
-      // ---------------------------------------------------------------------------
-      def fields(sel: SEL.UnnestFrom.Selector): Self2 = self2 :+ UnnestFrom(parent.value, SEL.UnnestFrom.resolve(sel)) }
+        // ---------------------------------------------------------------------------
+        def fields(key1: RenW, key2: RenW, more: RenW*): Self2 = fields(_.explicit(key1, key2, more:_*))
+        def fields(keys: RenWz)                        : Self2 = fields(_.explicit(keys))
+
+        // ---------------------------------------------------------------------------
+        def fields(sel: SEL.UnnestFrom.Selector): Self2 = self2 :+ UnnestFrom(parent.value, SEL.UnnestFrom.resolve(sel)) }
 
     // ===========================================================================
     /** uses nesting name; OOO = Objects Of Ones, eg {"a": [{"b": 1}, {"b": 2}]} */

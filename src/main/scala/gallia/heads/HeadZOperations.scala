@@ -12,13 +12,14 @@ trait HeadZOperations { self: HeadZ =>
   @Distributivity def distinctByAdjacency: Self = ??? //TODO: t210117113705 - convenient if mostly grouped already; for distributivity, do at least per partition
 
   // ===========================================================================
-  def force = new { // TODO: t201016121417 - or as convert... [term:x]
+  def force: Force = new Force() // TODO: t201016121417 - or as convert... [term:x]
+
+    class Force private[HeadZOperations] () {
       def one: HeadU = zu(ForceOne)
 
       // ---------------------------------------------------------------------------
       /** very costly if not checkpointed first (unless in-memory) ... */
-      def distinct: HeadZ = _ensureUniqueness(None)
-    }
+      def distinct: HeadZ = _ensureUniqueness(None) }
 
     // ---------------------------------------------------------------------------
     // TODO: t201016122408 - or "assertUniqueness"? [term:x]

@@ -63,7 +63,9 @@ class HeadV[T: WTT /* will be Vle (Any) for data phase */] private[gallia] ( // 
     //TODO: IQR? stats? see ReducingType
 
   // ---------------------------------------------------------------------------
-  def combine[T2: WTT](that: HeadV[T2]) = new {
+  def combine[T2: WTT](that: HeadV[T2]) = new _Combine(that)
+
+    class _Combine[T2: WTT] private[HeadV] (that: HeadV[T2]) {
       def using[T3: WTT](f: (T, T2) => T3): HeadV[T3] = handler.joinVv2v[T, T2, T3](self, that)( // TODO: as "reduce"?
         CombineVV(typeNode[T], typeNode[T2], result = typeNode[T3],
           (x: Any, y: Any) => f(x.asInstanceOf[T], y.asInstanceOf[T2]))) }

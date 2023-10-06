@@ -3,7 +3,7 @@ import sbt.Keys._
 
 // ===========================================================================
 object GalliaCommonSettings {
-  val CurrentGalliaVersion = "0.5.0"
+  val CurrentGalliaVersion = "0.6.0-SNAPSHOT"
 
   // ---------------------------------------------------------------------------
   val mainSettings = Seq(
@@ -18,20 +18,12 @@ object GalliaCommonSettings {
 
     // ---------------------------------------------------------------------------
          scalaVersion  := GalliaScalaVersions.supported.head,
-    crossScalaVersions := GalliaScalaVersions.supported)
-
-  // ===========================================================================
-  // TODO: t210121165741: -Xdisable-assertions (also turns off require?)  
-  scalacOptions ++= Seq(
-        "-encoding", "UTF-8",  
-      //"-Yimports:java.lang,scala,scala.Predef,scala.util.chaining,aptus.Anything_" -- not possible for 2.12 it seems (TODO: t210308154253 confirm)
-        "-Ywarn-value-discard") ++ 
-      // ---------------------------------------------------------------------------
-      (scalaBinaryVersion.value match {
-        case "2.13" => Seq("-Ywarn-unused:imports")
-        case _      => Seq("-Ywarn-unused-import" ) })
-
-}
+    crossScalaVersions := GalliaScalaVersions.supported,
+    // ---------------------------------------------------------------------------
+    scalacOptions     ++= (scalaBinaryVersion.value match {
+      case "3"    => GalliaScalacOptions.scala3Options
+      case "2.13" => GalliaScalacOptions.scala213Options
+      case "2.12" => GalliaScalacOptions.scala212Options })) }
 
 // ===========================================================================
 

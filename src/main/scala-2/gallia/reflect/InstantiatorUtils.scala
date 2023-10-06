@@ -1,24 +1,46 @@
 package gallia
 package reflect
 
-import aptus.{String_, Seq_}
+import aptus.{Seq_, String_}
+
+import java.lang.reflect.Constructor
 import scala.reflect.runtime.universe
+
+import target.Instantiator
 
 // ===========================================================================
 object InstantiatorUtils {
 
-  type InstantiatorContructor[$Instantiator] =
+  private type InstantiatorContructor[$Instantiator] =
     (aptus.DebugString, Map[Key, $Instantiator], java.lang.reflect.Constructor[_]) =>
       $Instantiator
 
   // ===========================================================================
-  def rec[$Instantiator]
+  def fromFirstTypeArgFirstTypeArg[T: WTT]: Instantiator =
+    scala.reflect.runtime.universe
+      .weakTypeTag[T]
+      .pipe { wtt => reflect.InstantiatorUtils.rec(new Instantiator(_, _, _))(wtt.mirror)(wtt.tpe.typeArgs.head.typeArgs.head) }
+
+  // ---------------------------------------------------------------------------
+  def fromFirstTypeArg[T: WTT]: Instantiator =
+    scala.reflect.runtime.universe
+      .weakTypeTag[T]
+      .pipe { wtt => reflect.InstantiatorUtils.rec(new Instantiator(_, _, _))(wtt.mirror)(wtt.tpe.typeArgs.head) }
+
+  // ---------------------------------------------------------------------------
+  def fromTypeDirectly[T: WTT]: Instantiator =
+    scala.reflect.runtime.universe
+      .weakTypeTag[T]
+      .pipe { wtt => reflect.InstantiatorUtils.rec(new Instantiator(_, _, _))(wtt.mirror)(wtt.tpe) }
+
+  // ===========================================================================
+  private def rec[$Instantiator]
           /* basically new Instantiator(_, _, _) */
           (constr: InstantiatorContructor[$Instantiator])
           (mirror: universe.Mirror)
           (tpe   : universe.Type) // that we want to instantiate
         : $Instantiator = {
-      val node = gallia.reflect.TypeNode.parse(tpe)
+      val node = reflect.TypeLeafParser.parseNode(tpe)
 
       val nestedObjs: Map[Key, $Instantiator] =
         ReflectUtils
@@ -38,8 +60,7 @@ object InstantiatorUtils {
       constr(
           node.leaf.name, // for debugging only
           nestedObjs,
-          mirror.runtimeClass(tpe).mainConstructor)
-    }
+          mirror.runtimeClass(tpe).mainConstructor) }
 
     // ===========================================================================
     private def subInstantiator[$Instantiator](constr: InstantiatorContructor[$Instantiator])(
@@ -55,7 +76,7 @@ object InstantiatorUtils {
 
   // ===========================================================================
   private implicit class Class__(u: Class[_]) {
-    def mainConstructor =
+    def mainConstructor: Constructor[_] =
       u .getConstructors
         .headOption // t200720101733 - establish always safe or add corresponding validation
         .getOrElse(null) } // TODO: handle better (happens with eg .removeIf('f).hasValue(None))

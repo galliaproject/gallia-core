@@ -15,13 +15,13 @@ class HT(
           new HT(node, instantiator[T](node)) }
 
       // ---------------------------------------------------------------------------
-              def instantiator[T: WTT]              : Instantiator = instantiator[T](typeNode[T]) //TODO:to private
+      /**/    def instantiator[T: WTT]              : Instantiator = instantiator[T](typeNode[T]) //TODO:to private
       private def instantiator[T: WTT](to: TypeNode): Instantiator = {
         if (!to.isContainedDataClass) null // TODO
         else {
-               if (to.isOptionOfSeq)        Instantiator.fromFirstTypeArgFirstTypeArg[T]       // eg Option[Seq[MyCc]]
-          else if (to.isSeq || to.isOption) Instantiator.fromFirstTypeArg            [T]       // eg Option[    MyCc ]
-          else                              Instantiator.fromTypeDirectly            [T] } } } // eg            MyCc
+               if (to.isOptionOfSeq)        reflect.InstantiatorUtils.fromFirstTypeArgFirstTypeArg[T]       // eg Option[Seq[MyCc]]
+          else if (to.isSeq || to.isOption) reflect.InstantiatorUtils.fromFirstTypeArg            [T]       // eg Option[    MyCc ]
+          else                              reflect.InstantiatorUtils.fromTypeDirectly            [T] } } } // eg            MyCc
 
   // ===========================================================================
   class HT2(val ht1: HT, val ht2: HT) extends HasTypes2

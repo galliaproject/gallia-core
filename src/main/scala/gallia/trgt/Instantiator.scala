@@ -5,7 +5,7 @@ import meta._
 import aptus.Anything_
 
 // ===========================================================================
-class Instantiator private (
+class Instantiator private[gallia] (
       target     : aptus.DebugString,
 
       nestedObjs : Map[Key, Instantiator],
@@ -31,20 +31,20 @@ class Instantiator private (
 
       // ---------------------------------------------------------------------------
       private def processField(o: Obj)(field: Fld): AnyRef =
-        (field.nestedClassOpt match {
-            case None =>
-              if (field.isRequired) o.forceKey  (field.key)
-              else                  o.attemptKey(field.key)
-            case Some(c2) => processContainedObj(c2, field, o) })
-          .asInstanceOf[AnyRef /* TODO: safe? */]
+          (field.nestedClassOpt match {
+              case None =>
+                if (field.isRequired) o.forceKey  (field.key)
+                else                  o.attemptKey(field.key)
+              case Some(c2) => processContainedObj(c2, field, o) })
+            .asInstanceOf[AnyRef /* TODO: safe? */]
 
         // ---------------------------------------------------------------------------
         private def processContainedObj(c2: Cls, field: Fld, o: Obj): AnyValue =
-          field.info.container1 match { // TODO: use Container.wrap now?
-            case Container._One => o.forceKey  (field.key)                            .pipe(processObj(c2, field))
-            case Container._Opt => o.attemptKey(field.key)                            .map (processObj(c2, field))
-            case Container._Nes => o.forceKey  (field.key)      .asInstanceOf[List[_]].map (processObj(c2, field))
-            case Container._Pes => o.attemptKey(field.key).map(_.asInstanceOf[List[_]].map (processObj(c2, field))) }
+            field.info.container1 match { // TODO: use Container.wrap now?
+              case Container._One => o.forceKey  (field.key)                            .pipe(processObj(c2, field))
+              case Container._Opt => o.attemptKey(field.key)                            .map (processObj(c2, field))
+              case Container._Nes => o.forceKey  (field.key)      .asInstanceOf[List[_]].map (processObj(c2, field))
+              case Container._Pes => o.attemptKey(field.key).map(_.asInstanceOf[List[_]].map (processObj(c2, field))) }
 
           // ---------------------------------------------------------------------------
           private def processObj(c2: Cls, field: gallia.meta.Fld)(value: AnyValue): Any =
@@ -56,24 +56,6 @@ class Instantiator private (
   // ===========================================================================
   object Instantiator {
 
-    def fromFirstTypeArgFirstTypeArg[T: WTT]: Instantiator =
-        scala.reflect.runtime.universe
-          .weakTypeTag[T]
-          .pipe { wtt => reflect.InstantiatorUtils.rec(new Instantiator(_, _, _))(wtt.mirror)(wtt.tpe.typeArgs.head.typeArgs.head) }
-
-    // ---------------------------------------------------------------------------
-    def fromFirstTypeArg[T: WTT]: Instantiator =
-        scala.reflect.runtime.universe
-          .weakTypeTag[T]
-          .pipe { wtt => reflect.InstantiatorUtils.rec(new Instantiator(_, _, _))(wtt.mirror)(wtt.tpe.typeArgs.head) }
-
-    // ---------------------------------------------------------------------------
-    def fromTypeDirectly[T: WTT]: Instantiator =
-        scala.reflect.runtime.universe
-          .weakTypeTag[T]
-          .pipe { wtt => reflect.InstantiatorUtils.rec(new Instantiator(_, _, _))(wtt.mirror)(wtt.tpe) }
-
-    // ===========================================================================
     def out(value: Any)(subInfo: Info): Any = {
              if (subInfo.isOne) { val c2 = subInfo.forceNestedClass; Instantiator.valueToObj  (c2)(value) }
         else if (subInfo.isOpt) { val c2 = subInfo.forceNestedClass; Instantiator.valueToObj_ (c2)(value) }

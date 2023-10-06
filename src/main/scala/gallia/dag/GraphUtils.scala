@@ -22,9 +22,9 @@ object GraphUtils {
             .contains)
 
     val list = ListBuffer[A]()
-    val set  = roots.to(ListBuffer)
 
-    val edges = originalEdges.to(ListBuffer)
+    val set  : ListBuffer[ A    ] = cross.immutableSeqToListBuffer(roots)         // because of 2.12
+    val edges: ListBuffer[(A, A)] = cross.immutableSeqToListBuffer(originalEdges) // because of 2.12
 
     while (set.nonEmpty) {
       val n = set.remove(0)

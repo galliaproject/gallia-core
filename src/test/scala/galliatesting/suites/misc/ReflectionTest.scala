@@ -10,7 +10,7 @@ object ReflectionTest extends utest.TestSuite { import utest._
   // ===========================================================================
   val tests = Tests {
     test("TypeNode") {
-      val actual = gallia.reflect.TypeNode.parse[MyComplexData]
+      val actual   = gallia.reflect.TypeLeafParser.parseTypeNode[MyComplexData]
       val Expected = gallia.testing.resourceContent("TypeNodeExample.json").prettyJson
 
       Predef.assert(

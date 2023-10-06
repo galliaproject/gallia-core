@@ -17,9 +17,6 @@ package object typed {
   type TqRPathz = TargetQuery[RPathz]
 
   // ---------------------------------------------------------------------------
-  private[typed] def node[T: gallia.WTT] = gallia.reflect.TypeNode.parse[T]
-
-  // ---------------------------------------------------------------------------
   val TsBoilerplate = TsBase
 }
 

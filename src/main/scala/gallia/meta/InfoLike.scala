@@ -19,11 +19,11 @@ trait InfoLike extends SubInfosLike {
   def toFld(key: KeyW): Fld = Fld(key.value, _info)
 
   // ===========================================================================
-  def isType[T: WTT]: Boolean = isType(TypeNode.parse[T])
+  def isType[T: WTT]: Boolean = typeNode[T].pipe(isType)
 
     def isType(node: TypeNode): Boolean =
       node
-        .assert(!_.isContainedBObj) // has already been validated by here (see 201014103336)
+        .ensuring(!_.isContainedBObj) // has already been validated by here (see 201014103336)
         .forceNonBObjInfo
         .pipe(_ == this)
 

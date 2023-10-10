@@ -1,8 +1,6 @@
 package gallia
 package plans
 
-import aptus.{Seq_, Tuple2_}
-
 // ===========================================================================
 private[plans] object AtomProcessor {
 

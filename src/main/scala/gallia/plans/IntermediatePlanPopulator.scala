@@ -1,8 +1,6 @@
 package gallia
 package plans
 
-import aptus.Anything_
-
 import env.ActionDag
 import heads.HeadsNestingHandler.NestingMetaPlaceholder
 

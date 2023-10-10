@@ -21,16 +21,19 @@ lazy val root = (project in file("."))
 // see https://github.com/aptusproject/aptus-core
 //   our own utilities library, bundles low level library such as commons-{io,lang3,math3,csv}, gson, enumeratum, ...
 
-lazy val aptusVersion      = "0.5.1"
-lazy val enumeratumVersion = "1.5.13"
+lazy val aptusVersion      = "0.5.2"
+lazy val enumeratumVersion = "1.7.3"
 lazy val uTestVersion      = "0.8.1"
 
 // ---------------------------------------------------------------------------
 libraryDependencies ++=
-  Seq(
-    "org.scala-lang"         %  "scala-reflect" % scalaVersion.value, // for scala.reflect.runtime.universe
+  Seq(    
     "io.github.aptusproject" %% "aptus-core"    % aptusVersion,
-    "com.beachape"           %% "enumeratum"    % enumeratumVersion)
+    "com.beachape"           %% "enumeratum"    % enumeratumVersion) ++
+  (scalaBinaryVersion.value match {
+    case "3"    => Seq.empty
+    case "2.13" => Seq("org.scala-lang" %  "scala-reflect" % scalaVersion.value) /* for scala.reflect.runtime.universe */
+    case "2.12" => Seq("org.scala-lang" %  "scala-reflect" % scalaVersion.value) /* for scala.reflect.runtime.universe */ })         
 
 // ===========================================================================
 // testing

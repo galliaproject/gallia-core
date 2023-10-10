@@ -22,7 +22,7 @@ private object TypeLeafParser {
     val fullName  = symbol.fullName
 
     val alias: Option[String] =
-      ReflectUtils
+      this
         .alias(tpe)
         .in.noneIf(_ == fullName) // eg "String" instead of "java.lang.String", but None for "foo.bar.Baz"
 
@@ -70,6 +70,14 @@ private object TypeLeafParser {
   }
 
   // ===========================================================================
+  /** eg "Option" from "scala.Option[String]", or "String" from "java.lang.String" */
+  private def alias(tpe: UType): Alias =
+    tpe
+      .toString
+      .takeWhile(_ != '[') /* TODO: cleaner way? */
+      .pipe(simplifyFullName)
+
+  // ---------------------------------------------------------------------------
   private def parseFields(tpe: UType): Seq[Field] =
     ReflectUtils
       .parseFields(tpe)

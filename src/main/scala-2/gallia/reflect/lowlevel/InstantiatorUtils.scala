@@ -6,6 +6,7 @@ import aptus.{Seq_, String_}
 
 import java.lang.reflect.Constructor
 import scala.reflect.runtime.universe
+import scala.reflect.runtime.universe.weakTypeTag
 
 import target.Instantiator
 
@@ -18,21 +19,18 @@ private object InstantiatorUtils {
 
   // ===========================================================================
   def fromFirstTypeArgFirstTypeArg[T: WTT]: Instantiator =
-    scala.reflect.runtime.universe
-      .weakTypeTag[T]
-      .pipe { wtt => rec(new Instantiator(_, _, _))(wtt.mirror)(wtt.tpe.typeArgs.head.typeArgs.head) }
+    weakTypeTag[T].pipe { wtt =>
+      rec(new Instantiator(_, _, _))(wtt.mirror)(wtt.tpe.typeArgs.head.typeArgs.head) }
 
   // ---------------------------------------------------------------------------
   def fromFirstTypeArg[T: WTT]: Instantiator =
-    scala.reflect.runtime.universe
-      .weakTypeTag[T]
-      .pipe { wtt => rec(new Instantiator(_, _, _))(wtt.mirror)(wtt.tpe.typeArgs.head) }
+    weakTypeTag[T].pipe { wtt =>
+      rec(new Instantiator(_, _, _))(wtt.mirror)(wtt.tpe.typeArgs.head) }
 
   // ---------------------------------------------------------------------------
   def fromTypeDirectly[T: WTT]: Instantiator =
-    scala.reflect.runtime.universe
-      .weakTypeTag[T]
-      .pipe { wtt => rec(new Instantiator(_, _, _))(wtt.mirror)(wtt.tpe) }
+    weakTypeTag[T].pipe { wtt =>
+      rec(new Instantiator(_, _, _))(wtt.mirror)(wtt.tpe) }
 
   // ===========================================================================
   private def rec[$Instantiator]

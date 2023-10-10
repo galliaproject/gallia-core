@@ -3,8 +3,6 @@ package heads
 package pivoting
 
 import aptus.Separator
-import reflect.ReflectUtils
-
 import DataN._
 
 // ===========================================================================
@@ -50,14 +48,14 @@ import DataN._
           def columns(targets: KeyWz)                           : NewKeys2b[O1, O2, D] = new NewKeys2b(data.copy(columns = targets.keyz)) }
 
         class NewKeys1b[O1: WTT, O2: WTT, D: WTT] private[pivoting] (data: Data2[O1, O2, D]) {
-            def asNewKeys[E <: EnumEntry : WTT]                   : HeadZ = asNewKeys(ReflectUtils.enumValueNames[E])
+            def asNewKeys[E <: EnumEntry : WTT]                   : HeadZ = asNewKeys(reflect.low.enumValueNames[E])
             def asNewKeys(value : KeyW)                           : HeadZ = asNewKeys(Keyz.from(value))
             def asNewKeys(value1: KeyW, value2: KeyW, more: KeyW*): HeadZ = asNewKeys(Keyz.from(value1, value2, more))
             def asNewKeys(values: KeyWz)                          : HeadZ = PivotingCombosN.apply2(head, data.copy(newKeys = values.keyz))
         }
 //to max 5
         class NewKeys2b[O1: WTT, O2: WTT, D: WTT] private[pivoting] (data: Data2[O1, O2, D]) {
-            def asNewKeys[E <: EnumEntry : WTT]                   : KeySeparator2[O1, O2, D] = asNewKeys(ReflectUtils.enumValueNames[E])
+            def asNewKeys[E <: EnumEntry : WTT]                   : KeySeparator2[O1, O2, D] = asNewKeys(reflect.low.enumValueNames[E])
             def asNewKeys(value : KeyW)                           : KeySeparator2[O1, O2, D] = asNewKeys(Keyz.from(value))
             def asNewKeys(value1: KeyW, value2: KeyW, more: KeyW*): KeySeparator2[O1, O2, D] = asNewKeys(Keyz.from(value1, value2, more))
             def asNewKeys(values: KeyWz)                          : KeySeparator2[O1, O2, D] = new KeySeparator2(data.copy(newKeys = values.keyz))
@@ -92,7 +90,7 @@ import DataN._
           def columns(targets: KeyWz)                           : NewKeys3[O1, O2, O3, D] = new NewKeys3(data.copy(columns = targets.keyz)) }
 
         class NewKeys3[O1: WTT, O2: WTT, O3: WTT, D: WTT] private[pivoting] (data: Data3[O1, O2, O3, D]) {
-            def asNewKeys[E <: EnumEntry : WTT]                   : HeadZ = asNewKeys(ReflectUtils.enumValueNames[E])
+            def asNewKeys[E <: EnumEntry : WTT]                   : HeadZ = asNewKeys(reflect.low.enumValueNames[E])
             def asNewKeys(value : KeyW)                           : HeadZ = asNewKeys(Keyz.from(value))
             def asNewKeys(value1: KeyW, value2: KeyW, more: KeyW*): HeadZ = asNewKeys(Keyz.from(value1, value2, more))
             def asNewKeys(values: KeyWz)                          : HeadZ = PivotingCombosN.apply3(head, data.copy(newKeys = values.keyz)) }
@@ -113,7 +111,7 @@ import DataN._
           def columns(targets: KeyWz)                           : NewKeys4[O1, O2, O3, O4, D] = new NewKeys4(data.copy(columns = targets.keyz)) }
 
         class NewKeys4[O1: WTT, O2: WTT, O3: WTT, O4: WTT, D: WTT] private[pivoting] (data: Data4[O1, O2, O3, O4, D]) {
-            def asNewKeys[E <: EnumEntry : WTT]                   : HeadZ = asNewKeys(ReflectUtils.enumValueNames[E])
+            def asNewKeys[E <: EnumEntry : WTT]                   : HeadZ = asNewKeys(reflect.low.enumValueNames[E])
             def asNewKeys(value : KeyW)                           : HeadZ = asNewKeys(Keyz.from(value))
             def asNewKeys(value1: KeyW, value2: KeyW, more: KeyW*): HeadZ = asNewKeys(Keyz.from(value1, value2, more))
             def asNewKeys(values: KeyWz)                          : HeadZ = PivotingCombosN.apply4(head, data.copy(newKeys = values.keyz)) }
@@ -134,7 +132,7 @@ import DataN._
           def columns(targets: KeyWz)                           : NewKeys5[O1, O2, O3, O4, O5, D] = new NewKeys5(data.copy(columns = targets.keyz)) }
 
         class NewKeys5[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, D: WTT] private[pivoting] (data: Data5[O1, O2, O3, O4, O5, D]) {
-            def asNewKeys[E <: EnumEntry : WTT]                   : HeadZ = asNewKeys(ReflectUtils.enumValueNames[E])
+            def asNewKeys[E <: EnumEntry : WTT]                   : HeadZ = asNewKeys(reflect.low.enumValueNames[E])
             def asNewKeys(value : KeyW)                           : HeadZ = asNewKeys(Keyz.from(value))
             def asNewKeys(value1: KeyW, value2: KeyW, more: KeyW*): HeadZ = asNewKeys(Keyz.from(value1, value2, more))
             def asNewKeys(values: KeyWz)                          : HeadZ = PivotingCombosN.apply5(head, data.copy(newKeys = values.keyz)) }

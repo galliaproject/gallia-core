@@ -3,7 +3,6 @@ package data
 package single
 
 import aptus.{Opt, Pes}
-import reflect.ReflectUtils.withEntryName
 
 // ===========================================================================
 @TypeMatching
@@ -122,10 +121,10 @@ trait ObjAccessors { ignored: Obj => // id210326140514
   def enms_(key: KPathW): Pes[EnumValue] = attemptPath(key).map(_.asSeq.map(_.asEnum))
 
   // ===========================================================================
-  def enumeratum   [T <: EnumEntry: WTT](key: KPathW):     T  = enm  (key)            .stringValue.pipe(withEntryName[T])
-  def enumeratum_  [T <: EnumEntry: WTT](key: KPathW): Opt[T] = enm_ (key).map(      _.stringValue.pipe(withEntryName[T]))
-  def enumeratums  [T <: EnumEntry: WTT](key: KPathW): Seq[T] = enms (key)      .map(_.stringValue.pipe(withEntryName[T]))
-  def enumeratums_ [T <: EnumEntry: WTT](key: KPathW): Pes[T] = enms_(key).map(_.map(_.stringValue.pipe(withEntryName[T])))
+  def enumeratum   [T <: EnumEntry: WTT](key: KPathW):     T  = enm  (key)            .stringValue.pipe(reflect.low.withEntryName[T])
+  def enumeratum_  [T <: EnumEntry: WTT](key: KPathW): Opt[T] = enm_ (key).map(      _.stringValue.pipe(reflect.low.withEntryName[T]))
+  def enumeratums  [T <: EnumEntry: WTT](key: KPathW): Seq[T] = enms (key)      .map(_.stringValue.pipe(reflect.low.withEntryName[T]))
+  def enumeratums_ [T <: EnumEntry: WTT](key: KPathW): Pes[T] = enms_(key).map(_.map(_.stringValue.pipe(reflect.low.withEntryName[T])))
 
   // ---------------------------------------------------------------------------
   def text  (key: KPathW):     String  = forcePath  (key).pipe           (DataDynamicFormatting.formatBasicValue)

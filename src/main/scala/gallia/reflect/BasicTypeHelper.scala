@@ -13,7 +13,7 @@ private[reflect] trait BasicTypeHelper { ignored: BasicType =>
   protected def accessorNameModifier(value: FullName): String = value // overriden by some: BigDec, Enum, ...
 
   // ===========================================================================
-  final lazy val alias: Option[Alias] = ReflectUtils.simplify(fullName).in.noneIf(_ == fullName)
+  final lazy val alias: Option[Alias] = simplifyFullName(fullName).in.noneIf(_ == fullName)
 
   final lazy val node: TypeNode = TypeNode(TypeLeaf(fullName, fullName.split("\\.").last, alias) , Nil)
 

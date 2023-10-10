@@ -13,12 +13,6 @@ object BasicTypeUtils {
       .withDefault { value => aptus.illegalState(s"TODO:CantFindType:201013093225:${value}") }
 
   // ===========================================================================
-  private[reflect] def normalizeFullName(value: FullName): FullName =
-    /**/ if (value == "java.lang.Integer") "scala.Int"
-    else if (value == "java.lang.String")   value
-    else                                    value.replace("java.lang.", "scala.") // not so for java.math (not equivalent at runtime)
-
-  // ===========================================================================
   def combine(values: Seq[BasicType]): BasicType = // TODO: subtype these 3?
     values.distinct.sortBy(_.entryName) match {
       case Seq(                   BasicType._Int                   ) => BasicType._Int

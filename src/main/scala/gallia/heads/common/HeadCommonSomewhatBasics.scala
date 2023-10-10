@@ -12,7 +12,6 @@ import actions.common.ActionsCommonUntuplify._
 import domain._
 import target._
 import target.utils.TypedTargetQueryUtils._
-import reflect.ReflectUtils
 
 // ===========================================================================
 trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
@@ -269,7 +268,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
     // ===========================================================================
     class _Untuplify1z(targetKey: Ren) {
-          def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(ReflectUtils.enumValueNames[E])
+          def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(reflect.low.enumValueNames[E])
           def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
           def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
             Untuplify1z(targetKey, keys.keyz) }
@@ -277,7 +276,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
     // ---------------------------------------------------------------------------
     class _Untuplify1a(targetKey: Ren) {
       def withSplitter(entriesSplitter: StringSplitter) = new {
-          def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(ReflectUtils.enumValueNames[E])
+          def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(reflect.low.enumValueNames[E])
           def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
           def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
             Untuplify1a(targetKey, entriesSplitter, keys.keyz) } }
@@ -285,7 +284,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
     // ---------------------------------------------------------------------------
     class _Untuplify1b(targetKey: Ren) {
       def withSplitters(arraySplitter: StringSplitter, entriesSplitter: StringSplitter) = new {
-          def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(ReflectUtils.enumValueNames[E])
+          def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(reflect.low.enumValueNames[E])
           def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
           def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
             Untuplify1b(targetKey, arraySplitter, entriesSplitter, keys.keyz) } }
@@ -293,7 +292,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
     // ===========================================================================
     final class _Untuplify2z(targetKey: Ren) {
         def withSplitter(entrySplitter: StringSplitter) = new {
-            def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(ReflectUtils.enumValueNames[E])
+            def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(reflect.low.enumValueNames[E])
             def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
             def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
               Untuplify2z(targetKey, entrySplitter, keys.keyz) } }
@@ -301,7 +300,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
       // ---------------------------------------------------------------------------
       final class _Untuplify2a(targetKey: Ren) {
         def withSplitters(entriesSplitter: StringSplitter, entrySplitter: StringSplitter) = new {
-            def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(ReflectUtils.enumValueNames[E])
+            def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(reflect.low.enumValueNames[E])
             def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
             def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
               Untuplify2a(targetKey, entriesSplitter, entrySplitter, keys.keyz) } }
@@ -309,7 +308,7 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
       // ---------------------------------------------------------------------------
       final class _Untuplify2b(targetKey: Ren) {
         def withSplitters(arraySplitter: StringSplitter, entriesSplitter: StringSplitter, entrySplitter: StringSplitter) = new {
-            def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(ReflectUtils.enumValueNames[E])
+            def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(reflect.low.enumValueNames[E])
             def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
             def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
               Untuplify2b(targetKey, arraySplitter, entriesSplitter, entrySplitter, keys.keyz) } }

@@ -6,7 +6,6 @@ import FunctionWrappers._
 import actions.ActionsZZSorting._
 import domain.{Sorter, SortingPair}
 import atoms.utils.SuperMetaPair
-import reflect.ReflectUtils
 
 // ===========================================================================
 @Max5
@@ -82,14 +81,14 @@ trait HeadZSorting { self: HeadZ =>
 
   // sort using 1
   def sortUsing[O1: WTT](f1: SortingT[O1]) = new {
-      def using[D: WTT: Ordering](f: O1 => D): Self = zz(CustomSort1(resolve(f1), wrap(f), SuperMetaPair(ReflectUtils.ctag[D], implicitly[Ordering[D]]))) }
+      def using[D: WTT: Ordering](f: O1 => D): Self = zz(CustomSort1(resolve(f1), wrap(f), SuperMetaPair(reflect.low.ctag[D], implicitly[Ordering[D]]))) }
 
     // ---------------------------------------------------------------------------
     // sort using 2
 
     def sortUsing[O1: WTT, O2: WTT](f1: SortingT[O1], f2: SortingT[O2]) = new {
       def using[D: WTT: Ordering](f: (O1, O2) => D): Self =
-        zz(CustomSort2(resolve2(f1, f2), wrap21(f), SuperMetaPair(ReflectUtils.ctag[D], implicitly[Ordering[D]]))) }
+        zz(CustomSort2(resolve2(f1, f2), wrap21(f), SuperMetaPair(reflect.low.ctag[D], implicitly[Ordering[D]]))) }
 
     // TODO: more
 

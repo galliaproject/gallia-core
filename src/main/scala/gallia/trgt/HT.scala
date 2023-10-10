@@ -19,9 +19,9 @@ class HT(
       private def instantiator[T: WTT](to: TypeNode): Instantiator = {
         if (!to.isContainedDataClass) null // TODO
         else {
-               if (to.isOptionOfSeq)        reflect.InstantiatorUtils.fromFirstTypeArgFirstTypeArg[T]       // eg Option[Seq[MyCc]]
-          else if (to.isSeq || to.isOption) reflect.InstantiatorUtils.fromFirstTypeArg            [T]       // eg Option[    MyCc ]
-          else                              reflect.InstantiatorUtils.fromTypeDirectly            [T] } } } // eg            MyCc
+               if (to.isOptionOfSeq)        reflect.low.instantiateFromFirstTypeArgFirstTypeArg[T]       // eg Option[Seq[MyCc]]
+          else if (to.isSeq || to.isOption) reflect.low.instantiateFromFirstTypeArg            [T]       // eg Option[    MyCc ]
+          else                              reflect.low.instantiateFromTypeDirectly            [T] } } } // eg            MyCc
 
   // ===========================================================================
   class HT2(val ht1: HT, val ht2: HT) extends HasTypes2
@@ -31,7 +31,6 @@ class HT(
       def from[T1: WTT, T2: WTT] =
         new HT2(
           new HT(typeNode[T1], HT.instantiator[T1]),
-          new HT(typeNode[T2], HT.instantiator[T2]) )
-    }
+          new HT(typeNode[T2], HT.instantiator[T2]) ) }
 
 // ===========================================================================

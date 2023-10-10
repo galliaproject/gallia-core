@@ -1,14 +1,16 @@
 package gallia
 package reflect
+package lowlevel
 
 import aptus.Anything_
 
 // ===========================================================================
-object TypeLeafParser {
+private object TypeLeafParser {
 
   def parseTypeNode[A: WTT]: TypeNode = parseNode(scala.reflect.runtime.universe.weakTypeTag[A].tpe)
 
-  def parseNode(tpe: UType): TypeNode =
+  // ---------------------------------------------------------------------------
+  private[reflect] def parseNode(tpe: UType): TypeNode =
     TypeNode(
         leaf = TypeLeafParser(tpe),
         args = tpe.typeArgs.map(parseNode))
@@ -72,7 +74,7 @@ object TypeLeafParser {
     ReflectUtils
       .parseFields(tpe)
       .map { case (name, returnTpe) =>
-        Field(name, reflect.TypeLeafParser.parseNode(returnTpe)) }
+        Field(name, parseNode(returnTpe)) }
 
 }
 

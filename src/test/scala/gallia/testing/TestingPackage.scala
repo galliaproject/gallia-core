@@ -17,14 +17,6 @@ package object testing {
     value
       .copy(c = keys
       .map(_.value)
-      .foldLeft(value.c)(_ toOptional _))
-
-  // ===========================================================================
-  /** typically those are private so users don't shoot themselves in the foot */
-  object accessPrivate {
-    def useWeakTypeTagDecorator[T: WTT, A](wtt: WTT[T])(f: WeakTypeTagDecorator[T] => A) =
-      f(new WeakTypeTagDecorator(
-        wtt.tpe.pipe(reflect.ReflectUtils.fullNameFromType) )) }
-}
+      .foldLeft(value.c)(_ toOptional _)) }
 
 // ===========================================================================

@@ -1,8 +1,9 @@
 package gallia
 package reflect
+package lowlevel
 
 // ===========================================================================
-object ReflectUtils {
+private object ReflectUtils {
   import scala.reflect.api
   import scala.reflect.runtime.universe
   import scala.reflect.runtime.universe.weakTypeTag
@@ -13,27 +14,13 @@ object ReflectUtils {
     tpe
       .toString
       .takeWhile(_ != '[') /* TODO: cleaner way? */
-      .pipe(simplify)
+      .pipe(simplifyFullName)
 
-  def     name[T : WTT]:     Name = weakTypeTag[T].tpe.typeSymbol.name.decodedName.toString
+  // ---------------------------------------------------------------------------
   def fullName[T : WTT]: FullName = weakTypeTag[T].tpe.typeSymbol.fullName
 
-  // ---------------------------------------------------------------------------
-  def fullNameFromType (tpe: UType): FullName = tpe.typeSymbol.fullName
-  def fullNameFromValue(value: Any): FullName = value.getClass.getName.pipe(BasicTypeUtils.normalizeFullName) // TODO: t220411094433 - hopefully there's a cleaner way...
-
-  // ---------------------------------------------------------------------------
-  def simplify(value: FullName): Alias =
-    value
-      .stripPrefix("java.lang.")
-      .stripPrefix("java.time.")
-      .stripPrefix("java.math.")
-      .stripPrefix("scala.package.")
-      .stripPrefix("scala.")
-      .stripPrefix("enumeratum.")
-
   // ===========================================================================
-  def parseFields(tpe: UType): List[(Name, UType)] =
+  private[reflect] def parseFields(tpe: UType): List[(Name, UType)] =
       _methodSymbols(tpe)
         .map { method =>
           val name = method.name.decodedName.toString
@@ -52,7 +39,7 @@ object ReflectUtils {
 
     // ---------------------------------------------------------------------------
 //TODO: change to UType?
-    def methodSymbols(tpe: universe.Type) = // can't easily refactor with above, so at least keep them together
+    private[reflect] def methodSymbols(tpe: universe.Type) = // can't easily refactor with above, so at least keep them together
       tpe
         .decls
         .filter((x: api.Symbols#SymbolApi) => x.isMethod)
@@ -66,7 +53,7 @@ object ReflectUtils {
 
   // ---------------------------------------------------------------------------
   /** enum must not be nested somehow */
-  def enumValueNames(tpe: UType): Seq[String] =
+  private[reflect] def enumValueNames(tpe: UType): Seq[String] =
     tpe
       .companion
       .members

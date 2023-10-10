@@ -5,10 +5,10 @@ import gallia.domain._
 package object gallia
     extends Reserved
     with    Aliases
-    with    reflect.ReflectionAbstraction
     with    Annotations
     with    CustomTraits
-    with    GenericEntryImplicits {
+    with    GenericEntryImplicits
+    with    reflect.lowlevel.ReflectionTypesAbstraction {
 
   // ---------------------------------------------------------------------------
   private[gallia] implicit class GalliaAnything_[A](value: A) { // so as to not import chaining._ everywhere
@@ -160,7 +160,7 @@ package object gallia
   private[gallia] def errs  (any: Any)             : Errs = Seq(Err(any))
 
   // ---------------------------------------------------------------------------
-  private[gallia] def typeNode[T: WTT] = reflect.TypeLeafParser.parseTypeNode[T]
+  private[gallia] def typeNode[T: WTT]: reflect.TypeNode = reflect.low.typeNode[T]
 
   // ===========================================================================
   /** until/unless sure what we'll use - only to be used in non-object arrays/matrices/tensors */

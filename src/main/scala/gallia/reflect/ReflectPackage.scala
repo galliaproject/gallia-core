@@ -6,7 +6,9 @@ import aptus.Class_
 package object reflect {
   /** eg           "String" */ type     Name = String
   /** eg "java.lang.String" */ type FullName = String
-  /** eg "String"           */ type Alias    = String
+  /** eg           "String" */ type Alias    = String
+
+  /** eg "north" for Cardinal.north */ type EntryNameString = String
 
   // ===========================================================================
   private[reflect] val _AObj    = classOf[gallia.AObj].fullPath
@@ -28,6 +30,32 @@ package object reflect {
   // ===========================================================================
   private[reflect] val _EnumEntry = classOf[enumeratum.EnumEntry].fullPath
   private[gallia]  val _EnumValue = classOf[gallia.EnumValue]    .fullPath
+
+  // ===========================================================================
+  def simplifyFullName(value: FullName): Alias =
+    value
+      .stripPrefix("java.lang.")
+      .stripPrefix("java.time.")
+      .stripPrefix("java.math.")
+      .stripPrefix("scala.package.")
+      .stripPrefix("scala.")
+      .stripPrefix("enumeratum.")
+
+  // ---------------------------------------------------------------------------
+  def normalizeFullName(value: FullName): FullName =
+    /**/ if (value == "java.lang.Integer") "scala.Int"
+    else if (value == "java.lang.String")   value
+    else                                    value.replace("java.lang.", "scala.") // not so for java.math (not equivalent at runtime)
+
+  // ---------------------------------------------------------------------------
+  def fullNameFromValue(value: Any): FullName =
+    value
+      .getClass
+      .getName
+      .pipe(normalizeFullName)
+
+  // ===========================================================================
+  val low: lowlevel.ReflectionUtilsAbstraction = lowlevel.ConcreteReflectionUtils
 }
 
 // ===========================================================================

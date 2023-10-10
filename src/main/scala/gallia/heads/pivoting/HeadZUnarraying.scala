@@ -5,7 +5,6 @@ package pivoting
 import aptus.Separator
 
 import actions.ActionsOthers._
-import reflect.ReflectUtils
 
 // ===========================================================================
 @deprecated trait HeadZUnarraying /* "pivone" */ { self: HeadZ =>
@@ -23,7 +22,7 @@ import reflect.ReflectUtils
 
     // ---------------------------------------------------------------------------
     class _UnarrayEntries1(keyKeys: Keyz) {
-      def asNewKeys[E <: EnumEntry : WTT]: __UnarrayEntries1 = asNewKeys(ReflectUtils.enumValueNames[E])
+      def asNewKeys[E <: EnumEntry : WTT]: __UnarrayEntries1 = asNewKeys(reflect.low.enumValueNames[E])
       def asNewKeys(x1: KeyW, xs: KeyW*) : __UnarrayEntries1 = asNewKeys(Keyz.from(x1, xs))
       def asNewKeys(xs: KeyWz)           : __UnarrayEntries1 = new __UnarrayEntries1(xs.keyz)
 
@@ -33,7 +32,7 @@ import reflect.ReflectUtils
 
     // ---------------------------------------------------------------------------
     class _UnarrayEntriesN(keyKeys: Keyz) {
-      def asNewKeys[E <: EnumEntry : WTT]: __UnarrayEntriesN = asNewKeys(ReflectUtils.enumValueNames[E])
+      def asNewKeys[E <: EnumEntry : WTT]: __UnarrayEntriesN = asNewKeys(reflect.low.enumValueNames[E])
       def asNewKeys(x1: KeyW, xs: KeyW*) : __UnarrayEntriesN = asNewKeys(Keyz.from(x1, xs))
       def asNewKeys(xs: KeyWz)           : __UnarrayEntriesN = new __UnarrayEntriesN(xs.keyz)
 
@@ -59,13 +58,13 @@ import reflect.ReflectUtils
 
     // ---------------------------------------------------------------------------
     class _UnarrayBy1(keyKeys: Keyz) {
-      def asNewKeys[E <: EnumEntry : WTT]: HeadU = asNewKeys(ReflectUtils.enumValueNames[E])
+      def asNewKeys[E <: EnumEntry : WTT]: HeadU = asNewKeys(reflect.low.enumValueNames[E])
       def asNewKeys(x1: KeyW, xs: KeyW*) : HeadU = asNewKeys(Keyz.from(x1, xs))
       def asNewKeys(xs: KeyWz)           : HeadU = zu(UnarrayBy0(xs.keyz          , keyKeys, sep = null /* ignored by design */)) }
 
     // ---------------------------------------------------------------------------
     class _UnarrayByN(keyKeys: Keyz) {
-      def asNewKeys[E <: EnumEntry : WTT]: __UnarrayByN = asNewKeys(ReflectUtils.enumValueNames[E])
+      def asNewKeys[E <: EnumEntry : WTT]: __UnarrayByN = asNewKeys(reflect.low.enumValueNames[E])
       def asNewKeys(x1: KeyW, xs: KeyW*) : __UnarrayByN = asNewKeys(Keyz.from(x1, xs))
       def asNewKeys(xs: KeyWz)           : __UnarrayByN = new __UnarrayByN(xs.keyz)
 

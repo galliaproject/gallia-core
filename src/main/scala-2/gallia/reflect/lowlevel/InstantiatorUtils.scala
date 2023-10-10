@@ -1,5 +1,6 @@
 package gallia
 package reflect
+package lowlevel
 
 import aptus.{Seq_, String_}
 
@@ -9,7 +10,7 @@ import scala.reflect.runtime.universe
 import target.Instantiator
 
 // ===========================================================================
-object InstantiatorUtils {
+private object InstantiatorUtils {
 
   private type InstantiatorContructor[$Instantiator] =
     (aptus.DebugString, Map[Key, $Instantiator], java.lang.reflect.Constructor[_]) =>
@@ -19,19 +20,19 @@ object InstantiatorUtils {
   def fromFirstTypeArgFirstTypeArg[T: WTT]: Instantiator =
     scala.reflect.runtime.universe
       .weakTypeTag[T]
-      .pipe { wtt => reflect.InstantiatorUtils.rec(new Instantiator(_, _, _))(wtt.mirror)(wtt.tpe.typeArgs.head.typeArgs.head) }
+      .pipe { wtt => rec(new Instantiator(_, _, _))(wtt.mirror)(wtt.tpe.typeArgs.head.typeArgs.head) }
 
   // ---------------------------------------------------------------------------
   def fromFirstTypeArg[T: WTT]: Instantiator =
     scala.reflect.runtime.universe
       .weakTypeTag[T]
-      .pipe { wtt => reflect.InstantiatorUtils.rec(new Instantiator(_, _, _))(wtt.mirror)(wtt.tpe.typeArgs.head) }
+      .pipe { wtt => rec(new Instantiator(_, _, _))(wtt.mirror)(wtt.tpe.typeArgs.head) }
 
   // ---------------------------------------------------------------------------
   def fromTypeDirectly[T: WTT]: Instantiator =
     scala.reflect.runtime.universe
       .weakTypeTag[T]
-      .pipe { wtt => reflect.InstantiatorUtils.rec(new Instantiator(_, _, _))(wtt.mirror)(wtt.tpe) }
+      .pipe { wtt => rec(new Instantiator(_, _, _))(wtt.mirror)(wtt.tpe) }
 
   // ===========================================================================
   private def rec[$Instantiator]
@@ -40,7 +41,7 @@ object InstantiatorUtils {
           (mirror: universe.Mirror)
           (tpe   : universe.Type) // that we want to instantiate
         : $Instantiator = {
-      val node = reflect.TypeLeafParser.parseNode(tpe)
+      val node = TypeLeafParser.parseNode(tpe)
 
       val nestedObjs: Map[Key, $Instantiator] =
         ReflectUtils

@@ -10,7 +10,7 @@ object ReflectionTest extends utest.TestSuite { import utest._
   // ===========================================================================
   val tests = Tests {
     test("TypeNode") {
-      val actual   = gallia.reflect.TypeLeafParser.parseTypeNode[MyComplexData]
+      val actual   = gallia.reflect.low.typeNode[MyComplexData]
       val Expected = gallia.testing.resourceContent("TypeNodeExample.json").prettyJson
 
       Predef.assert(
@@ -18,13 +18,10 @@ object ReflectionTest extends utest.TestSuite { import utest._
         Seq(actual.formatDefault.prettyJson, "\n", Expected).section2) }
 
     // ---------------------------------------------------------------------------
-    test("WeakTypeTagDecorator") {
-      import scala.reflect.runtime.universe.weakTypeTag
+    test("WeakTypeTagDecorator") { // for union types
+      val wttd = new gallia.reflect.WeakTypeTagDecorator[Int]
 
-      assert(gallia.testing.accessPrivate.useWeakTypeTagDecorator(weakTypeTag[Int])   (_.sameType("foo") == false))
-      assert(gallia.testing.accessPrivate.useWeakTypeTagDecorator(weakTypeTag[String])(_.sameType("foo") == true)) }
-  }
-
-}
+      assert(wttd.ifApplicable(_ + 1).apply("foo") == "foo") // ignored
+      assert(wttd.ifApplicable(_ + 1).apply(1)     == 2) } } }
 
 // ===========================================================================

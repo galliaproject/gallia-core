@@ -5,7 +5,7 @@ import gallia.domain._
 package object gallia
     extends Reserved
     with    Aliases
-    with    WttAbstraction
+    with    reflect.ReflectionAbstraction
     with    Annotations
     with    CustomTraits
     with    GenericEntryImplicits {

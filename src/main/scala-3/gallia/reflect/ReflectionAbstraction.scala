@@ -1,7 +1,8 @@
 package gallia
+package reflect
 
 // ===========================================================================
-trait WttAbstraction {
+trait ReflectionAbstraction {
   private[gallia] trait UType
 
   // ---------------------------------------------------------------------------

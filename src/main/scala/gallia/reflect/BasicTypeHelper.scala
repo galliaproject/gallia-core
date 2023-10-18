@@ -9,13 +9,17 @@ private[reflect] trait BasicTypeHelper { ignored: BasicType =>
   import OptionOrdering._
 
   // ---------------------------------------------------------------------------
-  final     def accessorName                         : String = fullName.pipe(accessorNameModifier).splitBy(".").last.uncapitalizeFirst
-  protected def accessorNameModifier(value: FullName): String = value // overriden by some: BigDec, Enum, ...
+  final     def accessorName                               : String = fullName.pipe(accessorNameModifier).splitBy(".").last.uncapitalizeFirst
+  protected def accessorNameModifier(value: FullNameString): String = value // overriden by some: BigDec, Enum, ...
 
   // ===========================================================================
-  final lazy val alias: Option[Alias] = simplifyFullName(fullName).in.noneIf(_ == fullName)
-
-  final lazy val node: TypeNode = TypeNode(TypeLeaf(fullName, fullName.split("\\.").last, alias) , Nil)
+  final lazy val node: TypeNode =
+    TypeNode
+      .trivial(fullName)
+      .alias(valueOpt =
+        FullName
+          .simplifyFullName(fullName)
+          .in.noneIf(_ == fullName))
 
   // ===========================================================================
   def superPair(container: Container, descending: Boolean, missingLast: Boolean) =

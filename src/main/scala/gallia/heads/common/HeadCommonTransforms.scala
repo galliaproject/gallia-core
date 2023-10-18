@@ -89,7 +89,6 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
 
     // ===========================================================================
     class _TransformVV[O: WTT](f1: Transform[O]) { val ttq = resolves(f1)
-      private val wtto = new reflect.WeakTypeTagDecorator[O]()
 
       // ---------------------------------------------------------------------------
       def withSchema(field1: Fld, more: Fld*): _UsingSchema = new _UsingSchema(cls(field1 +: more))
@@ -109,6 +108,8 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
 
       // ---------------------------------------------------------------------------
       def using[D: WTT](f: O => D): Self2 = self2 :+ {
+        val wtto = new reflect.WeakTypeTagDecorator[O]()
+
         val dest = typeNode[D]
 
         if (!dest.isContainedDataClass)

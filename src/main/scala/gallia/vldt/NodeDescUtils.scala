@@ -29,8 +29,7 @@ object NodeDescUtils {
          generic                      -> s"${ErrorId.GenericClass}",
          fields.isEmpty               -> s"${ErrorId.NoFields}",
         !fields.map(_.key).isDistinct -> s"${ErrorId.DuplicateKeys}: ${fields.map(_.key).duplicates.distinct.#@@}") ++
-      fields.
-      flatMap(_.errorMessages(parent.append(name.value)))
+      fields.flatMap(_.errorMessages(parent.append(name.value)))
 
   }
 
@@ -53,16 +52,16 @@ object NodeDescUtils {
 
     def isInvalid: Boolean =
       u match {
-        case Node(_)          => true
+        case Error(_)         => true
         case Enumeratum       => false
-        case Named(fullName)  => fullName != reflect._EnumValue && !BasicType.isKnown(fullName)
+        case Named(fullName)  => !FullName.from(fullName).isEnumValue && !BasicType.isKnown(fullName)
         case Nesting(nesting) => nesting.isInvalid }
 
     // ===========================================================================
     def errorMessages                : Seq[ErrorMsg] = errorMessages(Parent.Root)
     def errorMessages(parent: Parent): Seq[ErrorMsg] =
       u match {
-        case Node(node)  => s"${ErrorId.InvalidTypeNode} - ${parent} ${node.formatDefault}".in.seq
+        case Error(node) => s"${ErrorId.InvalidTypeNode} - ${parent} ${node.formatDefault}".in.seq
         case Enumeratum  => Nil
         case Named(name) =>
           if (BasicType.isKnown(name)) Nil

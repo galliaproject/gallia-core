@@ -39,7 +39,7 @@ private[gallia] object InfoUtils {
   def forceNonBObjInfo(node: TypeNode): Info =
       node
         .forceValidContainer
-        .pipe(valueType(None /* TODO? */)(node.isContainedDataClass))
+        .pipe(valueType(enmOpt = None /* TODO? */)(node.isContainedDataClass))
         .pipe(node.containerType.info)
 
     // ---------------------------------------------------------------------------

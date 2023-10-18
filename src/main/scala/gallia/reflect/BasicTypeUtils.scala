@@ -6,7 +6,7 @@ import aptus.Seq_
 // ===========================================================================
 object BasicTypeUtils {
 
-  private[reflect] def createLookup(values: Seq[BasicType]): Map[FullName, BasicType] =
+  private[reflect] def createLookup(values: Seq[BasicType]): Map[FullNameString, BasicType] =
     values
       .map { x => x.fullName -> x }
       .force.map

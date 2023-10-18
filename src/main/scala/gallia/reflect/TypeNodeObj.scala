@@ -12,9 +12,17 @@ object TypeNodeObj {
     // ---------------------------------------------------------------------------
     def tipe(value: TypeLeaf): Obj =
         obj(
-          "name"      -> value.name,
-          "alias"     -> value.alias,
-          "dataClass" -> value.dataClass,
+          "name"        -> value.name,
+          "inScopeName" -> value.inScopeName,
+          "alias"       -> value.alias,
+
+          "dataClass"   -> value.dataClass,
+          "enm"         -> value.enm,
+          "bytes"       -> value.bytes,
+          "inheritsSeq" -> value.inheritsSeq,
+
+          "enumeratumValueNamesOpt" -> value.enumeratumValueNamesOpt,
+
           "fields"    -> value.fields.map(field))
 
       // ---------------------------------------------------------------------------

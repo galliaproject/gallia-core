@@ -39,7 +39,7 @@ private object InstantiatorUtils {
           (mirror: universe.Mirror)
           (tpe   : universe.Type) // that we want to instantiate
         : $Instantiator = {
-      val node = TypeLeafParser.parseNode(tpe)
+      val node = TypeLeafParser._parseTypeNode(tpe)
 
       val nestedObjs: Map[Key, $Instantiator] =
         ReflectUtils

@@ -2,42 +2,35 @@ package gallia
 package reflect
 package lowlevel
 
-import aptus.Anything_
-
 // ===========================================================================
 private object TypeLeafParser {
 
-  def parseTypeNode[A: WTT]: TypeNode = parseNode(scala.reflect.runtime.universe.weakTypeTag[A].tpe)
+  def parseTypeNode[A: WTT]: TypeNode = _parseTypeNode(runiverse.weakTypeTag[A].tpe)
 
   // ---------------------------------------------------------------------------
-  private[reflect] def parseNode(tpe: UType): TypeNode =
+  def _parseTypeNode(tpe: UType): TypeNode =
     TypeNode(
-        leaf = TypeLeafParser(tpe),
-        args = tpe.typeArgs.map(parseNode))
+        leaf = apply(tpe),
+        args = tpe.typeArgs.map(_parseTypeNode))
 
   // ===========================================================================
-  def apply(tpe: UType): TypeLeaf = {
+  private def apply(tpe: UType): TypeLeaf = {
     val symbol = tpe.typeSymbol
 
-    val fullName  = symbol.fullName
+    val fullName: FullName = symbol.fullName.pipe(FullName.from)
 
-    val alias: Option[String] =
-      this
-        .alias(tpe)
-        .in.noneIf(_ == fullName) // eg "String" instead of "java.lang.String", but None for "foo.bar.Baz"
+    val inScopeName: String = symbol.name.encodedName.toString
 
-    val baseClassNames: List[String] =
-      tpe
-        .baseClasses
-        .map(_.fullName)
+    val alias: Option[Alias] = tpe.toString.pipe(fullName.alias) // eg "String" instead of "java.lang.String", but None for "foo.bar.Baz"
 
-    // ---------------------------------------------------------------------------
-    val enm: Boolean = fullName == _EnumValue
+    val baseClassNames: List[FullNameString] = tpe.baseClasses.map(_.fullName)
+
+    val enumValue: Boolean = fullName.isEnumValue
 
     // ---------------------------------------------------------------------------
     val enumeratumValueNamesOpt =
-      if (baseClassNames.contains(_EnumEntry)) Some(ReflectUtils.enumValueNames(tpe))
-      else                                     None
+      if (FullName.containsEnumEntry(baseClassNames)) Some(ReflectUtils.enumValueNames(tpe))
+      else                                            None
 
     // ---------------------------------------------------------------------------
     val caseClass: Boolean =
@@ -45,44 +38,36 @@ private object TypeLeafParser {
       symbol.asClass.isCaseClass
 
     // ---------------------------------------------------------------------------
-    val dataClass =
+    val dataClass: Boolean =
       /**/  caseClass &&
-      /**/ !enm &&
+      /**/ !enumValue &&
       /**/  enumeratumValueNamesOpt.isEmpty &&
-      /**/ !fullName.startsWith("scala.")
+      /**/ !fullName.startsWithScalaPackage
 
     // ---------------------------------------------------------------------------
     TypeLeaf(
-      name        = fullName,
-      inScopeName = symbol.name.encodedName.toString,      
+      name        = fullName.format,
+      inScopeName = inScopeName,
       alias       = alias,
 
       dataClass   = dataClass,
-      enm         = enm,
-      bytes       = fullName == _ByteBuffer,      
-      inheritsSeq = baseClassNames.contains(_Seq),
+      enm         = enumValue,
+      bytes       = fullName.isByteBuffer,
+      inheritsSeq = FullName.containsSeq(baseClassNames),
 
       enumeratumValueNamesOpt = enumeratumValueNamesOpt,
 
-      fields      =
-        if (caseClass) parseFields(tpe) // may in theory be empty
+      fields =
+        if (dataClass) parseFields(tpe) // may in theory be empty
         else           Nil)
   }
 
   // ===========================================================================
-  /** eg "Option" from "scala.Option[String]", or "String" from "java.lang.String" */
-  private def alias(tpe: UType): Alias =
-    tpe
-      .toString
-      .takeWhile(_ != '[') /* TODO: cleaner way? */
-      .pipe(simplifyFullName)
-
-  // ---------------------------------------------------------------------------
   private def parseFields(tpe: UType): Seq[Field] =
     ReflectUtils
       .parseFields(tpe)
       .map { case (name, returnTpe) =>
-        Field(name, parseNode(returnTpe)) }
+        Field(name, _parseTypeNode(returnTpe)) }
 
 }
 

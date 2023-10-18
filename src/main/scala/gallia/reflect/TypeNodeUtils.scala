@@ -11,7 +11,7 @@ object TypeNodeUtils {
       _validContainerOpt(dis)
         .flatMap { node => node.args match {
             case Nil => Some(node.leaf)
-            case seq => None } }
+            case _   => None } }
 
     // ---------------------------------------------------------------------------
     private def _validContainerOpt(dis: TypeNode): Option[TypeNode] = { import dis._
@@ -31,8 +31,7 @@ object TypeNodeUtils {
       def tmp(value: TypeLeaf) = value.alias.getOrElse(value.name)
 
       def isTopLevel(value: TypeNode): Boolean =
-        !value.complex &&
-        BasicType.isKnown(value.leaf.name)
+        !value.complex && BasicType.isKnown(value.leaf.name)
 
       // ---------------------------------------------------------------------------
       containerTypeOpt match {
@@ -47,7 +46,7 @@ object TypeNodeUtils {
 
         case None =>
           if (isTopLevel(dis)) s"succinct:${tmp(leaf)}"
-          else                 formatDefault
+          else                 dis.formatDefault
       }
     }
 }

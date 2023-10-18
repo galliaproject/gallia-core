@@ -8,6 +8,7 @@ package object gallia
     with    Annotations
     with    CustomTraits
     with    GenericEntryImplicits
+with ReflectExtensions
     with    reflect.lowlevel.ReflectionTypesAbstraction {
 
   // ---------------------------------------------------------------------------
@@ -160,7 +161,8 @@ package object gallia
   private[gallia] def errs  (any: Any)             : Errs = Seq(Err(any))
 
   // ---------------------------------------------------------------------------
-  private[gallia] def typeNode[T: WTT]: reflect.TypeNode = reflect.low.typeNode[T]
+/*private[gallia] */def typeNode[T: WTT]: reflect.TypeNode = /*reflect.low.typeNode[T]*/gallia.reflect.lowlevel.ConcreteReflectionUtils.typeNode[T]
+
 
   // ===========================================================================
   /** until/unless sure what we'll use - only to be used in non-object arrays/matrices/tensors */

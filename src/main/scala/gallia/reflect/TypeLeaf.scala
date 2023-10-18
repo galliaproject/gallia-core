@@ -4,10 +4,10 @@ package reflect
 import aptus.{String_, Seq_}
 
 // ===========================================================================
-case class TypeLeaf(
-      name       : FullName,                // eg java.lang.String
-      inScopeName: String,                  // eg String
-      alias      : Option[FullName] = None, // eg String
+case class TypeLeaf( // TODO: t231018094951 - capture classOf[T].getName as it doesn't always agree (eg "int") - requires mirror?
+      name       : FullNameString,       // eg java.lang.String
+      inScopeName: String,               // eg String
+      alias      : Option[Alias] = None, // eg String
 
       dataClass  : Boolean = false, // eg "case class Foo(a: String, b: Int)", but not necessarily all case classes (eg not scala.Some)
       enm        : Boolean = false, // "enum" is reserved in scala 3
@@ -16,17 +16,18 @@ case class TypeLeaf(
 
       enumeratumValueNamesOpt: Option[Seq[String]] = None, // not used currently
       fields: Seq[Field] = Nil) {
+    val fullName = FullName.from(name)
 
-    def keyz: Keyz = fields.map(_.key.symbol).pipe(Keyz.apply)
+    def keys: Seq[Key] = fields.map(_.key.symbol)
 
     // ---------------------------------------------------------------------------
     def isSeq       : Boolean = inheritsSeq
     def isEnumeratum: Boolean = enumeratumValueNamesOpt.nonEmpty
 
-    def isOption: Boolean = name == _Option
+    def isOption: Boolean = fullName.isOption
 
-    def isNone: Boolean = name == _None
-    def isSome: Boolean = name == _Some
+    def isNone: Boolean = fullName.isNone
+    def isSome: Boolean = fullName.isSome
 
     def isNotOne: Boolean = isSeq || isOption
 
@@ -34,19 +35,10 @@ case class TypeLeaf(
     def unaliased: TypeLeaf = copy(alias = None, fields = fields.map(_.unaliased))
 
     // ===========================================================================
-    def forceDataClass: Cls =
-      dataClassEither match {
-        case Left (l) => aptus.illegalArgument(l)
-        case Right(r) => r }
-
-    // ---------------------------------------------------------------------------
-    def dataClassEither: Either[Any, Cls] = // TODO: use Try until determine precise criteria (cc + not Some + valid types...)
-      util.Try(meta.InfoUtils.forceNestedClass(this)) match {
-        case util.Failure(error)          => Left(s"TODO:t201015102536:${error.toString}")
-        case util.Success(validDataClass) => Right(validDataClass) }
-
-    // ---------------------------------------------------------------------------
-    def enumeratumEnum: Seq[EnumValue] = enumeratumValueNamesOpt.get.map(EnumValue.apply)
+    // TODO: t231017103243 - use lens lib
+    def alias      (value   :        Alias ): TypeLeaf = copy(alias       = Some(value))
+    def alias      (valueOpt: Option[Alias]): TypeLeaf = copy(alias       = valueOpt)
+    def inScopeName(value   : InScopeName  ): TypeLeaf = copy(inScopeName = value)
 
     // ===========================================================================
     override def toString: String = formatDefault
@@ -57,10 +49,29 @@ case class TypeLeaf(
       // ---------------------------------------------------------------------------
       private def _formatDefault: String =
         Seq(
-            name, inScopeName, alias,
-            dataClass, enm, bytes, inheritsSeq,
-            enumeratumValueNamesOpt)
-          .join("\t")
+            "inScopeName" ->  inScopeName,
+            "alias"       ->  alias,
+
+            "dataClass"   ->  dataClass,
+            "enm"         ->  enm,
+            "bytes"       ->  bytes,
+            "inheritsSeq" ->  inheritsSeq,
+
+            "enumeratumValueNamesOpt" -> enumeratumValueNamesOpt,
+            "fields" ->  fields)
+          .section(name)
   }
+
+  // ===========================================================================
+  object TypeLeaf {
+    val Dummy               : TypeLeaf = TypeLeaf.trivial("gallia.Dummy")
+    def debug(value: String): TypeLeaf = Dummy.alias(value)
+
+    // ---------------------------------------------------------------------------
+    def trivial(name: String, alias: String): TypeLeaf = trivial(name).alias(alias)
+    def trivial(name: String)               : TypeLeaf =
+      TypeLeaf(
+        name        = name,
+        inScopeName = name.splitBy(".").last) }
 
 // ===========================================================================

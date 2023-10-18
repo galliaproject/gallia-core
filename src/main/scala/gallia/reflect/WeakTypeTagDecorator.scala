@@ -3,11 +3,11 @@ package reflect
 
 // ===========================================================================
 class WeakTypeTagDecorator[T: WTT]() {
-  private val fullName: FullName = reflect.low.fullName[T]
+  private val fullName: FullNameString = reflect.low.fullName[T]
 
   // ---------------------------------------------------------------------------
   // TODO: t220411094433 - hopefully there's a cleaner way...
-  private def sameType(value: Any): Boolean = fullName == reflect.fullNameFromValue(value)
+  private def sameType(value: Any): Boolean = fullName == reflect.FullName.fromRuntimeValue(value)
 
   // ===========================================================================
   // see t210125111338 (union types)

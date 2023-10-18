@@ -101,7 +101,7 @@ object MetaValidationHelper {
 
   // ===========================================================================
   def validateCaseClass(location: Location)(leaf: TypeLeaf): Errs =
-    validateKeys(location)(leaf.keyz) ++
+    validateKeys(location)(leaf.keys.pipe(Keyz.apply)) ++
     leaf
       .fields
       .flatMap { field =>

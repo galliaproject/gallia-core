@@ -5,7 +5,7 @@ package lowlevel
 // ===========================================================================
 /** differs based on 2.x vs 3.x */
 trait ReflectionUtilsAbstraction {
-  def fullName[T : WTT]: FullName
+  def fullName[T : WTT]: FullNameString
   def ctag    [T : WTT]: CT[T]
   def typeNode[T : WTT]: TypeNode
 

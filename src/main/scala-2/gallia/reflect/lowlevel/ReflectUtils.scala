@@ -7,7 +7,7 @@ import scala.reflect.api
 // ===========================================================================
 private object ReflectUtils {
 
-  private[reflect] def parseFields(tpe: UType): List[(Name, UType)] =
+  private[reflect] def parseFields(tpe: UType): List[(String, UType)] =
       _methodSymbols(tpe)
         .map { method =>
           val name = method.name.decodedName.toString

@@ -1,61 +1,17 @@
 package gallia
 
-import aptus.Class_
-
 // ===========================================================================
 package object reflect {
-  /** eg           "String" */ type     Name = String
-  /** eg "java.lang.String" */ type FullName = String
-  /** eg           "String" */ type Alias    = String
-
-  /** eg "north" for Cardinal.north */ type EntryNameString = String
-
-  // ===========================================================================
-  private[reflect] val _AObj    = classOf[gallia.AObj].fullPath
-  private[reflect] val _BObj    = classOf[gallia.BObj].fullPath
-
-  private[reflect] val _HeadU    = classOf[gallia.heads.HeadU].fullPath
-  private[reflect] val _HeadZ    = classOf[gallia.heads.HeadZ].fullPath
-
-  // ===========================================================================
-  private[reflect] val _Seq    = classOf[scala.collection.Seq[_]].fullPath
-  private[reflect] val _Option = classOf[scala.Option[_]]        .fullPath
-
-  private[reflect] val _Some   = classOf[scala.Some[_]].fullPath
-  private[reflect] val _None   = scala.None.getClass.fullPath
-
-  // ===========================================================================
-  private[reflect] val _ByteBuffer = classOf[java.nio.ByteBuffer].fullPath
-
-  // ===========================================================================
-  private[reflect] val _EnumEntry = classOf[enumeratum.EnumEntry].fullPath
-  private[gallia]  val _EnumValue = classOf[gallia.EnumValue]    .fullPath
-
-  // ===========================================================================
-  def simplifyFullName(value: FullName): Alias =
-    value
-      .stripPrefix("java.lang.")
-      .stripPrefix("java.time.")
-      .stripPrefix("java.math.")
-      .stripPrefix("scala.package.")
-      .stripPrefix("scala.")
-      .stripPrefix("enumeratum.")
+  lazy val low: lowlevel.ReflectionUtilsAbstraction = lowlevel.ConcreteReflectionUtils
 
   // ---------------------------------------------------------------------------
-  def normalizeFullName(value: FullName): FullName =
-    /**/ if (value == "java.lang.Integer") "scala.Int"
-    else if (value == "java.lang.String")   value
-    else                                    value.replace("java.lang.", "scala.") // not so for java.math (not equivalent at runtime)
+  /** eg           "String" */ type InScopeName    = String
+  /** eg "java.lang.String" */ type FullNameString = String
 
-  // ---------------------------------------------------------------------------
-  def fullNameFromValue(value: Any): FullName =
-    value
-      .getClass
-      .getName
-      .pipe(normalizeFullName)
+  /** eg "String" instead of "java.lang.String", but None for "foo.bar.Baz" */
+  type Alias       = String
 
-  // ===========================================================================
-  val low: lowlevel.ReflectionUtilsAbstraction = lowlevel.ConcreteReflectionUtils
-}
+  /** eg "north" for Cardinal.north */
+  type EntryNameString = String }
 
 // ===========================================================================

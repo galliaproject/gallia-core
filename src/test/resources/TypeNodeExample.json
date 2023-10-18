@@ -1,171 +1,333 @@
-{ "leaf": {
+{
+  "leaf": {
     "name": "galliatesting.TestMeta.MyComplexData",
+    "inScopeName": "MyComplexData",
     "dataClass": true,
+    "enm": false,
+    "bytes": false,
+    "inheritsSeq": false,
     "fields": [
-      { "key": "b",
+      {
+        "key": "b",
         "node": {
           "leaf": {
             "name": "scala.Boolean",
+            "inScopeName": "Boolean",
             "alias": "Boolean",
-            "dataClass": false } }},
-      { "key": "myString",
+            "dataClass": false,
+            "enm": false,
+            "bytes": false,
+            "inheritsSeq": false
+          }
+        }
+      },
+      {
+        "key": "myString",
         "node": {
           "leaf": {
             "name": "java.lang.String",
+            "inScopeName": "String",
             "alias": "String",
-            "dataClass": false } }},
-      { "key": "myOptInt",
+            "dataClass": false,
+            "enm": false,
+            "bytes": false,
+            "inheritsSeq": false
+          }
+        }
+      },
+      {
+        "key": "myOptInt",
         "node": {
           "leaf": {
             "name": "scala.Option",
+            "inScopeName": "Option",
             "alias": "Option",
-            "dataClass": false
+            "dataClass": false,
+            "enm": false,
+            "bytes": false,
+            "inheritsSeq": false
           },
           "args": [
             {
               "leaf": {
                 "name": "scala.Int",
+                "inScopeName": "Int",
                 "alias": "Int",
-                "dataClass": false }}]}
+                "dataClass": false,
+                "enm": false,
+                "bytes": false,
+                "inheritsSeq": false
+              }
+            }
+          ]
+        }
       },
-      { "key": "myDoubles",
+      {
+        "key": "myDoubles",
         "node": {
           "leaf": {
             "name": "scala.collection.immutable.Seq",
+            "inScopeName": "Seq",
             "alias": "Seq",
-            "dataClass": false
+            "dataClass": false,
+            "enm": false,
+            "bytes": false,
+            "inheritsSeq": true
           },
           "args": [
-            { "leaf": {
+            {
+              "leaf": {
                 "name": "scala.Double",
+                "inScopeName": "Double",
                 "alias": "Double",
-                "dataClass": false}}]}},
-      { "key": "myOptBooleans",
+                "dataClass": false,
+                "enm": false,
+                "bytes": false,
+                "inheritsSeq": false
+              }
+            }
+          ]
+        }
+      },
+      {
+        "key": "myOptBooleans",
         "node": {
           "leaf": {
             "name": "scala.Option",
+            "inScopeName": "Option",
             "alias": "Option",
-            "dataClass": false },
+            "dataClass": false,
+            "enm": false,
+            "bytes": false,
+            "inheritsSeq": false
+          },
           "args": [
-            { "leaf": {
+            {
+              "leaf": {
                 "name": "scala.collection.immutable.Seq",
+                "inScopeName": "Seq",
                 "alias": "Seq",
-                "dataClass": false },
+                "dataClass": false,
+                "enm": false,
+                "bytes": false,
+                "inheritsSeq": true
+              },
               "args": [
                 {
                   "leaf": {
                     "name": "scala.Boolean",
+                    "inScopeName": "Boolean",
                     "alias": "Boolean",
-                    "dataClass": false }}]}]}},
-      { "key": "myObj",
+                    "dataClass": false,
+                    "enm": false,
+                    "bytes": false,
+                    "inheritsSeq": false
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "key": "myObj",
         "node": {
           "leaf": {
             "name": "galliatesting.TestMeta.MyComplexSubData",
+            "inScopeName": "MyComplexSubData",
             "dataClass": true,
+            "enm": false,
+            "bytes": false,
+            "inheritsSeq": false,
             "fields": [
               {
                 "key": "mySubString",
                 "node": {
                   "leaf": {
                     "name": "java.lang.String",
+                    "inScopeName": "String",
                     "alias": "String",
-                    "dataClass": false}}},
+                    "dataClass": false,
+                    "enm": false,
+                    "bytes": false,
+                    "inheritsSeq": false
+                  }
+                }
+              },
               {
                 "key": "mySubInt",
                 "node": {
                   "leaf": {
                     "name": "scala.Int",
+                    "inScopeName": "Int",
                     "alias": "Int",
-                    "dataClass": false}}}
-            ] } }},
-      { "key": "myOptObj",
+                    "dataClass": false,
+                    "enm": false,
+                    "bytes": false,
+                    "inheritsSeq": false
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "key": "myOptObj",
         "node": {
           "leaf": {
             "name": "scala.Option",
+            "inScopeName": "Option",
             "alias": "Option",
-            "dataClass": false
+            "dataClass": false,
+            "enm": false,
+            "bytes": false,
+            "inheritsSeq": false
           },
           "args": [
             {
               "leaf": {
                 "name": "galliatesting.TestMeta.MyComplexSubData",
+                "inScopeName": "MyComplexSubData",
                 "dataClass": true,
+                "enm": false,
+                "bytes": false,
+                "inheritsSeq": false,
                 "fields": [
-                  { "key": "mySubString",
+                  {
+                    "key": "mySubString",
                     "node": {
                       "leaf": {
                         "name": "java.lang.String",
+                        "inScopeName": "String",
                         "alias": "String",
-                        "dataClass": false }}},
-                  { "key": "mySubInt",
-                    "node": {
-                      "leaf": {
-                        "name": "scala.Int",
-                        "alias": "Int",
-                        "dataClass": false
-                      }
-                    }
-                  }
-                ]}}]}},
-      { "key": "myObjs",
-        "node": {
-          "leaf": {
-            "name": "scala.collection.immutable.Seq",
-            "alias": "Seq",
-            "dataClass": false
-          },
-          "args": [
-            {
-              "leaf": {
-                "name": "galliatesting.TestMeta.MyComplexSubData",
-                "dataClass": true,
-                "fields": [
-                  { "key": "mySubString",
-                    "node": {
-                      "leaf": {
-                        "name": "java.lang.String",
-                        "alias": "String",
-                        "dataClass": false
+                        "dataClass": false,
+                        "enm": false,
+                        "bytes": false,
+                        "inheritsSeq": false
                       }
                     }
                   },
-                  { "key": "mySubInt",
+                  {
+                    "key": "mySubInt",
                     "node": {
                       "leaf": {
                         "name": "scala.Int",
+                        "inScopeName": "Int",
                         "alias": "Int",
-                        "dataClass": false
+                        "dataClass": false,
+                        "enm": false,
+                        "bytes": false,
+                        "inheritsSeq": false
                       }
                     }
                   }
-                ]}}]}},
-      { "key": "myOptObjs",
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "key": "myObjs",
+        "node": {
+          "leaf": {
+            "name": "scala.collection.immutable.Seq",
+            "inScopeName": "Seq",
+            "alias": "Seq",
+            "dataClass": false,
+            "enm": false,
+            "bytes": false,
+            "inheritsSeq": true
+          },
+          "args": [
+            {
+              "leaf": {
+                "name": "galliatesting.TestMeta.MyComplexSubData",
+                "inScopeName": "MyComplexSubData",
+                "dataClass": true,
+                "enm": false,
+                "bytes": false,
+                "inheritsSeq": false,
+                "fields": [
+                  {
+                    "key": "mySubString",
+                    "node": {
+                      "leaf": {
+                        "name": "java.lang.String",
+                        "inScopeName": "String",
+                        "alias": "String",
+                        "dataClass": false,
+                        "enm": false,
+                        "bytes": false,
+                        "inheritsSeq": false
+                      }
+                    }
+                  },
+                  {
+                    "key": "mySubInt",
+                    "node": {
+                      "leaf": {
+                        "name": "scala.Int",
+                        "inScopeName": "Int",
+                        "alias": "Int",
+                        "dataClass": false,
+                        "enm": false,
+                        "bytes": false,
+                        "inheritsSeq": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "key": "myOptObjs",
         "node": {
           "leaf": {
             "name": "scala.Option",
+            "inScopeName": "Option",
             "alias": "Option",
-            "dataClass": false
+            "dataClass": false,
+            "enm": false,
+            "bytes": false,
+            "inheritsSeq": false
           },
           "args": [
             {
               "leaf": {
                 "name": "scala.collection.immutable.Seq",
+                "inScopeName": "Seq",
                 "alias": "Seq",
-                "dataClass": false
+                "dataClass": false,
+                "enm": false,
+                "bytes": false,
+                "inheritsSeq": true
               },
               "args": [
                 {
                   "leaf": {
                     "name": "galliatesting.TestMeta.MyComplexSubData",
+                    "inScopeName": "MyComplexSubData",
                     "dataClass": true,
+                    "enm": false,
+                    "bytes": false,
+                    "inheritsSeq": false,
                     "fields": [
                       {
                         "key": "mySubString",
                         "node": {
                           "leaf": {
                             "name": "java.lang.String",
+                            "inScopeName": "String",
                             "alias": "String",
-                            "dataClass": false
+                            "dataClass": false,
+                            "enm": false,
+                            "bytes": false,
+                            "inheritsSeq": false
                           }
                         }
                       },
@@ -174,12 +336,37 @@
                         "node": {
                           "leaf": {
                             "name": "scala.Int",
+                            "inScopeName": "Int",
                             "alias": "Int",
-                            "dataClass": false}}}]}}]}]}},
-      { "key": "myClosing",
+                            "dataClass": false,
+                            "enm": false,
+                            "bytes": false,
+                            "inheritsSeq": false
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "key": "myClosing",
         "node": {
           "leaf": {
             "name": "scala.Boolean",
+            "inScopeName": "Boolean",
             "alias": "Boolean",
-            "dataClass": false } }}]}}
-
+            "dataClass": false,
+            "enm": false,
+            "bytes": false,
+            "inheritsSeq": false
+          }
+        }
+      }
+    ]
+  }
+}

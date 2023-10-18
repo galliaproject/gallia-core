@@ -2,7 +2,6 @@ package gallia
 package reflect
 
 import enumeratum.{Enum, EnumEntry}
-import gallia.meta.{Info, Info1}
 
 // ===========================================================================
 sealed trait Container extends EnumEntry {
@@ -24,24 +23,7 @@ sealed trait Container extends EnumEntry {
         case Container._One =>                                          f
         case Container._Opt => _.asInstanceOf[Option    [_] ]      .map(f)
         case Container._Nes => _.asInstanceOf[       Seq[_] ]      .map(f)
-        case Container._Pes => _.asInstanceOf[Option[Seq[_]]].map(_.map(f)) }
-
-    // ---------------------------------------------------------------------------
-    def info(valueType: meta.ValueType): Info =
-      this match {
-        case Container._One => Info.one(valueType)
-        case Container._Opt => Info.opt(valueType)
-        case Container._Nes => Info.nes(valueType)
-        case Container._Pes => Info.pes(valueType) }
-
-    // ---------------------------------------------------------------------------
-    def info1(valueType: meta.ValueType): Info1 =
-      this match {
-        case Container._One => Info1.one(valueType)
-        case Container._Opt => Info1.opt(valueType)
-        case Container._Nes => Info1.nes(valueType)
-        case Container._Pes => Info1.pes(valueType) }
-  }
+        case Container._Pes => _.asInstanceOf[Option[Seq[_]]].map(_.map(f)) } }
 
   // ===========================================================================
   object Container extends Enum[Container] {
@@ -96,33 +78,27 @@ sealed trait Container extends EnumEntry {
           case Container._One => _One
           case Container._Opt => _Opt
           case Container._Nes => _Nes
-          case Container._Pes => _Pes
-        }
+          case Container._Pes => _Pes }
 
         // ---------------------------------------------------------------------------
         case Container._Opt => c2 match {
           case Container._One => _Opt
           case Container._Opt => _Opt
           case Container._Nes => _Pes
-          case Container._Pes => _Pes
-        }
+          case Container._Pes => _Pes }
 
         // ---------------------------------------------------------------------------
         case Container._Nes => c2 match {
           case Container._One => _Nes
           case Container._Opt => _Pes
           case Container._Nes => _Nes
-          case Container._Pes => _Pes
-        }
+          case Container._Pes => _Pes }
 
         // ---------------------------------------------------------------------------
         case Container._Pes => c2 match {
           case Container._One => _Pes
           case Container._Opt => _Pes
           case Container._Nes => _Pes
-          case Container._Pes => _Pes
-        }
-      }
-  }
+          case Container._Pes => _Pes } } }
 
 // ===========================================================================

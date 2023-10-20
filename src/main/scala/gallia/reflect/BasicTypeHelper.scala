@@ -1,5 +1,6 @@
 package gallia
-package reflect
+package meta
+package basic
 
 import aptus.{Anything_, String_}
 import atoms.utils.SuperMetaPair
@@ -9,7 +10,7 @@ private[reflect] trait BasicTypeHelper { ignored: BasicType =>
   import OptionOrdering._
 
   // ---------------------------------------------------------------------------
-  final     def accessorName                               : String = fullName.pipe(accessorNameModifier).splitBy(".").last.uncapitalizeFirst
+  final     def accessorName                               : String = fullName.pype(accessorNameModifier).splitBy(".").last.uncapitalizeFirst
   protected def accessorNameModifier(value: FullNameString): String = value // overriden by some: BigDec, Enum, ...
 
   // ===========================================================================

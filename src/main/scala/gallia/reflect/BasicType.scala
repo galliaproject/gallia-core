@@ -1,11 +1,11 @@
 package gallia
-package reflect
+package meta
+package basic
 
 import java.time._
 
 import data.{DataParsing, DataFormatting}
-import aptus.{Anything_, String_, Long_}
-import reflect.low
+import aptus.{String_, Long_}
 
 // ===========================================================================
 sealed trait NumericalType extends BasicType

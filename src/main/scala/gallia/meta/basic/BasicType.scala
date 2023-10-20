@@ -3,9 +3,9 @@ package meta
 package basic
 
 import java.time._
-
-import data.{DataParsing, DataFormatting}
 import aptus.{String_, Long_}
+import data.{DataParsing, DataFormatting}
+import reflect.FullName
 
 // ===========================================================================
 sealed trait NumericalType extends BasicType
@@ -85,7 +85,7 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
       with    HasFormatString
       with    meta.ValueType {
     type T
-    protected[reflect] val  fullName: FullNameString
+    protected[basic] val  fullName: FullNameString
 
     def formatDefault: String = entryName }
 

@@ -3,7 +3,7 @@ package meta
 package basic
 
 // ===========================================================================
-object OptionOrdering {
+private object OptionOrdering {
 
   def optionAF[T](ord: Ordering[T]): Ordering[Option[T]] = new OptionOrderingAF[T] { val optionOrdering = ord }
   def optionAL[T](ord: Ordering[T]): Ordering[Option[T]] = new OptionOrderingAL[T] { val optionOrdering = ord }

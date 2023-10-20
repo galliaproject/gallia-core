@@ -7,7 +7,7 @@ import aptus.Seq_
 // ===========================================================================
 object BasicTypeUtils {
 
-  private[reflect] def createLookup(values: Seq[BasicType]): Map[FullNameString, BasicType] =
+  private[basic] def createLookup(values: Seq[BasicType]): Map[FullNameString, BasicType] =
     values
       .map { x => x.fullName -> x }
       .force.map
@@ -24,7 +24,7 @@ object BasicTypeUtils {
       case Seq(_                , _             , BasicType._String) => BasicType._String }
 
   // ===========================================================================
-  private[reflect] def stringOrLong[T](ifString: String => T, ifLong: Long => T)(s: String): T =
+  private[basic] def stringOrLong[T](ifString: String => T, ifLong: Long => T)(s: String): T =
     if (!s.forall(_.isDigit)) ifString(s)
     else                      ifLong  (s.toLong)
 

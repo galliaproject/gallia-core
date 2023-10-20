@@ -2,25 +2,19 @@ package gallia
 package meta
 package basic
 
-import aptus.{Anything_, String_}
+import aptus.String_
 import atoms.utils.SuperMetaPair
 
 // ===========================================================================
-private[reflect] trait BasicTypeHelper { ignored: BasicType =>
+private trait BasicTypeHelper { ignored: BasicType =>
   import OptionOrdering._
 
   // ---------------------------------------------------------------------------
-  final     def accessorName                               : String = fullName.pype(accessorNameModifier).splitBy(".").last.uncapitalizeFirst
-  protected def accessorNameModifier(value: FullNameString): String = value // overriden by some: BigDec, Enum, ...
+  final     def accessorName                       : String = fullName.pipe(accessorNameModifier).splitBy(".").last.uncapitalizeFirst
+  protected def accessorNameModifier(value: String): String = value // overriden by some: BigDec, Enum, ...
 
   // ===========================================================================
-  final lazy val node: TypeNode =
-    TypeNode
-      .trivial(fullName)
-      .alias(valueOpt =
-        FullName
-          .simplifyFullName(fullName)
-          .in.noneIf(_ == fullName))
+  final lazy val node: TypeNode = TypeNode.node(fullName)
 
   // ===========================================================================
   def superPair(container: Container, descending: Boolean, missingLast: Boolean) =

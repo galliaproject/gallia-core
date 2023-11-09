@@ -21,7 +21,7 @@ object ViewStreamerUtils {
         key -> values.toList }
 
   // ===========================================================================
-  private[streamer] def union[B: CT](dis: ViewStreamer[B], that: Streamer[B]): Streamer[B] =
+  private[streamer] def union[B: CWTT](dis: ViewStreamer[B], that: Streamer[B]): Streamer[B] =
     that.tipe match {
       case StreamerType.ViewBased =>
         //Streamer.fromView(dis.toView ++ that.toView) - FIXME: 2.13 issues
@@ -38,7 +38,7 @@ object ViewStreamerUtils {
     }
 
   // ===========================================================================
-  private[streamer] def zip[B: CT](dis: ViewStreamer[B], that: Streamer[B], combiner: (B, B) => B): Streamer[B] =
+  private[streamer] def zip[B: CWTT](dis: ViewStreamer[B], that: Streamer[B], combiner: (B, B) => B): Streamer[B] =
     that.tipe match {
       case StreamerType.ViewBased =>
         //Streamer.fromView(dis.toView ++ that.toView) - FIXME: 2.13 issues
@@ -57,7 +57,7 @@ object ViewStreamerUtils {
     }
 
   // ===========================================================================
-  private[streamer] def coGroup[K: CT, V: CT]
+  private[streamer] def coGroup[K: CWTT, V: CWTT]
           (joinType: JoinType)
           (left: Streamer[(K, V)], right: Streamer[(K, V)])
         : Streamer[(K, (Iterable[V], Iterable[V]))] =
@@ -76,7 +76,7 @@ object ViewStreamerUtils {
       }
 
     // ===========================================================================
-    private[streamer] def join[K: CT, V: CT]
+    private[streamer] def join[K: CWTT, V: CWTT]
           (joinType: JoinType, combine: (V, V) => V)
           (left: Streamer[(K, V)], right: Streamer[(K, V)])
         : Streamer[V] =

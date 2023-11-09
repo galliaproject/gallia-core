@@ -25,11 +25,11 @@ class ViewStreamer[A](view: ViewRepr[A]) extends Streamer[A] { // TODO: add a Li
   override def toViewBased    : Streamer[A] = this
   override def toIteratorBased: Streamer[A] = IteratorStreamer.from(new data.DataRegenerationClosure[A] { def regenerate = () => closeabledIterator })
 
-  override def toMeBased [B >: A : CT](that: Streamer[B]): Streamer[B] = that.toViewBased
+  override def toMeBased [B >: A : CWTT](that: Streamer[B]): Streamer[B] = that.toViewBased
 
   // ===========================================================================
-  override def     map[B: CT](f: A =>      B ): Streamer[B] = view.    map(f).toSeq.view.pipe(_rewrap)
-  override def flatMap[B: CT](f: A => Coll[B]): Streamer[B] = view.flatMap(f).toSeq.view.pipe(_rewrap)
+  override def     map[B: CWTT](f: A =>      B ): Streamer[B] = view.    map(f).toSeq.view.pipe(_rewrap)
+  override def flatMap[B: CWTT](f: A => Coll[B]): Streamer[B] = view.flatMap(f).toSeq.view.pipe(_rewrap)
 
   override def filter(p: A => Boolean): Streamer[A] = view.filter(p).toSeq.view.pipe(_rewrap)
   override def find  (p: A => Boolean): Option  [A] = view.find  (p)
@@ -54,19 +54,19 @@ class ViewStreamer[A](view: ViewRepr[A]) extends Streamer[A] { // TODO: add a Li
   override def distinct: Streamer[A] = view.distinct.toSeq.view.pipe(_rewrap)
 
   // ---------------------------------------------------------------------------
-  override def groupByKey[K: CT, V: CT](implicit ev: A <:< (K, V)): Streamer[(K, List[V])] =
+  override def groupByKey[K: CWTT, V: CWTT](implicit ev: A <:< (K, V)): Streamer[(K, List[V])] =
     view.asInstanceOf[ViewRepr[(K, V)]].pipe(_utils.groupByKey).pipe(_rewrap)
 
   // ===========================================================================
-  override def union[B >: A : CT](that: Streamer[B])                       : Streamer[B] = _utils.union(this.asInstanceOf[ViewStreamer[B]], that)
-  override def zip  [B >: A : CT](that: Streamer[B], combiner: (B, B) => B): Streamer[B] = _utils.zip  (this.asInstanceOf[ViewStreamer[B]], that, combiner)
+  override def union[B >: A : CWTT](that: Streamer[B])                       : Streamer[B] = _utils.union(this.asInstanceOf[ViewStreamer[B]], that)
+  override def zip  [B >: A : CWTT](that: Streamer[B], combiner: (B, B) => B): Streamer[B] = _utils.zip  (this.asInstanceOf[ViewStreamer[B]], that, combiner)
 
   // ===========================================================================
-  override def coGroup[K: CT, V: CT](joinType: JoinType)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[(K, (Iterable[V], Iterable[V]))] =
+  override def coGroup[K: CWTT, V: CWTT](joinType: JoinType)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[(K, (Iterable[V], Iterable[V]))] =
     _utils.coGroup(joinType)(this.asInstanceOf[Streamer[(K, V)]], that)
 
   // ---------------------------------------------------------------------------
-  override def join[K: CT, V: CT](joinType: JoinType, combine: (V, V) => V)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[V] =
+  override def join[K: CWTT, V: CWTT](joinType: JoinType, combine: (V, V) => V)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[V] =
     _utils.join(joinType, combine)(this.asInstanceOf[Streamer[(K, V)]], that)
 }
 

@@ -108,13 +108,11 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
 
       // ---------------------------------------------------------------------------
       def using[D: WTT](f: O => D): Self2 = self2 :+ {
-        val wtto = new reflect.WeakTypeTagDecorator[O]()
-
         val dest = typeNode[D]
 
         if (!dest.isContainedDataClass)
-          if (!ttq.ignoreContainer) TransformVV (ttq, dest, wrap(f), wtto.ifApplicable(f))
-          else                      TransformVVx(ttq, dest, wrap(f), wtto.ifApplicable(f))
+          if (!ttq.ignoreContainer) TransformVV (ttq, dest, wrap(f), typeNode[O].ifApplicable(wrap(f)))
+          else                      TransformVVx(ttq, dest, wrap(f), typeNode[O].ifApplicable(wrap(f)))
 
         // ---------------------------------------------------------------------------
         // deprecated way now, c220914145147 or t220914144458 instead

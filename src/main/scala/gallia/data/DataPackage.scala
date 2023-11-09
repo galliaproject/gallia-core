@@ -2,8 +2,8 @@ package gallia
 
 // ===========================================================================
 package object data {
-  type BasicType = reflect.BasicType
-  val  BasicType = reflect.BasicType
+  type BasicType = meta.basic.BasicType
+  val  BasicType = meta.basic.BasicType
 
   type PathPair = domain.PathPair
   val  PathPair = domain.PathPair

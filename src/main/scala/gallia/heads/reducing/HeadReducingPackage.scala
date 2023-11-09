@@ -8,10 +8,9 @@ package object reducing extends _heads {
   type Fld = gallia.meta.Fld
   val  Fld = gallia.meta.Fld
 
-  type BasicType = gallia.reflect.BasicType
-  val  BasicType = gallia.reflect.BasicType
+  type BasicType = gallia.meta.basic.BasicType
+  val  BasicType = gallia.meta.basic.BasicType
 
-  type NumericalType = gallia.reflect.NumericalType
-}
+  type NumericalType = gallia.meta.basic.NumericalType }
 
 // ===========================================================================

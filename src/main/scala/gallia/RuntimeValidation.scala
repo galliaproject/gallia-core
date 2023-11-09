@@ -3,8 +3,6 @@ package gallia
 import aptus.Anything_
 import aptus.Pes
 
-import gallia.reflect.BasicType
-
 // ===========================================================================
 object RuntimeValidation { import meta._ // 210115153346 - POC  
   type DistinctSeq[A] = Seq[A]

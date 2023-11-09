@@ -1,7 +1,7 @@
 package gallia
 package meta
 
-import aptus._
+import aptus.{Index, Seq_}
 import GalliaUtils.Seq__
 
 // ===========================================================================
@@ -62,7 +62,7 @@ case class Info(
     def potentiallyProcessNesting(value: AnyValue): AnyValue =
       nestedClassOpt
         .map { nestedClass =>
-          container1.containerWrap(target.Instantiator.valueToObj(nestedClass))(value) }
+          container1.containerWrap(Instantiator2.valueToObj(nestedClass))(value) }
         .getOrElse(value)
   }
 

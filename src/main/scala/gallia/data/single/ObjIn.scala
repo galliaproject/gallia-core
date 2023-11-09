@@ -7,7 +7,7 @@ object ObjIn {
 
   def fromDataClassInstance[T <: Product : WTT](value: T): Obj =
     cls[T]
-      .pipe(target.Instantiator.valueToObj(_)(value))
+      .pipe(Instantiator2.valueToObj(_)(value))
       .asInstanceOf[Obj]
 
   // ===========================================================================

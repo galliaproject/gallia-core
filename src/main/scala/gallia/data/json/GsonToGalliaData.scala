@@ -96,8 +96,8 @@ object GsonToGalliaData {
   // ===========================================================================
   private[json] def numberToLong(n: Number): Long =
     n .doubleValue
-      .assert(gallia.reflect.BasicTypeUtils.doubleFitsLong)
-      .pipe(d => d.toLong.assert(_.toDouble == d))
+      .assert(meta.basic.BasicTypeUtils.doubleFitsLong)
+      .pipe(d => d.toLong.ensuring(_.toDouble == d))
 
   // ===========================================================================
   private def parseJsonString(nesting: Boolean, multiple: Boolean)(value: JsonString): AnyValue =

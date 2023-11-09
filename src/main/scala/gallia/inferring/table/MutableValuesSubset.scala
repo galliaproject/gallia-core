@@ -6,7 +6,7 @@ import scala.collection.mutable
 
 import aptus.{Seq_, String_}
 
-import reflect.BasicType
+import meta.basic.BasicType
 import meta.Info
 
 // ===========================================================================

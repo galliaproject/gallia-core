@@ -10,13 +10,13 @@ trait HeadZPivoting { self: HeadZ =>
   //TODO: t210110094829 - opaque nesting: accept Obj as value (standalone version), so may not provide newKeys when unwanted
 
   def pivoneEnum[E <: EnumEntry : WTT](k: KeyW): HeadU = pivone(k).asNewKeys[E]
-  def pivoneEnum[E <: EnumEntry : WTT]         : HeadU = pivone(reflect.low.fullName[E].splitBy(".").last).asNewKeys[E]
+  def pivoneEnum[E <: EnumEntry : WTT]         : HeadU = pivone(typeNode[E].leaf.fullName.inScopeName).asNewKeys[E]
 
   // ---------------------------------------------------------------------------
   def pivone(k: KeyW) = new Pivone(k)
 
     class Pivone (k: KeyW) {
-      def asNewKeys[E <: EnumEntry : WTT]     : HeadU = asNewKeys(reflect.low.enumValueNames[E])
+      def asNewKeys[E <: EnumEntry : WTT]     : HeadU = asNewKeys(low.enumValueNames[E])
       def asNewKeys(value1: KeyW, more: KeyW*): HeadU = asNewKeys(Keyz.from(value1, more))
       def asNewKeys(values: KeyWz)            : HeadU = self.groupBy(k.value).as(_tmp).pivot(_tmp).column(k.value).asNewKeys(values) }
 
@@ -36,7 +36,7 @@ trait HeadZPivoting { self: HeadZ =>
     
     // ===========================================================================  
     class NewKeysU[T: WTT] private[pivoting] (data: PivotingData[WV, Nothing]) {
-      def asNewKeys[E <: EnumEntry : WTT]     : HeadU = asNewKeys(reflect.low.enumValueNames[E])
+      def asNewKeys[E <: EnumEntry : WTT]     : HeadU = asNewKeys(low.enumValueNames[E])
       def asNewKeys(value1: KeyW, more: KeyW*): HeadU = asNewKeys(Keyz.from(value1, more))
       def asNewKeys(values: KeyWz)            : HeadU = data.copy(newKeys = values.keyz).pivone(self) }
 
@@ -62,7 +62,7 @@ trait HeadZPivoting { self: HeadZ =>
 
       // ---------------------------------------------------------------------------
       class NewKeysT[O1: WTT, D: WTT] private[pivoting] (data: PivotingData[O1, D]) {
-          def asNewKeys[E <: EnumEntry : WTT]     : HeadZ = asNewKeys(reflect.low.enumValueNames[E])
+          def asNewKeys[E <: EnumEntry : WTT]     : HeadZ = asNewKeys(low.enumValueNames[E])
           def asNewKeys(value1: KeyW, more: KeyW*): HeadZ = asNewKeys(Keyz.from(value1, more))
           def asNewKeys(values: KeyWz)            : HeadZ = data.copy(newKeys = values.keyz).pivot[O1, D](self) }
 

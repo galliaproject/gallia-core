@@ -41,6 +41,8 @@ case class Keyz(values: Seq[Key]) extends Seq[Key] {
     val Empty = Keyz.apply(Nil)
 
     // ---------------------------------------------------------------------------
+    def from(values: Seq[SKey]): Keyz = values.map(_.symbol).pipe(Keyz.apply)
+
     def from(key: KeyW)                              : Keyz = Keyz(List(key.value))
     def from(key1: KeyW,             more: Seq[KeyW]): Keyz = Keyz((     key1        +: more).map(_.value))
     def from(key1: KeyW, key2: KeyW, more: Seq[KeyW]): Keyz = Keyz((List(key1, key2) ++ more).map(_.value))

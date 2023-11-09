@@ -81,20 +81,20 @@ trait HeadZSorting { self: HeadZ =>
 
   // sort using 1
   def sortUsing[O1: WTT](f1: SortingT[O1]) = new {
-      def using[D: WTT: Ordering](f: O1 => D): Self = zz(CustomSort1(resolve(f1), wrap(f), SuperMetaPair(reflect.low.ctag[D], implicitly[Ordering[D]]))) }
+      def using[D: WTT: Ordering](f: O1 => D): Self = zz(CustomSort1(resolve(f1), wrap(f), SuperMetaPair(low.ctag[D], implicitly[Ordering[D]]))) }
 
     // ---------------------------------------------------------------------------
     // sort using 2
 
     def sortUsing[O1: WTT, O2: WTT](f1: SortingT[O1], f2: SortingT[O2]) = new {
       def using[D: WTT: Ordering](f: (O1, O2) => D): Self =
-        zz(CustomSort2(resolve2(f1, f2), wrap21(f), SuperMetaPair(reflect.low.ctag[D], implicitly[Ordering[D]]))) }
+        zz(CustomSort2(resolve2(f1, f2), wrap21(f), SuperMetaPair(low.ctag[D], implicitly[Ordering[D]]))) }
 
     // TODO: more
 
   // ===========================================================================
   // unsafe
-  def sortUsingUnsafe[T: Ordering : CT](f: Obj => T): Self = zz(SortUnsafe(f, implicitly[Ordering[T]]))
+  def sortUsingUnsafe[T: Ordering : CWTT](f: Obj => T): Self = zz(SortUnsafe(f, implicitly[Ordering[T]]))
 
     def sortUsingUnsafe(ord: Ordering[Obj]): Self = { implicit val x = ord; sortUsingUnsafe(o => o) }
     def sortUsingUnsafe(        f:       (Obj, Obj)  => Int): Self = sortUsingUnsafe(new Ordering[Obj] { def compare(x: Obj, y: Obj): Int = f(    x, y)  })

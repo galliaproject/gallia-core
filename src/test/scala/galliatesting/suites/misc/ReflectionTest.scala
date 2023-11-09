@@ -78,7 +78,7 @@ object ReflectionTest extends utest.TestSuite { import utest._
 
     // ---------------------------------------------------------------------------
     test("complex TypeNode") {
-      val actual   = gallia.reflect.low.typeNode[MyComplexData]
+      val actual   = gallia.low.typeNode[MyComplexData]
       val Expected = gallia.testing.resourceContent("TypeNodeExample.json").prettyJson
 
       if (scala.util.Properties.versionNumberString.startsWith("2.12."))
@@ -91,11 +91,11 @@ object ReflectionTest extends utest.TestSuite { import utest._
           Seq(actual.formatDefault.prettyJson, "\n", Expected).section2) }
 
     // ---------------------------------------------------------------------------
-    test("WeakTypeTagDecorator") { // for union types
-      val wttd = new gallia.reflect.WeakTypeTagDecorator[Int]
+    test("if applicable") { // for union types
+      val node = gallia.typeNode[Int]
 
-      assert(wttd.ifApplicable(_ + 1).apply("foo") == "foo") // ignored
-      assert(wttd.ifApplicable(_ + 1).apply(1)     == 2) } }
+      assert(node.ifApplicable(_ + 1).apply("foo") == "foo") // ignored
+      assert(node.ifApplicable(_ + 1).apply(1)     == 2) } }
 
   // ===========================================================================
   private def testClassName(actual: String, expected: String): Unit = Predef.assert(actual == expected, actual -> expected)

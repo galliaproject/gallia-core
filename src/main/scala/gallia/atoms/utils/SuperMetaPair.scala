@@ -27,7 +27,7 @@ case class SuperMetaPair[T]( // TODO: rename...
     // ---------------------------------------------------------------------------
     def optionObjSuperMetaPair(c: Cls, pair: domain.SortingPair): SuperMetaPair[Option[Obj]] =
       SuperMetaPair(
-        ctag = reflect.low.ctag[Option[Obj]],
+        ctag = low.ctag[Option[Obj]],
         ord  = ObjOrdering.optObjOrdering(c, pair))
   }
 

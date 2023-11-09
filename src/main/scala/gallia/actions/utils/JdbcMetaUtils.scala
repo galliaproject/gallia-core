@@ -5,8 +5,8 @@ package utils
 // ===========================================================================
 object JdbcMetaUtils {
   import java.sql.Types
-  import reflect.BasicType
-  import reflect.BasicType._
+  import meta.basic.BasicType
+  import meta.basic.BasicType._
 
   // ===========================================================================
   def columnsToCls(columns: aptus.aptmisc.Rdbms.Columns): Cls =

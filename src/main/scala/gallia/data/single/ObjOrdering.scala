@@ -2,7 +2,7 @@ package gallia
 package data
 package single
 
-import reflect.{Container, BasicType}
+import meta.{Container, BasicType}
 import domain.PathPair
 import domain.SortingPair
 

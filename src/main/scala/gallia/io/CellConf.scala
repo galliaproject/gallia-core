@@ -2,9 +2,10 @@ package gallia
 package io
 
 import aptus.{Anything_, String_}
-import meta.{SubInfo, Info}
+import meta.{SubInfo, Info, BasicType}
+import meta.basic.UnparameterizedBasicType
+import reflect.Container
 import inferring.table.TypeGuessing
-import reflect.{BasicType, Container, UnparameterizedBasicType}
 
 // ===========================================================================
 case class CellConf(
@@ -37,7 +38,7 @@ case class CellConf(
       values
         .map(TypeGuessing.apply)
         .distinct
-        .pipe(reflect.BasicTypeUtils.combine)
+        .pipe(meta.basic.BasicTypeUtils.combine)
 
   // ===========================================================================
   def valueSet(value: String): Set[String] =

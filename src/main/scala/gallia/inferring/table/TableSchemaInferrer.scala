@@ -4,10 +4,7 @@ package table
 
 import aptus.Seq_
 
-import reflect.BasicType
-import reflect.Container
-import meta.Fld
-import meta.Info
+import meta.{Container, BasicType, Fld, Info}
 import io.CellConf
 
 // ===========================================================================
@@ -70,7 +67,7 @@ object TableSchemaInferrer {
       .mapValues0(combineInfosString)
 
   // ===========================================================================
-  private def combineInfosAll   (values: Seq[Info]): Info = _combineInfos(values)(_.map(_.forceBasicType).pipe(reflect.BasicTypeUtils.combine))
+  private def combineInfosAll   (values: Seq[Info]): Info = _combineInfos(values)(_.map(_.forceBasicType).pipe(meta.basic.BasicTypeUtils.combine))
   private def combineInfosString(values: Seq[Info]): Info = _combineInfos(values)(_ => BasicType._String)
 
     // ---------------------------------------------------------------------------

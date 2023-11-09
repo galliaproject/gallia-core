@@ -29,6 +29,6 @@ object TypeNodeObj {
       def field(value: Field): Obj =
         obj(
           "key"  -> value.key,
-          "node" -> value.node.pipe(typeNode)) }
+          "node" -> value.node.pype(typeNode)) }
 
 // ===========================================================================

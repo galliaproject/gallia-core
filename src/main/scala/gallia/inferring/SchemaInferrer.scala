@@ -1,8 +1,7 @@
 package gallia
 package inferring
 
-import reflect.Container._
-import reflect.BasicType._
+import meta.basic.BasicType._
 import meta.{Cls => _, Fld => _, _}
 
 // ===========================================================================

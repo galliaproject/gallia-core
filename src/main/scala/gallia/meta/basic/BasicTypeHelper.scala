@@ -6,7 +6,7 @@ import aptus.String_
 import atoms.utils.SuperMetaPair
 
 // ===========================================================================
-private trait BasicTypeHelper { ignored: BasicType =>
+private[gallia] trait BasicTypeHelper { ignored: BasicType =>
   import OptionOrdering._
 
   // ---------------------------------------------------------------------------

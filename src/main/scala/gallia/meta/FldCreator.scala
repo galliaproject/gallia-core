@@ -3,7 +3,7 @@ package meta
 
 import aptus.Nes
 
-import reflect.BasicType._
+import BasicType._
 
 // ===========================================================================
 @TypeMatching

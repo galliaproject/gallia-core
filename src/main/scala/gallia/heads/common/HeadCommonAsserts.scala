@@ -3,7 +3,6 @@ package heads
 package common
 
 import meta._
-import reflect.{BasicType, Container}
 import actions.ActionsCustoms.{CustomMeta, CustomField}
 import actions.ActionsAsserts._
 

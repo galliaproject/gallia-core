@@ -2,15 +2,13 @@ package gallia
 package atoms
 
 import aptus.{Anything_, String_}
-import aptus.aptmisc.{CloseabledIterator, Rdbms}
+import aptus.aptmisc.Rdbms
 import io._
 import io.in._
 import actions.in.HasProjection
 import data.json
 import data.TableToGalliaData
-import streamer.{IteratorStreamer, Streamer}
-import atoms.utils.MongoDb
-import atoms.utils.MongoDb.MongoDbCmd
+import streamer.Streamer
 
 // ===========================================================================
 object AtomsIX { import utils.JdbcDataUtils

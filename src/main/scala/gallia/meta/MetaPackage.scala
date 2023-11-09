@@ -15,21 +15,21 @@ package object meta {
           val _valueType = "valueType" }
 
   // ===========================================================================
-  private[meta] type Container = gallia.reflect.Container
-  private[meta] val  Container = gallia.reflect.Container
+  private[gallia] type Container = gallia.reflect.Container
+  private[gallia] val  Container = gallia.reflect.Container
 
-  private[meta] type BasicType = gallia.reflect.BasicType
-  private[meta] val  BasicType = gallia.reflect.BasicType
+  private[gallia] type BasicType = gallia.meta.basic.BasicType
+  private[gallia] val  BasicType = gallia.meta.basic.BasicType
 
   private[meta] type TypeNode  = gallia.reflect.TypeNode
   private[meta] val  TypeNode  = gallia.reflect.TypeNode
 
   // ===========================================================================
-  type NumericalType       = gallia.reflect.NumericalType
-    type UnboundedNumber   = gallia.reflect.UnboundedNumber
-    type   BoundedNumber   = gallia.reflect.  BoundedNumber
-      type IntegerLikeType = gallia.reflect.IntegerLikeType
-      type RealLikeType    = gallia.reflect.   RealLikeType  
+  type NumericalType       = gallia.meta.basic.NumericalType
+    type UnboundedNumber   = gallia.meta.basic.UnboundedNumber
+    type   BoundedNumber   = gallia.meta.basic.  BoundedNumber
+      type IntegerLikeType = gallia.meta.basic.IntegerLikeType
+      type RealLikeType    = gallia.meta.basic.   RealLikeType
 
   // ===========================================================================
   case class FldPair(field1: Fld, field2: Fld) {

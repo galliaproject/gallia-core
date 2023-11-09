@@ -7,8 +7,8 @@ package object actions { // TODO: delegate access to all of AtomsUtils._
   // ---------------------------------------------------------------------------
   type TypeNode  = reflect.TypeNode
 
-  type BasicType = reflect.BasicType
-  val  BasicType = reflect.BasicType
+  type BasicType = meta.basic.BasicType
+  val  BasicType = meta.basic.BasicType
 
   type Container = reflect.Container
   val  Container = reflect.Container

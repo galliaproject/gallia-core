@@ -2,7 +2,7 @@ package gallia
 package inferring
 package table
 
-import reflect.BasicType
+import meta.basic.BasicType
 
 // ===========================================================================
 object TypeGuessing {

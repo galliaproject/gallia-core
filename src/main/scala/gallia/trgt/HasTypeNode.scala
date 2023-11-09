@@ -13,7 +13,7 @@ trait HasTypeNode {
     // ---------------------------------------------------------------------------
     def _out(value: Any): Any =
       if (!node.isContainedDataClass) value
-      else                            node.forceNonBObjInfo.pipe(Instantiator2.out(value)) }
+      else                            node.forceNonBObjInfo.pipe(InstantiatorUtils.out(value)) }
 
   // ===========================================================================
   object HasTypeNode {

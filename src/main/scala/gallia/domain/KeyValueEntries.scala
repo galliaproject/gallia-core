@@ -57,8 +57,8 @@ sealed trait KVE { // Key-Value Entry
           .forceNonBObjInfo
           .nestedClassOpt
           .map { c =>
-              if (node.isMultiple) Instantiator2.valueToObjs(c)(value)
-              else                 Instantiator2.valueToObj (c)(value) }
+              if (node.isMultiple) InstantiatorUtils.valueToObjs(c)(value)
+              else                 InstantiatorUtils.valueToObj (c)(value) }
           .getOrElse(value) }
 
   // ===========================================================================

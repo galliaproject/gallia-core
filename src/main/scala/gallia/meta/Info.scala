@@ -62,7 +62,7 @@ case class Info(
     def potentiallyProcessNesting(value: AnyValue): AnyValue =
       nestedClassOpt
         .map { nestedClass =>
-          container1.containerWrap(Instantiator2.valueToObj(nestedClass))(value) }
+          container1.containerWrap(InstantiatorUtils.valueToObj(nestedClass))(value) }
         .getOrElse(value)
   }
 

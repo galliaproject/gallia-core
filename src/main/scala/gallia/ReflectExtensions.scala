@@ -1,7 +1,8 @@
 package gallia
+package reflect
 
+import aptus.{Anything_, String_}
 import meta._
-import reflect.{TypeNode, TypeLeaf, Container}
 
 // ===========================================================================
 /** so we could externalize gallia-reflect */
@@ -12,22 +13,45 @@ trait ReflectExtensions {
     def formatDefault: String = obj.formatPrettyJson
     def obj          : Obj    = reflect.TypeNodeObj.typeNode(node)
 
+    // ---------------------------------------------------------------------------
     // eg for translate type mismatch
-    def formatSuccinct: String = reflect.TypeNodeUtils.formatSuccinct(node)
+    def formatSuccinct: String = {
+        def tmp(value: TypeLeaf) = value.alias.getOrElse(value.name)
+
+        def isTopLevel(value: TypeNode): Boolean =
+          !value.complex && basic.BasicType.isKnown(value.leaf.name)
+
+        // ---------------------------------------------------------------------------
+        node.containerTypeOpt match {
+          case Some(container) =>
+            val leaf = node.args.head.leaf.pype(tmp)
+
+            "succinct".colon(container match {
+                case Container._Opt => leaf.surroundWith(    "Option[", "]")
+                case Container._Nes => leaf.surroundWith(       "Seq[", "]")
+                case Container._Pes => leaf.surroundWith("Option[Seq[", "]]")
+                case _              => ??? }) // TODO:can't actually happen - create sub-enum
+
+          case None =>
+            if (isTopLevel(node)) s"succinct:${tmp(node.leaf)}"
+            else                  node.formatDefault } }
 
     // ---------------------------------------------------------------------------
-    def forceNonBObjInfo                    : Info    = node.ensuring(!_.isContainedBObj).pipe(InfoUtils.forceNonBObjInfo)
-    def forceNonBObjSubInfo                 : SubInfo = node.ensuring(!_.isContainedBObj).pipe(InfoUtils.forceNonBObjSubInfo)
-    def forceNonBObjSubInfo(enmOpt: _EnmOpt): SubInfo = node.ensuring(!_.isContainedBObj).pipe(InfoUtils.forceNonBObjSubInfo(enmOpt))
+    def forceNonBObjInfo                    : Info    = node.ensuring(!_.isContainedBObj).pype(InfoUtils.forceNonBObjInfo)
+    def forceNonBObjSubInfo                 : SubInfo = node.ensuring(!_.isContainedBObj).pype(InfoUtils.forceNonBObjSubInfo)
+    def forceNonBObjSubInfo(enmOpt: _EnmOpt): SubInfo = node.ensuring(!_.isContainedBObj).pype(InfoUtils.forceNonBObjSubInfo(enmOpt))
 
     // ---------------------------------------------------------------------------
     def nodeDesc = reflect.NodeDesc.from(node)
 
     // ---------------------------------------------------------------------------
+    def normalizeSome: TypeNode = if (node.isSome) node.copy(leaf = typeNode[Option[_]].leaf) else node
+
+    // ---------------------------------------------------------------------------
     def enmInfo1(c: Cls, path: KPath, multiple: Multiple): Info1 =
       c .field(path)
         .enmValueType(multiple)
-        .pipe(node.containerType.info1) }
+        .pype(node.containerType.info1) }
 
   // ===========================================================================
   implicit class TypeLeaf_(leaf: TypeLeaf) {
@@ -60,6 +84,80 @@ trait ReflectExtensions {
         case Container._One => Info1.one(valueType)
         case Container._Opt => Info1.opt(valueType)
         case Container._Nes => Info1.nes(valueType)
-        case Container._Pes => Info1.pes(valueType) } } }
+        case Container._Pes => Info1.pes(valueType) } }
+
+
+  // ===========================================================================
+  private[gallia] implicit class InstantiatorExtension(dis: Instantiator) {
+    override def toString: String = dis.formatDefault
+
+    // ---------------------------------------------------------------------------
+    def in(value: Any)(subInfo: Info): Any = {
+           if (subInfo.isOne) { value.asInstanceOf[              Obj  ]      .pype(this.instantiateRecursively(subInfo.forceNestedClass))  }
+      else if (subInfo.isOpt) { value.asInstanceOf[       Option[Obj] ]      .map (this.instantiateRecursively(subInfo.forceNestedClass))  }
+      else if (subInfo.isNes) { value.asInstanceOf[       Seq   [Obj] ]      .map (this.instantiateRecursively(subInfo.forceNestedClass))  }
+      else if (subInfo.isPes) { value.asInstanceOf[Option[Seq   [Obj]]].map(_.map (this.instantiateRecursively(subInfo.forceNestedClass))) }
+      else ??? } // TODO: as match rather
+
+    // ===========================================================================
+    private[InstantiatorExtension] def instantiateRecursively(c: Cls)(o: Obj): Any =
+        c .fields // for order
+          .map(processField(o))
+          .pype { args => dis.klass.newInstance(args:_*) }
+
+      // ---------------------------------------------------------------------------
+      private def processField(o: Obj)(field: Fld): AnyRef =
+          (field.nestedClassOpt match {
+              case None =>
+                if (field.isRequired) o.forceKey  (field.key)
+                else                  o.attemptKey(field.key)
+              case Some(c2) => processContainedObj(c2, field, o) })
+            .asInstanceOf[AnyRef /* TODO: safe? */]
+
+        // ---------------------------------------------------------------------------
+        private def processContainedObj(c2: Cls, field: Fld, o: Obj): AnyValue =
+            field.info.container1 match { // TODO: use Container.wrap now?
+              case Container._One => o.forceKey  (field.key)                            .pype(processObj(c2, field))
+              case Container._Opt => o.attemptKey(field.key)                            .map (processObj(c2, field))
+              case Container._Nes => o.forceKey  (field.key)      .asInstanceOf[List[_]].map (processObj(c2, field))
+              case Container._Pes => o.attemptKey(field.key).map(_.asInstanceOf[List[_]].map (processObj(c2, field))) }
+
+          // ---------------------------------------------------------------------------
+          private def processObj(c2: Cls, field: gallia.meta.Fld)(value: AnyValue): Any =
+            dis
+              .nestedObjs
+              .apply(field.key) // guaranteed if nested class
+              .instantiateRecursively(c2)(
+                  value.asInstanceOf[Obj] /* by design if passed validation */) }
+
+  // ===========================================================================
+  object InstantiatorUtils {
+
+    def out(value: Any)(subInfo: Info): Any = {
+             if (subInfo.isOne) { val c2 = subInfo.forceNestedClass; valueToObj  (c2)(value) }
+        else if (subInfo.isOpt) { val c2 = subInfo.forceNestedClass; valueToObj_ (c2)(value) }
+        else if (subInfo.isNes) { val c2 = subInfo.forceNestedClass; valueToObjs (c2)(value) }
+        else if (subInfo.isPes) { val c2 = subInfo.forceNestedClass; valueToObjs_(c2)(value) }
+        else ??? } // TODO: (match rather)
+
+      // ---------------------------------------------------------------------------
+              def valueToObj  (c: Cls)(value: Any): Any = value.asInstanceOf[              Product  ]            .productIterator.pype(valuesToObjOpt(c)).getOrElse(None)
+      private def valueToObj_ (c: Cls)(value: Any): Any = value.asInstanceOf[       Option[Product] ]      .map(_.productIterator.pype(valuesToObjOpt(c)).getOrElse(None))
+              def valueToObjs (c: Cls)(value: Any): Any = value.asInstanceOf[       Seq   [Product] ]      .map(_.productIterator.pype(valuesToObjOpt(c)).getOrElse(None))
+      private def valueToObjs_(c: Cls)(value: Any): Any = value.asInstanceOf[Option[Seq   [Product]]].map(_.map(_.productIterator.pype(valuesToObjOpt(c)).getOrElse(None)))
+
+        // ---------------------------------------------------------------------------
+        private def valuesToObjOpt(c: Cls)(itr: Iterator[AnyValue]): Option[Obj] =
+          c .fields
+            .map { field =>
+              field.key ->
+                field.info.potentiallyProcessNesting(
+                  value = itr.next()) }
+            .flatMap(data.single.ObjIn.normalizeEntry)
+            .in.noneIf(_.isEmpty)
+            .map(obj)
+            .tep(_ => assert(itr.isEmpty, c /* TODO: pass original value? */)) }
+
+}
 
 // ===========================================================================

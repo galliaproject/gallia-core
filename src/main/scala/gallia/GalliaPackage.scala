@@ -8,7 +8,7 @@ package object gallia
     with    Annotations
     with    CustomTraits
     with    GenericEntryImplicits
-with ReflectExtensions
+    with    reflect.ReflectExtensions
     with    reflect.lowlevel.ReflectionTypesAbstraction {
 
   // ---------------------------------------------------------------------------
@@ -128,8 +128,8 @@ with ReflectExtensions
   private[gallia] type EnumEntry            = enumeratum.EnumEntry
   private[gallia] type Enum[T <: EnumEntry] = enumeratum.Enum[T]
 
-  private[gallia] type _Enm    =        gallia.reflect.BasicType._Enm
-  private[gallia] type _EnmOpt = Option[gallia.reflect.BasicType._Enm]
+  private[gallia] type _Enm    =        gallia.meta.basic.BasicType._Enm
+  private[gallia] type _EnmOpt = Option[gallia.meta.basic.BasicType._Enm]
 
   // ---------------------------------------------------------------------------
   private[gallia] type Whatever = whatever.Whatever
@@ -161,8 +161,8 @@ with ReflectExtensions
   private[gallia] def errs  (any: Any)             : Errs = Seq(Err(any))
 
   // ---------------------------------------------------------------------------
-/*private[gallia] */def typeNode[T: WTT]: reflect.TypeNode = /*reflect.low.typeNode[T]*/gallia.reflect.lowlevel.ConcreteReflectionUtils.typeNode[T]
-
+  private[gallia] val low             : reflect.lowlevel.ReflectionUtilsAbstraction = reflect.lowlevel.ConcreteReflectionUtils
+  private[gallia] def typeNode[T: WTT]: reflect.TypeNode                            = reflect.lowlevel.ConcreteReflectionUtils.typeNode[T]
 
   // ===========================================================================
   /** until/unless sure what we'll use - only to be used in non-object arrays/matrices/tensors */

@@ -1,9 +1,8 @@
 {
   "leaf": {
-    "name": "galliatesting.TestMeta.MyComplexData",
-    "inScopeName": "MyComplexData",
+    "name": "galliatesting.TestMeta$.MyComplexData",
     "dataClass": true,
-    "enm": false,
+    "galliaEnumValue": false,
     "bytes": false,
     "inheritsSeq": false,
     "fields": [
@@ -12,10 +11,8 @@
         "node": {
           "leaf": {
             "name": "scala.Boolean",
-            "inScopeName": "Boolean",
-            "alias": "Boolean",
             "dataClass": false,
-            "enm": false,
+            "galliaEnumValue": false,
             "bytes": false,
             "inheritsSeq": false
           }
@@ -26,10 +23,8 @@
         "node": {
           "leaf": {
             "name": "java.lang.String",
-            "inScopeName": "String",
-            "alias": "String",
             "dataClass": false,
-            "enm": false,
+            "galliaEnumValue": false,
             "bytes": false,
             "inheritsSeq": false
           }
@@ -40,10 +35,8 @@
         "node": {
           "leaf": {
             "name": "scala.Option",
-            "inScopeName": "Option",
-            "alias": "Option",
             "dataClass": false,
-            "enm": false,
+            "galliaEnumValue": false,
             "bytes": false,
             "inheritsSeq": false
           },
@@ -51,10 +44,8 @@
             {
               "leaf": {
                 "name": "scala.Int",
-                "inScopeName": "Int",
-                "alias": "Int",
                 "dataClass": false,
-                "enm": false,
+                "galliaEnumValue": false,
                 "bytes": false,
                 "inheritsSeq": false
               }
@@ -67,10 +58,8 @@
         "node": {
           "leaf": {
             "name": "scala.collection.immutable.Seq",
-            "inScopeName": "Seq",
-            "alias": "Seq",
             "dataClass": false,
-            "enm": false,
+            "galliaEnumValue": false,
             "bytes": false,
             "inheritsSeq": true
           },
@@ -78,10 +67,8 @@
             {
               "leaf": {
                 "name": "scala.Double",
-                "inScopeName": "Double",
-                "alias": "Double",
                 "dataClass": false,
-                "enm": false,
+                "galliaEnumValue": false,
                 "bytes": false,
                 "inheritsSeq": false
               }
@@ -94,10 +81,8 @@
         "node": {
           "leaf": {
             "name": "scala.Option",
-            "inScopeName": "Option",
-            "alias": "Option",
             "dataClass": false,
-            "enm": false,
+            "galliaEnumValue": false,
             "bytes": false,
             "inheritsSeq": false
           },
@@ -105,10 +90,8 @@
             {
               "leaf": {
                 "name": "scala.collection.immutable.Seq",
-                "inScopeName": "Seq",
-                "alias": "Seq",
                 "dataClass": false,
-                "enm": false,
+                "galliaEnumValue": false,
                 "bytes": false,
                 "inheritsSeq": true
               },
@@ -116,10 +99,8 @@
                 {
                   "leaf": {
                     "name": "scala.Boolean",
-                    "inScopeName": "Boolean",
-                    "alias": "Boolean",
                     "dataClass": false,
-                    "enm": false,
+                    "galliaEnumValue": false,
                     "bytes": false,
                     "inheritsSeq": false
                   }
@@ -133,10 +114,9 @@
         "key": "myObj",
         "node": {
           "leaf": {
-            "name": "galliatesting.TestMeta.MyComplexSubData",
-            "inScopeName": "MyComplexSubData",
+            "name": "galliatesting.TestMeta$.MyComplexSubData",
             "dataClass": true,
-            "enm": false,
+            "galliaEnumValue": false,
             "bytes": false,
             "inheritsSeq": false,
             "fields": [
@@ -145,10 +125,8 @@
                 "node": {
                   "leaf": {
                     "name": "java.lang.String",
-                    "inScopeName": "String",
-                    "alias": "String",
                     "dataClass": false,
-                    "enm": false,
+                    "galliaEnumValue": false,
                     "bytes": false,
                     "inheritsSeq": false
                   }
@@ -159,10 +137,8 @@
                 "node": {
                   "leaf": {
                     "name": "scala.Int",
-                    "inScopeName": "Int",
-                    "alias": "Int",
                     "dataClass": false,
-                    "enm": false,
+                    "galliaEnumValue": false,
                     "bytes": false,
                     "inheritsSeq": false
                   }
@@ -177,20 +153,17 @@
         "node": {
           "leaf": {
             "name": "scala.Option",
-            "inScopeName": "Option",
-            "alias": "Option",
             "dataClass": false,
-            "enm": false,
+            "galliaEnumValue": false,
             "bytes": false,
             "inheritsSeq": false
           },
           "args": [
             {
               "leaf": {
-                "name": "galliatesting.TestMeta.MyComplexSubData",
-                "inScopeName": "MyComplexSubData",
+                "name": "galliatesting.TestMeta$.MyComplexSubData",
                 "dataClass": true,
-                "enm": false,
+                "galliaEnumValue": false,
                 "bytes": false,
                 "inheritsSeq": false,
                 "fields": [
@@ -199,10 +172,8 @@
                     "node": {
                       "leaf": {
                         "name": "java.lang.String",
-                        "inScopeName": "String",
-                        "alias": "String",
                         "dataClass": false,
-                        "enm": false,
+                        "galliaEnumValue": false,
                         "bytes": false,
                         "inheritsSeq": false
                       }
@@ -213,10 +184,8 @@
                     "node": {
                       "leaf": {
                         "name": "scala.Int",
-                        "inScopeName": "Int",
-                        "alias": "Int",
                         "dataClass": false,
-                        "enm": false,
+                        "galliaEnumValue": false,
                         "bytes": false,
                         "inheritsSeq": false
                       }
@@ -233,20 +202,17 @@
         "node": {
           "leaf": {
             "name": "scala.collection.immutable.Seq",
-            "inScopeName": "Seq",
-            "alias": "Seq",
             "dataClass": false,
-            "enm": false,
+            "galliaEnumValue": false,
             "bytes": false,
             "inheritsSeq": true
           },
           "args": [
             {
               "leaf": {
-                "name": "galliatesting.TestMeta.MyComplexSubData",
-                "inScopeName": "MyComplexSubData",
+                "name": "galliatesting.TestMeta$.MyComplexSubData",
                 "dataClass": true,
-                "enm": false,
+                "galliaEnumValue": false,
                 "bytes": false,
                 "inheritsSeq": false,
                 "fields": [
@@ -255,10 +221,8 @@
                     "node": {
                       "leaf": {
                         "name": "java.lang.String",
-                        "inScopeName": "String",
-                        "alias": "String",
                         "dataClass": false,
-                        "enm": false,
+                        "galliaEnumValue": false,
                         "bytes": false,
                         "inheritsSeq": false
                       }
@@ -269,10 +233,8 @@
                     "node": {
                       "leaf": {
                         "name": "scala.Int",
-                        "inScopeName": "Int",
-                        "alias": "Int",
                         "dataClass": false,
-                        "enm": false,
+                        "galliaEnumValue": false,
                         "bytes": false,
                         "inheritsSeq": false
                       }
@@ -289,10 +251,8 @@
         "node": {
           "leaf": {
             "name": "scala.Option",
-            "inScopeName": "Option",
-            "alias": "Option",
             "dataClass": false,
-            "enm": false,
+            "galliaEnumValue": false,
             "bytes": false,
             "inheritsSeq": false
           },
@@ -300,20 +260,17 @@
             {
               "leaf": {
                 "name": "scala.collection.immutable.Seq",
-                "inScopeName": "Seq",
-                "alias": "Seq",
                 "dataClass": false,
-                "enm": false,
+                "galliaEnumValue": false,
                 "bytes": false,
                 "inheritsSeq": true
               },
               "args": [
                 {
                   "leaf": {
-                    "name": "galliatesting.TestMeta.MyComplexSubData",
-                    "inScopeName": "MyComplexSubData",
+                    "name": "galliatesting.TestMeta$.MyComplexSubData",
                     "dataClass": true,
-                    "enm": false,
+                    "galliaEnumValue": false,
                     "bytes": false,
                     "inheritsSeq": false,
                     "fields": [
@@ -322,10 +279,8 @@
                         "node": {
                           "leaf": {
                             "name": "java.lang.String",
-                            "inScopeName": "String",
-                            "alias": "String",
                             "dataClass": false,
-                            "enm": false,
+                            "galliaEnumValue": false,
                             "bytes": false,
                             "inheritsSeq": false
                           }
@@ -336,10 +291,8 @@
                         "node": {
                           "leaf": {
                             "name": "scala.Int",
-                            "inScopeName": "Int",
-                            "alias": "Int",
                             "dataClass": false,
-                            "enm": false,
+                            "galliaEnumValue": false,
                             "bytes": false,
                             "inheritsSeq": false
                           }
@@ -358,10 +311,8 @@
         "node": {
           "leaf": {
             "name": "scala.Boolean",
-            "inScopeName": "Boolean",
-            "alias": "Boolean",
             "dataClass": false,
-            "enm": false,
+            "galliaEnumValue": false,
             "bytes": false,
             "inheritsSeq": false
           }
@@ -370,3 +321,4 @@
     ]
   }
 }
+

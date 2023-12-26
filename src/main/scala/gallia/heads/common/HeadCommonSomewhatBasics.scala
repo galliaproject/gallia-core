@@ -50,12 +50,14 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
     // ===========================================================================
     final class _RemoveConditionally2 private[common] (target: TqKey) {
 
-      def ifValueFor(reference: KeyW) = new {
+      def ifValueFor(reference: KeyW) = new _IfValueFor1(reference)
+       final class _IfValueFor1 private[heads] (reference: KeyW) {
         def is(value: Any): Self2 =
           RemoveConditionally2Whatever(reference.value, target, value) }
 
       // ---------------------------------------------------------------------------
-      def ifValueFor[T: WTT](reference: IfValueFor[T]) = new {
+      def ifValueFor[T: WTT](reference: IfValueFor[T]) = new _IfValueFor2(reference)
+         final class _IfValueFor2[T: WTT] private[heads] (reference: IfValueFor[T]) {
           def is     (value: Any)        : Self2 = matches(_ == value)
           def matches(pred: T => Boolean): Self2 =
             RemoveConditionally2(TSL.IfValueFor.resolve2(reference), target, pwrap(pred)) } }
@@ -76,22 +78,29 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   def setDefaultConditionally(selector: SEL.SetDefaultFor.Selector): _SetDefaultConditionally2 = new _SetDefaultConditionally2(SEL.SetDefaultFor.resolve(selector))
 
     // ---------------------------------------------------------------------------
-    final class _SetDefaultFor private[common] (targets: TqRPathz){
+    final class _SetDefaultFor private[common] (targets: TqRPathz) {
       def asValue[T: WTT](defaultValue: => T): Self2 =
-        SetDefaultValueFor(ttqrpathz1[Option[T]](targets), defaultValue) }
+        SetDefaultValueFor(ttqrpathz1(typeNode[T].wrapInOption)(targets), defaultValue) }
 
     // ---------------------------------------------------------------------------
     final class _SetDefaultConditionally2 private[common](target: TqKey) {
-      def asValue[T: WTT](newValue: T) = new {
+      def asValue[T: WTT](newValue: T) = new _AsValue[T](newValue, typeNode[T])
 
-        def ifValueFor(reference: KeyW) = new {
-          def is(referenceValue: Any): Self2 =
-            SetDefaultConditionally2Whatever(reference.value, target, referenceValue, typeNode[T], newValue) }
+        // ---------------------------------------------------------------------------
+        final class _AsValue[T] private[common] (newValue: T, node: TypeNode) {
+          def ifValueFor(reference: KeyW)                  = new _IfValueFor1(reference)
+          def ifValueFor[U: WTT](reference: IfValueFor[U]) = new _IfValueFor2(reference)
 
-        def ifValueFor[U: WTT](reference: IfValueFor[U]) = new {
-          def is     (value: Any)        : Self2 = matches(_ == value)
-          def matches(pred: U => Boolean): Self2 =
-            SetDefaultConditionally2(TSL.IfValueFor.resolve2(reference), target, pwrap(pred), typeNode[T], newValue) } } }
+          // ---------------------------------------------------------------------------
+          final class _IfValueFor1 private[common] (reference: KeyW) {
+            def is(referenceValue: Any): Self2 =
+              SetDefaultConditionally2Whatever(reference.value, target, referenceValue, node, newValue) }
+
+          // ---------------------------------------------------------------------------
+          final class _IfValueFor2[U: WTT] private[common] (reference: IfValueFor[U]) {
+            def is     (value: Any)        : Self2 = matches(_ == value)
+            def matches(pred: U => Boolean): Self2 =
+              SetDefaultConditionally2(TSL.IfValueFor.resolve2(reference), target, pwrap(pred), node, newValue) } } }
 
   // ===========================================================================
   // convert
@@ -172,9 +181,11 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
       // ---------------------------------------------------------------------------
       /** strict = all values are translated, therefore type can change */
-      def usingStrict [O: WTT, D : WTT](entries: Seq[(O, D)]): Self2 = self2 :+ new Translate(ttqrpathz1[O](target), typeNode[D], true , entries)
-      def usingLenient[O: WTT, D : WTT](entries: Seq[(O, D)]): Self2 = self2 :+ new Translate(ttqrpathz1[O](target), typeNode[D], false, entries)
-    }
+      def usingStrict [O: WTT, D : WTT](entries: Seq[(O, D)]): Self2 = self2 :+
+        Translate(ttqrpathz1(typeNode[O])(target), typeNode[D], true , entries)
+
+      def usingLenient[O: WTT, D : WTT](entries: Seq[(O, D)]): Self2 = self2 :+
+        Translate(ttqrpathz1(typeNode[O])(target), typeNode[D], false, entries) }
 
   // ===========================================================================
   // split
@@ -268,47 +279,52 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
     // ===========================================================================
     class _Untuplify1z(targetKey: Ren) {
-          def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(low.enumValueNames[E])
+          def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(typeNode[E].flattenedEnumValueNames)
           def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
           def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
             Untuplify1z(targetKey, keys.keyz) }
 
     // ---------------------------------------------------------------------------
     class _Untuplify1a(targetKey: Ren) {
-      def withSplitter(entriesSplitter: StringSplitter) = new {
-          def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(low.enumValueNames[E])
+      def withSplitter(entriesSplitter: StringSplitter) = new _WithSplitter(entriesSplitter)
+        final class _WithSplitter private[heads] (entriesSplitter: StringSplitter) {
+          def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(typeNode[E].flattenedEnumValueNames)
           def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
           def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
             Untuplify1a(targetKey, entriesSplitter, keys.keyz) } }
 
     // ---------------------------------------------------------------------------
     class _Untuplify1b(targetKey: Ren) {
-      def withSplitters(arraySplitter: StringSplitter, entriesSplitter: StringSplitter) = new {
-          def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(low.enumValueNames[E])
+      def withSplitters(arraySplitter: StringSplitter, entriesSplitter: StringSplitter) = new _WithSplitters(arraySplitter, entriesSplitter)
+        final class _WithSplitters private[heads] (arraySplitter: StringSplitter, entriesSplitter: StringSplitter) {
+          def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(typeNode[E].flattenedEnumValueNames)
           def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
           def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
             Untuplify1b(targetKey, arraySplitter, entriesSplitter, keys.keyz) } }
 
     // ===========================================================================
     final class _Untuplify2z(targetKey: Ren) {
-        def withSplitter(entrySplitter: StringSplitter) = new {
-            def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(low.enumValueNames[E])
+        def withSplitter(entrySplitter: StringSplitter) = new _WithSplitter(entrySplitter)
+          final class _WithSplitter private[heads] (entrySplitter: StringSplitter) {
+            def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(typeNode[E].flattenedEnumValueNames)
             def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
             def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
               Untuplify2z(targetKey, entrySplitter, keys.keyz) } }
 
       // ---------------------------------------------------------------------------
       final class _Untuplify2a(targetKey: Ren) {
-        def withSplitters(entriesSplitter: StringSplitter, entrySplitter: StringSplitter) = new {
-            def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(low.enumValueNames[E])
+        def withSplitters(entriesSplitter: StringSplitter, entrySplitter: StringSplitter) = new _WithSplitters(entriesSplitter, entrySplitter)
+          final class _WithSplitters private[heads] (entriesSplitter: StringSplitter, entrySplitter: StringSplitter) {
+            def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(typeNode[E].flattenedEnumValueNames)
             def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
             def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
               Untuplify2a(targetKey, entriesSplitter, entrySplitter, keys.keyz) } }
 
       // ---------------------------------------------------------------------------
       final class _Untuplify2b(targetKey: Ren) {
-        def withSplitters(arraySplitter: StringSplitter, entriesSplitter: StringSplitter, entrySplitter: StringSplitter) = new {
-            def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(low.enumValueNames[E])
+        def withSplitters(arraySplitter: StringSplitter, entriesSplitter: StringSplitter, entrySplitter: StringSplitter) = new _WithSplitters(arraySplitter, entriesSplitter, entrySplitter)
+          final class _WithSplitters private[heads] (arraySplitter: StringSplitter, entriesSplitter: StringSplitter, entrySplitter: StringSplitter) {
+            def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(typeNode[E].flattenedEnumValueNames)
             def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
             def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
               Untuplify2b(targetKey, arraySplitter, entriesSplitter, entrySplitter, keys.keyz) } }
@@ -320,7 +336,8 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
   // ---------------------------------------------------------------------------
   // TODO: t220914144753 - generalize as unpivot of some keys
-  def unpivotOneItem(key1: KeyW, key2: KeyW) = new {
+  def unpivotOneItem(key1: KeyW, key2: KeyW) = new _UnpivotOneItem(key1, key2)
+   final class _UnpivotOneItem private[heads] (key1: KeyW, key2: KeyW) {
     def withValue(targetValue: Any): Self2 = self2 :+
       actions.ActionsOthers.UnpivotOneItem(key1.value, key2.value, targetValue.toString) }
 }

@@ -1,7 +1,7 @@
 package gallia
 package vldt
 
-import aptus.{Anything_, Seq_}
+import aptus.{Anything_, Seq_, String_}
 import aptus.ErrorMsg
 
 import reflect._
@@ -54,7 +54,7 @@ object NodeDescUtils {
       u match {
         case Error(_)         => true
         case Enumeratum       => false
-        case Named(fullName)  => !FullName.from(fullName).isEnumValue && !BasicType.isKnown(fullName)
+        case Named(fullName)  => !FullName.from(fullName).isGalliaEnumValue && !BasicType.isKnown(fullName)
         case Nesting(nesting) => nesting.isInvalid }
 
     // ===========================================================================
@@ -65,7 +65,7 @@ object NodeDescUtils {
         case Enumeratum  => Nil
         case Named(name) =>
           if (BasicType.isKnown(name)) Nil
-          else                         s"${ErrorId.UnsupportedTlSubtype} - ${parent} - ${name}".in.seq
+          else                         s"${ErrorId.UnsupportedTlSubtype} - ${parent} - ${name.quote}".in.seq
         case Nesting(nesting) => nesting.errorMessages(parent) }
 
   }

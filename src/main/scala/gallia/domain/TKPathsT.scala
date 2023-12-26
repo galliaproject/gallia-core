@@ -17,7 +17,7 @@ trait TKPathSeq extends KPathSeq {
     // vldt
     override def vldtAsNewDestination(c: Cls): Errs = 
       super.vldtAsNewDestination(c) ++
-      values.map(_.tipe).flatMap(MetaValidation.validType)
+      values.map(_.typeNode).flatMap(MetaValidation.validType)
       
     // ---------------------------------------------------------------------------
     // meta

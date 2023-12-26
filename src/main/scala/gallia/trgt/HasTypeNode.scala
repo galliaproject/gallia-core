@@ -3,20 +3,21 @@ package target
 
 // ===========================================================================
 trait HasTypeNode {
-    val node: TypeNode
+    val typeNode: TypeNode
 
     // ---------------------------------------------------------------------------
     def info1Opt(validator: TypeNode => Boolean): Option[Info1] =
-      if (validator(node)) Some(node.forceNonBObjInfo.forceInfo1)
+      if (validator(typeNode)) Some(typeNode.forceNonBObjInfo.forceInfo1)
       else                 None
 
     // ---------------------------------------------------------------------------
-    def _out(value: Any): Any =
-      if (!node.isContainedDataClass) value
-      else                            node.forceNonBObjInfo.pipe(InstantiatorUtils.out(value)) }
+    /** static -> dynamic */
+    def toDynamic(value: Any): Any =
+      if (!typeNode.isContainedDataClass) value
+      else                                typeNode.forceNonBObjInfo.pipe(StaticToDynamic(value)) }
 
   // ===========================================================================
   object HasTypeNode {
-    implicit def to(x: TypeNode): HasTypeNode = new HasTypeNode { val node = x } }
+    implicit def to(x: TypeNode): HasTypeNode = new HasTypeNode { val typeNode = x } }
 
 // ===========================================================================

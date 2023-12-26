@@ -11,9 +11,9 @@ private[typed] trait TsBase {
 
     // ===========================================================================
     // TODO: rename
-    def resolve [T: WTT](tsl: TSelector[T]): TypedTargetQuery[KPath ] = new TypedTargetQuery[KPath ](tqkpath (tsl), typeNode[T], HT.instantiator[T], tsl.apply(from).ignoreContainer)
-    def resolves[T: WTT](tsl: TSelector[T]): TypedTargetQuery[RPathz] = new TypedTargetQuery[RPathz](tqrpathz(tsl), typeNode[T], HT.instantiator[T], tsl.apply(from).ignoreContainer)
-    def resolve2[T: WTT](tsl: TSelector[T]): TypedTargetQuery[Key]    = new TypedTargetQuery[Key]   (tqkey   (tsl), typeNode[T], HT.instantiator[T], tsl.apply(from).ignoreContainer)
+    def resolve [T: WTT](tsl: TSelector[T]): TypedTargetQuery[KPath ] = new TypedTargetQuery[KPath ](tqkpath (tsl), TypeDuo.build[T], tsl.apply(from).ignoreContainer)
+    def resolves[T: WTT](tsl: TSelector[T]): TypedTargetQuery[RPathz] = new TypedTargetQuery[RPathz](tqrpathz(tsl), TypeDuo.build[T], tsl.apply(from).ignoreContainer)
+    def resolve2[T: WTT](tsl: TSelector[T]): TypedTargetQuery[Key]    = new TypedTargetQuery[Key]   (tqkey   (tsl), TypeDuo.build[T], tsl.apply(from).ignoreContainer)
 
     // ---------------------------------------------------------------------------
     def tqkey   [T: WTT](tsl: TSelector[T]): TqKey    = tsl.apply(from).forceTqKey

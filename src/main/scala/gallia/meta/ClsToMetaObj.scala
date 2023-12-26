@@ -35,7 +35,7 @@ object ClsToMetaObj { // 201222111332
                 private def enm(value: BasicType._Enm): Obj =
                   obj(
                     _type    -> "_Enm",
-                    "values" -> value.stringValues.assert(_.nonEmpty))
+                    "values" -> value.stringValues.ensuring(_.nonEmpty))
 
 }
 

@@ -12,6 +12,7 @@ case class IntermediateMetaResult(dag: gallia.dag.DAG[IntermediateMetaResultNode
       override def toString: String = formatDefault
 
         def formatDefault: String = dag.formatDefault
+        def formatErrors : String = allErrors.map(_.format).#@@
           //graphviz.GraphVizUtils.IntermediateMetaResultNode_ ; { node => (node.formatDotLabel, node.formatDotColor) }
 
       // ===========================================================================
@@ -35,7 +36,11 @@ case class IntermediateMetaResult(dag: gallia.dag.DAG[IntermediateMetaResultNode
 
       // ---------------------------------------------------------------------------
       def allErrors: Errs = dag.kahnTraverseNodes.flatMap(_.result.errors)
-        def containsAllErrorMarkers(markers: Seq[String]): Boolean = markers.forall(allErrors.toString.contains) // mostly for tests        
+
+        // ---------------------------------------------------------------------------
+        def containsAllErrorMarkers(markers: Seq[String]): Boolean =
+          markers.forall { marker =>
+            allErrors.map(_.format).exists(_.contains(marker)) } // mostly for tests
 
       // ---------------------------------------------------------------------------
       def metaErrorOpt: Option[MetaError] =

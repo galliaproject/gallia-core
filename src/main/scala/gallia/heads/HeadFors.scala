@@ -19,7 +19,8 @@ trait HeadUFors { ignored: HeadU =>
         def thn        (f: (Self, Key) => HeadZ   )(implicit d: DI, d2: DI): HeadZ    = uz(ForPathUZ   (resolve(sel), (u, p) => f(u, p.key))) }
 
     // ===========================================================================
-    def forPath(sel: ForPath.Selector) = new { import ForPath._
+    def forPath(sel: ForPath.Selector) = new _ForPath(sel)
+     final class _ForPath private[heads] (sel: ForPath.Selector) { import ForPath._
       def thn(f: (Self, KPath) => Self): Self =
         self ::+ ForPathUU(resolve(sel), f) }
 
@@ -71,7 +72,8 @@ trait HeadUFors { ignored: HeadU =>
         def thn        (f: (Self, Key) => HeadU   )(implicit d: DI, d2: DI): HeadU    = zu(ForPathZU   (resolve(sel), (x, p) => f(x, p.key))) }
 
     // ===========================================================================
-    def forPath(sel: ForPath.Selector) = new { import ForPath._
+    def forPath(sel: ForPath.Selector) = new _ForPath(sel)
+     final class _ForPath private[heads] (sel: ForPath.Selector) { import ForPath._
       def thn(f: (Self, KPath) => Self): Self = zz(
           ForPathZZ(resolve(sel), f)) } // TODO: test ok?
 

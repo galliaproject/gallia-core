@@ -12,7 +12,7 @@ import vldt._Error.Runtime.WhateverOperationForbidden
     more explicit and less likely to result in unpleasant surprises at runtime.
  */
 @NumberAbstraction @TypeMatching
-class Whatever(private[gallia] val any: Any) extends AnyVal with Serializable { // keep to a minimum
+private[gallia] class Whatever(private[gallia] val any: Any) extends AnyVal with Serializable { // keep to a minimum
   import Whatever._
   import WhateverImplicits._
   

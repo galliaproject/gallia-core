@@ -37,7 +37,8 @@ trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F]
 
   // ---------------------------------------------------------------------------
   // enum:
-  def transformEnumStringValue(k: RPathW) = new {
+  def transformEnumStringValue(k: RPathW) = new _TransformEnumStringValue(k)
+   final class _TransformEnumStringValue private[heads] (k: RPathW) {
     def using(f: EnumStringValue => EnumStringValue) =
       transform(_.enm(k)).using {
         _.stringValue.pipe(f).pipe(EnumValue.apply) } }
@@ -82,12 +83,14 @@ trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F]
   // to/from JSON
 
   // TODO: an "opaque object" version for each (see t210110094829)
-  def parseJsonObjectString(k: RPathW) = new {  
+  def parseJsonObjectString(k: RPathW) = new _ParseJsonObjectString(k)
+     final class _ParseJsonObjectString private[heads] (k: RPathW) {
       def usingSchema(c: Cls) = transformString(k).toObjUsing(c)(
         atoms.AtomsIX._JsonObjectString.toObj(c)) }
   
     // ---------------------------------------------------------------------------
-    def parseJsonArrayString(k: RPathW) = new {  
+    def parseJsonArrayString(k: RPathW) = new _ParseJsonArrayString(k)
+     final class _ParseJsonArrayString private[heads] (k: RPathW) {
       def usingSchema(c: Cls) = transformString(k).toObjsUsing(c)(
         atoms.AtomsIX._JsonArrayString.toObjs(c)) }
   

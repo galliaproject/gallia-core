@@ -56,15 +56,7 @@ case class Info(
 
     // ---------------------------------------------------------------------------
     def updateValueType  (valueType: ValueType): Info = transformSoleSubInfo(_.updateValueType(valueType))
-    def updateOptionality(value: Optional)     : Info = copy(optional = value)
-
-    // ===========================================================================
-    def potentiallyProcessNesting(value: AnyValue): AnyValue =
-      nestedClassOpt
-        .map { nestedClass =>
-          container1.containerWrap(InstantiatorUtils.valueToObj(nestedClass))(value) }
-        .getOrElse(value)
-  }
+    def updateOptionality(value: Optional)     : Info = copy(optional = value) }
 
   // ===========================================================================
   object Info {

@@ -14,8 +14,8 @@ private[gallia] object InfoUtils {
       .map { field =>
         Fld(
           field.key.symbol,
-          field.node.forceNonBObjInfo)
-          .setEnumName(field.node.leaf.name) /* mostly for macros */ }
+          field.typeNode.forceNonBObjInfo)
+          .setEnumName(field.typeNode.leaf.name) /* mostly for macros */ }
       .pipe(Cls.apply)
       .setName(leaf.name.splitBy(".").last /* TODO: see t210325105833 - need to be in scope for macros */) // mostly for macros
 
@@ -45,13 +45,14 @@ private[gallia] object InfoUtils {
     // ---------------------------------------------------------------------------
     private def valueType(enmOpt: _EnmOpt)(isContainedDataClass: Boolean)(leaf: TypeLeaf): ValueType =
          if (isContainedDataClass) forceNestedClass(leaf)
-         else                      valueTypeOpt(enmOpt)(leaf).get
+         else                      valueTypeOpt(enmOpt)(leaf).getOrElse {
+           throw new IllegalStateException(s"${leaf.formatDefault -> enmOpt}") }
 
       // ---------------------------------------------------------------------------
       private def valueTypeOpt(enmOpt: _EnmOpt)(leaf: TypeLeaf): Option[ValueType] =
-        /**/ if (leaf.enm)          enmOpt.orElse(Some(BasicType._Enm.Dummy) /* typically for validations, see 220506101842 */)
-        else if (leaf.isEnumeratum) Some(BasicType._Enm(leaf.enumeratumEnum))
-        else if (leaf.bytes)        Some(BasicType._Binary)
-        else                        BasicType.fromFullNameOpt(leaf.name) }
+        /**/ if (leaf.galliaEnumValue) enmOpt.orElse(Some(BasicType._Enm.Dummy) /* typically for validations, see 220506101842 */)
+        else if (leaf.isEnumeratum)    Some(BasicType._Enm(leaf.enumeratumEnum))
+        else if (leaf.bytes)           Some(BasicType._Binary)
+        else                           BasicType.fromFullNameOpt(leaf.name) }
 
 // ===========================================================================

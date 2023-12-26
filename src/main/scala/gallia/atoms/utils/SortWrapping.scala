@@ -41,7 +41,7 @@ object SortWrapping {
 
       // ---------------------------------------------------------------------------
       override def meta = SuperMetaPair(
-        implicitly[CT[(K1, K2)]],
+        implicitly[low.CT[(K1, K2)]],
         Ordering.Tuple2(value1.meta.ord, value2.meta.ord))
 
       // ---------------------------------------------------------------------------
@@ -54,7 +54,7 @@ object SortWrapping {
 
       // ---------------------------------------------------------------------------
       override def meta = SuperMetaPair(
-        implicitly[CT[(K1, K2, K3)]],
+        implicitly[low.CT[(K1, K2, K3)]],
         Ordering.Tuple3(value1.meta.ord, value2.meta.ord, value3.meta.ord))
 
       // ---------------------------------------------------------------------------

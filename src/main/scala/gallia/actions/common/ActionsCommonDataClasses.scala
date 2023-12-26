@@ -9,21 +9,21 @@ import atoms.common.AtomsCommonDataClasses._
 // ===========================================================================
 object ActionsCommonDataClasses {
 
-  case class TransformDataClass(target: Key, from: HT, to: HT, f: _ff11) extends ActionUUc {
+  case class TransformDataClass(target: Key, from: TypeDuo, to: TypeDuo, f: _ff11) extends ActionUUc {
     // TODO: validate those
-    lazy val _from: Cls = from.node.forceNonBObjInfo.subInfo1.valueType.nestingOpt.get
-    lazy val   _to: Cls =   to.node.forceNonBObjInfo.subInfo1.valueType.nestingOpt.get
+    lazy val _from: Cls = from.typeNode.forceNonBObjInfo.subInfo1.valueType.nestingOpt.get
+    lazy val   _to: Cls =   to.typeNode.forceNonBObjInfo.subInfo1.valueType.nestingOpt.get
 
     // ---------------------------------------------------------------------------
     def  vldt (c: Cls): Errs   = Nil // TODO: validate from matches origin container
-    def _meta (c: Cls): Cls    = c.updateSoleType(target, to.node)
+    def _meta (c: Cls): Cls    = c.updateSoleType(target, to.typeNode)
     def atomuu(c: Cls): AtomUU = _TransformVV(c.pathPair(target), from.wrapc(to, f)) }
 
   // ===========================================================================
-  case class CotransformViaDataClass(from: HT, to: HT, f: _ff11, eraseOriginIfDifferent: Boolean) extends ActionUUc {
+  case class CotransformViaDataClass(from: TypeDuo, to: TypeDuo, f: _ff11, eraseOriginIfDifferent: Boolean) extends ActionUUc {
       //TODO: validate Container._One for now
-      lazy val _from: Cls = from.node.forceNonBObjInfo.subInfo1.valueType.nestingOpt.get
-      lazy val _to  : Cls =   to.node.forceNonBObjInfo.subInfo1.valueType.nestingOpt.get
+      lazy val _from: Cls = from.typeNode.forceNonBObjInfo.subInfo1.valueType.nestingOpt.get
+      lazy val _to  : Cls =   to.typeNode.forceNonBObjInfo.subInfo1.valueType.nestingOpt.get
 
       // ---------------------------------------------------------------------------
       def  vldt(c: Cls): Errs = Nil // TODO
@@ -52,9 +52,9 @@ object ActionsCommonDataClasses {
     }
 
     // ===========================================================================
-    case class CotransformViaDataClassAs(from: HT, to: TypeNode, as: Key, f: _ff11, eraseOriginIfDifferent: Boolean) extends ActionUUc {
+    case class CotransformViaDataClassAs(from: TypeDuo, to: TypeNode, as: Key, f: _ff11, eraseOriginIfDifferent: Boolean) extends ActionUUc {
       //TODO: validate Container._One for now
-      lazy val _from: Cls = from.node.forceNonBObjInfo.subInfo1.valueType.nestingOpt.get
+      lazy val _from: Cls = from.typeNode.forceNonBObjInfo.subInfo1.valueType.nestingOpt.get
       lazy val _to  : Fld = Fld(as, to.forceNonBObjInfo)
 
       // ---------------------------------------------------------------------------

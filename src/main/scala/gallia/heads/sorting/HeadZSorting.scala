@@ -80,13 +80,15 @@ trait HeadZSorting { self: HeadZ =>
   // safe
 
   // sort using 1
-  def sortUsing[O1: WTT](f1: SortingT[O1]) = new {
+  def sortUsing[O1: WTT](f1: SortingT[O1]) = new _SortUsing1(f1)
+     final class _SortUsing1[O1: WTT] private[heads] (f1: SortingT[O1]) {
       def using[D: WTT: Ordering](f: O1 => D): Self = zz(CustomSort1(resolve(f1), wrap(f), SuperMetaPair(low.ctag[D], implicitly[Ordering[D]]))) }
 
     // ---------------------------------------------------------------------------
     // sort using 2
 
-    def sortUsing[O1: WTT, O2: WTT](f1: SortingT[O1], f2: SortingT[O2]) = new {
+    def sortUsing[O1: WTT, O2: WTT](f1: SortingT[O1], f2: SortingT[O2]) = new _SortUsing2(f1, f2)
+     final class _SortUsing2[O1: WTT, O2: WTT] private[heads] (f1: SortingT[O1], f2: SortingT[O2]) {
       def using[D: WTT: Ordering](f: (O1, O2) => D): Self =
         zz(CustomSort2(resolve2(f1, f2), wrap21(f), SuperMetaPair(low.ctag[D], implicitly[Ordering[D]]))) }
 

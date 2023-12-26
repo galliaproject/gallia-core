@@ -72,12 +72,14 @@ trait HeadCommon[F <: HeadCommon[F]]
   private[gallia] def validateBObjs(value: BObjs): Self2 = self2 :+ new ValidateBObjs(value)
 
   // ===========================================================================
-  def fuseToUnion(origin1: KeyW, origin2: KeyW) = new {
+  def fuseToUnion(origin1: KeyW, origin2: KeyW) = new _FuseToUnion(origin1, origin2)
+    final class _FuseToUnion private[heads] (origin1: KeyW, origin2: KeyW) {
       def as(union: KeyW): Self2 = self2 :+
         ActionsCommonUnionTypes.FuseToUnion(origin1.value, origin2.value, union.value) }
 
     // ---------------------------------------------------------------------------
-    def fissionFromUnion(origin: KeyW) = new {
+    def fissionFromUnion(origin: KeyW) = new _FissionFromUnion(origin)
+     final class _FissionFromUnion private[heads] (origin: KeyW) {
       def as(target1: KeyW, target2: KeyW): Self2 = self2 :+
         ActionsCommonUnionTypes.FissionFromUnion(origin.value, target1.value, target2.value) }
 

@@ -80,7 +80,7 @@ package object target { // TODO: t210202090211 - p3 - rename package and homogen
     type TtqRPathz10 = TypedTargetQuery10[RPathz]
   
   // ===========================================================================
-  case class Duo[$Target](node: TypeNode, target: $Target) extends HasTypeNode // TODO: rename
+  case class Duo[$Target](typeNode: TypeNode, target: $Target) extends HasTypeNode // TODO: rename
   
   // ===========================================================================
   trait CanResolve[$Target] { val resolve: Cls => $Target } // for TargetQuery
@@ -88,6 +88,9 @@ package object target { // TODO: t210202090211 - p3 - rename package and homogen
   // ---------------------------------------------------------------------------
   trait CanValidateQuery { val vldtTargetQuery : Cls => Errs    }
   
+  // ---------------------------------------------------------------------------
+  trait HasTypeDuo extends HasTypeNode with HasInstantiatorOpt { def typeDuo: TypeDuo }
+
   // ---------------------------------------------------------------------------
   trait HasTypeSeq { def hts: Seq[HasType] } 
 }

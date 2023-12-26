@@ -7,7 +7,7 @@ import data.single.ObjOrdering
 
 // ===========================================================================
 case class SuperMetaPair[T]( // TODO: rename...
-      ctag: CT      [T], // required by Spark RDD for sorting
+      ctag: low.CT      [T], // required by Spark RDD for sorting
       ord : Ordering[T])
 
   // ===========================================================================

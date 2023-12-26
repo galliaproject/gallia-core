@@ -36,7 +36,7 @@ class HeadV[T: WTT /* will be Vle (Any) for data phase */] private[gallia] ( // 
   def dressUp(key: KeyW): HeadO = DressUp[T](key.value).pipe(vu) // "dress up" because naked value otherwise
 
   // ===========================================================================
-  def mapV [         T2: WTT](f: T  => T2)                            : HeadV[    T2 ] = handler.chainvv(this)(MapV2V(typeNode[T2], (x: Any) => f(x.asInstanceOf[T]) ))
+  def mapV [         T2: WTT](f: T  => T2)                            : HeadV[    T2 ] = typeNode[T2].pipe { tn => handler.chainvv(this)(MapV2V(tn, (x: Any) => f(x.asInstanceOf[T]) )) }
   def mapVs[T1: WTT, T2: WTT](f: T1 => T2)(implicit ev: T <:< Seq[T1]): HeadV[Seq[T2]] = mapV[Seq[T2]](_.map(f)) // worth keeping? - TODO: subclass rather?
 
   // ---------------------------------------------------------------------------

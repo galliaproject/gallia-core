@@ -3,7 +3,7 @@ package whatever
 
 // ===========================================================================
 /** when type is known (eg _.size will always result in a Int) but we need to remain in "whatever" territory */
-class TypedWhatever[+T](val typed: T) extends Serializable { // can't be AnyVal since Whatever already is
+private[gallia] class TypedWhatever[+T](val typed: T) extends Serializable { // can't be AnyVal since Whatever already is
   import Whatever._
   import WhateverImplicits._
 

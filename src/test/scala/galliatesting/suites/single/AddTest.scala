@@ -27,7 +27,11 @@ object AddTest extends utest.TestSuite with GalliaTestSuite with TestDataO { imp
     test(Default01.addId("myid")           check bobj(f -> foo, g -> 1, _id -> "myid"))
 
     // ---------------------------------------------------------------------------
+    test(Default01.add(p -> TestMeta.Foo2("aa", Some    ("AA")))          check aobj(f.string, g.int, p.cls("a".string, "A".string_))(obj(f -> foo, g -> 1, p ->      obj("a" -> "aa" , "A" -> "AA"))))
+    test(Default01.add(p -> TestMeta.Foo3("aa", Seq     ("AA1", "AA2")))  check bobj                                                     (f -> foo, g -> 1, p ->     bobj("a" -> "aa" , "A" -> Seq("AA1", "AA2"))))
+
     test(Default01.add(p ->     TestMeta.Foo("aa", "AA"))                                check bobj(f -> foo, g -> 1, p ->     bobj("a" -> "aa" , "A" -> "AA")))
+    test(Default01.add(p -> Seq(TestMeta.Foo("aa1", "AA1"), TestMeta.Foo("aa2", "AA2"))) check bobj(f -> foo, g -> 1, p -> Seq(bobj("a" -> "aa1", "A" -> "AA1"), bobj("a" -> "aa2", "A" -> "AA2"))))
     test(Default01.add(p -> Seq(TestMeta.Foo("aa1", "AA1"), TestMeta.Foo("aa2", "AA2"))) check bobj(f -> foo, g -> 1, p -> Seq(bobj("a" -> "aa1", "A" -> "AA1"), bobj("a" -> "aa2", "A" -> "AA2")))) } }
 
 // ===========================================================================

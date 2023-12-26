@@ -6,29 +6,27 @@ object TypeNodeObj {
 
   def typeNode(value: TypeNode): Obj =
         obj(
-          "leaf" -> tipe(value.leaf),
+          "leaf" -> typeLeaf(value.leaf),
           "args" -> value.args.map(typeNode))
 
     // ---------------------------------------------------------------------------
-    def tipe(value: TypeLeaf): Obj =
+    def typeLeaf(value: TypeLeaf): Obj =
         obj(
-          "name"        -> value.name,
-          "inScopeName" -> value.inScopeName,
-          "alias"       -> value.alias,
+          "name"            -> value.name,
 
-          "dataClass"   -> value.dataClass,
-          "enm"         -> value.enm,
-          "bytes"       -> value.bytes,
-          "inheritsSeq" -> value.inheritsSeq,
+          "dataClass"       -> value.dataClass,
+          "galliaEnumValue" -> value.galliaEnumValue,
+          "bytes"           -> value.bytes,
+          "inheritsSeq"     -> value.inheritsSeq,
 
           "enumeratumValueNamesOpt" -> value.enumeratumValueNamesOpt,
 
-          "fields"    -> value.fields.map(field))
+          "fields" -> value.fields.map(field))
 
       // ---------------------------------------------------------------------------
       def field(value: Field): Obj =
         obj(
           "key"  -> value.key,
-          "node" -> value.node.pype(typeNode)) }
+          "node" -> value.typeNode.pype(typeNode)) }
 
 // ===========================================================================

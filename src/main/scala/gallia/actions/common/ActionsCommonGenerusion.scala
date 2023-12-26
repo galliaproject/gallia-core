@@ -94,7 +94,7 @@ object ActionsCommonGenerusion { //TODO: t210111095156 separate all the Whatever
       // ---------------------------------------------------------------------------
       case class GenerateWV2b(from: TqKPath2, to: TtqKPath, f: _ff21) extends ActionUUc {       
           def  vldt (c: Cls): Errs   = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c)
-          def _meta (c: Cls): Cls    = c.add(to.tq.resolve(c), to.node.forceNonBObjInfo)
+          def _meta (c: Cls): Cls    = c.add(to.tq.resolve(c), to.typeNode.forceNonBObjInfo)
           def atomuu(c: Cls): AtomUU = _Transform2to1(from.pathPairT(c), to.tq.resolve(c), f(_, _)) }
 
     // ===========================================================================    
@@ -108,7 +108,7 @@ object ActionsCommonGenerusion { //TODO: t210111095156 separate all the Whatever
       // ---------------------------------------------------------------------------
       case class GenerateWV3b(from: TqKPath3, to: TtqKPath, f: _ff31) extends ActionUUc {       
           def  vldt (c: Cls): Errs   = from.vldtAsOrigin(c) ++ to.vldtAsNewDestination(c)
-          def _meta (c: Cls): Cls    = c.add(to.tq.resolve(c), to.node.forceNonBObjInfo)
+          def _meta (c: Cls): Cls    = c.add(to.tq.resolve(c), to.typeNode.forceNonBObjInfo)
           def atomuu(c: Cls): AtomUU = _Transform3to1(from.pathPairT(c), to.tq.resolve(c), f(_, _, _)) }
       
 }

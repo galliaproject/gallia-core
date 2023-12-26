@@ -12,18 +12,21 @@ import vldt.{MetaValidation, SpecialCardiMode}
 // term: t210201151634 - (target) replace "Query" with "Selection" throughout?
 case class TypedTargetQuery[$Target /* TODO: t210823111030 - ungenerify */]( // t210110103720 - subclass TargetQuery and TypedTargetQuery rather than using (ev <:<
         tq             : TargetQuery[$Target],
-        node           : TypeNode,
-        instantiator   : Instantiator,
+        typeDuo        : TypeDuo,
         ignoreContainer: Boolean /* eg for stringx('foo) */)
-      extends HasType { private val self = this
+      extends HasType {
 
-    def size(c: Cls): Int = tq.size(c)
-
-    def isMultiple: Boolean = node.isMultiple
+    override val instantiatorOpt: Option[Instantiator] = typeDuo.instantiatorOpt
+    override val typeNode       :        TypeNode      = typeDuo.typeNode
 
     // ---------------------------------------------------------------------------
-    def duo      (c: Cls): Duo[$Target]    = Duo[$Target](node, tq.resolve(c))
-    def fieldPair(c: Cls): ($Target, Info) = (tq.resolve(c), node.forceNonBObjInfo)
+    def size(c: Cls): Int = tq.size(c)
+
+    def isMultiple: Boolean = typeNode.isMultiple
+
+    // ---------------------------------------------------------------------------
+    def duo      (c: Cls): Duo[$Target]    = Duo[$Target](typeNode, tq.resolve(c))
+    def fieldPair(c: Cls): ($Target, Info) = (tq.resolve(c), typeNode.forceNonBObjInfo)
     
     def valueType1(c: Cls)(implicit ev: $Target <:< KPath) = kpathT(c).pipe(c.field(_).subInfo1.valueType)
 
@@ -37,9 +40,9 @@ case class TypedTargetQuery[$Target /* TODO: t210823111030 - ungenerify */]( // 
     def pathPairT(c: Cls)(implicit ev: $Target <:< KPath): PathPair =
       tq
         .pathPairT(c: Cls)
-        .assert(
-            _.optional == node.leaf.isOption ||
-            node.isContainedWhatever /* TODO: contained ok here? */)
+        .ensuring(
+            _.optional == typeNode.isOption ||
+            typeNode.isContainedWhatever /* TODO: contained ok here? */)
 
     // ---------------------------------------------------------------------------
     def wrapx (c: Cls,                  f: Any => Any): Any => Any = tq.container1(c).containerWrap(f)
@@ -52,8 +55,8 @@ case class TypedTargetQuery[$Target /* TODO: t210823111030 - ungenerify */]( // 
     def vldtAsOrigin(c: Cls, mode: SpecialCardiMode): Errs = tq.vldtAsOrigin(c) ++ MetaValidation.typeCompatibility(c, duo(c), mode)
 
     // ---------------------------------------------------------------------------
-    def vldtAsNewDestination(c: Cls): Errs = tq.vldtAsNewDestination(c) ++ MetaValidation.validType(node)
-    def vldtAsAnyDestination(c: Cls): Errs =                               MetaValidation.validType(node)
+    def vldtAsNewDestination(c: Cls): Errs = tq.vldtAsNewDestination(c) ++ MetaValidation.validType(typeNode)
+    def vldtAsAnyDestination(c: Cls): Errs =                               MetaValidation.validType(typeNode)
 
     // ---------------------------------------------------------------------------
     def vldtAsCotransformDestination(c: Cls, from: KPath) (implicit ev: $Target <:< KPath): Errs = vldtAsCotransformDestination(c, KPathz(Seq(from)))
@@ -64,7 +67,7 @@ case class TypedTargetQuery[$Target /* TODO: t210823111030 - ungenerify */]( // 
     // ===========================================================================
     // meta
 
-    def fromOverride(value: HasType)(implicit ev: $Target <:< KPath): TtqKPath = TypedTargetQueryUtils.ttqkpath1(tqkpath, this)
+    def fromOverride(value: HasType)(implicit ev: $Target <:< KPath): TtqKPath = TypedTargetQueryUtils.ttqkpath1(tqkpath, typeDuo)
 
     def forceData(c: Cls): $Target = tq.resolve(c)    
   }

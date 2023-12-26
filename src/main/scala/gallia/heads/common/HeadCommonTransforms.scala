@@ -3,7 +3,7 @@ package heads
 package common
 
 import aptus.Index
-import target.HT
+import target.TypeDuo
 import FunctionWrappers._
 import actions.common.ActionsCommonTransforms._
 
@@ -88,7 +88,9 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
       def using[D: WTT](f: WV =>     D)(implicit di: DI): Self2 = self2 :+ TransformWW1b(resolves(f1), typeNode[D], wrap(f)(x => x) (_)) }
 
     // ===========================================================================
-    class _TransformVV[O: WTT](f1: Transform[O]) { val ttq = resolves(f1)
+    class _TransformVV[O: WTT](f1: Transform[O]) {
+      private val ttq    = resolves(f1)
+      private val origin = typeNode[O]
 
       // ---------------------------------------------------------------------------
       def withSchema(field1: Fld, more: Fld*): _UsingSchema = new _UsingSchema(cls(field1 +: more))
@@ -105,20 +107,19 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
       // ---------------------------------------------------------------------------
       //TODO: "opaque" counteparts (see t210110094829)
 
-
       // ---------------------------------------------------------------------------
       def using[D: WTT](f: O => D): Self2 = self2 :+ {
-        val dest = typeNode[D]
+        val dest = TypeDuo.build[D]
 
-        if (!dest.isContainedDataClass)
-          if (!ttq.ignoreContainer) TransformVV (ttq, dest, wrap(f), typeNode[O].ifApplicable(wrap(f)))
-          else                      TransformVVx(ttq, dest, wrap(f), typeNode[O].ifApplicable(wrap(f)))
+        if (!dest.typeNode.isContainedDataClass)
+          if (!ttq.ignoreContainer) TransformVV (ttq, dest.typeNode, wrap(f), origin.ifApplicable(wrap(f)))
+          else                      TransformVVx(ttq, dest.typeNode, wrap(f), origin.ifApplicable(wrap(f)))
 
         // ---------------------------------------------------------------------------
         // deprecated way now, c220914145147 or t220914144458 instead
         else
-          if (!ttq.ignoreContainer) TransformVVc (ttq, to = HT.parse[D], wrap(f))
-          else                      TransformVVxc(ttq, to = HT.parse[D], wrap(f)) } }
+          if (!ttq.ignoreContainer) TransformVVc (ttq, dest, wrap(f))
+          else                      TransformVVxc(ttq, dest, wrap(f)) } }
 
 }
 

@@ -75,13 +75,15 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
                         def isCurrentDate: Self = hasValue(java.time.LocalDate.now()) }
 
                       // ---------------------------------------------------------------------------
-                      def findBy(target: FindBy1[HeadU])(implicit di: DI) = new { // trade-off: pre-process for more more than 1
+                      def findBy(target: FindBy1[HeadU])(implicit di: DI) = new _FindByU1(target) // trade-off: pre-process for more more than 1
+                       final class _FindByU1 private[heads] (target: FindBy1[HeadU]) {
                         //TODO: add isPresent/...
                         def matches(f: HeadU => HeadV[Boolean]): Self =
                           zz(FilterByU(resolve(target), f, asFind = true)) }
 
                       // ---------------------------------------------------------------------------
-                      def findBy(target: FindBy1[HeadZ])(implicit di: DI, di2: DI) = new { // trade-off: pre-process for more more than 1
+                      def findBy(target: FindBy1[HeadZ])(implicit di: DI, di2: DI) = new _FindByU2(target) // trade-off: pre-process for more more than 1
+                       final class _FindByU2 private[heads] (target: FindBy1[HeadZ]) {
                         def matches(f: HeadZ => HeadV[Boolean]): Self =
                           zz(FilterByZ(resolve(target), f, asFind = true)) }
 
@@ -181,13 +183,15 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
         def isCurrentDate: Self = hasValue(java.time.LocalDate.now()) }
 
       // ===========================================================================
-      def filterBy(target: FilterBy1[HeadU])(implicit di: DI) = new { // trade-off: pre-process for more more than 1
+      def filterBy(target: FilterBy1[HeadU])(implicit di: DI) = new _FilterByU1(target) // trade-off: pre-process for more more than 1
+       final class _FilterByU1 private[heads] (target: FilterBy1[HeadU]) {
         //TODO: add isPresent/...
         def matches(f: HeadU => HeadV[Boolean]): Self =
           zz(FilterByU(resolve(target), f, asFind = false)) }
 
       // ---------------------------------------------------------------------------
-      def filterBy(target: FilterBy1[HeadZ])(implicit di: DI, di2: DI) = new { // trade-off: pre-process for more more than 1
+      def filterBy(target: FilterBy1[HeadZ])(implicit di: DI, di2: DI) = new _FilterByU2(target) // trade-off: pre-process for more more than 1
+       final class _FilterByU2 private[heads] (target: FilterBy1[HeadZ]) {
         def matches(f: HeadZ => HeadV[Boolean]): Self =
           zz(FilterByZ(resolve(target), f, asFind = false)) }
 

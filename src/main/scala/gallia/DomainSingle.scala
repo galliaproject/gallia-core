@@ -2,13 +2,11 @@ package gallia
 
 import aptus.{Anything_, Seq_}
 import aptus.Option_
-import gallia.target.HasType
 
 // ===========================================================================
 case class ActualRen(from: Key, to: Key) { 
   require(from != to, from)
-  def pair = from -> to
-}
+  def pair = from -> to }
 
 // ===========================================================================
 case class Ren(from: Key, to: Key /* may be the same as from */) { // TODO: t210115153452 - change so as to use Option for to
@@ -26,14 +24,12 @@ case class Ren(from: Key, to: Key /* may be the same as from */) { // TODO: t210
     def rpath: RPath = RPath(Nil, this)
     @deprecated def fromFX = from // FIXME: see t210110104437
 
-    def renz = Renz(Seq(this))
-  }
+    def renz = Renz(Seq(this)) }
 
   // ===========================================================================
   object Ren {
-    def from(key: KeyW           ): Ren = Ren(key.value, key.value)
-    def from(key: KeyW, to: KeyW): Ren = Ren(key.value, to .value)
-  }
+    def from(key: KeyW          ): Ren = Ren(key.value, key.value)
+    def from(key: KeyW, to: KeyW): Ren = Ren(key.value, to .value) }
 
 // ===========================================================================
 case class KPath(parent: Seq[Key], key: Key) {
@@ -91,15 +87,13 @@ case class KPath(parent: Seq[Key], key: Key) {
         pair match {
           case (None      , leaf) => ???
           case (Some(tail), leaf) => ???
-      */
-  }
+      */ }
 
   // ===========================================================================
   object KPath {
     def from(key: KeyW): KPath = KPath(Nil, key.value)
 
-    def opt(values: Seq[Key]): Option[KPath] = values.in.noneIf(_.isEmpty).map(x => KPath(x.init, x.last))
-  }
+    def opt(values: Seq[Key]): Option[KPath] = values.in.noneIf(_.isEmpty).map(x => KPath(x.init, x.last)) }
 
 // ===========================================================================
 case class RPath(parent: Seq[Key], ren: Ren) {
@@ -150,8 +144,7 @@ case class RPath(parent: Seq[Key], ren: Ren) {
         tailPair match {
           case Left ( renaming      ) => ???
           case Right((parent, rpath)) => ???
-      */
-  }
+      */ }
 
   // ===========================================================================
   object RPath {
@@ -159,17 +152,17 @@ case class RPath(parent: Seq[Key], ren: Ren) {
     def from(path: KPathW)      : RPath = RPath(path.kpath.parent, Ren.from(path.kpath.key))
 
     // ---------------------------------------------------------------------------
-    @deprecated("make sure ok") def from(path: Seq[Key], to: Key) = RPath(path.init /* TODO: safe? */, Ren(path.last, to)) // from RenameDynamically
-  }
+    @deprecated("make sure ok") def from(path: Seq[Key], to: Key) = RPath(path.init /* TODO: safe? */, Ren(path.last, to)) /* from RenameDynamically */ }
 
 // ===========================================================================
-case class TKPath(path: KPath, tipe: gallia.reflect.TypeNode) extends gallia.target.HasTypeNode with HasType {
-  override val instantiator = null // FIXME: t210826103357
-  override val node = tipe
-  def fieldPair(c: Cls): (KPath, gallia.meta.Info) = (path, tipe.forceNonBObjInfo)
-  def isLeaf: Boolean = path.isLeaf
-}
-  
+case class TKPath(path: KPath, typeNode: reflect.TypeNode) extends target.HasTypeNode with target.HasType {
+  override val instantiatorOpt = None
+  override def typeDuo = target.TypeDuo.fromTypeNodeOnly(typeNode)
+
+  // ---------------------------------------------------------------------------
+  def fieldPair(c: Cls): (KPath, gallia.meta.Info) = (path, typeNode.forceNonBObjInfo)
+  def isLeaf           : Boolean                   = path.isLeaf }
+
 // ===========================================================================
 case class OptionalKPath(value: Option[KPath]) {
     def appendLevel(key: Key): OptionalKPath =
@@ -178,13 +171,11 @@ case class OptionalKPath(value: Option[KPath]) {
           .orElse(Some(KPath.from(key)))
         .pipe(OptionalKPath.apply)
 
-    def forcePath: KPath = value.force
-  }
+    def forcePath: KPath = value.force }
 
   // ===========================================================================
   object OptionalKPath {
-    val Root = OptionalKPath(None)
-  }
+    val Root = OptionalKPath(None) }
 
 // ===========================================================================
 case class OptionalRPath(value: Option[RPath]) { // TODO:?
@@ -194,7 +185,6 @@ case class OptionalRPath(value: Option[RPath]) { // TODO:?
 
   // ===========================================================================
   object OptionalRPath {
-    val Root = OptionalRPath(None)
-  }
+    val Root = OptionalRPath(None) }
 
 // ===========================================================================

@@ -38,9 +38,9 @@ object MetaValidationHelper {
 
   // ===========================================================================
   def typeCompatibility[$Target](c: Cls, duo: Duo[$Target], mode: SpecialCardiMode): Errs =
-      if (duo.node.isWhatever0) Nil
+      if (duo.typeNode.isWhatever0) Nil
       else
-          validType(Location.Root, duo.node) ++
+          validType(Location.Root, duo.typeNode) ++
           (duo.target match {
               case key   : Key    =>                                 _typeCompatibility(c)(KPath.from(key),      duo, mode)
               case ren   : Ren    =>                                 _typeCompatibility(c)(KPath.from(ren.from), duo, mode)
@@ -48,9 +48,9 @@ object MetaValidationHelper {
               case rpathz: RPathz => rpathz.froms.flatMap { kpath => _typeCompatibility(c)(kpath,                duo, mode) } })
 
     // ---------------------------------------------------------------------------
-    private def _typeCompatibility(c: Cls)(kpath: KPath, ht: HasTypeNode, mode: SpecialCardiMode): Err_ =
+    private def _typeCompatibility(c: Cls)(kpath: KPath, htn: HasTypeNode, mode: SpecialCardiMode): Err_ =
       (   c.field_(kpath).map(_.info), // see t210125111338 (union types)
-          ht.info1Opt(isValidType))
+          htn.info1Opt(isValidType))
         .toOptionalTuple
         .flatMap { case (infoA, info1B) =>
           errIf_(!MetaValidationCompatibility.compatible(infoA, info1B, mode)) {
@@ -107,7 +107,7 @@ object MetaValidationHelper {
       .flatMap { field =>
         validType(
           field.key.pipe(location.addKey),
-          field.node) }
+          field.typeNode) }
 
 }
 

@@ -94,7 +94,7 @@ package object actions { // TODO: delegate access to all of AtomsUtils._
 
   // ---------------------------------------------------------------------------
   implicit class TKPath__(value: TKPath) {
-    def vldtAsNewDestination(c: Cls) = value.path.vldtAsNewDestination(c) ++ _vldt.validType(value.tipe) }
+    def vldtAsNewDestination(c: Cls) = value.path.vldtAsNewDestination(c) ++ _vldt.validType(value.typeNode) }
 
 }
 

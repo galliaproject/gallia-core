@@ -12,15 +12,11 @@ object TimeTest extends utest.TestSuite with GalliaTestSuite { import utest._
 
     // ---------------------------------------------------------------------------
     test {
-      valueWrapper(instant)
+      gallia.bobj("value" -> instant).forceAObj
           .transform(_.instant("value")).using {
           _.atZone(java.time.ZoneId.systemDefault).getYear }
-        ._assert2(gallia.bobj("value" -> 2022))
-    }
-  }
+        ._assert2(gallia.bobj("value" -> 2022)) } }
 
-  // ===========================================================================
-  private def valueWrapper[T: WTT](value: T): gallia.domain.AObj = gallia.bobj("value" -> value).forceAObj
 }
 
 // ===========================================================================f

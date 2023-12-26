@@ -25,8 +25,8 @@ private[gallia] object MetaValidation {
   def validType(pair: (Location, TypeNode)): Errs = validType(pair._1, pair._2)
 
   // ---------------------------------------------------------------------------
-  def validType (c: Cls, ht :     HasType ): Errs =                   validType(Location.Root, ht.node)
-  def validTypes(c: Cls, hts: Seq[HasType]): Errs = hts.flatMap(ht => validType(Location.Root, ht.node))
+  def validType (c: Cls, ht :     HasType ): Errs =                   validType(Location.Root, ht.typeNode)
+  def validTypes(c: Cls, hts: Seq[HasType]): Errs = hts.flatMap(ht => validType(Location.Root, ht.typeNode))
 
   // ---------------------------------------------------------------------------
   def classCompatibilities(cls1: Cls, cls2: Cls): Err_ =

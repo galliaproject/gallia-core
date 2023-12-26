@@ -4,7 +4,7 @@ package domain
 import heads.Head
 
 // ===========================================================================
-case class BObj private[gallia](entries: KVEs) { // TODO: t210124100009 - no proper rationale for "B" prefix
+private[gallia] case class BObj private[gallia](entries: KVEs) { // TODO: t210124100009 - no proper rationale for "B" prefix
 
     override def toString: String = formatDefault
       def formatDefault: String = entries.formatDefault
@@ -20,30 +20,26 @@ case class BObj private[gallia](entries: KVEs) { // TODO: t210124100009 - no pro
     def forceCls: Cls = entries.forceCls
     def forceObj: Obj = entries.forceObj
 
-    def forceAObj: AObj = AObj(forceCls, forceObj)
-  }
+    def forceAObj: AObj = AObj(forceCls, forceObj) }
 
   // ===========================================================================
-  object BObj {
+  private[gallia] object BObj {
     implicit def toHead(value: BObj): HeadU =
-      new actions.in
+      actions.in
         .InMemoryInputUb(value)
-        .pipe(Head.inputU)
-  }
+        .pipe(Head.inputU) }
 
 // ===========================================================================
-case class BObjs(values: Seq[BObj]) {
+private[gallia] case class BObjs(values: Seq[BObj]) {
     def forceCls : Cls  = values.map(_.forceCls)       .pipe(AObjs.combineCls)
     def forceObjs: Objs = values.map(_.forceObj).toList.pipe(Objs.from)
-    def forceAObjs: AObjs = AObjs.from(values.map(_.forceAObj))
-  }
+    def forceAObjs: AObjs = AObjs.from(values.map(_.forceAObj)) }
 
   // ---------------------------------------------------------------------------
-  object BObjs {
+  private[gallia] object BObjs {
     implicit def toHead(value: BObjs): HeadZ =
-      new actions.in
+      actions.in
         .InMemoryInputZb(value)
-        .pipe(Head.inputZ)
-  }
+        .pipe(Head.inputZ) }
 
 // ===========================================================================

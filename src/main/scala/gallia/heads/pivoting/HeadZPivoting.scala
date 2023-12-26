@@ -2,8 +2,7 @@ package gallia
 package heads
 package pivoting
 
-import aptus.{String_, Seq_}
-import heads.common.Pivot
+import aptus.Seq_
 
 // ===========================================================================
 trait HeadZPivoting { self: HeadZ =>
@@ -13,16 +12,16 @@ trait HeadZPivoting { self: HeadZ =>
   def pivoneEnum[E <: EnumEntry : WTT]         : HeadU = pivone(typeNode[E].leaf.fullName.inScopeName).asNewKeys[E]
 
   // ---------------------------------------------------------------------------
-  def pivone(k: KeyW) = new Pivone(k)
+  def pivone(k: KeyW) = new _Pivone(k)
 
-    class Pivone (k: KeyW) {
-      def asNewKeys[E <: EnumEntry : WTT]     : HeadU = asNewKeys(low.enumValueNames[E])
+    final class _Pivone private[heads] (k: KeyW) {
+      def asNewKeys[E <: EnumEntry : WTT]     : HeadU = asNewKeys(typeNode[E].flattenedEnumValueNames)
       def asNewKeys(value1: KeyW, more: KeyW*): HeadU = asNewKeys(Keyz.from(value1, more))
       def asNewKeys(values: KeyWz)            : HeadU = self.groupBy(k.value).as(_tmp).pivot(_tmp).column(k.value).asNewKeys(values) }
 
   // ===========================================================================
-  def pivot         (x1: KPathW)    = new PivotStartU    (PivotingData[WV, Nothing](_._explicit(x1) /* TODO: see t210303111953 */))
-  def pivot[O1: WTT](x1: Pivot[O1]) = new PivotStartT[O1](PivotingData[O1, Nothing](x1))
+  def pivot         (x1: KPathW)           = new PivotStartU    (PivotingData[WV, Nothing](_._explicit(x1) /* TODO: see t210303111953 */))
+  def pivot[O1: WTT](x1: common.Pivot[O1]) = new PivotStartT[O1](PivotingData[O1, Nothing](x1))
   
   // ===========================================================================
   class PivotStartU private[pivoting] (data: PivotingData[WV, Nothing] /* TODO: t210303111953 - use different structure now */) {
@@ -32,11 +31,12 @@ trait HeadZPivoting { self: HeadZ =>
       //TODO: keep or just expect pre-grouping?      
       def rows(target: RenW)                             : Columns[WV, WV] = rows(Renz.from(target))
       def rows(target1: RenW, target2: RenW, more: RenW*): Columns[WV, WV] = rows(Renz.from(target1, target2, more))
-      def rows(targets: RenWz)                           : Columns[WV, WV] = new Columns[WV, WV](PivotingData[WV, WV](data.target.asInstanceOf[Pivot[WV]], rows = targets.renz) ) }
+      def rows(targets: RenWz)                           : Columns[WV, WV] =
+        new Columns[WV, WV](PivotingData[WV, WV](data.target.asInstanceOf[common.Pivot[WV]], rows = targets.renz) ) }
     
     // ===========================================================================  
     class NewKeysU[T: WTT] private[pivoting] (data: PivotingData[WV, Nothing]) {
-      def asNewKeys[E <: EnumEntry : WTT]     : HeadU = asNewKeys(low.enumValueNames[E])
+      def asNewKeys[E <: EnumEntry : WTT]     : HeadU = asNewKeys(typeNode[E].flattenedEnumValueNames)
       def asNewKeys(value1: KeyW, more: KeyW*): HeadU = asNewKeys(Keyz.from(value1, more))
       def asNewKeys(values: KeyWz)            : HeadU = data.copy(newKeys = values.keyz).pivone(self) }
 
@@ -62,7 +62,7 @@ trait HeadZPivoting { self: HeadZ =>
 
       // ---------------------------------------------------------------------------
       class NewKeysT[O1: WTT, D: WTT] private[pivoting] (data: PivotingData[O1, D]) {
-          def asNewKeys[E <: EnumEntry : WTT]     : HeadZ = asNewKeys(low.enumValueNames[E])
+          def asNewKeys[E <: EnumEntry : WTT]     : HeadZ = asNewKeys(typeNode[E].flattenedEnumValueNames)
           def asNewKeys(value1: KeyW, more: KeyW*): HeadZ = asNewKeys(Keyz.from(value1, more))
           def asNewKeys(values: KeyWz)            : HeadZ = data.copy(newKeys = values.keyz).pivot[O1, D](self) }
 

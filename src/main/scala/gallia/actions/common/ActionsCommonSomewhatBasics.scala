@@ -16,8 +16,8 @@ object ActionsCommonSomewhatBasics {
   // ===========================================================================
   case class RemoveConditionally(target: TtqRPathz, pred: Any => Boolean) extends ActionUUb {
       def  vldt(c: Cls): Errs = // TODO: no need to check if some fields are left
-        if (target.node.isNone) _Error.CantBeNone.errs //TODO: also Nil
-        else                    target.vldtAsOrigin(c, mode = SpecialCardiMode.IgnoreRequiredness)
+        if (target.typeNode.isNone) _Error.CantBeNone.errs //TODO: also Nil
+        else                        target.vldtAsOrigin(c, mode = SpecialCardiMode.IgnoreRequiredness)
 
       def _meta  (c: Cls): Cls     = target.tq.rpathz_(c).foldLeft(c)(_ toOptional _)
       def atomuus(c: Cls): AtomUUs = target.tq.rpathz_(c).pipe(_atoms(x => _RemoveIf(x, x, pred ))) }
@@ -84,7 +84,7 @@ object ActionsCommonSomewhatBasics {
   // ===========================================================================
   /** strict = all values are translated, therefore type can change */
   case class Translate(target: TtqRPathz, to: TypeNode, strict: Boolean, mapping: Seq[(_, _)]) extends ActionUUb {
-      @deprecated val toOpt = to.in.someIf(_ != target.node)
+      @deprecated val toOpt = to.in.someIf(_ != target.typeNode)
 
       def  vldt(c: Cls): Errs =
         target.vldtAsOrigin(c, SpecialCardiMode.IgnoreRequiredness /* TODO: check no Some/None provided */) ++
@@ -94,7 +94,7 @@ object ActionsCommonSomewhatBasics {
             if (strict) {
               _vldt.validType(gallia.vldt.Location.Root, to)
             } else {
-              if (to != target.node) Some(Err("201105140603 - MustBeSameType")) else None
+              if (to != target.typeNode) Some(Err("201105140603 - MustBeSameType")) else None
               //_vldt.typeCompatibilities6(c, target, ignoreRequiredness = false)
             }
           })

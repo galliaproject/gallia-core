@@ -275,7 +275,7 @@ object ActionsOthers {
       ifOpt      : KPath => $Atom,
       ifOne      : KPath => $Atom) {
     def vldt (in: Seq[Cls]): Errs = if (!checkOrigin) Nil     else from.vldtAsOrigin(in.force.one) //TODO: more
-    def _meta(in: Seq[Cls]): Cls  = if (!checkOrigin) in.head else Cls.vles(from.node)
+    def _meta(in: Seq[Cls]): Cls  = if (!checkOrigin) in.head else Cls.vles(from.typeNode)
 
     // ---------------------------------------------------------------------------
     def atoms(ctx: NodeMetaContext): Atoms =

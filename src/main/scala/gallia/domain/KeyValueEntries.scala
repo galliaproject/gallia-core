@@ -16,15 +16,13 @@ sealed trait KVE { // Key-Value Entry
 
     def vldt(nextLocation: Location): Errs
     def metaEntry: (Key, Info)
-    def dataEntry: (Key, AnyValue)
-  }
+    def dataEntry: (Key, AnyValue) }
 
   // ===========================================================================
   case class BObjKVE(key: Key, bobj: BObj) extends KVE {
       def vldt(nextLocation: Location): Errs = MetaValidation.validateBObj(nextLocation)(bobj)
       def metaEntry: (Key, Info)     = key -> bobj.forceCls.pipe(Info.one)
-      def dataEntry: (Key, AnyValue) = key -> bobj.forceObj
-    }
+      def dataEntry: (Key, AnyValue) = key -> bobj.forceObj }
 
   // ===========================================================================
   case class BObjsKVE(key: Key, bobjs: Seq[BObj]) extends KVE {
@@ -36,8 +34,7 @@ sealed trait KVE { // Key-Value Entry
                 nextLocation.addIndex(index))(value) }
 
       def metaEntry: (Key, Info)     = key -> bobjs.map(_.forceCls).distinct.force.one.pipe(Info.nes)
-      def dataEntry: (Key, AnyValue) = key -> bobjs.map(_.forceObj)
-    }
+      def dataEntry: (Key, AnyValue) = key -> bobjs.map(_.forceObj) }
 
   // ===========================================================================
   case class VleKVE(key: Key, node: TypeNode, value: AnyValue) extends KVE {
@@ -57,8 +54,8 @@ sealed trait KVE { // Key-Value Entry
           .forceNonBObjInfo
           .nestedClassOpt
           .map { c =>
-              if (node.isMultiple) InstantiatorUtils.valueToObjs(c)(value)
-              else                 InstantiatorUtils.valueToObj (c)(value) }
+              if (node.isMultiple) StaticToDynamic.staticToObjs(c)(value)
+              else                 StaticToDynamic.staticToObj (c)(value) }
           .getOrElse(value) }
 
   // ===========================================================================
@@ -78,14 +75,11 @@ sealed trait KVE { // Key-Value Entry
 
     // ---------------------------------------------------------------------------
     implicit def toValueEntry[T: WTT](key: KeyW, value: T): KVE = {
-      val _node = typeNode[T]
+      val typeNode = gallia.typeNode[T]
 
            if (typeNode.isBObj ) BObjKVE (key.value, value.asInstanceOf[    BObj ])
       else if (typeNode.isBObjs) BObjsKVE(key.value, value.asInstanceOf[Seq[BObj]])
-      else                       VleKVE  (key.value, _node, value)
-    }
-
-  }
+      else                       VleKVE  (key.value, typeNode, value) } }
 
 // ===========================================================================
 case class RVE(underlying: KVE, to: Key) {

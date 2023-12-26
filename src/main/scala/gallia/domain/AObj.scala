@@ -6,7 +6,7 @@ import aptus.{Anything_, Seq_}
 import heads.Head
 
 // ===========================================================================
-case class AObj(c: Cls, @deprecated u: Obj) { // TODO: tt210124100009 - initially stood for "Annotated Object"...
+private[gallia] case class AObj(c: Cls, @deprecated u: Obj) { // TODO: tt210124100009 - initially stood for "Annotated Object"...
             def schema = c
             def data   = u    
     @inline def o      = u
@@ -18,19 +18,17 @@ case class AObj(c: Cls, @deprecated u: Obj) { // TODO: tt210124100009 - initiall
         o.pp
 
     def toBObj : BObj  = ??? //TODO
-    def inAObjs: AObjs = AObjs(c, Objs.from(List(o)))
-  }
+    def inAObjs: AObjs = AObjs(c, Objs.from(List(o))) }
 
   // ---------------------------------------------------------------------------
-  object AObj {
+  private[gallia] object AObj {
     implicit def toHead(value: AObj): HeadU =
-      new actions.in
+      actions.in
         .InMemoryInputUa(value)
-        .pipe(Head.inputU)
-  }
+        .pipe(Head.inputU) }
 
 // ===========================================================================
-case class AObjs(c: Cls, z: Objs) {
+private[gallia] case class AObjs(c: Cls, z: Objs) {
     def schema = c
     def data   = z
 
@@ -43,11 +41,10 @@ case class AObjs(c: Cls, z: Objs) {
     override def toString: String = formatDefault
       def formatDefault: String =
         c.formatDefault + "\n" +
-        z.formatPrettyJson
-  }
+        z.formatPrettyJson }
 
   // ===========================================================================
-  object AObjs {
+  private[gallia] object AObjs {
     implicit def toHead(value: AObjs): HeadZ =
       actions.in
         .InMemoryInputZa(value)
@@ -64,8 +61,6 @@ case class AObjs(c: Cls, z: Objs) {
 
     // ---------------------------------------------------------------------------
     lazy val Empty             : AObjs = empty(Cls.Line)
-         def empty(schema: Cls): AObjs = AObjs(schema, Objs.empty)
-  }
-
+         def empty(schema: Cls): AObjs = AObjs(schema, Objs.empty) }
 
 // ===========================================================================

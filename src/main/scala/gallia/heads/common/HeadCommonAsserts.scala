@@ -13,7 +13,8 @@ trait HeadCommonAsserts[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   def assertMeta(f: ClsLike => Boolean): Self2 = self2 :+ AssertMeta(f)
 
     //TODO: field selection too? or for-key...
-    def assertField(target: KPathW) = new {
+    def assertField(target: KPathW) = new _AssertField(target)
+      final class _AssertField private[heads] (target: KPathW) {
         def matches(pred: InfoLike => Boolean): Self2 =
           self2 :+ AssertField(target.value, _Error.FieldAssertionFailure(target.value), pred) }
 
@@ -60,9 +61,13 @@ trait HeadCommonAsserts[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
         .pattern.matcher(_).matches()) }
 
     // ---------------------------------------------------------------------------
-    def assertBoolean(target: KPathW) = new { def hasValue(value: Boolean): Self2 = assertDataU(_.booleanx(target)).using(_ == value) }
-    def assertInt    (target: KPathW) = new { def hasValue(value: Int)    : Self2 = assertDataU(_.intx    (target)).using(_ == value) }
-    def assertDouble (target: KPathW) = new { def hasValue(value: Double) : Self2 = assertDataU(_.doublex (target)).using(_ == value) }
+    def assertBoolean(target: KPathW) = new _AssertBoolean(target)
+    def assertInt    (target: KPathW) = new _AssertInt    (target)
+    def assertDouble (target: KPathW) = new _AssertDouble (target)
+
+      final class _AssertBoolean private[heads] (target: KPathW) { def hasValue(value: Boolean): Self2 = assertDataU(_.booleanx(target)).using(_ == value) }
+      final class _AssertInt     private[heads] (target: KPathW) { def hasValue(value: Int)    : Self2 = assertDataU(_.intx    (target)).using(_ == value) }
+      final class _AssertDouble  private[heads] (target: KPathW) { def hasValue(value: Double) : Self2 = assertDataU(_.doublex (target)).using(_ == value) }
 
   // ---------------------------------------------------------------------------
   def customMeta(f: Cls => Cls): Self2 = self2 :+ CustomMeta(f)

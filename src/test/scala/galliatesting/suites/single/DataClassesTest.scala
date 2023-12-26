@@ -22,6 +22,7 @@ object DataClassesTest extends utest.TestSuite with GalliaTestSuite with TestDat
     test("more complex transformDataClass") {
       val expected = bobj(p -> bobj(/*g -> 1, */f -> 3, h -> false), z -> true)
 
+      // ---------------------------------------------------------------------------
       test { Default03.transformDataClass[_Default01](p).using(x => f_String(x.f)).check(bobj(p -> bobj(f -> foo), z -> true)) }
 
       // ---------------------------------------------------------------------------
@@ -33,7 +34,8 @@ object DataClassesTest extends utest.TestSuite with GalliaTestSuite with TestDat
         // ---------------------------------------------------------------------------
         // convoluted way
         test { Default04.cotransformViaDataClass[__Default01]
-          .using { _.p.head.pipe { head => $f_Int$h_Boolean(f_Int$h_Boolean(head.f.size, (head.f.size % 2 ) == 0)) } }
+          .using { _.p.head.pipe { head =>
+            $f_Int$h_Boolean(f_Int$h_Boolean(head.f.size, (head.f.size % 2 ) == 0)) } }
           .check(expected.reverseKeyOrder._forceResult) } }
 
     // ===========================================================================
@@ -99,4 +101,4 @@ object DataClassesTest extends utest.TestSuite with GalliaTestSuite with TestDat
           cls(f  .cls_("a".string, "A".string), g.int))(
           obj(                                  g -> 1)) ) } } } }
 
-// ===========================================================================f
+// ===========================================================================

@@ -62,8 +62,10 @@ case class Objs private (  // TODO: two versions, see t210104164036
     def find  (p: Obj => Boolean): Option[Obj] = values.find  (p)
 
     // ===========================================================================
-    def force = new { def one: Obj = toListAndTrash.force.one }
+    def force = new _Force()
+      final class _Force private[Objs] { def one: Obj = toListAndTrash.force.one }
 
+    // ---------------------------------------------------------------------------
     def  isEmpty: Boolean = values. isEmpty
     def nonEmpty: Boolean = values.nonEmpty
 

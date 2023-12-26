@@ -14,9 +14,6 @@ private[gallia] trait BasicTypeHelper { ignored: BasicType =>
   protected def accessorNameModifier(value: String): String = value // overriden by some: BigDec, Enum, ...
 
   // ===========================================================================
-  final lazy val node: TypeNode = TypeNode.node(fullName)
-
-  // ===========================================================================
   def superPair(container: Container, descending: Boolean, missingLast: Boolean) =
       _superPair(container, descending, missingLast)
 
@@ -25,10 +22,11 @@ private[gallia] trait BasicTypeHelper { ignored: BasicType =>
       _compare(container, descending, missingLast)(x, y)
 
   // ===========================================================================
-  def  ctag: CT[                T ]
-  def nctag: CT[       Iterable[T] ]
-  def octag: CT[       Option  [T] ]
-  def pctag: CT[Option[Iterable[T]]]
+  // low. because of scala 3...
+  def  ctag: low.CT[                T ]
+  def nctag: low.CT[       Iterable[T] ]
+  def octag: low.CT[       Option  [T] ]
+  def pctag: low.CT[Option[Iterable[T]]]
 
   // ===========================================================================
   def  ordA: Ordering[                 T ]

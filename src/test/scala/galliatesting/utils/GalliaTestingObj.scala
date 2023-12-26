@@ -11,8 +11,8 @@ trait GalliaTestingObj {
   // ===========================================================================
   implicit class GalliaTestingObj_(o: Obj) {
     def exactlyEquals(that: Obj): Boolean =
-      o          == that &&
-      o.debugObj == that.debugObj
+      o            == that &&
+      o.debugObj() == that.debugObj()
 
     // ---------------------------------------------------------------------------
     def debugObj(): Obj = toDebug(o)

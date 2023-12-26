@@ -4,9 +4,13 @@ package galliatesting
 object TestMeta {
   case class _Default01(f: String = "foo", g: Int = 1) { def op: Double = (f.size + g) * 1.1 }
   case class __Default01(p: Seq[_Default01])
+  case class __Default01b(p: Seq[Int])
 
   // ---------------------------------------------------------------------------
-  case class Foo(a: String, A: String)
+  case class Foo (a: String, A: String)
+  case class Foo2(a: String, A: Option[String])
+  case class Foo3(a: String, A: Seq   [String])
+  case class Foo4(a: String, A: Option[Seq[String]])
 
   case class Bar(a: String, A: String, i: Int)
   
@@ -67,6 +71,17 @@ case class $f_Int$h_Boolean(p:     f_Int$h_Boolean)
       case class MyComplexSubData(
           mySubString: String,
           mySubInt   : Int)
+
+  // ===========================================================================
+  sealed trait MyEnum2 extends enumeratum.EnumEntry
+
+    object MyEnum2 extends enumeratum.Enum[MyEnum2] {
+      val values = findValues
+
+      // ---------------------------------------------------------------------------
+      case object foo  extends MyEnum2
+      case object foo2 extends MyEnum2 }
+
 }
 
 // ===========================================================================

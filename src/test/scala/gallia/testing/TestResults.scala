@@ -28,7 +28,7 @@ case class TestResults(values: Seq[TestResult]) {
     private val tests = cross.MutList[TestResult]()
 
     // ---------------------------------------------------------------------------
-    private[testing] def add(value: TestResult) {
+    private[testing] def add(value: TestResult): Unit = {
       ActualTestOpt match { // TODO: until finish migrating tests
         case None        => aptus.illegalState("must set it, running galliatesting0 tests or ujson's?")
         case Some(false) => tests += value
@@ -38,7 +38,7 @@ case class TestResults(values: Seq[TestResult]) {
             case gallia.testing.Problem(error) => throw error } } }
 
     // ---------------------------------------------------------------------------
-    /*private[testing] - for switch to ujson (t214360121145) */def printResults() {
+    /*private[testing] - for switch to ujson (t214360121145) */def printResults(): Unit = {
       val tmp = tests.toList
       tests.clear()      
       val results = TestResults(tmp)      

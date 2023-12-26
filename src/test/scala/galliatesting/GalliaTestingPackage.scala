@@ -3,9 +3,6 @@ package object galliatesting {
   type GalliaTestSuite = gallia.testing.Suite
 
   // ---------------------------------------------------------------------------
-  private[galliatesting] type WTT[A] = scala.reflect.runtime.universe.WeakTypeTag[A]
-
-  // ---------------------------------------------------------------------------
   @deprecated type _Error = gallia.vldt._Error
   @deprecated val  _Error = gallia.vldt._Error
 
@@ -18,6 +15,8 @@ package object galliatesting {
   private[galliatesting] val f2 = "f2"
   private[galliatesting] val f3 = "f3"
   private[galliatesting] val g  = "g"
+  private[galliatesting] val g1 = "g1"
+  private[galliatesting] val g2 = "g2"
   private[galliatesting] val h  = "h"
   private[galliatesting] val p  = "p"
   private[galliatesting] val z  = "z"
@@ -28,6 +27,7 @@ package object galliatesting {
 
   // ---------------------------------------------------------------------------
   private[galliatesting] val foo = "foo"
+  private[galliatesting] val FOO = "FOO"
 
     private[galliatesting] val foo1 = "foo1"
     private[galliatesting] val foo2 = "foo2"

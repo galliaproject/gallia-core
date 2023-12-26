@@ -34,11 +34,11 @@ trait GalliaTestingAObj {
 
         // ---------------------------------------------------------------------------
         assert(
-          aobj.o.debugObj == expected.o.debugObj,
+          aobj.o.debugObj() == expected.o.debugObj(),
           Seq(
-              expected.o.debugObj.formatDefault.sectionAllOff("expected:"),
-              aobj    .o.debugObj.formatDefault.sectionAllOff("actual:"),
-              origin  .o.debugObj.formatDefault.sectionAllOff("origin:"))
+              expected.o.debugObj().formatDefault.sectionAllOff("expected:"),
+              aobj    .o.debugObj().formatDefault.sectionAllOff("actual:"),
+              origin  .o.debugObj().formatDefault.sectionAllOff("origin:"))
             .section)
 
         // ---------------------------------------------------------------------------
@@ -59,9 +59,9 @@ trait GalliaTestingAObj {
       // ---------------------------------------------------------------------------
       def formatSandbox =
         Seq(
-          aobj.c         .formatDefault,
-          aobj.o         .formatDefault,
-          aobj.o.debugObj.formatDefault)
+          aobj.c           .formatDefault,
+          aobj.o           .formatDefault,
+          aobj.o.debugObj().formatDefault)
         .joinln
   }
 

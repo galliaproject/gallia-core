@@ -82,12 +82,12 @@ trait HeadCommonVeryBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   // - t210127194716 - p2 - also support append/prepend field(s); maybe generalized as insertion index (including negative)?
   // - t210125111338 - investigate union types to restrict T at compile-time (coming in scala 3?)
 
-  def add(e1: KVE): Self2 = self2 :+ new Add(e1)
+  def add(e1: KVE): Self2 = self2 :+ new Add(KVEs(Seq(e1)))
 
-    def add(e1: KVE, e2: KVE                           ): Self2 = self2 :+ new Add(e1, e2)
-    def add(e1: KVE, e2: KVE, e3: KVE                  ): Self2 = self2 :+ new Add(e1, e2, e3)
-    def add(e1: KVE, e2: KVE, e3: KVE, e4: KVE         ): Self2 = self2 :+ new Add(e1, e2, e3, e4)
-    def add(e1: KVE, e2: KVE, e3: KVE, e4: KVE, e5: KVE): Self2 = self2 :+ new Add(e1, e2, e3, e4, e5)
+    def add(e1: KVE, e2: KVE                           ): Self2 = self2 :+ new Add(KVEs(Seq(e1, e2)))
+    def add(e1: KVE, e2: KVE, e3: KVE                  ): Self2 = self2 :+ new Add(KVEs(Seq(e1, e2, e3)))
+    def add(e1: KVE, e2: KVE, e3: KVE, e4: KVE         ): Self2 = self2 :+ new Add(KVEs(Seq(e1, e2, e3, e4)))
+    def add(e1: KVE, e2: KVE, e3: KVE, e4: KVE, e5: KVE): Self2 = self2 :+ new Add(KVEs(Seq(e1, e2, e3, e4, e5)))
 
   // ===========================================================================
   // replace
@@ -96,12 +96,12 @@ trait HeadCommonVeryBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   // - t210111113206 - support adding path, eg: .replace('p |> 'f -> "foo")
   // - t210125111338 - investigate union types to restrict T at compile-time (coming in scala 3?)
 
-  def replace(e1: RVE): Self2 = self2 :+ new Replace(e1)
+  def replace(e1: RVE): Self2 = self2 :+ new Replace(RVEs(Seq(e1)))
 
-    def replace(e1: RVE, e2: RVE                           ): Self2 = self2 :+ new Replace(e1, e2)
-    def replace(e1: RVE, e2: RVE, e3: RVE                  ): Self2 = self2 :+ new Replace(e1, e2, e3)
-    def replace(e1: RVE, e2: RVE, e3: RVE, e4: RVE         ): Self2 = self2 :+ new Replace(e1, e2, e3, e4)
-    def replace(e1: RVE, e2: RVE, e3: RVE, e4: RVE, e5: RVE): Self2 = self2 :+ new Replace(e1, e2, e3, e4, e5)
+    def replace(e1: RVE, e2: RVE                           ): Self2 = self2 :+ new Replace(RVEs(Seq(e1, e2)))
+    def replace(e1: RVE, e2: RVE, e3: RVE                  ): Self2 = self2 :+ new Replace(RVEs(Seq(e1, e2, e3)))
+    def replace(e1: RVE, e2: RVE, e3: RVE, e4: RVE         ): Self2 = self2 :+ new Replace(RVEs(Seq(e1, e2, e3, e4)))
+    def replace(e1: RVE, e2: RVE, e3: RVE, e4: RVE, e5: RVE): Self2 = self2 :+ new Replace(RVEs(Seq(e1, e2, e3, e4, e5)))
 
   // ===========================================================================
   // shorthands

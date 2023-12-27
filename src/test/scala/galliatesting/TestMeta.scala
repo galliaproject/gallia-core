@@ -73,15 +73,23 @@ case class $f_Int$h_Boolean(p:     f_Int$h_Boolean)
           mySubInt   : Int)
 
   // ===========================================================================
-  sealed trait MyEnum2 extends enumeratum.EnumEntry
+   sealed trait MyEnum1 extends enumeratum.EnumEntry
 
-    object MyEnum2 extends enumeratum.Enum[MyEnum2] {
+    object MyEnum1 extends enumeratum.Enum[MyEnum1] {
       val values = findValues
 
       // ---------------------------------------------------------------------------
-      case object foo  extends MyEnum2
-      case object foo2 extends MyEnum2 }
+      case object a extends MyEnum1
+      case object b extends MyEnum1 }
 
-}
+    // ---------------------------------------------------------------------------
+    sealed trait MyEnum2 extends enumeratum.EnumEntry
+
+      object MyEnum2 extends enumeratum.Enum[MyEnum2] {
+        val values = findValues
+
+        // ---------------------------------------------------------------------------
+        case object foo  extends MyEnum2
+        case object foo2 extends MyEnum2 } }
 
 // ===========================================================================

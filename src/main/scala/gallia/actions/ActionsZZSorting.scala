@@ -15,7 +15,7 @@ object ActionsZZSorting {
   // ---------------------------------------------------------------------------
   case class SortUnsafe[T: CWTT](f: Obj => T, ord: Ordering[T]) extends ActionZZc with IdentityVM1 {
     //TODO: at least check T?
-    def  atomzz(c: Cls) = _SortUnsafe(f: Obj => T, SuperMetaPair(low.ctag[T], ord)) }
+    def  atomzz(c: Cls) = _SortUnsafe(f: Obj => T, SuperMetaPair(implicitly[WTT[T]].ctag, ord)) }
 
   // ===========================================================================
   case class SortByAll(pair: SortingPair) extends ActionZZc with IdentityVM1 {

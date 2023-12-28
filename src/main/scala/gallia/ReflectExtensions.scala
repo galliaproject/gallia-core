@@ -155,7 +155,7 @@ trait ReflectExtensions {
             .flatMap(data.single.ObjIn.normalizeEntry)
             .in.noneIf(_.isEmpty)
             .map(obj)
-            .tep(_ => assert(itr.isEmpty, c /* TODO: pass original value? */)) }
+            .tap(_ => assert(itr.isEmpty, c /* TODO: pass original value? */)) }
 
     // ===========================================================================
     private def potentiallyProcessNesting(info: Info)(value: AnyValue): AnyValue =

@@ -72,8 +72,8 @@ class HeadV[T: WTT /* will be Vle (Any) for data phase */] private[gallia] ( // 
 
     // ---------------------------------------------------------------------------
     // combining String
-    def concatenate(that: HeadV[_])(implicit ev1: T <:< String): HeadV[String] = combine(that).using(_ + _.toString)
-    def concatenate(that: Any)     (implicit ev1: T <:< String): HeadV[String] = concatenate(headV[String](that.toString))
+    def concatenate[T2: WTT](that: HeadV[T2])(implicit ev1: T <:< String): HeadV[String] = combine(that).using(_ + _.toString)
+    def concatenate         (that: Any)      (implicit ev1: T <:< String): HeadV[String] = concatenate(headV[String](that.toString))
 
     def concatenateStrings             (implicit ev1: T <:< Iterable[String]): HeadV[String] = mapV(_.reduceLeft(_ + _))
     def concatenateStrings(sep: String)(implicit ev1: T <:< Iterable[String]): HeadV[String] = mapV(_.reduceLeft(_ + sep + _))

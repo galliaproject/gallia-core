@@ -2,17 +2,17 @@ package gallia
 package reflect
 package lowlevel
 
+import scala.reflect.ClassTag
+
 // ===========================================================================
 /** differs based on 2.x vs 3.x */
 trait ReflectionTypesAbstraction {
-
-  private[gallia] trait CT[T]
-
-    private[gallia] object CT { implicit def _ct[T]: CT[T] = new CT[T] {} }
+  type CT[T] = ClassTag[T]
 
   // ===========================================================================
   private[gallia] case class WTT[T](
     typeNode       :        TypeNode,
+    ctag           :        ClassTag[T],
     instantiatorOpt: Option[Instantiator])
 
   // ---------------------------------------------------------------------------
@@ -21,14 +21,15 @@ trait ReflectionTypesAbstraction {
   // ===========================================================================
   trait LowPriority {
     inline given [T]: WTT[T] = {
-      val (typeNode, instantiator) = pairMacro[T]
+      val (typeNode, instantiator, classTag) = tripletMacro[T]
 
       WTT[T](
         typeNode,
-        instantiatorOpt = if (instantiator.isPlaceholder) None else Some(instantiator)) } }
+        classTag,
+        if (instantiator.isPlaceholder) None else Some(instantiator)) } }
 
   // ---------------------------------------------------------------------------
-  private inline def pairMacro[A]: (TypeNode, Instantiator) = ${macros3.PairCreatorMacro3.apply[A]}
+  private inline def tripletMacro[A]: (TypeNode, Instantiator, ClassTag[A]) = ${macros3.PairCreatorMacro3.apply[A]}
 
   // ===========================================================================
   trait HighPriority extends LowPriority {

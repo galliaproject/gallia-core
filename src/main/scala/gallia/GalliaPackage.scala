@@ -9,8 +9,8 @@ package object gallia
     with    CustomTraits
     with    GenericEntryImplicits
     with    reflect.ReflectExtensions
-    with    reflect.lowlevel.ReflectionTypesAbstraction /* mostly WTT */
-    with    reflect.lowlevel.WttImplicits /* only for scala 2 */ {
+    with    reflect.lowlevel.ReflectionTypesAbstraction /* notably WTT, differs for scala 2 vs scala 3 */
+    with    reflect.lowlevel.WttImplicits /* only useful to scala 2 */ {
 
   // ---------------------------------------------------------------------------
   private[gallia] implicit class GalliaAnything_[A](value: A) { // so as to not import chaining._ everywhere
@@ -166,7 +166,10 @@ package object gallia
   private[gallia] def errs  (any: Any)             : Errs = Seq(Err(any))
 
   // ---------------------------------------------------------------------------
-  /*private[gallia] - for tests... */ val low                                = reflect.lowlevel.ConcreteReflectionUtils
+  class Low() {
+    type CT[T] = scala.reflect.ClassTag[T]
+    def ctag[T: WTT] = implicitly[WTT[T]].ctag }
+  /*private[gallia] - for tests... */ val low                                = new Low()
   /*private[gallia] - for tests... */ def typeNode[T: WTT]: reflect.TypeNode = implicitly[WTT[T]].typeNode
 
   // ===========================================================================

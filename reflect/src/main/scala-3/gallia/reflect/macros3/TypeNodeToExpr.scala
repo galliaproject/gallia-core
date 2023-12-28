@@ -22,7 +22,7 @@ object TypeNodeToExpr {
       typeNodeToExpr(x) }
 
   // ===========================================================================
-  private def typeNodeToExpr(x: TypeNode)(using Quotes) =
+  def typeNodeToExpr(x: TypeNode)(using Quotes) =
       '{TypeNode(
           leaf = ${Expr(x.leaf)},
           args = ${Expr(x.args)}) }

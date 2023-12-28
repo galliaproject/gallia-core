@@ -4,7 +4,7 @@ package reflect
 import aptus.{Anything_, String_, Seq_}
 
 // ===========================================================================
-case class TypeLeaf( // TODO: t231018094951 - capture classOf[T].getName as it doesn't always agree (eg "int") - requires mirror?
+case class TypeLeaf(
       name           : FullNameString,  // eg java.lang.String
 
       dataClass      : Boolean = false, // eg "case class Foo(a: String, b: Int)", but not necessarily all case classes (eg not scala.Some)

@@ -57,9 +57,9 @@ def entriesN(vs: E*): List[E] = vs.toList
     import quotes.reflect.*
 
          if (!typeNode.isContainedDataClass && !typeNode.isContainedEnumeratum) '{Instantiator.Placeholder /* easier for now */}.asTerm
-    else if (typeNode.isOptionOfSeq) rec(tpe.typeArgs.force.one.typeArgs.force.one)(typeNode.forceSoleTypeArg.forceSoleTypeArg)
-    else if (typeNode.isOption)      rec(tpe.typeArgs.force.one)                   (typeNode.forceSoleTypeArg)
-    else if (typeNode.        isSeq) rec(tpe.typeArgs.force.one)                   (typeNode.forceSoleTypeArg)
+    else if ( typeNode.isOptionOfSeq) rec(tpe.typeArgs.force.one.typeArgs.force.one)(typeNode.forceSoleTypeArg.forceSoleTypeArg)
+    else if ( typeNode.isOption)      rec(tpe.typeArgs.force.one)                   (typeNode.forceSoleTypeArg)
+    else if ( typeNode.        isSeq) rec(tpe.typeArgs.force.one)                   (typeNode.forceSoleTypeArg)
     else {
       val enumeratum = typeNode.leaf.isEnumeratum
 

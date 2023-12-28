@@ -11,9 +11,11 @@ trait ReflectionTypesAbstraction {
 
   // ===========================================================================
   private[gallia] case class WTT[T](
-    typeNode       :        TypeNode,
-    ctag           :        ClassTag[T],
-    instantiatorOpt: Option[Instantiator])
+      typeNode       :        TypeNode,
+      ctag           :        ClassTag[T],
+      instantiatorOpt: Option[Instantiator]) {
+    def instantiator(implicit ev: T <:< enumeratum.EnumEntry): Instantiator =
+      instantiatorOpt.get /* guaranteed by design for EnumEntry */ }
 
   // ---------------------------------------------------------------------------
   private[gallia] type CWTT[T] = WTT[T] // to be phased out

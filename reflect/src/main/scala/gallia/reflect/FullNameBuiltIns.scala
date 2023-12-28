@@ -80,9 +80,9 @@ object FullNameBuiltIns {
   private[reflect] val _EnumEntry: FullNameString = "enumeratum.EnumEntry".intern()
 
   // ===========================================================================
-  private[reflect] val _GalliaEnumValue: FullNameString = s"${ScalaVersion.galliaPackageName}.EnumValue".intern()
-  private[reflect] val _GalliaAObj     : FullNameString = "gallia.domain.AObj"        .intern()
-  private[reflect] val _GalliaBObj     : FullNameString = "gallia.domain.BObj"        .intern()
-  private[reflect] val _GalliaWhatever : FullNameString = "gallia.whatever.Whatever"  .intern() }
+  private[reflect] val _GalliaEnumValue: FullNameString = "gallia.reflect.EnumValue".intern()
+  private[reflect] val _GalliaAObj     : FullNameString = "gallia.domain.AObj"      .intern()
+  private[reflect] val _GalliaBObj     : FullNameString = "gallia.domain.BObj"      .intern()
+  private[reflect] val _GalliaWhatever : FullNameString = "gallia.whatever.Whatever".intern() }
 
 // ===========================================================================

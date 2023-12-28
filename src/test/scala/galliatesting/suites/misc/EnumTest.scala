@@ -49,6 +49,6 @@ object EnumTest  extends utest.TestSuite with GalliaTestSuite with utils.FormerS
     test(aobj1.transform(e).using(_.stringValue.toUpperCase)._assert(AObj(cls(f.string, e.string),      obj(f -> "foo", e -> "A"))))
 
     // ---------------------------------------------------------------------------
-    test(typeNode[TestMeta.MyEnum1].flattenedEnumValueNames.ensuring(_ == List("a", "b"))) } }
+    test(gallia._typeNode[TestMeta.MyEnum1].flattenedEnumValueNames.ensuring(_ == List("a", "b"))) } }
 
 // ===========================================================================

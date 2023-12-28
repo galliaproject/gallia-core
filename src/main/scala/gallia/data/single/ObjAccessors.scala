@@ -121,10 +121,10 @@ trait ObjAccessors { ignored: Obj => // id210326140514
   def enms_(key: KPathW): Pes[EnumValue] = attemptPath(key).map(_.asSeq.map(_.asEnum))
 
   // ===========================================================================
-  def enumeratum   [T <: EnumEntry: WTT](key: KPathW):     T  = enm  (key)            .stringValue.pipe(low.withEntryName[T])
-  def enumeratum_  [T <: EnumEntry: WTT](key: KPathW): Opt[T] = enm_ (key).map(      _.stringValue.pipe(low.withEntryName[T]))
-  def enumeratums  [T <: EnumEntry: WTT](key: KPathW): Seq[T] = enms (key)      .map(_.stringValue.pipe(low.withEntryName[T]))
-  def enumeratums_ [T <: EnumEntry: WTT](key: KPathW): Pes[T] = enms_(key).map(_.map(_.stringValue.pipe(low.withEntryName[T])))
+  def enumeratum   [E <: EnumEntry: WTT](key: KPathW):     E  = implicitly[WTT[E]].instantiator.pipe { x => enm  (key)            .enumEntry[E](x)   }
+  def enumeratum_  [E <: EnumEntry: WTT](key: KPathW): Opt[E] = implicitly[WTT[E]].instantiator.pipe { x => enm_ (key).map(      _.enumEntry[E](x))  }
+  def enumeratums  [E <: EnumEntry: WTT](key: KPathW): Seq[E] = implicitly[WTT[E]].instantiator.pipe { x => enms (key)      .map(_.enumEntry[E](x))  }
+  def enumeratums_ [E <: EnumEntry: WTT](key: KPathW): Pes[E] = implicitly[WTT[E]].instantiator.pipe { x => enms_(key).map(_.map(_.enumEntry[E](x))) }
 
   // ---------------------------------------------------------------------------
   def text  (key: KPathW):     String  = forcePath  (key).pipe           (DataDynamicFormatting.formatBasicValue)

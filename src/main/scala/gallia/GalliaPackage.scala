@@ -82,6 +82,10 @@ package object gallia
   lazy val TypeNode = reflect.TypeNode
 
   // ---------------------------------------------------------------------------
+  type EnumValue = reflect.EnumValue
+  val  EnumValue = reflect.EnumValue
+
+  // ---------------------------------------------------------------------------
   type BigDec = scala.BigDecimal
   val  BigDec = scala.BigDecimal
 
@@ -102,10 +106,6 @@ package object gallia
   def byteBuffer(byte1: Byte, more: Byte*): ByteBuffer = java.nio.ByteBuffer.wrap((byte1 +: more).toArray)
   def byteBuffer(value: String)           : ByteBuffer = java.nio.ByteBuffer.wrap(value.getBytes)
   def byteBuffer(bytes: Array[Byte])      : ByteBuffer = java.nio.ByteBuffer.wrap(bytes)
-
-  // ---------------------------------------------------------------------------
-  /** a simple wrapper for enum values */ case class EnumValue(stringValue: EnumStringValue) extends AnyVal {
-    override def toString: String = stringValue /* used by convert(myEnum).toStr */ }
 
   // ---------------------------------------------------------------------------
   implicit class ByteBuffer__(bb: ByteBuffer) {

@@ -7,7 +7,6 @@ trait ScalaVersionTrait {
 
   // ---------------------------------------------------------------------------
   def isScala2: Boolean = _isScala2
-  final def galliaPackageName: String = if (_isScala2) "gallia" else "gallia.package$" // eg for EnumValue
   final def companionName(name: String): String = if (_isScala2) name else name + "$" }
 
 // ===========================================================================

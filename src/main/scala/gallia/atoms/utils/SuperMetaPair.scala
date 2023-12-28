@@ -7,7 +7,7 @@ import data.single.ObjOrdering
 
 // ===========================================================================
 case class SuperMetaPair[T]( // TODO: rename...
-      ctag: low.CT      [T], // required by Spark RDD for sorting
+      ctag: CT      [T], // required by Spark RDD for sorting
       ord : Ordering[T])
 
   // ===========================================================================
@@ -27,7 +27,7 @@ case class SuperMetaPair[T]( // TODO: rename...
     // ---------------------------------------------------------------------------
     def optionObjSuperMetaPair(c: Cls, pair: domain.SortingPair): SuperMetaPair[Option[Obj]] =
       SuperMetaPair(
-        ctag = low.ctag[Option[Obj]],
+        ctag = ctag[Option[Obj]],
         ord  = ObjOrdering.optObjOrdering(c, pair))
   }
 

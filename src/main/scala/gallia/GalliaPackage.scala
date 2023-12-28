@@ -165,12 +165,10 @@ package object gallia
   private[gallia] def err   (any: Any)             : Err  = Err(any)
   private[gallia] def errs  (any: Any)             : Errs = Seq(Err(any))
 
-  // ---------------------------------------------------------------------------
-  class Low() {
-    type CT[T] = scala.reflect.ClassTag[T]
-    def ctag[T: WTT] = implicitly[WTT[T]].ctag }
-  /*private[gallia] - for tests... */ val low                                = new Low()
-  /*private[gallia] - for tests... */ def typeNode[T: WTT]: reflect.TypeNode = implicitly[WTT[T]].typeNode
+  // ===========================================================================
+                  def _typeNode[T: WTT]: gallia.reflect.TypeNode    = implicitly[WTT[T]].typeNode // for tests
+  private[gallia] def  typeNode[T: WTT]: gallia.reflect.TypeNode    = implicitly[WTT[T]].typeNode
+  private[gallia] def  ctag    [T: WTT]: scala .reflect.ClassTag[T] = implicitly[WTT[T]].ctag
 
   // ===========================================================================
   /** until/unless sure what we'll use - only to be used in non-object arrays/matrices/tensors */

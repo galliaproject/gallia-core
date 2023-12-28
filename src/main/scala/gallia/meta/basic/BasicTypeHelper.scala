@@ -22,11 +22,10 @@ private[gallia] trait BasicTypeHelper { ignored: BasicType =>
       _compare(container, descending, missingLast)(x, y)
 
   // ===========================================================================
-  // low. because of scala 3...
-  def  ctag: low.CT[                T ]
-  def nctag: low.CT[       Iterable[T] ]
-  def octag: low.CT[       Option  [T] ]
-  def pctag: low.CT[Option[Iterable[T]]]
+  def _ctag: CT[                T ]
+  def nctag: CT[       Iterable[T] ]
+  def octag: CT[       Option  [T] ]
+  def pctag: CT[Option[Iterable[T]]]
 
   // ===========================================================================
   def  ordA: Ordering[                 T ]
@@ -78,7 +77,7 @@ private[gallia] trait BasicTypeHelper { ignored: BasicType =>
   // ===========================================================================
   def _superPair(container: Container, descending: Boolean, missingLast: Boolean) =
       container match {
-        case Container._One => SuperMetaPair( ctag, (if (descending)  ordD else  ordA))
+        case Container._One => SuperMetaPair(_ctag, (if (descending)  ordD else  ordA))
         case Container._Nes => SuperMetaPair(nctag, (if (descending) nordD else nordA))
         case Container._Opt => SuperMetaPair(octag,
           ((descending, missingLast) match {

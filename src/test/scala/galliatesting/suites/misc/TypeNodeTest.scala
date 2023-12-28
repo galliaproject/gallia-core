@@ -18,73 +18,79 @@ object TypeNodeTest extends utest.TestSuite { import utest._
         fields = List(Field.string("a"), Field.string("A"))),
       args = List.empty)
 
+  // ---------------------------------------------------------------------------
+       class MyAnyVal1(val b: Boolean) extends AnyVal
+  case class MyAnyVal2(val b: Boolean) extends AnyVal
+
   // ===========================================================================
   val tests = Tests {
 
     // ---------------------------------------------------------------------------
     test("built-ins") {
-        test(compare(gallia.typeNode[String]             , TypeNodeBuiltIns.JavaString))
-        test(compare(gallia.typeNode[scala.Predef.String], TypeNodeBuiltIns.JavaString))
-        test(compare(gallia.typeNode[java.lang.String]   , TypeNodeBuiltIns.JavaString))
+        test(compare(gallia._typeNode[String]             , TypeNodeBuiltIns.JavaString))
+        test(compare(gallia._typeNode[scala.Predef.String], TypeNodeBuiltIns.JavaString))
+        test(compare(gallia._typeNode[java.lang.String]   , TypeNodeBuiltIns.JavaString))
 
         // ---------------------------------------------------------------------------
-        test(compare(gallia.typeNode[Boolean], TypeNodeBuiltIns.ScalaBoolean))
-        test(compare(gallia.typeNode[Int]    , TypeNodeBuiltIns.ScalaInt))
-        test(compare(gallia.typeNode[Double] , TypeNodeBuiltIns.ScalaDouble))
+        test(compare(gallia._typeNode[Boolean], TypeNodeBuiltIns.ScalaBoolean))
+        test(compare(gallia._typeNode[Int]    , TypeNodeBuiltIns.ScalaInt))
+        test(compare(gallia._typeNode[Double] , TypeNodeBuiltIns.ScalaDouble))
 
         // ---------------------------------------------------------------------------
-        test(compare(gallia.typeNode[Byte] , TypeNodeBuiltIns.ScalaByte))
-        test(compare(gallia.typeNode[Short], TypeNodeBuiltIns.ScalaShort))
-        test(compare(gallia.typeNode[Long] , TypeNodeBuiltIns.ScalaLong))
-        test(compare(gallia.typeNode[Float], TypeNodeBuiltIns.ScalaFloat))
+        test(compare(gallia._typeNode[Byte] , TypeNodeBuiltIns.ScalaByte))
+        test(compare(gallia._typeNode[Short], TypeNodeBuiltIns.ScalaShort))
+        test(compare(gallia._typeNode[Long] , TypeNodeBuiltIns.ScalaLong))
+        test(compare(gallia._typeNode[Float], TypeNodeBuiltIns.ScalaFloat))
 
         // ---------------------------------------------------------------------------
-        test(compare(gallia.typeNode[BigInt]    , TypeNodeBuiltIns.ScalaMathBigInt))
-        test(compare(gallia.typeNode[BigDecimal], TypeNodeBuiltIns.ScalaMathBigDecimal))
+        test(compare(gallia._typeNode[BigInt]    , TypeNodeBuiltIns.ScalaMathBigInt))
+        test(compare(gallia._typeNode[BigDecimal], TypeNodeBuiltIns.ScalaMathBigDecimal))
 
         // ---------------------------------------------------------------------------
-        test(compare(gallia.typeNode[java.time.LocalDate]     , TypeNodeBuiltIns.JavaTimeLocalDate))
-        test(compare(gallia.typeNode[java.time.LocalTime]     , TypeNodeBuiltIns.JavaTimeLocalTime))
-        test(compare(gallia.typeNode[java.time.LocalDateTime] , TypeNodeBuiltIns.JavaTimeLocalDateTime))
-        test(compare(gallia.typeNode[java.time.OffsetDateTime], TypeNodeBuiltIns.JavaTimeOffsetDateTime))
-        test(compare(gallia.typeNode[java.time.ZonedDateTime] , TypeNodeBuiltIns.JavaTimeZonedDateTime))
-        test(compare(gallia.typeNode[java.time.Instant]       , TypeNodeBuiltIns.JavaTimeInstant))
+        test(compare(gallia._typeNode[java.time.LocalDate]     , TypeNodeBuiltIns.JavaTimeLocalDate))
+        test(compare(gallia._typeNode[java.time.LocalTime]     , TypeNodeBuiltIns.JavaTimeLocalTime))
+        test(compare(gallia._typeNode[java.time.LocalDateTime] , TypeNodeBuiltIns.JavaTimeLocalDateTime))
+        test(compare(gallia._typeNode[java.time.OffsetDateTime], TypeNodeBuiltIns.JavaTimeOffsetDateTime))
+        test(compare(gallia._typeNode[java.time.ZonedDateTime] , TypeNodeBuiltIns.JavaTimeZonedDateTime))
+        test(compare(gallia._typeNode[java.time.Instant]       , TypeNodeBuiltIns.JavaTimeInstant))
 
         // ---------------------------------------------------------------------------
-        test(compare(gallia.typeNode[java.nio.ByteBuffer]     , TypeNodeBuiltIns.JavaNioByteByffer))
+        test(compare(gallia._typeNode[java.nio.ByteBuffer]     , TypeNodeBuiltIns.JavaNioByteByffer))
 
         // ---------------------------------------------------------------------------
-        test(compare(gallia.typeNode[Seq   [Boolean]]     , TypeNodeBuiltIns.scalaSeq   (TypeNodeBuiltIns.ScalaBoolean)))
-        test(compare(gallia.typeNode[Option[Boolean]]     , TypeNodeBuiltIns.scalaOption(TypeNodeBuiltIns.ScalaBoolean)))
+        test(compare(gallia._typeNode[Seq   [Boolean]]     , TypeNodeBuiltIns.scalaSeq   (TypeNodeBuiltIns.ScalaBoolean)))
+        test(compare(gallia._typeNode[Option[Boolean]]     , TypeNodeBuiltIns.scalaOption(TypeNodeBuiltIns.ScalaBoolean)))
 
         // ---------------------------------------------------------------------------
-        test(compare(gallia.typeNode[gallia.EnumValue]  , TypeNodeBuiltIns.GalliaEnumValue))
+        test(compare(gallia._typeNode[gallia.EnumValue]  , TypeNodeBuiltIns.GalliaEnumValue))
 
-        test(compare(gallia.typeNode[gallia       .AObj], TypeNodeBuiltIns.GalliaAObj))
-        test(compare(gallia.typeNode[gallia       .BObj], TypeNodeBuiltIns.GalliaBObj)) }
+        test(compare(gallia._typeNode[gallia       .AObj], TypeNodeBuiltIns.GalliaAObj))
+        test(compare(gallia._typeNode[gallia       .BObj], TypeNodeBuiltIns.GalliaBObj)) }
 
     // ---------------------------------------------------------------------------
     test("java") {
-        test(compare(gallia.typeNode[java.lang.String]      , TypeNode.trivial("java.lang.String")))
-        test(compare(gallia.typeNode[java.lang.Integer]     , TypeNode.trivial("java.lang.Integer")))
-        test(compare(gallia.typeNode[java.lang.Boolean]     , TypeNode.trivial("java.lang.Boolean")))
-        test(compare(gallia.typeNode[java.io.File]          , TypeNode.trivial("java.io.File"))) }
+        test(compare(gallia._typeNode[java.lang.String]      , TypeNode.trivial("java.lang.String")))
+        test(compare(gallia._typeNode[java.lang.Integer]     , TypeNode.trivial("java.lang.Integer")))
+        test(compare(gallia._typeNode[java.lang.Boolean]     , TypeNode.trivial("java.lang.Boolean")))
+        test(compare(gallia._typeNode[java.io.File]          , TypeNode.trivial("java.io.File"))) }
 
     // ---------------------------------------------------------------------------
     test("case classes") {
-        test(compare(gallia.typeNode[MyAliasToCaseClass], gallia.typeNode[TestMeta.Foo]))
-        test(compare(gallia.typeNode[MyAliasToCaseClass], FooTypeNode)) }
+        test(compare(gallia._typeNode[MyAliasToCaseClass], gallia._typeNode[TestMeta.Foo]))
+        test(compare(gallia._typeNode[MyAliasToCaseClass], FooTypeNode))
+
+        test(assert(!gallia._typeNode[MyAnyVal1].leaf.dataClass))
+        test(assert(!gallia._typeNode[MyAnyVal2].leaf.dataClass)) }
 
     // ---------------------------------------------------------------------------
-    test("complex TypeNode") { import gallia._ // for .formatDefault on TypeNode
-      val actual   = gallia.typeNode[TestMeta.MyComplexData]
+    test("complex TypeNode") { import gallia._
+      val actual   = gallia._typeNode[TestMeta.MyComplexData]
       val Expected = gallia.testing.resourceContent("TypeNodeExample.json").prettyJson
 
       if (gallia.ScalaVersion.isScala2)
-        Predef.assert(actual.formatDefault.prettyJson ==     Expected.replace("TestMeta$", "TestMeta"))
+        Predef.assert(actual.formatDefault.prettyJson == Expected.replace("TestMeta$", "TestMeta"))
       else
-        Predef.assert(actual.formatDefault.prettyJson ==     Expected) }
-  }
+        Predef.assert(actual.formatDefault.prettyJson == Expected) } }
 
   // ===========================================================================
   def compare(actual: TypeNode, expected: TypeNode) =

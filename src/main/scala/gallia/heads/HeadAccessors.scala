@@ -6,9 +6,6 @@ import aptus.{One, Opt, Pes, Nes}
 // ===========================================================================
 @TypeMatching
 private[gallia] trait HeadUAccessors { ignored: HeadU =>
-  def forceAny(key: KPathW): One[Any] = typed(key, checkOrigin = false).forceValues[Any]
-
-  // ===========================================================================
   def string  (key: KPathW): HeadV[One[String]] = typed  [String](key)
   def string_ (key: KPathW): HeadV[Opt[String]] = typed_ [String](key)
   def strings (key: KPathW): HeadV[Nes[String]] = typeds [String](key)
@@ -204,9 +201,6 @@ private[gallia] trait HeadUAccessors { ignored: HeadU =>
 // ===========================================================================
 @TypeMatching
 private[gallia] trait HeadZAccessors { ignored: HeadZ => // TODO: t210202101142 - keep "accessor"?
-  def forceAnys(key: KPathW): Nes[Any] = typeds(key, checkOrigin = false).forceValues[Any]
-
-  // ===========================================================================
   def strings   (key: KPathW): HeadV[Nes[String]] = typeds [String](key)
   def strings_  (key: KPathW): HeadV[Pes[String]] = typeds_[String](key)
 

@@ -5,3 +5,5 @@ bin/
 target/
 project/project/
 project/target/
+
+src/main/scala/sandbox/

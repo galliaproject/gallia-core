@@ -3,19 +3,39 @@
 //   TODO: t210125110147 - investigate sbt alternatives, especially https://github.com/com-lihaoyi/mill
 
 // ===========================================================================
+ThisBuild / organizationName     := "Gallia Project"
+ThisBuild / organization         := "io.github.galliaproject" // *must* match groupId for sonatype
+ThisBuild / organizationHomepage := Some(url("https://github.com/galliaproject"))
+ThisBuild / startYear            := Some(2021)
+ThisBuild / version              := "0.6.0-SNAPSHOT"
+ThisBuild / description          := "A Scala library for data manipulation"
+ThisBuild / homepage             := Some(url("https://github.com/galliaproject/gallia-core"))
+ThisBuild / licenses             := Seq("Apache 2" -> url("https://github.com/galliaproject/gallia-core/blob/master/LICENSE"))
+ThisBuild / developers           := List(Developer(
+  id    = "anthony-cros",
+  name  = "Anthony Cros",
+  email = "contact.galliaproject@gmail.com",
+  url   = url("https://github.com/anthony-cros")))
+ThisBuild / scmInfo              := Some(ScmInfo(
+  browseUrl  = url("https://github.com/galliaproject/gallia-core"),
+  connection =     "scm:git@github.com:galliaproject/gallia-core.git"))
+
+// ===========================================================================
+lazy val reflect = (project in file("reflect"))
+  .settings(
+    name   := "gallia-reflect",
+    target := baseDirectory.value / ".." / "bin" / "reflect")
+  .settings(GalliaCommonSettings.mainSettings:_*)
+
+
+// ---------------------------------------------------------------------------
+// TODO: t231230123606 - how to nest core under its own folder? tests no longer found when trying
 lazy val root = (project in file("."))
   .settings(
-    organizationName     := "Gallia Project",
-    organization         := "io.github.galliaproject", // *must* match groupId for sonatype
-    name                 := "gallia-core",
-    version              := GalliaCommonSettings.CurrentGalliaVersion,
-    homepage             := Some(url("https://github.com/galliaproject/gallia-core")),
-    scmInfo              := Some(ScmInfo(
-        browseUrl  = url("https://github.com/galliaproject/gallia-core"),
-        connection =     "scm:git@github.com:galliaproject/gallia-core.git")),
-    licenses             := Seq("Apache 2" -> url("https://github.com/galliaproject/gallia-core/blob/master/LICENSE")),
-    description          := "A Scala library for data manipulation" )
+    name   := "gallia-core",
+    target := baseDirectory.value / "bin" / "core")
   .settings(GalliaCommonSettings.mainSettings:_*)
+  .dependsOn(reflect) // TODO: also bring in gallia-macros
 
 // ===========================================================================    
 // see https://github.com/aptusproject/aptus-core
@@ -26,7 +46,7 @@ lazy val enumeratumVersion = "1.7.3"
 lazy val uTestVersion      = "0.8.1"
 
 // ---------------------------------------------------------------------------
-libraryDependencies ++=
+ThisBuild / libraryDependencies ++=
   Seq(    
     "io.github.aptusproject" %% "aptus-core"    % aptusVersion,
     "com.beachape"           %% "enumeratum"    % enumeratumVersion) ++

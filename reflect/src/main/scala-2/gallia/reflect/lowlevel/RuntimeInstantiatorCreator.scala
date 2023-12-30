@@ -51,7 +51,7 @@ private object RuntimeInstantiatorCreator extends ReflectionTypesAbstraction {
             .getConstructors
             .headOption // t200720101733 - establish always safe or add corresponding validation
             .getOrElse(null) // TODO: handle better (happens with eg .removeIf('f).hasValue(None))
-            .newInstance(args:_*),
+            .newInstance(args.map(_.asInstanceOf[Object] /* for scala 2.12 only */):_*),
         nestedObjs)
   }
 

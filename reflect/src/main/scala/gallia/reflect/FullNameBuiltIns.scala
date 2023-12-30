@@ -71,7 +71,9 @@ object FullNameBuiltIns {
   private[reflect] val _ScalaAnyVal: FullNameString = "scala.AnyVal"
 
   private[reflect] val _ScalaOption: FullNameString = "scala.Option"
-  private[reflect] val _ScalaSeq   : FullNameString = "scala.collection.immutable.Seq"
+  private[reflect] val _ScalaSeq   : FullNameString =
+    if (scala.util.Properties.versionNumberString.startsWith("2.12")) "scala.collection.Seq"
+    else                                                              "scala.collection.immutable.Seq"
 
   // ===========================================================================
   private[reflect] val _ByteBuffer: FullNameString = "java.nio.ByteBuffer".intern()

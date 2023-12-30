@@ -87,10 +87,14 @@ object TypeNodeTest extends utest.TestSuite { import utest._
       val actual   = gallia._typeNode[TestMeta.MyComplexData]
       val Expected = gallia.testing.resourceContent("TypeNodeExample.json").prettyJson
 
+      val actualFormatted = actual.formatDefault.prettyJson
+
       if (gallia.ScalaVersion.isScala2)
-        Predef.assert(actual.formatDefault.prettyJson == Expected.replace("TestMeta$", "TestMeta"))
+        Predef.assert(
+          actualFormatted.replace("scala.collection.Seq", "scala.collection.immutable.Seq" /* only for 2.12 */) ==
+          Expected       .replace("TestMeta$", "TestMeta" /* for both 2.12 and 2.13 */))
       else
-        Predef.assert(actual.formatDefault.prettyJson == Expected) } }
+        Predef.assert(actualFormatted == Expected) } }
 
   // ===========================================================================
   def compare(actual: TypeNode, expected: TypeNode) =

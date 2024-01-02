@@ -6,7 +6,7 @@ import aptus.Seq_
 
 // ===========================================================================
 private object InstantiatorCreatorMacro3 {
-  import scala.quoted.{Quotes, quotes, Type, Expr}
+  import scala.quoted.{Quotes, quotes, Type, Expr, Varargs}
 
   // ===========================================================================
   private object MethodNames {
@@ -27,30 +27,9 @@ private object InstantiatorCreatorMacro3 {
     type E = Tuple2[String, Instantiator]
 
     // ---------------------------------------------------------------------------
-    def entry  (key: String, value: Instantiator): E = Tuple2[String, Instantiator](key, value)
-
-    //def entries(values: List[E]): List[E] = values
-
-    def entriesMap(values: List[E]): Map[String, Instantiator] = values.force.map
-
-    // ---------------------------------------------------------------------------
-    //FIXME: t231221110951
-    def entries0()                                 : List[E] = List()
-    def entries1(v1: E)                            : List[E] = List(v1)
-    def entries2(v1: E, v2: E)                     : List[E] = List(v1, v2)
-    def entries3(v1: E, v2: E, v3: E)              : List[E] = List(v1, v2, v3)
-    def entries4(v1: E, v2: E, v3: E, v4: E)       : List[E] = List(v1, v2, v3, v4)
-    def entries5(v1: E, v2: E, v3: E, v4: E, v5: E): List[E] = List(v1, v2, v3, v4, v5)
-
-    def entries10(v1: E, v2: E, v3: E, v4: E, v5: E, v6: E, v7: E, v8: E, v9: E, vA: E): List[E] = List(v1, v2, v3, v4, v5, v6, v7, v8, v9, vA)
-
-def entriesN(vs: E*): List[E] = vs.toList
-//wrong number of arguments at pickler for (vs: gallia.reflect.reflect3.InstantiatorCreator.HelperMethods.E*):
-//[error]    |  List[gallia.reflect.reflect3.InstantiatorCreator.HelperMethods.E]: (gallia.reflect.reflect3.InstantiatorCreator.HelperMethods#entriesN :
-//[error]    |  (vs: gallia.reflect.reflect3.InstantiatorCreator.HelperMethods.E*):
-//[error]    |    List[gallia.reflect.reflect3.InstantiatorCreator.HelperMethods.E]
-//[error]    |), expected: 1, found: 0
-  }
+    // to save a bit of TypeApply-ing
+    def entry(key: String, value: Instantiator): E = Tuple2[String, Instantiator](key, value)
+    def entriesMap(values: Seq[E]): Map[String, Instantiator] = values.force.map }
 
   // ===========================================================================
   def rec(using q: Quotes)(tpe: q.reflect.TypeRepr)(typeNode: TypeNode): q.reflect.Term = {
@@ -151,9 +130,13 @@ def entriesN(vs: E*): List[E] = vs.toList
 
         // ---------------------------------------------------------------------------
         else {
+          val varargs = // TODO: 240101204835 - populate map directly
+            Varargs[Tuple2[String, Instantiator]](
+              fieldTerms.map(_.asExprOf[Tuple2[String, Instantiator]]))
+
           val mapApply =
             _helperApply(MethodNames.entriesMap)(
-              Apply(_helperSelect(MethodNames.entries(fieldTerms.size)), fieldTerms) )
+              varargs.asTerm )
 
           // ---------------------------------------------------------------------------
           Apply(
@@ -163,15 +146,6 @@ def entriesN(vs: E*): List[E] = vs.toList
             List(constructorArgBlock, mapApply)) }
 
       // ===========================================================================
-      /*
-        ~translates to eg:
-
-           gallia.reflect.Instantiator.from2[scala.Predef.String, scala.Predef.String](
-             ((a: scala.Predef.String, A: scala.Predef.String) => galliatesting.TestMeta.Foo.apply(a, A)),
-             gallia.reflect.macros3.InstantiatorCreatorMacro3.inline$HelperMethods.entriesMap(
-               gallia.reflect.macros3.InstantiatorCreatorMacro3.inline$HelperMethods.entries0()))
-      */
-
       (applyFrom: Term)
     }
   }

@@ -24,9 +24,8 @@ ThisBuild / scmInfo              := Some(ScmInfo(
 lazy val reflect = (project in file("reflect"))
   .settings(
     name   := "gallia-reflect",
-    target := baseDirectory.value / ".." / "bin" / "reflect")
+    target := baseDirectory.value / ".." / "bin" / "reflect" /* TODO: t240103170440 - still leaves a reflect/target folder somehow */)
   .settings(GalliaCommonSettings.mainSettings:_*)
-
 
 // ---------------------------------------------------------------------------
 // TODO: t231230123606 - how to nest core under its own folder? tests no longer found when trying
@@ -47,13 +46,15 @@ lazy val uTestVersion      = "0.8.1"
 
 // ---------------------------------------------------------------------------
 ThisBuild / libraryDependencies ++=
-  Seq(    
-    "io.github.aptusproject" %% "aptus-core"    % aptusVersion,
-    "com.beachape"           %% "enumeratum"    % enumeratumVersion) ++
+                   Seq("com.beachape" %% "enumeratum" % enumeratumVersion) ++
+  (scalaBinaryVersion.value match {
+    case "3"    => Seq(("io.github.aptusproject" %% "aptus-core" % aptusVersion).cross(CrossVersion.for3Use2_13) /* because of gallia-spark, which will bring in 2.13's scala-parallel-collections */)
+    case "2.13" => Seq( "io.github.aptusproject" %% "aptus-core" % aptusVersion)
+    case "2.12" => Seq( "io.github.aptusproject" %% "aptus-core" % aptusVersion) }) ++
   (scalaBinaryVersion.value match {
     case "3"    => Seq.empty
     case "2.13" => Seq("org.scala-lang" %  "scala-reflect" % scalaVersion.value) /* for scala.reflect.runtime.universe */
-    case "2.12" => Seq("org.scala-lang" %  "scala-reflect" % scalaVersion.value) /* for scala.reflect.runtime.universe */ })         
+    case "2.12" => Seq("org.scala-lang" %  "scala-reflect" % scalaVersion.value) /* for scala.reflect.runtime.universe */ })                  
 
 // ===========================================================================
 // testing

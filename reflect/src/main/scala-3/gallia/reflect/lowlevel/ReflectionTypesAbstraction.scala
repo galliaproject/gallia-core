@@ -7,10 +7,8 @@ import scala.reflect.ClassTag
 // ===========================================================================
 /** differs based on 2.x vs 3.x */
 trait ReflectionTypesAbstraction {
-  type CT[T] = ClassTag[T]
 
-  // ===========================================================================
-  /** Formerly stood for WeakTypeTag, now has a life of its own */
+  /** stood for WeakTypeTag in scala 2.x, has a life of its own in scala 3.x */
   private[gallia] case class WTT[T](
       typeNode       :        TypeNode,
       ctag           :        ClassTag[T],

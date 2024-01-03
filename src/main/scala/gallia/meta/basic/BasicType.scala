@@ -105,6 +105,9 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
     @inline def matchingSubinfos(info: meta.InfoLike)(multiple: Multiple)(value: Any): Seq[meta.SubInfo] =
       BasicTypeUtils.matchingSubinfos(info)(multiple)(value)
 
+    // ---------------------------------------------------------------------------
+    private type CT[T] = scala.reflect.ClassTag[T] // just to help with boilerplate
+
     // ===========================================================================
     // TODO:
     // - t210108114447 - support own "flag" type?

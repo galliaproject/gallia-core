@@ -22,10 +22,10 @@ private[gallia] trait BasicTypeHelper { ignored: BasicType =>
       _compare(container, descending, missingLast)(x, y)
 
   // ===========================================================================
-  def _ctag: CT[                T ]
-  def nctag: CT[       Iterable[T] ]
-  def octag: CT[       Option  [T] ]
-  def pctag: CT[Option[Iterable[T]]]
+  def _ctag: ClassTag[                T ]
+  def nctag: ClassTag[       Iterable[T] ]
+  def octag: ClassTag[       Option  [T] ]
+  def pctag: ClassTag[Option[Iterable[T]]]
 
   // ===========================================================================
   def  ordA: Ordering[                 T ]

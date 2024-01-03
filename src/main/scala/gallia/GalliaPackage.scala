@@ -156,6 +156,9 @@ package object gallia
   // ---------------------------------------------------------------------------
   private[gallia] type DataClass = Product with Equals // TODO: no way to make it more specific for case class?
 
+  // ---------------------------------------------------------------------------
+  private[gallia] type ClassTag[T] = scala.reflect.ClassTag[T] // mostly because of spark
+
   // ===========================================================================
   private[gallia] def dataError(anys: Any*): Nothing = throw new RuntimeError(anys.mkString(","))
 

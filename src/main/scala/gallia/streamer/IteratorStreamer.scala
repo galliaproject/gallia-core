@@ -58,11 +58,11 @@ final class IteratorStreamer[A](gen: () => CloseabledIterator[A]) extends Stream
   override def toIteratorBased: Streamer[A] = this
 
   // ---------------------------------------------------------------------------
-  override def toMeBased[B >: A : CWTT](that: Streamer[B]): Streamer[B] = that.toIteratorBased
+  override def toMeBased[B >: A : WTT](that: Streamer[B]): Streamer[B] = that.toIteratorBased
 
   // ===========================================================================
-  override def     map[B: CWTT](f: A =>      B ): Streamer[B] = _alter(IteratorParHack.    map(f))
-  override def flatMap[B: CWTT](f: A => Coll[B]): Streamer[B] = _alter(IteratorParHack.flatMap(f))
+  override def     map[B: WTT](f: A =>      B ): Streamer[B] = _alter(IteratorParHack.    map(f))
+  override def flatMap[B: WTT](f: A => Coll[B]): Streamer[B] = _alter(IteratorParHack.flatMap(f))
 
   // ---------------------------------------------------------------------------
   private[gallia] def     _map[B](f: A =>      B) : IteratorStreamer[B] = _alter(IteratorParHack.    map(f))
@@ -88,11 +88,11 @@ final class IteratorStreamer[A](gen: () => CloseabledIterator[A]) extends Stream
   override def reduce(op: (A, A) => A): A = _consume(_.reduce(op))
 
   // ---------------------------------------------------------------------------
-  override def union[B >: A : CWTT](that: Streamer[B]): Streamer[B] = {
+  override def union[B >: A : WTT](that: Streamer[B]): Streamer[B] = {
     ensureStillUsable(); _utils.union[B](this.asInstanceOf[IteratorStreamer[B]], that) }
 
   // ---------------------------------------------------------------------------
-  override def zip[B >: A : CWTT](that: Streamer[B], combiner: (B, B) => B): Streamer[B] = {
+  override def zip[B >: A : WTT](that: Streamer[B], combiner: (B, B) => B): Streamer[B] = {
     ensureStillUsable(); _utils.zip(this.asInstanceOf[IteratorStreamer[B]], that, combiner) }
 
   // ===========================================================================
@@ -104,15 +104,15 @@ final class IteratorStreamer[A](gen: () => CloseabledIterator[A]) extends Stream
     aptus.illegalState("220629103902 - should be by-passed now (see 220629103917)")
 
   // ---------------------------------------------------------------------------
-  override def groupByKey[K: CWTT, V: CWTT](implicit ev: A <:< (K, V)): Streamer[(K, List[V])] =
+  override def groupByKey[K: WTT, V: WTT](implicit ev: A <:< (K, V)): Streamer[(K, List[V])] =
     aptus.illegalState("220629103903 - should be by-passed now (see 220629103917)")
 
   // ===========================================================================
-  override def coGroup[K: CWTT, V: CWTT](joinType: JoinType)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[(K, (Iterable[V], Iterable[V]))] =
+  override def coGroup[K: WTT, V: WTT](joinType: JoinType)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[(K, (Iterable[V], Iterable[V]))] =
     aptus.illegalState("220629103904 - should be by-passed now (see 220629103917)")
 
   // ---------------------------------------------------------------------------
-  override def join[K: CWTT, V: CWTT](joinType: JoinType, combine: (V, V) => V)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[V] =
+  override def join[K: WTT, V: WTT](joinType: JoinType, combine: (V, V) => V)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[V] =
     { ensureStillUsable(); _utils.join(joinType, combine)(this.asInstanceOf[Streamer[(K, V)]], that) }
 
   // ===========================================================================

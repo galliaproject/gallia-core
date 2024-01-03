@@ -29,8 +29,8 @@ trait Streamer[A] { // note: not necessarily bothering with genericity (in the g
 
   // ===========================================================================
   // ClassTag is a requirement of Spark RDD (easier to include it here than work around it); TODO: Coll as well?
-  def     map[B: CWTT](f: A =>      B ): Streamer[B]
-  def flatMap[B: CWTT](f: A => Coll[B]): Streamer[B]
+  def     map[B: WTT](f: A =>      B ): Streamer[B]
+  def flatMap[B: WTT](f: A => Coll[B]): Streamer[B]
 
   def filter(p: A => Boolean): Streamer[A]
   def find  (p: A => Boolean): Option  [A]
@@ -60,18 +60,18 @@ trait Streamer[A] { // note: not necessarily bothering with genericity (in the g
   def distinctByAdjacency: Streamer[A] = ??? // t210117113705 - implement
 
   // ---------------------------------------------------------------------------
-  def groupByKey[K: CWTT, V: CWTT](implicit ev: A <:< (K, V)): Streamer[(K, List[V])]
+  def groupByKey[K: WTT, V: WTT](implicit ev: A <:< (K, V)): Streamer[(K, List[V])]
 
   // ===========================================================================
-  def union[B >: A : CWTT](that: Streamer[B])                       : Streamer[B] //TODO: use implicit ev
-  def zip  [B >: A : CWTT](that: Streamer[B], combiner: (B, B) => B): Streamer[B]
+  def union[B >: A : WTT](that: Streamer[B])                       : Streamer[B] //TODO: use implicit ev
+  def zip  [B >: A : WTT](that: Streamer[B], combiner: (B, B) => B): Streamer[B]
 
   // ---------------------------------------------------------------------------
-  def join   [K: CWTT, V: CWTT](joinType: JoinType, combiner: (V, V) => V)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[              V]
-  def coGroup[K: CWTT, V: CWTT](joinType: JoinType                       )(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[(K, (Iterable[V], Iterable[V]))]
+  def join   [K: WTT, V: WTT](joinType: JoinType, combiner: (V, V) => V)(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[              V]
+  def coGroup[K: WTT, V: WTT](joinType: JoinType                       )(that: Streamer[(K, V)])(implicit ev: A <:< (K, V)): Streamer[(K, (Iterable[V], Iterable[V]))]
 
   // ===========================================================================
-  private[streamer] def toMeBased[B >: A : CWTT](that: Streamer[B]): Streamer[B]
+  private[streamer] def toMeBased[B >: A : WTT](that: Streamer[B]): Streamer[B]
 
   // ---------------------------------------------------------------------------
   def toViewBased    : Streamer[A]

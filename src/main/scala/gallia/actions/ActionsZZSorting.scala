@@ -13,7 +13,7 @@ import domain.{Sorter, SortingPair}
 object ActionsZZSorting {
 
   // ---------------------------------------------------------------------------
-  case class SortUnsafe[T: CWTT](f: Obj => T, ord: Ordering[T]) extends ActionZZc with IdentityVM1 {
+  case class SortUnsafe[T: WTT](f: Obj => T, ord: Ordering[T]) extends ActionZZc with IdentityVM1 {
     //TODO: at least check T?
     def  atomzz(c: Cls) = _SortUnsafe(f: Obj => T, SuperMetaPair(implicitly[WTT[T]].ctag, ord)) }
 

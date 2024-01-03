@@ -9,7 +9,7 @@ import atoms.utils.SortWrapping._
 object AtomsZZSorting { import utils.SuperMetaPair
 
   // ---------------------------------------------------------------------------
-  case class _SortUnsafe[T: CWTT](f: Obj => T, meta: SuperMetaPair[T]) extends AtomZZ { def naive(z: Objs) =
+  case class _SortUnsafe[T: WTT](f: Obj => T, meta: SuperMetaPair[T]) extends AtomZZ { def naive(z: Objs) =
     z.sortUnsafe(f, meta) }
 
   // ===========================================================================

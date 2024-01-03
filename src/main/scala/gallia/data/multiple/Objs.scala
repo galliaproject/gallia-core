@@ -39,8 +39,8 @@ case class Objs private (  // TODO: two versions, see t210104164036
         case StreamerType.RDDBased      => this }
 
     // ===========================================================================
-    def     mapToStreamer[A: CWTT](f: Obj =>      A ): Streamer[A] = values.    map(f)
-    def flatMapToStreamer[A: CWTT](f: Obj => Coll[A]): Streamer[A] = values.flatMap(f)
+    def     mapToStreamer[A: WTT](f: Obj =>      A ): Streamer[A] = values.    map(f)
+    def flatMapToStreamer[A: WTT](f: Obj => Coll[A]): Streamer[A] = values.flatMap(f)
 
     // ---------------------------------------------------------------------------
     def consumeSelfClosing:                 Iterator[Obj] = values.selfClosingIterator

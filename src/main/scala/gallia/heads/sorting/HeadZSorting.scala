@@ -96,7 +96,7 @@ trait HeadZSorting { self: HeadZ =>
 
   // ===========================================================================
   // unsafe
-  def sortUsingUnsafe[T: Ordering : CWTT](f: Obj => T): Self = zz(SortUnsafe(f, implicitly[Ordering[T]]))
+  def sortUsingUnsafe[T: Ordering : WTT](f: Obj => T): Self = zz(SortUnsafe(f, implicitly[Ordering[T]]))
 
     def sortUsingUnsafe(ord: Ordering[Obj]): Self = { implicit val x = ord; sortUsingUnsafe(o => o) }
     def sortUsingUnsafe(        f:       (Obj, Obj)  => Int): Self = sortUsingUnsafe(new Ordering[Obj] { def compare(x: Obj, y: Obj): Int = f(    x, y)  })

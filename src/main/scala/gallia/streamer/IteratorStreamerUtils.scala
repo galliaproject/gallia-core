@@ -13,7 +13,7 @@ import heads.merging.MergingData._
 // ===========================================================================
 object IteratorStreamerUtils {
 
-  private[streamer] def union[B: CWTT](dis: IteratorStreamer[B], that: Streamer[B]): IteratorStreamer[B] =
+  private[streamer] def union[B: WTT](dis: IteratorStreamer[B], that: Streamer[B]): IteratorStreamer[B] =
     that.tipe match {  
       case StreamerType.ViewBased | StreamerType.IteratorBased =>
         new data.DataRegenerationClosure[B] {
@@ -26,7 +26,7 @@ object IteratorStreamerUtils {
       case StreamerType.RDDBased => ??? /* TODO */ }
 
   // ===========================================================================
-  private[streamer] def zip[B: CWTT](dis: IteratorStreamer[B], that: Streamer[B], combiner: (B, B) => B): IteratorStreamer[B] =
+  private[streamer] def zip[B: WTT](dis: IteratorStreamer[B], that: Streamer[B], combiner: (B, B) => B): IteratorStreamer[B] =
     that.tipe match {
       case StreamerType.ViewBased | StreamerType.IteratorBased =>
         new data.DataRegenerationClosure[B] {
@@ -40,7 +40,7 @@ object IteratorStreamerUtils {
       case StreamerType.RDDBased => ??? /* TODO */ }
 
   // ===========================================================================
-  private[streamer] def join[K: CWTT, V: CWTT]
+  private[streamer] def join[K: WTT, V: WTT]
           (joinType: JoinType, combine: (V, V) => V)
           (left: Streamer[(K, V)], right: Streamer[(K, V)])
         : Streamer[V] =
@@ -55,7 +55,7 @@ object IteratorStreamerUtils {
       }
 
     // ===========================================================================
-    private def hashJoin[K: CWTT, V: CWTT]
+    private def hashJoin[K: WTT, V: WTT]
           (loseRightOrder: Boolean)
           (joinType: JoinType, combine: (V, V) => V)
           (left: Streamer[(K, V)], right: Streamer[(K, V)])

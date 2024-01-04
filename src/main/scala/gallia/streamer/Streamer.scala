@@ -49,7 +49,7 @@ trait Streamer[A] { // note: not necessarily bothering with genericity (in the g
   def reduce(op: (A, A) => A): A
 
   // ---------------------------------------------------------------------------
-  // ClassTag[T] is a requirement coming from Spark RDDs
+  // note: ClassTag is required by Spark RDDs
   def sort     (meta: SuperMetaPair[A])           : Streamer[A] = sortBy(meta)(identity)
   def sortBy[K](meta: SuperMetaPair[K])(f: A => K): Streamer[A]
 

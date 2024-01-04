@@ -22,7 +22,7 @@ private[gallia] trait BasicTypeHelper { ignored: BasicType =>
       _compare(container, descending, missingLast)(x, y)
 
   // ===========================================================================
-  def _ctag: ClassTag[                T ]
+  def _ctag: ClassTag[                T  ]
   def nctag: ClassTag[       Iterable[T] ]
   def octag: ClassTag[       Option  [T] ]
   def pctag: ClassTag[Option[Iterable[T]]]

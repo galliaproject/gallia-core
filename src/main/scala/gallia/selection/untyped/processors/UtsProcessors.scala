@@ -110,7 +110,7 @@ object UtsProcessors {
       def keys(c: Cls): Keys = c.keys.diff(values.values) }
 
     // ---------------------------------------------------------------------------
-    case class AllButKeys2(groupee: target.TqRen) extends KeyzSelection {
+    case class AllButKeys2(groupee: trgt.TqRen) extends KeyzSelection {
       def vldt(c: Cls): Errs = Nil //TODO: check duplicates + check some left?
       def keys(c: Cls): Keys = groupee.resolve(c).from.pipe { x => c.keys.filterNot(_ == x) } }
 

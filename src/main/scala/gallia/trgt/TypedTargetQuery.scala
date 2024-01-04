@@ -1,11 +1,11 @@
 package gallia
-package target
+package trgt
 
 import aptus.{Anything_, Seq_}
 
 import meta._
 import domain._
-import target.utils.TypedTargetQueryUtils
+import trgt.utils.TypedTargetQueryUtils
 import vldt.{MetaValidation, SpecialCardiMode}
 
 // ===========================================================================

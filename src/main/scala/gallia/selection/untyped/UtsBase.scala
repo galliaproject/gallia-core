@@ -2,8 +2,8 @@ package gallia
 package selection
 package untyped
 
-import target._
-import target.utils.TargetQueryValidation._
+import trgt._
+import trgt.utils.TargetQueryValidation._
 import selection.typed._
 import selection.typed.fluency.TsSelBundles
 import selection.untyped.processors._

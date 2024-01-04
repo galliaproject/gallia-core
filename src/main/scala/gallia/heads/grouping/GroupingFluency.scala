@@ -2,7 +2,7 @@ package gallia
 package heads
 package grouping
 
-import target._
+import trgt._
 
 // ===========================================================================
 object GroupingFluency { // TODO: DWH/MDX: t210124100722

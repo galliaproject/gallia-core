@@ -10,8 +10,8 @@ import actions.common.ActionsCommonSomewhatBasics._
 import actions.common.ActionsCommonConverts._
 import actions.common.ActionsCommonDeserialize._
 import domain._
-import target._
-import target.utils.TypedTargetQueryUtils._
+import trgt._
+import trgt.utils.TypedTargetQueryUtils._
 
 // ===========================================================================
 trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>

@@ -3,8 +3,8 @@ package selection
 
 // ===========================================================================
 package object typed {
-  type TargetQuery[T] = gallia.target.TargetQuery[T]
-  val  TargetQuery    = gallia.target.TargetQuery
+  type TargetQuery[T] = gallia.trgt.TargetQuery[T]
+  val  TargetQuery    = gallia.trgt.TargetQuery
 
   // ---------------------------------------------------------------------------
   type TypeNode = gallia.reflect.TypeNode

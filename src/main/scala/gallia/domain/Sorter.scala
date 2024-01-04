@@ -2,8 +2,8 @@ package gallia
 package domain
 
 import aptus.Anything_
-import target.utils.TargetQueryUtils.tqkpath
-import target.TqKPath
+import trgt.utils.TargetQueryUtils.tqkpath
+import trgt.TqKPath
 import atoms.utils.SortWrapping.SortWrapper1
 import atoms.utils.SuperMetaPair
 

@@ -7,7 +7,7 @@ import aptus.{One, Opt, Pes, Nes}
 import FunctionWrappers._
 import actions.ActionsOthers._
 import heads.common.{Grab, Squash}
-import target.utils.TypedTargetQueryUtils.ttqkpath1
+import trgt.utils.TypedTargetQueryUtils.ttqkpath1
 
 // ===========================================================================
 trait HeadUSquashing { ignored: HeadU => // TODO: t210122161652 - favor AtomsVO now?

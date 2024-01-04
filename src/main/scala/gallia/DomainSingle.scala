@@ -155,9 +155,9 @@ case class RPath(parent: Seq[Key], ren: Ren) {
     @deprecated("make sure ok") def from(path: Seq[Key], to: Key) = RPath(path.init /* TODO: safe? */, Ren(path.last, to)) /* from RenameDynamically */ }
 
 // ===========================================================================
-case class TKPath(path: KPath, typeNode: reflect.TypeNode) extends target.HasTypeNode with target.HasType {
+case class TKPath(path: KPath, typeNode: reflect.TypeNode) extends trgt.HasTypeNode with trgt.HasType {
   override val instantiatorOpt = None
-  override def typeDuo = target.TypeDuo.fromTypeNodeOnly(typeNode)
+  override def typeDuo         = trgt.TypeDuo.fromTypeNodeOnly(typeNode)
 
   // ---------------------------------------------------------------------------
   def fieldPair(c: Cls): (KPath, gallia.meta.Info) = (path, typeNode.forceNonBObjInfo)

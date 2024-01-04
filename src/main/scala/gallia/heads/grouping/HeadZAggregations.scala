@@ -2,7 +2,7 @@ package gallia
 package heads
 package grouping
 
-import target._
+import trgt._
 import actions.ActionsZZAggregating._
 import heads.reducing.{ReducingPair, ReducingPair1, ReducingPairs, CountLikeType}
 

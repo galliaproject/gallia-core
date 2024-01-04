@@ -2,7 +2,7 @@ package gallia
 package selection
 package typed
 
-import target._
+import trgt._
 
 // ===========================================================================
 private[typed] trait TsBase {

@@ -2,7 +2,7 @@ package gallia
 package actions
 package common
 
-import target._
+import trgt._
 import atoms.common.AtomsCommonReducer0._
 
 // ===========================================================================

@@ -2,7 +2,7 @@ package gallia
 package actions
 package common
 
-import target._
+import trgt._
 import FunctionWrappers._
 import atoms.common.AtomsCommonTransforms._
 import meta.ValueType
@@ -76,7 +76,7 @@ object ActionsCommonCotransforms { // TODO: t210826102833 - rework co-transforms
       def atomuu(c: Cls): AtomUU = _Transform2to3(from.pathPairT(c), to.kpathT(c), f) }
 
   // ===========================================================================
-  @deprecated private implicit class HasTypedTargetQuerySeq_(u: gallia.target.HasTypedTargetQuerySeq[KPath]) {
+  @deprecated private implicit class HasTypedTargetQuerySeq_(u: gallia.trgt.HasTypedTargetQuerySeq[KPath]) {
       @deprecated def valueTypes(c:Cls): Seq[ValueType] = u.tqs.map(_.kpath_(c)).map(c.field(_).subInfo1.valueType)
     
       // ---------------------------------------------------------------------------
@@ -85,7 +85,7 @@ object ActionsCommonCotransforms { // TODO: t210826102833 - rework co-transforms
     }
 
     // ---------------------------------------------------------------------------
-    @deprecated private implicit class TypedTargetQuery_(u: gallia.target.TypedTargetQuery[KPath]) {
+    @deprecated private implicit class TypedTargetQuery_(u: gallia.trgt.TypedTargetQuery[KPath]) {
       @deprecated def asMultiple = new HasTypedTargetQuerySeq[KPath] { override def ttqs: Seq[TypedTargetQuery[KPath]] = Seq(u) }
     }
 

@@ -5,7 +5,7 @@ package common
 import aptus.{Anything_, Seq_}
 import aptus.Separator
 
-import target._
+import trgt._
 import atoms.common.AtomsCommonSomewhatBasics._
 import atoms.common.AtomsCommonResnesting
 

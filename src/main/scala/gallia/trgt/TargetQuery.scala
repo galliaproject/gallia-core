@@ -1,5 +1,5 @@
 package gallia
-package target
+package trgt
 
 import aptus.Anything_
 import domain._

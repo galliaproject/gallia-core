@@ -1,5 +1,5 @@
 package gallia
-package target
+package trgt
 
 import FunctionWrappers._
 
@@ -24,7 +24,7 @@ trait HasType extends HasTypeDuo with HasTypeSeq {
 
     // ===========================================================================
     /** dynamic -> static */
-    private[target] def toStatic(value: Any): Any =
+    private[trgt] def toStatic(value: Any): Any =
       if (typeNode.isContainedWhatever)
         if (typeNode.isNotOne) ??? //TODO:?
         else               new gallia.Whatever(value)

@@ -1,5 +1,5 @@
 package gallia
-package target
+package trgt
 
 // ===========================================================================
 class TypeDuo private ( // still a poor name, but better than "HT"

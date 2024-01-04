@@ -2,7 +2,7 @@ package gallia
 package heads
 package common
 
-import target.TypeDuo
+import trgt.TypeDuo
 import FunctionWrappers._
 import actions.common.ActionsCommonDataClasses._
 

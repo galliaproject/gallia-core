@@ -196,7 +196,7 @@ trait ActionUUbb extends ActionUU with AtomsUUbb // provides origin, TODO: t2106
   @deprecated trait ActionZVc2 extends ActionZV with AtomsZVc with ActionV1 with ActionM1
 
 // ===========================================================================
-import target.{TypedTargetQuery, TypedTargetQuery2, TypedTargetQuery3}
+import trgt.{TypedTargetQuery, TypedTargetQuery2, TypedTargetQuery3}
 
 // TODO: generalize + TargetQuery counterpart
 trait UsesSimpleTypedTargetQuery1Target[$Target] { // TODO: mixin action?

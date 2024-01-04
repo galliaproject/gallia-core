@@ -1,7 +1,7 @@
 package gallia
 package actions
 
-import target._
+import trgt._
 import FunctionWrappers._
 import meta.InfoLike
 import atoms.AtomsUV._

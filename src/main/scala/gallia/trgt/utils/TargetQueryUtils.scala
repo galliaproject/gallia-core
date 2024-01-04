@@ -1,8 +1,8 @@
 package gallia
-package target
+package trgt
 package utils
 
-import target._
+import trgt._
 
 // ===========================================================================
 object TargetQueryUtils {

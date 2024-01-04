@@ -3,7 +3,7 @@ package meta
 
 import aptus.{Anything_, String_, Seq_}
 
-import target._
+import trgt._
 
 // ===========================================================================
 case class Cls(fields: Seq[Fld]) // TODO: as List?

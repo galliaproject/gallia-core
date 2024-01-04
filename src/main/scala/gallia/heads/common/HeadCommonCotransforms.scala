@@ -3,8 +3,8 @@ package heads
 package common
 
 import aptus.Anything_
-import target.{TypeDuo, TypeDuo2}
-import target.utils.TypedTargetQueryUtils._
+import trgt.{TypeDuo, TypeDuo2}
+import trgt.utils.TypedTargetQueryUtils._
 import FunctionWrappers._
 import actions.common.ActionsCommonCotransforms._
 

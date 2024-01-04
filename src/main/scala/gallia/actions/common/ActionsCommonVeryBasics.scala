@@ -4,7 +4,7 @@ package common
 
 import aptus.{Anything_, String_}
 
-import target._
+import trgt._
 import vldt.ErrorId
 import domain.{KVEs, RVEs}
 import atoms.AtomsOthers._

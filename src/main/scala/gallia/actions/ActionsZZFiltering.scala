@@ -2,7 +2,7 @@ package gallia
 package actions
 
 import aptus.Anything_
-import target._
+import trgt._
 import FunctionWrappers.{_pp11, _pp21, _pp31}
 import atoms.AtomsZZFiltering._
 import Whatever._

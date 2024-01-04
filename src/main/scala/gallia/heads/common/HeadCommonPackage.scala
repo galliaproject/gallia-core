@@ -5,8 +5,8 @@ import gallia.FunctionWrappers._pp11
 
 // ===========================================================================
 package object common extends _heads {
-  val      TargetQueryUtils = gallia.target.utils.     TargetQueryUtils
-  val TypedTargetQueryUtils = gallia.target.utils.TypedTargetQueryUtils
+  val      TargetQueryUtils = gallia.trgt.utils.     TargetQueryUtils
+  val TypedTargetQueryUtils = gallia.trgt.utils.TypedTargetQueryUtils
 
   // ---------------------------------------------------------------------------
   type StringSplitter = gallia.domain.StringSplitter

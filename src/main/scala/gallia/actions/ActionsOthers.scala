@@ -3,7 +3,7 @@ package actions
 
 import aptus.{Anything_, Seq_}
 import aptus.Separator
-import target._
+import trgt._
 import FunctionWrappers._
 import data.multiple.Streamer
 import atoms._UWrapper

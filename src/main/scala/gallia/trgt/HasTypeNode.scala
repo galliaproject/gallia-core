@@ -1,5 +1,5 @@
 package gallia
-package target
+package trgt
 
 // ===========================================================================
 trait HasTypeNode {

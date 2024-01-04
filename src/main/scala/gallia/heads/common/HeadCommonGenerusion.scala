@@ -3,7 +3,7 @@ package heads
 package common
 
 import FunctionWrappers._
-import target.utils.TypedTargetQueryUtils._
+import trgt.utils.TypedTargetQueryUtils._
 import actions.common.ActionsCommonGenerationOther
 import actions.common.ActionsCommonGenerusion._
 

@@ -42,7 +42,7 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
                         def matches(f: O => Boolean): Self = zz(FilterByV(resolve(target), f, asFind = true)) }
                 
                       // ---------------------------------------------------------------------------
-                      class __FindBy1WV(target: KPathW) { import gallia.target.utils.TargetQueryUtils.tqkpath
+                      class __FindBy1WV(target: KPathW) { import gallia.trgt.utils.TargetQueryUtils.tqkpath
 
                         def isPresent: Self = zz(FilterByPresence(tqkpath(target.value), negate = false, asFind = true))
                         def isMissing: Self = zz(FilterByPresence(tqkpath(target.value), negate = true,  asFind = true))
@@ -98,7 +98,7 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
                     def findBy[O1: WTT, O2: WTT, O3: WTT](f1: FindByT[O1], f2: FindByT[O2], f3: FindByT[O3]): _FindBy3[O1, O2, O3] = new _FindBy3(f1, f2, f3)
                 
                     // ===========================================================================
-                    class __FindBy2WV(target1: KPathW, target2: KPathW) { import gallia.target.utils.TargetQueryUtils.tqkpath2
+                    class __FindBy2WV(target1: KPathW, target2: KPathW) { import gallia.trgt.utils.TargetQueryUtils.tqkpath2
                         def hasValues(value1: Any, value2: Any): Self = matches { (x, y) => x.any == value1 && y.any == value2 }
                         def notValues(value1: Any, value2: Any): Self = matches { (x, y) => x.any != value1 && y.any != value2 }
                     
@@ -107,7 +107,7 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
                         def matches(f: (WV, WV) =>     Boolean) (implicit di: DI): Self = zz(FilterByWV2(tqkpath2(target1.value, target2.value), f,             asFind = true)) }
                   
                       // ---------------------------------------------------------------------------
-                      class __FindBy3WV(target1: KPathW, target2: KPathW, target3: KPathW) { import gallia.target.utils.TargetQueryUtils.tqkpath3
+                      class __FindBy3WV(target1: KPathW, target2: KPathW, target3: KPathW) { import gallia.trgt.utils.TargetQueryUtils.tqkpath3
                         def hasValues(value1: Any, value2: Any, value3: Any): Self = matches { (x, y, z) => x.any == value1 && y.any == value2 && z.any == value3 }
                         def notValues(value1: Any, value2: Any, value3: Any): Self = matches { (x, y, z) => x.any != value1 && y.any != value2 && z.any != value3 }
                 
@@ -150,7 +150,7 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
         def matches(f: O => Boolean): Self = zz(FilterByV(resolve(target), f, asFind = false)) }
 
       // ---------------------------------------------------------------------------
-      class __FilterBy1WV(target: KPath, alsoRemove: Boolean) { import gallia.target.utils.TargetQueryUtils.tqkpath
+      class __FilterBy1WV(target: KPath, alsoRemove: Boolean) { import gallia.trgt.utils.TargetQueryUtils.tqkpath
 
         def isPresent: Self = zz(FilterByPresence(tqkpath(target), negate = false, asFind = false)).pipeIf(alsoRemove)(_.remove(target))
         def isMissing: Self = zz(FilterByPresence(tqkpath(target), negate = true,  asFind = false)).pipeIf(alsoRemove)(_.remove(target))
@@ -206,7 +206,7 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
     def filterBy[O1: WTT, O2: WTT, O3: WTT](f1: FilterByT[O1], f2: FilterByT[O2], f3: FilterByT[O3]): _FilterBy3[O1, O2, O3] = new _FilterBy3(f1, f2, f3)
 
     // ===========================================================================
-    class __FilterBy2WV(target1: KPathW, target2: KPathW) { import gallia.target.utils.TargetQueryUtils.tqkpath2    
+    class __FilterBy2WV(target1: KPathW, target2: KPathW) { import gallia.trgt.utils.TargetQueryUtils.tqkpath2    
         def hasValues(value1: Any, value2: Any): Self = matches { (x, y) => x.any == value1 && y.any == value2 }
         def notValues(value1: Any, value2: Any): Self = matches { (x, y) => x.any != value1 && y.any != value2 }
     
@@ -215,7 +215,7 @@ trait HeadZFiltering { ignored: HeadZ => // pretty messy, need to find a cleaner
         def matches(f: (WV, WV) =>     Boolean) (implicit di: DI): Self = zz(FilterByWV2(tqkpath2(target1.value, target2.value), f,             asFind = false)) }
   
       // ---------------------------------------------------------------------------
-      class __FilterBy3WV(target1: KPathW, target2: KPathW, target3: KPathW) { import gallia.target.utils.TargetQueryUtils.tqkpath3
+      class __FilterBy3WV(target1: KPathW, target2: KPathW, target3: KPathW) { import gallia.trgt.utils.TargetQueryUtils.tqkpath3
         def hasValues(value1: Any, value2: Any, value3: Any): Self = matches { (x, y, z) => x.any == value1 && y.any == value2 && z.any == value3 }
         def notValues(value1: Any, value2: Any, value3: Any): Self = matches { (x, y, z) => x.any != value1 && y.any != value2 && z.any != value3 }
 

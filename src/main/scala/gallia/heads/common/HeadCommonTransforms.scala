@@ -3,7 +3,7 @@ package heads
 package common
 
 import aptus.Index
-import target.TypeDuo
+import trgt.TypeDuo
 import FunctionWrappers._
 import actions.common.ActionsCommonTransforms._
 

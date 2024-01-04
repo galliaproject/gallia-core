@@ -1,7 +1,7 @@
 package gallia
 package actions
 
-import target.{TqRenz, TqRen}
+import trgt.{TqRenz, TqRen}
 import domain.GroupingPair._
 
 // ===========================================================================

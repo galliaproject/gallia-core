@@ -6,7 +6,7 @@ package processors
 import aptus.Anything_
 import aptus.finl
 
-import target._
+import trgt._
 
 // ===========================================================================
 trait SelectionValidation { def vldt(c: Cls): Errs }

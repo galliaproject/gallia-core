@@ -1,20 +1,20 @@
 package gallia
 
 // ===========================================================================
-package object target { // TODO: t210202090211 - p3 - rename package and homogenize with selection package...
-  private[target] type TypeNode = gallia.reflect.TypeNode
+package object trgt { // TODO: t210202090211 - p3 - rename package and homogenize with selection package...
+  private[trgt] type TypeNode = gallia.reflect.TypeNode
 
   // ---------------------------------------------------------------------------
-  private[target] type SubInfo   = meta.SubInfo
-  private[target] type Info      = meta.Info
-  private[target] type Info1     = meta.Info1
-  private[target] type Fld       = meta.Fld
+  private[trgt] type SubInfo   = meta.SubInfo
+  private[trgt] type Info      = meta.Info
+  private[trgt] type Info1     = meta.Info1
+  private[trgt] type Fld       = meta.Fld
 
-  private[target] type Container    = reflect.Container
-  private[target] val  Container    = reflect.Container
-  private[target] type Instantiator = reflect.Instantiator
+  private[trgt] type Container    = reflect.Container
+  private[trgt] val  Container    = reflect.Container
+  private[trgt] type Instantiator = reflect.Instantiator
 
-  private[target] type TQ[$Target] = TargetQuery[$Target]
+  private[trgt] type TQ[$Target] = TargetQuery[$Target]
 
   // ===========================================================================
   type TqKey    = TargetQuery[Key]

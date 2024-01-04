@@ -3,7 +3,7 @@ package domain
 
 import aptus._
 
-import target._
+import trgt._
 import vldt.MetaValidation
 
 // ===========================================================================

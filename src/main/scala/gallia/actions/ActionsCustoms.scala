@@ -1,7 +1,7 @@
 package gallia
 package actions
 
-import target._
+import trgt._
 import atoms.AtomsCustom._
 
 // ===========================================================================

@@ -5,7 +5,7 @@ package common
 import aptus.Anything_
 import aptus.Separator
 
-import target._
+import trgt._
 import atoms.common.AtomsCommonSomewhatBasics._
 
 // ===========================================================================

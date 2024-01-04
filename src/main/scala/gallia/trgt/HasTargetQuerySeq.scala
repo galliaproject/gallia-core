@@ -1,7 +1,7 @@
 package gallia
-package target
+package trgt
 
-import target.utils.TypedTargetQueryUtils
+import utils.TypedTargetQueryUtils
 import vldt.MetaValidation
 
 // ===========================================================================
@@ -15,8 +15,8 @@ trait HasTargetQuerySeq[$Target] {
   def resolve(c: Cls): Seq[$Target] = tqs.map(_.resolve(c))
   
   // TODO: should be private
-  /*private[target] */def __kpathz(c: Cls): KPathz = tqs.flatMap(_.__kpaths(c)).pipe(KPathz.apply)
-  /*private[target] */def __rpathz(c: Cls): RPathz = tqs.flatMap(_.__rpaths(c)).pipe(RPathz.apply)
+  /*private[trgt] */def __kpathz(c: Cls): KPathz = tqs.flatMap(_.__kpaths(c)).pipe(KPathz.apply)
+  /*private[trgt] */def __rpathz(c: Cls): RPathz = tqs.flatMap(_.__rpaths(c)).pipe(RPathz.apply)
   
   // ---------------------------------------------------------------------------
   def pathz(c: Cls)(implicit ev: $Target <:< KPath): KPathz = KPathz(resolve(c).asInstanceOf[Seq[KPath]])

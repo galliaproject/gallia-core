@@ -9,7 +9,7 @@ import atoms.common.AtomsCommonDataClasses._
 // ===========================================================================
 object ActionsCommonDataClasses {
 
-  case class TransformDataClass(target: Key, from: TypeDuo, to: TypeDuo, f: _ff11) extends ActionUUc {
+  case class TransformViaDataClass(target: Key, from: TypeDuo, to: TypeDuo, f: _ff11) extends ActionUUc {
     // TODO: validate those
     lazy val _from: Cls = from.typeNode.forceNonBObjInfo.subInfo1.valueType.nestingOpt.get
     lazy val   _to: Cls =   to.typeNode.forceNonBObjInfo.subInfo1.valueType.nestingOpt.get

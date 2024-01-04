@@ -10,23 +10,23 @@ object DataClassesTest extends utest.TestSuite with GalliaTestSuite with TestDat
 
   // ---------------------------------------------------------------------------
   val tests = Tests {
-    test("basic transformDataClass") {
-      test { Default03 .transformDataClass[           _Default01 ] (p).using(            _.op)                     .check(bobj(p ->  4.4, z -> true)) }
-      test { Default03p.transformDataClass[Option[    _Default01 ]](p).using(      _.map(_.op)     .getOrElse(1.1)).check(bobj(p ->  4.4, z -> true)) }
-      test { Default03m.transformDataClass[Option[    _Default01 ]](p).using(      _.map(_.op)     .getOrElse(1.1)).check(bobj(p ->  1.1, z -> true)) }
-      test { Default04 .transformDataClass[       Seq[_Default01 ]](p).using(      _.map(_.op).sum)                .check(bobj(p -> 11.0, z -> true)) } // 4.4+6.6=11.0
-      test { Default04p.transformDataClass[Option[Seq[_Default01]]](p).using(_.map(_.map(_.op).sum).getOrElse(1.1)).check(bobj(p -> 11.0, z -> true)) } // 4.4+6.6=11.0
-      test { Default04m.transformDataClass[Option[Seq[_Default01]]](p).using(_.map(_.map(_.op).sum).getOrElse(1.1)).check(bobj(p ->  1.1, z -> true)) } }
+    test("basic transformViaDataClass") {
+      test { Default03 .transformViaDataClass[           _Default01 ] (p).using(            _.op)                     .check(bobj(p ->  4.4, z -> true)) }
+      test { Default03p.transformViaDataClass[Option[    _Default01 ]](p).using(      _.map(_.op)     .getOrElse(1.1)).check(bobj(p ->  4.4, z -> true)) }
+      test { Default03m.transformViaDataClass[Option[    _Default01 ]](p).using(      _.map(_.op)     .getOrElse(1.1)).check(bobj(p ->  1.1, z -> true)) }
+      test { Default04 .transformViaDataClass[       Seq[_Default01 ]](p).using(      _.map(_.op).sum)                .check(bobj(p -> 11.0, z -> true)) } // 4.4+6.6=11.0
+      test { Default04p.transformViaDataClass[Option[Seq[_Default01]]](p).using(_.map(_.map(_.op).sum).getOrElse(1.1)).check(bobj(p -> 11.0, z -> true)) } // 4.4+6.6=11.0
+      test { Default04m.transformViaDataClass[Option[Seq[_Default01]]](p).using(_.map(_.map(_.op).sum).getOrElse(1.1)).check(bobj(p ->  1.1, z -> true)) } }
 
     // ---------------------------------------------------------------------------
-    test("more complex transformDataClass") {
+    test("more complex transformViaDataClass") {
       val expected = bobj(p -> bobj(/*g -> 1, */f -> 3, h -> false), z -> true)
 
       // ---------------------------------------------------------------------------
-      test { Default03.transformDataClass[_Default01](p).using(x => f_String(x.f)).check(bobj(p -> bobj(f -> foo), z -> true)) }
+      test { Default03.transformViaDataClass[_Default01](p).using(x => f_String(x.f)).check(bobj(p -> bobj(f -> foo), z -> true)) }
 
       // ---------------------------------------------------------------------------
-      test { Default04.transformDataClass[Seq[_Default01]](p)
+      test { Default04.transformViaDataClass[Seq[_Default01]](p)
             .using { dc =>
               f_Int$h_Boolean(dc.head.f.size, (dc.head.f.size % 2 ) == 0) }
           .check(expected) }
@@ -76,7 +76,7 @@ object DataClassesTest extends utest.TestSuite with GalliaTestSuite with TestDat
     // ---------------------------------------------------------------------------
     if (false) /*test */{
       TestDataO.Default03 //val Default03  = bobj(p -> Default01 , z -> true)
-        .transformDataClass[f_String](p)
+        .transformViaDataClass[f_String](p)
           .using { dc => Quux2c(dc.f.size, (dc.f.size % 2 ) == 0) }
             .check(bobj(p -> bobj(/*g -> 1, */f -> 3, h -> false), z -> true) ) } // --> differs from v1... (g field)
 

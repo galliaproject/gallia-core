@@ -9,14 +9,16 @@ import actions.common.ActionsCommonDataClasses._
 // ===========================================================================
 trait HeadCommonDataClasses[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 220412171654
 
-  // 220914145147 - transformDataClass
+  // 220914145147 - transformViaDataClass
   // TODO: t220923095400 - in the future .transform(_.dataClass[Foo]("foo"))
-  def transformDataClass[O: WTT](target: KeyW) = new _TransformDataClass(target) // TODO: better name?
+  def transformViaDataClass[O: WTT](target: KeyW) = new _TransformViaDataClass(target)
+  @deprecated("use via version now")
+  def transformDataClass   [O: WTT](target: KeyW) = new _TransformViaDataClass(target)
 
     // ---------------------------------------------------------------------------
-    class _TransformDataClass[O: WTT] private[HeadCommonDataClasses] (target: KeyW) {
+    class _TransformViaDataClass[O: WTT] private[HeadCommonDataClasses] (target: KeyW) {
       def using[D: WTT](f: O => D): Self2 = self2 :+
-        TransformDataClass(target.value, from = TypeDuo.build[O], to = TypeDuo.build[D], wrap(f)) }
+        TransformViaDataClass(target.value, from = TypeDuo.build[O], to = TypeDuo.build[D], wrap(f)) }
 
   // ===========================================================================
   /** does not *have* to be co-transform, can also only use one field (convenient for encapsulation) */

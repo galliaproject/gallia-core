@@ -24,8 +24,7 @@ object ActionsOthers {
   case class UWrapper(u: ActionUU) extends ActionZZ {
     def vldt (in: Cls ): Errs = u. vldt(in)
     def _meta(in: Cls ): Cls  = u._meta(in)
-    def atomzzs(ctx: NodeMetaContext) = u.atomuus(ctx).map(_UWrapper)
-  }
+    def atomzzs(ctx: NodeMetaContext) = u.atomuus(ctx).map(_UWrapper.apply) }
 
   // ===========================================================================
   case class ModifyUnderlyingStreamer(f: Streamer[Obj] => Streamer[Obj]) extends IdentityVM1 with ActionZZd {

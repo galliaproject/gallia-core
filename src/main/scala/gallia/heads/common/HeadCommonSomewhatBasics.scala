@@ -8,7 +8,7 @@ import aptus.Separator
 
 import actions.common.ActionsCommonSomewhatBasics._
 import actions.common.ActionsCommonConverts._
-import actions.common.ActionsCommonUntuplify._
+import actions.common.ActionsCommonDeserialize._
 import domain._
 import target._
 import target.utils.TypedTargetQueryUtils._
@@ -249,85 +249,77 @@ trait HeadCommonSomewhatBasics[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
   // - TODO: t210124100009 - odd suffices (1a, 2z, ...), but not easy to find meaningful names here so for now...
 
   /** eg for: {"f": ["foo", "3"]} */
-  def deserialize1z(targetKey: RenW) = new _Untuplify1z(targetKey.value)
+  def deserialize1z(targetKey: RenW) = new _Deserialize1z(targetKey.value)
 
   /** eg for: {"f": "foo|3"} or {"f": ["foo|3", "bar|4"]} */
-  def deserialize1a(targetKey: RenW) = new _Untuplify1a(targetKey.value)
+  def deserialize1a(targetKey: RenW) = new _Deserialize1a(targetKey.value)
 
   /** eg for: {"f": "foo|3,bar|4"} */
-  def deserialize1b(targetKey: RenW) = new _Untuplify1b(targetKey.value)
+  def deserialize1b(targetKey: RenW) = new _Deserialize1b(targetKey.value)
 
   // ---------------------------------------------------------------------------
   // TODO: handle escaping?
 
   /** eg for: {"f": ["str=foo", "int=3"]} */
-  def deserialize2z(targetKey: RenW) = new _Untuplify2z(targetKey.value)
+  def deserialize2z(targetKey: RenW) = new _Deserialize2z(targetKey.value)
 
   /** eg for: {"f": "str=foo|int=3"}  or {"f": [ "str=foo|int=3", "str=..." ]} */
-  def deserialize2a(targetKey: RenW) = new _Untuplify2a(targetKey.value)
+  def deserialize2a(targetKey: RenW) = new _Deserialize2a(targetKey.value)
 
   /** eg for: {"f": "str=foo;int=3,str=bar;int=4,str=baz;int=5"} */
-  def deserialize2b(targetKey: RenW) = new _Untuplify2b(targetKey.value)
-
-      // ---------------------------------------------------------------------------
-      /** eg for: {"f": ["foo", "3"]} */                                              @deprecated def untuplify1z(targetKey: RenW) = deserialize1z(targetKey)
-      /** eg for: {"f": "foo|3"} or {"f": ["foo|3", "bar|4"]} */                      @deprecated def untuplify1a(targetKey: RenW) = deserialize1a(targetKey)
-      /** eg for: {"f": "foo|3,bar|4"} */                                             @deprecated def untuplify1b(targetKey: RenW) = deserialize1b(targetKey)
-      /** eg for: {"f": ["str=foo", "int=3"]} */                                      @deprecated def untuplify2z(targetKey: RenW) = deserialize2z(targetKey)
-      /** eg for: {"f": "str=foo|int=3"}  or {"f": [ "str=foo|int=3", "str=..." ]} */ @deprecated def untuplify2a(targetKey: RenW) = deserialize2a(targetKey)
-      /** eg for: {"f": "str=foo;int=3,str=bar;int=4,str=baz;int=5"} */               @deprecated def untuplify2b(targetKey: RenW) = deserialize2b(targetKey)
+  def deserialize2b(targetKey: RenW) = new _Deserialize2b(targetKey.value)
 
     // ===========================================================================
-    class _Untuplify1z(targetKey: Ren) {
+    class _Deserialize1z(targetKey: Ren) {
           def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(typeNode[E].flattenedEnumValueNames)
           def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
           def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
-            Untuplify1z(targetKey, keys.keyz) }
+            Deserialize1z(targetKey, keys.keyz) }
 
     // ---------------------------------------------------------------------------
-    class _Untuplify1a(targetKey: Ren) {
+    class _Deserialize1a(targetKey: Ren) {
       def withSplitter(entriesSplitter: StringSplitter) = new _WithSplitter(entriesSplitter)
         final class _WithSplitter private[heads] (entriesSplitter: StringSplitter) {
           def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(typeNode[E].flattenedEnumValueNames)
           def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
           def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
-            Untuplify1a(targetKey, entriesSplitter, keys.keyz) } }
+            Deserialize1a(targetKey, entriesSplitter, keys.keyz) } }
 
     // ---------------------------------------------------------------------------
-    class _Untuplify1b(targetKey: Ren) {
+    class _Deserialize1b(targetKey: Ren) {
       def withSplitters(arraySplitter: StringSplitter, entriesSplitter: StringSplitter) = new _WithSplitters(arraySplitter, entriesSplitter)
         final class _WithSplitters private[heads] (arraySplitter: StringSplitter, entriesSplitter: StringSplitter) {
           def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(typeNode[E].flattenedEnumValueNames)
           def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
           def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
-            Untuplify1b(targetKey, arraySplitter, entriesSplitter, keys.keyz) } }
+            Deserialize1b(targetKey, arraySplitter, entriesSplitter, keys.keyz) } }
 
     // ===========================================================================
-    final class _Untuplify2z(targetKey: Ren) {
+    final class _Deserialize2z(targetKey: Ren) {
         def withSplitter(entrySplitter: StringSplitter) = new _WithSplitter(entrySplitter)
           final class _WithSplitter private[heads] (entrySplitter: StringSplitter) {
             def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(typeNode[E].flattenedEnumValueNames)
             def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
             def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
-              Untuplify2z(targetKey, entrySplitter, keys.keyz) } }
+              Deserialize2z(targetKey, entrySplitter, keys.keyz) } }
 
       // ---------------------------------------------------------------------------
-      final class _Untuplify2a(targetKey: Ren) {
+      final class _Deserialize2a(targetKey: Ren) {
         def withSplitters(entriesSplitter: StringSplitter, entrySplitter: StringSplitter) = new _WithSplitters(entriesSplitter, entrySplitter)
           final class _WithSplitters private[heads] (entriesSplitter: StringSplitter, entrySplitter: StringSplitter) {
             def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(typeNode[E].flattenedEnumValueNames)
             def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
             def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
-              Untuplify2a(targetKey, entriesSplitter, entrySplitter, keys.keyz) } }
+              Deserialize2a(targetKey, entriesSplitter, entrySplitter, keys.keyz) } }
 
       // ---------------------------------------------------------------------------
-      final class _Untuplify2b(targetKey: Ren) {
+      final class _Deserialize2b(targetKey: Ren) {
         def withSplitters(arraySplitter: StringSplitter, entriesSplitter: StringSplitter, entrySplitter: StringSplitter) = new _WithSplitters(arraySplitter, entriesSplitter, entrySplitter)
           final class _WithSplitters private[heads] (arraySplitter: StringSplitter, entriesSplitter: StringSplitter, entrySplitter: StringSplitter) {
             def asNewKeys[E <: EnumEntry : WTT]   : Self2 = asNewKeys(typeNode[E].flattenedEnumValueNames)
             def asNewKeys(key1: KeyW, more: KeyW*): Self2 = asNewKeys((key1, more))
             def asNewKeys(keys: KeyWz)            : Self2 = self2 :+
-              Untuplify2b(targetKey, arraySplitter, entriesSplitter, entrySplitter, keys.keyz) } }
+              Deserialize2b(targetKey, arraySplitter, entriesSplitter, entrySplitter, keys.keyz) } }
 
   // ===========================================================================
   // this is the bare minimum (fifteen pieces of flair)

@@ -75,12 +75,12 @@ trait ClsAdvanced { self: Cls =>
         .pipe(Cls.apply)
 
   // ===========================================================================
-  def untuplifyz(targetKey: Ren, newKeys: Keyz): Cls = untuplify(targetKey, newKeys, _ => _Single)   // TODO: add check one string;
-  def untuplifya(targetKey: Ren, newKeys: Keyz): Cls = untuplify(targetKey, newKeys, identity)       // TODO: add check strings
-  def untuplifyb(targetKey: Ren, newKeys: Keyz): Cls = untuplify(targetKey, newKeys, _ => _Multiple) // TODO: can it be empty?
+  def deserializez(targetKey: Ren, newKeys: Keyz): Cls = deserialize(targetKey, newKeys, _ => _Single)   // TODO: add check one string;
+  def deserializea(targetKey: Ren, newKeys: Keyz): Cls = deserialize(targetKey, newKeys, identity)       // TODO: add check strings
+  def deserializeb(targetKey: Ren, newKeys: Keyz): Cls = deserialize(targetKey, newKeys, _ => _Multiple) // TODO: can it be empty?
 
     // ---------------------------------------------------------------------------
-    private def untuplify(targetKey: Ren, newKeys: Keyz, f: Multiple => Multiple): Cls =
+    private def deserialize(targetKey: Ren, newKeys: Keyz, f: Multiple => Multiple): Cls =
       transformSoleSubInfo(targetKey) { // see 210109100250, may have to force them all to be strings
         subInfo => SubInfo(
             f(subInfo.multiple),

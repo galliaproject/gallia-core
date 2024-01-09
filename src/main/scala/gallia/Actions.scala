@@ -11,7 +11,7 @@ trait Action
     with    ActionAN
 
   // ===========================================================================
-  trait ActionVN  {
+  trait ActionVN {
     def  vldt(in: Seq[Cls]): Errs
     final val callSite : CallSite = CallSite.generate()
 
@@ -20,7 +20,7 @@ trait Action
   }
 
   // ===========================================================================
-  trait ActionMN  { def _meta(in: Seq[Cls]): Cls }
+  trait ActionMN { def _meta(in: Seq[Cls]): Cls }
 
   // ===========================================================================
   trait ActionAN { def atoms(ctx: NodeMetaContext): Atoms }

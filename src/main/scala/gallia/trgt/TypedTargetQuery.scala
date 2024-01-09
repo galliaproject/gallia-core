@@ -14,7 +14,8 @@ case class TypedTargetQuery[$Target /* TODO: t210823111030 - ungenerify */]( // 
         tq             : TargetQuery[$Target],
         typeDuo        : TypeDuo,
         ignoreContainer: Boolean /* eg for stringx('foo) */)
-      extends HasType {
+      extends Serializable /* TODO: t240108113850 - ideally shouldn't be needed, but see the likes of 240108113936 */
+         with HasType {
 
     override val instantiatorOpt: Option[Instantiator] = typeDuo.instantiatorOpt
     override val typeNode       :        TypeNode      = typeDuo.typeNode

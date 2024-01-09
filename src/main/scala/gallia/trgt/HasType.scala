@@ -12,6 +12,7 @@ trait HasType extends HasTypeDuo with HasTypeSeq {
 
     def wrapc(that: HasTypeNode, f: _ff11): _ff11 = x => that.toDynamic(f(this.toStatic(x)))
 
+    // 240108113936 - see corresponding TODO: t240108113850
     def wrapc(that: HasTypes2  , f: _ff12): _ff12 = x => { val (y1, y2)                                 = f(this.toStatic(x)); (that.ht1.toDynamic(y1), that.ht2.toDynamic(y2)) }
     def wrapc(that: HasTypes3  , f: _ff13): _ff13 = x => { val (y1, y2, y3)                             = f(this.toStatic(x)); (that.ht1.toDynamic(y1), that.ht2.toDynamic(y2), that.ht3.toDynamic(y3)) }
     def wrapc(that: HasTypes4  , f: _ff14): _ff14 = x => { val (y1, y2, y3, y4)                         = f(this.toStatic(x)); (that.ht1.toDynamic(y1), that.ht2.toDynamic(y2), that.ht3.toDynamic(y3), that.ht4.toDynamic(y4)) }

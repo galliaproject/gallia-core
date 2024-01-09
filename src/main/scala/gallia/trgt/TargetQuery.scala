@@ -11,7 +11,8 @@ class TargetQuery[$Target /* TODO: t210823111030 - ungenerify */](
     //TODO: t210110103720 - subclass rather, in terms of $Target + pass actual selection when possible (especially for explicit)?
         val vldtTargetQuery : Cls => Errs,
         val resolve         : Cls => $Target /* 201005113232 - consistently same cardi/type by design */)
-       extends CanValidateQuery
+       extends Serializable /* TODO: t240108113850 - ideally shouldn't be needed, but see the likes of 240108113936 */
+          with CanValidateQuery
           with CanResolve[$Target] {
 
     def apply[A](c: Cls)(f: $Target => A): A = resolve(c).pipe(f)

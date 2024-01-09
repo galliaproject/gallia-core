@@ -25,14 +25,14 @@ trait HeadCommonFusion[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
       def fuse[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT, O7: WTT, O8: WTT](o1: Fusion[O1], o2: Fusion[O2], o3: Fusion[O3], o4: Fusion[O4], o5: Fusion[O5], o6: Fusion[O6], o7: Fusion[O7], o8: Fusion[O8]) = new _Fuse8(o1, o2, o3, o4, o5, o6, o7, o8)
 
     // ===========================================================================
-    class _Fuse2[O1: WTT, O2: WTT](o1: Fusion[O1], o2: Fusion[O2]) {
+    final class _Fuse2[O1: WTT, O2: WTT] private[heads] (o1: Fusion[O1], o2: Fusion[O2]) {
         def as(d: KPathW) = new _As(d)
          final class _As private[heads] (d: KPathW) {
           def using[D1: WTT](f: (O1, O2) => D1): Self2 = self2 :+ 
             Fuse2(resolve2(o1, o2), tkpath[D1](d), wrap21(f)) } }
   
     // ---------------------------------------------------------------------------
-    class _Fuse3[O1: WTT, O2: WTT, O3: WTT](
+    final class _Fuse3[O1: WTT, O2: WTT, O3: WTT] private[heads] (
       o1: Fusion[O1], o2: Fusion[O2], o3: Fusion[O3]) {
         def as(d: KPathW) = new _As(d)
          final class _As private[heads] (d: KPathW) {
@@ -40,7 +40,7 @@ trait HeadCommonFusion[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
             Fuse3(resolve3(o1, o2, o3), tkpath[D1](d), wrap31(f)) } }
 
     // ---------------------------------------------------------------------------
-    class _Fuse4[O1: WTT, O2: WTT, O3: WTT, O4: WTT](
+    final class _Fuse4[O1: WTT, O2: WTT, O3: WTT, O4: WTT] private[heads] (
       o1: Fusion[O1], o2: Fusion[O2], o3: Fusion[O3], o4: Fusion[O4]) {
         def as(d: KPathW) = new _As(d)
          final class _As private[heads] (d: KPathW) {
@@ -48,7 +48,7 @@ trait HeadCommonFusion[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
             Fuse4(resolve4(o1, o2, o3, o4), tkpath[D1](d), wrap41(f)) } }
 
     // ---------------------------------------------------------------------------
-    class _Fuse5[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT](
+    final class _Fuse5[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT] private[heads] (
       o1: Fusion[O1], o2: Fusion[O2], o3: Fusion[O3], o4: Fusion[O4], o5: Fusion[O5]) {
         def as(d: KPathW) = new _As(d)
          final class _As private[heads] (d: KPathW) {
@@ -56,7 +56,7 @@ trait HeadCommonFusion[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
             Fuse5(resolve5(o1, o2, o3, o4, o5), tkpath[D1](d), wrap51(f)) } }
 
     // ---------------------------------------------------------------------------
-    class _Fuse6[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT](
+    final class _Fuse6[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT] private[heads] (
       o1: Fusion[O1], o2: Fusion[O2], o3: Fusion[O3], o4: Fusion[O4], o5: Fusion[O5], o6: Fusion[O6]) {
         def as(d: KPathW) = new _As(d)
          final class _As private[heads] (d: KPathW) {
@@ -64,7 +64,7 @@ trait HeadCommonFusion[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
             Fuse6(resolve6(o1, o2, o3, o4, o5, o6), tkpath[D1](d), wrap61(f)) } }
 
     // ---------------------------------------------------------------------------
-    class _Fuse7[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT, O7: WTT](
+    final class _Fuse7[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT, O7: WTT] private[heads] (
       o1: Fusion[O1], o2: Fusion[O2], o3: Fusion[O3], o4: Fusion[O4], o5: Fusion[O5], o6: Fusion[O6], o7: Fusion[O7]) {
         def as(d: KPathW) = new _As(d)
          final class _As private[heads] (d: KPathW) {
@@ -72,7 +72,7 @@ trait HeadCommonFusion[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
             Fuse7(resolve7(o1, o2, o3, o4, o5, o6, o7), tkpath[D1](d), wrap71(f)) } }
 
     // ---------------------------------------------------------------------------
-    class _Fuse8[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT, O7: WTT, O8: WTT](
+    final class _Fuse8[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT, O7: WTT, O8: WTT] private[heads] (
       o1: Fusion[O1], o2: Fusion[O2], o3: Fusion[O3], o4: Fusion[O4], o5: Fusion[O5], o6: Fusion[O6], o7: Fusion[O7], o8: Fusion[O8]) {
         def as(d: KPathW) = new _As(d)
          final class _As private[heads] (d: KPathW) {
@@ -80,7 +80,7 @@ trait HeadCommonFusion[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
             Fuse8(resolve8(o1, o2, o3, o4, o5, o6, o7, o8), tkpath[D1](d), wrap81(f)) } }
 
     // ---------------------------------------------------------------------------
-    class _Fuse9[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT, O7: WTT, O8: WTT, O9: WTT](
+    final class _Fuse9[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT, O7: WTT, O8: WTT, O9: WTT] private[heads] (
       o1: Fusion[O1], o2: Fusion[O2], o3: Fusion[O3], o4: Fusion[O4], o5: Fusion[O5], o6: Fusion[O6], o7: Fusion[O7], o8: Fusion[O8], o9: Fusion[O9]) {
         def as(d: KPathW) = new _As(d)
          final class _As private[heads] (d: KPathW) {
@@ -88,7 +88,7 @@ trait HeadCommonFusion[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
             Fuse9(resolve9(o1, o2, o3, o4, o5, o6, o7, o8, o9), tkpath[D1](d), wrap91(f)) } }
     
     // ---------------------------------------------------------------------------
-    class _Fuse10[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT, O7: WTT, O8: WTT, O9: WTT, O10: WTT](
+    final class _Fuse10[O1: WTT, O2: WTT, O3: WTT, O4: WTT, O5: WTT, O6: WTT, O7: WTT, O8: WTT, O9: WTT, O10: WTT] private[heads] (
       o1: Fusion[O1], o2: Fusion[O2], o3: Fusion[O3], o4: Fusion[O4], o5: Fusion[O5], o6: Fusion[O6], o7: Fusion[O7], o8: Fusion[O8], o9: Fusion[O9], o10: Fusion[O10]) {
         def as(d: KPathW) = new _As(d)
          final class _As private[heads] (d: KPathW) {
@@ -96,7 +96,7 @@ trait HeadCommonFusion[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
             Fuse10(resolve10(o1, o2, o3, o4, o5, o6, o7, o8, o9, o10), tkpath[D1](d), wrapA1(f)) } }
     
   // ===========================================================================  
-  class _Whatever2(o1: Fusion[WV], o2: Fusion[WV]) {
+  final class _Whatever2 private[heads] (o1: Fusion[WV], o2: Fusion[WV]) {
       def as(d: KPathW) = new _As(d)
        final class _As private[common] (d: KPathW) {
     	  // TODO: t210816120207 - should this also abstract multiplicity?
@@ -113,7 +113,7 @@ trait HeadCommonFusion[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
           FusionWV2b(resolve2(o1, o2).tqkpath2, d.value, typeNode[D], wrap(f)(x => x)) } }
     
     // ---------------------------------------------------------------------------  
-    class _Whatever3(o1: Fusion[WV], o2: Fusion[WV], o3: Fusion[WV]) {
+    final class _Whatever3 private[heads] (o1: Fusion[WV], o2: Fusion[WV], o3: Fusion[WV]) {
       def as(d: KPathW) = new _As(d)
        final class _As private[common] (d: KPathW) {
     	  // TODO: t210816120207 - should this also abstract multiplicity?

@@ -29,7 +29,7 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
 //def transformb[O: WTT](f1: Transform[O])                                              = new TransformVV(f1)
 
     // ===========================================================================
-    trait ___TransformU {
+    sealed trait ___TransformU {
         protected val target: Transform[HeadU]
         protected val disambiguatorOpt: Option[UnionObjectDisambiguator] = None // TODO: t220517123057: support for UZ and UV
 
@@ -39,7 +39,7 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
         def using[V1: WTT](f: HeadU => HeadV[V1])(implicit d: DI, d2: DI): Self2 = self2 :+ TransformUV[V1](tqrpathz(target), f) }
 
       // ===========================================================================
-      class _TransformU(val target: Transform[HeadU]) extends ___TransformU {
+      final class _TransformU private[heads] (val target: Transform[HeadU]) extends ___TransformU {
           /** disambiguate in case of union type - see t210125111338 */
           def withPredicate(meta: Cls => Boolean, data: Obj => Boolean): __TransformU = new __TransformU(target, DisambiguateByClassPredicateU(meta, data))
 
@@ -49,11 +49,11 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
           def withIndex    (value: Index) : __TransformU = new __TransformU(target, DisambiguateByClassIndex(value)) }
 
         // ---------------------------------------------------------------------------
-        class __TransformU(val target: Transform[HeadU], disambiguator: UnionObjectDisambiguator) extends ___TransformU {
+        final class __TransformU private[heads] (val target: Transform[HeadU], disambiguator: UnionObjectDisambiguator) extends ___TransformU {
           protected override val disambiguatorOpt = Some(disambiguator) }
 
     // ===========================================================================
-    trait ___TransformZ {
+    sealed trait ___TransformZ {
         protected val target: Transform[HeadZ]
         protected val disambiguatorOpt: Option[UnionObjectDisambiguator] = None // TODO: t220517123057: support for ZU and ZV
 
@@ -63,7 +63,7 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
         def using[D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI, d2: DI): Self2 = self2 :+ TransformZV[D1](tqrpathz(target), f) }
 
       // ===========================================================================
-      class _TransformZ(val target: Transform[HeadZ]) extends ___TransformZ {
+      final class _TransformZ private[heads] (val target: Transform[HeadZ]) extends ___TransformZ {
           /** disambiguate in case of union type - see t210125111338 */
           def withPredicate(meta: Cls => Boolean, data: Seq[Obj] => Boolean): __TransformZ = new __TransformZ(target, DisambiguateByClassPredicateZ(meta, data))
 
@@ -73,11 +73,11 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
           def withIndex    (value: Index) : __TransformZ = new __TransformZ(target, DisambiguateByClassIndex(value)) }
 
         // ---------------------------------------------------------------------------
-        class __TransformZ(val target: Transform[HeadZ], disambiguator: UnionObjectDisambiguator) extends ___TransformZ {
+        final class __TransformZ private[heads] (val target: Transform[HeadZ], disambiguator: UnionObjectDisambiguator) extends ___TransformZ {
           protected override val disambiguatorOpt = Some(disambiguator) }
 
     // ===========================================================================
-    class _TransformWhatever(f1: Transform[WV]) {
+    final class _TransformWhatever private[heads] (f1: Transform[WV]) {
       private def wrap[T, D](f: WV => T)(g: T => D) =          
           (x: Any) => x match {
             case y: Seq[_] => y.map { z => g(f(new WV(z))) }
@@ -88,7 +88,7 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
       def using[D: WTT](f: WV =>     D)(implicit di: DI): Self2 = self2 :+ TransformWW1b(resolves(f1), typeNode[D], wrap(f)(x => x) (_)) }
 
     // ===========================================================================
-    class _TransformVV[O: WTT](f1: Transform[O]) {
+    final class _TransformVV[O: WTT] private[heads] (f1: Transform[O]) {
       private val ttq    = resolves(f1)
       private val origin = typeNode[O]
 
@@ -99,7 +99,7 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
           @deprecated("see withSchema below") def toObjUsing (c: Cls)(f: O => Obj ): Self2 = self2 :+ TransformToObj(ttq, c, multiple = false, wrap(f))
 
         // ---------------------------------------------------------------------------
-        class _UsingSchema private[HeadCommonTransforms] (c: Cls) {
+        final class _UsingSchema private[heads] (c: Cls) {
           def using(f: O => Obj)                              : Self2 = self2 :+ TransformToObj(ttq, c, multiple = false, wrap(f))
           def using(f: O => Objs)    (implicit d1: DI)        : Self2 = self2 :+ TransformToObj(ttq, c, multiple = true , wrap(f))
           def using(f: O => Seq[Obj])(implicit d1: DI, d2: DI): Self2 = self2 :+ TransformToObj(ttq, c, multiple = true , wrap((x: Any) => f(x.asInstanceOf[O]).toList.pipe(Objs.from(_)) )) }
@@ -108,19 +108,21 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
       //TODO: "opaque" counteparts (see t210110094829)
 
       // ---------------------------------------------------------------------------
-      def using[D: WTT](f: O => D): Self2 = self2 :+ {
+      def using[D: WTT](f: O => D): Self2 = {
         val dest = TypeDuo.build[D]
 
-        if (!dest.typeNode.isContainedDataClass)
-          if (!ttq.ignoreContainer) TransformVV (ttq, dest.typeNode, wrap(f), origin.ifApplicable(wrap(f)))
-          else                      TransformVVx(ttq, dest.typeNode, wrap(f), origin.ifApplicable(wrap(f)))
+        val action: ActionUUb =
+          if (!dest.typeNode.isContainedDataClass)
+            if (!ttq.ignoreContainer) TransformVV (ttq, dest.typeNode, wrap(f), origin.ifApplicable(wrap(f)))
+            else                      TransformVVx(ttq, dest.typeNode, wrap(f), origin.ifApplicable(wrap(f)))
+
+          // ---------------------------------------------------------------------------
+          // deprecated way now, c220914145147 or t220914144458 instead
+          else
+            if (!ttq.ignoreContainer) TransformVVc (ttq, dest, wrap(f))
+            else                      TransformVVxc(ttq, dest, wrap(f))
 
         // ---------------------------------------------------------------------------
-        // deprecated way now, c220914145147 or t220914144458 instead
-        else
-          if (!ttq.ignoreContainer) TransformVVc (ttq, dest, wrap(f))
-          else                      TransformVVxc(ttq, dest, wrap(f)) } }
-
-}
+        self2 :+ action } } }
 
 // ===========================================================================

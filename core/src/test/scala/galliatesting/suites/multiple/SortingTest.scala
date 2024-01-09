@@ -15,9 +15,7 @@ object SortingTest extends utest.TestSuite with GalliaTestSuite with TestDataS {
 
   // ===========================================================================
   val tests = Tests {
-    test(true)
 
-    // ---------------------------------------------------------------------------
     // TODO: t231228133031 - how to refactor code with utest? keeping as asserts until then
     def _test(itr: Boolean /* asIterator */): Unit = { val mem = !itr
       Default52.mode(itr).distinct.check(Default51)

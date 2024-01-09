@@ -19,6 +19,9 @@ ThisBuild / developers           := List(Developer(
 ThisBuild / scmInfo              := Some(ScmInfo(
   browseUrl  = url("https://github.com/galliaproject/gallia-core"),
   connection =     "scm:git@github.com:galliaproject/gallia-core.git"))
+ThisBuild / libraryDependencies  += "com.lihaoyi" %% "utest" % uTestVersion % "test"
+ThisBuild / testFrameworks       += new TestFramework("utest.runner.Framework")
+// more tests: see https://github.com/galliaproject/gallia-testing (being moved here)
 
 // ===========================================================================
 lazy val reflect = (project in file("reflect"))
@@ -28,13 +31,17 @@ lazy val reflect = (project in file("reflect"))
   .settings(GalliaCommonSettings.mainSettings:_*)
 
 // ---------------------------------------------------------------------------
-// TODO: t231230123606 - how to nest core under its own folder? tests no longer found when trying
-lazy val root = (project in file("."))
+lazy val core = (project in file("core"))
   .settings(
     name   := "gallia-core",
     target := baseDirectory.value / "bin" / "core")
   .settings(GalliaCommonSettings.mainSettings:_*)
   .dependsOn(reflect) // TODO: also bring in gallia-macros
+
+// ---------------------------------------------------------------------------
+lazy val root = (project in file("."))
+  .settings(GalliaCommonSettings.mainSettings:_*)
+  .aggregate(reflect, core)
 
 // ===========================================================================    
 // see https://github.com/aptusproject/aptus-core
@@ -55,16 +62,6 @@ ThisBuild / libraryDependencies ++=
     case "3"    => Seq.empty
     case "2.13" => Seq("org.scala-lang" %  "scala-reflect" % scalaVersion.value) /* for scala.reflect.runtime.universe */
     case "2.12" => Seq("org.scala-lang" %  "scala-reflect" % scalaVersion.value) /* for scala.reflect.runtime.universe */ })                  
-
-// ===========================================================================
-// testing
-
-libraryDependencies += "com.lihaoyi" %% "utest" % uTestVersion % "test" withSources() withJavadoc()
-
-testFrameworks += new TestFramework("utest.runner.Framework")
-
-// ---------------------------------------------------------------------------
-// more tests: see https://github.com/galliaproject/gallia-testing
 
 // ===========================================================================
 sonatypeRepository     := "https://s01.oss.sonatype.org/service/local"

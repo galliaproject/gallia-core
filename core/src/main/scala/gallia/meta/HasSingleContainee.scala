@@ -6,8 +6,9 @@ trait HasSingleValueType {
   protected val valueType: ValueType
 
   // ---------------------------------------------------------------------------
-  def      nestedClassOpt: Option[Cls] = valueType.nestingOpt
-  def forceNestedClass   :        Cls  = nestedClassOpt.get
+  def      basicTypeOpt  : Option[BasicType] = valueType.basicTypeOpt
+  def      nestedClassOpt: Option[Cls]       = valueType.nestingOpt
+  def forceNestedClass   :        Cls        = nestedClassOpt.get
 
   // ---------------------------------------------------------------------------
   def isNestingWithName(name: String): Boolean = valueType.nestingOpt.exists(_.nameOpt == Some(name))

@@ -13,14 +13,14 @@ object TypeNodeTest extends utest.TestSuite { import utest._
 
   // ---------------------------------------------------------------------------
   private val FooTypeNode: TypeNode =
-    TypeNode(
-      leaf = TypeLeaf(s"galliatesting.${gallia.ScalaVersion.companionName("TestMeta")}.Foo", dataClass = true,
-        fields = List(Field.string("a"), Field.string("A"))),
-      args = List.empty)
+    TypeNode
+      .trivial(s"galliatesting.${gallia.ScalaVersion.companionName("TestMeta")}.Foo")
+      .dataClass(true)
+      .fields(Field.string("a"), Field.string("A"))
 
   // ---------------------------------------------------------------------------
        class MyAnyVal1(val b: Boolean) extends AnyVal
-  case class MyAnyVal2(val b: Boolean) extends AnyVal
+  case class MyAnyVal2(    b: Boolean) extends AnyVal
 
   // ===========================================================================
   val tests = Tests {
@@ -81,6 +81,21 @@ object TypeNodeTest extends utest.TestSuite { import utest._
 
         test(assert(!gallia._typeNode[MyAnyVal1].leaf.dataClass))
         test(assert(!gallia._typeNode[MyAnyVal2].leaf.dataClass)) }
+
+    // ---------------------------------------------------------------------------
+    test("special ones") {
+      test(compare(gallia._typeNode[Object], TypeNode.trivial("java.lang.Object")))
+
+      test(compare(gallia._typeNode[Any], TypeNode.trivial("scala.Any")))
+
+      test(compare(gallia._typeNode[Numeric[Int]],    TypeNode.trivial("scala.math.Numeric").typeArg(TypeNodeBuiltIns.ScalaInt)))
+      test(compare(gallia._typeNode[Numeric[Double]], TypeNode.trivial("scala.math.Numeric").typeArg(TypeNodeBuiltIns.ScalaDouble))) }
+
+    // ---------------------------------------------------------------------------
+    test("gallia ones") {
+      test(compare(gallia._typeNode[gallia.EnumValue], TypeNode.trivial("gallia.reflect.EnumValue").galliaEnumValue(true)))
+      test(compare(gallia._typeNode[gallia.AObj],      TypeNode.trivial("gallia.domain.AObj")))
+      test(compare(gallia._typeNode[gallia.BObj],      TypeNode.trivial("gallia.domain.BObj"))) }
 
     // ---------------------------------------------------------------------------
     test("complex TypeNode") { import gallia._

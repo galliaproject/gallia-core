@@ -38,7 +38,7 @@ private[actions] object ActionsUtils {
         f(PathPair(rpath.to, c.isOptional(rpath.from))) }
 
   // ---------------------------------------------------------------------------
-  def _atoms2(c: Cls)(ifOne: PathPair => AtomUU, ifMultiple: PathPair => AtomUU)(values: Seq[RPath]): Seq[AtomUU] = // see t210125111338 (union types)
+  def _atomsUnion(c: Cls)(ifOne: PathPair => AtomUU, ifMultiple: PathPair => AtomUU)(values: Seq[RPath]): Seq[AtomUU] = // see t210125111338 (union types)
     values
       .flatMap { rpath =>
         val pair = PathPair(rpath.to, c.isOptional(rpath.from))

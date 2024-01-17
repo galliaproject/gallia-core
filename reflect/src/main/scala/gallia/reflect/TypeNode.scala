@@ -25,6 +25,10 @@ case class TypeNode(
   def bytes          (value: Boolean): TypeNode = copy(leaf = leaf.bytes          (value))
   def inheritsSeq    (value: Boolean): TypeNode = copy(leaf = leaf.inheritsSeq    (value))
 
+  def fields(field1: Field, more: Field*) = copy(leaf = leaf.copy(fields = field1 +: more))
+
+  def typeArg(value: TypeNode) = copy(args = List(value))
+
   // ===========================================================================
   def complex: Boolean = leaf.dataClass || leaf.fields.nonEmpty || args.nonEmpty
 

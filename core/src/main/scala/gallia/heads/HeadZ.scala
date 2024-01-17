@@ -70,9 +70,9 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
   private[heads] def zvToz[T : WTT](that: HeadV[T])(action: ActionZvToZ): HeadZ = handler.joinZv2z(self, that)(action)
 
   // ---------------------------------------------------------------------------
-  private[heads] def zu        (action: ActionZU): HeadU    = handler.chainzu(self)(action)
-  private[heads] def zv[V: WTT](action: ActionZV): HeadV[V] = handler.chainzv(self)(action)
-  private[heads] def zo        (action: ActionZO): HeadZ    = handler.chainzo(self)(action)
+  private[heads] def zu        (action: ActionZU): HeadU    = handler.chainzu   (self)(action)
+  private[heads] def zv[V: WTT](action: ActionZV): HeadV[V] = handler.chainzv[V](self)(action)
+  private[heads] def zo        (action: ActionZO): HeadZ    = handler.chainzo   (self)(action)
 
   // ===========================================================================
   private[heads] def mergeObjsVle[V: WTT](that: HeadV[V])(f: (Objs, V) => Objs): HeadZ = zvToz(that)(MergeObjsVle((z: Objs, v: Vle) => f(z, v.asInstanceOf[V]) ))

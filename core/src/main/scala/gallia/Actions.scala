@@ -29,6 +29,11 @@ trait Action
     case class NodeMetaContext(afferents: Seq[Cls], efferent: Cls, origin: CallSite) { def forceSingleAfferent: Cls = afferents.force.one }
 
 // ===========================================================================
+trait ActionAN1 extends ActionAN {
+  final override def atoms(ctx: NodeMetaContext): Atoms = Seq(atom)
+                 def atom: Atom }
+
+// ===========================================================================
 trait ActionVM0   extends ActionV0 with ActionM0
   trait ActionVM1 extends ActionV1 with ActionM1
   trait ActionVM2 extends ActionV2 with ActionM2
@@ -81,7 +86,7 @@ trait ActionM0 extends ActionMN {
           def _meta(in1: Cls, in2: Cls): Cls }
 
 // ===========================================================================
-trait ActionUU extends Action with ActionVM1 with AtomsUU
+trait ActionUU extends /*Action with*/ ActionVM1 with AtomsUU
 trait ActionZZ extends Action with ActionVM1 with AtomsZZ
 
   // ---------------------------------------------------------------------------

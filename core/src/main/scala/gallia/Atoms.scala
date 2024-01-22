@@ -5,9 +5,7 @@ import aptus.{Anything_, Seq_}
 import actions._
 
 // ===========================================================================
-sealed trait Atom extends ActionAN {
-    final override def atoms(ignored: NodeMetaContext): Atoms = Seq(this)
-
+sealed trait Atom {
     def className      : String = getClass.getSimpleName
     def formatDefault  : String = s"ATOM: ${className} - ${this.toString}"
     def formatSuccinct1: String = className
@@ -35,7 +33,7 @@ sealed trait Atom extends ActionAN {
   trait AtomCombiner[T <: Atom] extends Atom // eg multiple renaming in sequence bundled as one
 
   // ---------------------------------------------------------------------------
-  case object NestingDataPlaceholder extends Atom // data to be provided by runner
+  case object NestingDataPlaceholder extends ActionAN1 with Atom { def atom = this } // data to be provided by runner
 
   // ===========================================================================
   trait AtomIU extends Atom { def naive: Option[Obj ] }

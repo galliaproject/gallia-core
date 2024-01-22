@@ -57,8 +57,7 @@ class JsonObjectStringFluency(val conf: JsonObjectStringConf)
     // ---------------------------------------------------------------------------
     // boilerplate:
     override def explicitSchema(c: Cls) = conf.copy(schemaProvider = ExplicitSchema(c))
-    override def inferSchema            = conf.copy(schemaProvider = InferSchema)
-  }
+    override def inferSchema            = conf.copy(schemaProvider = InferSchema) }
 
   // ---------------------------------------------------------------------------
   class JsonArrayStringFluency(val conf: JsonArrayStringConf)

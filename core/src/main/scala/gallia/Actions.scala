@@ -53,42 +53,36 @@ trait IdentityVVa extends ActionVV with AtomsVVa { def atomvvs: AtomVVs = Nil }
 // ===========================================================================
 trait ActionV0 extends ActionVN { // = input
     final def vldt(in: Seq[Cls]): Errs = { assert(in.isEmpty, in -> this); vldt }
-          def vldt: Errs
-  }
+          def vldt: Errs }
 
   // ---------------------------------------------------------------------------
   trait ActionV1 extends ActionVN {
     final def vldt(in: Seq[Cls]): Errs = vldt(in.force.one)
-          def vldt(in: Cls ): Errs
-  }
+          def vldt(in: Cls ): Errs }
 
   // ---------------------------------------------------------------------------
   trait ActionV2 extends ActionVN {
     final def vldt(in: Seq[Cls]): Errs = { val (in1, in2) = in.force.tuple2; vldt(in1, in2) }
-          def vldt(in1: Cls, in2: Cls): Errs
-  }
+          def vldt(in1: Cls, in2: Cls): Errs }
 
 // ===========================================================================
 trait ActionM0 extends ActionMN {
     final def _meta(in: Seq[Cls]): Cls = { assert(in.isEmpty, in); _meta }
-          def _meta: Cls
-  }
+          def _meta: Cls }
 
   // ---------------------------------------------------------------------------
   trait ActionM1 extends ActionMN {
     final def _meta(in: Seq[Cls]): Cls = _meta(in.force.one)
-          def _meta(in: Cls ): Cls
-  }
+          def _meta(in: Cls ): Cls }
 
   // ---------------------------------------------------------------------------
   trait ActionM2 extends ActionMN { // more like 2 to 1
     final def _meta(in: Seq[Cls]      ): Cls = { val (in1, in2) = in.force.tuple2; _meta(in1, in2) }
-          def _meta(in1: Cls, in2: Cls): Cls
-  }
+          def _meta(in1: Cls, in2: Cls): Cls }
 
 // ===========================================================================
-trait ActionUU extends Action with ActionV1 with ActionM1 with AtomsUU
-trait ActionZZ extends Action with ActionV1 with ActionM1 with AtomsZZ
+trait ActionUU extends Action with ActionVM1 with AtomsUU
+trait ActionZZ extends Action with ActionVM1 with AtomsZZ
 
   // ---------------------------------------------------------------------------
   trait ActionZU extends Action with ActionV1 with ActionM1

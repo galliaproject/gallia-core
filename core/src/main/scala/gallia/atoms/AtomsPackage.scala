@@ -18,7 +18,6 @@ package object atoms {
   val  _Nested = gallia.atoms.AtomsOthers._Nested
 
   type _Rename = gallia.atoms.common.AtomsCommonVeryBasics._Rename
-  val  _Rename = gallia.atoms.common.AtomsCommonVeryBasics._Rename
-}
+  val  _Rename = gallia.atoms.common.AtomsCommonVeryBasics._Rename }
 
 // ===========================================================================

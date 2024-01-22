@@ -50,17 +50,15 @@ object AtomsIX { import utils.JdbcDataUtils
 
       // ---------------------------------------------------------------------------
       def commonObj: Obj = {
-          val o = json.GsonParsing.parseObject(inputString)
+        val o = json.GsonParsing.parseObject(inputString)
 
-          Option(c)/* TODO: see 211230183100 - may be null */
-            .map { schema => o.pipe(json.GsonToGalliaData.convertRecursively(schema)) }
-            .getOrElse(o)
-        } }
+        Option(c)/* TODO: see 211230183100 - may be null */
+          .map { schema => o.pipe(json.GsonToGalliaData.convertRecursively(schema)) }
+          .getOrElse(o) } }
 
     // ---------------------------------------------------------------------------  
     object _JsonObjectString {
-      def toObj(c: Cls)(value: String): Obj = _JsonObjectString(value, null /* TODO */, c).commonObj
-    }
+      def toObj(c: Cls)(value: String): Obj = _JsonObjectString(value, null /* TODO */, c).commonObj }
 
   // ---------------------------------------------------------------------------
   case class _JsonArrayString(inputString: InputString, ignored /* TODO: t211231112700 - investigate */: OtherSchemaProvider, c: Cls) extends HasCommonObjs {

@@ -20,13 +20,13 @@ object ActionsCommonTransforms {
   case class TransformVV(from: TtqRPathz, to: TypeNode, f: _ff11, g: _ff11) extends ActionUUb {
       def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) ++ _vldt.validType(to)
       def _meta  (c: Cls): Cls     = from.rpathz_(c).foldLeft(c) { _.updateType(_, from.typeNode, to) }
-      def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atoms2(c)(_TransformVV(_, f), _TransformVV(_, g))) }
+      def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atomsUnion(c)(_TransformVV(_, f), _TransformVV(_, g))) }
 
     // ---------------------------------------------------------------------------
     case class TransformVVx(from: TtqRPathz, to: TypeNode, f: _ff11, g: _ff11) extends ActionUUb {
       def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c, SpecialCardiMode.IgnoreAltogether) ++ _vldt.validType(to)
       def _meta  (c: Cls): Cls     = from.rpathz_(c).foldLeft(c) { _.updateTypex(_, from.typeNode, to) }
-      def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atoms2(c)(_TransformVV(_, from.wrapx(c, f)), _TransformVV(_, g))) }
+      def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atomsUnion(c)(_TransformVV(_, from.wrapx(c, f)), _TransformVV(_, g))) }
 
     // ---------------------------------------------------------------------------
 //TODO: these should also handle origin as cc..

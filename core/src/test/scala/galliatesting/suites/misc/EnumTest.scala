@@ -5,7 +5,7 @@ import gallia._
 import aptus._
 
 // ===========================================================================
-object EnumTest  extends utest.TestSuite with GalliaTestSuite with utils.FormerSandboxImplicits { import utest._
+object EnumTest extends utest.TestSuite with GalliaTestSuite with utils.FormerSandboxImplicits { import utest._
   lazy val aobj1 = AObj(cls(f.string, e.enm("a", "b")),      obj(f -> "foo", e -> "a".e))
   lazy val aobj2 = AObj(cls(f.string, e.enm("a", "b")),      obj(f -> "foo", e -> "b".e))
   lazy val aobj3 = AObj(cls(f.string, e.string),             obj(f -> "foo", e -> "b"  ))

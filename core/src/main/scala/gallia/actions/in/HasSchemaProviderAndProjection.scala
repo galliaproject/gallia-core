@@ -30,8 +30,7 @@ trait HasSchemaProviderAndProjectionU extends HasSchemaProvider with HasProjecti
     protected def hasCommonObj: HasCommonObj
 
     // ---------------------------------------------------------------------------
-    final def atomiu = hasCommonObj
-  }
+    final def atomiu = hasCommonObj }
 
   // ===========================================================================
   trait HasSchemaProviderAndProjectionZ extends HasSchemaProvider with HasProjection {

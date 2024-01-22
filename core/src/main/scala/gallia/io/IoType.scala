@@ -15,8 +15,7 @@ sealed trait IoTypeU {
     // ---------------------------------------------------------------------------
     // TODO: t210124100009 - rename "NonTable"
     final def urlLikeConf   (path: String): UrlLikeNonTableConfU    = UrlLikeNonTableConfU(this, path)
-    final def urlLikeFluency(path: String): UrlLikeNonTableFluencyU = new UrlLikeNonTableFluencyU(urlLikeConf(path))
-  }
+    final def urlLikeFluency(path: String): UrlLikeNonTableFluencyU = new UrlLikeNonTableFluencyU(urlLikeConf(path)) }
 
   // ===========================================================================
   object IoTypeU { // TODO: t210118103012 - proper handling
@@ -50,16 +49,14 @@ sealed trait IoTypeU {
       case object PrettyJsonObject extends IoTypeU {
         def defaultRead   = (start, conf) => start.jsonObjectFile.schemaProvider(conf.schemaProvider).project(conf.projectionOpt)
         override def defaultFormat2(c: Cls, o: Obj): String = data.json.GalliaToGsonData.convertRecursively(c)(o).pipe(GsonFormatter.pretty)
-        def defaultFormat = _.formatPrettyJson }
-  }
+        def defaultFormat = _.formatPrettyJson } }
 
 // ===========================================================================
 sealed trait IoTypeZ { // TODO: t210118103012 - proper handling
     def defaultRead  : (StartReadZFluency, InputZStringDrivenConf) => EndReadZFluency
     def defaultFormat: Objs => Iterator[String]
 
-    def outputConf(path: String): OutputConfZ
-  }
+    def outputConf(path: String): OutputConfZ }
 
   // ===========================================================================
   sealed trait UrlLikeIoTypeZ extends IoTypeZ {
@@ -67,8 +64,7 @@ sealed trait IoTypeZ { // TODO: t210118103012 - proper handling
     final def urlLikeConf   (path: String): UrlLikeNonTableConfZ    = UrlLikeNonTableConfZ(this, path)
     final def urlLikeFluency(path: String): UrlLikeNonTableFluencyZ = new UrlLikeNonTableFluencyZ(urlLikeConf(path))
 
-    final def outputConf    (path: String): OutputConfZ        = urlLikeConf(path)
-  }
+    final def outputConf    (path: String): OutputConfZ        = urlLikeConf(path) }
 
   // ===========================================================================
   object IoTypeZ {

@@ -11,14 +11,12 @@ object ChainDataRun {
 
     nodes
       .values
-      .foreach { node =>  
-        latest = AtomProcessor(
-            DataInput.SingleInput(latest), missingInputs.apply)(
-            node.id, node.atom, node.debug) }
+      .foreach { node =>
+        latest =
+          node.process(
+            input = DataInput.SingleInput(latest))(
+            missingInputs.apply) }
 
-    latest
-  }
-  
-}
+    latest } }
 
 // ===========================================================================

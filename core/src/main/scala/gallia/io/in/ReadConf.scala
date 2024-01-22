@@ -65,8 +65,7 @@ case class InputUStringDrivenConf(
         projectionOpt: Option[ReadProjection] = None,
         queryingOpt  : Option[ReadQuerying]   = None)
       extends InputConfU with InputUStringDrivenConfHelper {
-    def actionU: ActionIU = _action
-  }
+    def actionU: ActionIU = _action }
 
   // ===========================================================================
   case class InputZStringDrivenConf(

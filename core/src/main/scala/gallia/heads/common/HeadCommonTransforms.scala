@@ -108,21 +108,16 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
       //TODO: "opaque" counteparts (see t210110094829)
 
       // ---------------------------------------------------------------------------
-      def using[D: WTT](f: O => D): Self2 = {
-        val dest = TypeDuo.build[D]
+      def using[D: WTT](f: O => D): Self2 = { val dest = TypeDuo.build[D]
 
-        val action: ActionUUb =
-          if (!dest.typeNode.isContainedDataClass)
-            if (!ttq.ignoreContainer) TransformVV (ttq, dest.typeNode, wrap(f), origin.ifApplicable(wrap(f)))
-            else                      TransformVVx(ttq, dest.typeNode, wrap(f), origin.ifApplicable(wrap(f)))
-
-          // ---------------------------------------------------------------------------
-          // deprecated way now, c220914145147 or t220914144458 instead
-          else
-            if (!ttq.ignoreContainer) TransformVVc (ttq, dest, wrap(f))
-            else                      TransformVVxc(ttq, dest, wrap(f))
+        if (!dest.typeNode.isContainedDataClass)
+          if (!ttq.ignoreContainer) self2 :+ TransformVV (ttq, dest.typeNode, wrap(f), origin.ifApplicable(wrap(f)))
+          else                      self2 :+ TransformVVx(ttq, dest.typeNode, wrap(f), origin.ifApplicable(wrap(f)))
 
         // ---------------------------------------------------------------------------
-        self2 :+ action } } }
+        // deprecated way now, c220914145147 or t220914144458 instead
+        else
+          if (!ttq.ignoreContainer) self2 :+ TransformVVc (ttq, dest, wrap(f))
+          else                      self2 :+ TransformVVxc(ttq, dest, wrap(f)) } } }
 
 // ===========================================================================

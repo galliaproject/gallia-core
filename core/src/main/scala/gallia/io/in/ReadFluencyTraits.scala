@@ -26,8 +26,8 @@ trait CanSetSchemaFluency[Fluency] { ignored: HasSelf[Fluency] =>
   final def schema(c: Cls)                 : Fluency = explicitSchema(c)
 
   // ---------------------------------------------------------------------------
-  private[io] final def schemaProvider(schemaProvider: OtherSchemaProvider): Fluency = schemaProvider.explicitOpt.map(c => explicitSchema(c)).getOrElse(self)
-}
+  private[io] final def schemaProvider(schemaProvider: OtherSchemaProvider): Fluency =
+    schemaProvider.explicitOpt.map(c => explicitSchema(c)).getOrElse(self) }
 
 // ===========================================================================
 trait CanProjectFluency[Fluency] {

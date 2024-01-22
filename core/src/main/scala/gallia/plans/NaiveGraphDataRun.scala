@@ -14,7 +14,7 @@ object NaiveGraphDataRun {
 
     // ---------------------------------------------------------------------------      
     dag
-      .chainTraverseNodes // TODO: change to a chain-first kahn-like traversal
+      .chainTraverseNodes // TODO: optim - change to a chain-first kahn-like traversal
       .foreach { node =>
         val afferentIds: Seq[NodeId] = dag.afferentIds(node.id)
 
@@ -27,9 +27,9 @@ object NaiveGraphDataRun {
             case Seq(sole)       => SingleForkInput(forkJoinData(sole)) // if previous node is a fork
             case multiple        => MultipleInputs(multiple.map(forkJoinData.apply)) }
 
-        latest = node.id -> AtomProcessor(
-            input, missingInputs.apply)(
-            node.id, node.atom, node.debug)
+        val output: NDT = node.process(input)(missingInputs)
+
+        latest = node.id -> output
 
         dag.efferentIds(node.id) match {
           case Nil       => ()
@@ -44,7 +44,7 @@ object NaiveGraphDataRun {
     // ---------------------------------------------------------------------------
     latest._2
    }
-  
+
 }
 
 // ===========================================================================

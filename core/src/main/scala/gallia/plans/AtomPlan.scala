@@ -6,7 +6,7 @@ import aptus._
 import dag._
 
 // ===========================================================================
-case class AtomPlan(dag: DAG[AtomNode]) {
+case class AtomPlan(dag: DAG[AtomNode]) { // = data plan (TODO: rename?)
 
   override def toString: String = formatSuccinct1
     def formatDefault  : String = dag.formatDefault

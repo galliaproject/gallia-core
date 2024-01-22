@@ -236,7 +236,7 @@ object ActionsOthers {
 
   // ---------------------------------------------------------------------------
   case class GrabZ(from: TtqKPath1 /* does not specify the surrounding Seq */, checkOrigin: Boolean /* not for V=Any */) 
-    extends Grab[AtomZV](from, checkOrigin, _GrabZOpt, _GrabZOne) with ActionZV // {
+    extends Grab[AtomZV](from, checkOrigin, _GrabZOpt, _GrabZOne) with ActionZV
 
   // ---------------------------------------------------------------------------
   case class SquashZUnsafe(to: TypeNode, f: Seq[Obj] => Any) extends ActionZV {

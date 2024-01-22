@@ -52,9 +52,8 @@ trait AtomVU extends Atom { def naive(v: Vle): Obj  }
 trait AtomVZ extends Atom { def naive(v: Vle): Objs }
 
   // ---------------------------------------------------------------------------
-  trait AtomUorZ[T] { def naive(t: T): T }
-    trait AtomUU extends Atom with AtomUorZ[Obj]  { def naive(o: Obj ): Obj  }
-    trait AtomZZ extends Atom with AtomUorZ[Objs] { def naive(z: Objs): Objs }
+  trait AtomUU extends Atom { def naive(o: Obj ): Obj  }
+  trait AtomZZ extends Atom { def naive(z: Objs): Objs }
 
   // ---------------------------------------------------------------------------
   trait AtomZU extends Atom { def naive(z: Objs): Obj  }

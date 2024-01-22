@@ -6,7 +6,9 @@ private[plans] object AtomProcessor {
 
   def apply
         (input: DataInput, missingInputs: dag.RootId => NDT)
-        (nodeId: NodeId, nodeAtom: Atom, debug: AtomNodeDebugging)
+        (nodeId: NodeId, nodeAtom: Atom)
+        (afferentSchemas: Clss, efferentSchema: Cls)
+        (debug: AtomNodeDebugging)
       : NDT = { import InputData._
 
     def inputData(atom: Atom): InputData = // this is a bit of an afterthought... TODO: t210114125607 - improve
@@ -53,7 +55,7 @@ private[plans] object AtomProcessor {
 
         case x: AtomUU => x.naive(input.obj)
         case x: AtomZZ => x.naive(input.objs)
-        
+
         // ===========================================================================
         case NestingDataPlaceholder => missingInputs(nodeId)
 

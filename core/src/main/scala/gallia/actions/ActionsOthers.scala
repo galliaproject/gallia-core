@@ -3,7 +3,9 @@ package actions
 
 import aptus.{Anything_, Seq_}
 import aptus.Separator
+
 import trgt._
+import plans.Clss
 import FunctionWrappers._
 import data.multiple.Streamer
 import atoms._UWrapper
@@ -50,7 +52,7 @@ object ActionsOthers {
     // ---------------------------------------------------------------------------
     //TODO: t220914144753 - generalize as unpivot of some keys
     case class UnpivotOneItem(key1: Key, key2: Key, targetStringValue: String) extends ActionUUc {
-      def  vldt(c: Cls): Errs = Nil // TODO
+      def  vldt(c: Cls): Errs = Nil // TODO: t240124123030 - missing validations
 
       // ---------------------------------------------------------------------------
       def _meta(c: Cls): Cls = {
@@ -166,8 +168,8 @@ object ActionsOthers {
           keys   : Keyz,
           sep    : Separator) // for data only
         extends ActionZU {
-      def vldt (in: Cls): Errs = Nil //TODO
-      def _meta(in: Cls): Cls = in.unarrayBy0(keys, newKeys)
+      def vldt (in: Cls): Errs = Nil // TODO: t240124123030 - missing validations
+      def _meta(in: Cls): Cls  = in.unarrayBy0(keys, newKeys)
       def atoms(ctx: NodeMetaContext): Atoms = Seq(
         _EnsureUniquenessBy(ctx.forceSingleAfferent, keys),
         _UnarrayBy0(keys, sep)) }
@@ -176,8 +178,8 @@ object ActionsOthers {
   // vv
 
   case class MapV2V(to: TypeNode, f: _ff11) extends ActionVV {
-    def vldt(in: Seq[Cls] ) = Nil // TODO
-    def _meta(in: Seq[Cls] ) = in.force.one//TODO: ok? t220627162134 - must adapt type
+    def  vldt(in: Clss): Errs = Nil // TODO: t240124123030 - missing validations
+    def _meta(in: Clss): Cls  = in.forceOne//TODO: ok? t220627162134 - must adapt type
     def atoms (ignored: NodeMetaContext): Atoms = _MapV2V(f).in.seq }
 
   // ---------------------------------------------------------------------------
@@ -200,14 +202,14 @@ object ActionsOthers {
     
   // ---------------------------------------------------------------------------
   case class PopulateDataClass(node: TypeNode) extends ActionUV {
-    def vldt (in: Seq[Cls]): Errs = ???
-    def _meta(ignored: Seq[Cls]): Cls = ???
+    def  vldt(in     : Clss): Errs = Nil // TODO: t240124123030 - missing validations
+    def _meta(ignored: Clss): Cls  = ???
     def atoms(ctx: NodeMetaContext): Atoms = ??? } //_PopulateDataClass
 
   // ---------------------------------------------------------------------------
   case class SquashUUnsafe(to: TypeNode, f: Obj => Any) extends ActionUV {
-      def vldt (in: Seq[Cls]): Errs = Nil//TODO
-      def _meta(ignored: Seq[Cls]): Cls = Cls.vle(to)
+      def  vldt(in     : Clss): Errs = Nil // TODO: t240124123030 - missing validations
+      def _meta(ignored: Clss): Cls  = Cls.vle(to)
       def atoms(ignored: NodeMetaContext): Atoms = _SquashUUnsafe(f).in.seq }
 
     // ---------------------------------------------------------------------------
@@ -230,8 +232,8 @@ object ActionsOthers {
   // zv
 
   case object Size extends ActionZV {
-    def vldt (ignored: Seq[Cls]): Errs = Nil// TODO
-    def _meta(ignored: Seq[Cls]): Cls  = Cls.vleInt
+    def  vldt(ignored: Clss): Errs = Nil // TODO: t240124123030 - missing validations
+    def _meta(ignored: Clss): Cls  = Cls.vleInt
     def atoms(ctx: NodeMetaContext): Atoms = _Size.in.seq }
 
   // ---------------------------------------------------------------------------
@@ -240,8 +242,8 @@ object ActionsOthers {
 
   // ---------------------------------------------------------------------------
   case class SquashZUnsafe(to: TypeNode, f: Seq[Obj] => Any) extends ActionZV {
-      def vldt (in: Seq[Cls]): Errs = Nil//TODO
-      def _meta(ignored: Seq[Cls]): Cls = Cls.vle(to)
+      def  vldt(in     : Clss): Errs = Nil // TODO: t240124123030 - missing validations
+      def _meta(ignored: Clss): Cls  = Cls.vle(to)
       def atoms(ignored: NodeMetaContext): Atoms = _SquashZUnsafe(f).in.seq }
 
     // ---------------------------------------------------------------------------
@@ -273,8 +275,8 @@ object ActionsOthers {
       checkOrigin: Boolean /* not for V=Any */,
       ifOpt      : KPath => $Atom,
       ifOne      : KPath => $Atom) {
-    def vldt (in: Seq[Cls]): Errs = if (!checkOrigin) Nil     else from.vldtAsOrigin(in.force.one) //TODO: more
-    def _meta(in: Seq[Cls]): Cls  = if (!checkOrigin) in.head else Cls.vles(from.typeNode)
+    def  vldt(in: Clss): Errs = if (!checkOrigin) Nil else from.vldtAsOrigin(in.forceOne) //TODO: more
+    def _meta(in: Clss): Cls  = if (!checkOrigin) in.forceOne else Cls.vles(from.typeNode)
 
     // ---------------------------------------------------------------------------
     def atoms(ctx: NodeMetaContext): Atoms =
@@ -282,8 +284,6 @@ object ActionsOthers {
         .pipe(from.pathPairT)
         .pipe { pair =>
           if (pair.optional) Seq(ifOpt(pair.path))
-          else               Seq(ifOne(pair.path))  } }
-    
-}
+          else               Seq(ifOne(pair.path)) } } }
 
 // ===========================================================================

@@ -29,10 +29,7 @@ case class IntermediatePlan private[plans] (dag: ActionDag) {
       // ---------------------------------------------------------------------------
       mut
         .toMap
-        .pipe(IntermediateMetaResultNodeCreator(dag))
-    }
-
-  }
+        .pipe(IntermediateMetaResultNodeCreator(dag)) } }
 
   // ===========================================================================
   object IntermediatePlan  {
@@ -42,13 +39,12 @@ case class IntermediatePlan private[plans] (dag: ActionDag) {
         .map(_.successOpt)
         .in.noneIf(_.exists(_.isEmpty)) // = none if any failure
         .map(_.flatten)
+        .map(Clss.apply)
          match {
           case None       => ResultSchema.UpstreamError
           case Some(clss) =>
             actionm.vldt(clss) match {
               case Nil    => ResultSchema.Success(actionm._meta(clss).tap { actionm.resultCls = _ /* TODO: relates to t201214105653 hack */ })
-              case errors => ResultSchema.Errors(errors, actionm.callSite) } }
-
-  }
+              case errors => ResultSchema.Errors(errors, actionm.callSite) } } }
 
 // ===========================================================================

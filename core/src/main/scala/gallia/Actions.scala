@@ -3,6 +3,7 @@ package gallia
 import aptus.{Anything_, Seq_}
 
 import actions._
+import plans.Clss
 
 // ===========================================================================
 trait Action
@@ -12,7 +13,7 @@ trait Action
 
   // ===========================================================================
   trait ActionVN {
-    def  vldt(in: Seq[Cls]): Errs
+    def  vldt(in: Clss): Errs
     final val callSite : CallSite = CallSite.generate()
 
     // ---------------------------------------------------------------------------
@@ -20,7 +21,7 @@ trait Action
   }
 
   // ===========================================================================
-  trait ActionMN { def _meta(in: Seq[Cls]): Cls }
+  trait ActionMN { def _meta(in: Clss): Cls }
 
   // ===========================================================================
   trait ActionAN { def atoms(ctx: NodeMetaContext): Atoms }
@@ -57,33 +58,33 @@ trait IdentityVVa extends ActionVV with AtomsVVa { def atomvvs: AtomVVs = Nil }
 
 // ===========================================================================
 trait ActionV0 extends ActionVN { // = input
-    final def vldt(in: Seq[Cls]): Errs = { assert(in.isEmpty, in -> this); vldt }
-          def vldt: Errs }
+    final override def vldt(in: Clss): Errs = { assert(in.isEmpty, in -> this); vldt }
+                   def vldt: Errs }
 
   // ---------------------------------------------------------------------------
   trait ActionV1 extends ActionVN {
-    final def vldt(in: Seq[Cls]): Errs = vldt(in.force.one)
-          def vldt(in: Cls ): Errs }
+    final override def vldt(in: Clss): Errs = vldt(in.forceOne)
+                   def vldt(in: Cls ): Errs }
 
   // ---------------------------------------------------------------------------
   trait ActionV2 extends ActionVN {
-    final def vldt(in: Seq[Cls]): Errs = { val (in1, in2) = in.force.tuple2; vldt(in1, in2) }
-          def vldt(in1: Cls, in2: Cls): Errs }
+    final override def vldt(in: Clss): Errs = { val (in1, in2) = in.forcePair; vldt(in1, in2) }
+                   def vldt(in1: Cls, in2: Cls): Errs }
 
 // ===========================================================================
 trait ActionM0 extends ActionMN {
-    final def _meta(in: Seq[Cls]): Cls = { assert(in.isEmpty, in); _meta }
-          def _meta: Cls }
+    final override def _meta(in: Clss): Cls = { assert(in.isEmpty, in); _meta }
+                   def _meta: Cls }
 
   // ---------------------------------------------------------------------------
   trait ActionM1 extends ActionMN {
-    final def _meta(in: Seq[Cls]): Cls = _meta(in.force.one)
-          def _meta(in: Cls ): Cls }
+    final override def _meta(in: Clss): Cls = _meta(in.forceOne)
+                   def _meta(in: Cls ): Cls }
 
   // ---------------------------------------------------------------------------
   trait ActionM2 extends ActionMN { // more like 2 to 1
-    final def _meta(in: Seq[Cls]      ): Cls = { val (in1, in2) = in.force.tuple2; _meta(in1, in2) }
-          def _meta(in1: Cls, in2: Cls): Cls }
+    final override def _meta(in: Clss      ): Cls = { val (in1, in2) = in.forcePair; _meta(in1, in2) }
+                   def _meta(in1: Cls, in2: Cls): Cls }
 
 // ===========================================================================
 trait ActionUU extends /*Action with*/ ActionVM1 with AtomsUU
@@ -210,15 +211,13 @@ trait UsesSimpleTypedTargetQuery1Target[$Target] { // TODO: mixin action?
     val target: TypedTargetQuery3[$Target]
     final def vldt(c: Cls): Errs = target.vldtAsOrigin(c) }
 
-
 // ===========================================================================
 trait SquashXN extends Action with TodoV1 {
     val to: reflect.TypeNode
     def atom(c: Cls): Atom
 
     // ---------------------------------------------------------------------------
-    final def _meta(ignored: Seq[Cls])   : Cls = Cls.Dummy //TODO?
-    final def atoms(ctx: NodeMetaContext): Atoms = ctx.forceSingleAfferent.pipe(atom).in.seq
-  }
+    final def _meta(ignored: Clss): Cls = Cls.Dummy //TODO?
+    final def atoms(ctx: NodeMetaContext): Atoms = ctx.forceSingleAfferent.pipe(atom).in.seq }
 
 // ===========================================================================

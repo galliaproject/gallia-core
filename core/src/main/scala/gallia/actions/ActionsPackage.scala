@@ -113,12 +113,12 @@ package object actions extends boilerplate.ActionBoilerplate { // TODO: delegate
       final def vldt(c: Cls): Errs = target.vldtAsOrigin(c) }
 
   // ===========================================================================
-  trait SquashXN extends Action with TodoV1 {
+  trait SquashXN extends ActionM0 with TodoV1 {
       val to: reflect.TypeNode
       def atom(c: Cls): Atom
 
       // ---------------------------------------------------------------------------
-      final def _meta(ignored: plans.Clss): Cls = Cls.Dummy //TODO?
+      final def _meta: Cls = Cls.Dummy //TODO?
       final def atoms(ctx: NodeMetaContext): Atoms = Seq(ctx.afferents.forceOne.pipe(atom)) } }
 
 // ===========================================================================

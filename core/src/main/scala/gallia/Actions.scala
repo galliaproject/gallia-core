@@ -6,13 +6,7 @@ import actions._
 import plans.Clss
 
 // ===========================================================================
-trait Action
-    extends ActionVN
-    with    ActionMN
-    with    ActionAN
-
-  // ===========================================================================
-  trait ActionVN {
+trait ActionVN {
     def  vldt(in: Clss): Errs
     final val callSite : CallSite = CallSite.generate()
 
@@ -96,9 +90,9 @@ trait ActionZZ extends ActionVM1 with ActionAtomsZZ
   trait ActionUZ extends ActionVM1 with ActionAtomsUZ
 
   // ---------------------------------------------------------------------------
-  trait ActionUV extends Action// with ActionV1 with ActionM1
-  trait ActionZV extends Action// with ActionV1 with ActionM1
-  trait ActionVV extends Action// with ActionV1 with ActionM1
+  trait ActionUV extends ActionVN with ActionMN with ActionAN
+  trait ActionZV extends ActionVN with ActionMN with ActionAN
+  trait ActionVV extends ActionVN with ActionMN with ActionAN
 
   // ---------------------------------------------------------------------------
   trait ActionIU extends ActionVM0 with ActionAtomsIU

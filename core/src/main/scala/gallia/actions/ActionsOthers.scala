@@ -80,7 +80,7 @@ object ActionsOthers {
       case BasicType._Enm(values) => BasicType._Enm(f(values)) } } }
 
   // ===========================================================================
-  case object UnionUU extends Action with ActionV2 with ActionM2 with ActionAN {
+  case object UnionUU extends ActionV2 with ActionM2 with ActionAN {
     def  vldt (in1: Cls, in2: Cls): Errs  = Nil // TODO: eg collisions
     def _meta (in1: Cls, in2: Cls): Cls   = in1.mergeDisjoint(in2)
     def atoms(ignored: NodeMetaContext): Atoms = _Merge.in.seq }

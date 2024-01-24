@@ -45,8 +45,9 @@ trait ReducingPair {
           def count_distinct         : ReducingPair1 = ReducingType.count_distinct        .pair(_key)
           def count_distinct_present : ReducingPair1 = ReducingType.count_distinct_present.pair(_key)
 
+        @deprecated("name seems to conflict with something, use sum_ instead") // t240124112404 - investigate
         def sum   : ReducingPair1 = ReducingType.sum   .pair(_key)
-
+        def sum_  : ReducingPair1 = ReducingType.sum   .pair(_key)
         def mean  : ReducingPair1 = ReducingType.mean  .pair(_key)
         def stdev : ReducingPair1 = ReducingType.stdev .pair(_key)
         def median: ReducingPair1 = ReducingType.median.pair(_key)
@@ -55,10 +56,7 @@ trait ReducingPair {
 
         // ---------------------------------------------------------------------------
         @deprecated def count  = count_all
-        @deprecated def values = flattened
-      }
-
-    }
+        @deprecated def values = flattened } }
 
   // ===========================================================================
   case class ReducingPairN(

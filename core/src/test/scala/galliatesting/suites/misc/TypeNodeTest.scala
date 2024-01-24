@@ -6,7 +6,7 @@ import aptus._
 
 // ===========================================================================
 object TypeNodeTest extends utest.TestSuite { import utest._
-  import gallia.reflect.{TypeNode, TypeLeaf, Field, TypeNodeBuiltIns}
+  import gallia.reflect.{TypeNode, Field, TypeNodeBuiltIns}
 
   // ---------------------------------------------------------------------------
   private type MyAliasToCaseClass = TestMeta.Foo

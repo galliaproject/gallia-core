@@ -14,7 +14,7 @@ object TypeNodeUtils {
     // ---------------------------------------------------------------------------
     private def _validContainerOpt(dis: TypeNode): Option[TypeNode] = { import dis._
       // TODO: issue with eg Pes[T] = Option[Seq[T]]
-           if (leaf.isSeq   ) Some(args.head)
+           if (leaf.isSeq) Some(args.head)
       else if (leaf.isOption || leaf.isSome) // TODO: None? parameterized with Nothing..
         if (args.size == 1 && args.head.leaf.isSeq) Some(args.head.args.head)
         else                                        Some(args.head)

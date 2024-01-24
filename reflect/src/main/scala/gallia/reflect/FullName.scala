@@ -14,6 +14,8 @@ case class FullName(items: Seq[String]) {
   val  lastItem = items.last
 
   // ---------------------------------------------------------------------------
+  override def toString: String = format
+
   def format     : FullNameString = fullName
   def inScopeName: String         = lastItem
 

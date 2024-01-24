@@ -94,9 +94,10 @@ package object gallia
   private         type VEntry  = GenericEntry[HeadV[_]]
 
   // ===========================================================================
-  def headV[T: WTT](value1: T, value2: T, more: T*): HeadV[Seq[T]] = heads.Head.inputV(Seq(value1, value2) ++ more)
-  def headV[T: WTT](values: Seq[T])                : HeadV[Seq[T]] = heads.Head.inputV(values)
-  def headV[T: WTT](value :     T )                : HeadV[    T ] = heads.Head.inputV(value)
+  @aptus.ordermatters
+  def headV[T: WTT](values: Seq[T])                : HeadV[Seq[T]] = heads.Head.inputV[Seq[T]](values)
+  def headV[T: WTT](value1: T, value2: T, more: T*): HeadV[Seq[T]] = heads.Head.inputV[Seq[T]](Seq(value1, value2) ++ more)
+  def headV[T: WTT](value :     T )                : HeadV[    T ] = heads.Head.inputV[    T ](value)
 
   // ---------------------------------------------------------------------------
                   def headO(first: VEntry, second: VEntry, more: VEntry*): HeadU = headO(Seq(first, second) ++ more)

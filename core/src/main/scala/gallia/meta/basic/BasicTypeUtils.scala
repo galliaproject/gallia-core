@@ -9,7 +9,7 @@ object BasicTypeUtils {
 
   private[basic] def createLookup(values: Seq[BasicType]): Map[FullNameString, BasicType] =
     values
-      .map { x => x.fullName -> x }
+      .map { x => x.fullNameString -> x }
       .force.map
       .withDefault { value => aptus.illegalState(s"TODO:CantFindType:201013093225:${value}") }
 

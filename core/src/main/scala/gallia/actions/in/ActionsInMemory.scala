@@ -35,11 +35,8 @@ case class InMemoryInputUb(value: BObj) extends ActionIUd {
 
 // ===========================================================================
 case class InMemoryInputV[T: WTT](value: T) extends ActionIVd {
-  private val typeNode = gallia.typeNode[T]
-
-  // ---------------------------------------------------------------------------
-  def vldt: Errs = _vldt.validType(Location.Root -> typeNode)
-  def _meta: Cls = Cls.vle(typeNode)
+  def vldt: Errs = Nil // not constrained by the One/Opt/Nes/Pes paradigm (eg Seq[Option] is valid) - TODO: add some sanity check nonetheless (t240124111927)
+  def _meta: Cls = Cls.Dummy // not actually used
   def atomiv     = _InMemoryInputV(value) }
 
 // ===========================================================================

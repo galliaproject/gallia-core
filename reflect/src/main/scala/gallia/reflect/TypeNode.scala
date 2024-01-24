@@ -64,6 +64,16 @@ case class TypeNode(
     /** should return some if valid, just removing any Option/Seq containers */
     def validContainerOpt: Option[TypeLeaf] = TypeNodeUtils.validContainerOpt(this)
 
+  // ---------------------------------------------------------------------------
+  /** e.g for HeadV values, not necessarily restricted by the One/Opt/Nes/Pes paradigm (eg Seq[Option] is valid) */
+  private[gallia] def underlyingFullName = removeAllContainers.leaf.fullName
+
+    // ---------------------------------------------------------------------------
+    private def removeAllContainers: TypeNode =
+           if (isSeq)    forceSoleTypeArg.removeAllContainers
+      else if (isOption) forceSoleTypeArg.removeAllContainers
+      else               this
+
   // ===========================================================================
   def isContainedWhatever: Boolean =
         isWhatever ||

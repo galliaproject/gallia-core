@@ -10,7 +10,7 @@ private[gallia] trait BasicTypeHelper { ignored: BasicType =>
   import OptionOrdering._
 
   // ---------------------------------------------------------------------------
-  final     def accessorName                       : String = fullName.pipe(accessorNameModifier).splitBy(".").last.uncapitalizeFirst
+  final     def accessorName                       : String = fullNameString.pipe(accessorNameModifier).splitBy(".").last.uncapitalizeFirst
   protected def accessorNameModifier(value: String): String = value // overriden by some: BigDec, Enum, ...
 
   // ===========================================================================

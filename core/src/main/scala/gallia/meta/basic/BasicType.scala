@@ -5,7 +5,7 @@ package basic
 import java.time._
 import aptus.{Long_, String_}
 import data.{DataFormatting, DataParsing}
-import reflect.{FullNameBuiltIns, TypeNodeBuiltIns}
+import reflect.{FullName, TypeNodeBuiltIns}
 
 // ===========================================================================
 sealed trait NumericalType extends BasicType
@@ -82,9 +82,10 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
       with    meta.ValueType {
     type T
 
-    protected[basic]       val node    : TypeNode
-    protected[basic]       val ordinal : Int // scala 3
-    protected[basic] final def fullName: FullNameString = node.leaf.name
+    protected[basic]       val node          : TypeNode
+    protected[basic]       val ordinal       : Int // scala 3
+    protected[basic] final def fullNameString: FullNameString = node.leaf.name
+                     final def fullName      : FullName       = node.leaf.fullName
 
     def formatDefault: String = entryName }
 
@@ -92,6 +93,9 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
   @TypeMatching object BasicType extends Enum[BasicType]  {
     @deprecated val values        = findValues
                 val orderedValues = findValues.sortBy(_.ordinal).distinct // TODO: distinct necessary with scala-3?
+
+    private[gallia] lazy val fullNames  : Seq[reflect.FullName] = orderedValues.map(_.node.leaf.fullName) :+ _Enm.Node.leaf.fullName
+    private[gallia] lazy val fullNameSet: Set[reflect.FullName] = fullNames.toSet
 
     // ---------------------------------------------------------------------------
     def fromFullNameOpt(value: FullNameString): Option[BasicType] = lookup.get     (reflect.FullName.normalizeFullName(value))
@@ -355,7 +359,7 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
 
         type T = gallia.EnumValue
 
-        override val node    = TypeNodeBuiltIns.GalliaEnumValue
+        override val node    = _Enm.Node
         override val ordinal = 17
 
         def stringValues: Seq[EnumStringValue] = values.map(_.stringValue)
@@ -372,6 +376,8 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
         type T = EnumValue
         override def has         = _.hasEnum
         override def parseString = EnumValue.apply
+
+        val Node = TypeNodeBuiltIns.GalliaEnumValue
 
         // ---------------------------------------------------------------------------
         private[gallia] val Dummy = _Enm(Seq(EnumValue("_"))) /* useful for internal comparisons in validation, see 220506101842 */ }

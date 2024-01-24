@@ -27,9 +27,8 @@ import env._
 
     // ===========================================================================
     // also for nesting
-    private[gallia] def inputU        (input: ActionIU): HeadU    = new Handler().startu(input)
-    private[gallia] def inputZ        (input: ActionIZ): HeadZ    = new Handler().startz(input)
-    private[gallia] def inputV[T: WTT](input: ActionIV): HeadV[T] = new Handler().startv(input)
-  }
+    private[gallia] def inputU        (input: ActionIU): HeadU    = new Handler().startu   (input)
+    private[gallia] def inputZ        (input: ActionIZ): HeadZ    = new Handler().startz   (input)
+    private[gallia] def inputV[T: WTT](input: ActionIV): HeadV[T] = new Handler().startv[T](input) }
 
 // ===========================================================================

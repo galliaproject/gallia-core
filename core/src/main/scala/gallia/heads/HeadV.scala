@@ -1,17 +1,22 @@
 package gallia
 package heads
 
-import aptus.Seq_
+import aptus.{Anything_, Seq_}
 import actions.ActionsOthers.{MapV2V, CombineVV, DressUp}
+import meta.basic.BasicType
 
 // ===========================================================================
 class HeadV[T: WTT /* will be Vle (Any) for data phase */] private[gallia] ( // TODO: t220916113454 - separate HeadV[T] from HeadV[Seq[U]]
       override val nodeId : NodeId,
       override val handler: Handler)
-    extends Head[HeadV[T]] 
-    with    HeadVOut[T] {
+    extends Head[HeadV[T]]
+    with    HeadVOut[T]
+    with    HeadVsScalaVersionSpecific[T] /* TODO: t240124104448 - figure out why has to differ */ {
   private[gallia] type Self = HeadV[T]
   private         val  self = this
+
+  // ---------------------------------------------------------------------------
+  typeNode[T].underlyingFullName.require(BasicType.fullNameSet.contains, _ -> BasicType.fullNameSet)
 
   // ---------------------------------------------------------------------------
   private[heads] def vo(action: ActionVO): HeadV[T] = handler.chainvo(this)(action)
@@ -36,7 +41,7 @@ class HeadV[T: WTT /* will be Vle (Any) for data phase */] private[gallia] ( // 
   def dressUp(key: KeyW): HeadO = DressUp[T](key.value).pipe(vu) // "dress up" because naked value otherwise
 
   // ===========================================================================
-  def mapV [         T2: WTT](f: T  => T2)                            : HeadV[    T2 ] = typeNode[T2].pipe { tn => handler.chainvv(this)(MapV2V(tn, (x: Any) => f(x.asInstanceOf[T]) )) }
+  def mapV [         T2: WTT](f: T  => T2)                            : HeadV[    T2 ] = typeNode[T2].pipe { tn => handler.chainvv[T, T2](this)(MapV2V(tn, (x: Any) => f(x.asInstanceOf[T]) )) }
   def mapVs[T1: WTT, T2: WTT](f: T1 => T2)(implicit ev: T <:< Seq[T1]): HeadV[Seq[T2]] = mapV[Seq[T2]](_.map(f)) // worth keeping? - TODO: subclass rather?
 
   // ---------------------------------------------------------------------------
@@ -44,21 +49,18 @@ class HeadV[T: WTT /* will be Vle (Any) for data phase */] private[gallia] ( // 
   def toDouble(implicit ev: T =:= Int)   : HeadV[Double] = mapV(_.toDouble)
 
   // ---------------------------------------------------------------------------
-  // TODO: t220916113454 - separate HeadV[T] from HeadV[Seq[U]]
+  // TODO: t220916113454 - separate HeadV[T] from HeadV[Seq[U]] (as HeadW)
 
-    @gallia.IntSize def count(implicit ev1: T <:< Iterable[_]): HeadV[Int] = mapV(_.size)
+    @gallia.IntSize
+    def count(implicit ev1: T <:< Iterable[_]): HeadV[Int] = mapV(_.size)
 
-    def distinct [U : WTT](implicit ev1: T <:< Iterable[       U ]): HeadV[Seq[U]] = mapV(_.toSeq.distinct)
-    def flattened[U : WTT](implicit ev1: T <:< Iterable[Option[U]]): HeadV[Seq[U]] = mapV(_.toSeq.flatten)
+    def distinct[U](implicit ev1: T <:< Iterable[U]): HeadV[Seq[U]] = mapV(_.toSeq.distinct)(implicitly[WTT[T]].asInstanceOf[WTT[Seq[U]]])
 
-    def min  [N : WTT](implicit ev1: T <:< Iterable[N], ev2: Numeric[N]): HeadV[N]   = mapV(_.min)
-    def max  [N : WTT](implicit ev1: T <:< Iterable[N], ev2: Numeric[N]): HeadV[N]   = mapV(_.max)
-    def range[N : WTT](implicit ev1: T <:< Iterable[N], ev2: Numeric[N]): HeadV[N]   = mapV(x => ev2.minus(x.max, x.min))
+    // for flattened/min/max/range/sum: see HeadVsScalaVersionSpecific (scala version specific for now)
 
-    def sum   [N : WTT](implicit ev1: T <:< Iterable[N], ev2: Numeric[N]): HeadV[N]      = mapV(_.sum)
-    def mean  [N : WTT](implicit ev1: T <:< Iterable[N], ev2: Numeric[N]): HeadV[Double] = mapV(_.toSeq.mean)
-    def median[N : WTT](implicit ev1: T <:< Iterable[N], ev2: Numeric[N]): HeadV[Double] = mapV(_.toSeq.median)
-    def stdev [N : WTT](implicit ev1: T <:< Iterable[N], ev2: Numeric[N]): HeadV[Double] = mapV(_.toSeq.stdev)
+    def mean  [N](implicit ev1: T <:< Iterable[N], ev2: Numeric[N]): HeadV[Double] = mapV(_.toSeq.mean)
+    def median[N](implicit ev1: T <:< Iterable[N], ev2: Numeric[N]): HeadV[Double] = mapV(_.toSeq.median)
+    def stdev [N](implicit ev1: T <:< Iterable[N], ev2: Numeric[N]): HeadV[Double] = mapV(_.toSeq.stdev)
 
     //TODO: IQR? stats? see ReducingType
 

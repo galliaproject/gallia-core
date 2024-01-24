@@ -31,7 +31,13 @@ trait HasType extends HasTypeDuo with HasTypeSeq {
         else               new gallia.Whatever(value)
       else if (!typeNode.isContainedDataClass) value
       // wouldn't need to recompute info if we had result cls here (TODO: t230822103631)
-      else                                     typeNode.forceNonBObjInfo.pipe(instantiatorOpt.get.dynamicToStatic(value)) }
+      else
+        typeNode
+          .forceNonBObjInfo
+          .pipe(instantiatorOpt
+          .getOrElse {
+            aptus.illegalState("240124110715 - expecting an instantiator available here by design") }
+          .dynamicToStatic(value)) }
 
   // ===========================================================================
   trait HasInstantiatorOpt { val instantiatorOpt: Option[Instantiator] }

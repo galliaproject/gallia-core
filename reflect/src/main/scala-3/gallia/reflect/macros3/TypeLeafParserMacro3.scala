@@ -16,6 +16,8 @@ private object TypeLeafParserMacro3 {
 
   // ===========================================================================
   private def typeLeaf(using q: Quotes)(typeRepr: q.reflect.TypeRepr): TypeLeaf = {
+    // TODO: add lookup for built-ins here
+
     val typeSymbol: q.reflect.Symbol = typeRepr.dealias.typeSymbol
     assert(!typeSymbol.isAliasType) // TODO: when is it ever? doesn't seem to work when using an alias type
 

@@ -8,7 +8,7 @@ private[gallia] class GenericRunnerO(writing: AObj => Unit) {
         head.runGeneric(GenericRunnerOutputU)
 
       // ---------------------------------------------------------------------------
-      object GenericRunnerOutputU extends ActionUOc with IdentityVM1 {
+      object GenericRunnerOutputU extends actions.boilerplate.ActionBoilerplate.ActionUOc with IdentityVM1 {
           def atomuo(c: Cls) = _GenericRunnerOutputU(c) }
 
         // ---------------------------------------------------------------------------
@@ -23,7 +23,7 @@ private[gallia] class GenericRunnerO(writing: AObj => Unit) {
         head.runGeneric(GenericRunnerOutputZ)
 
       // ---------------------------------------------------------------------------
-      object GenericRunnerOutputZ extends ActionZOc with IdentityVM1 {
+      object GenericRunnerOutputZ extends actions.boilerplate.ActionBoilerplate.ActionZOc with IdentityVM1 {
           def atomzo(c: Cls) = _GenericRunnerOutputZ(c) }
 
         // ---------------------------------------------------------------------------

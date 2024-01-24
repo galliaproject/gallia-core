@@ -50,10 +50,10 @@ object ActionsAsserts {
                       ( negated && !field.isUnionType))) }
 
   // ===========================================================================
-  case class AssertDataUnsafeU(pred: gallia.Obj => Boolean) extends ActionUU with IdentityVM1 with AtomsUUd {
+  case class AssertDataUnsafeU(pred: gallia.Obj => Boolean) extends ActionUU with IdentityVM1 with ActionAtomsUUd {
         def atomuu: AtomUU = _AssertUnsafeO(pred) }
 
-    case class AssertDataUnsafeZ(pred: gallia.Objs => Boolean) extends ActionZZ with IdentityVM1 with AtomsZZd {
+    case class AssertDataUnsafeZ(pred: gallia.Objs => Boolean) extends ActionZZ with IdentityVM1 with ActionAtomsZZd {
         def atomzz: AtomZZ = _AssertUnsafeZ(pred) }
 
   // ===========================================================================

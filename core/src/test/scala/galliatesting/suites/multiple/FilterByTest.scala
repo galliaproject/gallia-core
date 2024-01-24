@@ -83,8 +83,6 @@ object FilterByTest extends utest.TestSuite with GalliaTestSuite with TestDataO 
     test(bobjs(bobj(_line -> foo), bobj(_line -> ""), bobj(_line -> bar))
         .filterOutEmptyLines
       .check(bobjs(bobj(_line -> foo), bobj(_line -> bar))))
-  }
-
-}
+} }
 
 // ===========================================================================

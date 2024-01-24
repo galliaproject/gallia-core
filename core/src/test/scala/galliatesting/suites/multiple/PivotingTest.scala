@@ -81,7 +81,7 @@ object PivotingTest extends utest.TestSuite with GalliaTestSuite with TestDataS 
             bobj(f -> "f2", a -> Seq(4)            , c ->  Seq(5)).toOptional(a,    c)),
         out2 = aobjs(
             bobj(f -> "f1", a -> -1, b -> 3            ).toOptional(a, b),
-            bobj(f -> "f2", a -> 4            , c ->  5).toOptional(a,     c)) ) )
+            bobj(f -> "f2", a ->  4           , c ->  5).toOptional(a,     c)) ) )
 
     // ---------------------------------------------------------------------------
     // test pivone
@@ -99,17 +99,12 @@ object PivotingTest extends utest.TestSuite with GalliaTestSuite with TestDataS 
   // ===========================================================================
   private def testNoRowsPivot00(in: BObjs): Unit = {
     in.transformString(g).using(_ => "").group(f).by(g).pivot(f).column(g).asNewKeys(a, b).dataError(vldt.ErrorId.Runtime.EmptyKey)
-
-    in.group(f).by(g).pivot(f).column(g).asNewKeys(a, b)             .check(bobj(a -> Seq(1, 1), b -> Seq(2, 2)).toOptional(a, b))
-    in.group(f).by(g).unarrayEntries (g).asNewKeys(a, b).valueKey(f).check(bobj(a -> Seq(1, 1), b -> Seq(2, 2)).toOptional(a, b))
-    in.group(f).by(g).unarrayBy0     (g).asNewKeys(a, b) /*FIXME: t210303103728 - meta and data disagree */ }
+    in.group(f).by(g).pivot(f).column(g).asNewKeys(a, b).check(bobj(a -> Seq(1, 1), b -> Seq(2, 2)).toOptional(a, b)) }
 
   // ===========================================================================
   private def testNoRowsPivot0(out: AObj): Unit = {
-    Default52.unarrayEntries  (f).asNewKeys("foo", "foo2").valueKey(g).dataError(vldt.ErrorId.Runtime.NotUnique)
-    Default52.pivot(g).column(f).asNewKeys("foo", "foo2")             .dataError(vldt.ErrorId.Runtime.NotUnique)
-    Default51.unarrayEntries  (f).asNewKeys("foo", "foo2").valueKey(g).check(out)
-    Default51.pivot(g).column(f).asNewKeys("foo", "foo2")             .check(out)
+    Default52.pivot(g).column(f).asNewKeys("foo", "foo2").dataError(vldt.ErrorId.Runtime.NotUnique)
+    Default51.pivot(g).column(f).asNewKeys("foo", "foo2").check(out)
 
     //Default51.pivotValue(g).columns(f).asNewKeys("foo", "foo2")
     //Default51.pivotBy   (f -> Seq("foo", "foo2"))
@@ -125,12 +120,7 @@ object PivotingTest extends utest.TestSuite with GalliaTestSuite with TestDataS 
     in.pivot(      h )                .rows(f).column(g).asNewKeys(a, b, c).check(out)
 
     // ---------------------------------------------------------------------------
-    inDistinct.unarrayEntries  (f).asNewKeys(f1, f2).valueKey(h).check(bobj(f1 -> 1, f2 -> 5).toOptional(f1, f2))
-    inDistinct.pivot(h).column(f).asNewKeys(f1, f2)             .check(bobj(f1 -> 1, f2 -> 5).toOptional(f1, f2))
-
-    inDistinct          .unarrayBy0(f   ).asNewKeys(f1  , f2                      )                        .check(bobj( f1    -> bobj(g-> "a", h -> 1), f2   -> bobj(g-> "c", h -> 5)))
-    inDistinct          .unarrayBy0(f, g).asNewKeys("f1_a",                 "f2_c").withDefaultKeySeparator.check(bobj("f1_a" -> bobj(h -> 1)                                     , "f2_c" -> bobj(h -> 5)))
-    in.group(h).by(f, g).unarrayBy0(f, g).asNewKeys("f1_a", "f1_b", "f2_a", "f2_c").withDefaultKeySeparator.check(bobj("f1_a" -> bobj(h -> Seq(1, 2)), "f1_b" -> bobj(h -> Seq(3)), "f2_a" -> bobj(h -> Seq(4)), "f2_c" -> bobj(h -> Seq(5)))) }
+    inDistinct.pivot(h).column(f).asNewKeys(f1, f2).check(bobj(f1 -> 1, f2 -> 5).toOptional(f1, f2)) }
 
   // ===========================================================================
   private def testPivotEmulation(in: BObjs, out: AObjs): Unit = {

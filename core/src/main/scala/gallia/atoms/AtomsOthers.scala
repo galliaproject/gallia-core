@@ -2,7 +2,6 @@ package gallia
 package atoms
 
 import aptus.Anything_
-import aptus.Separator
 
 // ===========================================================================
 object AtomsOthers {
@@ -14,9 +13,7 @@ object AtomsOthers {
           case y: Seq[_] => y.map(_.asInstanceOf[Obj]).map(nestee.naive)
           case y         => y      .asInstanceOf[Obj] .pipe(nestee.naive) }
 
-      o.transformPath(parent, f)
-    }
-  }
+      o.transformPath(parent, f) } }
 
   // ===========================================================================
   case class _Unpivot(keyz: Keyz) extends AtomUU { def naive(o: Obj) =
@@ -34,10 +31,7 @@ object AtomsOthers {
 
           o .    addEntry(targetStringValue, target)
             .replaceEntry(key1,              rest) }
-        .getOrElse(o)
-    }
-  }
-
+        .getOrElse(o) } }
 
   // ===========================================================================
   case object _IdentityUU extends AtomUU { @inline def naive(o: Obj ) = o }
@@ -104,39 +98,15 @@ object AtomsOthers {
 
   // ===========================================================================
   @Scalability case class _Pivone(keyKey: Key, valueKey: Key) extends AtomZU { def naive(z: Objs) =
-      z .toListAndTrash
-        .flatMap { o =>
-          val newKey =
-            o .unarrayCompositeKey2(keyKey)
-              .getOrElse(dataError(ErrorId.Runtime.EmptyKey))
-  
-          o.attemptKey(valueKey).map(newKey -> _) }
-       .pipe(obj) }
-       // t201122154119 - if in is empty...
-      
-    // ---------------------------------------------------------------------------
-    @Scalability @deprecated case class _UnarrayEntries0(keyKeys: Keyz, separator: Separator, valueKey: Key) extends AtomZU { def naive(z: Objs) =
-        z .toListAndTrash
-          .flatMap { o =>
-            val newKey =
-              o .unarrayCompositeKey(keyKeys.values, separator)
-                .getOrElse(dataError(ErrorId.Runtime.NoKeysLeft)) //TODO: or offer alterative if all missing?
-    
-            o.attemptKey(valueKey).map(newKey -> _) }
-         .pipe(obj) }
-         // t201122154119 - if in is empty...
-    
-    // ---------------------------------------------------------------------------
-    @Scalability @deprecated case class _UnarrayBy0(keys: Keyz, sep: Separator) extends AtomZU { def naive(z: Objs) =
-        // FIXME: runtime check of keys
-        z .toListAndTrash
-          .flatMap { o =>
-            val newKey =
-              o .unarrayCompositeKey(keys.values, sep)
-                .getOrElse(dataError(ErrorId.Runtime.NoKeysLeft)) //TODO: or offer alterative if all missing?
-  
-            o.removeOpt(keys).map(newKey -> _) }
-          .pipe(obj) }
+    z .toListAndTrash
+      .flatMap { o =>
+        val newKey =
+          o .unarrayCompositeKey2(keyKey)
+            .getOrElse(dataError(ErrorId.Runtime.EmptyKey))
+
+        o.attemptKey(valueKey).map(newKey -> _) }
+     .pipe(obj) }
+     // t201122154119 - if in is empty...
 
   // ===========================================================================
   // uz
@@ -160,8 +130,7 @@ object AtomsOthers {
           .map {
             _ .map(u.putPath(target, _))
               .toList }
-          .getOrElse(List(u))
-    }
+          .getOrElse(List(u)) }
 }
 
 // ===========================================================================

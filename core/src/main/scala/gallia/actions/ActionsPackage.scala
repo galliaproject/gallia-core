@@ -96,7 +96,29 @@ package object actions { // TODO: delegate access to all of AtomsUtils._
   implicit class TKPath__(value: TKPath) {
     def vldtAsNewDestination(c: Cls) = value.path.vldtAsNewDestination(c) ++ _vldt.validType(value.typeNode) }
 
-}
+  // ===========================================================================
+  import trgt.{TypedTargetQuery, TypedTargetQuery2, TypedTargetQuery3}
+
+  // TODO: generalize + TargetQuery counterpart
+  trait UsesSimpleTypedTargetQuery1Target[$Target] { // TODO: mixin action?
+      val target: TypedTargetQuery[$Target]
+      final def vldt(c: Cls): Errs = target.vldtAsOrigin(c) }
+
+    trait UsesSimpleTypedTargetQuery2Target[$Target] {
+      val target: TypedTargetQuery2[$Target]
+      final def vldt(c: Cls): Errs = target.vldtAsOrigin(c) }
+
+    trait UsesSimpleTypedTargetQuery3Target[$Target] {
+      val target: TypedTargetQuery3[$Target]
+      final def vldt(c: Cls): Errs = target.vldtAsOrigin(c) }
+
+  // ===========================================================================
+  trait SquashXN extends Action with TodoV1 {
+      val to: reflect.TypeNode
+      def atom(c: Cls): Atom
+
+      // ---------------------------------------------------------------------------
+      final def _meta(ignored: plans.Clss): Cls = Cls.Dummy //TODO?
+      final def atoms(ctx: NodeMetaContext): Atoms = Seq(ctx.afferents.forceOne.pipe(atom)) } }
 
 // ===========================================================================
-

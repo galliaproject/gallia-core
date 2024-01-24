@@ -22,7 +22,7 @@ object IntermediateMetaResultNodeCreator {
     action match {
       case x: ActionAN          => x // <=> asInstanceOf[ActionAN]
       case x: InMemoryMetaInput => NestingDataPlaceholder // TODO: build-in InMemoryMetaInput
-      case x                    => aptus.illegalState(s"${x}") }
+      case x                    => aptus.illegalState(s"not an ActionAN: ${x}") }
 
 }
 

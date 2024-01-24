@@ -44,8 +44,7 @@ object AtomsZZ {
 
     // ---------------------------------------------------------------------------
     object _EnsureUniquenessBy {
-      def error(sizes: (Int, Int))(z: Objs) = _Error.Runtime.NotUnique(None, sizes).throwDataError(z)
-    }
+      def error(sizes: (Int, Int))(z: Objs) = _Error.Runtime.NotUnique(None, sizes).throwDataError(z) }
 
   // ===========================================================================
   // grouping

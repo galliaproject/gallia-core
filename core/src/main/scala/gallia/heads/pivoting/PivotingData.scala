@@ -17,10 +17,12 @@ private[pivoting] case class PivotingData[O1: WTT, D: WTT](
     newKeys  : Keyz = PivotingData.InitValue) {
 
   def pivone(input: HeadZ): HeadU = // TODO: t210303111953 - use different structure now
-    input.zu(ActionsOthers.Pivone(
+    input
+      .ensureUniquenessBy(column) // 240124153043 - ensure uniquess first
+      .zu { ActionsOthers.Pivone(
         newKeys,
         column,
-        valueKey = target.pipe(Squash.resolve(_)).tq))
+        valueKey = target.pipe(Squash.resolve(_)).tq) }
 
   // ===========================================================================
   def pivot[O1: WTT, D: WTT](input: HeadZ): HeadZ =

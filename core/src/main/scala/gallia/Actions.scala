@@ -88,12 +88,12 @@ trait ActionM0 extends ActionMN {
 import actions.boilerplate.ActionAtomsBoilerplate._
 
 // ---------------------------------------------------------------------------
-trait ActionUU extends /*Action with*/ ActionVM1 with ActionAtomsUU
-trait ActionZZ extends Action with ActionVM1 with ActionAtomsZZ
+trait ActionUU extends ActionVM1 with ActionAtomsUU
+trait ActionZZ extends ActionVM1 with ActionAtomsZZ
 
   // ---------------------------------------------------------------------------
-  trait ActionZU extends Action with ActionV1 with ActionM1
-  trait ActionUZ extends Action with ActionV1 with ActionM1
+  trait ActionZU extends ActionVM1 with ActionAtomsZU
+  trait ActionUZ extends ActionVM1 with ActionAtomsUZ
 
   // ---------------------------------------------------------------------------
   trait ActionUV extends Action// with ActionV1 with ActionM1
@@ -101,22 +101,22 @@ trait ActionZZ extends Action with ActionVM1 with ActionAtomsZZ
   trait ActionVV extends Action// with ActionV1 with ActionM1
 
   // ---------------------------------------------------------------------------
-  trait ActionIU extends Action with ActionVM0 with ActionAtomsIU
-  trait ActionIZ extends Action with ActionVM0 with ActionAtomsIZ
-  trait ActionIV extends Action with ActionVM0 with ActionAtomsIV
+  trait ActionIU extends ActionVM0 with ActionAtomsIU
+  trait ActionIZ extends ActionVM0 with ActionAtomsIZ
+  trait ActionIV extends ActionVM0 with ActionAtomsIV
 
   // ---------------------------------------------------------------------------
-  trait ActionUO extends Action with ActionV1 with IdentityM1 with ActionAtomsUO
-  trait ActionZO extends Action with ActionV1 with IdentityM1 with ActionAtomsZO
-  trait ActionVO extends Action with ActionV1 with IdentityM1 with ActionAtomsVO
+  trait ActionUO extends ActionV1 with IdentityM1 with ActionAtomsUO
+  trait ActionZO extends ActionV1 with IdentityM1 with ActionAtomsZO
+  trait ActionVO extends ActionV1 with IdentityM1 with ActionAtomsVO
 
   // ---------------------------------------------------------------------------
-  trait ActionVU extends Action with ActionV1 with ActionM1 with ActionAtomsVU
-  trait ActionVZ extends Action with ActionV1 with ActionM1 with ActionAtomsVZ
+  trait ActionVU extends ActionVM1 with ActionAtomsVU
+  trait ActionVZ extends ActionVM1 with ActionAtomsVZ
 
   // ---------------------------------------------------------------------------
-  trait ActionZzToZ extends Action with ActionV2 with ActionM2 with ActionAtomsZzToZ { def vldt(c1: Cls , c2: Cls ): Errs = Nil } // TODO
-  trait ActionZvToZ extends Action with ActionV2 with ActionM2 with ActionAtomsZvToZ { def vldt(c1: Cls , c2: Cls ): Errs = Nil } // TODO
-  trait ActionVvToV extends Action with ActionV2 with ActionM2 with ActionAtomsVvToV { def vldt(c1: Cls , c2: Cls ): Errs = Nil } // TODO
+  trait ActionZzToZ extends ActionVM2 with ActionAtomsZzToZ { def vldt(c1: Cls , c2: Cls ): Errs = Nil } // TODO
+  trait ActionZvToZ extends ActionVM2 with ActionAtomsZvToZ { def vldt(c1: Cls , c2: Cls ): Errs = Nil } // TODO
+  trait ActionVvToV extends ActionVM2 with ActionAtomsVvToV { def vldt(c1: Cls , c2: Cls ): Errs = Nil } // TODO
 
 // ===========================================================================

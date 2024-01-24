@@ -39,6 +39,7 @@ object FlattenByTest extends utest.TestSuite with GalliaTestSuite with TestDataS
     // uz - also see flattenBy
 
     test(bobj(f1 -> "foo1", "g1" -> 1).convertToMultiple.check(
-        bobjs(bobj(f1 -> "foo1", "g1" -> 1)))) } }
+        bobjs(bobj(f1 -> "foo1", "g1" -> 1))))
+} }
 
 // ===========================================================================

@@ -1,8 +1,7 @@
 package gallia
 package actions
 
-import aptus.{Anything_, Seq_}
-import aptus.Separator
+import aptus.Anything_
 
 import trgt._
 import plans.Clss
@@ -93,17 +92,17 @@ object ActionsOthers {
     def atomuz: AtomUZ = _ConvertUtoZ }
 
   // ---------------------------------------------------------------------------
-  abstract class FlattenBy(target: KPath) extends ActionUZ {
+  abstract class FlattenBy(target: KPath) {
       def vldt (in: Cls): Errs = Nil//TODO; check was seq?; ensure only one level of multiplicity
       def _meta(in: Cls): Cls = in.toSingle(target).pipeIf(in.isOptional(target))(_.toOptional(target)) }
 
     // ---------------------------------------------------------------------------
     case class FlattenByU(target: KPath) extends FlattenBy(target) with ActionUZ {
-      def atoms(ignored: NodeMetaContext): Atoms =
+      def atomuzs(ignored: NodeMetaContext): AtomUZs =
         _FlattenByU(target).in.seq }
 
     case class FlattenByZ(target: KPath) extends FlattenBy(target) with ActionZZ {
-      def atomzzs(ignored: NodeMetaContext): AtomZZs = 
+      def atomzzs(ignored: NodeMetaContext): AtomZZs =
         _FlattenByZ(target).in.seq }
 
   // ===========================================================================
@@ -111,68 +110,40 @@ object ActionsOthers {
 
   case object MergeAll extends ActionZU with TodoV1 {
     def _meta(in: Cls): Cls = ???//in.reduceLeft(_ mergeDisjoint _) - FIXME:?
-    def atoms(ctx: NodeMetaContext): Atoms = ??? } //_MergeAll.in.seq
+    def atomzus(ctx: NodeMetaContext): AtomZUs = ??? } //_MergeAll.in.seq
 
   // ---------------------------------------------------------------------------
   case object AsArray1 extends ActionZU with TodoV1 { // TODO: key sole + not array
       def _meta(in: Cls): Cls =  in.soleField.key.pipe(in.toMultiple(_))
-      def atoms(ctx: NodeMetaContext): Atoms = ctx.afferents.forceOne.soleField.key.pipe(_AsArray1).in.seq }
+      def atomzus(ctx: NodeMetaContext): AtomZUs = ctx.afferents.forceOne.soleField.key.pipe(_AsArray1).in.seq }
 
     // ---------------------------------------------------------------------------
     case class AsArray2(newKey: Key) extends ActionZU with TodoV1 {
       def _meta(in: Cls): Cls =  in.nest(in.keyz.renz, newKey).toMultiple(newKey)
-      def atoms(ctx: NodeMetaContext): Atoms = _AsArray2(newKey).in.seq }
+      def atomzus(ctx: NodeMetaContext): AtomZUs = _AsArray2(newKey).in.seq }
 
   // ---------------------------------------------------------------------------
   case object ForceOne extends ActionZU {
     def vldt (in: Cls): Errs = Nil
     def _meta(in: Cls): Cls = in
-    def atoms(ignored: NodeMetaContext): Atoms = _ForceOne.in.seq }
+    def atomzus(ignored: NodeMetaContext): AtomZUs = _ForceOne.in.seq }
 
   // ===========================================================================
   //FIXME t210115175242 - runtime validation of newKeys for these
+
   case class Pivone(
           newKeys  : Keyz, // only for meta
           keyKey   : Key , // only for data - may or may not have the same cardinality as newKeys - TODO: t210303102200 - also allow selection
           valueKey : TqKPath /* TODO: key only? */)
-        extends ActionZU {
+        extends ActionZUc {
       private def resolveTargetKey(c: Cls): Key = valueKey.resolve(c).forceLeafFX /* see  t210303111953 */
-      
+
       // ---------------------------------------------------------------------------
-      def vldt (in: Cls)             : Errs  = Nil //TODO: t210303101704 - check reasonnably "to-textable" value
-      def _meta(in: Cls)             : Cls   = resolveTargetKey(in)                     .pipe(in.unarrayEntries(newKeys, _))
-      def atoms(ctx: NodeMetaContext): Atoms = ctx.afferents.forceOne.pipe { c =>
-        val target = resolveTargetKey(c)
+      def vldt  (in: Cls): Errs   = Nil //TODO: t210303101704 - check reasonnably "to-textable" value
+      def _meta (in: Cls): Cls    = resolveTargetKey(in).pipe { in.unarrayEntries(newKeys, _) }
 
-        Seq(
-          _EnsureUniquenessBy(c, Keyz.from(keyKey)),
-          _Pivone(keyKey, target)) } }
-
-    // ---------------------------------------------------------------------------
-    @deprecated case class UnarrayEntries0(
-            newKeys  : Keyz, // only for meta
-            keyKeys  : Keyz, // only for data - may or may not have the same cardinality as newKeys
-            separator: Separator, // for data only, and only needed if more than one "key" key
-            valueKey : Key)
-          extends ActionZU {
-        def vldt (in: Cls): Errs = Nil //TODO; consistency of key separator; reasonnable separator; check "textable" value; check separator availble if more than 1 keykey
-        def _meta(in: Cls): Cls = valueKey.pipe(in.unarrayEntries(newKeys, _))
-  
-        def atoms(ctx: NodeMetaContext): Atoms = Seq(
-            _EnsureUniquenessBy(ctx.afferents.forceOne, keyKeys),
-            _UnarrayEntries0(keyKeys, separator, valueKey) ) }
-  
-    // ---------------------------------------------------------------------------
-    @deprecated("see 210303104417") case class UnarrayBy0(
-          newKeys: Keyz, // only for meta
-          keys   : Keyz,
-          sep    : Separator) // for data only
-        extends ActionZU {
-      def vldt (in: Cls): Errs = Nil // TODO: t240124123030 - missing validations
-      def _meta(in: Cls): Cls  = in.unarrayBy0(keys, newKeys)
-      def atoms(ctx: NodeMetaContext): Atoms = Seq(
-        _EnsureUniquenessBy(ctx.afferents.forceOne, keys),
-        _UnarrayBy0(keys, sep)) }
+      // uniqueness already ensured, see 240124153043
+      def atomzu(in: Cls): AtomZU = resolveTargetKey(in).pipe { target => _Pivone(keyKey, target) } }
 
   // ===========================================================================
   // vv

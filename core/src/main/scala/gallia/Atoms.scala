@@ -148,17 +148,17 @@ trait AtomsUU extends ActionAN {
 
   // ===========================================================================
   trait AtomsZzToZ extends ActionAN {
-    final def atoms(ctx: NodeMetaContext): Atoms = ctx.afferents.force.tuple2.pipe((dataz2 _).tupled)
+    final def atoms(ctx: NodeMetaContext): Atoms = ctx.afferents.forcePair.pipe((dataz2 _).tupled)
           def dataz2(c1: Cls , c2: Cls)  : Atoms }
 
   // ---------------------------------------------------------------------------
   trait AtomsZvToZ extends ActionAN {
-    final def atoms(ctx: NodeMetaContext): Atoms = ctx.afferents.force.tuple2.pipe((dataz2 _).tupled)
+    final def atoms(ctx: NodeMetaContext): Atoms = ctx.afferents.forcePair.pipe((dataz2 _).tupled)
           def dataz2(c1: Cls , c2: Cls)  : Atoms }
 
   // ---------------------------------------------------------------------------
   trait AtomsVvToV extends ActionAN {
-    final def atoms(ctx: NodeMetaContext): Atoms = ctx.afferents.force.tuple2.pipe((dataz2 _).tupled)
+    final def atoms(ctx: NodeMetaContext): Atoms = ctx.afferents.forcePair.pipe((dataz2 _).tupled)
           def dataz2(c1: Cls , c2: Cls)  : Atoms }
 
 // ===========================================================================
@@ -173,17 +173,17 @@ trait AtomsUUd extends AtomsUU {
 
   // ---------------------------------------------------------------------------
   trait AtomsUUc extends AtomsUU {
-    final def atomuus(ctx: NodeMetaContext): AtomUUs = atomuu(ctx.forceSingleAfferent).in.seq
+    final def atomuus(ctx: NodeMetaContext): AtomUUs = atomuu(ctx.afferents.forceOne).in.seq
           def atomuu (afferent: Cls       ): AtomUU }
 
   // ---------------------------------------------------------------------------
   trait AtomsUUb extends AtomsUU {
-    final def atomuus(ctx: NodeMetaContext): AtomUUs = atomuus(ctx.forceSingleAfferent)
+    final def atomuus(ctx: NodeMetaContext): AtomUUs = atomuus(ctx.afferents.forceOne)
           def atomuus(afferent: Cls       ): AtomUUs }
 
   // ===========================================================================
   trait AtomsUUbb extends AtomsUU { // TODO: see t210616122449
-    final def atomuus(ctx: NodeMetaContext)           : AtomUUs = atomuus(ctx.origin)(ctx.forceSingleAfferent)
+    final def atomuus(ctx: NodeMetaContext)           : AtomUUs = atomuus(ctx.origin)(ctx.afferents.forceOne)
           def atomuus(origin: CallSite)(afferent: Cls): AtomUUs }
   
 // ---------------------------------------------------------------------------
@@ -198,12 +198,12 @@ trait AtomsZZd extends AtomsZZ {
 
   // ---------------------------------------------------------------------------
   trait AtomsZZc extends AtomsZZ {
-    final def atomzzs(ctx: NodeMetaContext): AtomZZs = atomzz(ctx.forceSingleAfferent).in.seq
+    final def atomzzs(ctx: NodeMetaContext): AtomZZs = atomzz(ctx.afferents.forceOne).in.seq
           def atomzz (afferent: Cls       ): AtomZZ }
 
   // ---------------------------------------------------------------------------
   trait AtomsZZb extends AtomsZZ {
-    final def atomzzs(ctx: NodeMetaContext): AtomZZs = atomzzs(ctx.forceSingleAfferent)
+    final def atomzzs(ctx: NodeMetaContext): AtomZZs = atomzzs(ctx.afferents.forceOne)
           def atomzzs(afferent: Cls       ): AtomZZs }
 
 // ---------------------------------------------------------------------------
@@ -223,12 +223,12 @@ trait AtomsIUd extends AtomsIU {
 
     // ---------------------------------------------------------------------------
     trait AtomsIUc extends AtomsIU {
-      final def atomius(ctx: NodeMetaContext): AtomIUs = atomiu(ctx.forceSingleAfferent).in.seq
+      final def atomius(ctx: NodeMetaContext): AtomIUs = atomiu(ctx.afferents.forceOne).in.seq
             def atomiu (afferent: Cls       ): AtomIU }
 
     // ---------------------------------------------------------------------------
     trait AtomsIUb extends AtomsIU {
-      final def atomius(ctx: NodeMetaContext): AtomIUs = atomius(ctx.forceSingleAfferent)
+      final def atomius(ctx: NodeMetaContext): AtomIUs = atomius(ctx.afferents.forceOne)
             def atomius(afferent: Cls       ): AtomIUs }
 
 
@@ -244,12 +244,12 @@ trait AtomsIUd extends AtomsIU {
 
     // ---------------------------------------------------------------------------
     trait AtomsIZc extends AtomsIZ {
-      final def atomizs(ctx: NodeMetaContext): AtomIZs = atomiz(ctx.forceSingleAfferent).in.seq
+      final def atomizs(ctx: NodeMetaContext): AtomIZs = atomiz(ctx.afferents.forceOne).in.seq
             def atomiz (afferent: Cls       ): AtomIZ }
 
     // ---------------------------------------------------------------------------
     trait AtomsIZb extends AtomsIZ {
-      final def atomizs(ctx: NodeMetaContext): AtomIZs = atomizs(ctx.forceSingleAfferent)
+      final def atomizs(ctx: NodeMetaContext): AtomIZs = atomizs(ctx.afferents.forceOne)
             def atomizs(afferent: Cls       ): AtomIZs }
 
   // ===========================================================================
@@ -264,12 +264,12 @@ trait AtomsIUd extends AtomsIU {
 
     // ---------------------------------------------------------------------------
     trait AtomsIVc extends AtomsIV {
-      final def atomivs(ctx: NodeMetaContext): AtomIVs = atomiv(ctx.forceSingleAfferent).in.seq
+      final def atomivs(ctx: NodeMetaContext): AtomIVs = atomiv(ctx.afferents.forceOne).in.seq
             def atomiv (afferent: Cls       ): AtomIV }
 
     // ---------------------------------------------------------------------------
     trait AtomsIVb extends AtomsIV {
-      final def atomivs(ctx: NodeMetaContext): AtomIVs = atomivs(ctx.forceSingleAfferent)
+      final def atomivs(ctx: NodeMetaContext): AtomIVs = atomivs(ctx.afferents.forceOne)
             def atomivs(afferent: Cls       ): AtomIVs }
 
 // ===========================================================================
@@ -284,12 +284,12 @@ trait AtomsUOd extends AtomsUO {
 
     // ---------------------------------------------------------------------------
     trait AtomsUOc extends AtomsUO {
-      final def atomuos(ctx: NodeMetaContext): AtomUOs = atomuo(ctx.forceSingleAfferent).in.seq
+      final def atomuos(ctx: NodeMetaContext): AtomUOs = atomuo(ctx.afferents.forceOne).in.seq
             def atomuo (afferent: Cls       ): AtomUO }
 
     // ---------------------------------------------------------------------------
     trait AtomsUOb extends AtomsUO {
-      final def atomuos(ctx: NodeMetaContext): AtomUOs = atomuos(ctx.forceSingleAfferent)
+      final def atomuos(ctx: NodeMetaContext): AtomUOs = atomuos(ctx.afferents.forceOne)
             def atomuos(afferent: Cls       ): AtomUOs }
 
   // ===========================================================================
@@ -304,12 +304,12 @@ trait AtomsUOd extends AtomsUO {
 
     // ---------------------------------------------------------------------------
     trait AtomsZOc extends AtomsZO {
-      final def atomzos(ctx: NodeMetaContext): AtomZOs = atomzo(ctx.forceSingleAfferent).in.seq
+      final def atomzos(ctx: NodeMetaContext): AtomZOs = atomzo(ctx.afferents.forceOne).in.seq
             def atomzo (afferent: Cls       ): AtomZO }
 
     // ---------------------------------------------------------------------------
     trait AtomsZOb extends AtomsZO {
-      final def atomzos(ctx: NodeMetaContext): AtomZOs = atomzos(ctx.forceSingleAfferent)
+      final def atomzos(ctx: NodeMetaContext): AtomZOs = atomzos(ctx.afferents.forceOne)
             def atomzos(afferent: Cls       ): AtomZOs }
 
   // ===========================================================================
@@ -324,12 +324,12 @@ trait AtomsUOd extends AtomsUO {
 
     // ---------------------------------------------------------------------------
     trait AtomsVOc extends AtomsVO {
-      final def atomvos(ctx: NodeMetaContext): AtomVOs = atomvo(ctx.forceSingleAfferent).in.seq
+      final def atomvos(ctx: NodeMetaContext): AtomVOs = atomvo(ctx.afferents.forceOne).in.seq
             def atomvo (afferent: Cls       ): AtomVO }
 
     // ---------------------------------------------------------------------------
     trait AtomsVOb extends AtomsVO {
-      final def atomvos(ctx: NodeMetaContext): AtomVOs = atomvos(ctx.forceSingleAfferent)
+      final def atomvos(ctx: NodeMetaContext): AtomVOs = atomvos(ctx.afferents.forceOne)
             def atomvos(afferent: Cls       ): AtomVOs }
 
   // ===========================================================================
@@ -344,12 +344,12 @@ trait AtomsUOd extends AtomsUO {
 
     // ---------------------------------------------------------------------------
     trait AtomsVUc extends AtomsVU {
-      final def atomvus(ctx: NodeMetaContext): AtomVUs = atomvu(ctx.forceSingleAfferent).in.seq
+      final def atomvus(ctx: NodeMetaContext): AtomVUs = atomvu(ctx.afferents.forceOne).in.seq
             def atomvu (afferent: Cls       ): AtomVU }
 
     // ---------------------------------------------------------------------------
     trait AtomsVUb extends AtomsVU {
-      final def atomvus(ctx: NodeMetaContext): AtomVUs = atomvus(ctx.forceSingleAfferent)
+      final def atomvus(ctx: NodeMetaContext): AtomVUs = atomvus(ctx.afferents.forceOne)
             def atomvus(afferent: Cls       ): AtomVUs }
 
   // ===========================================================================
@@ -364,12 +364,12 @@ trait AtomsUOd extends AtomsUO {
 
     // ---------------------------------------------------------------------------
     trait AtomsVZc extends AtomsVZ {
-      final def atomvzs(ctx: NodeMetaContext): AtomVZs = atomvz(ctx.forceSingleAfferent).in.seq
+      final def atomvzs(ctx: NodeMetaContext): AtomVZs = atomvz(ctx.afferents.forceOne).in.seq
             def atomvz (afferent: Cls       ): AtomVZ }
 
     // ---------------------------------------------------------------------------
     trait AtomsVZb extends AtomsVZ {
-      final def atomvzs(ctx: NodeMetaContext): AtomVZs = atomvzs(ctx.forceSingleAfferent)
+      final def atomvzs(ctx: NodeMetaContext): AtomVZs = atomvzs(ctx.afferents.forceOne)
             def atomvzs(afferent: Cls       ): AtomVZs }
 
 // ===========================================================================
@@ -379,7 +379,7 @@ trait AtomsUZd extends AtomsUZ {
 
   // ---------------------------------------------------------------------------
   trait AtomsUZc extends AtomsUZ {
-    final def atomuzs(ctx: NodeMetaContext): AtomUZs = atomuz(ctx.forceSingleAfferent).in.seq
+    final def atomuzs(ctx: NodeMetaContext): AtomUZs = atomuz(ctx.afferents.forceOne).in.seq
           def atomuz (afferent: Cls       ): AtomUZ }
 
   // ===========================================================================
@@ -389,17 +389,17 @@ trait AtomsUZd extends AtomsUZ {
 
   // ---------------------------------------------------------------------------
   trait AtomsZUc extends AtomsZU {
-    final def atomzus(ctx: NodeMetaContext): AtomZUs = atomzu(ctx.forceSingleAfferent).in.seq
+    final def atomzus(ctx: NodeMetaContext): AtomZUs = atomzu(ctx.afferents.forceOne).in.seq
           def atomzu (afferent: Cls       ): AtomZU }
 
   // ===========================================================================
   trait AtomsUVc extends AtomsUV {
-    final def atomuvs(ctx: NodeMetaContext): AtomUVs = atomuv(ctx.forceSingleAfferent).in.seq
+    final def atomuvs(ctx: NodeMetaContext): AtomUVs = atomuv(ctx.afferents.forceOne).in.seq
           def atomuv (afferent: Cls       ): AtomUV }
 
   // ---------------------------------------------------------------------------
   trait AtomsZVc extends AtomsZV {
-    final def atomzvs(ctx: NodeMetaContext): AtomZVs = atomzv(ctx.forceSingleAfferent).in.seq
+    final def atomzvs(ctx: NodeMetaContext): AtomZVs = atomzv(ctx.afferents.forceOne).in.seq
           def atomzv (afferent: Cls       ): AtomZV }
 
 // ===========================================================================

@@ -27,7 +27,9 @@ trait Action
   trait ActionAN { def atoms(ctx: NodeMetaContext): Atoms }
 
     // ---------------------------------------------------------------------------
-    case class NodeMetaContext(afferents: Seq[Cls], efferent: Cls, origin: CallSite) { def forceSingleAfferent: Cls = afferents.force.one }
+    case class NodeMetaContext    (afferents: Clss, efferent: Cls, origin: CallSite) { import aptus.String_
+      def formatDebugAfferents: String = afferents.values.map(_.formatShort0.sectionAllOff).joinln.newline
+      def formatDebugEfferent : String = efferent              .formatShort0.sectionAllOff        .newline }
 
 // ===========================================================================
 trait ActionAN1 extends ActionAN {
@@ -218,6 +220,6 @@ trait SquashXN extends Action with TodoV1 {
 
     // ---------------------------------------------------------------------------
     final def _meta(ignored: Clss): Cls = Cls.Dummy //TODO?
-    final def atoms(ctx: NodeMetaContext): Atoms = ctx.forceSingleAfferent.pipe(atom).in.seq }
+    final def atoms(ctx: NodeMetaContext): Atoms = ctx.afferents.forceOne.pipe(atom).in.seq }
 
 // ===========================================================================

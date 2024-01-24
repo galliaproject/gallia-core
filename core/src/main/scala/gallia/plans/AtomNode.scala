@@ -18,7 +18,7 @@ case class AtomNode(
         debug)
 
     // ---------------------------------------------------------------------------
-    private def afferentSchemas: Clss = debug.ctx.afferents.pipe(Clss.apply)
+    private def afferentSchemas: Clss = debug.ctx.afferents
     private def efferentSchema : Cls  = debug.ctx.efferent
 
   // ===========================================================================

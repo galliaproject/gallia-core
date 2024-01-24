@@ -10,8 +10,7 @@ sealed trait ResultSchema {
 
     // ---------------------------------------------------------------------------
     def errors    : Errs    = errorOpt.toSeq.flatMap(_.values) // may be empty
-    def isError   : Boolean = errors.nonEmpty
-  }
+    def isError   : Boolean = errors.nonEmpty }
 
   // ===========================================================================
   object ResultSchema {
@@ -24,17 +23,6 @@ sealed trait ResultSchema {
               errors.map(_.format).joinln,
               origin.formatSuccinct)
           .joinlnln
-          .sectionAllOff(2)
-    }
-
-    // ---------------------------------------------------------------------------
-    /*
-      match {
-        case UpstreamError        => ???
-        case Errors(values: Errs) => ???
-        case Result(value : Cls ) => ???
-      }
-    */
-  }
+          .sectionAllOff(2) } }
 
 // ===========================================================================

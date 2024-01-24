@@ -116,7 +116,7 @@ object ActionsOthers {
   // ---------------------------------------------------------------------------
   case object AsArray1 extends ActionZU with TodoV1 { // TODO: key sole + not array
       def _meta(in: Cls): Cls =  in.soleField.key.pipe(in.toMultiple(_))
-      def atoms(ctx: NodeMetaContext): Atoms = ctx.forceSingleAfferent.soleField.key.pipe(_AsArray1).in.seq }
+      def atoms(ctx: NodeMetaContext): Atoms = ctx.afferents.forceOne.soleField.key.pipe(_AsArray1).in.seq }
 
     // ---------------------------------------------------------------------------
     case class AsArray2(newKey: Key) extends ActionZU with TodoV1 {
@@ -141,7 +141,7 @@ object ActionsOthers {
       // ---------------------------------------------------------------------------
       def vldt (in: Cls)             : Errs  = Nil //TODO: t210303101704 - check reasonnably "to-textable" value
       def _meta(in: Cls)             : Cls   = resolveTargetKey(in)                     .pipe(in.unarrayEntries(newKeys, _))
-      def atoms(ctx: NodeMetaContext): Atoms = ctx.forceSingleAfferent.pipe { c =>
+      def atoms(ctx: NodeMetaContext): Atoms = ctx.afferents.forceOne.pipe { c =>
         val target = resolveTargetKey(c)
 
         Seq(
@@ -159,7 +159,7 @@ object ActionsOthers {
         def _meta(in: Cls): Cls = valueKey.pipe(in.unarrayEntries(newKeys, _))
   
         def atoms(ctx: NodeMetaContext): Atoms = Seq(
-            _EnsureUniquenessBy(ctx.forceSingleAfferent, keyKeys),
+            _EnsureUniquenessBy(ctx.afferents.forceOne, keyKeys),
             _UnarrayEntries0(keyKeys, separator, valueKey) ) }
   
     // ---------------------------------------------------------------------------
@@ -171,7 +171,7 @@ object ActionsOthers {
       def vldt (in: Cls): Errs = Nil // TODO: t240124123030 - missing validations
       def _meta(in: Cls): Cls  = in.unarrayBy0(keys, newKeys)
       def atoms(ctx: NodeMetaContext): Atoms = Seq(
-        _EnsureUniquenessBy(ctx.forceSingleAfferent, keys),
+        _EnsureUniquenessBy(ctx.afferents.forceOne, keys),
         _UnarrayBy0(keys, sep)) }
 
   // ===========================================================================
@@ -280,7 +280,7 @@ object ActionsOthers {
 
     // ---------------------------------------------------------------------------
     def atoms(ctx: NodeMetaContext): Atoms =
-      ctx.afferents.force.one
+      ctx.afferents.forceOne
         .pipe(from.pathPairT)
         .pipe { pair =>
           if (pair.optional) Seq(ifOpt(pair.path))

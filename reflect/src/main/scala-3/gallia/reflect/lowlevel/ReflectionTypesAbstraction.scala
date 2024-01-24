@@ -7,7 +7,9 @@ import scala.reflect.{classTag, ClassTag}
 // ===========================================================================
 /** differs based on 2.x vs 3.x */
 trait ReflectionTypesAbstraction {
+  type __WTT_for_testing_only[T] = WTT[T]
 
+  // ---------------------------------------------------------------------------
   /** stood for WeakTypeTag in scala 2.x, has a life of its own in scala 3.x */
   private[gallia] case class WTT[T](
       typeNode       :        TypeNode,

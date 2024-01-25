@@ -23,14 +23,19 @@ case class GenericInputU(schema: Cls, datum : Obj)
 case class JsonObjectString(inputString: InputString, schemaProvider: OtherSchemaProvider)
     extends ActionIU01x with TodoV0 with HasSchemaProviderUx {
   override def _meta: Cls   = __meta
-  override def hasCommonObjx = _JsonObjectString(inputString, schemaProvider)
-  override def atomiux: AtomIUx = hasCommonObjx }
+  override def atomiux: AtomIUx = hasCommonObjx
+
+    // ---------------------------------------------------------------------------
+    override def hasCommonObjx = _JsonObjectString(inputString, schemaProvider) }
 
 // ===========================================================================
 case class JsonArrayString(inputString: InputString, schemaProvider: OtherSchemaProvider)
     extends ActionIZ01x with TodoV0 with HasSchemaProviderZx {
-  def _meta: Cls    = __meta
-  def hasCommonObjsx = _JsonArrayString(inputString, schemaProvider) }
+  override def _meta  : Cls    = __meta
+  override def atomizx: AtomIZx = hasCommonObjsx
+
+    // ---------------------------------------------------------------------------
+    def hasCommonObjsx = _JsonArrayString(inputString, schemaProvider) }
 
 // ===========================================================================
 case class JsonObjectFileInputU(

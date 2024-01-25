@@ -5,9 +5,6 @@ package in
 import atoms.AtomsIX._
 
 // ===========================================================================
-trait HasSchemaProviderU extends HasSchemaProviderAndProjectionU0 with HasNoProjection
-trait HasSchemaProviderZ extends HasSchemaProviderAndProjectionZ0 with HasNoProjection
-
 trait HasSchemaProviderUx extends HasSchemaProviderAndProjectionUx with HasNoProjection
 trait HasSchemaProviderZx extends HasSchemaProviderAndProjectionZx with HasNoProjection
 
@@ -67,43 +64,39 @@ trait HasSchemaProviderZx extends HasSchemaProviderAndProjectionZx with HasNoPro
 
   // ===========================================================================
   sealed trait HasSchemaProviderAndProjectionx extends HasSchemaProvider with HasProjection {
-      private[in] var preProjectionSchema: Cls = null // TODO: t220615121216 - address hack
+        private[in] var preProjectionSchema: Cls = null // TODO: t220615121216 - address hack
 
-      // ---------------------------------------------------------------------------
-      protected def infer(): Cls
+        // ---------------------------------------------------------------------------
+        protected def infer(): Cls
 
-      // ---------------------------------------------------------------------------
-      final def __meta: Cls =
-          schemaProvider
-            .explicitOpt
-            .getOrElse {
-              infer() }
-            .tap { preProjectionSchema = _ }
-            .pipe(projectMeta) }
+        // ---------------------------------------------------------------------------
+        final def __meta: Cls =
+            schemaProvider
+              .explicitOpt
+              .getOrElse {
+                infer() }
+              .tap { preProjectionSchema = _ }
+              .pipe(projectMeta) }
 
-  // ===========================================================================
-  trait HasSchemaProviderAndProjectionUx extends HasSchemaProviderAndProjectionx {
+    // ===========================================================================
+    trait HasSchemaProviderAndProjectionUx extends HasSchemaProviderAndProjectionx {
+        protected def hasCommonObjx: HasCommonObjx
 
-    protected def infer(): Cls = // TODO: t210115194646 - check if file size > x
-      hasCommonObjx
-        .commonObjx
-        .pipe(SchemaInferrer.klass)
+        // ---------------------------------------------------------------------------
+        protected def infer(): Cls = // TODO: t210115194646 - check if file size > x
+          hasCommonObjx
+            .commonObjx
+            .pipe(SchemaInferrer.klass) }
 
-    // ---------------------------------------------------------------------------
-    protected def hasCommonObjx: HasCommonObjx }
+      // ===========================================================================
+      trait HasSchemaProviderAndProjectionZx extends HasSchemaProviderAndProjectionx {
+        protected def hasCommonObjsx: HasCommonObjsx
 
-  // ===========================================================================
-  trait HasSchemaProviderAndProjectionZx extends HasSchemaProviderAndProjectionx {
-    protected def infer(): Cls = // TODO: t210115194646 - check if file size > x
-      hasCommonObjsx
-        .commonObjsx
-        .toListAndTrash // because of c201104121618
-        .pipe(SchemaInferrer.klass)
-
-    // ---------------------------------------------------------------------------
-    final def atomizx: AtomIZx = hasCommonObjsx
-
-      // ---------------------------------------------------------------------------
-      protected def hasCommonObjsx: HasCommonObjsx }
+        // ---------------------------------------------------------------------------
+        protected def infer(): Cls = // TODO: t210115194646 - check if file size > x
+          hasCommonObjsx
+            .commonObjsx
+            .toListAndTrash // because of c201104121618
+            .pipe(SchemaInferrer.klass) }
 
 // ===========================================================================

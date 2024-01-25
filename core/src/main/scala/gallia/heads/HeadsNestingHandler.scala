@@ -14,9 +14,9 @@ object HeadsNestingHandler { // TODO: move thse to handler/handler helper
       def _meta: Cls  = aptus.illegalState("bug:201110144402") }
 
     // ---------------------------------------------------------------------------
-    object NestingMetaPlaceholderU extends NestingMetaPlaceholder with actions.boilerplate.ActionBoilerplate.ActionIUa { def atomius = Nil }
-    object NestingMetaPlaceholderZ extends NestingMetaPlaceholder with actions.boilerplate.ActionBoilerplate.ActionIZa { def atomizs = Nil }
-    object NestingMetaPlaceholderV extends NestingMetaPlaceholder with actions.boilerplate.ActionBoilerplate.ActionIVa { def atomivs = Nil }
+    object NestingMetaPlaceholderU extends NestingMetaPlaceholder with actions.boilerplate.ActionBoilerplate.ActionIU0N { def atomius = Nil }
+    object NestingMetaPlaceholderZ extends NestingMetaPlaceholder with actions.boilerplate.ActionBoilerplate.ActionIZ0N { def atomizs = Nil }
+    object NestingMetaPlaceholderV extends NestingMetaPlaceholder with actions.boilerplate.ActionBoilerplate.ActionIV0N { def atomivs = Nil }
 
   // ===========================================================================
   // FIXME: disable forking in these case

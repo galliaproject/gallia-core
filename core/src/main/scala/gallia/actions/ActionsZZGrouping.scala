@@ -8,7 +8,7 @@ import heads.grouping.GroupData._
 // ===========================================================================
 object ActionsZZGrouping {
 
-  case class GroupingAction(data: GroupData) extends ActionZZb with CanForceAs1[GroupingAction] {
+  case class GroupingAction(data: GroupData) extends ActionZZ1N with CanForceAs1[GroupingAction] {
         override def forceAs(key: Key) = copy(data = data.forceAs(key))
 
       // ---------------------------------------------------------------------------

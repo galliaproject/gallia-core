@@ -11,7 +11,7 @@ object ActionsFor {
   import actions.utils.NestedTransform.{parseUU, parseZZ, parseUZ, parseZU, parseUV, parseZV}
 
   // ===========================================================================
-  case class ForPathUU(target: TqKPath, f: (HeadU, KPath) => HeadU) extends ActionUUc {
+  case class ForPathUU(target: TqKPath, f: (HeadU, KPath) => HeadU) extends ActionUU11 {
       protected def resolve(c: Cls): HeadU => HeadU = target.resolve(c).pipe(p => u => f(u, p))
 
       // ---------------------------------------------------------------------------
@@ -21,7 +21,7 @@ object ActionsFor {
     }
 
     // ---------------------------------------------------------------------------
-    case class ForPathZZ(target: TqKPath, f: (HeadZ, KPath) => HeadZ) extends ActionZZc {
+    case class ForPathZZ(target: TqKPath, f: (HeadZ, KPath) => HeadZ) extends ActionZZ11 {
       private def resolve(c: Cls): HeadZ => HeadZ = target.resolve(c).pipe { p => z => f(z, p) }
 
       // ---------------------------------------------------------------------------
@@ -31,7 +31,7 @@ object ActionsFor {
     }
 
     // ===========================================================================
-    case class ForPathUZ(target: TqKPath, f: (HeadU, KPath) => HeadZ) extends ActionUZc {
+    case class ForPathUZ(target: TqKPath, f: (HeadU, KPath) => HeadZ) extends ActionUZ11 {
       protected def resolve(c: Cls): HeadU => HeadZ = target.resolve(c).pipe(p => u => f(u, p))
 
       // ---------------------------------------------------------------------------
@@ -41,7 +41,7 @@ object ActionsFor {
     }
 
     // ---------------------------------------------------------------------------
-    case class ForPathZU(target: TqKPath, f: (HeadZ, KPath) => HeadU) extends ActionZUc {
+    case class ForPathZU(target: TqKPath, f: (HeadZ, KPath) => HeadU) extends ActionZU11 {
       protected def resolve(c: Cls): HeadZ => HeadU = target.resolve(c).pipe(p => z => f(z, p))
 
       // ---------------------------------------------------------------------------
@@ -51,7 +51,7 @@ object ActionsFor {
     }
 
     // ===========================================================================
-    case class ForPathUV[V: WTT](target: TqKPath, f: (HeadU, KPath) => HeadV[V]) extends ActionUVc2 {
+    case class ForPathUV[V: WTT](target: TqKPath, f: (HeadU, KPath) => HeadV[V]) extends ActionUV11b {
       private def resolve(c: Cls): HeadU => HeadV[V] = target.resolve(c).pipe(k => u => f(u, k))
 
       // ---------------------------------------------------------------------------
@@ -61,7 +61,7 @@ object ActionsFor {
     }
 
     // ---------------------------------------------------------------------------
-    case class ForPathZV[V: WTT](target: TqKPath, f: (HeadZ, KPath) => HeadV[V]) extends ActionZVc2 {
+    case class ForPathZV[V: WTT](target: TqKPath, f: (HeadZ, KPath) => HeadV[V]) extends ActionZV11b {
       private def resolve(c: Cls): HeadZ => HeadV[V] = target.resolve(c).pipe(k => x => f(x, k))
 
       // ---------------------------------------------------------------------------
@@ -71,7 +71,7 @@ object ActionsFor {
     }
 
   // ===========================================================================
-  case class ForPathsUU(target: TqKPathz, f: (HeadU, KPathW) => HeadU) extends ActionUUb {
+  case class ForPathsUU(target: TqKPathz, f: (HeadU, KPathW) => HeadU) extends ActionUU1N {
       private def resolveSequence(c: Cls): Seq[HeadU => HeadU] = target.resolve(c).map { p => (u: HeadU) => f(u, p) }
 
       // ---------------------------------------------------------------------------
@@ -88,7 +88,7 @@ object ActionsFor {
     }
 
   // ---------------------------------------------------------------------------
-  case class ForPathsZZ(target: TqKPathz, f: (HeadZ, KPathW) => HeadZ) extends ActionZZb {
+  case class ForPathsZZ(target: TqKPathz, f: (HeadZ, KPathW) => HeadZ) extends ActionZZ1N {
       private def resolveSequence(c: Cls): Seq[HeadZ => HeadZ] = target.resolve(c).map { p => (z: HeadZ) => f(z, p) }
 
       // ---------------------------------------------------------------------------

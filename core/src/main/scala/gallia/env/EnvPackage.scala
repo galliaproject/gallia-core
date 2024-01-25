@@ -4,7 +4,7 @@ import dag._
 
 // ===========================================================================
 package object env {
-  type Node      = ActionVMN
+  type Node      = ActionVN with ActionMN
   type NodePair  = (NodeId, Node)
   type ActionDag = DAG[NodePair] }
 

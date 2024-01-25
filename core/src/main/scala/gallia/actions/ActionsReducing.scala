@@ -8,14 +8,14 @@ import heads.reducing._
 @NumberAbstraction
 object ActionsReducing {
 
-  case class Reduce(pairs: ReducingPairs) extends ActionZUc {
+  case class Reduce(pairs: ReducingPairs) extends ActionZU11 {
       def vldt  (in: Cls): Errs    = Nil//TODO; at least one pair, no duplicates
       def _meta (in: Cls): Cls    = pairs.values.map(_.field(in)).pipe(Cls.apply)
       def atomzu(in: Cls): AtomZU = pairs.values.map(_.dataTriplet(in)).pipe(_Reduce)
     }
 
     // ---------------------------------------------------------------------------
-    case class Reduce1(targets: TqKeyz, tipe: ReducingType) extends ActionZUc {
+    case class Reduce1(targets: TqKeyz, tipe: ReducingType) extends ActionZU11 {
       def vldt (in: Cls): Errs = Nil
 
       def _meta (in: Cls): Cls    = pairs(in).map(_.field(in)).pipe(Cls.apply)
@@ -25,7 +25,7 @@ object ActionsReducing {
     }
 
     // ---------------------------------------------------------------------------
-    case class ReduceN(targets: TqKeyz, tipes: Seq[ReducingType] /* TODO: check at least one*/) extends ActionZUc {
+    case class ReduceN(targets: TqKeyz, tipes: Seq[ReducingType] /* TODO: check at least one*/) extends ActionZU11 {
       def vldt  (in: Cls): Errs = Nil
       def _meta (in: Cls): Cls    = pairs(in).map(_.field(in)).pipe(Cls.apply)
       def atomzu(in: Cls): AtomZU = pairs(in).map(_.dataTriplet(in)).pipe(_Reduce)

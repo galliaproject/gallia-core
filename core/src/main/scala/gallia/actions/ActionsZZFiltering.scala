@@ -22,26 +22,26 @@ object ActionsZZFiltering {
 
   // ===========================================================================
   case class FilterUnsafe(pred: Obj => Boolean, asFind: Boolean)
-      extends ActionZZd with IdentityVM1 with HasAsFind {
+      extends ActionZZ01 with IdentityVM1 with HasAsFind {
     def  atomzz: AtomZZ = _FilterUnsafe(pred, max) }
 
   // ===========================================================================
   case class FilterByV[$Ignored](target: TtqKPath, pred: $Ignored => Boolean, asFind: Boolean)
-      extends ActionZZc with IdentityM1 with UsesSimpleTypedTargetQuery1Target[KPath] with HasAsFind {
+      extends ActionZZ11 with IdentityM1 with UsesSimpleTypedTargetQuery1Target[KPath] with HasAsFind {
         def atomzz(c: Cls): AtomZZ = target.pathPairT(c).pipe(_FilterBy1(_, pred, max)) }
 
       // ===========================================================================
       case class FilterByV2[T1, T2](target: TtqKPath2, pred: (T1, T2) => Boolean, asFind: Boolean)
-          extends ActionZZc with IdentityM1 with UsesSimpleTypedTargetQuery2Target[KPath] with HasAsFind {
+          extends ActionZZ11 with IdentityM1 with UsesSimpleTypedTargetQuery2Target[KPath] with HasAsFind {
         def atomzz(c: Cls): AtomZZ = target.pathPairT(c).pipe(_FilterBy2(_, pred, max)) }
 
       // ---------------------------------------------------------------------------
       case class FilterByV3[T1, T2, T3](target: TtqKPath3, pred: (T1, T2, T3) => Boolean, asFind: Boolean)
-          extends ActionZZc with IdentityM1 with UsesSimpleTypedTargetQuery3Target[KPath] with HasAsFind {
+          extends ActionZZ11 with IdentityM1 with UsesSimpleTypedTargetQuery3Target[KPath] with HasAsFind {
         def atomzz(c: Cls): AtomZZ = target.pathPairT(c).pipe(_FilterBy3(_, pred, max)) }
 
     // ===========================================================================
-    @Distributivity case class TakeWhile(pred: HeadU => HeadV[Boolean]) extends ActionZZc with IdentityM1 {
+    @Distributivity case class TakeWhile(pred: HeadU => HeadV[Boolean]) extends ActionZZ11 with IdentityM1 {
         private val _trsf = parseUV(pred)
 
         // ---------------------------------------------------------------------------
@@ -49,7 +49,7 @@ object ActionsZZFiltering {
         def atomzz(c: Cls): AtomZZ = _TakeWhile(_trsf.dataU2B(c)) }
 
       // ---------------------------------------------------------------------------
-      @Distributivity case class DropWhile(pred: HeadU => HeadV[Boolean]) extends ActionZZc with IdentityM1 {
+      @Distributivity case class DropWhile(pred: HeadU => HeadV[Boolean]) extends ActionZZ11 with IdentityM1 {
         private val _trsf = parseUV(pred)
 
         // ---------------------------------------------------------------------------
@@ -58,7 +58,7 @@ object ActionsZZFiltering {
 
   // ===========================================================================
     case class FilterByU(target: TtqKPath, pred: HeadU => HeadV[Boolean], asFind: Boolean)
-          extends ActionZZc with IdentityM1 with HasAsFind {
+          extends ActionZZ11 with IdentityM1 with HasAsFind {
         private val _trsf = parseUV(pred)
 
         // ---------------------------------------------------------------------------
@@ -78,7 +78,7 @@ object ActionsZZFiltering {
 
     // ---------------------------------------------------------------------------
     case class FilterByZ(target: TtqKPath, pred: HeadZ => HeadV[Boolean], asFind: Boolean)
-          extends ActionZZc with IdentityM1 with HasAsFind {
+          extends ActionZZ11 with IdentityM1 with HasAsFind {
         private val _trsf = parseZV(pred)
 
         // ---------------------------------------------------------------------------
@@ -120,7 +120,7 @@ object ActionsZZFiltering {
 
     // ===========================================================================
     case class FilterByPresence(target: TqKPath, negate: Boolean, asFind: Boolean)
-      extends ActionZZc with IdentityM1 with HasAsFind {
+      extends ActionZZ11 with IdentityM1 with HasAsFind {
         def vldt(c: Cls): Errs   =
           target.vldtAsOrigin(c)
             .orIfEmpty(_vldt.checkNonRequired(c, target.resolve(c).pipe(KPathz.from)))
@@ -133,7 +133,7 @@ object ActionsZZFiltering {
 
     // ===========================================================================
     case class FilterByWV(target: TqKPath, pred: WV => Boolean, asFind: Boolean)
-      extends ActionZZc with IdentityM1 with HasAsFind {
+      extends ActionZZ11 with IdentityM1 with HasAsFind {
         def vldt  (c: Cls): Errs   = target.vldtAsOrigin(c)
         def atomzz(c: Cls): AtomZZ = target.pathPairT(c).pipe(_FilterBy1(_, wrap, max))
 
@@ -142,7 +142,7 @@ object ActionsZZFiltering {
 
       // ===========================================================================
       case class FilterByWV2(target: TqKPath2, pred: (WV, WV) => Boolean, asFind: Boolean)
-        extends ActionZZc with IdentityM1 with HasAsFind {
+        extends ActionZZ11 with IdentityM1 with HasAsFind {
           def vldt  (c: Cls): Errs   = target.vldtAsOrigin(c)
           def atomzz(c: Cls): AtomZZ = target.pathPairT(c).pipe(_FilterBy2(_, wrap, max))
   
@@ -151,7 +151,7 @@ object ActionsZZFiltering {
 
       // ===========================================================================
       case class FilterByWV3(target: TqKPath3, pred: (WV, WV, WV) => Boolean, asFind: Boolean)
-        extends ActionZZc with IdentityM1 with HasAsFind {
+        extends ActionZZ11 with IdentityM1 with HasAsFind {
           def vldt  (c: Cls): Errs   = target.vldtAsOrigin(c)
           def atomzz(c: Cls): AtomZZ = target.pathPairT(c).pipe(_FilterBy3(_, wrap, max))
   

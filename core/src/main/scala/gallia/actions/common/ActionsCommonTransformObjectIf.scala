@@ -11,7 +11,7 @@ object ActionsCommonTransformObjectIf {
   import gallia.atoms.AtomsCustom
 
   // ===========================================================================
-  abstract class _TransformObjectIf(pred: AnyValue => Boolean, f: HeadO => HeadO) extends ActionUUc with IdentityM1 {
+  abstract class _TransformObjectIf(pred: AnyValue => Boolean, f: HeadO => HeadO) extends ActionUU11 with IdentityM1 {
     def pathPair(c: Cls): PathPair
 
     // ===========================================================================

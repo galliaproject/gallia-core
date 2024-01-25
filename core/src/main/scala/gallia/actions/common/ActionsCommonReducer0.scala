@@ -12,12 +12,12 @@ import atoms.common.AtomsCommonReducer0._
 
   // ---------------------------------------------------------------------------
   //FIXME: needs to return 0 if missing + allow renamings
-  @deprecated("use reducer rather") case class ToSize(targets: TqRPathz) extends ActionUUc with TodoV1 { def hack(c: Cls) = targets.resolve(c).from1KFX
+  @deprecated("use reducer rather") case class ToSize(targets: TqRPathz) extends ActionUU11 with TodoV1 { def hack(c: Cls) = targets.resolve(c).from1KFX
       def _meta (c: Cls): Cls    = hack(c).pipe(c.updateInfo(_, Info.oneInt))
       def atomuu(c: Cls): AtomUU = _ToSize(hack(c)) }
 
     // ---------------------------------------------------------------------------
-    @deprecated("use reducer rather") case class ToSum(targets: TqRPathz) extends ActionUUc with TodoV1 { def hack(c: Cls) = targets.resolve(c).from1KFX
+    @deprecated("use reducer rather") case class ToSum(targets: TqRPathz) extends ActionUU11 with TodoV1 { def hack(c: Cls) = targets.resolve(c).from1KFX
       def _meta(c: Cls): Cls  =
         hack(c).pipe(c.field).forceNumericalType match {
           case BasicType._Int    => hack(c).pipe(c.updateInfo(_, Info.oneInt))
@@ -30,7 +30,7 @@ import atoms.common.AtomsCommonReducer0._
     }
 
     // ---------------------------------------------------------------------------
-    @deprecated("use reducer rather") case class ToMean(targets: TqRPathz) extends ActionUUc with TodoV1 { def hack(c: Cls) = targets.resolve(c).from1KFX
+    @deprecated("use reducer rather") case class ToMean(targets: TqRPathz) extends ActionUU11 with TodoV1 { def hack(c: Cls) = targets.resolve(c).from1KFX
       def _meta(c: Cls): Cls  = hack(c).pipe(c.updateInfo(_, Info.oneDouble))
 
       def atomuu(c: Cls): AtomUU =
@@ -39,7 +39,7 @@ import atoms.common.AtomsCommonReducer0._
     }
 
     // ---------------------------------------------------------------------------
-    @deprecated("use reducer rather") case class ToStdev(targets: TqRPathz) extends ActionUUc with TodoV1 { def hack(c: Cls) = targets.resolve(c).from1KFX
+    @deprecated("use reducer rather") case class ToStdev(targets: TqRPathz) extends ActionUU11 with TodoV1 { def hack(c: Cls) = targets.resolve(c).from1KFX
       def _meta(c: Cls): Cls  = hack(c).pipe(c.updateInfo(_, Info.oneDouble))
 
       def atomuu(c: Cls): AtomUU =

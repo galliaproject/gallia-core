@@ -5,7 +5,7 @@ import actions.ActionsOthers._
 import actions.ActionsThns._
 
 // ===========================================================================
-class HeadU private[gallia]( // TODO: t210121105809 - rename to HeadO and generally change occurrences of "u" into "o"; "u" was historical
+class HeadU private[gallia]( // TODO: t210121105809 - rename to HeadO and generally change occurrences of "u" into "o"; "u" was historical; problem is "o" is also used for "output" elsewhere
       protected[gallia] override val nodeId : NodeId,
       protected[gallia] override val handler: Handler)
     extends common.HeadCommon[HeadU]

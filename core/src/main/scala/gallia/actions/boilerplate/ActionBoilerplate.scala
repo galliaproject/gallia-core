@@ -8,85 +8,85 @@ object ActionBoilerplate extends ActionBoilerplate
 // ---------------------------------------------------------------------------
 trait ActionBoilerplate { import ActionAtomsBoilerplate._
 
-  trait IdentityUUa extends ActionUU with ActionAtomsUUa { def atomuus: AtomUUs = Nil }
-  trait IdentityZZa extends ActionZZ with ActionAtomsZZa { def atomzzs: AtomZZs = Nil }
-  trait IdentityVVa extends ActionVV with ActionAtomsVVa { def atomvvs: AtomVVs = Nil }
+  trait IdentityUU0N extends ActionUU with ActionAtomsUU0N { def atomuus: AtomUUs = Nil }
+  trait IdentityZZ0N extends ActionZZ with ActionAtomsZZ0N { def atomzzs: AtomZZs = Nil }
+  trait IdentityVV0N extends ActionVV with ActionAtomsVV0N { def atomvvs: AtomVVs = Nil }
 
   // ---------------------------------------------------------------------------
-  trait ActionUUa extends ActionUU with ActionAtomsUUa
-  trait ActionUUd extends ActionUU with ActionAtomsUUd
-  trait ActionUUc extends ActionUU with ActionAtomsUUc
-  trait ActionUUb extends ActionUU with ActionAtomsUUb
+  trait ActionUU0N extends ActionUU with ActionAtomsUU0N
+  trait ActionUU01 extends ActionUU with ActionAtomsUU01
+  trait ActionUU11 extends ActionUU with ActionAtomsUU11
+  trait ActionUU1N extends ActionUU with ActionAtomsUU1N
 
-  trait ActionUUbb extends ActionUU with ActionAtomsUUbb // provides origin, TODO: t210616122449 - generalize
-
-    // ---------------------------------------------------------------------------
-    trait ActionZZd extends ActionZZ with ActionAtomsZZd
-    trait ActionZZa extends ActionZZ with ActionAtomsZZa
-    trait ActionZZc extends ActionZZ with ActionAtomsZZc
-    trait ActionZZb extends ActionZZ with ActionAtomsZZb
+  trait ActionUU1Nb extends ActionUU with ActionAtomsUU1Nb // provides origin, TODO: t210616122449 - generalize
 
     // ---------------------------------------------------------------------------
-    trait ActionUZc extends ActionUZ with ActionAtomsUZc
-    trait ActionUZd extends ActionUZ with ActionAtomsUZd
+    trait ActionZZ01 extends ActionZZ with ActionAtomsZZ01
+    trait ActionZZ0N extends ActionZZ with ActionAtomsZZ0N
+    trait ActionZZ11 extends ActionZZ with ActionAtomsZZ11
+    trait ActionZZ1N extends ActionZZ with ActionAtomsZZ1N
 
     // ---------------------------------------------------------------------------
-    trait ActionZUc extends ActionZU with ActionAtomsZUc
-    trait ActionZUd extends ActionZU with ActionAtomsZUd
+    trait ActionUZ11 extends ActionUZ with ActionAtomsUZ11
+    trait ActionUZ01 extends ActionUZ with ActionAtomsUZ01
 
     // ---------------------------------------------------------------------------
-    trait ActionIUd extends ActionIU with ActionAtomsIUd
-    trait ActionIUa extends ActionIU with ActionAtomsIUa
-    trait ActionIUc extends ActionIU with ActionAtomsIUc
-    trait ActionIUb extends ActionIU with ActionAtomsIUb
+    trait ActionZU11 extends ActionZU with ActionAtomsZU11
+    trait ActionZU01 extends ActionZU with ActionAtomsZU01
 
     // ---------------------------------------------------------------------------
-    trait ActionIZd extends ActionIZ with ActionAtomsIZd
-    trait ActionIZa extends ActionIZ with ActionAtomsIZa
-    trait ActionIZc extends ActionIZ with ActionAtomsIZc
-    trait ActionIZb extends ActionIZ with ActionAtomsIZb
+    trait ActionIU01 extends ActionIU with ActionAtomsIU01
+    trait ActionIU0N extends ActionIU with ActionAtomsIU0N
+    trait ActionIU11 extends ActionIU with ActionAtomsIU11
+    trait ActionIU1N extends ActionIU with ActionAtomsIU1N
 
     // ---------------------------------------------------------------------------
-    trait ActionIVd extends ActionIV with ActionAtomsIVd
-    trait ActionIVa extends ActionIV with ActionAtomsIVa
-    trait ActionIVc extends ActionIV with ActionAtomsIVc
-    trait ActionIVb extends ActionIV with ActionAtomsIVb
+    trait ActionIZ01 extends ActionIZ with ActionAtomsIZ01
+    trait ActionIZ0N extends ActionIZ with ActionAtomsIZ0N
+    trait ActionIZ11 extends ActionIZ with ActionAtomsIZ11
+    trait ActionIZ1N extends ActionIZ with ActionAtomsIZ1N
+
+    // ---------------------------------------------------------------------------
+    trait ActionIV01 extends ActionIV with ActionAtomsIV01
+    trait ActionIV0N extends ActionIV with ActionAtomsIV0N
+    trait ActionIV11 extends ActionIV with ActionAtomsIV11
+    trait ActionIV1N extends ActionIV with ActionAtomsIV1N
 
     // ===========================================================================
-    trait ActionUOd extends ActionUO with ActionAtomsUOd
-    trait ActionUOa extends ActionUO with ActionAtomsUOa
-    trait ActionUOc extends ActionUO with ActionAtomsUOc
-    trait ActionUOb extends ActionUO with ActionAtomsUOb
+    trait ActionUO01 extends ActionUO with ActionAtomsUO01
+    trait ActionUO0N extends ActionUO with ActionAtomsUO0N
+    trait ActionUO11 extends ActionUO with ActionAtomsUO11
+    trait ActionUO1N extends ActionUO with ActionAtomsUO1N
 
     // ---------------------------------------------------------------------------
-    trait ActionZOd extends ActionZO with ActionAtomsZOd
-    trait ActionZOa extends ActionZO with ActionAtomsZOa
-    trait ActionZOc extends ActionZO with ActionAtomsZOc
-    trait ActionZOb extends ActionZO with ActionAtomsZOb
+    trait ActionZO01 extends ActionZO with ActionAtomsZO01
+    trait ActionZO0N extends ActionZO with ActionAtomsZO0N
+    trait ActionZO11 extends ActionZO with ActionAtomsZO11
+    trait ActionZO1N extends ActionZO with ActionAtomsZO1N
 
     // ---------------------------------------------------------------------------
-    trait ActionVOd extends ActionVO with ActionAtomsVOd
-    trait ActionVOa extends ActionVO with ActionAtomsVOa
-    trait ActionVOc extends ActionVO with ActionAtomsVOc
-    trait ActionVOb extends ActionVO with ActionAtomsVOb
+    trait ActionVO01 extends ActionVO with ActionAtomsVO01
+    trait ActionVO0N extends ActionVO with ActionAtomsVO0N
+    trait ActionVO11 extends ActionVO with ActionAtomsVO11
+    trait ActionVO1N extends ActionVO with ActionAtomsVO1N
 
     // ---------------------------------------------------------------------------
-    trait ActionVUd extends ActionVU with ActionAtomsVUd
-    trait ActionVUa extends ActionVU with ActionAtomsVUa
-    trait ActionVUc extends ActionVU with ActionAtomsVUc
-    trait ActionVUb extends ActionVU with ActionAtomsVUb
+    trait ActionVU01 extends ActionVU with ActionAtomsVU01
+    trait ActionVU0N extends ActionVU with ActionAtomsVU0N
+    trait ActionVU11 extends ActionVU with ActionAtomsVU11
+    trait ActionVU1N extends ActionVU with ActionAtomsVU1N
 
     // ---------------------------------------------------------------------------
-    trait ActionVZd extends ActionVZ with ActionAtomsVZd
-    trait ActionVZa extends ActionVZ with ActionAtomsVZa
-    trait ActionVZc extends ActionVZ with ActionAtomsVZc
-    trait ActionVZb extends ActionVZ with ActionAtomsVZb
+    trait ActionVZ01 extends ActionVZ with ActionAtomsVZ01
+    trait ActionVZ0N extends ActionVZ with ActionAtomsVZ0N
+    trait ActionVZ11 extends ActionVZ with ActionAtomsVZ11
+    trait ActionVZ1N extends ActionVZ with ActionAtomsVZ1N
 
     // ===========================================================================
-                trait ActionUVc  extends ActionUV with ActionAtomsUVc
-    @deprecated trait ActionUVc2 extends ActionUVc with ActionV1 with ActionM1
+                trait ActionUV11  extends ActionUV   with ActionAtomsUV11
+    @deprecated trait ActionUV11b extends ActionUV11 with ActionV1 with ActionM1
 
-                trait ActionZVc  extends ActionZV with ActionAtomsZVc
-    @deprecated trait ActionZVc2 extends ActionZV with ActionAtomsZVc with ActionV1 with ActionM1 }
+                trait ActionZV11  extends ActionZV with ActionAtomsZV11
+    @deprecated trait ActionZV11b extends ActionZV with ActionAtomsZV11 with ActionV1 with ActionM1 }
 
 // ===========================================================================

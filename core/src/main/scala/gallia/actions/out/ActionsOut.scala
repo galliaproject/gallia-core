@@ -15,18 +15,18 @@ import actions.AtomZOs
 // - if table, ensure flat
 
 // ===========================================================================
-case class ForeachOutputU(f: Obj => Unit) extends IdentityV1 with ActionUOd { def atomuo = _ForeachOutputU(f) }
-case class ForeachOutputZ(f: Obj => Unit) extends IdentityV1 with ActionZOd { def atomzo = _ForeachOutputZ(f) }
+case class ForeachOutputU(f: Obj => Unit) extends IdentityV1 with ActionUO01 { def atomuo = _ForeachOutputU(f) }
+case class ForeachOutputZ(f: Obj => Unit) extends IdentityV1 with ActionZO01 { def atomzo = _ForeachOutputZ(f) }
 
 // ===========================================================================
-case class UrlLikeOutputU(ioType: IoTypeU, uriString: String, urlLike: UrlLike) extends ActionUOb {
+case class UrlLikeOutputU(ioType: IoTypeU, uriString: String, urlLike: UrlLike) extends ActionUO1N {
     def vldt(c: Cls): Errs = Nil //TODO
     def atomuos(c: Cls): AtomUOs =
       Seq(_SchemaOutputU (c     , uriString, urlLike, DefaultSchemaSuffix), // TODO: t210115114631 - inclusion configurable
           _UrlLikeOutputU(ioType, uriString, urlLike)) }
 
   // ---------------------------------------------------------------------------
-  case class UrlLikeOutputZ(ioType: IoTypeZ, uriString: String, urlLike: UrlLike) extends ActionZOb {
+  case class UrlLikeOutputZ(ioType: IoTypeZ, uriString: String, urlLike: UrlLike) extends ActionZO1N {
     def vldt(c: Cls): Errs = Nil //TODO
     def atomzos(c: Cls): AtomZOs =
       Seq(_SchemaOutputZ (c     , uriString, urlLike, DefaultSchemaSuffix),
@@ -39,7 +39,7 @@ case class UrlLikeTableOutput(
         formatConf    : FormatConf,
         nullValue     : String,
         arraySeparator: String)
-      extends ActionZOb {
+      extends ActionZO1N {
 
     def vldt(c: Cls): Errs = Nil // TODO: ensure no contradion with uriString? (eg '\t' vs tsv)
     def atomzos(c: Cls): AtomZOs =
@@ -56,33 +56,33 @@ case class UrlLikeTableOutput(
 
 // ===========================================================================
 // including JSON
-case class OtherOutputU(ioType: IoTypeU, outlet: OutletType) extends ActionUOc {
+case class OtherOutputU(ioType: IoTypeU, outlet: OutletType) extends ActionUO11 {
     def vldt(c: Cls): Errs = Nil //TODO
     def atomuo(c: Cls): AtomUO = _OtherOutputU(c, ioType, outlet) }
 
   // ---------------------------------------------------------------------------
   // including JSON
-  case class OtherOutputZ(ioType: IoTypeZ, outlet: OutletType) extends ActionZOc {
+  case class OtherOutputZ(ioType: IoTypeZ, outlet: OutletType) extends ActionZO11 {
     def vldt(c: Cls): Errs = Nil //TODO
     def atomzo(c: Cls): AtomZO = _OtherOutputZ(ioType, outlet) }
 
   // ---------------------------------------------------------------------------
-  case class OtherTableOutput(outlet: OutletType, twc: TableWritingContext) extends ActionZOc {
+  case class OtherTableOutput(outlet: OutletType, twc: TableWritingContext) extends ActionZO11 {
       def vldt(c: Cls): Errs = Nil //TODO
       def atomzo(c: Cls): AtomZO = _OtherTableOutput(c, outlet, twc) }
 
   // ===========================================================================
-  case class PrettyRowOutput(outlet: OutletType, twc: PrettyTableWritingContext) extends ActionUOc {
+  case class PrettyRowOutput(outlet: OutletType, twc: PrettyTableWritingContext) extends ActionUO11 {
         def vldt(c: Cls): Errs = Nil //TODO
         def atomuo(c: Cls): AtomUO = _PrettyRowOutput(c, outlet, twc) }
     
     // ---------------------------------------------------------------------------
-    case class PrettyTableOutput(outlet: OutletType, twc: PrettyTableWritingContext) extends ActionZOc {
+    case class PrettyTableOutput(outlet: OutletType, twc: PrettyTableWritingContext) extends ActionZO11 {
         def vldt(c: Cls): Errs = Nil //TODO
         def atomzo(c: Cls): AtomZO = _PrettyTableOutput(c, outlet, twc) }
 
   // ===========================================================================
-  case class DisplayOutputU(forceRow: Boolean) extends ActionUOc {
+  case class DisplayOutputU(forceRow: Boolean) extends ActionUO11 {
         def vldt  (c: Cls): Errs = Nil //TODO
         def atomuo(c: Cls): AtomUO = 
           ( if (forceRow || !c.hasNesting) PrettyRowOutput(                       OutletType.StandardOutput, PrettyTableWritingContext.Default)
@@ -90,7 +90,7 @@ case class OtherOutputU(ioType: IoTypeU, outlet: OutletType) extends ActionUOc {
           .atomuo(c)}
     
     // ---------------------------------------------------------------------------
-    case class DisplayOutputZ(forceTable: Boolean) extends ActionZOc {
+    case class DisplayOutputZ(forceTable: Boolean) extends ActionZO11 {
         def vldt  (c: Cls): Errs = Nil //TODO
         def atomzo(c: Cls): AtomZO =
           ( if (forceTable || !c.hasNesting) PrettyTableOutput(                    OutletType.StandardOutput, PrettyTableWritingContext.Default)
@@ -102,7 +102,7 @@ case class OtherOutputU(ioType: IoTypeU, outlet: OutletType) extends ActionUOc {
 case class NakedValueOutput(
        eitherOpt: Option[Either[aptus.OutputFilePath, StringWriter]],
        f        : Vle => (Multiple, aptus.CloseabledIterator[String]))
-    extends IdentityV1 with ActionVOd {
+    extends IdentityV1 with ActionVO01 {
   def atomvo = _NakedValueOutput(eitherOpt, f) }
 
 // ===========================================================================

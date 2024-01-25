@@ -18,7 +18,7 @@ object IntermediateMetaResultNodeCreator {
       .pipe(IntermediateMetaResult.apply)
 
   // ===========================================================================
-  private[gallia] def actionAN(action: ActionVMN): ActionAN = // 210205060908
+  private[gallia] def actionAN(action: ActionVN with ActionMN): ActionAN = // 210205060908
     action match {
       case x: ActionAN          => x // <=> asInstanceOf[ActionAN]
       case x: InMemoryMetaInput => NestingDataPlaceholder // TODO: build-in InMemoryMetaInput

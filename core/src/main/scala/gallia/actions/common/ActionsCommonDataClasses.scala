@@ -9,7 +9,7 @@ import atoms.common.AtomsCommonDataClasses._
 // ===========================================================================
 object ActionsCommonDataClasses {
 
-  case class TransformViaDataClass(target: Key, from: TypeDuo, to: TypeDuo, f: _ff11) extends ActionUUc {
+  case class TransformViaDataClass(target: Key, from: TypeDuo, to: TypeDuo, f: _ff11) extends ActionUU11 {
     // TODO: validate those
     lazy val _from: Cls = from.typeNode.forceNonBObjInfo.subInfo1.valueType.nestingOpt.get
     lazy val   _to: Cls =   to.typeNode.forceNonBObjInfo.subInfo1.valueType.nestingOpt.get
@@ -20,7 +20,7 @@ object ActionsCommonDataClasses {
     def atomuu(c: Cls): AtomUU = _TransformVV(c.pathPair(target), from.wrapc(to, f)) }
 
   // ===========================================================================
-  case class CotransformViaDataClass(from: TypeDuo, to: TypeDuo, f: _ff11, eraseOriginIfDifferent: Boolean) extends ActionUUc {
+  case class CotransformViaDataClass(from: TypeDuo, to: TypeDuo, f: _ff11, eraseOriginIfDifferent: Boolean) extends ActionUU11 {
       //TODO: validate Container._One for now
       lazy val _from: Cls = from.typeNode.forceNonBObjInfo.subInfo1.valueType.nestingOpt.get
       lazy val _to  : Cls =   to.typeNode.forceNonBObjInfo.subInfo1.valueType.nestingOpt.get
@@ -52,7 +52,7 @@ object ActionsCommonDataClasses {
     }
 
     // ===========================================================================
-    case class CotransformViaDataClassAs(from: TypeDuo, to: TypeNode, as: Key, f: _ff11, eraseOriginIfDifferent: Boolean) extends ActionUUc {
+    case class CotransformViaDataClassAs(from: TypeDuo, to: TypeNode, as: Key, f: _ff11, eraseOriginIfDifferent: Boolean) extends ActionUU11 {
       //TODO: validate Container._One for now
       lazy val _from: Cls = from.typeNode.forceNonBObjInfo.subInfo1.valueType.nestingOpt.get
       lazy val _to  : Fld = Fld(as, to.forceNonBObjInfo)

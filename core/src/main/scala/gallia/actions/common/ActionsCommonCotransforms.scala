@@ -11,7 +11,7 @@ import meta.ValueType
 // ===========================================================================
 object ActionsCommonCotransforms { // TODO: t210826102833 - rework co-transforms
 
-  case class Cotransform1to1(from: TtqKPath1, toEither: Either[HasType, TtqKPath1], f: _ff11) extends ActionUUc {
+  case class Cotransform1to1(from: TtqKPath1, toEither: Either[HasType, TtqKPath1], f: _ff11) extends ActionUU11 {
       def  vldt(c: Cls): Errs  =
         from.vldtAsOrigin(c) ++
         to(c).vldtAsCotransformDestination(c, from.kpath_(c))
@@ -24,7 +24,7 @@ object ActionsCommonCotransforms { // TODO: t210826102833 - rework co-transforms
       def atomuu(c: Cls): AtomUU = _Transform1to1(from.pathPairT(c), to(c).kpathT(c), f) }
 
     // ---------------------------------------------------------------------------
-  case class Cotransform2to2(from: TtqKPath2, toEither: Either[HasTypes2, TtqKPath2], f: _ff22) extends ActionUUc {
+  case class Cotransform2to2(from: TtqKPath2, toEither: Either[HasTypes2, TtqKPath2], f: _ff22) extends ActionUU11 {
       def  vldt(c: Cls): Errs  =
         from.vldtAsOrigin(c) ++
         to(c).vldtAsCotransformDestination(c, from.__kpathz(c))
@@ -36,7 +36,7 @@ object ActionsCommonCotransforms { // TODO: t210826102833 - rework co-transforms
       def atomuu(c: Cls): AtomUU = _Transform2to2(from.pathPairT(c), to(c).kpathT(c), f) }
 
     // ---------------------------------------------------------------------------
-    case class Cotransform1to2(from: TtqKPath1, to: TtqKPath2, f: _ff12) extends ActionUUc {
+    case class Cotransform1to2(from: TtqKPath1, to: TtqKPath2, f: _ff12) extends ActionUU11 {
       def  vldt(c: Cls): Errs  =
         from.vldtAsOrigin(c) ++
         to.vldtAsCotransformDestination(c, from.kpath_(c))
@@ -46,7 +46,7 @@ object ActionsCommonCotransforms { // TODO: t210826102833 - rework co-transforms
       def atomuu(c: Cls): AtomUU = _Transform1to2(from.pathPairT(c), to.kpathT(c), f) }
 
     // ---------------------------------------------------------------------------
-    case class Cotransform1to3(from: TtqKPath1, to: TtqKPath3, f: _ff13) extends ActionUUc {
+    case class Cotransform1to3(from: TtqKPath1, to: TtqKPath3, f: _ff13) extends ActionUU11 {
       def  vldt(c: Cls): Errs  =
         from.vldtAsOrigin(c) ++
         to.vldtAsCotransformDestination(c, from.kpath_(c))
@@ -56,7 +56,7 @@ object ActionsCommonCotransforms { // TODO: t210826102833 - rework co-transforms
       def atomuu(c: Cls): AtomUU = _Transform1to3(from.pathPairT(c), to.kpathT(c), f) }
 
     // ---------------------------------------------------------------------------
-    case class Cotransform2to1(from: TtqKPath2, to: TtqKPath, f: _ff21) extends ActionUUc {
+    case class Cotransform2to1(from: TtqKPath2, to: TtqKPath, f: _ff21) extends ActionUU11 {
       def  vldt(c: Cls): Errs  =
         from.vldtAsOrigin(c) ++
         to.vldtAsCotransformDestination(c, from.__kpathz(c))
@@ -66,7 +66,7 @@ object ActionsCommonCotransforms { // TODO: t210826102833 - rework co-transforms
       def atomuu(c: Cls): AtomUU = _Transform2to1(from.pathPairT(c), to.kpathT(c), f) }
 
     // ---------------------------------------------------------------------------
-    case class Cotransform2to3(from: TtqKPath2, to: TtqKPath3, f: _ff23) extends ActionUUc {
+    case class Cotransform2to3(from: TtqKPath2, to: TtqKPath3, f: _ff23) extends ActionUU11 {
       def  vldt(c: Cls): Errs  =
         from.vldtAsOrigin(c) ++
         to.vldtAsCotransformDestination(c, from.__kpathz(c))

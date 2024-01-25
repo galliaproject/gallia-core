@@ -9,7 +9,7 @@ trait CanForceAs1[T] { def forceAs(key: Key): T } // TODO: t201208111414 - macro
 
   // ===========================================================================
   // TODO: reuse Rename?
-  case class AsRename private[gallia] (target: Ren) extends ActionZZa with CanForceAs1[AsRename] {
+  case class AsRename private[gallia] (target: Ren) extends ActionZZ0N with CanForceAs1[AsRename] {
     override def forceAs(key: Key): AsRename = AsRename(target.assert(!_.isActual /* see 201203143058 */).from ~> key)
 
     // ---------------------------------------------------------------------------

@@ -14,7 +14,7 @@ object ActionsCommonNestingRelated {
   import gallia.actions.utils.ActionsUtils.potentialRenaming
 
   // ===========================================================================
-  class NestUnder(target: TqRPathz, destination: Key) extends ActionUUb {
+  class NestUnder(target: TqRPathz, destination: Key) extends ActionUU1N {
         def  vldt(c: Cls): Errs = target.vldtAsOrigin(c) ++ Nil //TODO
            // TODO: t210128155944 - validate new key names
            // TODO: check target is distinct
@@ -25,7 +25,7 @@ object ActionsCommonNestingRelated {
     }
 
     // ---------------------------------------------------------------------------
-    class NestInto(target: TqRPathz, destination: Ren) extends ActionUUb {      
+    class NestInto(target: TqRPathz, destination: Ren) extends ActionUU1N {
         def  vldt(c: Cls): Errs = target.vldtAsOrigin(c) ++ Nil //TODO
         def _meta(c: Cls): Cls  = target.resolve(c).map(_.renFX).pipe(Renz.apply).pipe(c.nest(_, destination.from)).rename(destination)
         def atomuus(c: Cls)     = target.resolve(c).pipe { rpathz =>
@@ -37,7 +37,7 @@ object ActionsCommonNestingRelated {
   // ===========================================================================
   // TODO: split up
 
-  case class UnnestFrom(parent: KPath, target: TqRenz) extends ActionUUb { //TODO: multiple levels? mark here if one, all, ...
+  case class UnnestFrom(parent: KPath, target: TqRenz) extends ActionUU1N { //TODO: multiple levels? mark here if one, all, ...
     private def fromz(nc: Cls): Keyz = target.resolve(nc).froms
 
     // ---------------------------------------------------------------------------
@@ -82,7 +82,7 @@ object ActionsCommonNestingRelated {
   }
 
   // ===========================================================================
-  case class Renest(targets: TqKeyz, sep: Separator) extends ActionUUc with TodoV1 {
+  case class Renest(targets: TqKeyz, sep: Separator) extends ActionUU11 with TodoV1 {
       // TODO: check for potential resulting conflicts
       def _meta (c: Cls): Cls = targets.resolve(c).pipe(AtomsCommonResnesting.meta(_, sep)(c))
       def atomuu(c: Cls)      = targets.resolve(c).pipe(_Renest(_, sep)) }
@@ -92,7 +92,7 @@ object ActionsCommonNestingRelated {
       AtomsCommonResnesting.data(targetKeys, sep)(o) }
 
   // ===========================================================================
-  @deprecated("WIP: t210109144926 - nesting-related generalization") class Move(target: RPathz, destinationOpt: Option[RPath]) extends ActionUUa {
+  @deprecated("WIP: t210109144926 - nesting-related generalization") class Move(target: RPathz, destinationOpt: Option[RPath]) extends ActionUU0N {
       def  vldt(c: Cls): Errs = Nil //TODO
       def _meta(c: Cls): Cls  = ???
       def atomuus = {

@@ -7,26 +7,26 @@ import atoms.AtomsCustom._
 // ===========================================================================
 object ActionsCustoms {
 
-  case class CustomMeta(f: Cls => Cls) extends IdentityV1 with IdentityUUa {
+  case class CustomMeta(f: Cls => Cls) extends IdentityV1 with IdentityUU0N {
         def _meta(c: Cls): Cls = f(c) }
 
     // ---------------------------------------------------------------------------
-    case class CustomField(target: TqRPathz, f: Info => Info) extends IdentityUUa {
+    case class CustomField(target: TqRPathz, f: Info => Info) extends IdentityUU0N {
           def  vldt(c: Cls): Errs = target.vldtAsOrigin(c)
           def _meta(c: Cls): Cls  = target(c)(c.transformInfo(_, f)) }
 
       // ---------------------------------------------------------------------------
-      case class CustomContainer(target: TqRPathz, f: Container => Container) extends IdentityUUa { // TODO: t220427091730 - change to optional/multiple
+      case class CustomContainer(target: TqRPathz, f: Container => Container) extends IdentityUU0N { // TODO: t220427091730 - change to optional/multiple
           def  vldt(c: Cls): Errs = target.vldtAsOrigin(c)
           def _meta(c: Cls): Cls  = ??? }//FIXME: t220426160919 - target(c)(c.transformSoleSubInfo(_)(_.transformContainer(f))) }
 
       // ---------------------------------------------------------------------------
-      case class CustomBasicType(target: TqRPathz, f: BasicType => BasicType) extends IdentityUUa {
+      case class CustomBasicType(target: TqRPathz, f: BasicType => BasicType) extends IdentityUU0N {
           def vldt(c: Cls): Errs = target.vldtAsOrigin(c) // TODO: check not nesting
           def _meta(c: Cls): Cls = target(c)(c.transformSoleSubInfo(_)(_.transformBasicType(f))) }
 
   // ===========================================================================
-  class CustomUU(meta: Cls => Cls, data: Obj => Obj) extends ActionUUd with IdentityV1 {
+  class CustomUU(meta: Cls => Cls, data: Obj => Obj) extends ActionUU01 with IdentityV1 {
         def _meta (c: Cls): Cls  = meta(c)
         def  atomuu       : AtomUU = _CustomOO(data) }
 
@@ -39,7 +39,7 @@ object ActionsCustoms {
       }
 
     // ===========================================================================
-    class CustomZZ(meta: Cls => Cls, data: Objs => Objs) extends ActionZZd with IdentityV1 {
+    class CustomZZ(meta: Cls => Cls, data: Objs => Objs) extends ActionZZ01 with IdentityV1 {
         def _meta(in: Cls): Cls    = meta(in)
         def atomzz        : AtomZZ = _CustomZZ(data) }
 
@@ -52,7 +52,7 @@ object ActionsCustoms {
       }
 
     // ===========================================================================
-    class CustomZU(meta: Cls => Cls, data: Objs => Obj) extends ActionZUd with IdentityV1 {
+    class CustomZU(meta: Cls => Cls, data: Objs => Obj) extends ActionZU01 with IdentityV1 {
         def _meta(in: Cls): Cls    = meta(in)
         def atomzu        : AtomZU = _CustomZO(data) }
 

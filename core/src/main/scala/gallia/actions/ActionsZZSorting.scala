@@ -13,28 +13,28 @@ import domain.{Sorter, SortingPair}
 object ActionsZZSorting {
 
   // ---------------------------------------------------------------------------
-  case class SortUnsafe[T: WTT](f: Obj => T, ord: Ordering[T]) extends ActionZZc with IdentityVM1 {
+  case class SortUnsafe[T: WTT](f: Obj => T, ord: Ordering[T]) extends ActionZZ11 with IdentityVM1 {
     //TODO: at least check T?
     def  atomzz(c: Cls) = _SortUnsafe(f: Obj => T, SuperMetaPair(implicitly[WTT[T]].ctag, ord)) }
 
   // ===========================================================================
-  case class SortByAll(pair: SortingPair) extends ActionZZc with IdentityVM1 {
+  case class SortByAll(pair: SortingPair) extends ActionZZ11 with IdentityVM1 {
       def  atomzz(c: Cls) = _SortByAll(c, pair) }
 
   // ===========================================================================
-  case class SortBy1(sorter: Sorter) extends ActionZZc with IdentityVM1 {
+  case class SortBy1(sorter: Sorter) extends ActionZZ11 with IdentityVM1 {
     def atomzz(c: Cls) = sortBy1(c)(sorter) } //TODO: check target (use HasTypedTargetQueryXXX?)
 
   // ---------------------------------------------------------------------------
-  case class SortBy2(sorter1: Sorter, sorter2: Sorter) extends ActionZZc with IdentityVM1 {
+  case class SortBy2(sorter1: Sorter, sorter2: Sorter) extends ActionZZ11 with IdentityVM1 {
     def  atomzz(c: Cls) = sortBy2(c)(sorter1, sorter2) } // TODO: also check targets are distinct
 
   // ---------------------------------------------------------------------------
-  case class SortBy3(sorter1: Sorter, sorter2: Sorter, sorter3: Sorter) extends ActionZZc with IdentityVM1 {
+  case class SortBy3(sorter1: Sorter, sorter2: Sorter, sorter3: Sorter) extends ActionZZ11 with IdentityVM1 {
     def  atomzz(c: Cls) = sortBy3(c)(sorter1, sorter2, sorter3) } // TODO: also check targets are distinct
 
   // ---------------------------------------------------------------------------
-  case class SortByN(targets: TqKPathz) extends ActionZZc with IdentityVM1 {
+  case class SortByN(targets: TqKPathz) extends ActionZZ11 with IdentityVM1 {
      // TODO: validate 5 at most (and at least one?)
     def  atomzz(c: Cls) =
       targets.resolve(c).values match {
@@ -54,11 +54,11 @@ object ActionsZZSorting {
   // ===========================================================================
   //TODO: check targets (use HasTypedTargetQueryXXX?)
 
-  case class CustomSort1[D](target: TtqKPath, f: _ff11, meta: SuperMetaPair[D]) extends ActionZZc with IdentityVM1 {
+  case class CustomSort1[D](target: TtqKPath, f: _ff11, meta: SuperMetaPair[D]) extends ActionZZ11 with IdentityVM1 {
       def  atomzz(c: Cls) = _CustomSort1(target.pathPairT(c), f, meta) }
 
     // ---------------------------------------------------------------------------
-    case class CustomSort2[D](target: TtqKPath2, f: _ff21, meta: SuperMetaPair[D]) extends ActionZZc with IdentityVM1 {
+    case class CustomSort2[D](target: TtqKPath2, f: _ff21, meta: SuperMetaPair[D]) extends ActionZZ11 with IdentityVM1 {
       def  atomzz(c: Cls) = _CustomSort2(target.pathPairT(c), f, meta) }
 
 }

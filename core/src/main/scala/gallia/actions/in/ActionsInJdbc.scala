@@ -6,7 +6,7 @@ package in
 case class JdbcInputZ1( // TODO: t240118135747 - look into https://github.com/com-lihaoyi/scalasql
       inputString: String,
       queryingOpt: Option[ReadQuerying] /* missing if URI-driven */)
-    extends ActionIZd {
+    extends ActionIZ01 {
   private var c: Cls = null
 
   // ---------------------------------------------------------------------------
@@ -24,7 +24,7 @@ case class JdbcInputZ1( // TODO: t240118135747 - look into https://github.com/co
 case class JdbcInputZ2( // TODO: t240118135747 - look into https://github.com/com-lihaoyi/scalasql
       connection: java.sql.Connection,      
       querying: ReadQuerying)
-    extends ActionIZd {
+    extends ActionIZ01 {
   private var c: Cls = null
 
   // ---------------------------------------------------------------------------

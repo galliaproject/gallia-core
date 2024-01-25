@@ -34,6 +34,8 @@ package object gallia
 
   // ===========================================================================
   // TODO: t210121105809 - rename to HeadU->HeadO and HeadZ->HeadS (historical names)
+  //   but 'o' is also used to refer to output in places
+  // we need new/better suffices for 'single' vs 'multiple', and '(naked) value' vs 'entity'
 
   type HeadV[T] = heads.HeadV[T]
 
@@ -147,9 +149,6 @@ package object gallia
 
   private[gallia] type Errs  = Seq[Err]
   private[gallia] type Err_  = Option[Err]
-
-  // ---------------------------------------------------------------------------
-  private[gallia] type ActionVMN = ActionVN with ActionMN
 
   // ---------------------------------------------------------------------------
   private[gallia] type DataRegenerationClosure[T] = gallia.data.DataRegenerationClosure[T]

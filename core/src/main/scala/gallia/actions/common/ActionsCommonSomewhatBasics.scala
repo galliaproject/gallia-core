@@ -14,7 +14,7 @@ object ActionsCommonSomewhatBasics {
   import gallia.actions.utils.ActionsUtils._
 
   // ===========================================================================
-  case class RemoveConditionally(target: TtqRPathz, pred: Any => Boolean) extends ActionUUb {
+  case class RemoveConditionally(target: TtqRPathz, pred: Any => Boolean) extends ActionUU1N {
       def  vldt(c: Cls): Errs = // TODO: no need to check if some fields are left
         if (target.typeNode.isNone) _Error.CantBeNone.errs //TODO: also Nil
         else                        target.vldtAsOrigin(c, mode = SpecialCardiMode.IgnoreRequiredness)
@@ -23,26 +23,26 @@ object ActionsCommonSomewhatBasics {
       def atomuus(c: Cls): AtomUUs = target.tq.rpathz_(c).pipe(_atoms(x => _RemoveIf(x, x, pred ))) }
 
     // ===========================================================================
-    case class RemoveConditionallyWhatever(target: TqRPathz, value: Any) extends ActionUUb {
+    case class RemoveConditionallyWhatever(target: TqRPathz, value: Any) extends ActionUU1N {
       def  vldt(c: Cls): Errs = target.vldtAsOrigin(c) // TODO: no need to check if some fields are left
 
       def _meta  (c: Cls): Cls     = target.rpathz_(c).foldLeft(c)(_ toOptional _)
       def atomuus(c: Cls): AtomUUs = target.rpathz_(c).pipe(_atoms(_RemoveWhateverIf(_, value))) }
 
     // ===========================================================================
-    case class RemoveConditionally2(reference: TypedTargetQuery[Key], target: TqKey, pred: Any => Boolean) extends ActionUUc {
+    case class RemoveConditionally2(reference: TypedTargetQuery[Key], target: TqKey, pred: Any => Boolean) extends ActionUU11 {
       def  vldt (c: Cls): Errs   = reference.vldtAsOrigin(c) ++ target.vldtAsOrigin(c)
       def _meta (c: Cls): Cls    = c.toOptional(target.resolve(c))
       def atomuu(c: Cls): AtomUU = _RemoveIf(reference.resolve(c), target.resolve(c), pred) }
 
     // ---------------------------------------------------------------------------
-    case class RemoveConditionally2Whatever(reference: Key, target: TqKey, value: Any) extends ActionUUc {
+    case class RemoveConditionally2Whatever(reference: Key, target: TqKey, value: Any) extends ActionUU11 {
       def  vldt (c: Cls): Errs   = _vldt.fieldPresence(c, reference).toSeq ++ target.vldtAsOrigin(c)
       def _meta (c: Cls): Cls    = c.toOptional(target.resolve(c))
       def atomuu(c: Cls): AtomUU = _RemoveIf(reference, target.resolve(c), _ == value) }
 
   // ===========================================================================
-  case class SetDefaultValueFor(target: TtqRPathz, newValue: AnyValue) extends ActionUUb {
+  case class SetDefaultValueFor(target: TtqRPathz, newValue: AnyValue) extends ActionUU1N {
         def vldt(c: Cls): Errs =
           target.vldtAsOrigin(c) ++
           _vldt.typeCompatibility(c, target.duo(c), SpecialCardiMode.Normal)
@@ -54,7 +54,7 @@ object ActionsCommonSomewhatBasics {
       // ---------------------------------------------------------------------------
       case class SetDefaultConditionally2(
             reference: TypedTargetQuery[Key], target: TqKey, pred: Any => Boolean, newValueType: TypeNode, newValue: Any)
-          extends IdentityM1 with ActionUUc {
+          extends IdentityM1 with ActionUU11 {
         def vldt(c: Cls): Errs =
           reference.vldtAsOrigin(c) ++
           target.vldtAsOrigin(c).orIfEmpty {
@@ -66,7 +66,7 @@ object ActionsCommonSomewhatBasics {
       // ---------------------------------------------------------------------------
       case class SetDefaultConditionally2Whatever(
             reference: Key, target: TqKey, referenceValue: Any, newValueType: TypeNode, newValue: Any)
-          extends IdentityM1 with ActionUUc {
+          extends IdentityM1 with ActionUU11 {
 
         def vldt(c: Cls): Errs   =
           _vldt.fieldPresence(c, reference).toSeq ++
@@ -77,13 +77,13 @@ object ActionsCommonSomewhatBasics {
         def atomuu(c: Cls): AtomUU = _SetDefault2(reference, target.resolve(c), _ == referenceValue, newValue) }
 
   // ===========================================================================
-  case class Split(paths: RPathz, splitter: StringSplitter) extends ActionUUa with TodoV1 {
+  case class Split(paths: RPathz, splitter: StringSplitter) extends ActionUU0N with TodoV1 {
     def _meta(c: Cls): Cls  = paths.foldLeft(c)(_ toMultiple _)
     def atomuus: AtomUUs = _atoms(paths, _Split(_, splitter)) }
 
   // ===========================================================================
   /** strict = all values are translated, therefore type can change */
-  case class Translate(target: TtqRPathz, to: TypeNode, strict: Boolean, mapping: Seq[(_, _)]) extends ActionUUb {
+  case class Translate(target: TtqRPathz, to: TypeNode, strict: Boolean, mapping: Seq[(_, _)]) extends ActionUU1N {
       @deprecated val toOpt = to.in.someIf(_ != target.typeNode)
 
       def  vldt(c: Cls): Errs =
@@ -111,7 +111,7 @@ object ActionsCommonSomewhatBasics {
     }
 
   // ===========================================================================
-  case class SingleSwap(parentOpt: Option[RPath], target1: Key, target2: Key) extends ActionUUa with TodoV1 {
+  case class SingleSwap(parentOpt: Option[RPath], target1: Key, target2: Key) extends ActionUU0N with TodoV1 {
       def _meta(c: Cls): Cls  = c.swapFields(parentOpt, target1, target2)
       def atomuus =
         parentOpt match {
@@ -120,12 +120,12 @@ object ActionsCommonSomewhatBasics {
     }
 
     // ---------------------------------------------------------------------------
-    class MultiSwap(targets: Seq[KeyPair]) extends ActionUUa with TodoV1 {
+    class MultiSwap(targets: Seq[KeyPair]) extends ActionUU0N with TodoV1 {
       def _meta(c: Cls): Cls = targets.map(_.value).foldLeft(c)((curr, x) => curr.swapFields(None, x._1, x._2))
       def atomuus            = targets.map(_.value).map((_Swap.apply _).tupled) }
 
   // ---------------------------------------------------------------------------
-  class CopyEntries(origin: RPath, destinations: Seq[Key]) extends ActionUUa with TodoV1 {
+  class CopyEntries(origin: RPath, destinations: Seq[Key]) extends ActionUU0N with TodoV1 {
       def _meta(c: Cls): Cls  = destinations.foldLeft(c)(_.copyField(origin.from, _)).rename(origin)
       def atomuus =
         origin.initPair2 match {
@@ -136,7 +136,7 @@ object ActionsCommonSomewhatBasics {
     }
 
   // ===========================================================================
-  case class ZipStrings(keys: Renz, sep: Separator, newNestingKey : Key) extends ActionUUd with TodoV1 { //TODO: validate at least 2 keys
+  case class ZipStrings(keys: Renz, sep: Separator, newNestingKey : Key) extends ActionUU01 with TodoV1 { //TODO: validate at least 2 keys
       def _meta(c: Cls): Cls = c.zipStrings(keys, newNestingKey)
       def atomuu = _ZipStrings(keys, sep, newNestingKey) }
 
@@ -145,7 +145,7 @@ object ActionsCommonSomewhatBasics {
       gallia.atoms.common.AtomsCommonZip.zip(o, keys, sep, newNestingKey) }
 
   // ===========================================================================
-  case class EnsureNumeric(targets: TqKPathz) extends IdentityM1 with IdentityUUa { // TODO: generalize to any validation
+  case class EnsureNumeric(targets: TqKPathz) extends IdentityM1 with IdentityUU0N { // TODO: generalize to any validation
     def vldt(c: Cls): Errs  = targets.resolve(c).toSeq.flatMap(_vldt.checkNotNumerical(c, _)) }
 
 }

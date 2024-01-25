@@ -15,22 +15,22 @@ import actions.utils.ActionsUtils._
 // ===========================================================================
 object ActionsCommonVeryBasics {
 
-  case object IdentityUU extends IdentityVM1 with IdentityUUa
+  case object IdentityUU extends IdentityVM1 with IdentityUU0N
 
   // ---------------------------------------------------------------------------
-  class ValidateBObj(value: BObj) extends ActionUUa {
+  class ValidateBObj(value: BObj) extends ActionUU0N {
         def  vldt(ignored: Cls): Errs    = _vldt.validateBObj(value)
         def _meta(ignored: Cls): Cls     = value.forceCls
         def atomuus            : AtomUUs = Nil }
 
     // ---------------------------------------------------------------------------
-    class ValidateBObjs(value: BObjs) extends ActionUUa {
+    class ValidateBObjs(value: BObjs) extends ActionUU0N {
         def  vldt(ignored: Cls): Errs    = _vldt.validateBObjs(value)
         def _meta(ignored: Cls): Cls     = value.forceCls
         def atomuus            : AtomUUs = Nil }
 
   // ---------------------------------------------------------------------------
-  case class ShowSchema(abort: Boolean) extends IdentityV1 with ActionM1 with IdentityUUa { // TODO: t210115180737 - configurable
+  case class ShowSchema(abort: Boolean) extends IdentityV1 with ActionM1 with IdentityUU0N { // TODO: t210115180737 - configurable
       def _meta(in: Cls ): Cls = {
         in.printShort()
         if (abort) "210106172924 - aborting".p__ // TODO
@@ -39,7 +39,7 @@ object ActionsCommonVeryBasics {
       } }
 
   // ===========================================================================
-  case class ReorderKeys(f: Seq[SKey] => Seq[SKey], recursively: Boolean) extends ActionUUc {
+  case class ReorderKeys(f: Seq[SKey] => Seq[SKey], recursively: Boolean) extends ActionUU11 {
         def  vldt (c: Cls): Errs   = _vldt.checkKeysReordering(c, f, recursively)
         def _meta (c: Cls): Cls    = c.reorderKeys(tmp, recursively)
         def atomuu(c: Cls): AtomUU =
@@ -51,7 +51,7 @@ object ActionsCommonVeryBasics {
       }
   
     // ---------------------------------------------------------------------------
-    case class ReorderSelectedKeys(target: TqKeyz, f: (Seq[SKey], Seq[SKey]) => Seq[SKey]) extends ActionUUc {
+    case class ReorderSelectedKeys(target: TqKeyz, f: (Seq[SKey], Seq[SKey]) => Seq[SKey]) extends ActionUU11 {
         def  vldt(c: Cls): Errs = 
           target.vldtTargetQuery(c)
             .in.someIf(_.nonEmpty)
@@ -66,13 +66,13 @@ object ActionsCommonVeryBasics {
       }
 
   // ===========================================================================
-  case class Rename(target: RPathz) extends ActionUUb {
+  case class Rename(target: RPathz) extends ActionUU1N {
       def  vldt  (c: Cls): Errs    = _vldt.fieldsRenaming(c, target)
       def _meta  (c: Cls): Cls     = target.foldLeft(c)(_ rename _)
       def atomuus(c: Cls): AtomUUs = target.pipe(_atoms(_ => _IdentityUU)) } // note: Identities get removed
 
     // ===========================================================================
-    case class RenameDynamically(modifier: SKey => SKey, recursively: Boolean) extends ActionUUb { // TODO: move to somewhat basics
+    case class RenameDynamically(modifier: SKey => SKey, recursively: Boolean) extends ActionUU1N { // TODO: move to somewhat basics
       private def results(c: Cls) = RenameDynamicallyHelper.Results.parse(modifier, recursively)(c)
 
       // ---------------------------------------------------------------------------
@@ -86,7 +86,7 @@ object ActionsCommonVeryBasics {
     }
 
   // ===========================================================================
-  class Remove(target: TqKPathz) extends ActionUUb {
+  class Remove(target: TqKPathz) extends ActionUU1N {
     def  vldt  (c: Cls): Errs    = target.vldtAsOrigin(c) ++ _vldt.someFieldsAreLeft (c, target.size(c)) // see 201107145004
 
     //FIXME: t220414112604 - if nesting, ensure parent is removed instead of all sub-fields being removed
@@ -94,7 +94,7 @@ object ActionsCommonVeryBasics {
     def atomuus(c: Cls): AtomUUs = target.kpathz_(c).pipe(_atoms(_, _Remove)) }
 
   // ===========================================================================
-  class Retain(target: TqRPathz) extends ActionUUb { import gallia.data.single.RetainMapping
+  class Retain(target: TqRPathz) extends ActionUU1N { import gallia.data.single.RetainMapping
 
     def  vldt(c: Cls): Errs  =
       target.vldtAsOrigin(c) //TODO: more?
@@ -117,7 +117,7 @@ object ActionsCommonVeryBasics {
   }
 
   // ===========================================================================
-  class Add(entries: KVEs) extends ActionUUb {
+  class Add(entries: KVEs) extends ActionUU1N {
       def vldt(c: Cls): Errs = Nil ++
         _vldt.fieldsAbsence(c, entries.keys) ++
         _vldt.validateKVEs (   entries) // TODO: t210128155944 - validate new key names
@@ -126,7 +126,7 @@ object ActionsCommonVeryBasics {
       def atomuus(c: Cls): AtomUUs = entries.forceDataEntries.map((_Add.apply _).tupled) }
 
     // ---------------------------------------------------------------------------
-    class Replace(entries: RVEs) extends ActionUUb {
+    class Replace(entries: RVEs) extends ActionUU1N {
       def  vldt(c: Cls): Errs  = Nil ++
         _vldt.fieldsRenaming(c, entries.renz) ++
         _vldt.validateKVEs  (   entries.kves) // TODO: t210128155944 - validate new key names

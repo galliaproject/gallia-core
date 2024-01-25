@@ -28,29 +28,29 @@ object ActionsOthers {
     def atomzzs(ctx: NodeMetaContext) = u.atomuus(ctx).map(_UWrapper.apply) }
 
   // ===========================================================================
-  case class ModifyUnderlyingStreamer(f: Streamer[Obj] => Streamer[Obj]) extends IdentityVM1 with ActionZZd {
+  case class ModifyUnderlyingStreamer(f: Streamer[Obj] => Streamer[Obj]) extends IdentityVM1 with ActionZZ01 {
       def atomzz = _CustomZZ(_._modifyUnderlyingStreamer(f)) }
 
     // ---------------------------------------------------------------------------
-    case object ToViewBased     extends IdentityVM1 with ActionZZd { def atomzz = _ToViewBased     }
-    case object ToIteratorBased extends IdentityVM1 with ActionZZd { def atomzz = _ToIteratorBased }
+    case object ToViewBased     extends IdentityVM1 with ActionZZ01 { def atomzz = _ToViewBased     }
+    case object ToIteratorBased extends IdentityVM1 with ActionZZ01 { def atomzz = _ToIteratorBased }
 
   // ===========================================================================
   //TODO: t210115175106 - versions that allows configuring more
-  case class InspectU(msg: Option[String], abort: Boolean) extends IdentityVM1 with ActionUUd {
+  case class InspectU(msg: Option[String], abort: Boolean) extends IdentityVM1 with ActionUU01 {
       def atomuu = _InspectU(msg, abort) }
 
-    case class InspectZ(msg: Option[String], abort: Boolean) extends IdentityVM1 with ActionZZd {
+    case class InspectZ(msg: Option[String], abort: Boolean) extends IdentityVM1 with ActionZZ01 {
       def atomzz = _InspectZ(msg, abort) }
 
   // ===========================================================================  
-  case class Unpivot(keyz: Keyz) extends ActionUUd with TodoV1 /* origins + check compatible infos */ {
+  case class Unpivot(keyz: Keyz) extends ActionUU01 with TodoV1 /* origins + check compatible infos */ {
       def _meta(c: Cls): Cls    = c.unpivot(keyz)
       def atomuu       : AtomUU =  _Unpivot(keyz) }
 
     // ---------------------------------------------------------------------------
     //TODO: t220914144753 - generalize as unpivot of some keys
-    case class UnpivotOneItem(key1: Key, key2: Key, targetStringValue: String) extends ActionUUc {
+    case class UnpivotOneItem(key1: Key, key2: Key, targetStringValue: String) extends ActionUU11 {
       def  vldt(c: Cls): Errs = Nil // TODO: t240124123030 - missing validations
 
       // ---------------------------------------------------------------------------
@@ -69,7 +69,7 @@ object ActionsOthers {
 
   // ===========================================================================
   /** a purely meta operation */
-  case class ModifyEnumValuesFor(target: TqRPathz, f: Seq[EnumValue] => Seq[EnumValue]) extends IdentityUUa {
+  case class ModifyEnumValuesFor(target: TqRPathz, f: Seq[EnumValue] => Seq[EnumValue]) extends IdentityUU0N {
     def  vldt(c: Cls): Errs = // allows no change
       target.vldtAsOrigin(c)
         .orIfEmpty { _vldt.checkIsEnumField       (c)(target) }
@@ -88,7 +88,7 @@ object ActionsOthers {
   // ===========================================================================
   // uz
 
-  case object ConvertUtoZ extends ActionUZd with IdentityVM1 {
+  case object ConvertUtoZ extends ActionUZ01 with IdentityVM1 {
     def atomuz: AtomUZ = _ConvertUtoZ }
 
   // ---------------------------------------------------------------------------
@@ -135,7 +135,7 @@ object ActionsOthers {
           newKeys  : Keyz, // only for meta
           keyKey   : Key , // only for data - may or may not have the same cardinality as newKeys - TODO: t210303102200 - also allow selection
           valueKey : TqKPath /* TODO: key only? */)
-        extends ActionZUc {
+        extends ActionZU11 {
       private def resolveTargetKey(c: Cls): Key = valueKey.resolve(c).forceLeafFX /* see  t210303111953 */
 
       // ---------------------------------------------------------------------------
@@ -161,7 +161,7 @@ object ActionsOthers {
 
   // ===========================================================================
   // vu
-  case class DressUp[T: WTT](key: Key) extends TodoV1 with ActionVUd {
+  case class DressUp[T: WTT](key: Key) extends TodoV1 with ActionVU01 {
     def _meta(ignored: Cls): Cls = Fld.fld[T](key).toSoleFieldCls
     def atomvu = new AtomVU { def naive(v: Vle): Obj = obj(key -> v) } }
 
@@ -234,10 +234,10 @@ object ActionsOthers {
       def atom(c: Cls) = _SquashZ5(from.pathPairT(c), f) }
 
   // ===========================================================================
-  case class CheckpointU(path1: String, path2: String) extends ActionUUc with IdentityVM1 {
+  case class CheckpointU(path1: String, path2: String) extends ActionUU11 with IdentityVM1 {
       def atomuu(c: Cls) = _CheckpointU(c, path1, path2) }
     
-    case class CheckpointZ(path1: String, path2: String) extends ActionZZc with IdentityVM1 {
+    case class CheckpointZ(path1: String, path2: String) extends ActionZZ11 with IdentityVM1 {
       def atomzz(c: Cls) = _CheckpointZ(c, path1, path2) }
 
   // ===========================================================================

@@ -97,243 +97,242 @@ object ActionAtomsBoilerplate {
             def dataz2(c1: Cls , c2: Cls)  : Atoms }
 
   // ===========================================================================
-  trait ActionAtomsUUd extends ActionAtomsUU {
+  trait ActionAtomsUU01 extends ActionAtomsUU {
       final def atomuus(ignored: NodeMetaContext): AtomUUs = atomuu.in.seq
             def atomuu                           : AtomUU }
 
     // ---------------------------------------------------------------------------
-    trait ActionAtomsUUa extends ActionAtomsUU {
+    trait ActionAtomsUU0N extends ActionAtomsUU {
       final def atomuus(ignored: NodeMetaContext): AtomUUs = atomuus
             def atomuus                          : AtomUUs }
 
     // ---------------------------------------------------------------------------
-    trait ActionAtomsUUc extends ActionAtomsUU {
+    trait ActionAtomsUU11 extends ActionAtomsUU {
       final def atomuus(ctx: NodeMetaContext): AtomUUs = atomuu(ctx.afferents.forceOne).in.seq
             def atomuu (afferent: Cls       ): AtomUU }
 
     // ---------------------------------------------------------------------------
-    trait ActionAtomsUUb extends ActionAtomsUU {
+    trait ActionAtomsUU1N extends ActionAtomsUU {
       final def atomuus(ctx: NodeMetaContext): AtomUUs = atomuus(ctx.afferents.forceOne)
             def atomuus(afferent: Cls       ): AtomUUs }
 
-    // ===========================================================================
-    trait ActionAtomsUUbb extends ActionAtomsUU { // TODO: see t210616122449
-      final def atomuus(ctx: NodeMetaContext)           : AtomUUs = atomuus(ctx.origin)(ctx.afferents.forceOne)
-            def atomuus(origin: CallSite)(afferent: Cls): AtomUUs }
+trait ActionAtomsUU1Nb extends ActionAtomsUU { // TODO: see t210616122449
+  final def atomuus(ctx: NodeMetaContext)           : AtomUUs = atomuus(ctx.origin)(ctx.afferents.forceOne)
+        def atomuus(origin: CallSite)(afferent: Cls): AtomUUs }
 
-  // ---------------------------------------------------------------------------
-  trait ActionAtomsZZd extends ActionAtomsZZ {
+  // ===========================================================================
+  trait ActionAtomsZZ01 extends ActionAtomsZZ {
       final def atomzzs(ignored: NodeMetaContext): AtomZZs = atomzz.in.seq
             def atomzz                           : AtomZZ }
 
     // ---------------------------------------------------------------------------
-    trait ActionAtomsZZa extends ActionAtomsZZ {
+    trait ActionAtomsZZ0N extends ActionAtomsZZ {
       final def atomzzs(ignored: NodeMetaContext): AtomZZs = atomzzs
             def atomzzs                          : AtomZZs }
 
     // ---------------------------------------------------------------------------
-    trait ActionAtomsZZc extends ActionAtomsZZ {
+    trait ActionAtomsZZ11 extends ActionAtomsZZ {
       final def atomzzs(ctx: NodeMetaContext): AtomZZs = atomzz(ctx.afferents.forceOne).in.seq
             def atomzz (afferent: Cls       ): AtomZZ }
 
     // ---------------------------------------------------------------------------
-    trait ActionAtomsZZb extends ActionAtomsZZ {
+    trait ActionAtomsZZ1N extends ActionAtomsZZ {
       final def atomzzs(ctx: NodeMetaContext): AtomZZs = atomzzs(ctx.afferents.forceOne)
             def atomzzs(afferent: Cls       ): AtomZZs }
 
-  // ---------------------------------------------------------------------------
-  trait ActionAtomsVVa extends ActionAtomsVV {
+  // ===========================================================================
+  trait ActionAtomsVV0N extends ActionAtomsVV {
       final def atomvvs(ignored: NodeMetaContext): AtomVVs = atomvvs
             def atomvvs                          : AtomVVs }
 
   // ===========================================================================
-  trait ActionAtomsIUd extends ActionAtomsIU {
+  trait ActionAtomsIU01 extends ActionAtomsIU {
         final def atomius(ignored: NodeMetaContext): AtomIUs = atomiu.in.seq
               def atomiu                           : AtomIU }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsIUa extends ActionAtomsIU {
+      trait ActionAtomsIU0N extends ActionAtomsIU {
         final def atomius(ignored: NodeMetaContext): AtomIUs = atomius
               def atomius                          : AtomIUs }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsIUc extends ActionAtomsIU {
+      trait ActionAtomsIU11 extends ActionAtomsIU {
         final def atomius(ctx: NodeMetaContext): AtomIUs = atomiu(ctx.afferents.forceOne).in.seq
               def atomiu (afferent: Cls       ): AtomIU }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsIUb extends ActionAtomsIU {
+      trait ActionAtomsIU1N extends ActionAtomsIU {
         final def atomius(ctx: NodeMetaContext): AtomIUs = atomius(ctx.afferents.forceOne)
               def atomius(afferent: Cls       ): AtomIUs }
 
 
     // ===========================================================================
-    trait ActionAtomsIZd extends ActionAtomsIZ {
+    trait ActionAtomsIZ01 extends ActionAtomsIZ {
         final def atomizs(ignored: NodeMetaContext): AtomIZs = atomiz.in.seq
               def atomiz                           : AtomIZ }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsIZa extends ActionAtomsIZ {
+      trait ActionAtomsIZ0N extends ActionAtomsIZ {
         final def atomizs(ignored: NodeMetaContext): AtomIZs = atomizs
               def atomizs                          : AtomIZs }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsIZc extends ActionAtomsIZ {
+      trait ActionAtomsIZ11 extends ActionAtomsIZ {
         final def atomizs(ctx: NodeMetaContext): AtomIZs = atomiz(ctx.afferents.forceOne).in.seq
               def atomiz (afferent: Cls       ): AtomIZ }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsIZb extends ActionAtomsIZ {
+      trait ActionAtomsIZ1N extends ActionAtomsIZ {
         final def atomizs(ctx: NodeMetaContext): AtomIZs = atomizs(ctx.afferents.forceOne)
               def atomizs(afferent: Cls       ): AtomIZs }
 
     // ===========================================================================
-    trait ActionAtomsIVd extends ActionAtomsIV {
+    trait ActionAtomsIV01 extends ActionAtomsIV {
         final def atomivs(ignored: NodeMetaContext): AtomIVs = atomiv.in.seq
               def atomiv                           : AtomIV }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsIVa extends ActionAtomsIV {
+      trait ActionAtomsIV0N extends ActionAtomsIV {
         final def atomivs(ignored: NodeMetaContext): AtomIVs = atomivs
               def atomivs                          : AtomIVs }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsIVc extends ActionAtomsIV {
+      trait ActionAtomsIV11 extends ActionAtomsIV {
         final def atomivs(ctx: NodeMetaContext): AtomIVs = atomiv(ctx.afferents.forceOne).in.seq
               def atomiv (afferent: Cls       ): AtomIV }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsIVb extends ActionAtomsIV {
+      trait ActionAtomsIV1N extends ActionAtomsIV {
         final def atomivs(ctx: NodeMetaContext): AtomIVs = atomivs(ctx.afferents.forceOne)
               def atomivs(afferent: Cls       ): AtomIVs }
 
   // ===========================================================================
-  trait ActionAtomsUOd extends ActionAtomsUO {
+  trait ActionAtomsUO01 extends ActionAtomsUO {
         final def atomuos(ignored: NodeMetaContext): AtomUOs = atomuo.in.seq
               def atomuo                           : AtomUO }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsUOa extends ActionAtomsUO {
+      trait ActionAtomsUO0N extends ActionAtomsUO {
         final def atomuos(ignored: NodeMetaContext): AtomUOs = atomuos
               def atomuos                          : AtomUOs }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsUOc extends ActionAtomsUO {
+      trait ActionAtomsUO11 extends ActionAtomsUO {
         final def atomuos(ctx: NodeMetaContext): AtomUOs = atomuo(ctx.afferents.forceOne).in.seq
               def atomuo (afferent: Cls       ): AtomUO }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsUOb extends ActionAtomsUO {
+      trait ActionAtomsUO1N extends ActionAtomsUO {
         final def atomuos(ctx: NodeMetaContext): AtomUOs = atomuos(ctx.afferents.forceOne)
               def atomuos(afferent: Cls       ): AtomUOs }
 
     // ===========================================================================
-    trait ActionAtomsZOd extends ActionAtomsZO {
+    trait ActionAtomsZO01 extends ActionAtomsZO {
         final def atomzos(ignored: NodeMetaContext): AtomZOs = atomzo.in.seq
               def atomzo                           : AtomZO }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsZOa extends ActionAtomsZO {
+      trait ActionAtomsZO0N extends ActionAtomsZO {
         final def atomzos(ignored: NodeMetaContext): AtomZOs = atomzos
               def atomzos                          : AtomZOs }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsZOc extends ActionAtomsZO {
+      trait ActionAtomsZO11 extends ActionAtomsZO {
         final def atomzos(ctx: NodeMetaContext): AtomZOs = atomzo(ctx.afferents.forceOne).in.seq
               def atomzo (afferent: Cls       ): AtomZO }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsZOb extends ActionAtomsZO {
+      trait ActionAtomsZO1N extends ActionAtomsZO {
         final def atomzos(ctx: NodeMetaContext): AtomZOs = atomzos(ctx.afferents.forceOne)
               def atomzos(afferent: Cls       ): AtomZOs }
 
     // ===========================================================================
-    trait ActionAtomsVOd extends ActionAtomsVO {
+    trait ActionAtomsVO01 extends ActionAtomsVO {
         final def atomvos(ignored: NodeMetaContext): AtomVOs = atomvo.in.seq
               def atomvo                           : AtomVO }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsVOa extends ActionAtomsVO {
+      trait ActionAtomsVO0N extends ActionAtomsVO {
         final def atomvos(ignored: NodeMetaContext): AtomVOs = atomvos
               def atomvos                          : AtomVOs }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsVOc extends ActionAtomsVO {
+      trait ActionAtomsVO11 extends ActionAtomsVO {
         final def atomvos(ctx: NodeMetaContext): AtomVOs = atomvo(ctx.afferents.forceOne).in.seq
               def atomvo (afferent: Cls       ): AtomVO }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsVOb extends ActionAtomsVO {
+      trait ActionAtomsVO1N extends ActionAtomsVO {
         final def atomvos(ctx: NodeMetaContext): AtomVOs = atomvos(ctx.afferents.forceOne)
               def atomvos(afferent: Cls       ): AtomVOs }
 
     // ===========================================================================
-    trait ActionAtomsVUd extends ActionAtomsVU {
+    trait ActionAtomsVU01 extends ActionAtomsVU {
         final def atomvus(ignored: NodeMetaContext): AtomVUs = atomvu.in.seq
               def atomvu                           : AtomVU }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsVUa extends ActionAtomsVU {
+      trait ActionAtomsVU0N extends ActionAtomsVU {
         final def atomvus(ignored: NodeMetaContext): AtomVUs = atomvus
               def atomvus                          : AtomVUs }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsVUc extends ActionAtomsVU {
+      trait ActionAtomsVU11 extends ActionAtomsVU {
         final def atomvus(ctx: NodeMetaContext): AtomVUs = atomvu(ctx.afferents.forceOne).in.seq
               def atomvu (afferent: Cls       ): AtomVU }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsVUb extends ActionAtomsVU {
+      trait ActionAtomsVU1N extends ActionAtomsVU {
         final def atomvus(ctx: NodeMetaContext): AtomVUs = atomvus(ctx.afferents.forceOne)
               def atomvus(afferent: Cls       ): AtomVUs }
 
     // ===========================================================================
-    trait ActionAtomsVZd extends ActionAtomsVZ {
+    trait ActionAtomsVZ01 extends ActionAtomsVZ {
         final def atomvzs(ignored: NodeMetaContext): AtomVZs = atomvz.in.seq
               def atomvz                           : AtomVZ }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsVZa extends ActionAtomsVZ {
+      trait ActionAtomsVZ0N extends ActionAtomsVZ {
         final def atomvzs(ignored: NodeMetaContext): AtomVZs = atomvzs
               def atomvzs                          : AtomVZs }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsVZc extends ActionAtomsVZ {
+      trait ActionAtomsVZ11 extends ActionAtomsVZ {
         final def atomvzs(ctx: NodeMetaContext): AtomVZs = atomvz(ctx.afferents.forceOne).in.seq
               def atomvz (afferent: Cls       ): AtomVZ }
 
       // ---------------------------------------------------------------------------
-      trait ActionAtomsVZb extends ActionAtomsVZ {
+      trait ActionAtomsVZ1N extends ActionAtomsVZ {
         final def atomvzs(ctx: NodeMetaContext): AtomVZs = atomvzs(ctx.afferents.forceOne)
               def atomvzs(afferent: Cls       ): AtomVZs }
 
   // ===========================================================================
-  trait ActionAtomsUZd extends ActionAtomsUZ {
+  trait ActionAtomsUZ01 extends ActionAtomsUZ {
       final def atomuzs(ignored: NodeMetaContext): AtomUZs = atomuz.in.seq
             def atomuz                           : AtomUZ }
 
     // ---------------------------------------------------------------------------
-    trait ActionAtomsUZc extends ActionAtomsUZ {
+    trait ActionAtomsUZ11 extends ActionAtomsUZ {
       final def atomuzs(ctx: NodeMetaContext): AtomUZs = atomuz(ctx.afferents.forceOne).in.seq
             def atomuz (afferent: Cls       ): AtomUZ }
 
     // ===========================================================================
-    trait ActionAtomsZUd extends ActionAtomsZU {
+    trait ActionAtomsZU01 extends ActionAtomsZU {
       final def atomzus(ignored: NodeMetaContext): AtomZUs = atomzu.in.seq
             def atomzu                           : AtomZU }
 
     // ---------------------------------------------------------------------------
-    trait ActionAtomsZUc extends ActionAtomsZU {
+    trait ActionAtomsZU11 extends ActionAtomsZU {
       final def atomzus(ctx: NodeMetaContext): AtomZUs = atomzu(ctx.afferents.forceOne).in.seq
             def atomzu (afferent: Cls       ): AtomZU }
 
     // ===========================================================================
-    trait ActionAtomsUVc extends ActionAtomsUV {
+    trait ActionAtomsUV11 extends ActionAtomsUV {
       final def atomuvs(ctx: NodeMetaContext): AtomUVs = atomuv(ctx.afferents.forceOne).in.seq
             def atomuv (afferent: Cls       ): AtomUV }
 
     // ---------------------------------------------------------------------------
-    trait ActionAtomsZVc extends ActionAtomsZV {
+    trait ActionAtomsZV11 extends ActionAtomsZV {
       final def atomzvs(ctx: NodeMetaContext): AtomZVs = atomzv(ctx.afferents.forceOne).in.seq
             def atomzv (afferent: Cls       ): AtomZV }
 

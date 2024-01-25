@@ -20,7 +20,7 @@ object ActionsCommonGenerationOther { //TODO: t210111095156 separate all the Wha
   val  GenerateVtoV = ActionsCommonGenerusion.Generate1VtoV
 
   // ===========================================================================
-  abstract class _Generate(target: TqKPath, newPath: KPath) extends ActionUUc {
+  abstract class _Generate(target: TqKPath, newPath: KPath) extends ActionUU11 {
       protected val _trnsf: NestedTransform
 
       // ---------------------------------------------------------------------------

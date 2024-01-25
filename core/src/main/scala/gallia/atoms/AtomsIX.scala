@@ -41,9 +41,6 @@ object AtomsIX { import utils.JdbcDataUtils
       def naive: Option[Objs] = Some(input.streamLines(inMemoryMode).map(Obj.line).pipe(Objs.build)) }
 
   // ===========================================================================
-  trait HasCommonObj   extends AtomIU  { def commonObj  : Obj  /* must not rely on schema */ }
-  trait HasCommonObjs  extends AtomIZ  { def commonObjs : Objs /* must not rely on schema */ }
-
   trait HasCommonObjx  extends AtomIUx { def commonObjx : Obj  /* must not rely on schema */ }
   trait HasCommonObjsx extends AtomIZx { def commonObjsx: Objs /* must not rely on schema */ }
 
@@ -79,65 +76,65 @@ object AtomsIX { import utils.JdbcDataUtils
   case class _JsonObjectFileInputU(
         input        : InputUrlLike,
         projectionOpt: Option[ReadProjection],
-        preProjectionSchema: Cls,
-        schema       : Cls)
-      extends HasCommonObj
+        preProjectionSchema: Cls)
+      extends HasCommonObjx
          with HasProjection {
 
-    def commonObj: Obj =
-      input
-        .content()
-        .pipe(json.GsonParsing.parseObject)
+    override def naive(schema: Cls): Option[Obj] =
+        commonObjx
+          .pipe(json.GsonToGalliaData.convertRecursively(preProjectionSchema))
+          .pipe(projectData(schema, _))
+          .in.some
 
-    def naive: Option[Obj] =
-      commonObj
-        .pipe(json.GsonToGalliaData.convertRecursively(preProjectionSchema))
-        .pipe(projectData(schema, _))
-        .in.some }
+      // ---------------------------------------------------------------------------
+      override def commonObjx: Obj =
+        input
+          .content()
+          .pipe(json.GsonParsing.parseObject) }
 
   // ===========================================================================
   case class _JsonLinesFileInputZ(
           input        : InputUrlLike,
           inMemoryMode : Boolean,
           projectionOpt: Option[ReadProjection],
-          preProjectionSchema: Cls,
-          schema       : Cls)
-        extends HasCommonObjs
+          preProjectionSchema: Cls)
+        extends HasCommonObjsx
            with HasProjection {
 
-      def commonObjs: Objs =
+      override def naive(schema: Cls): Option[Objs] =
+          commonObjsx
+            .map(json.GsonToGalliaData.convertRecursively(preProjectionSchema))
+            .pipe(projectData(schema))
+            .in.some
+
+        // ---------------------------------------------------------------------------
+        override def commonObjsx: Objs =
           input
             .streamLines(inMemoryMode)
             .filterNot(_.trim.isEmpty) // a220930162941 - for better or worse, we ignore those (ideally we'd only ignore the last one)
             .map(json.GsonParsing.parseObject) // TODO: t230112130056 - detect if documents are pretty printed (and disallow)
-            .pipe(Objs.build)
-
-      // ---------------------------------------------------------------------------
-      def naive: Option[Objs] = 
-        commonObjs
-          .map(json.GsonToGalliaData.convertRecursively(preProjectionSchema))
-          .pipe(projectData(schema))
-          .in.some }
+            .pipe(Objs.build) }
 
     // ===========================================================================
     case class _JsonArrayFileInputZ(
           input        : InputUrlLike,
           inMemoryMode : Boolean,
-          projectionOpt: Option[ReadProjection],
-          schema       : Cls)
-        extends HasCommonObjs with HasProjection {
-      def commonObjs: Objs =
-          input
-            .streamLines(inMemoryMode)
-.toList.mkString.pipe(json.GsonParsing.parseArray) // TODO: t201221175254 - actually stream array...
-            .pipe(Objs.from)
+          projectionOpt: Option[ReadProjection])
+        extends HasCommonObjsx
+           with HasProjection {
 
-      // ---------------------------------------------------------------------------
-      def naive: Option[Objs] = 
-        commonObjs
-          .map(json.GsonToGalliaData.convertRecursively(schema))
-          .pipe(projectData(schema))
-          .in.some }
+      override def naive(schema: Cls): Option[Objs] =
+          commonObjsx
+            .map(json.GsonToGalliaData.convertRecursively(schema))
+            .pipe(projectData(schema))
+            .in.some
+
+        // ---------------------------------------------------------------------------
+        override def commonObjsx: Objs =
+            input
+              .streamLines(inMemoryMode)
+.toList.mkString.pipe(json.GsonParsing.parseArray) // TODO: t201221175254 - actually stream array...
+              .pipe(Objs.from) }
 
   // ===========================================================================
   case class _JdbcInputZ1(

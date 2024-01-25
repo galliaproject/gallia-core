@@ -7,13 +7,9 @@ import plans.Clss
 
 // ===========================================================================
 trait ActionVN {
-    def  vldt(in: Clss): Errs
-    final val callSite : CallSite = CallSite.generate()
-
-    // ---------------------------------------------------------------------------
-    // t201214105653 - hack (also see t220615121216)
-    @deprecated def resultCls = Option(metaContext).map(_.efferent).getOrElse(null)
-      var metaContext: NodeMetaContext = null }
+          def vldt(in: Clss): Errs
+    final val callSite      : CallSite        = CallSite.generate()
+          var metaContext   : NodeMetaContext = null /* t201214105653 - hack (also see t220615121216) */ }
 
   // ===========================================================================
   trait ActionMN { def _meta(in: Clss): Cls }

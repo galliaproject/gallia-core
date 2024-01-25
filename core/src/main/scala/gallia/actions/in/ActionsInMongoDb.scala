@@ -9,7 +9,8 @@ case class MongodbInputZ(
       queryingOpt   : Option[ReadQuerying] /* None if URI-driven (eg "mydb.mycoll") */)
     extends ActionIZ01x
     with    TodoV0 //TODO: check valid URI, ...
-    with    HasSchemaProviderZx { // TODO: t201223092203 - look into https://docs.mongodb.com/realm/mongodb/document-schemas
+    with    HasSchemaProviderAndProjectionZx with HasNoProjection {
+  // TODO: t201223092203 - look into https://docs.mongodb.com/realm/mongodb/document-schemas
 
   override def _meta  : Cls     = __meta
   override def atomizx: AtomIZx = hasCommonObjsx

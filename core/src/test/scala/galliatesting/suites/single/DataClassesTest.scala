@@ -79,26 +79,6 @@ object DataClassesTest extends utest.TestSuite with GalliaTestSuite with TestDat
         .transformViaDataClass[f_String](p)
           .using { dc => Quux2c(dc.f.size, (dc.f.size % 2 ) == 0) }
             .check(bobj(p -> bobj(/*g -> 1, */f -> 3, h -> false), z -> true) ) } // --> differs from v1... (g field)
-
-    // ===========================================================================
-    test("deprecated way") { // deprecated way now, c220914145147 or t220914144458 instead
-
-      // manually would be: nest f under g, rename g |> f as "a", then generate g |> "A" from "a"
-      test { Default01   .transform(_.string (f)).using { s =>     Foo(s, s.toUpperCase)                               }.check(bobj(f ->     bobj("a" -> foo, "A" -> "FOO")                                                          , g -> 1)) }
-      test { Default01   .transform(_.stringx(f)).using { s =>     Foo(s, s.toUpperCase)                               }.check(bobj(f ->     bobj("a" -> foo, "A" -> "FOO")                                                          , g -> 1)) }
-      test { Default01   .transform(_.string (f)).using { s => Seq(Bar(s, s.toUpperCase, 1), Bar(s, s.toUpperCase, 2)) }.check(bobj(f -> Seq(bobj("a" -> foo, "A" -> "FOO", "i" -> 1), /*a*/bobj("a" -> foo, "A" -> "FOO", "i" -> 2)), g -> 1)) }
-
-      // ---------------------------------------------------------------------------
-      test { Default01   .transform(_.string(f)).using { s => s.in.noneIf(_.startsWith(z)).map(s2 => Foo(s2, s2.toUpperCase)) }.
-        check(aobj(
-          cls(f  .cls_("a".string,   "A".string),   g.int))(
-          obj(f -> obj("a" -> foo, "A" -> "FOO"), g -> 1))) }
-
-      // ---------------------------------------------------------------------------
-      // will remove it
-      test { Default01   .transform(_.string(f)).using { s => s.in.noneIf(_.startsWith(f)).map(s2 => Foo(s2, s2.toUpperCase)) }.check(
-        aobj(
-          cls(f  .cls_("a".string, "A".string), g.int))(
-          obj(                                  g -> 1)) ) } } } }
+  } }
 
 // ===========================================================================

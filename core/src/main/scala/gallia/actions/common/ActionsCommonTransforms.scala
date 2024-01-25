@@ -28,18 +28,6 @@ object ActionsCommonTransforms {
       def _meta  (c: Cls): Cls     = from.rpathz_(c).foldLeft(c) { _.updateTypex(_, from.typeNode, to) }
       def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atomsUnion(c)(_TransformVV(_, from.wrapx(c, f)), _TransformVV(_, g))) }
 
-    // ---------------------------------------------------------------------------
-//TODO: these should also handle origin as cc..
-    case class TransformVVc(from: TtqRPathz, to: TypeDuo, f: _ff11) extends ActionUU1N with TodoV1 {
-      def _meta  (c: Cls): Cls     = from.rpathz_(c).foldLeft(c) { _.updateInfo(_, to.typeNode.forceNonBObjInfo) }
-      def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.wrapc(to, f) ))) }
-
-    // ---------------------------------------------------------------------------
-//TODO: these should also handle origin as cc..
-    case class TransformVVxc(from: TtqRPathz, to: TypeDuo, f: _ff11) extends ActionUU1N with TodoV1 {
-      def _meta  (c: Cls): Cls     = from.rpathz_(c).foldLeft(c)(_.transformSoleValueType(_)(_ => to.typeNode.forceNonBObjInfo.subInfo1.valueType))
-      def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atoms(c)(_TransformVV(_, from.wrapxc(c, to, f) ))) }
-
     // ===========================================================================
     //TODO: t210111095156 separate all the Whatever and t210111095157 case-class versions...
 

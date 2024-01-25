@@ -2,6 +2,7 @@ package gallia
 package heads
 package common
 
+import aptus.Anything_
 import aptus.Index
 import trgt.TypeDuo
 import FunctionWrappers._
@@ -107,17 +108,15 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
       // ---------------------------------------------------------------------------
       //TODO: "opaque" counteparts (see t210110094829)
 
-      // ---------------------------------------------------------------------------
-      def using[D: WTT](f: O => D): Self2 = { val dest = TypeDuo.build[D]
-
-        if (!dest.typeNode.isContainedDataClass)
-          if (!ttq.ignoreContainer) self2 :+ TransformVV (ttq, dest.typeNode, wrap(f), origin.ifApplicable(wrap(f)))
-          else                      self2 :+ TransformVVx(ttq, dest.typeNode, wrap(f), origin.ifApplicable(wrap(f)))
+      // ===========================================================================
+      def using[D: WTT](f: O => D): Self2 = {
+        val dest: TypeDuo =
+          TypeDuo
+            .build[D]
+            .assert(!_.typeNode.isContainedDataClass, _.typeNode)
 
         // ---------------------------------------------------------------------------
-        // deprecated way now, c220914145147 or t220914144458 instead
-        else
-          if (!ttq.ignoreContainer) self2 :+ TransformVVc (ttq, dest, wrap(f))
-          else                      self2 :+ TransformVVxc(ttq, dest, wrap(f)) } } }
+        if (!ttq.ignoreContainer) self2 :+ TransformVV (ttq, dest.typeNode, wrap(f), origin.ifApplicable(wrap(f)))
+        else                      self2 :+ TransformVVx(ttq, dest.typeNode, wrap(f), origin.ifApplicable(wrap(f))) } } }
 
 // ===========================================================================

@@ -24,10 +24,11 @@ case class TableInputZ( // TODO: t210101150123 - split up?
 
   private val Tsp = TableSchemaProvider
 
-  private var defaultCls2: Cls = _ // can't use resultCls because of t210106120036 (delayed data projection)
-
   private val sep      : Char    = formatConf.sep      (input._inputString)
   private val hasHeader: Boolean = formatConf.hasHeader(input._inputString)
+
+  // ---------------------------------------------------------------------------
+  private var preProjectionSchema: Cls = _
 
   // ===========================================================================
   def vldt: Errs = Nil
@@ -49,14 +50,14 @@ case class TableInputZ( // TODO: t210101150123 - split up?
 
     // ---------------------------------------------------------------------------
     def inferFully(keys: Seq[Key]): Cls =
-        atomizTable // will ignore uninitialised defaultCls2 (see t201214105653 and t210106120036)
+        atomizTable // will ignore uninitialised preProjectionSchema (see t201214105653 and t210106120036)
           .stringObjs(keys)
           /*.pipe(projectData(cc)) TODO: data projection (wasteful)...*/
           .pipe(TableSchemaInferrer.fullInferring(cellConf, keys))
 
     // ---------------------------------------------------------------------------
     def inferStringsOnly(keys: Seq[Key]): Cls =
-        atomizTable // will ignore uninitialised defaultCls2 (see t201214105653 and t210106120036)
+        atomizTable // will ignore uninitialised preProjectionSchema (see t201214105653 and t210106120036)
           .stringObjs(keys)
           /*.pipe(projectData(cc)) TODO: data projection (wasteful)...*/
           .pipe(TableSchemaInferrer.stringsOnly(cellConf, keys))
@@ -68,7 +69,7 @@ case class TableInputZ( // TODO: t210101150123 - split up?
         case Tsp.InferSchema        => inferFully(default.keys)
         case Tsp.ExplicitKeys(keyz) => inferFully(default.keys).pipe(renameKeys(keyz))
         case Tsp.ExplicitSchema(c)  => c /* TODO: allow contradictions even in field names vs header? */ })
-      .tap(defaultCls2 = _)
+      .tap { preProjectionSchema = _ }
       .pipe(projectMeta) } // note: must come after tap because for now it's not a proper retain (we still read it all first) - see t210106120036
 
   // ===========================================================================
@@ -90,10 +91,10 @@ case class TableInputZ( // TODO: t210101150123 - split up?
      // ---------------------------------------------------------------------------
      private def atomizTable =
        AtomsIX._Table(input,
-           cellConf, inMemoryMode,
-           schemaProvider, projectionOpt,
-           sep, hasHeader,
-            defaultCls2) // TODO: t201214105653 - address resultCls hack
+         cellConf, inMemoryMode,
+         schemaProvider, projectionOpt,
+         sep, hasHeader,
+         preProjectionSchema)
 
 }
 

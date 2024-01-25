@@ -255,15 +255,15 @@ object AtomsIX { import utils.JdbcDataUtils
       hasHeader: Boolean,
 
       // ---------------------------------------------------------------------------
-      defaultSchema: Cls)
+      preProjectionSchema: Cls)
 
   extends AtomIZ with HasProjection {
     override def formatSuccinct1 = s"${className}(${input._inputString})"
 
     // ---------------------------------------------------------------------------
     def naive: Option[Objs] = {
-      val schema =                                     projectMeta(defaultSchema).assert(!_.hasNesting)
-      val data   = stringObjs(defaultSchema.keys).pipe(projectData(defaultSchema)) // see t210106120036 (project ealier)
+      val schema =                                           projectMeta(preProjectionSchema).ensuring(!_.hasNesting)
+      val data   = stringObjs(preProjectionSchema.keys).pipe(projectData(preProjectionSchema)) // see t210106120036 (project ealier)
 
       Some(schemaProvider match {
         case TableSchemaProvider.NoInferring => data // nothing to do

@@ -3,6 +3,9 @@ package actions
 package in
 
 // ===========================================================================
+trait HasNoProjection extends HasProjection { final override val projectionOpt: Option[ReadProjection] = None }
+
+// ---------------------------------------------------------------------------
 trait HasProjection {
   val projectionOpt: Option[ReadProjection]
 

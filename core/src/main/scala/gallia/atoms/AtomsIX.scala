@@ -13,7 +13,7 @@ import streamer.Streamer
 // ===========================================================================
 object AtomsIX { import utils.JdbcDataUtils
 
-  case   class _GenericInputU(datum: Obj) extends AtomIU { def naive: Option[Obj] = Some(datum) }
+  case   class _GenericInputU(datum: Obj) extends AtomIU { def naive: Option[Obj]  = Some(datum) }
     case class _GenericInputZ(data: Objs) extends AtomIZ { def naive: Option[Objs] = Some(data) }
 
     // ---------------------------------------------------------------------------
@@ -41,8 +41,8 @@ object AtomsIX { import utils.JdbcDataUtils
       def naive: Option[Objs] = Some(input.streamLines(inMemoryMode).map(Obj.line).pipe(Objs.build)) }
 
   // ===========================================================================
-  trait HasCommonObj  extends AtomIU { def commonObj : Obj  }
-  trait HasCommonObjs extends AtomIZ { def commonObjs: Objs }
+  trait HasCommonObj  extends AtomIU { def commonObj : Obj  /* must not rely on schema */ }
+  trait HasCommonObjs extends AtomIZ { def commonObjs: Objs /* must not rely on schema */ }
 
   // ===========================================================================
   case class _JsonObjectString(inputString: InputString, ignored /* TODO: t211231112700 - investigate */: OtherSchemaProvider, c: Cls) extends HasCommonObj {
@@ -72,14 +72,13 @@ object AtomsIX { import utils.JdbcDataUtils
 
     // ---------------------------------------------------------------------------  
     object _JsonArrayString {
-      def toObjs(c: Cls)(value: String): Objs = _JsonArrayString(value, null /* TODO */, c).commonObjs
-    }
+      def toObjs(c: Cls)(value: String): Objs = _JsonArrayString(value, null /* TODO */, c).commonObjs }
 
   // ===========================================================================
   case class _JsonObjectFileInputU(
         input        : InputUrlLike,
         projectionOpt: Option[ReadProjection],
-        protoSchema  : Cls, // pre-projection
+        preProjectionSchema: Cls,
         schema       : Cls)
       extends HasCommonObj
          with HasProjection {
@@ -91,7 +90,7 @@ object AtomsIX { import utils.JdbcDataUtils
 
     def naive: Option[Obj] =
       commonObj
-        .pipe(json.GsonToGalliaData.convertRecursively(protoSchema))
+        .pipe(json.GsonToGalliaData.convertRecursively(preProjectionSchema))
         .pipe(projectData(schema, _))
         .in.some }
 
@@ -100,7 +99,7 @@ object AtomsIX { import utils.JdbcDataUtils
           input        : InputUrlLike,
           inMemoryMode : Boolean,
           projectionOpt: Option[ReadProjection],
-          protoSchema  : Cls, // pre-projection
+          preProjectionSchema: Cls,
           schema       : Cls)
         extends HasCommonObjs
            with HasProjection {
@@ -115,10 +114,9 @@ object AtomsIX { import utils.JdbcDataUtils
       // ---------------------------------------------------------------------------
       def naive: Option[Objs] = 
         commonObjs
-          .map(json.GsonToGalliaData.convertRecursively(protoSchema))
+          .map(json.GsonToGalliaData.convertRecursively(preProjectionSchema))
           .pipe(projectData(schema))
-          .in.some
-    }
+          .in.some }
 
     // ===========================================================================
     case class _JsonArrayFileInputZ(
@@ -138,8 +136,7 @@ object AtomsIX { import utils.JdbcDataUtils
         commonObjs
           .map(json.GsonToGalliaData.convertRecursively(schema))
           .pipe(projectData(schema))
-          .in.some
-    }
+          .in.some }
 
   // ===========================================================================
   case class _JdbcInputZ1(
@@ -172,8 +169,7 @@ object AtomsIX { import utils.JdbcDataUtils
         .orElse {
           JdbcDataUtils
             .extractTableNameOpt(inputString, "table")
-            .map(ReadQuerying.All) }
-    }
+            .map(ReadQuerying.All) } }
     
     // ===========================================================================
     case class _JdbcInputZ2(
@@ -196,14 +192,14 @@ object AtomsIX { import utils.JdbcDataUtils
           .in.some }
 
   // ===========================================================================
-  case class _MongodbInputZ(
+  class _MongodbInputZ(
           inputString   : InputString,
-          schemaProvider: OtherSchemaProvider,
           queryingOpt   : Option[ReadQuerying] /* None if URI-driven (eg "mydb.mycoll") */,
           c: Cls)
       extends HasCommonObjs { import _MongodbInputZ._
       mongoDb()
 
+      // ---------------------------------------------------------------------------
       def naive: Option[Objs] = 
         commonObjs
           .map(json.GsonToGalliaData.convertRecursively(c)) // TODO: confirm need to pay tax here?
@@ -219,8 +215,7 @@ object AtomsIX { import utils.JdbcDataUtils
           Objs.from {
             new data.DataRegenerationClosure[Obj] {
               def regenerate = () =>
-                mongoDb().closeableQuery(new java.net.URI(inputString), None)(cmd).map(obj) } }
-        }
+                mongoDb().closeableQuery(new java.net.URI(inputString), None)(cmd).map(obj) } } }
 
         // ===========================================================================
         private def cmdOpt =
@@ -232,8 +227,7 @@ object AtomsIX { import utils.JdbcDataUtils
         private def tmp: Option[ReadQuerying] =
             queryingOpt
           .orElse {
-            mongoDb().uriCollectionOpt(inputString).map(ReadQuerying.All) }// TODO: t210115205723 - validate URI earlier
-    }
+            mongoDb().uriCollectionOpt(inputString).map(ReadQuerying.All) } /* TODO: t210115205723 - validate URI earlier */ }
 
     // ===========================================================================
     object _MongodbInputZ {
@@ -246,8 +240,7 @@ object AtomsIX { import utils.JdbcDataUtils
         def mongoDb(): utils.MongoDb =
           mongoDbOpt match {
             case None        => aptus.illegalState("requires gallia.mongodb.injectMongoDb") // TODO: t201223101425 prettify
-            case Some(value) => value }
-    }
+            case Some(value) => value } }
 
   // ===========================================================================
   case class _Table(
@@ -266,6 +259,7 @@ object AtomsIX { import utils.JdbcDataUtils
 
       // ---------------------------------------------------------------------------
       defaultSchema: Cls)
+
   extends AtomIZ with HasProjection {
     override def formatSuccinct1 = s"${className}(${input._inputString})"
 
@@ -298,8 +292,7 @@ object AtomsIX { import utils.JdbcDataUtils
         .streamLines(inMemoryMode)
         .pipeIf(hasHeader)(_.drop(1)) // TODO: t210116110159 for n >= 1?
         .filterNot(_.trim.isEmpty) // a220930162941 - for better or worse, we ignore those (ideally we'd only ignore the last one)
-        .map(_.splitXsv(sep))
-  }
+        .map(_.splitXsv(sep)) }
 
 }
 

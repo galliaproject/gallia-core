@@ -5,18 +5,20 @@ package in
 import atoms.AtomsIX._
 
 // ===========================================================================
-trait HasSchemaProviderU extends HasSchemaProviderAndProjectionU { val projectionOpt: Option[ReadProjection] = None }
-trait HasSchemaProviderZ extends HasSchemaProviderAndProjectionZ { val projectionOpt: Option[ReadProjection] = None }
+trait HasSchemaProviderU extends HasSchemaProviderAndProjectionU with HasNoProjection
+trait HasSchemaProviderZ extends HasSchemaProviderAndProjectionZ with HasNoProjection
 
 // ===========================================================================
 trait HasSchemaProviderAndProjectionU extends HasSchemaProvider with HasProjection {
-    private[in] var protoSchema: Cls = null // pre-projection schema; TODO: t220615121216 - address hack
+    private[in] var preProjectionSchema: Cls = null // TODO: t220615121216 - address hack
 
     // ---------------------------------------------------------------------------
     def __meta: Cls =
         schemaProvider
-          .resolve(default = infer())
-          .tap { protoSchema = _ }
+          .explicitOpt
+          .getOrElse {
+            infer() }
+          .tap { preProjectionSchema = _ }
           .pipe(projectMeta)
 
       // ---------------------------------------------------------------------------
@@ -34,17 +36,19 @@ trait HasSchemaProviderAndProjectionU extends HasSchemaProvider with HasProjecti
 
   // ===========================================================================
   trait HasSchemaProviderAndProjectionZ extends HasSchemaProvider with HasProjection {
-    private[in] var protoSchema: Cls = null // pre-projection schema; TODO: t220615121216 - address hack (also see t201214105653)
+    private[in] var preProjectionSchema: Cls = null // pre-projection schema; TODO: t220615121216 - address hack (also see t201214105653)
 
     // ---------------------------------------------------------------------------
     def __meta: Cls =
         schemaProvider
-          .resolve(default = infer())
-          .tap { protoSchema = _ }
+          .explicitOpt
+          .getOrElse {
+            infer() }
+          .tap { preProjectionSchema = _ }
           .pipe(projectMeta)
 
       // ---------------------------------------------------------------------------
-      // TODO: t210115194646: check if file size > x
+      // TODO: t210115194646 - check if file size > x
       private def infer(): Cls =
         hasCommonObjs
           .commonObjs

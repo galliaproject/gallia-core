@@ -119,8 +119,7 @@ case class JdbcConf(
         schemaProvider: OtherSchemaProvider  = InferSchema,
         queryingOpt   : Option[ReadQuerying] = None)
       extends InputConfZ {
-    def actionZ: ActionIZ = MongodbInputZ(inputString, schemaProvider, queryingOpt)
-  }
+    def actionZ: ActionIZ = MongodbInputZ(inputString, schemaProvider, queryingOpt) }
 
 // ===========================================================================
 case class JsonLinesFileConf(

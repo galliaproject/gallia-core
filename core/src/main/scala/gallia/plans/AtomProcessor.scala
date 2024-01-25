@@ -1,6 +1,8 @@
 package gallia
 package plans
 
+import aptus.String_
+
 // ===========================================================================
 private[plans] object AtomProcessor {
 
@@ -64,6 +66,7 @@ private[plans] object AtomProcessor {
         case x: AtomIZ => x.naive.map(NDT.to ).get
         case x: AtomIV => x.naive.map(NDT.vle).get
 
+        case x: AtomIUx => x.naive(efferentSchema).map(NDT.to ).get
         case x: AtomIZx => x.naive(efferentSchema).map(NDT.to ).get
 
         // ===========================================================================
@@ -99,7 +102,10 @@ private[plans] object AtomProcessor {
 
       //TODO: t210114111111 - distinguish RuntimeErrors (eg not distinct checking it is) from others (eg transform "".head or bugs)
       case util.Failure(throwable) =>
-        throw new Exception(RunCtx(nodeId, nodeAtom, debug, throwable, inputData(nodeAtom)).formatDefault) // will be pretty ugly...
+        throw new Exception( // will be pretty ugly...
+          RunCtx(nodeId, nodeAtom, debug, throwable, inputData(nodeAtom))
+            .formatDefault
+            .prepend("240125155846:"))
 
       // ---------------------------------------------------------------------------
       case util.Success(ndt) => ndt

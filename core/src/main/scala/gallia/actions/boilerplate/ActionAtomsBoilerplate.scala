@@ -19,7 +19,8 @@ object ActionAtomsBoilerplate {
     // ===========================================================================
     trait ActionAtomsIU extends ActionAN {
         final override def atoms  (ctx: NodeMetaContext): Atoms = atomius(ctx)
-                       def atomius(ctx: NodeMetaContext): AtomIUs }
+                       def atomius(ctx: NodeMetaContext)
+: AtomIUxs }
 
       // ---------------------------------------------------------------------------
       trait ActionAtomsIZ extends ActionAN {
@@ -147,9 +148,13 @@ trait ActionAtomsUU1Nb extends ActionAtomsUU { // TODO: see t210616122449
                      def atomvvs                          : AtomVVs }
 
   // ===========================================================================
-  trait ActionAtomsIU01 extends ActionAtomsIU {
-        final override def atomius(ignored: NodeMetaContext): AtomIUs = atomiu.in.seq
-                       def atomiu                           : AtomIU }
+  trait ActionAtomsIU01 extends ActionAtomsIU01x {
+        final override def atomiux: AtomIUx = atomiu
+                       def atomiu : AtomIU }
+
+trait ActionAtomsIU01x extends ActionAtomsIU {
+      final override def atomius(ignored: NodeMetaContext): AtomIUxs = atomiux.in.seq
+                     def atomiux                          : AtomIUx }
 
       // ---------------------------------------------------------------------------
       trait ActionAtomsIU0N extends ActionAtomsIU {
@@ -173,9 +178,9 @@ trait ActionAtomsUU1Nb extends ActionAtomsUU { // TODO: see t210616122449
                        def atomiz : AtomIZ }
 
         // ---------------------------------------------------------------------------
-	trait ActionAtomsIZ01x extends ActionAtomsIZ {
-	  final override def atomizs(ctx: NodeMetaContext): AtomIZxs = atomizx.in.seq
-	                 def atomizx                      : AtomIZx }
+trait ActionAtomsIZ01x extends ActionAtomsIZ {
+  final override def atomizs(ctx: NodeMetaContext): AtomIZxs = atomizx.in.seq
+                 def atomizx                      : AtomIZx }
 
       // ---------------------------------------------------------------------------
       trait ActionAtomsIZ0N extends ActionAtomsIZ {

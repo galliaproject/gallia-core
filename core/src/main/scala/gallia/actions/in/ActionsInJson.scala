@@ -20,14 +20,17 @@ case class GenericInputU(schema: Cls, datum : Obj)
       def atomiz = _GenericInputZb(data) }
 
 // ===========================================================================
-case class JsonObjectString(inputString: InputString, schemaProvider: OtherSchemaProvider) extends ActionIU01 with TodoV0 with HasSchemaProviderU {
-  def _meta: Cls   = __meta
-  def hasCommonObj = _JsonObjectString(inputString, schemaProvider, resultCls /* 211230183100 */) }
+case class JsonObjectString(inputString: InputString, schemaProvider: OtherSchemaProvider)
+    extends ActionIU01x with TodoV0 with HasSchemaProviderUx {
+  override def _meta: Cls   = __meta
+  override def hasCommonObjx = _JsonObjectString(inputString, schemaProvider)
+  override def atomiux: AtomIUx = hasCommonObjx }
 
 // ===========================================================================
-case class JsonArrayString(inputString: InputString, schemaProvider: OtherSchemaProvider) extends ActionIZ01 with TodoV0 with HasSchemaProviderZ {
+case class JsonArrayString(inputString: InputString, schemaProvider: OtherSchemaProvider)
+    extends ActionIZ01x with TodoV0 with HasSchemaProviderZx {
   def _meta: Cls    = __meta
-  def hasCommonObjs = _JsonArrayString(inputString, schemaProvider, resultCls /* 211230183100 */) }
+  def hasCommonObjsx = _JsonArrayString(inputString, schemaProvider) }
 
 // ===========================================================================
 case class JsonObjectFileInputU(

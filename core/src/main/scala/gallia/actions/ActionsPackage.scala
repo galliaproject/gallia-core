@@ -46,7 +46,8 @@ package object actions extends boilerplate.ActionBoilerplate { // TODO: delegate
     type AtomIZs = Seq[AtomIZ]
     type AtomIVs = Seq[AtomIV]
 
-    type AtomIZxs = Seq[AtomIZx]
+type AtomIUxs = Seq[AtomIUx]
+type AtomIZxs = Seq[AtomIZx]
 
     // ---------------------------------------------------------------------------
     type AtomUUs = Seq[AtomUU]

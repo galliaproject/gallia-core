@@ -44,37 +44,36 @@ object AtomsIX { import utils.JdbcDataUtils
   trait HasCommonObj   extends AtomIU  { def commonObj  : Obj  /* must not rely on schema */ }
   trait HasCommonObjs  extends AtomIZ  { def commonObjs : Objs /* must not rely on schema */ }
 
+  trait HasCommonObjx  extends AtomIUx { def commonObjx : Obj  /* must not rely on schema */ }
   trait HasCommonObjsx extends AtomIZx { def commonObjsx: Objs /* must not rely on schema */ }
 
   // ===========================================================================
-  case class _JsonObjectString(inputString: InputString, ignored /* TODO: t211231112700 - investigate */: OtherSchemaProvider, c: Cls) extends HasCommonObj {
-      def naive: Option[Obj] = Some(commonObj)
+  case class _JsonObjectString(inputString: InputString, ignored /* TODO: t211231112700 - investigate */: OtherSchemaProvider) extends HasCommonObjx {
+      override def naive(schema: Cls): Option[Obj] =
+        commonObjx
+          .pipe(json.GsonToGalliaData.convertRecursively(schema))
+          .in.some
 
       // ---------------------------------------------------------------------------
-      def commonObj: Obj = {
-        val o = json.GsonParsing.parseObject(inputString)
-
-        Option(c)/* TODO: see 211230183100 - may be null */
-          .map { schema => o.pipe(json.GsonToGalliaData.convertRecursively(schema)) }
-          .getOrElse(o) } }
+      def commonObjx: Obj = json.GsonParsing.parseObject(inputString) }
 
     // ---------------------------------------------------------------------------  
     object _JsonObjectString {
-      def toObj(c: Cls)(value: String): Obj = _JsonObjectString(value, null /* TODO */, c).commonObj }
+      def toObj(schema: Cls)(value: String): Obj = _JsonObjectString(value, null /* TODO */).naive(schema).get }
 
   // ---------------------------------------------------------------------------
-  case class _JsonArrayString(inputString: InputString, ignored /* TODO: t211231112700 - investigate */: OtherSchemaProvider, c: Cls) extends HasCommonObjs {
-      def naive: Option[Objs] = Some(commonObjs)
-        def commonObjs: Objs = {
-          val z = json.GsonParsing.parseArray(inputString).pipe(Objs.from)
+  case class _JsonArrayString(inputString: InputString, ignored /* TODO: t211231112700 - investigate */: OtherSchemaProvider) extends HasCommonObjsx {
+      override def naive(schema: Cls): Option[Objs] =
+          commonObjsx
+            .map(json.GsonToGalliaData.convertRecursively(schema))
+            .in.some
 
-          Option(c)/* TODO: see 211230183100 - may be null  */
-            .map { schema => z.map(json.GsonToGalliaData.convertRecursively(schema)) }
-            .getOrElse(z) } }
+        // ---------------------------------------------------------------------------
+        final override def commonObjsx: Objs = json.GsonParsing.parseArray(inputString).pipe(Objs.from) }
 
     // ---------------------------------------------------------------------------  
     object _JsonArrayString {
-      def toObjs(c: Cls)(value: String): Objs = _JsonArrayString(value, null /* TODO */, c).commonObjs }
+      def toObjs(schema: Cls)(value: String): Objs = _JsonArrayString(value, null /* TODO */).naive(schema).get }
 
   // ===========================================================================
   case class _JsonObjectFileInputU(
@@ -195,8 +194,8 @@ object AtomsIX { import utils.JdbcDataUtils
 
   // ===========================================================================
   class _MongodbInputZ(
-          inputString   : InputString,
-          queryingOpt   : Option[ReadQuerying] /* None if URI-driven (eg "mydb.mycoll") */)
+          inputString: InputString,
+          queryingOpt: Option[ReadQuerying] /* None if URI-driven (eg "mydb.mycoll") */)
       extends HasCommonObjsx { import _MongodbInputZ._
       mongoDb()
 
@@ -209,7 +208,7 @@ object AtomsIX { import utils.JdbcDataUtils
       // ===========================================================================
       // t210114153517 - must use jongo+find until figure out
       //   https://stackoverflow.com/questions/35771369/mongo-java-driver-how-to-create-cursor-in-mongodb-by-cusor-id-returned-by-a-db
-      def commonObjsx: Objs = {
+      final override def commonObjsx: Objs = {
           mongoDb().disableLogs()
           val cmd = cmdOpt.get // TODO: t210114152901 - validate
 

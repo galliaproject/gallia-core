@@ -31,10 +31,11 @@ sealed trait Atom {
   case object NestingDataPlaceholder extends ActionAN1 with Atom { def atom = this } // data to be provided by runner
 
   // ===========================================================================
-  trait AtomIU extends Atom    { def naive: Option[Obj ] }
+  trait AtomIU extends AtomIUx { def naive: Option[Obj ]; final override def naive(efferent: Cls): Option[Obj ] = naive }
   trait AtomIZ extends AtomIZx { def naive: Option[Objs]; final override def naive(efferent: Cls): Option[Objs] = naive }
   trait AtomIV extends Atom    { def naive: Option[Vle ] }
 
+    trait AtomIUx extends Atom { def naive(efferent: Cls): Option[Obj ] }
     trait AtomIZx extends Atom { def naive(efferent: Cls): Option[Objs] }
 
   // ---------------------------------------------------------------------------

@@ -41,8 +41,10 @@ object AtomsIX { import utils.JdbcDataUtils
       def naive: Option[Objs] = Some(input.streamLines(inMemoryMode).map(Obj.line).pipe(Objs.build)) }
 
   // ===========================================================================
-  trait HasCommonObj  extends AtomIU { def commonObj : Obj  /* must not rely on schema */ }
-  trait HasCommonObjs extends AtomIZ { def commonObjs: Objs /* must not rely on schema */ }
+  trait HasCommonObj   extends AtomIU  { def commonObj  : Obj  /* must not rely on schema */ }
+  trait HasCommonObjs  extends AtomIZ  { def commonObjs : Objs /* must not rely on schema */ }
+
+  trait HasCommonObjsx extends AtomIZx { def commonObjsx: Objs /* must not rely on schema */ }
 
   // ===========================================================================
   case class _JsonObjectString(inputString: InputString, ignored /* TODO: t211231112700 - investigate */: OtherSchemaProvider, c: Cls) extends HasCommonObj {
@@ -194,21 +196,20 @@ object AtomsIX { import utils.JdbcDataUtils
   // ===========================================================================
   class _MongodbInputZ(
           inputString   : InputString,
-          queryingOpt   : Option[ReadQuerying] /* None if URI-driven (eg "mydb.mycoll") */,
-          c: Cls)
-      extends HasCommonObjs { import _MongodbInputZ._
+          queryingOpt   : Option[ReadQuerying] /* None if URI-driven (eg "mydb.mycoll") */)
+      extends HasCommonObjsx { import _MongodbInputZ._
       mongoDb()
 
       // ---------------------------------------------------------------------------
-      def naive: Option[Objs] = 
-        commonObjs
-          .map(json.GsonToGalliaData.convertRecursively(c)) // TODO: confirm need to pay tax here?
+      override def naive(schema: Cls): Option[Objs] =
+        commonObjsx
+          .map(json.GsonToGalliaData.convertRecursively(schema)) // TODO: confirm need to pay tax here?
           .in.some
 
       // ===========================================================================
       // t210114153517 - must use jongo+find until figure out
       //   https://stackoverflow.com/questions/35771369/mongo-java-driver-how-to-create-cursor-in-mongodb-by-cusor-id-returned-by-a-db
-      def commonObjs: Objs = {
+      def commonObjsx: Objs = {
           mongoDb().disableLogs()
           val cmd = cmdOpt.get // TODO: t210114152901 - validate
 

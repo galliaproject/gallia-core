@@ -24,7 +24,8 @@ object ActionAtomsBoilerplate {
       // ---------------------------------------------------------------------------
       trait ActionAtomsIZ extends ActionAN {
         final override def atoms  (ctx: NodeMetaContext): Atoms = atomizs(ctx)
-                       def atomizs(ctx: NodeMetaContext): AtomIZs }
+                       def atomizs(ctx: NodeMetaContext)
+: AtomIZxs }
 
       // ---------------------------------------------------------------------------
       trait ActionAtomsIV extends ActionAN {
@@ -167,9 +168,14 @@ trait ActionAtomsUU1Nb extends ActionAtomsUU { // TODO: see t210616122449
 
 
     // ===========================================================================
-    trait ActionAtomsIZ01 extends ActionAtomsIZ {
-        final override def atomizs(ignored: NodeMetaContext): AtomIZs = atomiz.in.seq
-                       def atomiz                           : AtomIZ }
+    trait ActionAtomsIZ01 extends ActionAtomsIZ01x {
+        final override def atomizx: AtomIZx = atomiz
+                       def atomiz : AtomIZ }
+
+        // ---------------------------------------------------------------------------
+	trait ActionAtomsIZ01x extends ActionAtomsIZ {
+	  final override def atomizs(ctx: NodeMetaContext): AtomIZxs = atomizx.in.seq
+	                 def atomizx                      : AtomIZx }
 
       // ---------------------------------------------------------------------------
       trait ActionAtomsIZ0N extends ActionAtomsIZ {

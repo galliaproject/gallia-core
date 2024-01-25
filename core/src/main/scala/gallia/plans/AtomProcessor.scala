@@ -17,9 +17,9 @@ private[plans] object AtomProcessor {
           case NestingDataPlaceholder => _None
   
           // ---------------------------------------------------------------------------
-          case _: AtomIU => _None
-          case _: AtomIZ => _None
-          case _: AtomIV => _None
+          case _: AtomIU  => _None
+          case _: AtomIZx => _None
+          case _: AtomIV  => _None
 
           // ---------------------------------------------------------------------------
           case _: AtomUO => _Obj (input.obj)
@@ -63,6 +63,8 @@ private[plans] object AtomProcessor {
         case x: AtomIU => x.naive.map(NDT.to ).get // by design
         case x: AtomIZ => x.naive.map(NDT.to ).get
         case x: AtomIV => x.naive.map(NDT.vle).get
+
+        case x: AtomIZx => x.naive(efferentSchema).map(NDT.to ).get
 
         // ===========================================================================
         case x: AtomUO => input.obj .tap(x.naive)

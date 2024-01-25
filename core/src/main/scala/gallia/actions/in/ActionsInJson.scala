@@ -35,7 +35,7 @@ case class JsonObjectFileInputU(
       schemaProvider: OtherSchemaProvider,
       projectionOpt : Option[ReadProjection])
     extends ActionIU01 with TodoV0
-    with    HasSchemaProviderAndProjectionU {
+    with    HasSchemaProviderAndProjectionU0 {
   def _meta: Cls   = __meta
   def hasCommonObj = _JsonObjectFileInputU(input, projectionOpt, preProjectionSchema, resultCls /* 211230183100 */) }
 
@@ -46,7 +46,7 @@ case class JsonLinesFileInputZ(
         schemaProvider: OtherSchemaProvider,
         projectionOpt : Option[ReadProjection])
       extends ActionIZ01 with TodoV0 //TODO: 201104121618 - check not too big if not schema provided (or sample?)
-      with    HasSchemaProviderAndProjectionZ {
+      with    HasSchemaProviderAndProjectionZ0 {
     def _meta: Cls    = __meta
     def hasCommonObjs = _JsonLinesFileInputZ(input, inMemoryMode, projectionOpt, preProjectionSchema, resultCls /* 211230183100 */) } // TODO: t201214105653 - address resultCls hack
 
@@ -57,7 +57,7 @@ case class JsonLinesFileInputZ(
         schemaProvider: OtherSchemaProvider,
         projectionOpt : Option[ReadProjection])
       extends ActionIZ01 with TodoV0 //TODO: 201104121618 - check not too big if not schema provided (or sample?)
-      with    HasSchemaProviderAndProjectionZ {
+      with    HasSchemaProviderAndProjectionZ0 {
     def _meta: Cls    = __meta
     def hasCommonObjs = _JsonArrayFileInputZ(input, inMemoryMode, projectionOpt, resultCls /* 211230183100 */) }
 

@@ -38,22 +38,22 @@ object AtomsHelper {
       .pipe(gallia.obj)
 
   // ===========================================================================
-  def unnestOOO (o: Obj, parent: KPath, key: Key  ): Obj = AtomsUtils.nestingx(o, parent)(unnestOOO (_, _, key ))(unnestOOO (_, _, key ))
-  def unnestAll (o: Obj, parent: KPath            ): Obj = AtomsUtils.nestingx(o, parent)(unnestAll (_, _      ))(unnestAll (_, _      ))
-  def unnestSome(o: Obj, parent: KPath, keyz: Keyz): Obj = AtomsUtils.nestingx(o, parent)(unnestSome(_, _, keyz))(unnestSome(_, _, keyz))
+  def unnestOOO (o: Obj, parent: KPath, key: Key  ): Obj = AtomsUtils.nestingx(o, parent)(ifLeaf = unnestOOOLeaf (_, _, key ))(ifNesting = unnestOOO (_, _, key ))
+  def unnestAll (o: Obj, parent: KPath            ): Obj = AtomsUtils.nestingx(o, parent)(ifLeaf = unnestAllLeaf (_, _      ))(ifNesting = unnestAll (_, _      ))
+  def unnestSome(o: Obj, parent: KPath, keyz: Keyz): Obj = AtomsUtils.nestingx(o, parent)(ifLeaf = unnestSomeLeaf(_, _, keyz))(ifNesting = unnestSome(_, _, keyz))
 
     // ---------------------------------------------------------------------------
-    def unnestOOO(o: Obj, parent: Key, key: Key): Obj =
+    def unnestOOOLeaf(o: Obj, parent: Key, key: Key): Obj =
       o .objs_(parent)
-        .map(_.map(_.forceKey(key)))
+        .map { _.map(_.forceKey(key)) }
         .map { values =>
           o .removeOpt(parent)
-            .map(_    .putEntry(key,   values))
-            .getOrElse(obj     (key -> values)) }
+            .map       { _.putEntry(key,   values) }
+            .getOrElse { obj       (key -> values) } }
         .getOrElse(o)
 
     // ---------------------------------------------------------------------------
-    def unnestAll(o: Obj, parent: Key): Obj =
+    def unnestAllLeaf(o: Obj, parent: Key): Obj =
       o .obj_(parent)
         .map { o2 =>
           o .removeOpt(parent)
@@ -62,7 +62,7 @@ object AtomsHelper {
         .getOrElse(o)
 
     // ---------------------------------------------------------------------------
-    def unnestSome(o: Obj, parent: Key, keyz: Keyz): Obj =
+    def unnestSomeLeaf(o: Obj, parent: Key, keyz: Keyz): Obj =
       o .obj_(parent)
         .map { o2 =>
           o2.retainOpt(keyz)

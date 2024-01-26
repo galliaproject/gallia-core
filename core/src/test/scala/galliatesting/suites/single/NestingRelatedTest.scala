@@ -12,7 +12,7 @@ object NestingRelatedTest extends utest.TestSuite with GalliaTestSuite with Test
 
   private val x = "x"
   private val y = "y"
-  
+
   // ---------------------------------------------------------------------------
   val tests = Tests {
     test("nest") {
@@ -69,8 +69,9 @@ object NestingRelatedTest extends utest.TestSuite with GalliaTestSuite with Test
         test(UnnestIn.unnestAllFrom(a).rename(h ~> a).check(UnnestOut))
         test(UnnestIn.unnestOOO    (a)               .check(UnnestOut))
 
-        test(bobj(p ->               UnnestIn) .unnestOOO(p |> a).check(bobj(p ->     UnnestOut)))
-        test(bobj(p -> Seq(UnnestIn, UnnestIn)).unnestOOO(p |> a).check(bobj(p -> Seq(UnnestOut, UnnestOut))))
+        test(bobj(           p ->               UnnestIn) .unnestOOO      (p |> a).check(bobj(           p ->     UnnestOut)))
+        test(bobj(           p -> Seq(UnnestIn, UnnestIn)).unnestOOO      (p |> a).check(bobj(           p -> Seq(UnnestOut, UnnestOut))))
+        test(bobj(p2 -> bobj(p -> UnnestIn))              .unnestOOO(p2 |> p |> a).check(bobj(p2 -> bobj(p ->     UnnestOut))))
       } }
 
     // ===========================================================================

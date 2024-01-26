@@ -48,15 +48,15 @@ trait HeadCommonNestingRelated[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
     /** uses nesting name; OOO = Objects Of Ones, eg {"a": [{"b": 1}, {"b": 2}]} */
     def unnestOOO(path: KPathW): F = // TODO: t210109144447 - too convoluted, create dedicated action
         path.value.initPair match {
-          case (None      , leaf) => self2                                 ._unnestOOO(leaf)
-          case (Some(tail), leaf) => self2.transformEntityx(tail).using { _._unnestOOO(leaf) } }
+          case (None      , leaf) => self2                                 .unnestOOOLeaf(leaf)
+          case (Some(tail), leaf) => self2.transformEntityx(tail).using { _.unnestOOOLeaf(leaf) } }
 
       // ---------------------------------------------------------------------------
-      private[heads] def _unnestOOO(path: KPathW): F = // TODO: t210109144447 - too convoluted, create dedicated action
+      private[heads] def unnestOOOLeaf(key: Key): F =
         self2
-          .transformAllEntities(path.value)
-            .using(_.renameSoleKey(to = path.value.key)) // TODO: validate only one key
-          .rename(path).to(_tmp)
+          .transformAllEntities(key)
+            .using(_.renameSoleKey(to = key)) // TODO: validate only one key
+          .rename(key).to(_tmp)
           .unnestAllFrom(_tmp)
 
   // ===========================================================================

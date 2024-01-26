@@ -10,7 +10,9 @@ trait ActionVN {
           def vldt(in: Clss): Errs
     final val callSite      : CallSite        = CallSite.generate()
 
-    /* t201214105653 - keeping old hack around to help prototyping, avoid using otherwise (also see t220615121216) */
+    // ---------------------------------------------------------------------------
+    /* 201214105653 - keeping old hack around to help prototyping, avoid using otherwise (also see t220615121216)
+         can only be used from 'def atom[...]' */
     var _metaContext: NodeMetaContext = null }
 
   // ===========================================================================

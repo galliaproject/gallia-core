@@ -16,12 +16,12 @@ private[atoms] object AtomsUtils {
       case sgl         => f(sgl) }
 
   // ===========================================================================
-  def nestingx(dis: Obj, path: KPath) // TODO: should use schema rather (see t210115095838)
+  def nestingx(dis: Obj, path: KPath)
         (ifLeaf   : (Obj, Key  ) => Obj)
         (ifNesting: (Obj, KPath) => Obj): Obj =
     path.tailPair match {
       case (leaf  , None      ) => ifLeaf(dis, leaf)
-      case (parent, Some(tail)) => dis.transformObjx(parent, y => ifNesting(y, tail)) }
+      case (parent, Some(tail)) => dis.transformObjx(parent, ifNesting(_, tail)) }
 
 }
 

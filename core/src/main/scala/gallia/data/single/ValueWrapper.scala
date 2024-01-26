@@ -36,12 +36,10 @@ class ValueWrapper(val underlying: AnyValue) extends AnyVal {
     def asEnum         : EnumValue       = asTyped[EnumValue]
 
     // ---------------------------------------------------------------------------
-    def asObj          : Obj     = asTyped[Obj]
-  }
+    def asObj          : Obj     = asTyped[Obj] }
 
   // ===========================================================================
   object ValueWrapper {
-    implicit def to(x: AnyValue): ValueWrapper = new ValueWrapper(x)
-  }
+    implicit def to(x: AnyValue): ValueWrapper = new ValueWrapper(x) }
 
 // ===========================================================================

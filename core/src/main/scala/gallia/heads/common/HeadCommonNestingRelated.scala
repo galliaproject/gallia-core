@@ -46,12 +46,18 @@ trait HeadCommonNestingRelated[F <: HeadCommon[F]] { ignored: HeadCommon[F] =>
 
     // ===========================================================================
     /** uses nesting name; OOO = Objects Of Ones, eg {"a": [{"b": 1}, {"b": 2}]} */
-    def unnestOOO(key: KPathW): F = // TODO: t210109144447 - too convoluted, create dedicated action
-      self2
-        .transform(_.entities(key.value))
-          .using(_.renameSoleKey(key.value.key)) // TODO: validate only one key
-        .rename(key).to(_tmp)
-        .unnestAllFrom(_tmp)
+    def unnestOOO(path: KPathW): F = // TODO: t210109144447 - too convoluted, create dedicated action
+        path.value.initPair match {
+          case (None      , leaf) => self2                                 ._unnestOOO(leaf)
+          case (Some(tail), leaf) => self2.transformEntityx(tail).using { _._unnestOOO(leaf) } }
+
+      // ---------------------------------------------------------------------------
+      private[heads] def _unnestOOO(path: KPathW): F = // TODO: t210109144447 - too convoluted, create dedicated action
+        self2
+          .transformAllEntities(path.value)
+            .using(_.renameSoleKey(to = path.value.key)) // TODO: validate only one key
+          .rename(path).to(_tmp)
+          .unnestAllFrom(_tmp)
 
   // ===========================================================================
   // renesting; TODO: t210109173114 - renest just up to n levels?

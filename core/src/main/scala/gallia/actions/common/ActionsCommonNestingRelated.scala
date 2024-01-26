@@ -75,8 +75,8 @@ object ActionsCommonNestingRelated {
 
       // ---------------------------------------------------------------------------
       (      if (c.field(parent).subInfo1.isMultiple) _UnnestOOO (parent, fromz.values.force.one)
-        else if (fromz.size == nc.size)            _UnnestAll (parent) // TODO: still worth handling separately?
-        else                                       _UnnestSome(parent, fromz)) +:
+        else if (fromz.size == nc.size)               _UnnestAll (parent) // TODO: still worth handling separately?
+        else                                          _UnnestSome(parent, fromz)) +:
       target.resolve(nc).flatMap(potentialRenaming(_))
     }
   }

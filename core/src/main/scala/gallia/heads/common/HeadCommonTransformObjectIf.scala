@@ -12,21 +12,21 @@ trait HeadCommonTransformObjectIf[F <: HeadCommon[F]] { ignored: HeadCommon[F] =
   import   TSL.TransformSomeObjects._
 
   // ===========================================================================
-  class _TransformSomeObjects private[heads] (field: RPathW) {
-      def matching        (target: (SKey, AnyValue))                           : __TransformSomeObjectsW   = new __TransformSomeObjectsW(field, KPath.from(target._1), target._2)
-      def matching        (target: KPathW,                  value: AnyValue)   : __TransformSomeObjectsW   = new __TransformSomeObjectsW(field, target, value)
+  class _TransformSomeEntities private[heads] (field: RPathW) {
+      def matching        (target: (SKey, AnyValue))                           : __TransformSomeEntitiesW   = new __TransformSomeEntitiesW(field, KPath.from(target._1), target._2)
+      def matching        (target: KPathW,                  value: AnyValue)   : __TransformSomeEntitiesW   = new __TransformSomeEntitiesW(field, target, value)
 
-      def matching[O: WTT](target: TransformSomeObjects[O], value: O)          : __TransformSomeObjects[O] = new __TransformSomeObjects (field, target, _ == value)
-      def matching[O: WTT](target: TransformSomeObjects[O], pred: O => Boolean): __TransformSomeObjects[O] = new __TransformSomeObjects (field, target, pred)  }
+      def matching[O: WTT](target: TransformSomeObjects[O], value: O)          : __TransformSomeEntities[O] = new __TransformSomeEntities(field, target, _ == value)
+      def matching[O: WTT](target: TransformSomeObjects[O], pred: O => Boolean): __TransformSomeEntities[O] = new __TransformSomeEntities(field, target, pred)  }
 
     // ---------------------------------------------------------------------------
-    class __TransformSomeObjects[O: WTT] private[heads] (field: RPathW, target: TransformSomeObjects[O], pred: O => Boolean) {
+    class __TransformSomeEntities[O: WTT] private[heads] (field: RPathW, target: TransformSomeObjects[O], pred: O => Boolean) {
       def using(f: HeadU => HeadU): Self2 =
         transformAllEntities(field).using {
           _.transformEntityIf(target).matches(pred).using(f) } }
 
     // ---------------------------------------------------------------------------
-    class __TransformSomeObjectsW private[heads] (field: RPathW, target: KPathW, value: AnyValue) {
+    class __TransformSomeEntitiesW private[heads] (field: RPathW, target: KPathW, value: AnyValue) {
       def using(f: HeadU => HeadU): Self2 =
         transformAllEntities(field).using {
           _.transformEntityIf(target.value).hasValue(value).using(f) } }

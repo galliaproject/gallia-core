@@ -44,40 +44,26 @@ trait HeadCommonMiscTransformations[F <: HeadCommon[F]] { ignored: HeadCommon[F]
         _.stringValue.pipe(f).pipe(EnumValue.apply) } }
 
   // ===========================================================================
-  @deprecated def transformObject        (k: RPathW): _TransformU = transform(_.entity  (k.value)) // TODO: rename to convey 1 (as oppose to x)
-              def transformEntity        (k: RPathW): _TransformU = transform(_.entity  (k.value)) // TODO: rename to convey 1 (as oppose to x)
-  @deprecated def transformAllObjects    (k: RPathW): _TransformZ = transform(_.entities(k.value))
-              def transformAllEntities   (k: RPathW): _TransformZ = transform(_.entities(k.value))
-  @deprecated def transformAllObjectsTmp            : _TransformZ = transform(_.entities(_tmp))
-              def transformAllEntitiesTmp           : _TransformZ = transform(_.entities(_tmp))
-
-  @deprecated("use more explicit transformAllEntities") def transformObjects(k: RPathW) = transformAllEntities(k)
+  def transformEntity        (k: RPathW): _TransformU = transform(_.entity  (k.value)) // TODO: rename to convey 1 (as oppose to x)
+  def transformEntityx       (k: RPathW): _TransformU = transform(_.entityx (k.value))
+  def transformAllEntities   (k: RPathW): _TransformZ = transform(_.entities(k.value))
+  def transformAllEntitiesTmp           : _TransformZ = transform(_.entities(_tmp))
 
   // ---------------------------------------------------------------------------
-  @deprecated def transformSomeObjects (k: RPathW): _TransformSomeObjects = new _TransformSomeObjects(k)
-              def transformSomeEntities(k: RPathW): _TransformSomeObjects = new _TransformSomeObjects(k)
+  def transformSomeEntities  (k: RPathW): _TransformSomeEntities = new _TransformSomeEntities(k)
 
     // ---------------------------------------------------------------------------
-    @deprecated def transformGroupObjectsUsing          (f: HeadZ => HeadZ)                    : Self2 = transform(_.entities(_group))   .using(f)
-                def transformGroupEntitiesUsing         (f: HeadZ => HeadZ)                    : Self2 = transform(_.entities(_group))   .using(f)
-    @deprecated def transformGroupObjectsUsing          (f: HeadZ => HeadU)    (implicit d: DI): Self2 = transform(_.entities(_group))   .using(f)
-                def transformGroupEntitiesUsing         (f: HeadZ => HeadU)    (implicit d: DI): Self2 = transform(_.entities(_group))   .using(f)
-    @deprecated def transformGroupObjectsUsing [D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI): Self2 = transform(_.entities(_group))(d).using(f)
-                def transformGroupEntitiesUsing[D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI): Self2 = transform(_.entities(_group))(d).using(f)
+    def transformGroupEntitiesUsing         (f: HeadZ => HeadZ)                    : Self2 = transform(_.entities(_group))   .using(f)
+    def transformGroupEntitiesUsing         (f: HeadZ => HeadU)    (implicit d: DI): Self2 = transform(_.entities(_group))   .using(f)
+    def transformGroupEntitiesUsing[D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI): Self2 = transform(_.entities(_group))(d).using(f)
 
-    @deprecated def transformLeftObjectsUsing          (f: HeadZ => HeadZ)                    : Self2 = transform(_.entities(_left))   .using(f)
-                def transformLeftEntitiesUsing         (f: HeadZ => HeadZ)                    : Self2 = transform(_.entities(_left))   .using(f)
-    @deprecated def transformLeftObjectsUsing          (f: HeadZ => HeadU)    (implicit d: DI): Self2 = transform(_.entities(_left))   .using(f)
-                def transformLeftEntitiesUsing         (f: HeadZ => HeadU)    (implicit d: DI): Self2 = transform(_.entities(_left))   .using(f)
-    @deprecated def transformLeftObjectsUsing [D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI): Self2 = transform(_.entities(_left))(d).using(f)
-                def transformLeftEntitiesUsing[D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI): Self2 = transform(_.entities(_left))(d).using(f)
+    def transformLeftEntitiesUsing         (f: HeadZ => HeadZ)                    : Self2 = transform(_.entities(_left))   .using(f)
+    def transformLeftEntitiesUsing         (f: HeadZ => HeadU)    (implicit d: DI): Self2 = transform(_.entities(_left))   .using(f)
+    def transformLeftEntitiesUsing[D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI): Self2 = transform(_.entities(_left))(d).using(f)
 
-    @deprecated def transformRightObjectsUsing          (f: HeadZ => HeadZ)                    : Self2 = transform(_.entities(_right))   .using(f)
-                def transformRightEntitiesUsing         (f: HeadZ => HeadZ)                    : Self2 = transform(_.entities(_right))   .using(f)
-    @deprecated def transformRightObjectsUsing          (f: HeadZ => HeadU)    (implicit d: DI): Self2 = transform(_.entities(_right))   .using(f)
-                def transformRightEntitiesUsing         (f: HeadZ => HeadU)    (implicit d: DI): Self2 = transform(_.entities(_right))   .using(f)
-    @deprecated def transformRightObjectsUsing [D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI): Self2 = transform(_.entities(_right))(d).using(f)
-                def transformRightEntitiesUsing[D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI): Self2 = transform(_.entities(_right))(d).using(f)
+    def transformRightEntitiesUsing         (f: HeadZ => HeadZ)                    : Self2 = transform(_.entities(_right))   .using(f)
+    def transformRightEntitiesUsing         (f: HeadZ => HeadU)    (implicit d: DI): Self2 = transform(_.entities(_right))   .using(f)
+    def transformRightEntitiesUsing[D1: WTT](f: HeadZ => HeadV[D1])(implicit d: DI): Self2 = transform(_.entities(_right))(d).using(f)
 
   // ===========================================================================
   // to/from JSON

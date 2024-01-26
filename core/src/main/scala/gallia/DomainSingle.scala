@@ -60,7 +60,7 @@ case class KPath(parent: Seq[Key], key: Key) {
 
 
     // ---------------------------------------------------------------------------
-    def rpath           : RPath = RPath(parent, Ren.from(key))
+    def rpath          : RPath = RPath(parent, Ren.from(key))
     def rpath(to: KeyW): RPath = RPath(parent, Ren(key, to.value))
 
     def rpath(to: Ren  ): RPath = RPath(parent :+ key, to)

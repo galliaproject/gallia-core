@@ -42,114 +42,109 @@ object ActionsCommonTransforms {
       def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atoms(c)(_TransformWW(_, f, checkType = false))) }
 
   // ===========================================================================
-  private[actions] trait HasTqRPathzTarget { // TODO
-    val target: TqRPathz
-    def resolve(c: Cls) = target.rpathz_(c) }
+  private[gallia] trait EntityTransformXX  {
+        protected final def resolve(c: Cls) = target.rpathz_(c)
+        protected       val target: TqRPathz
+        protected       def _trnsf(c: Cls): NestedTransform
 
-  // ===========================================================================
-  case class TransformUU(target: TqRPathz, disambiguatorOpt: UnionObjectDisambiguatorOpt, f: HeadU => HeadU) extends ActionUU1N with HasTqRPathzTarget {
-      private val _trnsf: NestedTransform = utils.NestedTransform.parseUU(disambiguatorOpt)(f)
+        // ---------------------------------------------------------------------------
+        def  __vldt(c: Cls)(checkInput: Cls => KPathz => Errs): Errs =  /* TODO: t210202155459 - verify input is indeed u or z */
+          target.vldtAsOrigin(c) ++
+          target.__rpathz(c).pipe {
+            _trnsf(c).vldt(c, _) } ++
+          target.__rpathz(c).pipe(_.fromz).pipe {
+            checkInput(c) } }
 
-      // ---------------------------------------------------------------------------
-      def  vldt(c: Cls): Errs =
-        target.vldtAsOrigin(c) ++
-        target.__rpathz(c).pipe {
-            _trnsf.vldt(c, _) } ++
-        target.__rpathz(c).pipe(_.fromz).pipe {
-              checkUInput(c) }
-        // TODO: t210202155459 - verify input is indeed u
+      // ===========================================================================
+      private[gallia] trait EntityTransformXXX extends EntityTransformXX {
+          protected val multiple: Boolean
 
-      // ---------------------------------------------------------------------------
-      def _meta  (c: Cls): Cls     = resolve(c).pipe   (_trnsf.transformMeta(c, _))
-      def atomuus(c: Cls): AtomUUs = resolve(c).flatMap(_trnsf.transformData(c, _Single)) } //TODO: can only be one target actually
-
-    // ===========================================================================
-    case class TransformZZ(target: TqRPathz, disambiguatorOpt: UnionObjectDisambiguatorOpt, f: HeadZ => HeadZ) extends ActionUU1N with HasTqRPathzTarget {
-      private val _trnsf: NestedTransform = utils.NestedTransform.parseZZ(disambiguatorOpt)(f)
-
-      // ---------------------------------------------------------------------------
-      def  vldt(c: Cls): Errs =
-        target.vldtAsOrigin(c) ++
-        resolve(c).pipe {
-            _trnsf.vldt(c, _) } ++
-        target.__rpathz(c).pipe(_.fromz).pipe {
-              checkZInput(c) }
-
-      // ---------------------------------------------------------------------------
-      def _meta  (c: Cls): Cls     = resolve(c).pipe   (_trnsf.transformMeta(c, _))
-      def atomuus(c: Cls): AtomUUs = resolve(c).flatMap(_trnsf.transformData(c, _Multiple)) //TODO: can only be one target actualy
-    }
-
-  // ===========================================================================
-  case class TransformUZ(target: TqRPathz, f: HeadU => HeadZ) extends ActionUU1N with HasTqRPathzTarget {
-      private val _trnsf: NestedTransform = utils.NestedTransform.parseUZ(f)
-
-      // ---------------------------------------------------------------------------
-      def  vldt(c: Cls): Errs =
-        target.vldtAsOrigin(c) ++
-        resolve(c).pipe {
-            _trnsf.vldt(c, _) } ++
-        target.__rpathz(c).pipe(_.fromz).pipe {
-              checkUInput(c) }
-        // TODO: t210202155459 - verify input is indeed z
-
-      def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).toMultiple(x.force1FX) }
-      def atomuus(c: Cls): AtomUUs = resolve(c).pipe {      _trnsf.atomuusUZ    (c)(_, target.isOptional(c)) }
-    }
+          // ---------------------------------------------------------------------------
+          def _meta  (c: Cls): Cls     = resolve(c).pipe   (_trnsf(c).transformMeta(c, _))
+          def atomuus(c: Cls): AtomUUs = resolve(c).flatMap(_trnsf(c).transformData(c, multiple)) /* TODO: can only be one target actualy */ }
 
     // ===========================================================================
-    case class TransformZU(target: TqRPathz, f: HeadZ => HeadU) extends ActionUU1N with HasTqRPathzTarget {
-      private val _trnsf: NestedTransform = utils.NestedTransform.parseZU(f)
+    case class TransformUUx(target: TqRPathz, disambiguatorOpt: UnionObjectDisambiguatorOpt, f: HeadU => HeadU)
+          extends EntityTransformXX with ActionUU1N { import aptus.Seq_
+        private def multiple(c: Cls): Boolean = resolve(c).values.force.one /* TODO: always here? */.from.pipe(c.isMultiple(_))
 
-      // ---------------------------------------------------------------------------
-      def  vldt(c: Cls): Errs =
-        target.vldtAsOrigin(c) ++
-        resolve(c).pipe {
-            _trnsf.vldt(c, _) } ++
-        target.__rpathz(c).pipe(_.fromz).pipe {
-              checkZInput(c) }
+        // ---------------------------------------------------------------------------
+        final override protected def _trnsf(c: Cls): NestedTransform =
+          if (!multiple(c)) utils.NestedTransform.parseUU(disambiguatorOpt)(f)
+          else              utils.NestedTransform.parseZZ(disambiguatorOpt)(_.map(f))
 
-      def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).toSingle(x.force1FX) }
-      def atomuus(c: Cls): AtomUUs = resolve(c).pipe {      _trnsf.atomuusZU    (c)(_, target.isOptional(c)) }
-    }
+        // ---------------------------------------------------------------------------
+        def vldt(c: Cls): Errs = __vldt(c) { c => if (!multiple(c)) checkUInput(c) else checkZInput(c) }
 
-  // ===========================================================================
-  case class TransformUV[D1: WTT](target: TqRPathz, f: HeadU => HeadV[D1]) extends ActionUU1N with HasTqRPathzTarget {
-      private val _trnsf: NestedTransform = utils.NestedTransform.parseUV(f)
-
-      // ---------------------------------------------------------------------------
-      def  vldt(c: Cls): Errs =
-        target.vldtAsOrigin(c) ++
-        target.__rpathz(c).pipe {
-            _trnsf.vldt(c, _) } ++
-        target.__rpathz(c).pipe(_.fromz).pipe {
-              checkUInput(c) } ++
-        _vldt.validType(typeNode[D1])
-        //TODO: t210202155459 - verify input is indeed z
-
-      // ---------------------------------------------------------------------------
-      def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).updateInfo(x.force1FX, Info.forceFrom[D1]) }
-      def atomuus(c: Cls): AtomUUs = resolve(c).pipe {      _trnsf.atomuusUV    (c)(_, target.isOptional(c)) }
-    }
+          // ---------------------------------------------------------------------------
+          def _meta  (c: Cls): Cls     = resolve(c).pipe   (_trnsf(c).transformMeta(c, _))
+          def atomuus(c: Cls): AtomUUs = resolve(c).flatMap(_trnsf(c).transformData(c, multiple(c))) /* TODO: can only be one target actualy */ }
 
     // ===========================================================================
-    case class TransformZV[D1: WTT](target: TqRPathz, f: HeadZ => HeadV[D1]) extends ActionUU1N with HasTqRPathzTarget {
-      private val _trnsf: NestedTransform = utils.NestedTransform.parseZV(f)
+    case class TransformUU(target: TqRPathz, disambiguatorOpt: UnionObjectDisambiguatorOpt, f: HeadU => HeadU)
+          extends EntityTransformXXX with ActionUU1N {
+        final override protected def _trnsf(c: Cls): NestedTransform = utils.NestedTransform.parseUU(disambiguatorOpt)(f)
+        final override protected val multiple = _Single
 
-      // ---------------------------------------------------------------------------
-      def  vldt(c: Cls): Errs =
-        target.vldtAsOrigin(c) ++
-        target.__rpathz(c).pipe {
-            _trnsf.vldt(c, _) } ++
-        target.__rpathz(c).pipe(_.fromz).pipe {
-              checkZInput(c) } ++
-        _vldt.validType(typeNode[D1])
+        def vldt(c: Cls): Errs = __vldt(c)(checkUInput) }
 
-      // ---------------------------------------------------------------------------
-      def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf.transformMeta(c, x).updateInfo(x.force1FX, Info.forceFrom[D1]) }
-      def atomuus(c: Cls): AtomUUs = resolve(c).pipe { _trnsf.atomuusZV(c)(_, target.isOptional(c)) }
-    }
+      // ===========================================================================
+      case class TransformZZ(target: TqRPathz, disambiguatorOpt: UnionObjectDisambiguatorOpt, f: HeadZ => HeadZ)
+          extends EntityTransformXXX with ActionUU1N {
+        final override protected def _trnsf(c: Cls): NestedTransform = utils.NestedTransform.parseZZ(disambiguatorOpt)(f)
+        final override protected val multiple = _Multiple
 
+        def vldt(c: Cls): Errs = __vldt(c)(checkZInput) }
+
+    // ===========================================================================
+    case class TransformUZ(target: TqRPathz, f: HeadU => HeadZ)
+          extends EntityTransformXX with ActionUU1N {
+        final override protected def _trnsf(c: Cls): NestedTransform = utils.NestedTransform.parseUZ(f)
+
+        // ---------------------------------------------------------------------------
+        def vldt(c: Cls): Errs = __vldt(c)(checkUInput)
+
+        // ---------------------------------------------------------------------------
+        def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf(c).transformMeta(c, x).toMultiple(x.force1FX) }
+        def atomuus(c: Cls): AtomUUs = resolve(c).pipe {      _trnsf(c).atomuusUZ    (c)(_, target.isOptional(c))  } }
+
+      // ===========================================================================
+      case class TransformZU(target: TqRPathz, f: HeadZ => HeadU)
+          extends EntityTransformXX with ActionUU1N {
+        final override protected def _trnsf(c: Cls): NestedTransform = utils.NestedTransform.parseZU(f)
+
+        // ---------------------------------------------------------------------------
+        def vldt(c: Cls): Errs = __vldt(c)(checkZInput)
+
+        // ---------------------------------------------------------------------------
+        def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf(c).transformMeta(c, x).toSingle(x.force1FX) }
+        def atomuus(c: Cls): AtomUUs = resolve(c).pipe {      _trnsf(c).atomuusZU    (c)(_, target.isOptional(c)) } }
+
+    // ===========================================================================
+    case class TransformUV[D1: WTT](target: TqRPathz, f: HeadU => HeadV[D1])
+          extends EntityTransformXX with ActionUU1N {
+        final override protected def _trnsf(c: Cls): NestedTransform = utils.NestedTransform.parseUV(f)
+
+        // ---------------------------------------------------------------------------
+        def  vldt(c: Cls): Errs = __vldt(c)(checkUInput) ++
+          _vldt.validType(typeNode[D1])
+
+        // ---------------------------------------------------------------------------
+        def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf(c).transformMeta(c, x).updateInfo(x.force1FX, Info.forceFrom[D1]) }
+        def atomuus(c: Cls): AtomUUs = resolve(c).pipe { x => _trnsf(c).atomuusUV    (c)(x, target.isOptional(c)) } }
+
+      // ===========================================================================
+      case class TransformZV[D1: WTT](target: TqRPathz, f: HeadZ => HeadV[D1])
+          extends EntityTransformXX with ActionUU1N {
+        final override protected def _trnsf(c: Cls): NestedTransform = utils.NestedTransform.parseZV(f)
+
+        // ---------------------------------------------------------------------------
+        def  vldt(c: Cls): Errs = __vldt(c)(checkZInput) ++
+          _vldt.validType(typeNode[D1])
+
+        // ---------------------------------------------------------------------------
+        def _meta  (c: Cls): Cls     = resolve(c).pipe { x => _trnsf(c).transformMeta(c, x).updateInfo(x.force1FX, Info.forceFrom[D1]) }
+        def atomuus(c: Cls): AtomUUs = resolve(c).pipe { x => _trnsf(c).atomuusZV    (c)(x, target.isOptional(c)) } }
 
   // ===========================================================================
   case class TransformObjectCustom[D1: WTT](from: TqRPathz, to: TypeNode, f: Obj => D1) extends ActionUU1N {

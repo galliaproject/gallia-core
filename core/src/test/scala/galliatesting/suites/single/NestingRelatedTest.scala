@@ -54,19 +54,24 @@ object NestingRelatedTest extends utest.TestSuite with GalliaTestSuite with Test
       test(aobj(cls(p.cls(f.string_, g.int)))(obj(p -> obj(          g -> 1))).unnestFrom(p).field(f).display())
 
       // ---------------------------------------------------------------------------
-      val OooIn  = bobj(p -> Seq(Default00, Default00b), z -> _t)
-      val OooOut = bobj(z -> _t, g -> Seq(1, 2))
+      test("unnest OOOs (Object Of Ones)") {
+        val OooIn  = bobj(p -> Seq(Default00, Default00b), z -> _t)
+        val OooOut = bobj(z -> _t, g -> Seq(1, 2))
 
-      test(OooIn.unnestFrom(p).field (g)        .check(OooOut))
-      test(OooIn.unnestFrom(p).fields(_.soleKey).check(OooOut))
-      test(OooIn.unnestAllFrom(p)               .check(OooOut))
+        test(OooIn.unnestFrom(p).field (g)        .check(OooOut))
+        test(OooIn.unnestFrom(p).fields(_.soleKey).check(OooOut))
+        test(OooIn.unnestAllFrom(p)               .check(OooOut))
 
-      // ---------------------------------------------------------------------------
-      val UnnestIn  = bobj(a -> Seq(bobj(h -> 1), bobj(h -> 2)))
-      val UnnestOut = bobj(a -> Seq(1, 2))
+        // ---------------------------------------------------------------------------
+        val UnnestIn  = bobj(a -> Seq(bobj(h -> 1), bobj(h -> 2)))
+        val UnnestOut = bobj(a -> Seq(1, 2))
 
-      test(UnnestIn.unnestAllFrom(a).rename(h ~> a).check(UnnestOut))
-      test(UnnestIn.unnestOOO    (a)               .check(UnnestOut)) }
+        test(UnnestIn.unnestAllFrom(a).rename(h ~> a).check(UnnestOut))
+        test(UnnestIn.unnestOOO    (a)               .check(UnnestOut))
+
+        test(bobj(p ->               UnnestIn) .unnestOOO(p |> a).check(bobj(p ->     UnnestOut)))
+        test(bobj(p -> Seq(UnnestIn, UnnestIn)).unnestOOO(p |> a).check(bobj(p -> Seq(UnnestOut, UnnestOut))))
+      } }
 
     // ===========================================================================
     test("renest") {

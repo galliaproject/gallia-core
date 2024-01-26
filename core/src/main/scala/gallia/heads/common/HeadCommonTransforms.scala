@@ -32,10 +32,15 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
     // ===========================================================================
     sealed trait ___TransformU {
         protected val target: Transform[HeadU]
+        private   val ttq    = resolves(target)
         protected val disambiguatorOpt: Option[UnionObjectDisambiguator] = None // TODO: t220517123057: support for UZ and UV
 
         // ---------------------------------------------------------------------------
-        def using         (f: HeadU => HeadU)                            : Self2 = self2 :+ TransformUU    (tqrpathz(target), disambiguatorOpt, f)
+        // ignoreContainer only available for UU, not UV (for now)
+        def using         (f: HeadU => HeadU): Self2 = {
+          if (!ttq.ignoreContainer) self2 :+ TransformUU (ttq.tq, disambiguatorOpt, f)
+          else                      self2 :+ TransformUUx(ttq.tq, disambiguatorOpt, f) }
+
         def using         (f: HeadU => HeadZ)    (implicit d: DI)        : Self2 = self2 :+ TransformUZ    (tqrpathz(target), f)
         def using[V1: WTT](f: HeadU => HeadV[V1])(implicit d: DI, d2: DI): Self2 = self2 :+ TransformUV[V1](tqrpathz(target), f) }
 

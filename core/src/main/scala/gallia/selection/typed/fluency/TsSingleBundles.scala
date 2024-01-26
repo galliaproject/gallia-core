@@ -9,8 +9,9 @@ private[gallia] object TsSingleBundles {
 
   // ===========================================================================
   trait HasSingleNesting[$Wrap]
-    extends TsSingleIndividual.HasSingleObj [$Wrap]
-    with    TsSingleIndividual.HasSingleObjz[$Wrap]
+    extends TsSingleIndividual.HasSingleEntity  [$Wrap]
+    with    TsSingleIndividual.HasSingleEntityx [$Wrap] // ignores multiplicity
+    with    TsSingleIndividual.HasSingleEntities[$Wrap]
 
   // ---------------------------------------------------------------------------
   trait HasSingleBasic[$Wrap]

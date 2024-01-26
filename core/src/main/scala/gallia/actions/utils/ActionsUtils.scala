@@ -43,8 +43,8 @@ private[actions] object ActionsUtils {
       .flatMap { rpath =>
         val pair = PathPair(rpath.to, c.isOptional(rpath.from))
 
-        potentialRenaming(rpath).toSeq :+ 
-        (if (!c.field(rpath.from).isUnionType) ifOne     (pair) 
+        potentialRenaming(rpath).toSeq :+
+        (if (!c.field(rpath.from).isUnionType) ifOne     (pair)
          else                                  ifMultiple(pair))}
 
   // ===========================================================================

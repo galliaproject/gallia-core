@@ -9,7 +9,9 @@ import plans.Clss
 trait ActionVN {
           def vldt(in: Clss): Errs
     final val callSite      : CallSite        = CallSite.generate()
-          var metaContext   : NodeMetaContext = null /* t201214105653 - hack (also see t220615121216) */ }
+
+    /* t201214105653 - keeping old hack around to help prototyping, avoid using otherwise (also see t220615121216) */
+    var _metaContext: NodeMetaContext = null }
 
   // ===========================================================================
   trait ActionMN { def _meta(in: Clss): Cls }
@@ -18,7 +20,7 @@ trait ActionVN {
   trait ActionAN { def atoms(ctx: NodeMetaContext): Atoms }
 
     // ---------------------------------------------------------------------------
-    case class NodeMetaContext    (afferents: Clss, efferent: Cls, origin: CallSite) { import aptus.String_
+    case class NodeMetaContext(afferents: Clss, efferent: Cls, origin: CallSite) { import aptus.String_
       def formatDebugAfferents: String = afferents.values.map(_.formatShort0.sectionAllOff).joinln.newline
       def formatDebugEfferent : String = efferent              .formatShort0.sectionAllOff        .newline }
 

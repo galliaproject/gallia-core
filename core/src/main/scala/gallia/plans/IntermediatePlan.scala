@@ -44,8 +44,13 @@ case class IntermediatePlan private[plans] (dag: ActionDag) {
           case None       => ResultSchema.UpstreamError
           case Some(clss) =>
             actionm.vldt(clss) match {
-              case Nil    => ResultSchema.Success(actionm._meta(clss)
-.tap { efferent => actionm.metaContext = NodeMetaContext(afferents = clss, efferent, CallSite(None, Nil)) /* TODO: relates to t201214105653 hack */ })
+              case Nil =>
+                actionm
+                  ._meta(clss)
+                  .tap { efferent =>
+                    actionm._metaContext =
+                      NodeMetaContext(afferents = clss, efferent, CallSite(None, Nil)) }
+                  .pipe(ResultSchema.Success.apply)
               case errors => ResultSchema.Errors(errors, actionm.callSite) } } }
 
 // ===========================================================================

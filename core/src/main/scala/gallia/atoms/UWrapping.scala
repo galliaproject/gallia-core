@@ -4,6 +4,9 @@ package atoms
 import plans._
 
 // ===========================================================================
+/* NOTE: these .map is where Spark RDDs's map are used in their simplest form
+    (via the Objs.map(f) -> Streamer.map(f) -> RddStreamer.map(f) abstraction)
+    - see gallia-spark module */
 case class _UWrapper(wrappee: AtomUU) extends AtomZZ { def naive(z: Objs) = z.map(wrappee.naive) } // TODO: see t210114111539
 
 // ===========================================================================

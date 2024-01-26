@@ -7,7 +7,6 @@ import trgt._
 import plans.Clss
 import FunctionWrappers._
 import data.multiple.Streamer
-import atoms._UWrapper
 import atoms.AtomsOthers._
 import atoms.AtomsUV._
 import atoms.AtomsZZ._
@@ -20,12 +19,6 @@ object ActionsOthers {
     def  vldt(in: Cls) = Nil
     def _meta(in: Cls) = in
     def atoms(ignored: NodeMetaContext): Atoms = Nil }
-
-  // ===========================================================================
-  case class UWrapper(u: ActionUU) extends ActionZZ {
-    def vldt (in: Cls ): Errs = u. vldt(in)
-    def _meta(in: Cls ): Cls  = u._meta(in)
-    def atomzzs(ctx: NodeMetaContext) = u.atomuus(ctx).map(_UWrapper.apply) }
 
   // ===========================================================================
   case class ModifyUnderlyingStreamer(f: Streamer[Obj] => Streamer[Obj]) extends IdentityVM1 with ActionZZ01 {

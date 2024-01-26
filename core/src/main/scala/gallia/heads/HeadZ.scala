@@ -59,6 +59,14 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
   final          protected[heads] def ::+ (action: ActionZZ): Self = handler.chainzz(self)(action)
   final override protected[heads] def  :+ (action: ActionUU): Self = this ::+ UWrapper(action)
 
+    // ===========================================================================
+    private case class UWrapper(u: ActionUU) extends ActionZZ {
+      def vldt   (in: Cls): Errs = u. vldt(in)
+      def _meta  (in: Cls): Cls  = u._meta(in)
+      def atomzzs(ctx: NodeMetaContext): AtomZZs =
+        u .atomuus(ctx)
+          .map(gallia.atoms._UWrapperX.apply(_metaContext.efferent, _)) }
+
   // ===========================================================================
   private[heads] def zz      (action: ActionZZ): HeadZ            = handler.chainzz      (self)(action)
   private[heads] def zzWithAs(action: ActionZZ): HeadZ with HasAs = handler.chainzzWithAs(self)(action) // used by aggregations
@@ -148,8 +156,8 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
   // TODO: add more common ones
   // TODO: t210117110015 - move to common (need to abstract ForX...)
 
-  def retainFirst               : Self2 = forKey(_.firstKey).thn(_ retain _)
-  def renameSoleKey(value: KeyW): Self2 = forKey(_.soleKey) .thn(_.rename(_).to(value))
+  def retainFirst            : Self2 = forKey(_.firstKey).thn(_ retain _)
+  def renameSoleKey(to: KeyW): Self2 = forKey(_.soleKey) .thn(_.rename(_).to(to))
   
   def removeRecursivelyIfValue(value: String): Self2 = forLeafPaths { _.removeIfValueFor(_).is(value) } 
 

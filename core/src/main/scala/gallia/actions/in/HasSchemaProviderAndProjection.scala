@@ -21,23 +21,25 @@ sealed trait HasSchemaProviderAndProjectionx extends HasSchemaProvider with HasP
             .pipe(projectMeta) }
 
   // ===========================================================================
-  trait HasSchemaProviderAndProjectionUx extends HasSchemaProviderAndProjectionx {
-      protected def hasCommonObjx: HasCommonObjx
+  trait HasSchemaProviderAndProjectionU[$HasCommonObj <: HasCommonObj]
+        extends HasSchemaProviderAndProjectionx {
+      protected def hasCommonObj: $HasCommonObj
 
       // ---------------------------------------------------------------------------
-      protected def infer(): Cls = // TODO: t210115194646 - check if file size > x
-        hasCommonObjx
-          .commonObjx
+      protected final override def infer(): Cls = // TODO: t210115194646 - check if file size > x
+        hasCommonObj
+          .commonObj
           .pipe(SchemaInferrer.klass) }
 
     // ===========================================================================
-    trait HasSchemaProviderAndProjectionZx extends HasSchemaProviderAndProjectionx {
-      protected def hasCommonObjsx: HasCommonObjsx
+    trait HasSchemaProviderAndProjectionZ[$HasCommonObjs <: HasCommonObjs]
+        extends HasSchemaProviderAndProjectionx {
+      protected def hasCommonObjs: $HasCommonObjs
 
       // ---------------------------------------------------------------------------
-      protected def infer(): Cls = // TODO: t210115194646 - check if file size > x
-        hasCommonObjsx
-          .commonObjsx
+      protected final override def infer(): Cls = // TODO: t210115194646 - check if file size > x
+        hasCommonObjs
+          .commonObjs
           .toListAndTrash // because of c201104121618
           .pipe(SchemaInferrer.klass) }
 

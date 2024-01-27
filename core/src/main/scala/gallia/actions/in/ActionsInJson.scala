@@ -21,36 +21,37 @@ case class GenericInputU(schema: Cls, datum : Obj)
 
 // ===========================================================================
 case class JsonObjectString(inputString: InputString, schemaProvider: OtherSchemaProvider)
-    extends ActionIU01x with TodoV0
-       with HasSchemaProviderAndProjectionUx with HasNoProjection {
-  override def _meta: Cls   = __meta
-  override def atomiux: AtomIUx = hasCommonObjx
+    extends ActionIU01y with TodoV0
+       with HasSchemaProviderAndProjectionU[_JsonObjectString.Conf] with HasNoProjection {
+  override def _meta: Cls = __meta
+  override def atomiuy(resultSchema: Cls): AtomIU = _JsonObjectString(hasCommonObj, resultSchema)
 
-    // ---------------------------------------------------------------------------
-    override def hasCommonObjx = _JsonObjectString(inputString, schemaProvider) }
+  // ---------------------------------------------------------------------------
+  override def hasCommonObj = _JsonObjectString.Conf(inputString, schemaProvider) }
 
 // ===========================================================================
 case class JsonArrayString(inputString: InputString, schemaProvider: OtherSchemaProvider)
-    extends ActionIZ01x with TodoV0
-       with HasSchemaProviderAndProjectionZx with HasNoProjection {
-  override def _meta  : Cls    = __meta
-  override def atomizx: AtomIZx = hasCommonObjsx
+    extends ActionIZ01y with TodoV0
+       with HasSchemaProviderAndProjectionZ[_JsonArrayString.Conf]
+       with HasNoProjection {
+  override def _meta: Cls = __meta
+  override def atomizy(resultSchema: Cls): AtomIZ = _JsonArrayString(hasCommonObjs, resultSchema)
 
-    // ---------------------------------------------------------------------------
-    override def hasCommonObjsx = _JsonArrayString(inputString, schemaProvider) }
+  // ---------------------------------------------------------------------------
+  override def hasCommonObjs = _JsonArrayString.Conf(inputString, schemaProvider) }
 
 // ===========================================================================
 case class JsonObjectFileInputU(
       input         : InputUrlLike,
       schemaProvider: OtherSchemaProvider,
       projectionOpt : Option[ReadProjection])
-    extends ActionIU01x with TodoV0
-    with    HasSchemaProviderAndProjectionUx {
-  override def _meta  : Cls     = __meta
-  override def atomiux: AtomIUx = hasCommonObjx
+    extends ActionIU01y with TodoV0
+    with    HasSchemaProviderAndProjectionU[_JsonObjectFileInputU.Conf] {
+  override def _meta: Cls = __meta
+  override def atomiuy(resultSchema: Cls): AtomIU = _JsonObjectFileInputU(hasCommonObj, resultSchema)
 
-    // ---------------------------------------------------------------------------
-    override def hasCommonObjx = _JsonObjectFileInputU(input, projectionOpt, preProjectionSchema) }
+  // ---------------------------------------------------------------------------
+  override def hasCommonObj = _JsonObjectFileInputU.Conf(input, projectionOpt, preProjectionSchema) }
 
 // ===========================================================================
 case class JsonLinesFileInputZ(
@@ -58,13 +59,13 @@ case class JsonLinesFileInputZ(
         inMemoryMode  : Boolean,
         schemaProvider: OtherSchemaProvider,
         projectionOpt : Option[ReadProjection])
-      extends ActionIZ01x with TodoV0 //TODO: 201104121618 - check not too big if not schema provided (or sample?)
-      with    HasSchemaProviderAndProjectionZx {
-    override def _meta  : Cls     = __meta
-    override def atomizx: AtomIZx = hasCommonObjsx
+      extends ActionIZ01y with TodoV0 //TODO: 201104121618 - check not too big if not schema provided (or sample?)
+      with    HasSchemaProviderAndProjectionZ[_JsonLinesFileInputZ.Conf] {
+    override def _meta: Cls = __meta
+    override def atomizy(resultSchema: Cls): AtomIZ = _JsonLinesFileInputZ(hasCommonObjs, resultSchema)
 
-      // ---------------------------------------------------------------------------
-      override def hasCommonObjsx = _JsonLinesFileInputZ(input, inMemoryMode, projectionOpt, preProjectionSchema) }
+    // ---------------------------------------------------------------------------
+    override def hasCommonObjs = _JsonLinesFileInputZ.Conf(input, inMemoryMode, projectionOpt, preProjectionSchema) }
 
   // ===========================================================================
   case class JsonArrayFileInputZ(
@@ -72,12 +73,12 @@ case class JsonLinesFileInputZ(
         inMemoryMode  : Boolean,
         schemaProvider: OtherSchemaProvider,
         projectionOpt : Option[ReadProjection])
-      extends ActionIZ01x with TodoV0 //TODO: 201104121618 - check not too big if not schema provided (or sample?)
-      with    HasSchemaProviderAndProjectionZx {
-    override def _meta  : Cls     = __meta
-    override def atomizx: AtomIZx = hasCommonObjsx
+      extends ActionIZ01y with TodoV0 //TODO: 201104121618 - check not too big if not schema provided (or sample?)
+      with    HasSchemaProviderAndProjectionZ[_JsonArrayFileInputZ.Conf] {
+    override def _meta: Cls = __meta
+    override def atomizy(resultSchema: Cls): AtomIZ = _JsonArrayFileInputZ(hasCommonObjs, resultSchema)
 
-      // ---------------------------------------------------------------------------
-      override def hasCommonObjsx = _JsonArrayFileInputZ(input, inMemoryMode, projectionOpt) }
+    // ---------------------------------------------------------------------------
+    override def hasCommonObjs = _JsonArrayFileInputZ.Conf(input, inMemoryMode, projectionOpt) }
 
 // ===========================================================================

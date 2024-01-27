@@ -7,15 +7,16 @@ case class MongodbInputZ(
       inputString   : String,
       schemaProvider: OtherSchemaProvider,
       queryingOpt   : Option[ReadQuerying] /* None if URI-driven (eg "mydb.mycoll") */)
-    extends ActionIZ01x
+    extends ActionIZ01y
     with    TodoV0 //TODO: check valid URI, ...
-    with    HasSchemaProviderAndProjectionZx with HasNoProjection {
+    with    HasSchemaProviderAndProjectionZ[AtomsIX._MongodbInputZ.Conf] with HasNoProjection {
   // TODO: t201223092203 - look into https://docs.mongodb.com/realm/mongodb/document-schemas
 
-  override def _meta  : Cls     = __meta
-  override def atomizx: AtomIZx = hasCommonObjsx
+  // ---------------------------------------------------------------------------
+  override def _meta: Cls = __meta
+  override def atomizy(resultSchema: Cls): AtomIZ = new AtomsIX._MongodbInputZ(hasCommonObjs, resultSchema)
 
-    // ---------------------------------------------------------------------------
-    def hasCommonObjsx = new AtomsIX._MongodbInputZ(inputString, queryingOpt) }
+  // ---------------------------------------------------------------------------
+  def hasCommonObjs = new AtomsIX._MongodbInputZ.Conf(inputString, queryingOpt) }
 
 // ===========================================================================

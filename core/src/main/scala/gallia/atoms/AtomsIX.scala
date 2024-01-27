@@ -41,100 +41,146 @@ object AtomsIX { import utils.JdbcDataUtils
       def naive: Option[Objs] = Some(input.streamLines(inMemoryMode).map(Obj.line).pipe(Objs.build)) }
 
   // ===========================================================================
-  trait HasCommonObjx  extends AtomIUx { def commonObjx : Obj  /* must not rely on schema */ }
-  trait HasCommonObjsx extends AtomIZx { def commonObjsx: Objs /* must not rely on schema */ }
-
-  // ===========================================================================
-  case class _JsonObjectString(inputString: InputString, ignored /* TODO: t211231112700 - investigate */: OtherSchemaProvider) extends HasCommonObjx {
-      override def naive(schema: Cls): Option[Obj] =
-        commonObjx
-          .pipe(json.GsonToGalliaData.convertRecursively(schema))
-          .in.some
-
-      // ---------------------------------------------------------------------------
-      def commonObjx: Obj = json.GsonParsing.parseObject(inputString) }
-
-    // ---------------------------------------------------------------------------  
-    object _JsonObjectString {
-      def toObj(schema: Cls)(value: String): Obj = _JsonObjectString(value, null /* TODO */).naive(schema).get }
+  trait HasCommonObjConf [$HasCommonObj  <: HasCommonObj]  { def conf: $HasCommonObj }
+  trait HasCommonObjsConf[$HasCommonObjs <: HasCommonObjs] { def conf: $HasCommonObjs }
 
   // ---------------------------------------------------------------------------
-  case class _JsonArrayString(inputString: InputString, ignored /* TODO: t211231112700 - investigate */: OtherSchemaProvider) extends HasCommonObjsx {
-      override def naive(schema: Cls): Option[Objs] =
-          commonObjsx
-            .map(json.GsonToGalliaData.convertRecursively(schema))
-            .in.some
-
-        // ---------------------------------------------------------------------------
-        final override def commonObjsx: Objs = json.GsonParsing.parseArray(inputString).pipe(Objs.from) }
-
-    // ---------------------------------------------------------------------------  
-    object _JsonArrayString {
-      def toObjs(schema: Cls)(value: String): Objs = _JsonArrayString(value, null /* TODO */).naive(schema).get }
+  trait HasCommonObj  { def commonObj : Obj  }
+  trait HasCommonObjs { def commonObjs: Objs }
 
   // ===========================================================================
-  case class _JsonObjectFileInputU(
-        input        : InputUrlLike,
-        projectionOpt: Option[ReadProjection],
-        preProjectionSchema: Cls)
-      extends HasCommonObjx
-         with HasProjection {
+  case class _JsonObjectString(conf: _JsonObjectString.Conf, resultSchema: Cls)
+        extends AtomIU
+           with HasCommonObjConf[_JsonObjectString.Conf] {
 
-    override def naive(schema: Cls): Option[Obj] =
-        commonObjx
-          .pipe(json.GsonToGalliaData.convertRecursively(preProjectionSchema))
-          .pipe(projectData(schema, _))
-          .in.some
-
-      // ---------------------------------------------------------------------------
-      override def commonObjx: Obj =
-        input
-          .content()
-          .pipe(json.GsonParsing.parseObject) }
-
-  // ===========================================================================
-  case class _JsonLinesFileInputZ(
-          input        : InputUrlLike,
-          inMemoryMode : Boolean,
-          projectionOpt: Option[ReadProjection],
-          preProjectionSchema: Cls)
-        extends HasCommonObjsx
-           with HasProjection {
-
-      override def naive(schema: Cls): Option[Objs] =
-          commonObjsx
-            .map(json.GsonToGalliaData.convertRecursively(preProjectionSchema))
-            .pipe(projectData(schema))
-            .in.some
-
-        // ---------------------------------------------------------------------------
-        override def commonObjsx: Objs =
-          input
-            .streamLines(inMemoryMode)
-            .filterNot(_.trim.isEmpty) // a220930162941 - for better or worse, we ignore those (ideally we'd only ignore the last one)
-            .map(json.GsonParsing.parseObject) // TODO: t230112130056 - detect if documents are pretty printed (and disallow)
-            .pipe(Objs.build) }
+      override def naive: Option[Obj] =
+        conf.commonObj
+          .pipe(json.GsonToGalliaData.convertRecursively(resultSchema))
+          .in.some }
 
     // ===========================================================================
-    case class _JsonArrayFileInputZ(
-          input        : InputUrlLike,
-          inMemoryMode : Boolean,
-          projectionOpt: Option[ReadProjection])
-        extends HasCommonObjsx
-           with HasProjection {
+    object _JsonObjectString {
 
-      override def naive(schema: Cls): Option[Objs] =
-          commonObjsx
-            .map(json.GsonToGalliaData.convertRecursively(schema))
-            .pipe(projectData(schema))
-            .in.some
+      def toObj(schema: Cls)(value: String): Obj =
+        _JsonObjectString.Conf
+          .apply(value, null /* TODO */)
+          .pipe(_JsonObjectString(_, schema))
+          .naive.get
 
-        // ---------------------------------------------------------------------------
-        override def commonObjsx: Objs =
+      // ---------------------------------------------------------------------------
+      case class Conf(
+            inputString: InputString,
+            ignored /* TODO: t211231112700 - investigate */: OtherSchemaProvider)
+          extends HasCommonObj {
+
+        override def commonObj: Obj = json.GsonParsing.parseObject(inputString) } }
+
+  // ===========================================================================
+  case class _JsonArrayString(conf: _JsonArrayString.Conf, resultSchema: Cls)
+        extends AtomIZ
+           with HasCommonObjsConf[_JsonArrayString.Conf] {
+
+      override def naive: Option[Objs] =
+        conf.commonObjs
+          .map(json.GsonToGalliaData.convertRecursively(resultSchema))
+          .in.some }
+
+    // ===========================================================================
+    object _JsonArrayString {
+
+      def toObjs(schema: Cls)(value: String): Objs =
+        _JsonArrayString.Conf(value, null /* TODO */)
+          .pipe(_JsonArrayString(_, schema))
+          .naive.get
+
+      // ---------------------------------------------------------------------------
+      case class Conf(
+            inputString: InputString,
+            ignored /* TODO: t211231112700 - investigate */: OtherSchemaProvider)
+          extends HasCommonObjs {
+        override def commonObjs: Objs =
+          json.GsonParsing
+            .parseArray(inputString)
+            .pipe(Objs.from) } }
+
+  // ===========================================================================
+  case class _JsonObjectFileInputU(conf: _JsonObjectFileInputU.Conf, resultSchema: Cls)
+        extends AtomIU
+           with HasCommonObjConf[_JsonObjectFileInputU.Conf] { import conf._
+
+      override def naive: Option[Obj] =
+          commonObj
+            .pipe(json.GsonToGalliaData.convertRecursively(preProjectionSchema))
+            .pipe(projectData(resultSchema, _))
+            .in.some }
+
+    // ===========================================================================
+    object _JsonObjectFileInputU {
+      case class Conf(
+            input        : InputUrlLike,
+            projectionOpt: Option[ReadProjection],
+            preProjectionSchema: Cls)
+          extends HasCommonObj
+             with HasProjection {
+
+          override def commonObj: Obj =
+            input
+              .content()
+              .pipe(json.GsonParsing.parseObject) } }
+
+  // ===========================================================================
+  case class _JsonLinesFileInputZ(conf: _JsonLinesFileInputZ.Conf, resultSchema: Cls)
+        extends AtomIZ
+           with HasCommonObjsConf[_JsonLinesFileInputZ.Conf] { import conf._
+
+        override def naive: Option[Objs] =
+            commonObjs
+              .map(json.GsonToGalliaData.convertRecursively(preProjectionSchema))
+              .pipe(projectData(resultSchema))
+              .in.some }
+
+      // ---------------------------------------------------------------------------
+      object _JsonLinesFileInputZ {
+        case class Conf(
+            input        : InputUrlLike,
+            inMemoryMode : Boolean,
+            projectionOpt: Option[ReadProjection],
+            preProjectionSchema: Cls)
+          extends HasCommonObjs
+             with HasProjection {
+
+          final override def commonObjs: Objs =
             input
               .streamLines(inMemoryMode)
+              .filterNot(_.trim.isEmpty) // a220930162941 - for better or worse, we ignore those (ideally we'd only ignore the last one)
+              .map(json.GsonParsing.parseObject) // TODO: t230112130056 - detect if documents are pretty printed (and disallow)
+              .pipe(Objs.build) } }
+
+    // ===========================================================================
+    case class _JsonArrayFileInputZ(conf: _JsonArrayFileInputZ.Conf, resultSchema: Cls)
+        extends AtomIZ
+           with HasCommonObjsConf[_JsonArrayFileInputZ.Conf] { import conf._
+
+        final override def naive: Option[Objs] =
+            commonObjs
+              .map(json.GsonToGalliaData.convertRecursively(resultSchema))
+              .pipe(projectData(resultSchema))
+              .in.some }
+
+      // ---------------------------------------------------------------------------
+      object _JsonArrayFileInputZ {
+
+        case class Conf(
+              input        : InputUrlLike,
+              inMemoryMode : Boolean,
+              projectionOpt: Option[ReadProjection])
+            extends HasCommonObjs
+               with HasProjection {
+            override def commonObjs: Objs =
+                input
+                  .streamLines(inMemoryMode)
 .toList.mkString.pipe(json.GsonParsing.parseArray) // TODO: t201221175254 - actually stream array...
-              .pipe(Objs.from) }
+                  .pipe(Objs.from) } }
 
   // ===========================================================================
   case class _JdbcInputZ1(
@@ -168,7 +214,7 @@ object AtomsIX { import utils.JdbcDataUtils
           JdbcDataUtils
             .extractTableNameOpt(inputString, "table")
             .map(ReadQuerying.All) } }
-    
+
     // ===========================================================================
     case class _JdbcInputZ2(
          connection: java.sql.Connection,
@@ -190,44 +236,50 @@ object AtomsIX { import utils.JdbcDataUtils
           .in.some }
 
   // ===========================================================================
-  class _MongodbInputZ(
-          inputString: InputString,
-          queryingOpt: Option[ReadQuerying] /* None if URI-driven (eg "mydb.mycoll") */)
-      extends HasCommonObjsx { import _MongodbInputZ._
-      mongoDb()
+  class _MongodbInputZ(val conf: _MongodbInputZ.Conf, resultSchema: Cls)
+      extends AtomIZ
+         with HasCommonObjsConf[_MongodbInputZ.Conf] {
 
       // ---------------------------------------------------------------------------
-      override def naive(schema: Cls): Option[Objs] =
-        commonObjsx
-          .map(json.GsonToGalliaData.convertRecursively(schema)) // TODO: confirm need to pay tax here?
-          .in.some
+      final override def naive: Option[Objs] =
+        conf.commonObjs
+          .map(json.GsonToGalliaData.convertRecursively(resultSchema)) // TODO: confirm need to pay tax here?
+          .in.some }
 
-      // ===========================================================================
-      // t210114153517 - must use jongo+find until figure out
-      //   https://stackoverflow.com/questions/35771369/mongo-java-driver-how-to-create-cursor-in-mongodb-by-cusor-id-returned-by-a-db
-      final override def commonObjsx: Objs = {
-          mongoDb().disableLogs()
-          val cmd = cmdOpt.get // TODO: t210114152901 - validate
+  // ===========================================================================
+  object _MongodbInputZ {
 
-          Objs.from {
-            new data.DataRegenerationClosure[Obj] {
-              def regenerate = () =>
-                mongoDb().closeableQuery(new java.net.URI(inputString), None)(cmd).map(obj) } } }
+    class Conf(
+            inputString: InputString,
+            queryingOpt: Option[ReadQuerying] /* None if URI-driven (eg "mydb.mycoll") */)
+          extends HasCommonObjs {
+        mongoDb()
 
         // ===========================================================================
-        private def cmdOpt =
-          tmp.flatMap {
-             case ReadQuerying.All  (collection) => mongoDb().allFrom(collection).in.some
-             case ReadQuerying.Query(query)      => mongoDb().query(query) }
+        // t210114153517 - must use jongo+find until figure out
+        //   https://stackoverflow.com/questions/35771369/mongo-java-driver-how-to-create-cursor-in-mongodb-by-cusor-id-returned-by-a-db
+        final override def commonObjs: Objs = {
+            mongoDb().disableLogs()
+            val cmd = cmdOpt.get // TODO: t210114152901 - validate
 
-        // ---------------------------------------------------------------------------
-        private def tmp: Option[ReadQuerying] =
-            queryingOpt
-          .orElse {
-            mongoDb().uriCollectionOpt(inputString).map(ReadQuerying.All) } /* TODO: t210115205723 - validate URI earlier */ }
+            Objs.from {
+              new data.DataRegenerationClosure[Obj] {
+                def regenerate = () =>
+                  mongoDb().closeableQuery(new java.net.URI(inputString), None)(cmd).map(obj) } } }
 
-    // ===========================================================================
-    object _MongodbInputZ {
+          // ===========================================================================
+          private def cmdOpt =
+            tmp.flatMap {
+               case ReadQuerying.All  (collection) => mongoDb().allFrom(collection).in.some
+               case ReadQuerying.Query(query)      => mongoDb().query(query) }
+
+          // ---------------------------------------------------------------------------
+          private def tmp: Option[ReadQuerying] =
+              queryingOpt
+            .orElse {
+              mongoDb().uriCollectionOpt(inputString).map(ReadQuerying.All) } /* TODO: t210115205723 - validate URI earlier */ }
+
+      // ===========================================================================
       // FIXME: t201223100652 - proper DI; look into macwire
 
       // ---------------------------------------------------------------------------

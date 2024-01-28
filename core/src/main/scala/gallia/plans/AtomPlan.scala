@@ -6,63 +6,72 @@ import aptus._
 import dag._
 
 // ===========================================================================
-case class AtomPlan(dag: DAG[AtomNode]) { // = data plan (TODO: rename?)
+case class AtomPlan(atomDag: DAG[AtomNode]) { // = data plan (TODO: rename?)
 
   override def toString: String = formatSuccinct1
-    def formatDefault  : String = dag.formatDefault
-    def formatSuccinct1: String = dag.formatDefault2(x => s"${x.id}:${x.atom.formatSuccinct1}")
+    def formatDefault  : String = atomDag.formatDefault
+    def formatSuccinct1: String = atomDag.formatDefault2(x => s"${x.id}:${x.atom.formatSuccinct1}")
     
     def formatDot = s"""
       digraph {
-        ${dag
+        ${atomDag
           .nodes
           .map { node => s"${node.id.quote} [label=${node.formatSuccinct1.quote}]" }
           .joinln}
       
-        ${dag.edges.map{ case (f, t) => s"${f.quote} -> ${t.quote}"}.joinln}
-      }"""
+        ${atomDag.edges.map{ case (f, t) => s"${f.quote} -> ${t.quote}"}.joinln} }"""
 
   // ---------------------------------------------------------------------------
   private def nestingPlaceholderRootIds(dag: DAG[AtomNode]): Seq[RootId] =
     dag.roots.filter(_.atom == NestingDataPlaceholder).map(_.id)
 
+  // ---------------------------------------------------------------------------
+  def isChain: Boolean = atomDag.isChain
+
+  // ---------------------------------------------------------------------------
+  def atomNodesTail: AtomNodes = // used for MapU2U optimization
+    atomDag
+      .nodes // TODO: t210614142629 - confirm/enforce guaranteed topologically sorted if chain?
+      .tail  // TODO: confirm always has placeholder
+      .pipe(AtomNodes.apply)
+
   // ===========================================================================    
   def naiveRun(missingInputs: Map[RootId, NDT] = Map()): NDT = // TODO: t201027130649 - abstract runner strategy       
-       if (dag.isChain) 
-         dag
+       if (atomDag.isChain)
+         atomDag
            .nodes // TODO: t210614142629 - confirm/enforce guaranteed topologically sorted if chain?
            .pipe(AtomNodes.apply)
            .pruneChain
            .pipe(ChainDataRun(missingInputs))    
        else
-         NaiveGraphDataRun(missingInputs)(dag)
+         NaiveGraphDataRun(missingInputs)(atomDag)
 
   // ===========================================================================
   @deprecated object V1 { // to be phased out in favor of V2's approach
          
     def naiveRunUU_(missingInput: Option[Obj]): Option[Obj] = missingInput.map(naiveRunUU)
-    def naiveRunUU (missingInput:        Obj ): Obj         = naiveRun(Map(nestingPlaceholderRootIds(dag).force.one -> NDT.O(missingInput))).forceO
+    def naiveRunUU (missingInput:        Obj ): Obj         = naiveRun(Map(nestingPlaceholderRootIds(atomDag).force.one -> NDT.O(missingInput))).forceO
 
     def naiveRunZZ_(missingInput: Option[Objs]): Option[Objs] = missingInput.map(naiveRunZZ)
-    def naiveRunZZ (missingInput:        Objs ):        Objs  = naiveRun(Map(nestingPlaceholderRootIds(dag).force.one -> NDT.Z(missingInput))).forceZ
+    def naiveRunZZ (missingInput:        Objs ):        Objs  = naiveRun(Map(nestingPlaceholderRootIds(atomDag).force.one -> NDT.Z(missingInput))).forceZ
 
     // ---------------------------------------------------------------------------
     def naiveRunUZ_(missingInput: Option[Obj]): Option[Objs] = missingInput.map(naiveRunUZ)
-    def naiveRunUZ (missingInput:        Obj ):        Objs  = naiveRun(Map(nestingPlaceholderRootIds(dag).force.one -> NDT.O(missingInput))).forceZ
+    def naiveRunUZ (missingInput:        Obj ):        Objs  = naiveRun(Map(nestingPlaceholderRootIds(atomDag).force.one -> NDT.O(missingInput))).forceZ
 
     def naiveRunZU_(missingInput: Option[Objs]): Option[Obj] = missingInput.map(naiveRunZU)
-    def naiveRunZU (missingInput:        Objs ):        Obj  = naiveRun(Map(nestingPlaceholderRootIds(dag).force.one -> NDT.Z(missingInput))).forceO
+    def naiveRunZU (missingInput:        Objs ):        Obj  = naiveRun(Map(nestingPlaceholderRootIds(atomDag).force.one -> NDT.Z(missingInput))).forceO
 
     // ---------------------------------------------------------------------------
     def naiveRunUV_(missingInput: Option[Obj]):         AnyValue = missingInput.map(naiveRunUV)
-    def naiveRunUV (missingInput:        Obj ):         AnyValue = naiveRun(Map(nestingPlaceholderRootIds(dag).force.one -> NDT.O(missingInput))).forceVle
+    def naiveRunUV (missingInput:        Obj ):         AnyValue = naiveRun(Map(nestingPlaceholderRootIds(atomDag).force.one -> NDT.O(missingInput))).forceVle
 
     def naiveRunZV_(missingInput: Option[Objs]): Option[AnyValue] = missingInput.map(naiveRunZV)
-    def naiveRunZV (missingInput:        Objs ):        AnyValue  = naiveRun(Map(nestingPlaceholderRootIds(dag).force.one -> NDT.Z(missingInput))).forceVle
+    def naiveRunZV (missingInput:        Objs ):        AnyValue  = naiveRun(Map(nestingPlaceholderRootIds(atomDag).force.one -> NDT.Z(missingInput))).forceVle
 
     // ---------------------------------------------------------------------------
     def naiveRunUu2U(missingInput1: Obj, missingInput2: Obj): Obj  = // only if rootIds are ordered... TODO: ok?
-      nestingPlaceholderRootIds(dag)
+      nestingPlaceholderRootIds(atomDag)
         .force.tuple2
         .pipe { case (rootId1, rootId2) =>
           naiveRun(
@@ -74,7 +83,7 @@ case class AtomPlan(dag: DAG[AtomNode]) { // = data plan (TODO: rename?)
   
   // ===========================================================================
   object V2 {
-    def forceNestingDataPlaceholderRootId: RootId = dag.roots.filter(_.atom == NestingDataPlaceholder).map(_.id).force.one
+    def forceNestingDataPlaceholderRootId: RootId = atomDag.roots.filter(_.atom == NestingDataPlaceholder).map(_.id).force.one
 
     // ---------------------------------------------------------------------------
     def naiveRunUU(missingInput: Any): Obj =
@@ -104,22 +113,20 @@ case class AtomPlan(dag: DAG[AtomNode]) { // = data plan (TODO: rename?)
           Map(forceNestingDataPlaceholderRootId -> input)
             .pipe(naiveRun)
             .forceZ
-            .toListAndTrash }
-  }
+            .toListAndTrash } }
   
   // ===========================================================================
   // used by forXs
-  def chainU: Seq[AtomUU] = dag.kahnTraverseNodes.map(_.atom).map(_.asInstanceOf[AtomUU])
-  def chainZ: Seq[AtomZZ] = dag.kahnTraverseNodes.map(_.atom).map(_.asInstanceOf[AtomZZ])
-}
+  def chainU: Seq[AtomUU] = atomDag.kahnTraverseNodes.map(_.atom).map(_.asInstanceOf[AtomUU])
+  def chainZ: Seq[AtomZZ] = atomDag.kahnTraverseNodes.map(_.atom).map(_.asInstanceOf[AtomZZ]) }
 
 // ===========================================================================
 object AtomPlan {
 
   def stitchAll(atomPlans: Seq[AtomPlan]): AtomPlan =  
     atomPlans
-      .map(_.dag)
-      .map(_.exciseAllFromChain(_.isBar))
+      .map(_.atomDag)
+      .map(_.exciseAllFromChain(_.isNestedOrIdentity))
       .reduceLeft { (previous, current) =>
         val previousLeaf = previous.leaveIds.force.one  
         val currentRoot  = current .rootIds .force.one
@@ -127,8 +134,6 @@ object AtomPlan {
         current.mergeDisjointContinuous(
             previous)(
             previousLeaf -> currentRoot) }
-    .pipe(AtomPlan.apply)
-
-}
+    .pipe(AtomPlan.apply) }
 
 // ===========================================================================

@@ -80,7 +80,7 @@ object ActionsFor {
       def  atomuus(c: Cls): AtomUUs = {
         val nestedTransforms: Seq[NestedTransform] = resolveSequence(c).pipe(_nestedTransforms(c, parseUU))
         val atomPlans       : Seq[AtomPlan]        = nestedTransforms.map(_.metaToAtomPlan(c))
-        val optimizable     : Boolean              = atomPlans.nonEmpty && atomPlans.forall(_.dag.isChain)
+        val optimizable     : Boolean              = atomPlans.nonEmpty && atomPlans.forall(_.isChain)
         
         if (optimizable) atomPlans.pipe(AtomPlan.stitchAll).chainU   
         else             nestedTransforms.map(_.dataU2U(c)).map(_CustomOO)        
@@ -97,7 +97,7 @@ object ActionsFor {
       def  atomzzs(c: Cls): AtomZZs = {
         val nestedTransforms: Seq[NestedTransform] = resolveSequence(c).pipe(_nestedTransforms(c, parseZZ))
         val atomPlans       : Seq[AtomPlan]        = nestedTransforms.map(_.metaToAtomPlan(c))        
-        val optimizable     : Boolean              = atomPlans.nonEmpty && atomPlans.forall(_.dag.isChain)
+        val optimizable     : Boolean              = atomPlans.nonEmpty && atomPlans.forall(_.isChain)
         
         if (optimizable) atomPlans.pipe(AtomPlan.stitchAll).chainZ
         else             nestedTransforms.map(_.dataZ2Z(c)).map(_CustomZZ)

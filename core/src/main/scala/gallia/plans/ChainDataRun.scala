@@ -6,14 +6,14 @@ import dag._
 // ===========================================================================
 object ChainDataRun {
 
-  def apply(missingInputs: Map[RootId, NDT])(nodes: AtomNodes): NDT = {  
+  def apply(missingInputs: Map[RootId, NDT])(atomNodes: AtomNodes): NDT = {
     var latest: NDT = null // using foldLeft is tricky because of missingInputs
 
-    nodes
+    atomNodes
       .values
-      .foreach { node =>
+      .foreach { atomNode =>
         latest =
-          node.process(
+          atomNode.process(
             input = DataInput.SingleInput(latest))(
             missingInputs.apply) }
 

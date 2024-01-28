@@ -6,64 +6,47 @@ import aptus.{Anything_, String_, Seq_}
 import dag._
 
 // ===========================================================================
-private[plans] object AtomPlanPopulator {
+private object AtomPlanPopulator {
 
-  def apply(dag: DAG[ActionNode]): DAG[AtomNode] = {
+  def apply(actionDag: DAG[ActionNode]): DAG[AtomNode] = {
 
-    def atomId(id: NodeId, index: Int): NodeId = id.append(s"-${index}" /* TODO: not if only one? */)
-
-    // ---------------------------------------------------------------------------
-    def _newNodeIds(node: ActionNode): Seq[NodeId] =
-      node
-        .atoms
-        .assert(_.nonEmpty)
-        .zipWithIndex
-        .map { case (atom, index) =>
-          atomId(node.id, index) }
-
-    // ---------------------------------------------------------------------------
     def efferentNodeIds(id: NodeId): Seq[NodeId] =
-      dag
+      actionDag
         .efferentNodes(id)
         .flatMap { efferentNode =>
           if (efferentNode.atoms.nonEmpty) Seq(efferentNode.id)
           else                             efferentNodeIds(efferentNode.id) } // recursive call
 
     // ===========================================================================
-    val nodes2: Seq[AtomNode] =
-      dag
+    val atomNodes: Seq[AtomNode] =
+      actionDag
         .nodes
         .filterNot(_.atoms.isEmpty) // eg ValidateX or OutputX
-        .flatMap { node =>
-          _newNodeIds(node)
-            .zip(node.atoms)
-            .map { case (newNodeId, atom) =>
-              node.atomNode(newNodeId, atom) } }
+        .flatMap  (_.atomNodes)
 
     // ---------------------------------------------------------------------------
-    val edges2: Seq[Edge] =
-      dag
+    val atomEdges: Seq[Edge] =
+      actionDag
         .nodes
         .filterNot(_.atoms.isEmpty) // eg ValidateX or OutputX
-        .flatMap { node =>
-          val newNodeIds = _newNodeIds(node)
+        .flatMap { actionNode =>
+          val newNodeIds = actionNode.atomNodeIds
 
+          // internal to the action (there may be more than one atom per action)
           val internalEdges: Seq[Edge] =
-            newNodeIds match {
+            newNodeIds.ensuring(_.nonEmpty) match {
               case Seq(_) => Nil
-              case mult   => mult.sliding(2).map(_.force.tuple2).toSeq }
+              case mult   => mult.slidingPairs }
 
-          val externalEdges: Seq[Edge] =
-            efferentNodeIds(node.id) // arbirarily over afferent, though easier to compute since can use 0 as index
+          val efferentEdges: Seq[Edge] =
+            efferentNodeIds(actionNode.id) // arbirarily over afferent, though easier to compute since can use 0 as index
               .map { efferentId =>
-                newNodeIds.last -> atomId(efferentId, 0) }
+                newNodeIds.last ->
+                  AtomNode.atomId(efferentId, 0) }
 
-          internalEdges ++ externalEdges
-        }
+          internalEdges ++ efferentEdges }
 
     // ---------------------------------------------------------------------------
-    new DAG[AtomNode](nodes2, edges2, _.id)
-  }
-}
+    new DAG[AtomNode](atomNodes, atomEdges, _.id) } }
 
 // ===========================================================================

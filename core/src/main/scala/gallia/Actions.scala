@@ -23,6 +23,8 @@ trait ActionVN {
 
     // ---------------------------------------------------------------------------
     case class NodeMetaContext(afferents: Clss, efferent: Cls, origin: CallSite) { import aptus.String_
+      def forceOneAfferent: Cls = afferents.forceOne
+
       def formatDebugAfferents: String = afferents.values.map(_.formatShort0.sectionAllOff).joinln.newline
       def formatDebugEfferent : String = efferent              .formatShort0.sectionAllOff        .newline }
 

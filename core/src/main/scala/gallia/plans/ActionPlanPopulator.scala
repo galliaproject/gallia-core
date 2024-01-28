@@ -1,7 +1,6 @@
 package gallia
 package plans
 
-import dag.DAG
 import result.SuccessMetaResultNode
 
 // ===========================================================================

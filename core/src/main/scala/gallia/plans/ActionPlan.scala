@@ -2,16 +2,14 @@ package gallia
 package plans
 
 import aptus.Seq_
-import dag.DAG
 
 // ===========================================================================
-case class ActionPlan(dag: DAG[ActionNode]) {
-  def atomPlan: AtomPlan = new AtomPlan(AtomPlanPopulator(dag))
+case class ActionPlan(actionDag: DAG[ActionNode]) {
+  def atomPlan: AtomPlan = AtomPlanPopulator(actionDag).pipe(new AtomPlan(_))
 
   // ---------------------------------------------------------------------------
   override def toString: String = formatDefault
-    def formatDefault: String = dag.kahnTraverseNodes.map(_.formatDefault).joinln
     //dag.formatDot(node => node.formatDefault -> "white")
-}
+    def formatDefault: String = actionDag.kahnTraverseNodes.map(_.formatDefault).joinln }
 
 // ===========================================================================

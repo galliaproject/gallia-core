@@ -17,16 +17,13 @@ case class _UWrappers(wrappees: Seq[AtomUU]) extends AtomZZ with AtomCombiner[_U
   // ===========================================================================
   object _UWrappers {  
   
-    def fromMapU2U(plan: AtomPlan): _UWrappers = 
+    def fromMapU2U(in: Cls, out: Cls)(plan: AtomPlan): _UWrappersX =
       plan
-        .dag
-        .nodes // TODO: t210614142629 - confirm/enforce guaranteed topologically sorted if chain?
-        .tail  // TODO: confirm always has placeholder
-        .pipe(AtomNodes.apply)
+        .atomNodesTail
         .pruneChain
         .values
-        .map (_.atom.asInstanceOf[AtomUU])
-        .pipe(_UWrappers.apply)       
+        .map (_.atom.asInstanceOf[AtomUUio])
+        .pipe(_UWrappersX.apply(in, out, _))
   
     // ---------------------------------------------------------------------------
     def from(values: Seq[_UWrapper]): _UWrappers =

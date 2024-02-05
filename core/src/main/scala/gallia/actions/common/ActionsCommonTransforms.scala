@@ -17,16 +17,22 @@ object ActionsCommonTransforms {
   // ===========================================================================
   // TODO: check input isn't u or z + destination type is valid
   // FIXME: t210615104657 - if to is Option[T]
-  case class TransformVV(from: TtqRPathz, to: TypeNode, f: _ff11, g: _ff11) extends ActionUU1N {
+
+  case class TransformVV(from: TtqRPathz, to: TypeNode, f: _ff11, g: _ff11) extends ActionUU1Noswo {
       def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c) ++ _vldt.validType(to)
-      def _meta  (c: Cls): Cls     = from.rpathz_(c).foldLeft(c) { _.updateType(_, from.typeNode, to) }
-      def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atomsUnion(c)(_TransformVV(_, f), _TransformVV(_, g))) }
+      def _meta  (c: Cls): Cls     = from.rpathz_     (c).intraClss(c) { _.updateType(_, from.typeNode, to) }
+.pipe(storeIntraMetas)
+      def atomuus(c: Cls): AtomUUs =
+        from.rpathz_(c).pipe(_atomsUnion(c)(_TransformVV(_, f), _TransformVV(_, g)))
+.pipe(updateAtomMetas) }
 
     // ---------------------------------------------------------------------------
-    case class TransformVVx(from: TtqRPathz, to: TypeNode, f: _ff11, g: _ff11) extends ActionUU1N {
+    case class TransformVVx(from: TtqRPathz, to: TypeNode, f: _ff11, g: _ff11) extends ActionUU1Noswo {
       def  vldt  (c: Cls): Errs    = from.vldtAsOrigin(c, SpecialCardiMode.IgnoreAltogether) ++ _vldt.validType(to)
-      def _meta  (c: Cls): Cls     = from.rpathz_(c).foldLeft(c) { _.updateTypex(_, from.typeNode, to) }
-      def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atomsUnion(c)(_TransformVV(_, from.wrapx(c, f)), _TransformVV(_, g))) }
+      def _meta  (c: Cls): Cls     = from.rpathz_(c).intraClss(c) { _.updateTypex(_, from.typeNode, to) }
+.pipe(storeIntraMetas)
+      def atomuus(c: Cls): AtomUUs = from.rpathz_(c).pipe(_atomsUnion(c)(_TransformVV(_, from.wrapx(c, f)), _TransformVV(_, g)))
+.pipe(updateAtomMetas) }
 
     // ===========================================================================
     //TODO: t210111095156 separate all the Whatever and t210111095157 case-class versions...

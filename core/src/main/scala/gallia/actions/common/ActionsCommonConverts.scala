@@ -18,8 +18,10 @@ object ActionsCommonConverts {
     final def vldtAsOrigin(c: Cls): Errs   = target.vldtAsOrigin(c)
     final def rpathz      (c: Cls): RPathz = target.resolve(c)
 
-    final def foldRpathz (c: Cls)(f: (Cls, RPath) => Cls): Cls = target.resolve(c).foldLeft(c)(f)
-    final def soleSubInfo(c: Cls)(f: SubInfo => SubInfo) : Cls = target.resolve(c).foldLeft(c) { _.transformSoleSubInfo(_)(f) } }
+    // ---------------------------------------------------------------------------
+    final def foldRpathz     (c: Cls)(f: (Cls, RPath) => Cls):     Cls  = target.resolve(c).foldLeft(c)(f)
+    final def soleSubInfo    (c: Cls)(f: SubInfo => SubInfo) :     Cls  = target.resolve(c).foldLeft(c) { _.transformSoleSubInfo(_)(f) }
+    final def soleSubInfoOswo(c: Cls)(f: SubInfo => SubInfo) : Seq[Cls] = rpathz(c).intraClss(c) { _.transformSoleSubInfo(_)(f) } }
 
   // ===========================================================================
   case class ConvertToString(target: TqRPathz) extends ActionUU1N with ConverBase {
@@ -35,34 +37,36 @@ object ActionsCommonConverts {
     def atomuus(c: Cls): AtomUUs = rpathz(c).pipe(_atoms(c)(_ConvertToEnum)) } // TODO: optim: only if not String field already
 
   // ---------------------------------------------------------------------------
-  case class ConvertToInt(target: TqRPathz) extends ActionUU1Nb with ConverBase {
-    def vldt                     (c: Cls): Errs    = vldtAsOrigin(c)
-    def _meta                    (c: Cls): Cls     = soleSubInfo (c)(_.toInt)
-    def atomuus(origin: CallSite)(c: Cls): AtomUUs = rpathz(c).pipe(_atoms(c)(_ConvertToInt(origin))) } // TODO: t220929161636 - generalize callsite mechanism
+  case class ConvertToInt(target: TqRPathz) extends ActionUU1N with ConverBase {
+    def vldt   (c: Cls): Errs    = vldtAsOrigin(c)
+    def _meta  (c: Cls): Cls     = soleSubInfo (c)(_.toInt)
+    def atomuus(c: Cls): AtomUUs = rpathz(c).pipe(_atoms(c)(_ConvertToInt.apply)) }
 
   // ---------------------------------------------------------------------------
-  case class ConvertToDouble(target: TqRPathz) extends ActionUU1Nb with ConverBase {
-    def vldt                     (c: Cls): Errs    = vldtAsOrigin(c)
-    def _meta                    (c: Cls): Cls     = soleSubInfo (c)(_.toDouble)
-    def atomuus(origin: CallSite)(c: Cls): AtomUUs = rpathz(c).pipe(_atoms(c)(_ConvertToDouble(origin))) }
+  case class ConvertToDouble(target: TqRPathz) extends ActionUU1Noswo with ConverBase {
+    def vldt   (c: Cls): Errs    = vldtAsOrigin(c)
+    def _meta  (c: Cls): Cls     = soleSubInfoOswo(c)(_.toDouble)
+.pipe(storeIntraMetas)
+    def atomuus(c: Cls): AtomUUs = rpathz(c).pipe(_atoms(c)(_ConvertToDouble.apply))
+.pipe(updateAtomMetas) }
 
   // ---------------------------------------------------------------------------
-  case class ConvertToFlag[T: WTT](target: TqRPathz, trueValue: T, strict: Boolean) extends ActionUU1Nb with ConverBase {
-    def vldt                     (c: Cls): Errs    = vldtAsOrigin(c)
-    def _meta                    (c: Cls): Cls     = foldRpathz  (c) { _.updateInfo(_, Info.optBoolean) } // TODO: t210108114447 - support own "flag" type?
-    def atomuus(origin: CallSite)(c: Cls): AtomUUs = rpathz(c).pipe(_atoms(c)(_ConvertToFlag(origin)(_, trueValue, strict))) }
+  case class ConvertToFlag[T: WTT](target: TqRPathz, trueValue: T, strict: Boolean) extends ActionUU1N with ConverBase {
+    def vldt   (c: Cls): Errs    = vldtAsOrigin(c)
+    def _meta  (c: Cls): Cls     = foldRpathz  (c) { _.updateInfo(_, Info.optBoolean) } // TODO: t210108114447 - support own "flag" type?
+    def atomuus(c: Cls): AtomUUs = rpathz(c).pipe(_atoms(c)(_ConvertToFlag(_, trueValue, strict))) }
 
   // ---------------------------------------------------------------------------
-  case class ConvertToBoolean[T: WTT](target: TqRPathz, trueValue: T, falseValue: T) extends ActionUU1Nb with ConverBase {
-    def vldt                     (c: Cls): Errs    = vldtAsOrigin(c)
-    def _meta                    (c: Cls): Cls     = soleSubInfo (c)(_.toBoolean)
-    def atomuus(origin: CallSite)(c: Cls): AtomUUs = rpathz(c).pipe(_atoms(c)(_ConvertToBoolean(origin)(_, trueValue, falseValue))) }
+  case class ConvertToBoolean[T: WTT](target: TqRPathz, trueValue: T, falseValue: T) extends ActionUU1N with ConverBase {
+    def vldt   (c: Cls): Errs    = vldtAsOrigin(c)
+    def _meta  (c: Cls): Cls     = soleSubInfo (c)(_.toBoolean)
+    def atomuus(c: Cls): AtomUUs = rpathz(c).pipe(_atoms(c)(_ConvertToBoolean(_, trueValue, falseValue))) }
 
   // ---------------------------------------------------------------------------
-  case class ConvertToOptionalBoolean[T: WTT](target: TqRPathz, trueValue: T, falseValue: T, nullValue: T) extends ActionUU1Nb with ConverBase {
-    def vldt                     (c: Cls): Errs    = vldtAsOrigin(c)
-    def _meta                    (c: Cls): Cls     = foldRpathz  (c) { _.updateInfo(_, Info.optBoolean) }
-    def atomuus(origin: CallSite)(c: Cls): AtomUUs = rpathz(c).pipe(_atoms(c)(_ConvertToOptionalBoolean(origin)(_, trueValue, falseValue, nullValue))) }
+  case class ConvertToOptionalBoolean[T: WTT](target: TqRPathz, trueValue: T, falseValue: T, nullValue: T) extends ActionUU1N with ConverBase {
+    def vldt   (c: Cls): Errs    = vldtAsOrigin(c)
+    def _meta  (c: Cls): Cls     = foldRpathz  (c) { _.updateInfo(_, Info.optBoolean) }
+    def atomuus(c: Cls): AtomUUs = rpathz(c).pipe(_atoms(c)(_ConvertToOptionalBoolean(_, trueValue, falseValue, nullValue))) }
 
   // ===========================================================================
   case class ToOptional(targets: TqRPathz, strict: Boolean) extends ActionUU0N with IdentityUU0N {

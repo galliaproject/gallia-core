@@ -20,13 +20,11 @@ trait ActionBoilerplate { import ActionAtomsBoilerplate._
 
   // ---------------------------------------------------------------------------
   @oswo_ trait ActionUU1Noswo extends ActionUU1N {
-    var _intras: IntraActionClss = null // temporary hack for OSWO prototype
-    protected def intras(values: Seq[Cls]): Cls = { _intras = IntraActionClss(values); _intras.values.last }
-    protected def updateMeta[T <: AtomOswo](atoms: Seq[T]) = { atoms.updateMeta(_intras); atoms } }
+    private var _intras: IntraActionClss = null // temporary hack for OSWO prototype
 
     // ---------------------------------------------------------------------------
-@deprecated("origin is already in ctx actually")
-trait ActionUU1Nb extends ActionUU with ActionAtomsUU1Nb // provides origin, TODO: t210616122449 - generalize (can also use _metaContext hack in the meantime...)
+    protected def storeIntraMetas(values: Seq[Cls]): Cls = { _intras = IntraActionClss(values); _intras.values.last }
+    protected def updateAtomMetas[T <: AtomOswo](atoms: Seq[T]) = { atoms.updateAtomMetas(_intras); atoms } }
 
     // ---------------------------------------------------------------------------
     trait ActionZZ01 extends ActionZZ with ActionAtomsZZ01

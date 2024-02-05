@@ -10,9 +10,13 @@ package object gallia
     with    GenericEntryImplicits
     with    reflect.ReflectExtensions
     with    reflect.lowlevel.ReflectionTypesAbstraction /* notably WTT, differs for scala 2 vs scala 3 */
-    with    reflect.lowlevel.WttImplicits /* only useful to scala 2 */ {
+    with    reflect.lowlevel.WttImplicits /* only useful to scala 2 */
+    with    oswo.OswoPrototype {
 
-  // ---------------------------------------------------------------------------
+  /** marker for elements relating to OSWO optimization (see https://github.com/galliaproject/gallia-docs/blob/master/oswo.md) - OSWO = "On Steroids With Overhead" */
+  class oswo_(val message: String = "") extends scala.annotation.StaticAnnotation
+
+  // ===========================================================================
   private[gallia] implicit class GalliaAnything_[A](value: A) { // so as to not import chaining._ everywhere
     private[gallia] def pipe[B](f: A => B)   : B =   f(value)
     private[gallia] def tap    (f: A => Unit): A = { f(value); value }

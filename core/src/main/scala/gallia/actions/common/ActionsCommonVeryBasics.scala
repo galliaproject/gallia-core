@@ -35,8 +35,7 @@ object ActionsCommonVeryBasics {
         in.printShort()
         if (abort) "210106172924 - aborting".p__ // TODO
 
-        in
-      } }
+        in } }
 
   // ===========================================================================
   case class ReorderKeys(f: Seq[SKey] => Seq[SKey], recursively: Boolean) extends ActionUU11 {
@@ -47,8 +46,7 @@ object ActionsCommonVeryBasics {
           else             _ReorderKeys           (tmp)
   
         // ---------------------------------------------------------------------------
-        private def tmp: Seq[Key] => Seq[Key] = _.map(_.name).pipe(f).map(_.symbol)
-      }
+        private def tmp: Seq[Key] => Seq[Key] = _.map(_.name).pipe(f).map(_.symbol) }
   
     // ---------------------------------------------------------------------------
     case class ReorderSelectedKeys(target: TqKeyz, f: (Seq[SKey], Seq[SKey]) => Seq[SKey]) extends ActionUU11 {
@@ -66,10 +64,12 @@ object ActionsCommonVeryBasics {
       }
 
   // ===========================================================================
-  case class Rename(target: RPathz) extends ActionUU1N {
+  case class Rename(target: RPathz) extends ActionUU1Noswo {
       def  vldt  (c: Cls): Errs    = _vldt.fieldsRenaming(c, target)
-      def _meta  (c: Cls): Cls     = target.foldLeft(c)(_ rename _)
-      def atomuus(c: Cls): AtomUUs = target.pipe(_atoms(_ => _IdentityUU)) } // note: Identities get removed
+      def _meta  (c: Cls): Cls     = target.scanLeft(c)(_ rename _).pipe(storeIntraMetas)
+      def atomuus(c: Cls): AtomUUs = target.pipe(_atoms(_ => _IdentityUU))
+.filterNot(_.isIdentity)
+.pipe(updateAtomMetas) }
 
     // ===========================================================================
     case class RenameDynamically(modifier: SKey => SKey, recursively: Boolean) extends ActionUU1N { // TODO: move to somewhat basics
@@ -86,15 +86,17 @@ object ActionsCommonVeryBasics {
     }
 
   // ===========================================================================
-  class Remove(target: TqKPathz) extends ActionUU1N {
+  class Remove(target: TqKPathz) extends ActionUU1Noswo {
     def  vldt  (c: Cls): Errs    = target.vldtAsOrigin(c) ++ _vldt.someFieldsAreLeft (c, target.size(c)) // see 201107145004
 
     //FIXME: t220414112604 - if nesting, ensure parent is removed instead of all sub-fields being removed
-    def _meta  (c: Cls): Cls     = target.kpathz_(c).foldLeft(c)(_ remove _)
-    def atomuus(c: Cls): AtomUUs = target.kpathz_(c).pipe(_atoms(_, _Remove)) }
+    def _meta  (c: Cls): Cls     = target.kpathz_(c).scanLeft(c)(_ remove _) 
+.pipe(storeIntraMetas)
+    def atomuus(c: Cls): AtomUUs = target.kpathz_(c).pipe(_atoms(_, _Remove))
+.pipe(updateAtomMetas) }
 
   // ===========================================================================
-  class Retain(target: TqRPathz) extends ActionUU1N { import gallia.data.single.RetainMapping
+  class Retain(target: TqRPathz) extends ActionUU1Noswo { import gallia.data.single.RetainMapping
 
     def  vldt(c: Cls): Errs  =
       target.vldtAsOrigin(c) //TODO: more?
@@ -108,7 +110,7 @@ object ActionsCommonVeryBasics {
         .pipe { targets =>
           targets
             .fromz.pipe(c.retain)
-            .pipe(_.rename(targets)) }
+            .rename(targets) }
 
     // ---------------------------------------------------------------------------
     def atomuus(c: Cls): AtomUUs =
@@ -117,29 +119,34 @@ object ActionsCommonVeryBasics {
   }
 
   // ===========================================================================
-  class Add(entries: KVEs) extends ActionUU1N {
+  class Add(entries: KVEs) extends ActionUU1Noswo {
       def vldt(c: Cls): Errs = Nil ++
         _vldt.fieldsAbsence(c, entries.keys) ++
         _vldt.validateKVEs (   entries) // TODO: t210128155944 - validate new key names
 
-      def _meta  (c: Cls): Cls     = entries.forceMetaEntries.foldLeft(c)(_ add _)
-      def atomuus(c: Cls): AtomUUs = entries.forceDataEntries.map((_Add.apply _).tupled) }
+      def _meta  (c: Cls): Cls     = entries.forceMetaEntries.scanLeft(c)(_ add _)      
+.pipe(storeIntraMetas)
+      def atomuus(c: Cls): AtomUUs = entries.forceDataEntries.map((_Add.apply _).tupled)
+.pipe(updateAtomMetas) }
 
     // ---------------------------------------------------------------------------
-    class Replace(entries: RVEs) extends ActionUU1N {
+    class Replace(entries: RVEs) extends ActionUU1Noswo {
       def  vldt(c: Cls): Errs  = Nil ++
         _vldt.fieldsRenaming(c, entries.renz) ++
         _vldt.validateKVEs  (   entries.kves) // TODO: t210128155944 - validate new key names
 
       // ---------------------------------------------------------------------------
-      def _meta(c: Cls): Cls = entries.forceMetaEntries.foldLeft(c)(_ replace _)
+      def _meta(c: Cls): Cls = entries.forceMetaEntries.scanLeft(c)(_ replace _)
+.pipe(storeIntraMetas)
 
       def atomuus(c: Cls): AtomUUs =
         entries
           .forceDataEntries
           .flatMap { case (ren, value) =>
             potentialRenaming(ren).toSeq :+
-            _Add(ren.to, value) } }
+            _Add(ren.to, value) }
+.pipe(updateAtomMetas) //FIXME: if renames
+    }
 
 }
 

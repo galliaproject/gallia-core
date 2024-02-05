@@ -12,7 +12,7 @@ trait HeadOut { self: Head[_] =>
   // ---------------------------------------------------------------------------
   /** will *not* process all the data (assuming input schema does not need to be inferred) */
   def forceSchema: Cls =
-    self.end().runMetaOnly().either match {
+    self.end().runMetaOnly().resultEither match {
       case Left (errors)  => throw errors.metaErrorOpt.get
       case Right(success) => success.meta.forceLeafClass }
 
@@ -22,7 +22,7 @@ trait HeadOut { self: Head[_] =>
 trait HeadUOut extends HeadOut { self: HeadU =>
 
   private[heads] def _all: Unit =
-    self.end().runu().either match {
+    self.end().runu().resultEither match {
       case Left (errors)  => throw errors.metaErrorOpt.get
       case Right(_)       => () }
 
@@ -95,13 +95,16 @@ trait HeadUOut extends HeadOut { self: HeadU =>
   
   // ===========================================================================
   def foreach(f: Obj => Unit) = { write(_.foreach(f)); () }
-}
+
+  // ===========================================================================
+  // prototype, not ready
+  def oswo(): Any = { oswoRun(this) } }
 
 // ===========================================================================
 trait HeadZOut extends HeadOut { self: HeadZ =>
 
   private[heads] def _all: Unit =
-    self.end().runz().either match {
+    self.end().runz().resultEither match {
       case Left (errors)  => throw errors.metaErrorOpt.get
       case Right(_)       => () }
 
@@ -194,7 +197,7 @@ trait HeadVOut[T] extends HeadOut { self: HeadV[T] => import data.DataDynamicFor
 
   // ===========================================================================
   private[heads] def _all: Unit =
-    self.end().runv[T]().either match {
+    self.end().runv[T]().resultEither match {
       case Left (errors) => throw errors.metaErrorOpt.get
       case Right(_)      => () }
 

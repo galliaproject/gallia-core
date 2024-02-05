@@ -9,7 +9,7 @@ object ActionAtomsBoilerplate {
 
   trait ActionAtomsUU extends ActionAN {
         final override def atoms  (ctx: NodeMetaContext): Atoms = atomuus(ctx)
-                       def atomuus(ctx: NodeMetaContext): AtomUUs }
+                       def atomuus(ctx: NodeMetaContext): Seq[AtomUU] }
 
       // ---------------------------------------------------------------------------
       trait ActionAtomsZZ extends ActionAN {
@@ -18,15 +18,13 @@ object ActionAtomsBoilerplate {
 
     // ===========================================================================
     trait ActionAtomsIU extends ActionAN {
-        final override def atoms  (ctx: NodeMetaContext): Atoms = atomius(ctx)
-                       def atomius(ctx: NodeMetaContext)
-: AtomIUxs }
+        final override def atoms  (ctx: NodeMetaContext): Seq[Atom  ] = atomius(ctx)
+                       def atomius(ctx: NodeMetaContext): Seq[AtomIU] }
 
       // ---------------------------------------------------------------------------
       trait ActionAtomsIZ extends ActionAN {
-        final override def atoms  (ctx: NodeMetaContext): Atoms = atomizs(ctx)
-                       def atomizs(ctx: NodeMetaContext)
-: AtomIZxs }
+        final override def atoms  (ctx: NodeMetaContext): Seq[Atom  ] = atomizs(ctx)
+                       def atomizs(ctx: NodeMetaContext): Seq[AtomIZ] }
 
       // ---------------------------------------------------------------------------
       trait ActionAtomsIV extends ActionAN {
@@ -115,8 +113,8 @@ object ActionAtomsBoilerplate {
 
     // ---------------------------------------------------------------------------
     trait ActionAtomsUU1N extends ActionAtomsUU {
-      final override def atomuus(ctx: NodeMetaContext): AtomUUs = atomuus(ctx.afferents.forceOne)
-                     def atomuus(afferent: Cls       ): AtomUUs }
+      final override def atomuus(ctx: NodeMetaContext): Seq[AtomUU] = atomuus(ctx.forceOneAfferent)
+                     def atomuus(afferent: Cls)       : Seq[AtomUU] }
 
 trait ActionAtomsUU1Nb extends ActionAtomsUU { // TODO: see t210616122449
   final override def atomuus(ctx: NodeMetaContext)           : AtomUUs = atomuus(ctx.origin)(ctx.afferents.forceOne)
@@ -148,13 +146,13 @@ trait ActionAtomsUU1Nb extends ActionAtomsUU { // TODO: see t210616122449
                      def atomvvs                          : AtomVVs }
 
   // ===========================================================================
-  trait ActionAtomsIU01 extends ActionAtomsIU01x {
-        final override def atomiux: AtomIUx = atomiu
-                       def atomiu : AtomIU }
+  trait ActionAtomsIU01 extends ActionAtomsIU {
+        final override def atomius(ignored: NodeMetaContext): Seq[AtomIU] = atomiu.in.seq
+                       def atomiu                           :     AtomIU }
 
-trait ActionAtomsIU01x extends ActionAtomsIU {
-      final override def atomius(ignored: NodeMetaContext): AtomIUxs = atomiux.in.seq
-                     def atomiux                          : AtomIUx }
+  trait ActionAtomsIU01y extends ActionAtomsIU {
+        final override def atomius(ctx: NodeMetaContext): Seq[AtomIU] = atomiuy(ctx.efferent).in.seq
+                       def atomiuy(efferent: Cls)       :     AtomIU } // !! efferent, not afferent here
 
       // ---------------------------------------------------------------------------
       trait ActionAtomsIU0N extends ActionAtomsIU {
@@ -173,14 +171,13 @@ trait ActionAtomsIU01x extends ActionAtomsIU {
 
 
     // ===========================================================================
-    trait ActionAtomsIZ01 extends ActionAtomsIZ01x {
-        final override def atomizx: AtomIZx = atomiz
-                       def atomiz : AtomIZ }
+    trait ActionAtomsIZ01 extends ActionAtomsIZ {
+        final override def atomizs(ignored: NodeMetaContext): Seq[AtomIZ] = atomiz.in.seq
+                       def atomiz                           :     AtomIZ }
 
-        // ---------------------------------------------------------------------------
-trait ActionAtomsIZ01x extends ActionAtomsIZ {
-  final override def atomizs(ctx: NodeMetaContext): AtomIZxs = atomizx.in.seq
-                 def atomizx                      : AtomIZx }
+    trait ActionAtomsIZ01y extends ActionAtomsIZ {
+        final override def atomizs(ctx: NodeMetaContext): Seq[AtomIZ] = atomizy(ctx.efferent).in.seq
+                       def atomizy(efferent: Cls)       :     AtomIZ } // !! efferent, not afferent here
 
       // ---------------------------------------------------------------------------
       trait ActionAtomsIZ0N extends ActionAtomsIZ {

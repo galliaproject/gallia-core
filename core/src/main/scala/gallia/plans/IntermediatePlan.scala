@@ -9,8 +9,12 @@ import env.ActionDag
 
 // ===========================================================================
 case class IntermediatePlan private[plans] (dag: ActionDag) {
+  def run(): IntermediateMetaResult = IntermediatePlan.applyx(dag).pipe(IntermediateMetaResultNodeCreator(dag)) }
 
-    def run(): IntermediateMetaResult = {
+// ===========================================================================
+private object IntermediatePlan {
+
+    def applyx(dag: ActionDag): Map[NodeId, ResultSchema] = {
       val mut = collection.mutable.Map[NodeId, ResultSchema]()
 
       // ---------------------------------------------------------------------------
@@ -24,17 +28,13 @@ case class IntermediatePlan private[plans] (dag: ActionDag) {
 
           mut +=
             id ->
-              IntermediatePlan.node(inputs)(actionm) }
+              resultSchema(inputs)(actionm) }
 
       // ---------------------------------------------------------------------------
-      mut
-        .toMap
-        .pipe(IntermediateMetaResultNodeCreator(dag)) } }
+      mut.toMap }
 
   // ===========================================================================
-  object IntermediatePlan  {
-
-    private def node(inputs: Seq[ResultSchema])(actionm: ActionVN with ActionMN): ResultSchema =
+  private def resultSchema(inputs: Seq[ResultSchema])(actionm: ActionVN with ActionMN): ResultSchema =
       inputs
         .map(_.successOpt)
         .in.noneIf(_.exists(_.isEmpty)) // = none if any failure
@@ -42,14 +42,14 @@ case class IntermediatePlan private[plans] (dag: ActionDag) {
         .map(Clss.apply)
          match {
           case None       => ResultSchema.UpstreamError
-          case Some(clss) =>
-            actionm.vldt(clss) match {
+          case Some(afferentClss) =>
+            actionm.vldt(afferentClss) match {
               case Nil =>
                 actionm
-                  ._meta(clss)
+                  ._meta(afferentClss)
                   .tap { efferent =>
                     actionm._metaContext =
-                      NodeMetaContext(afferents = clss, efferent, CallSite(None, Nil)) }
+                      NodeMetaContext(afferentClss, efferent, CallSite(None, Nil)) }
                   .pipe(ResultSchema.Success.apply)
               case errors => ResultSchema.Errors(errors, actionm.callSite) } } }
 

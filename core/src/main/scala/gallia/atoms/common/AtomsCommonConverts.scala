@@ -34,7 +34,7 @@ object AtomsCommonConverts {
     }
 
     // ===========================================================================
-    case class _ConvertToInt(origin: CallSite)(target: PathPair) extends AtomUU { def naive(o: Obj) =
+    case class _ConvertToInt(target: PathPair) extends AtomUU { def naive(o: Obj) =
         _TransformVV(target, toInt).naive(o)
 
       // ---------------------------------------------------------------------------
@@ -45,11 +45,11 @@ object AtomsCommonConverts {
               case x: Number => x.intValue()
             } (value) }
         .getOrElse {
-          dataError(s"TODO:210106152700:${target}:${value}:${origin}") }
+          dataError(s"TODO:210106152700:${target}:${value}") }
     }
 
     // ===========================================================================
-    case class _ConvertToDouble(origin: CallSite)(target: PathPair) extends AtomUU { def naive(o: Obj) =
+    case class _ConvertToDouble(target: PathPair) extends AtomUU { def naive(o: Obj) =
         _TransformVV(target, toDouble).naive(o)
 
       // ---------------------------------------------------------------------------
@@ -60,8 +60,7 @@ object AtomsCommonConverts {
               case x: Number => x.doubleValue
             }(value) }
         .getOrElse{
-          dataError(s"TODO:210106152701:${target}:${value}:${origin}") }
-    }
+          dataError(s"TODO:210106152701:${target}:${value}") } }
 
   // ===========================================================================
   case class _ConvertToFlag(origin: CallSite)(target: PathPair, trueValue: Any, strict: Boolean) extends AtomUU { def naive(o: Obj) =

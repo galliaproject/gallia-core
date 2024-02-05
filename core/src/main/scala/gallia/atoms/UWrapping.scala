@@ -16,23 +16,21 @@ case class _UWrappers(wrappees: Seq[AtomUU]) extends AtomZZ with AtomCombiner[_U
 
   // ===========================================================================
   object _UWrappers {  
-  
-    def fromMapU2U(in: Cls, out: Cls)(plan: AtomPlan): _UWrappersX =
+
+    def fromMapU2U(plan: AtomPlan): _UWrappers =
       plan
         .atomNodesTail
         .pruneChain
         .values
-        .map (_.atom.asInstanceOf[AtomUUio])
-        .pipe(_UWrappersX.apply(in, out, _))
-  
+        .map (_.atom.asInstanceOf[AtomUU])
+        .pipe(_UWrappers.apply)
+
     // ---------------------------------------------------------------------------
     def from(values: Seq[_UWrapper]): _UWrappers =
       values  
           .map(_.wrappee)
           .pipe(AtomNodes.combineUWrapping)
           .map(_.asInstanceOf[AtomUU])  
-        .pipe(_UWrappers.apply)  
-      
-  }
-  
+        .pipe(_UWrappers.apply) }
+
 // ===========================================================================

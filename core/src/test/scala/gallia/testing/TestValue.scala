@@ -30,7 +30,7 @@ private object TestValue {
       util.Try { u.run[$Data]() } match {
         case util.Failure(f)   => problem(f.getMessage)
         case util.Success(res) =>
-          res.either match {
+          res.resultEither match {
             case Left (metaErrorResult)                                   => problem(s"210414125640:${metaErrorResult.formatErrors}")
             case Right(successResult) if (successResult.leavesCount != 1) => problem(s"210414125643:MultipleLeaves")
             case Right(successResult) =>
@@ -55,7 +55,7 @@ private object TestValue {
       util.Try { u.run[Objs]() } match {
         case util.Failure(f)   => problem(f.getMessage)
         case util.Success(res) =>
-          res.either match {
+          res.resultEither match {
             case Left (metaErrorResult)                                   => problem(s"210414125640:${metaErrorResult.formatErrors}")
             case Right(successResult) if (successResult.leavesCount != 1) => problem(s"210414125643:MultipleLeaves")
             case Right(successResult) =>
@@ -67,7 +67,7 @@ private object TestValue {
       
   // ===========================================================================
   def __metaError(end: gallia.heads.HeadEnd, markers: Seq[String]): TestValue =
-    Try { end.runMetaOnly().either } match {
+    Try { end.runMetaOnly().resultEither } match {
       case Failure(metaFailure)                                                                => problem(s"210414113945:MetaFailure:${metaFailure.getMessage}")
       case Success(Right(_))                                                                   => problem( "210414114600:ShouldNotHaveSucceeded")
       case Success(Left(metaErrorResult)) if !metaErrorResult.containsAllErrorMarkers(markers) => problem(s"210414114601:MissingErrorMarkers:${markers}:${metaErrorResult.allErrors}")
@@ -75,7 +75,7 @@ private object TestValue {
 
   // ===========================================================================
   def __dataError(end: gallia.heads.HeadEnd, markers: Seq[String]): TestValue =
-    Try { end.runMetaOnly().either } match {
+    Try { end.runMetaOnly().resultEither } match {
       case Failure(metaFailure)            => problem(s"210414113945:MetaFailure:${metaFailure.getMessage}")
       case Success(Left (metaErrorResult)) => problem(s"210414114439:MetaError:${metaErrorResult.formatDefault}")
       case Success(Right(metaSuccess))     => ___dataError(plan = metaSuccess.data, markers) }

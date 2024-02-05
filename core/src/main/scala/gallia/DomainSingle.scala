@@ -110,8 +110,8 @@ case class RPath(parent: Seq[Key], ren: Ren) {
     def isActual: Boolean = ren.isActual
     def isLeaf  : Boolean = parent.isEmpty
 
-    def forceKPath: KPath = this.assert(!_.isActual).from
-    def forceLeaf : Ren   = this.assert(_.isLeaf   ).ren
+    def forceKPath: KPath = this.ensuring(!_.isActual).from
+    def forceLeaf : Ren   = this.ensuring(_.isLeaf   ).ren
 
     def from : KPath  = KPath(parent, ren.from)
 
@@ -123,6 +123,8 @@ case class RPath(parent: Seq[Key], ren: Ren) {
     def to: KPath  = KPath(parent, ren.to  )
 
     // ---------------------------------------------------------------------------
+    def actualOpt: Option[RPath] = if (isActual) Some(this) else None
+
     def pathOpt: Option[KPath] = if (isActual) Some(to ) else None
     def leafOpt: Option[Ren]   = if (isLeaf)   Some(ren) else None
 

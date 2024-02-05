@@ -10,8 +10,10 @@ object ChainDataRun {
     var latest: NDT = null // using foldLeft is tricky because of missingInputs
 
     atomNodes
-      .values
-      .foreach { atomNode =>
+      .valuesWithContext
+      .foreach { case (fromIdOpt, atomNode, isLast) =>
+//atomNode.atom.optim(atomNode.id, fromIdOpt)(isLast)(atomNode.debug.ctx.efferent /* remove eventually */)
+
         latest =
           atomNode.process(
             input = DataInput.SingleInput(latest))(

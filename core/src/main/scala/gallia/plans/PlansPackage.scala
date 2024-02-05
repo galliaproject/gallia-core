@@ -13,6 +13,9 @@ package object plans {
   case class ClsS(values: Seq[Cls]) // eg intermediate steps
 
   // ---------------------------------------------------------------------------
+  case class ClsIO(in: Cls, out: Cls)
+
+  // ---------------------------------------------------------------------------
   type DAG[T] = dag.DAG[T]
   type NodeId = dag.NodeId }
 

@@ -44,8 +44,8 @@ object ActionsZZ {
       def  atomzz(c: Cls): AtomZZ = {
         val plan = parseUU(f).metaToAtomPlan(c)
 
-        if (plan.dag.isChain) _UWrappers.fromMapU2U(plan)      
-        else                  _MapU2U(o2o = plan.V1.naiveRunUU _) } }
+        if (plan.isChain) _UWrappers.fromMapU2U(plan)
+        else              _MapU2U(o2o = plan.V1.naiveRunUU _) } }
 
     // ---------------------------------------------------------------------------
     case class FlatMap(f: HeadU => HeadZ) extends ActionZZ11 {

@@ -52,7 +52,7 @@ object PivotingTest extends utest.TestSuite with GalliaTestSuite with TestDataS 
           bobj(f -> "f2", a -> Seq(4   ),              c ->  Seq(5)).toOptional(a, c) ) ) )
 
     // ===========================================================================
-    /* FIXME 231207 - scala 3 migration
+    /* FIXME t240202123127 - 231207 - scala 3 migration
     test(testPivotEmulation(
       in =
           bobjs(

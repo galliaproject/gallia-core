@@ -11,9 +11,9 @@ object IntermediateMetaResultNodeCreator {
       .transform { case (id, action) =>
           IntermediateMetaResultNode(
               id,
-              origin = action.callSite,
-              action = actionAN(action),
-              result = data(id)) }(
+              origin   = action.callSite,
+              actionan = actionAN(action),
+              result   = data(id)) }(
         newIdResolver = _.id)
       .pipe(IntermediateMetaResult.apply)
 
@@ -21,7 +21,7 @@ object IntermediateMetaResultNodeCreator {
   private[gallia] def actionAN(action: ActionVN with ActionMN): ActionAN = // 210205060908
     action match {
       case x: ActionAN          => x // <=> asInstanceOf[ActionAN]
-      case x: InMemoryMetaInput => NestingDataPlaceholder // TODO: build-in InMemoryMetaInput
+      case _: InMemoryMetaInput => NestingDataPlaceholder // TODO: build-in InMemoryMetaInput
       case x                    => aptus.illegalState(s"not an ActionAN: ${x}") }
 
 }

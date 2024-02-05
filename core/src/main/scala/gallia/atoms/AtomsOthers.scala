@@ -34,8 +34,9 @@ object AtomsOthers {
         .getOrElse(o) } }
 
   // ===========================================================================
-  case object _IdentityUU extends AtomUU { @inline def naive(o: Obj ) = o }
-  case object _IdentityZZ extends AtomZZ { @inline def naive(z: Objs) = z }
+  sealed trait _Identity
+    case object  _IdentityUU extends _Identity with AtomUU { @inline def naive(o: Obj ) = o }
+    case object  _IdentityZZ extends _Identity with AtomZZ { @inline def naive(z: Objs) = z }
 
   // ===========================================================================
   case class _CheckpointU(c: Cls, path1: String, path2: String) extends AtomUU { def naive(o: Obj) = {

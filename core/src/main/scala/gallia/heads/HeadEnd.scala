@@ -15,14 +15,20 @@ case class HeadEnd private (leafId : LeafId) {
     // ---------------------------------------------------------------------------
     def runMetaOnly(): RunResultM =
       adagm
-        .run().either
+        .run().intermediateEither
         .map((SuccessResultM.apply _).tupled)
         .pipe(RunResultM)
 
     // ===========================================================================
+    private[gallia] def runToNdt(): Either[MetaErrorResult, (SuccessMetaResult, NDT)] =
+        adagm
+          .run().intermediateEither
+          .map(_.mapSecond(_.atomPlan.naiveRun()))
+
+    // ---------------------------------------------------------------------------
     private[gallia] def run[$Data](): RunResult[SuccessResult[$Data], $Data] =
         adagm
-          .run().either
+          .run().intermediateEither
           .map(_.mapSecond(_.atomPlan.naiveRun().value.asInstanceOf[$Data]))
           .map(x => new SuccessResult(x._1, x._2))
           .pipe(new RunResult(_))
@@ -30,7 +36,7 @@ case class HeadEnd private (leafId : LeafId) {
       // ---------------------------------------------------------------------------
       def runu(): RunResultU =
         adagm
-          .run().either
+          .run().intermediateEither
           .map(_.mapSecond(_.atomPlan.naiveRun().forceO))
           .map((SuccessResultU.apply _).tupled)
           .pipe(RunResultU)
@@ -38,7 +44,7 @@ case class HeadEnd private (leafId : LeafId) {
       // ---------------------------------------------------------------------------
       def runz(): RunResultZ =
         adagm
-          .run().either
+          .run().intermediateEither
           .map(_.mapSecond(_.atomPlan.naiveRun().forceZ))
           .map((SuccessResultZ.apply _).tupled)
           .pipe(RunResultZ)
@@ -46,7 +52,7 @@ case class HeadEnd private (leafId : LeafId) {
       // ---------------------------------------------------------------------------
       def runv[T](): RunResultV[T] =
         adagm
-          .run().either
+          .run().intermediateEither
           .map(_.mapSecond(_.atomPlan.naiveRun().forceT[T]))
           .map(x => SuccessResultV[T](x._1, x._2)) // TODO: t210117104246 - can use .tupled?
           .pipe(RunResultV[T])

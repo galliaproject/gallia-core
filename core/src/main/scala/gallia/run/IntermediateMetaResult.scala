@@ -7,7 +7,7 @@ import plans._
 import result._
 
 // ===========================================================================
-case class IntermediateMetaResult(dag: gallia.dag.DAG[IntermediateMetaResultNode]) {
+case class IntermediateMetaResult(dag: DAG[IntermediateMetaResultNode]) {
 
       override def toString: String = formatDefault
 
@@ -29,10 +29,10 @@ case class IntermediateMetaResult(dag: gallia.dag.DAG[IntermediateMetaResultNode
             .pipe(SuccessMetaResult.apply)
 
       // ---------------------------------------------------------------------------
-      def either: Either[MetaErrorResult, (SuccessMetaResult, ActionPlan)] =
+      def intermediateEither: Either[MetaErrorResult, (SuccessMetaResult, ActionPlan)] =
         successOpt match {
-            case None                             => Left (this)
-            case Some(success: SuccessMetaResult) => Right(success, ActionPlanPopulator(success.dag)) }
+          case None                             => Left (this)
+          case Some(success: SuccessMetaResult) => Right(success, ActionPlanPopulator(success.dag)) }
 
       // ---------------------------------------------------------------------------
       def allErrors: Errs = dag.kahnTraverseNodes.flatMap(_.result.errors)
@@ -62,17 +62,15 @@ case class IntermediateMetaResult(dag: gallia.dag.DAG[IntermediateMetaResultNode
       private def leafNode: IntermediateMetaResultNode =
         dag
           .leaves
-          .force.one // since ASG
-    }
+          .force.one /* since ASG */ }
 
   // ===========================================================================
-  case class IntermediateMetaResultNode(id: NodeId, origin: CallSite, action: ActionAN, result: ResultSchema) extends HasNodeId {
+  case class IntermediateMetaResultNode(id: NodeId, origin: CallSite, actionan: ActionAN, result: ResultSchema) extends HasNodeId {
     def isSuccess: Boolean = result.successOpt.isDefined
 
     def successOpt: Option[SuccessMetaResultNode] =
       result
         .successOpt
-        .map(SuccessMetaResultNode(id, origin, action, _))
-  }
+        .map(SuccessMetaResultNode(id, origin, actionan, _)) }
 
 // ===========================================================================

@@ -18,7 +18,15 @@ trait ActionBoilerplate { import ActionAtomsBoilerplate._
   trait ActionUU11 extends ActionUU with ActionAtomsUU11
   trait ActionUU1N extends ActionUU with ActionAtomsUU1N
 
-  trait ActionUU1Nb extends ActionUU with ActionAtomsUU1Nb // provides origin, TODO: t210616122449 - generalize
+  // ---------------------------------------------------------------------------
+  @oswo_ trait ActionUU1Noswo extends ActionUU1N {
+    var _intras: IntraActionClss = null // temporary hack for OSWO prototype
+    protected def intras(values: Seq[Cls]): Cls = { _intras = IntraActionClss(values); _intras.values.last }
+    protected def updateMeta[T <: AtomOswo](atoms: Seq[T]) = { atoms.updateMeta(_intras); atoms } }
+
+    // ---------------------------------------------------------------------------
+@deprecated("origin is already in ctx actually")
+trait ActionUU1Nb extends ActionUU with ActionAtomsUU1Nb // provides origin, TODO: t210616122449 - generalize (can also use _metaContext hack in the meantime...)
 
     // ---------------------------------------------------------------------------
     trait ActionZZ01 extends ActionZZ with ActionAtomsZZ01
@@ -40,7 +48,7 @@ trait ActionBoilerplate { import ActionAtomsBoilerplate._
     trait ActionIU11 extends ActionIU with ActionAtomsIU11
     trait ActionIU1N extends ActionIU with ActionAtomsIU1N
 
-      trait ActionIU01x extends ActionIU with ActionAtomsIU01x
+      trait ActionIU01y extends ActionIU with ActionAtomsIU01y
 
     // ---------------------------------------------------------------------------
     trait ActionIZ01 extends ActionIZ with ActionAtomsIZ01
@@ -48,7 +56,7 @@ trait ActionBoilerplate { import ActionAtomsBoilerplate._
     trait ActionIZ11 extends ActionIZ with ActionAtomsIZ11
     trait ActionIZ1N extends ActionIZ with ActionAtomsIZ1N
 
-      trait ActionIZ01x extends ActionIZ with ActionAtomsIZ01x
+      trait ActionIZ01y extends ActionIZ with ActionAtomsIZ01y
 
     // ---------------------------------------------------------------------------
     trait ActionIV01 extends ActionIV with ActionAtomsIV01

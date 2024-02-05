@@ -65,7 +65,7 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
       def _meta  (in: Cls): Cls  = u._meta(in)
       def atomzzs(ctx: NodeMetaContext): AtomZZs =
         u .atomuus(ctx)
-          .map(gallia.atoms._UWrapperX.apply(_metaContext.efferent, _)) }
+          .map(gallia.atoms._UWrapper.apply) }
 
   // ===========================================================================
   private[heads] def zz      (action: ActionZZ): HeadZ            = handler.chainzz      (self)(action)

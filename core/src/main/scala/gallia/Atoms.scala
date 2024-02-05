@@ -21,6 +21,8 @@ sealed trait Atom {
 
       // ===========================================================================
       def isPlaceholder: Boolean = this == NestingDataPlaceholder
+
+      def isIdentity   : Boolean = this.isInstanceOf[gallia.atoms.AtomsOthers._Identity]
       def isIdentityUU : Boolean = this == gallia.atoms.AtomsOthers._IdentityUU    
       def isIdentityZZ : Boolean = this == gallia.atoms.AtomsOthers._IdentityZZ }
 
@@ -31,12 +33,9 @@ sealed trait Atom {
   case object NestingDataPlaceholder extends ActionAN1 with Atom { def atom = this } // data to be provided by runner
 
   // ===========================================================================
-  trait AtomIU extends AtomIUx { def naive: Option[Obj ]; final override def naive(efferent: Cls): Option[Obj ] = naive }
-  trait AtomIZ extends AtomIZx { def naive: Option[Objs]; final override def naive(efferent: Cls): Option[Objs] = naive }
-  trait AtomIV extends Atom    { def naive: Option[Vle ] }
-
-    trait AtomIUx extends Atom { def naive(efferent: Cls): Option[Obj ] }
-    trait AtomIZx extends Atom { def naive(efferent: Cls): Option[Objs] }
+  trait AtomIU extends Atom { def naive: Option[Obj ] }
+  trait AtomIZ extends Atom { def naive: Option[Objs] }
+  trait AtomIV extends Atom { def naive: Option[Vle ] }
 
   // ---------------------------------------------------------------------------
   trait AtomUO extends Atom { def naive(o: Obj ): Unit }
@@ -48,8 +47,9 @@ sealed trait Atom {
   trait AtomVZ extends Atom { def naive(v: Vle): Objs }
 
   // ---------------------------------------------------------------------------
-  trait AtomUU extends Atom { def naive(o: Obj ): Obj  }
-  trait AtomZZ extends Atom { def naive(z: Objs): Objs }
+  @oswo_
+  trait AtomUU extends Atom with AtomOswo { def naive(o: Obj ): Obj  }
+  trait AtomZZ extends Atom               { def naive(z: Objs): Objs }
 
   // ---------------------------------------------------------------------------
   trait AtomZU extends Atom { def naive(z: Objs): Obj  }
@@ -68,5 +68,8 @@ sealed trait Atom {
   trait AtomUUtoU extends Atom { def naive(o1: Obj , o2: Obj ): Obj  }
   trait AtomZZtoZ extends Atom { def naive(z1: Objs, z2: Objs): Objs }
   trait AtomZVtoZ extends Atom { def naive(z : Objs, v : Vle ): Objs }
+
+// ---------------------------------------------------------------------------
+@oswo_ trait AtomOswo { var _metaIO: plans.ClsIO = null /* temporary hack for OSWO prototype */ }
 
 // ===========================================================================

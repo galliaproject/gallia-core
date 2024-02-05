@@ -77,9 +77,7 @@ object ActionsCommonNestingRelated {
       (      if (c.field(parent).subInfo1.isMultiple) _UnnestOOO (parent, fromz.values.force.one)
         else if (fromz.size == nc.size)               _UnnestAll (parent) // TODO: still worth handling separately?
         else                                          _UnnestSome(parent, fromz)) +:
-      target.resolve(nc).flatMap(potentialRenaming(_))
-    }
-  }
+      target.resolve(nc).flatMap(potentialRenaming(_)) } }
 
   // ===========================================================================
   case class Renest(targets: TqKeyz, sep: Separator) extends ActionUU11 with TodoV1 {

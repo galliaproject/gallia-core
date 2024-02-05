@@ -1,19 +1,29 @@
 package gallia
 package plans
 
+import aptus.Seq_
+
 import atoms.common.AtomsCommonVeryBasics    ._RenameAll
 import atoms.common.AtomsCommonSomewhatBasics._RemoveWhateverIfAll
 import atoms                                 ._UWrappers
 
 // ===========================================================================
-case class AtomNodes(values: Seq[AtomNode]) extends AnyVal {  
-        
+case class AtomNodes(values: Seq[AtomNode]) extends AnyVal { // TODO: rename to ChainAtomNodes?
+
+  def valuesWithContext: Seq[(Option[NodeId], AtomNode, Boolean /* last */)] =
+    values
+      .slidingPairsWithPrevious
+      .zipWithIsLast
+      .map { case ((previousOpt, atomNode), isLast) => 
+        (previousOpt.map(_.id), atomNode, isLast) }
+
+  // ---------------------------------------------------------------------------        
   def pruneChain: AtomNodes =
       this
         .combine(_.isUWrapper)        (_.asUWrapper)        (_UWrappers          .from)
         .combine(_.isRename)          (_.asRename)          (_RenameAll          .from)
         .combine(_.isRemoveWhateverIf)(_.asRemoveWhateverIf)(_RemoveWhateverIfAll.from) // FIXME: t210727091024 - only if same level
-        
+
     // ===========================================================================  
     def combine[$Atom <: Atom](pred: Atom => Boolean)(specifier: Atom => $Atom)(combiner: Seq[$Atom] => AtomCombiner[$Atom]): AtomNodes =
       values

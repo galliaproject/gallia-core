@@ -87,6 +87,7 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
     protected[basic] final def fullNameString: FullNameString = node.leaf.name
                      final def fullName      : FullName       = node.leaf.fullName
 
+    def formatScala  : String = fullName.format.replace("scala.", "").replace("java.lang.String", "String") // TODO
     def formatDefault: String = entryName }
 
   // ===========================================================================

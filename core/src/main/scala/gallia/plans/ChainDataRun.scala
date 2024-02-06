@@ -12,8 +12,12 @@ object ChainDataRun {
     atomNodes
       .valuesWithContext
       .foreach { case (fromIdOpt, atomNode, isLast) =>
-//atomNode.atom.optim(atomNode.id, fromIdOpt)(isLast)(atomNode.debug.ctx.efferent /* remove eventually */)
+        if (gallia.isOswoPrototypeEnabled)
+          atomNode.atom.optim(
+            atomNode.id, fromIdOpt)(isLast)(
+            atomNode.debug.ctx.efferent /* remove eventually */)
 
+        // ---------------------------------------------------------------------------
         latest =
           atomNode.process(
             input = DataInput.SingleInput(latest))(

@@ -20,11 +20,11 @@ trait ActionBoilerplate { import ActionAtomsBoilerplate._
 
   // ---------------------------------------------------------------------------
   @oswo_ trait ActionUU1Noswo extends ActionUU1N {
-    private var _intras: IntraActionClss = null // temporary hack for OSWO prototype
+      private var _intras: IntraActionClss = null // temporary hack for OSWO prototype
 
-    // ---------------------------------------------------------------------------
-    protected def storeIntraMetas(values: Seq[Cls]): Cls = { _intras = IntraActionClss(values); _intras.values.last }
-    protected def updateAtomMetas[T <: AtomOswo](atoms: Seq[T]) = { atoms.updateAtomMetas(_intras); atoms } }
+      // ---------------------------------------------------------------------------
+      protected def storeIntraMetas(values: Seq[Cls]): Cls        = { if (gallia.isOswoPrototypeEnabled) { _intras = IntraActionClss(values) }; values.last }
+      protected def updateAtomMetas[T <: AtomOswo](atoms: Seq[T]) = { if (gallia.isOswoPrototypeEnabled) { atoms.updateAtomMetas(_intras) }; atoms } }
 
     // ---------------------------------------------------------------------------
     trait ActionZZ01 extends ActionZZ with ActionAtomsZZ01

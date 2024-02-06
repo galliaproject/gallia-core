@@ -58,6 +58,10 @@ ThisBuild / libraryDependencies ++=
     case "3"    => Seq(("io.github.aptusproject" %% "aptus-core" % aptusVersion).cross(CrossVersion.for3Use2_13) /* because of gallia-spark, which will bring in 2.13's scala-parallel-collections */)
     case "2.13" => Seq( "io.github.aptusproject" %% "aptus-core" % aptusVersion)
     case "2.12" => Seq( "io.github.aptusproject" %% "aptus-core" % aptusVersion) }) ++
+  (scalaBinaryVersion.value match { // OSWO dependencies (see https://github.com/galliaproject/gallia-docs/blob/master/oswo.md)
+    case "3"    => Seq() // TODO
+    case "2.13" => Seq("org.scala-lang" % "scala-compiler" % scalaVersion.value, "org.scala-lang" % "scala-library" % scalaVersion.value)
+    case "2.12" => Seq("org.scala-lang" % "scala-compiler" % scalaVersion.value, "org.scala-lang" % "scala-library" % scalaVersion.value) }) ++
   (scalaBinaryVersion.value match {
     case "3"    => Seq.empty
     case "2.13" => Seq("org.scala-lang" %  "scala-reflect" % scalaVersion.value) /* for scala.reflect.runtime.universe */

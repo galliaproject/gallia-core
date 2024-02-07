@@ -5,7 +5,7 @@ package macros3
 // ===========================================================================
 private object TypeLeafParserMacro3 {
   import scala.quoted.{Quotes, quotes, Type, Expr}
-  import TypeNodeToExpr._
+  import TypeNodeToExpr.*
 
   // ===========================================================================
   /** recursion for both potential type arguments and nesting */
@@ -30,8 +30,8 @@ private object TypeLeafParserMacro3 {
 
     // ---------------------------------------------------------------------------
     val enumeratumValueNamesOpt: Option[Seq[EntryNameString]] =
-      if (FullName.containsEnumEntry(baseClassNames)) Some(enumValueNames(typeSymbol))
-      else                                            None
+      if FullName.containsEnumEntry(baseClassNames) then Some(enumValueNames(typeSymbol))
+      else                                               None
 
     // ---------------------------------------------------------------------------
     val dataClass: Boolean =
@@ -53,7 +53,7 @@ private object TypeLeafParserMacro3 {
       enumeratumValueNamesOpt = enumeratumValueNamesOpt,
 
       fields =
-        if (!dataClass) List.empty // may in theory be empty
+        if !dataClass then List.empty // may in theory be empty
         else
             typeSymbol
               .caseFields

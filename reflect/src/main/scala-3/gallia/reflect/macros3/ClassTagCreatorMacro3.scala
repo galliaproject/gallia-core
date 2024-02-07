@@ -2,7 +2,7 @@ package gallia
 package reflect
 package macros3
 
-import aptus._
+import aptus.*
 
 // ===========================================================================
 private object ClassTagCreatorMacro3 {

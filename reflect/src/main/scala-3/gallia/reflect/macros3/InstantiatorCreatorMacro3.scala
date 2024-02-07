@@ -35,15 +35,15 @@ private object InstantiatorCreatorMacro3 {
   def rec(using q: Quotes)(tpe: q.reflect.TypeRepr)(typeNode: TypeNode): q.reflect.Term = {
     import quotes.reflect.*
 
-         if (!typeNode.isContainedDataClass && !typeNode.isContainedEnumeratum) '{Instantiator.Placeholder /* easier for now */}.asTerm
-    else if ( typeNode.isOptionOfSeq) rec(tpe.typeArgs.force.one.typeArgs.force.one)(typeNode.forceSoleTypeArg.forceSoleTypeArg)
-    else if ( typeNode.isOption)      rec(tpe.typeArgs.force.one)                   (typeNode.forceSoleTypeArg)
-    else if ( typeNode.        isSeq) rec(tpe.typeArgs.force.one)                   (typeNode.forceSoleTypeArg)
+         if !typeNode.isContainedDataClass && !typeNode.isContainedEnumeratum then '{Instantiator.Placeholder /* easier for now */}.asTerm
+    else if  typeNode.isOptionOfSeq then rec(tpe.typeArgs.force.one.typeArgs.force.one)(typeNode.forceSoleTypeArg.forceSoleTypeArg)
+    else if  typeNode.isOption      then rec(tpe.typeArgs.force.one)                   (typeNode.forceSoleTypeArg)
+    else if  typeNode.        isSeq then rec(tpe.typeArgs.force.one)                   (typeNode.forceSoleTypeArg)
     else {
       val enumeratum = typeNode.leaf.isEnumeratum
 
       val caseFieldSymbols: List[Symbol]   = tpe.typeSymbol.caseFields
-      val typeReprs       : List[TypeRepr] = if (enumeratum) List(TypeRepr.of[String]) else caseFieldSymbols.map(tpe.memberType)
+      val typeReprs       : List[TypeRepr] = if enumeratum then List(TypeRepr.of[String]) else caseFieldSymbols.map(tpe.memberType)
       val typeTrees       : List[TypeTree] = typeReprs.map(Inferred.apply)
       val fieldNames      : List[String] = caseFieldSymbols.map(_.name)
 
@@ -60,10 +60,10 @@ private object InstantiatorCreatorMacro3 {
           val closureMethodType =
             MethodType(
               paramNames =
-                  if (enumeratum) List(/* withName's */ "name")
-                  else            fieldNames)(
+                  if enumeratum then List(/* withName's */ "name")
+                  else               fieldNames)(
                 paramInfosExp = _ => typeReprs,
-                resultTypeExp = _ => TypeRepr.of[Any/*T*/])
+                resultTypeExp = _ => TypeRepr.of[Any])
 
           Symbol.newMethod(
             parent = Symbol.spliceOwner,
@@ -100,14 +100,14 @@ private object InstantiatorCreatorMacro3 {
 
       // ===========================================================================
       val fieldTerms: List[Term] =
-        if (enumeratum) Nil
+        if enumeratum then Nil
         else
           typeNode
             .leaf.fields
             .zipSameSize(caseFieldSymbols) /* see assert above (231219122236) */
             .toList
             .flatMap { (field, sym) =>
-               if (!field.typeNode.isContainedDataClass) None
+               if !field.typeNode.isContainedDataClass then None
                else Some(field.key, field.typeNode, tpe.memberType(sym)) }
             .map { (key, subNode, fieldTpe) =>
               _helperApply(MethodNames.entry)(
@@ -121,7 +121,7 @@ private object InstantiatorCreatorMacro3 {
       // ---------------------------------------------------------------------------
       val applyFrom: Term =
 
-        if (enumeratum)
+        if enumeratum then
           Apply(
             TypeApply(
               _instanSelect(MethodNames.instanEnumeratumWithName),
@@ -145,10 +145,7 @@ private object InstantiatorCreatorMacro3 {
               typeTrees),
             List(constructorArgBlock, mapApply)) }
 
-      // ===========================================================================
-      (applyFrom: Term)
-    }
-  }
-}
+      // ---------------------------------------------------------------------------
+      (applyFrom: Term) } } }
 
 // ===========================================================================

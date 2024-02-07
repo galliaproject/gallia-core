@@ -47,6 +47,9 @@ case class Cls(fields: Seq[Fld]) // TODO: as List?
           .map(_.formatDefault)
           .section(nameOpt.map(_.quote.colon).getOrElse(""))
 
+      def formatCaseClassHierarchy: Seq[String] =
+        oswo.source.CaseClassHierarchyFormatting(this).map(_.formatSource)
+
     // ---------------------------------------------------------------------------
     def unknownKeys(o: Obj): Set[Key] = {
       val set1 = o   .keySet

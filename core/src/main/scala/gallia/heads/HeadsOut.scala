@@ -6,7 +6,6 @@ import io.out._
 
 // ===========================================================================
 trait HeadOut { self: Head[_] =>
-
   // t220930115036 - add feature to dump intermediate meta/data like in towardsdatascience article (https://towardsdatascience.com/gallia-a-library-for-data-transformation-3fafaaa2d8b9)
 
   // ---------------------------------------------------------------------------
@@ -16,7 +15,11 @@ trait HeadOut { self: Head[_] =>
       case Left (errors)  => throw errors.metaErrorOpt.get
       case Right(success) => success.meta.forceLeafClass }
 
-}
+  /** will *not* process all the data (assuming input schema does not need to be inferred) */
+  def formatSchema: String = forceSchema.formatDefault
+
+  /** will *not* process all the data (assuming input schema does not need to be inferred) */
+  def formatCaseClasses: Seq[String] = forceSchema.formatCaseClassHierarchy /* produces scala source code (more than one class if nesting is involved) */ }
 
 // ===========================================================================
 trait HeadUOut extends HeadOut { self: HeadU =>
@@ -41,10 +44,6 @@ trait HeadUOut extends HeadOut { self: HeadU =>
   private[gallia] def _metaOnly(): HeadU = StartU.pipe(_.stdout).conf.actionU.pipe(uo).tap { x => x.forceSchema; () }
 
   // ===========================================================================
-  /** will *not* process all the data (assuming input schema does not need to be inferred) */
-  def formatSchema: String = forceSchema.formatDefault
-  
-  // ---------------------------------------------------------------------------
   def formatDefault   : String = formatJson
   def formatString    : String = formatJson
   
@@ -124,10 +123,6 @@ trait HeadZOut extends HeadOut { self: HeadZ =>
   private[gallia] def _metaOnly(): HeadZ = StartZ.pipe(_.stdout).conf.actionZ.pipe(zo).tap { x => x.forceSchema; () }
 
   // ===========================================================================
-  /** will *not* process all the data (assuming input schema does not need to be inferred) */
-  def formatSchema: String = forceSchema.formatDefault    
-  
-  // ---------------------------------------------------------------------------  
   def formatString : String = formatJsonLines
   def formatDefault: String = formatJsonLines
   //TODO: formatLines: Seq[Line]

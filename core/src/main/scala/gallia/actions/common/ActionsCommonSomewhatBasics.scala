@@ -116,13 +116,7 @@ object ActionsCommonSomewhatBasics {
       def atomuus =
         parentOpt match {
           case None         =>                                    Seq(                   _Swap(target1, target2) )
-          case Some(parent) => potentialRenaming(parent).toSeq ++ Seq(_Nested(parent.to, _Swap(target1, target2))) }
-    }
-
-    // ---------------------------------------------------------------------------
-    class MultiSwap(targets: Seq[KeyPair]) extends ActionUU0N with TodoV1 {
-      def _meta(c: Cls): Cls = targets.map(_.value).foldLeft(c)((curr, x) => curr.swapFields(None, x._1, x._2))
-      def atomuus            = targets.map(_.value).map((_Swap.apply _).tupled) }
+          case Some(parent) => potentialRenaming(parent).toSeq ++ Seq(_Nested(parent.to, _Swap(target1, target2))) } }
 
   // ---------------------------------------------------------------------------
   class CopyEntries(origin: RPath, destinations: Seq[Key]) extends ActionUU0N with TodoV1 {
@@ -132,8 +126,7 @@ object ActionsCommonSomewhatBasics {
           case (None        , Left(key))     => destinations.map(_Copy(key, _))
           case (None        , Right(actual)) => destinations.map(_Copy(actual.from, _)) :+ _Rename(actual)
           case (Some(parent), Left(key))     => destinations.map { destination => _Nested(parent, _Copy(key        , destination)) }
-          case (Some(parent), Right(actual)) => destinations.map { destination => _Nested(parent, _Copy(actual.from, destination)) } :+ _Nested(parent, _Rename(actual)) }
-    }
+          case (Some(parent), Right(actual)) => destinations.map { destination => _Nested(parent, _Copy(actual.from, destination)) } :+ _Nested(parent, _Rename(actual)) } }
 
   // ===========================================================================
   case class ZipStrings(keys: Renz, sep: Separator, newNestingKey : Key) extends ActionUU01 with TodoV1 { //TODO: validate at least 2 keys

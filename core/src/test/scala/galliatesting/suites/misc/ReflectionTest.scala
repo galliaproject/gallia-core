@@ -43,12 +43,11 @@ object ReflectionTest extends utest.TestSuite { import utest._
         test(checkClassName(generic(any), JavaString)) } }
 
     // ---------------------------------------------------------------------------
-    // FIXME: t231229155632 - scala 3 migration
-    /*test("if applicable") { // for union types
-      val node = gallia.typeNode[Int]
+    test("if applicable") { // for union types
+      val node = gallia._typeNode[Int]
 
-      assert(node.ifApplicable(_ + 1).apply("foo") == "foo") // ignored
-      assert(node.ifApplicable(_ + 1).apply(1)     == 2) }*/ }
+      assert(node.ifApplicable[Int /* ok because available where used (internally) */](_ + 1).apply("foo") == "foo") // ignored
+      assert(node.ifApplicable[Int /* ok because available where used (internally) */](_ + 1).apply(1)     == 2) } }
 
   // ===========================================================================
   private def checkClassName(actual: String, expected: String): Unit = Predef.assert(actual == expected, actual -> expected)

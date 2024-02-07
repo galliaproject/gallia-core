@@ -45,9 +45,9 @@ case class TypeNode(
   def fieldNames: Seq[String] = leaf.fields.map(_.key) // may be empty if not a data class
 
   // ===========================================================================
-  def ifApplicable(f: Any => Any): Any /* value */ => Any /* value */ =
+  def ifApplicable[T](f: T => Any): Any /* value */ => Any /* value */ =
       value =>
-        if (sameType(value)) f(value)
+        if (sameType(value)) f(value.asInstanceOf[T])
         else                   value
 
     // ---------------------------------------------------------------------------

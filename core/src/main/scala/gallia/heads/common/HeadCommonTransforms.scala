@@ -121,7 +121,7 @@ trait HeadCommonTransforms[F <: HeadCommon[F]] { ignored: HeadCommon[F] => // 22
             .assert(!_.typeNode.isContainedDataClass, _.typeNode)
 
         // ---------------------------------------------------------------------------
-        if (!ttq.ignoreContainer) self2 :+ TransformVV (ttq, dest.typeNode, wrap(f), origin.ifApplicable(wrap(f)))
-        else                      self2 :+ TransformVVx(ttq, dest.typeNode, wrap(f), origin.ifApplicable(wrap(f))) } } }
+        if (!ttq.ignoreContainer) self2 :+ TransformVV (ttq, dest.typeNode, wrap(f), origin.ifApplicable[O](wrap(f)))
+        else                      self2 :+ TransformVVx(ttq, dest.typeNode, wrap(f), origin.ifApplicable[O](wrap(f))) } } }
 
 // ===========================================================================

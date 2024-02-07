@@ -42,6 +42,7 @@ private object OswoAtomFieldFormatter { import source.SourceFluentBuilders._
     def fieldFunctionIf(id: String, target: Key): SourceString = {
       // eg: f = f.toUpperCase, - or rather: f = deserializeFunction("id003")(x.f)
       if (f.key != target) fieldDefault else
+        // TODO: t240206143032 - don't serdes, just store functions as is? ok as long as we don't rely on a completely external compilation
         s"${f.formatKeySourceIndented} = ${DeserializeFunction}(gallia.serials(${id.quote}))(x.${f.formatKeySource}).asInstanceOf[${f.forceBasicType.formatScala /* TODO: containers */}]" }
 
     // ---------------------------------------------------------------------------

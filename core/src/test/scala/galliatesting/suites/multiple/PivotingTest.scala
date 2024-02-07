@@ -52,19 +52,18 @@ object PivotingTest extends utest.TestSuite with GalliaTestSuite with TestDataS 
           bobj(f -> "f2", a -> Seq(4   ),              c ->  Seq(5)).toOptional(a, c) ) ) )
 
     // ===========================================================================
-    /* FIXME t240202123127 - 231207 - scala 3 migration
     test(testPivotEmulation(
       in =
           bobjs(
-            bobj(f1 -> "f11", f2 -> "f21", g1 -> "a", g1 -> "z", h1 -> 1, h2 ->  1),
-            bobj(f1 -> "f11", f2 -> "f21", g1 -> "a", g1 -> "z", h1 -> 2, h2 ->  4),
-            bobj(f1 -> "f11", f2 -> "f21", g1 -> "b", g1 -> "y", h1 -> 3, h2 ->  9),
-            bobj(f1 -> "f12", f2 -> "f22", g1 -> "a", g1 -> "z", h1 -> 4, h2 -> 16),
-            bobj(f1 -> "f12", f2 -> "f22", g1 -> "c", g1 -> "x", h1 -> 5, h2 -> 25) ),
+            bobj(f1 -> "f11", f2 -> "f21", g1 -> "a", g2 -> "z", h1 -> 1, h2 ->  1),
+            bobj(f1 -> "f11", f2 -> "f21", g1 -> "a", g2 -> "z", h1 -> 2, h2 ->  4),
+            bobj(f1 -> "f11", f2 -> "f21", g1 -> "b", g2 -> "y", h1 -> 3, h2 ->  9),
+            bobj(f1 -> "f12", f2 -> "f22", g1 -> "a", g2 -> "z", h1 -> 4, h2 -> 16),
+            bobj(f1 -> "f12", f2 -> "f22", g1 -> "c", g2 -> "x", h1 -> 5, h2 -> 25) ),
       out =
           aobjs(
             bobj(f1 -> "f11", f2 -> "f21", "a_z" ->  9, "b_y" -> 27              ).toOptional("a_z", "b_y"),
-            bobj(f1 -> "f12", f2 -> "f22", "a_z" -> 64            , "c_x" ->  125).toOptional("a_z",         "c_x") ) ) )*/
+            bobj(f1 -> "f12", f2 -> "f22", "a_z" -> 64            , "c_x" ->  125).toOptional("a_z",         "c_x") ) ) )
 
     // ===========================================================================
     test(testPivot(

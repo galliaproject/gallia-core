@@ -64,20 +64,32 @@ trait ReflectionTypesAbstraction {
     given _byteBuffer  : WTT[java.nio.ByteBuffer] = WttBuiltIns._ByteBuffer.asInstanceOf[WTT[java.nio.ByteBuffer]]
 
     // ===========================================================================
-    given optInt[T: WTT]: WTT[Option[T]] = {
+    given optSeq[T: WTT]: WTT[Option[Seq[T]]] = {
       val wttt = implicitly[WTT[T]]
+
+      WTT[Option[Seq[T]]](TypeNodeBuiltIns.scalaOption(TypeNodeBuiltIns.scalaSeq(wttt.typeNode)), classTag[Option[Seq[T]]],
+wttt.instantiatorOpt // TODO: wrap t240124111123
+      ).asInstanceOf[WTT[Option[Seq[T]]]]
+    }
+
+    // ---------------------------------------------------------------------------
+    given opt[T: WTT]: WTT[Option[T]] = {
+      val wttt = implicitly[WTT[T]]
+
       WTT[Option[T]](TypeNodeBuiltIns.scalaOption(wttt.typeNode), classTag[Option[T]],
 wttt.instantiatorOpt // TODO: wrap t240124111123
       ).asInstanceOf[WTT[Option[T]]]
     }
 
     // ---------------------------------------------------------------------------
-    given seqInt[T: WTT]: WTT[Seq[T]] = {
+    given seq[T: WTT]: WTT[Seq[T]] = {
       val wttt = implicitly[WTT[T]]
+
       WTT[Seq[T]](TypeNodeBuiltIns.scalaSeq(wttt.typeNode), classTag[Seq[T]],
 wttt.instantiatorOpt // TODO: wrap t240124111123
       ).asInstanceOf[WTT[Seq[T]]]
     }
+
   }
 
   // ===========================================================================

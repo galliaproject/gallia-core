@@ -49,7 +49,13 @@ trait HeadUSquashing { ignored: HeadU => // TODO: t210122161652 - favor AtomsVO 
   def forceTyped_ [T: WTT](key: KPathW): Opt[T] = typed_ (key).forceValue_ [T]
   def forceTypeds [T: WTT](key: KPathW): Nes[T] = typeds (key).forceValues [T]
   def forceTypeds_[T: WTT](key: KPathW): Pes[T] = typeds_(key).forceValues_[T]
-}
+
+  // ---------------------------------------------------------------------------
+  def any      (key: KPathW): HeadV[One[Any]] =      typed[Any](key)(AnyWTT /* DO NOT rely on implicits for WTT[Any] */)
+  def anys     (key: KPathW): HeadV[Seq[Any]] =      any(key).mapV(_.asInstanceOf[Seq[_]])
+
+  def forceAny (key: KPathW):       One[Any]  = forceTyped[Any](key)(AnyWTT /* DO NOT rely on implicits for WTT[Any] */)
+  def forceAnys(key: KPathW):       Seq[Any]  = forceAny(key)       .asInstanceOf[Seq[_]] }
 
 // ===========================================================================
 trait HeadZSquashing { ignored: HeadZ =>

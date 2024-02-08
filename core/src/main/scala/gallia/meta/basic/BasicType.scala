@@ -113,6 +113,11 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
     // ---------------------------------------------------------------------------
     private type CT[T] = scala.reflect.ClassTag[T] // just to help with boilerplate
 
+    // ---------------------------------------------------------------------------
+    // TODO: t240208161247 - create a proper placeholder rather, so can easily identify this use case (eg .forceAny("f"))
+    private[gallia] val ScalaAnyPlaceHolder = _Boolean // 240208154224 - arbitrarily use _Boolean as placeholder for Any (for internal use only)
+    private[gallia] val ScalaAnyFullName    = "scala.Any"
+
     // ===========================================================================
     // TODO:
     // - t210108114447 - support own "flag" type?

@@ -94,6 +94,9 @@ case class TypeNode(
     def isBObjs    : Boolean = isSeq && args.headOption.exists(_.isBObj)
 
   // ===========================================================================
+  def isAny: Boolean = this == TypeNodeBuiltIns.ScalaAny
+
+  // ---------------------------------------------------------------------------
   def isOptionOfSeq : Boolean = isOption && args.headOption.exists(_.isSeq)
   def isSeq         : Boolean = leaf.isSeq    && args.size == 1
   def isOption      : Boolean = leaf.isOption && args.size == 1

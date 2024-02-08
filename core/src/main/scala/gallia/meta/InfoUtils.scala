@@ -46,7 +46,8 @@ private[gallia] object InfoUtils {
     private def valueType(enmOpt: _EnmOpt)(isContainedDataClass: Boolean)(leaf: TypeLeaf): ValueType =
          if (isContainedDataClass) forceNestedClass(leaf)
          else                      valueTypeOpt(enmOpt)(leaf).getOrElse {
-           throw new IllegalStateException(s"${leaf.formatDefault -> enmOpt}") }
+           if (leaf.isAny) BasicType.ScalaAnyPlaceHolder
+           else throw new IllegalStateException(s"${leaf.formatDefault -> enmOpt}") }
 
       // ---------------------------------------------------------------------------
       private def valueTypeOpt(enmOpt: _EnmOpt)(leaf: TypeLeaf): Option[ValueType] =

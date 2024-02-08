@@ -23,6 +23,8 @@ case class FullName(items: Seq[String]) {
   def isJavaString: Boolean = fullName == FullNameBuiltIns._JavaString
 
   // ---------------------------------------------------------------------------
+  def isAny       : Boolean = fullName == FullNameBuiltIns._ScalaAny
+
   def isOption    : Boolean = fullName == FullNameBuiltIns._Option
   def isNone      : Boolean = fullName == FullNameBuiltIns._None
   def isSome      : Boolean = fullName == FullNameBuiltIns._Some

@@ -35,6 +35,8 @@ case class TypeLeaf(
          else                 fields.map(_.formatDebug).section2 + "]")
 
     // ---------------------------------------------------------------------------
+    def isAny: Boolean = this == TypeNodeBuiltIns.ScalaAny.leaf
+
     def isSeq       : Boolean = inheritsSeq
     def isEnumeratum: Boolean = enumeratumValueNamesOpt.nonEmpty
 

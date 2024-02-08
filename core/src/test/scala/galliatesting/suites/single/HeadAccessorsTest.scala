@@ -50,9 +50,11 @@ object HeadAccessorsTest extends utest.TestSuite with GalliaTestSuite with TestD
     test(present2.forceStrings_(f).check(Some(Seq(foo1, foo2))))
     test(missing2.forceStrings_(f).check(None))
 
-    test(Default01.forceAny(f).check(    foo        : Any))
-    test(Default02.forceAny(f).check(Seq(foo1, foo2): Any))
+    test(Default01.int(f).metaError(TypeMismatch))
 
-    test(Default01.int(f).metaError(TypeMismatch)) }}
+    // ---------------------------------------------------------------------------
+    test(Default01.forceAny (f).check(    foo        : Any))
+    test(Default02.forceAny (f).check(Seq(foo1, foo2): Any))
+    test(Default02.forceAnys(f).check(Seq(foo1, foo2): Seq[Any])) }}
 
 // ===========================================================================

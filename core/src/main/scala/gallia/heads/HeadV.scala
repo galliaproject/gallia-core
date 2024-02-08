@@ -16,7 +16,9 @@ class HeadV[T: WTT /* will be Vle (Any) for data phase */] private[gallia] ( // 
   private         val  self = this
 
   // ---------------------------------------------------------------------------
-  typeNode[T].underlyingFullName.require(BasicType.fullNameSet.contains, _ -> BasicType.fullNameSet)
+  typeNode[T].underlyingFullName.require(
+    x => BasicType.fullNameSet.contains(x) || BasicType.ScalaAnyFullName == x.format,
+    _ -> BasicType.fullNameSet)
 
   // ---------------------------------------------------------------------------
   private[heads] def vo(action: ActionVO): HeadV[T] = handler.chainvo(this)(action)

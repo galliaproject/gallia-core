@@ -68,6 +68,7 @@ object FullNameBuiltIns {
   private[gallia]  val _ScalaMathBigDecimal: FullNameString = "scala.math.BigDecimal".intern()
 
   // ---------------------------------------------------------------------------
+  private[reflect] val _ScalaAny   : FullNameString = "scala.Any"
   private[reflect] val _ScalaAnyVal: FullNameString = "scala.AnyVal"
 
   private[reflect] val _ScalaOption: FullNameString = "scala.Option"

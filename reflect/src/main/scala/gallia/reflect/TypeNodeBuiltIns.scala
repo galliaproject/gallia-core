@@ -9,6 +9,9 @@ object TypeNodeBuiltIns { import FullNameBuiltIns._
   val String      = JavaString // for convenience
 
   // ---------------------------------------------------------------------------
+  val ScalaAny       = TypeNode.trivial(_ScalaAny)
+
+  // ---------------------------------------------------------------------------
   val ScalaBoolean   = TypeNode.trivial(_ScalaBoolean)
   val ScalaInt       = TypeNode.trivial(_ScalaInt)
   val ScalaDouble    = TypeNode.trivial(_ScalaDouble)

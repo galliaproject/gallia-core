@@ -10,6 +10,10 @@ trait ReflectionTypesAbstraction {
   type __WTT_for_testing_only[T] = WTT[T]
 
   // ---------------------------------------------------------------------------
+  // don't rely on implicits for Any
+  private[gallia] val AnyWTT: WTT[scala.Any] = WttBuiltIns._Any.asInstanceOf[WTT[Any]]
+
+  // ---------------------------------------------------------------------------
   /** stood for WeakTypeTag in scala 2.x, has a life of its own in scala 3.x */
   private[gallia] case class WTT[T](
       typeNode       :        TypeNode,

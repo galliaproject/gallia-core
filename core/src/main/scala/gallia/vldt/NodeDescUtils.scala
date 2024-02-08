@@ -64,11 +64,9 @@ object NodeDescUtils {
         case Error(node) => s"${ErrorId.InvalidTypeNode} - ${parent} ${node.formatDefault}".in.seq
         case Enumeratum  => Nil
         case Named(name) =>
-          if (BasicType.isKnown(name)) Nil
-          else                         s"${ErrorId.UnsupportedTlSubtype} - ${parent} - ${name.quote}".in.seq
-        case Nesting(nesting) => nesting.errorMessages(parent) }
-
-  }
+          if (BasicType.isKnown(name) || name == BasicType.ScalaAnyFullName) Nil
+          else s"${ErrorId.UnsupportedTlSubtype} - ${parent} - ${name.quote}".in.seq
+        case Nesting(nesting) => nesting.errorMessages(parent) } }
 
   // ===========================================================================
   private def errorMessages(pairs: (Boolean, ErrorMsg)*): Seq[ErrorMsg] =

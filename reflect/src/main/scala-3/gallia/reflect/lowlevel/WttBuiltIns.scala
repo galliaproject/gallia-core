@@ -6,7 +6,9 @@ import scala.reflect.ClassTag
 
 // ===========================================================================
 object WttBuiltIns extends ReflectionTypesAbstraction {
+  val _Any: WTT[scala.Any] = WTT[scala.Any](TypeNodeBuiltIns.ScalaAny, ClassTag(classOf[scala.Any]), None)
 
+  // ---------------------------------------------------------------------------
   val _String  : WTT[String]  = WTT[String] (TypeNodeBuiltIns.String, ClassTag(classOf[String]), None)
 
   // ---------------------------------------------------------------------------

@@ -7,27 +7,6 @@ object SquashingTest extends utest.TestSuite with GalliaTestSuite with TestDataO
   import gallia._
   import gallia.vldt.ErrorId._
 
-  // ===========================================================================
-  private val present1 = aobj(
-    cls(f.string_, g.int))(
-    obj(f-> foo,   g-> 1) )
-
-  // ---------------------------------------------------------------------------
-  private val missing1 = aobj(
-    cls(f.string_, g.int))(
-    obj(           g-> 1) )
-
-  // ---------------------------------------------------------------------------
-  private val present2 = aobj(
-    cls(f.strings_          , g.int))(
-    obj(f-> Seq(foo1, foo2) , g-> 1) )
-
-  // ---------------------------------------------------------------------------
-  private val missing2 = aobj(
-    cls(f.strings_, g.int))(
-    obj(            g-> 1) )
-
-  // ===========================================================================
   val tests = Tests {
     test(Default06a.fuse  (_.string(f1), _.int(g)).as(_tmp).using((f1, g) => f1.size + g).int(_tmp).check(5)) // equivalent but longer (220620111230)
     test(Default06a.squash(_.string(f1), _.int(g))         .using((f1, g) => f1.size + g)          .check(5))
@@ -52,6 +31,18 @@ object SquashingTest extends utest.TestSuite with GalliaTestSuite with TestDataO
       v1.combine(v2).using((x, y) => x + (y + 1)).check(foo2) })
 
     // ===========================================================================
+    test(Predef.assert(4 == Default01.forceSquashUnsafe(o => o.string(f).size + o.int(g))))
+    test(Predef.assert(1 == Default01.forceInt         (g)))
+
+    //u.transform(f).using(_.size); u.fuse
+
+  // ---------------------------------------------------------------------------
+  //test(Default01.squash(_.string(f)).using(identity).check(foo))
+    test(Default01 .grab(_.string (f))                .check(foo))
+    test(Default15p.grab(_.string_(f)).check(Some(foo)))
+    test(Default15m.grab(_.string_(f)).check(None))
+
+    // ---------------------------------------------------------------------------
     test("grab/squash") {
       test(Default01.squashUnsafe(o => o.string(f).size + o.int(g)).check(4))
 
@@ -79,41 +70,6 @@ object SquashingTest extends utest.TestSuite with GalliaTestSuite with TestDataO
               cls(f.string, g.int_))(
               obj(f-> foo2)) )
           .ints_(g).check(Some(Seq(1)))) }
-
-    // ---------------------------------------------------------------------------
-    test("accessors") {
-      test(Predef.assert(4 == Default01.forceSquashUnsafe(o => o.string(f).size + o.int(g))))
-      test(Predef.assert(1 == Default01.forceInt         (g)))
-
-      //u.transform(f).using(_.size); u.fuse
-
-    //test(Default01.squash(_.string(f)).using(identity).check(foo))
-      test(Default01 .grab(_.string (f))                .check(foo))
-      test(Default15p.grab(_.string_(f)).check(Some(foo)))
-      test(Default15m.grab(_.string_(f)).check(None))
-
-      test(Default01     .string(f).check(foo))
-      test(Default01.forceString(f).check(foo))
-
-      test(       present1.string(f).metaError(TypeMismatch))
-      test(throws(present1.forceString(f)))
-
-      test(present1.     string_(f).check(Some(foo)))
-      test(present1.forceString_(f).check(Some(foo) ))
-
-      test(       missing1.string(f).metaError(TypeMismatch))
-      test(throws(missing1.forceString(f)))
-
-      test(missing1.     string_(f).check(None))
-      test(missing1.forceString_(f).ensuring(_.isEmpty ))
-
-      test(Default02.forceStrings (f).check(     Seq(foo1, foo2)))
-    //test(Default02.strings_9(f).ttest(Some(Seq(foo1, foo2))))
-
-      test(present2.forceStrings_(f).check(Some(Seq(foo1, foo2))))
-      test(missing2.forceStrings_(f).check(None))
-
-      test(Default01.int(f).metaError(TypeMismatch)) }
 
     // ===========================================================================
 //TODO: int vs ints inconsistency - also vs ooo

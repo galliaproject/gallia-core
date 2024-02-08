@@ -10,8 +10,8 @@ trait WttImplicits { x: ReflectionTypesAbstraction =>
   // ---------------------------------------------------------------------------
   /** only for scala 2... */
   implicit class WeakTypeTag_[T: WTT](wtt: WTT[T]) {
-    def typeNode       : TypeNode                     = TypeLeafParserRuntime2.parseTypeNode[T]
-    def ctag           : ClassTag[T]    = runtimeClassTag[T]
+    def typeNode       : TypeNode             = TypeLeafParserRuntime2.parseTypeNode[T]
+    def ctag           : ClassTag[T]          = runtimeClassTag[T]
     def instantiatorOpt: Option[Instantiator] = Some(runtimeInstantiator[T](to = typeNode))
 
     def instantiator(implicit ev: T <:< enumeratum.EnumEntry): Instantiator = instantiatorOpt.get /* guaranteed by design for EnumEntry */ }

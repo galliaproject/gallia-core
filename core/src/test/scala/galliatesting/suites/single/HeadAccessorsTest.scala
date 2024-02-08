@@ -53,8 +53,11 @@ object HeadAccessorsTest extends utest.TestSuite with GalliaTestSuite with TestD
     test(Default01.int(f).metaError(TypeMismatch))
 
     // ---------------------------------------------------------------------------
-    test(Default01.forceAny (f).check(    foo        : Any))
-    test(Default02.forceAny (f).check(Seq(foo1, foo2): Any))
-    test(Default02.forceAnys(f).check(Seq(foo1, foo2): Seq[Any])) }}
+    test(Default01 .forceAny (f).check(    foo        : Any))
+    test(Default02 .forceAny (f).check(Seq(foo1, foo2): Any))
+
+    test(Default51 .forceAnys(f).check(Seq(foo, foo2): Seq[Any]))
+    test(Default52b.forceAnys(f).check(Seq(Seq(foo1, foo2), Seq(foo3, foo4), Seq(foo1, foo2)): Seq[Any]))
+  }}
 
 // ===========================================================================

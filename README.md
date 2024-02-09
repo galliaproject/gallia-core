@@ -32,12 +32,12 @@ Preliminary notes:
 <a name="210121153147"></a><a name="dependencies"></a>
 ## Dependencies
 
-The library is available for both Scala 2.12 and 2.13 (3.0 will be more [challenging](https://users.scala-lang.org/t/introducing-gallia-a-library-for-data-manipulation/7112/12?u=anthony.cros))
+The library is available for Scala 2.12, 2.13, and 3.3.1
 
 <a name="sbt"></a><a name="210121153201"></a>
 Include the following in your `build.sbt` file:
 ```
-libraryDependencies += "io.github.galliaproject" %% "gallia-core" % "0.5.0"
+libraryDependencies += "io.github.galliaproject" %% "gallia-core" % "0.6.0"
 ```
 
 <a name="210121153200"></a>

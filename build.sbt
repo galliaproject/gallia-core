@@ -7,7 +7,7 @@ ThisBuild / organizationName     := "Gallia Project"
 ThisBuild / organization         := "io.github.galliaproject" // *must* match groupId for sonatype
 ThisBuild / organizationHomepage := Some(url("https://github.com/galliaproject"))
 ThisBuild / startYear            := Some(2021)
-ThisBuild / version              := "0.6.0-SNAPSHOT"
+ThisBuild / version              := "0.6.0"
 ThisBuild / description          := "A Scala library for data manipulation"
 ThisBuild / homepage             := Some(url("https://github.com/galliaproject/gallia-core"))
 ThisBuild / licenses             := Seq("Apache 2" -> url("https://github.com/galliaproject/gallia-core/blob/master/LICENSE"))
@@ -31,7 +31,7 @@ lazy val reflect = (project in file("reflect"))
 lazy val core = (project in file("core"))
   .settings(
     name   := "gallia-core",
-    target := baseDirectory.value / "bin" / "core")
+    target := baseDirectory.value / ".." / "bin" / "core")
   .settings(GalliaCommonSettings.mainSettings:_*)
   .dependsOn(reflect) // TODO: also bring in gallia-macros
 
@@ -73,4 +73,5 @@ publishMavenStyle      := true
 publishTo              := sonatypePublishToBundle.value
 
 // ===========================================================================
+ThisBuild / logLevel in compile := Level.Error
 

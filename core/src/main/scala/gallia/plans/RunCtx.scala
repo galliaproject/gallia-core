@@ -6,8 +6,8 @@ import aptus.{Seq_, String_}
 // ===========================================================================
 private case class RunCtx[$Data](
     nodeId   : NodeId,
-    nodeAtom : Atom,    
-    debug    : AtomNodeDebugging,
+    nodeAtom : Atom,
+    ctx      : AtomMetaContext,
     throwable: Throwable,
     inputData: InputData) {
 
@@ -21,17 +21,17 @@ private case class RunCtx[$Data](
         "message"    .padRight(12, ' ') -> throwable.getMessage,
 
         // ---------------------------------------------------------------------------
-        "node.parent".padRight(12, ' ') -> debug.parentId,
+        "node.parent".padRight(12, ' ') -> ctx.actionId,
         "node.id"    .padRight(12, ' ') -> nodeId,
         "node.atom"  .padRight(12, ' ') -> nodeAtom,
-          "afferent schema(s):" -> debug.ctx.formatDebugAfferents,
+          "afferent schema(s):" -> ctx.actionMetaCtx.formatDebugAfferents,
             "example input data:" -> inputData.formatDebug.sectionAllOff.newline, // TODO: may not show the relevant object if Objs... (see t210114111539) - hence "example" for now
-          "efferent schema:"    -> debug.ctx.formatDebugEfferent,
+          "efferent schema:"    -> ctx.actionMetaCtx.formatDebugEfferent,
 
         // ---------------------------------------------------------------------------
         // have those twice as the rest can be big
         "message".padRight(12, ' ') -> throwable.getMessage,
-        "origin" .padRight(12, ' ') -> debug.origin.formatDefault)
+        "origin" .padRight(12, ' ') -> ctx.actionMetaCtx.origin.formatDefault)
       .map { case (key, value) => s"${key}\t${value}" }
       .joinln
       .sectionAllOff(2)

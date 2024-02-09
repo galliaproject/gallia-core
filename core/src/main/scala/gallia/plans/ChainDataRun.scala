@@ -15,7 +15,7 @@ object ChainDataRun {
         if (gallia.isOswoPrototypeEnabled)
           atomNode.atom.optim(
             atomNode.id, fromIdOpt)(isLast)(
-            atomNode.debug.ctx.efferent /* remove eventually */)
+            atomNode.ctx.actionMetaCtx.efferent /* remove eventually */)
 
         // ---------------------------------------------------------------------------
         latest =

@@ -9,15 +9,14 @@ import dag.HasNodeId
 case class ActionNode(
       id    : NodeId,
       atoms : Seq[Atom], // may be empty, eg for ValidateX or OutputX
-      ctx   : NodeMetaContext,
-      origin: CallSite)
+      ctx   : NodeMetaContext)
     extends HasNodeId {
 
   override def toString: String = formatDefault
 
     def formatDefault: String =
       atoms match {
-        case Nil       => s"no-atoms:${origin.formatDefault}"
+        case Nil       => s"no-atoms:${ctx.origin.formatDefault}"
         case Seq(sole) => sole.formatDefault
         case mult      => mult.zipWithRank.map { case (atom, rank) => ??? /*atom.formatDefault*/ }.join(", ") }
 
@@ -31,12 +30,9 @@ case class ActionNode(
     // ---------------------------------------------------------------------------
     private def atomNode(newNodeId: NodeId, atom: Atom): AtomNode =
       AtomNode(
-          newNodeId,
-          atom,
-          AtomNodeDebugging(
-              parentId = id,
-              ctx,
-              origin))
+        newNodeId,
+        atom,
+        AtomMetaContext(actionId = id, ctx))
 
     // ---------------------------------------------------------------------------
     private[plans] def atomNodeIds: Seq[NodeId] =

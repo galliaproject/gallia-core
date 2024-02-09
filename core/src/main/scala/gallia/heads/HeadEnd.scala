@@ -62,7 +62,7 @@ case class HeadEnd private (leafId : LeafId) {
       Env
         .retrieveDagFromNode(leafId)
         .afferentSubGraph   (leafId)
-        .pipe(IntermediatePlanPopulator.apply)
+        .pipe(new IntermediatePlan(_))
 
   }
 

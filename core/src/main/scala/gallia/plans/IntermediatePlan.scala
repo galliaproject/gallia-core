@@ -5,51 +5,64 @@ import aptus.Anything_
 import run._
 
 // ===========================================================================
-case class IntermediatePlan private[plans] (dag: env.ActionDag) {
-
-  def run(): IntermediateMetaResult =
-      dag
-        .transform { _ .intermediateMetaResultNode(dataMap) }(newIdResolver = _.id)
-        .pipe(IntermediateMetaResult.apply)
-
-  // ===========================================================================
-  private def dataMap: Map[NodeId, ResultSchema] = {
-      val mut = collection.mutable.Map[NodeId, ResultSchema]()
-
-      // ---------------------------------------------------------------------------
-      dag
-        .kahnTraverseNodes // any topological order will do though
-        .foreach { x =>
-          val inputs =
-            dag
-              .afferentIds(x.id) // may be empty if root
-              .map(mut.apply)
-
-          mut +=
-            x.id ->
-              resultSchema(inputs)(x.actionvmn) }
-
-      // ---------------------------------------------------------------------------
-      mut.toMap }
+class IntermediatePlan private[gallia] (dag: env.ActionDag) {
+    dag
+      .nodes
+      .foreach { // TODO: move to transform3 (else may fail at runtime); may need classtag
+         _.ensuring(!_.isNestingMetaPlaceholder) }
 
     // ---------------------------------------------------------------------------
-    private def resultSchema(inputs: Seq[ResultSchema])(actionm: ActionVN with ActionMN): ResultSchema =
-      inputs
-        .map(_.successOpt)
-        .in.noneIf(_.exists(_.isEmpty)) // = none if any failure
-        .map(_.flatten)
-        .map(Clss.apply)
-         match {
-          case None       => ResultSchema.UpstreamError
-          case Some(afferentClss) =>
-            actionm.vldt(afferentClss) match {
-              case Nil =>
-                actionm
-                  ._meta(afferentClss)
-                  .tap { efferent =>
-                    actionm._metaContext =
-                      NodeMetaContext(afferentClss, efferent, CallSite(None, Nil)) }
-                  .pipe(ResultSchema.Success.apply)
-              case errors => ResultSchema.Errors(errors, actionm.callSite) } } }
+    def run(): IntermediateMetaResult =
+      IntermediatePlan
+        .populateDataMap(dag)
+        .pipe(IntermediatePlan.run(dag)) }
+
+  // ===========================================================================
+  object IntermediatePlan {
+
+    private def run(dag: env.ActionDag)(dataMap: Map[NodeId, ResultSchema]): IntermediateMetaResult =
+        dag
+          .transform { _ .intermediateMetaResultNode(dataMap) }(newIdResolver = _.id)
+          .pipe(IntermediateMetaResult.apply)
+
+    // ===========================================================================
+    private def populateDataMap(dag: env.ActionDag): Map[NodeId, ResultSchema] = {
+        val mut = collection.mutable.Map[NodeId, ResultSchema]()
+
+        // ---------------------------------------------------------------------------
+        dag
+          .kahnTraverseNodes // any topological order will do though
+          .foreach { pair =>
+            val inputs =
+              dag
+                .afferentIds(pair.id) // may be empty if root
+                .map(mut.apply)
+
+            mut +=
+              pair.id ->
+                resultSchema(inputs)(pair.actionvm) }
+
+        // ---------------------------------------------------------------------------
+        mut.toMap }
+
+      // ===========================================================================
+      private def resultSchema(inputs: Seq[ResultSchema])(actionvm: ActionVN with ActionMN): ResultSchema =
+        inputs
+          .map(_.successOpt)
+          .in.noneIf(_.exists(_.isEmpty)) // = none if any failure
+          .map(_.flatten)
+          .map(Clss.apply)
+           match {
+            case None       => ResultSchema.UpstreamError
+            case Some(afferentClss) =>
+              actionvm.vldt(afferentClss) match {
+                case Nil =>
+                  actionvm
+                    ._meta(afferentClss)
+                    .tap { efferent =>
+                      actionvm._metaContext =
+                        NodeMetaContext(afferentClss, efferent, CallSite(None, Nil)) }
+                    .pipe(ResultSchema.Success.apply)
+                case errors => ResultSchema.Errors(errors, actionvm.callSite) } } }
 
 // ===========================================================================

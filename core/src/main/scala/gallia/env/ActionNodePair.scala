@@ -4,21 +4,21 @@ package env
 import dag.NodeId
 
 // ===========================================================================
-case class ActionNodePair(id: NodeId, actionvmn: ActionVN with ActionMN) {
-    def tranform(f: ActionVN with ActionMN => ActionVN with ActionMN): ActionNodePair = copy(actionvmn = f(actionvmn))
+case class ActionNodePair(id: NodeId, actionvm: ActionVN with ActionMN) {
+    def tranform(f: ActionVN with ActionMN => ActionVN with ActionMN): ActionNodePair = copy(actionvm = f(actionvm))
 
     // ---------------------------------------------------------------------------
-    def isNestingMetaPlaceholder: Boolean = actionvmn.isInstanceOf[heads.HeadsNestingHandler.NestingMetaPlaceholder]
+    def isNestingMetaPlaceholder: Boolean = actionvm.isInstanceOf[heads.HeadsNestingHandler.NestingMetaPlaceholder]
     def isActionXO: Boolean =
-      actionvmn.isInstanceOf[ActionUO] ||
-      actionvmn.isInstanceOf[ActionZO]
+      actionvm.isInstanceOf[ActionUO] ||
+      actionvm.isInstanceOf[ActionZO]
 
     // ---------------------------------------------------------------------------
     def intermediateMetaResultNode(data: Map[NodeId, run.ResultSchema]) =
       run.IntermediateMetaResultNode(
         id,
-        origin   = actionvmn.callSite,
-        actionan = actionvmn.pipe(ActionNodePair.actionAN),
+        origin   = actionvm.callSite,
+        actionan = actionvm.pipe(ActionNodePair.actionAN),
         result   = id.pipe(data)) }
 
   // ===========================================================================

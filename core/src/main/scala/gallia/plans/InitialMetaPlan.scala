@@ -5,7 +5,7 @@ import aptus.Anything_
 import run._
 
 // ===========================================================================
-class IntermediatePlan private[gallia](actionMetaDag: ActionMetaDag)
+class InitialMetaPlan private[gallia](actionMetaDag: ActionMetaDag)
       extends dag.GalliaDAG[ActionMetaNode, Nothing, ActionVMN](actionMetaDag) {
     actionMetaDag
       .nodes
@@ -14,12 +14,12 @@ class IntermediatePlan private[gallia](actionMetaDag: ActionMetaDag)
 
     // ---------------------------------------------------------------------------
     def run(): IntermediateMetaPlan =
-      IntermediatePlan
+      InitialMetaPlan
         .populateDataMap(actionMetaDag)
-        .pipe(IntermediatePlan.run(actionMetaDag)) }
+        .pipe(InitialMetaPlan.run(actionMetaDag)) }
 
   // ===========================================================================
-  object IntermediatePlan {
+  object InitialMetaPlan {
 
     private def run(actionMetaDag: ActionMetaDag)(dataMap: Map[NodeId, ResultSchema]): IntermediateMetaPlan =
         actionMetaDag

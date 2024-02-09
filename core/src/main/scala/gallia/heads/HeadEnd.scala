@@ -15,20 +15,20 @@ case class HeadEnd private (leafId : LeafId) {
 
     // ---------------------------------------------------------------------------
     def runMetaOnly(): RunResultM =
-      adagm
+      initialMetaPlan
         .run().intermediateEither
         .map((SuccessResultM.apply _).tupled)
         .pipe(RunResultM)
 
     // ===========================================================================
     private[gallia] def runToNdt(): Either[MetaErrorResult, (SuccessMetaPlan, NDT)] =
-        adagm
+        initialMetaPlan
           .run().intermediateEither
           .map(_.mapSecond(_.atomPlan.naiveRun()))
 
     // ---------------------------------------------------------------------------
     private[gallia] def run[$Data](): RunResult[SuccessResult[$Data], $Data] =
-        adagm
+        initialMetaPlan
           .run().intermediateEither
           .map(_.mapSecond(_.atomPlan.naiveRun().value.asInstanceOf[$Data]))
           .map(x => new SuccessResult(x._1, x._2))
@@ -36,7 +36,7 @@ case class HeadEnd private (leafId : LeafId) {
   
       // ---------------------------------------------------------------------------
       def runu(): RunResultU =
-        adagm
+        initialMetaPlan
           .run().intermediateEither
           .map(_.mapSecond(_.atomPlan.naiveRun().forceO))
           .map((SuccessResultU.apply _).tupled)
@@ -44,7 +44,7 @@ case class HeadEnd private (leafId : LeafId) {
   
       // ---------------------------------------------------------------------------
       def runz(): RunResultZ =
-        adagm
+        initialMetaPlan
           .run().intermediateEither
           .map(_.mapSecond(_.atomPlan.naiveRun().forceZ))
           .map((SuccessResultZ.apply _).tupled)
@@ -52,18 +52,18 @@ case class HeadEnd private (leafId : LeafId) {
   
       // ---------------------------------------------------------------------------
       def runv[T](): RunResultV[T] =
-        adagm
+        initialMetaPlan
           .run().intermediateEither
           .map(_.mapSecond(_.atomPlan.naiveRun().forceT[T]))
           .map(x => SuccessResultV[T](x._1, x._2)) // TODO: t210117104246 - can use .tupled?
           .pipe(RunResultV[T])
 
     // ===========================================================================
-    private def adagm: IntermediatePlan =
+    private def initialMetaPlan: InitialMetaPlan =
       Env
         .retrieveDagFromNode(leafId)
         .afferentSubGraph   (leafId)
-        .pipe(new IntermediatePlan(_))
+        .pipe(new InitialMetaPlan(_))
 
   }
 

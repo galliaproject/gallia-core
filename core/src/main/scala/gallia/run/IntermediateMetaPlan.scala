@@ -8,8 +8,8 @@ import result._
 
 // ===========================================================================
 /** meta may still have failed here */
-class IntermediateMetaResult(dag: DAG[IntermediateMetaResult.Node])
-        extends gallia.dag.GalliaDAG [IntermediateMetaResult.Node, CallSite, ActionAN](dag) {
+class IntermediateMetaPlan(dag: DAG[IntermediateMetaPlan.Node])
+        extends gallia.dag.GalliaDAG [IntermediateMetaPlan.Node, CallSite, ActionAN](dag) {
 
       override def toString: String = formatDefault
 
@@ -60,13 +60,13 @@ class IntermediateMetaResult(dag: DAG[IntermediateMetaResult.Node])
           case ResultSchema.Success(value)         => value }
 
       // ===========================================================================
-      private def leafNode: IntermediateMetaResult.Node =
+      private def leafNode: IntermediateMetaPlan.Node =
         dag
           .leaves
           .force.one /* since ASG */ }
 
   // ===========================================================================
-  object IntermediateMetaResult {
+  object IntermediateMetaPlan {
     case class Node(id: NodeId, origin: CallSite, actiona: ActionAN, result: ResultSchema)
         extends HasNodeId
         with    HasNodeContext[CallSite]

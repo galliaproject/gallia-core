@@ -3,7 +3,6 @@ package plans
 
 import aptus.Anything_
 import run._
-import env._
 
 // ===========================================================================
 class IntermediatePlan private[gallia](actionMetaDag: ActionMetaDag)
@@ -14,7 +13,7 @@ class IntermediatePlan private[gallia](actionMetaDag: ActionMetaDag)
          _.ensuring(!_.isNestingMetaPlaceholder) }
 
     // ---------------------------------------------------------------------------
-    def run(): IntermediateMetaResult =
+    def run(): IntermediateMetaPlan =
       IntermediatePlan
         .populateDataMap(actionMetaDag)
         .pipe(IntermediatePlan.run(actionMetaDag)) }
@@ -22,10 +21,10 @@ class IntermediatePlan private[gallia](actionMetaDag: ActionMetaDag)
   // ===========================================================================
   object IntermediatePlan {
 
-    private def run(actionMetaDag: ActionMetaDag)(dataMap: Map[NodeId, ResultSchema]): IntermediateMetaResult =
+    private def run(actionMetaDag: ActionMetaDag)(dataMap: Map[NodeId, ResultSchema]): IntermediateMetaPlan =
         actionMetaDag
-          .transform { _ .intermediateMetaResultNode(dataMap) }(newIdResolver = _.id)
-          .pipe(new IntermediateMetaResult(_))
+          .transform { _ .intermediateMetaPlanNode(dataMap) }(newIdResolver = _.id)
+          .pipe(new IntermediateMetaPlan(_))
 
     // ===========================================================================
     private def populateDataMap(actionMetaDag: ActionMetaDag): Map[NodeId, ResultSchema] = {

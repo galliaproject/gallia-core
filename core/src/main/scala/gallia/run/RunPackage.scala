@@ -2,7 +2,7 @@ package gallia
 
 // ===========================================================================
 package object run {
-  type MetaErrorResult = IntermediateMetaResult
+  type MetaErrorResult = IntermediateMetaPlan
 
   // ---------------------------------------------------------------------------
   type    NodeId         = gallia.dag.   NodeId

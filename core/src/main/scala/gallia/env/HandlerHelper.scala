@@ -2,6 +2,7 @@ package gallia
 package env
 
 import dag._
+import env.NodePair
 
 // ===========================================================================
 class HandlerHelper() {
@@ -11,7 +12,7 @@ class HandlerHelper() {
     val rootId = Env.nextNodeId()
     Env.associateNode(rootId -> dagId)
 
-    val dag: ActionDag = DAG.trivial[gallia.env.NodePair](_._1)(rootId -> input)
+    val dag: ActionDag = DAG.trivial[gallia.env.NodePair](_.id)(NodePair(rootId, input))
     Env.associateDag(dagId -> dag)
 
     rootId
@@ -22,7 +23,7 @@ class HandlerHelper() {
     val (dagId, originalDag) = Env.retrieveDagPair(nodeId)
 
     val newNodeId = Env.nextNodeId()
-    val updatedDag = originalDag.appendNode(nodeId -> (newNodeId, action))
+    val updatedDag = originalDag.appendNode(nodeId -> NodePair(newNodeId, action))
 
     Env.associateNode(newNodeId -> dagId)
     Env.associateDag(dagId -> updatedDag)
@@ -39,9 +40,9 @@ class HandlerHelper() {
     val (originalDagId2, originalDag2) = Env.retrieveDagPair(thatNodeId)
 
     val newDag =
-      originalDag1.appendNode(thisNodeId -> (newNodeId, action))
+      originalDag1.appendNode(thisNodeId -> NodePair(newNodeId, action))
         .mergeBlindly(
-      originalDag2.appendNode(thatNodeId -> (newNodeId, action)) )
+      originalDag2.appendNode(thatNodeId -> NodePair(newNodeId, action)) )
 
     Env.associateDag(newDagId -> newDag)
     Env.dissociateDag(originalDagId1)
@@ -57,17 +58,15 @@ class HandlerHelper() {
   }
 
   // ===========================================================================
-  import gallia.actions.CanForceAs1
-
-  // ---------------------------------------------------------------------------
   def updateAs(nodeId: NodeId, key: Key) = { // TODO: t210116192032 - generalize
       val (dagId, dag) = Env.retrieveDagPair(nodeId)
 
       val updatedDag: ActionDag =
-        dag.transformNode[Node](nodeId) { // by design
-          _ .asInstanceOf[CanForceAs1[_]]
-            .forceAs(key)
-            .asInstanceOf[Node] }
+        dag.transformNodeTypeConditionally(_ == nodeId) {
+          _.tranform {
+            _ .asInstanceOf[actions.CanForceAs1[_]] /* by design */
+              .forceAs(key)
+              .asInstanceOf[Node]  /* by design */ } }
 
       Env.associateDag(dagId -> updatedDag)
       

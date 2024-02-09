@@ -20,15 +20,15 @@ private object IntermediatePlan {
       // ---------------------------------------------------------------------------
       dag
         .kahnTraverseNodes // any topological order will do though
-        .foreach { case (id, actionm) =>
+        .foreach { x =>
           val inputs =
             dag
-              .afferentIds(id) // may be empty if root
+              .afferentIds(x.id) // may be empty if root
               .map(mut.apply)
 
           mut +=
-            id ->
-              resultSchema(inputs)(actionm) }
+            x.id ->
+              resultSchema(inputs)(x.actionvmn) }
 
       // ---------------------------------------------------------------------------
       mut.toMap }

@@ -8,12 +8,12 @@ object IntermediateMetaResultNodeCreator {
 
   def apply(asg: gallia.env.ActionDag)(data: Map[NodeId, ResultSchema]): IntermediateMetaResult =
     asg
-      .transform { case (id, action) =>
+      .transform { x =>
           IntermediateMetaResultNode(
-              id,
-              origin   = action.callSite,
-              actionan = actionAN(action),
-              result   = data(id)) }(
+              x.id,
+              origin   = x.actionvmn.callSite,
+              actionan = x.actionvmn.pipe(actionAN),
+              result   = x.id.pipe(data)) }(
         newIdResolver = _.id)
       .pipe(IntermediateMetaResult.apply)
 

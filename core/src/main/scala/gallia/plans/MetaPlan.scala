@@ -22,9 +22,9 @@ case class MetaPlan(dag: ActionDag) { // requires slightly larger glasses
   private def addMetaInput(rootId: RootId, c: Cls): MetaPlan =
     dag
       .assert(
-          _.lookup(rootId)._2.isInstanceOf[NestingMetaPlaceholder],
+          _.lookup(rootId).isNestingMetaPlaceholder,
           _.lookup(rootId))
-      .replaceNode(rootId -> InMemoryMetaInput(c))
+      .replaceNode(env.NodePair(rootId, InMemoryMetaInput(c)))
       .pipe(MetaPlan.apply)
 }
 

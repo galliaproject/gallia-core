@@ -11,12 +11,7 @@ import env._
     protected[gallia] final def end(): HeadEnd = handler.end(this)
 
     protected[gallia] final def underlyingDagHasOnlyOutputLeaves: Boolean =
-      retrieveDag
-        .leaves
-        .forall { case (_, node) =>
-          // by design...; TODO: create common XO trait
-          node.isInstanceOf[ActionUO] ||
-          node.isInstanceOf[ActionZO] }
+      retrieveDag.leaves.forall(_.isActionXO /* by design */) // TODO: create common XO trait
 
     // ---------------------------------------------------------------------------
     private def retrieveDag: ActionDag = Env.retrieveDagFromNode(nodeId) }

@@ -141,11 +141,19 @@ class DAG[$NodeType](
             (newIdResolver: $NewNodeType => NodeId)
           : DAG[$NewNodeType] =
         new DAG[$NewNodeType](
-          nodes
-          .toList.map(f),
+          nodes.toList.map(f),
           edges.map(x => (g(x._1), g(x._2))), //TODO:?
           newIdResolver)
 
+    def transformNodeTypeConditionally
+            (p: NodeId => Boolean)
+            (f: $NodeType => $NodeType)
+          : DAG[$NodeType] =
+        new DAG[$NodeType](
+          nodes.mapIf(_.pipe(idResolver).pipe(p))(f).toList,
+          edges, idResolver)
+
+      // ---------------------------------------------------------------------------
       // TODO: un-generalize...
       def transform2[A, B](f: A => B)(implicit ev: $NodeType <:< (NodeId, A)): DAG[(NodeId, B)] =
           transform({ case (id, x) => (id.asInstanceOf[NodeId], f(x.asInstanceOf[A])) })(_._1)
@@ -154,13 +162,6 @@ class DAG[$NodeType](
 
         def transform4[B <: HasNodeId](f: $NodeType => B)  (implicit ev: $NodeType <:< HasNodeId): DAG[B]      = transform(f)(_.id)
         def transform5                (f: NodeId => NodeId)(implicit ev: $NodeType =:= NodeId)   : DAG[NodeId] = transform(n => f(n.asInstanceOf[NodeId]))(id => id)
-
-      // ---------------------------------------------------------------------------
-      def transformNode[A](id: NodeId)(f: A => A)(implicit ev: $NodeType <:< (NodeId, A)): Self =
-        new DAG(
-          nodes.mapIf(_._1 == id) { x => (x._1 -> f(x._2)).asInstanceOf[$NodeType] },
-          edges,
-          idResolver)
 
     // ===========================================================================
     // must ensure common nodes/edges have already been added on both sides

@@ -6,7 +6,8 @@ import aptus._
 import dag._
 
 // ===========================================================================
-case class AtomPlan(atomDag: DAG[AtomNode]) { // = data plan (TODO: rename?)
+class AtomPlan(atomDag: DAG[AtomNode]) // = data plan (TODO: rename?)
+    extends GalliaDAG[AtomNode](atomDag) {
 
   override def toString: String = formatSuccinct1
     def formatDefault  : String = atomDag.formatDefault
@@ -21,7 +22,7 @@ case class AtomPlan(atomDag: DAG[AtomNode]) { // = data plan (TODO: rename?)
       
         ${atomDag.edges.map{ case (f, t) => s"${f.quote} -> ${t.quote}"}.joinln} }"""
 
-  // ---------------------------------------------------------------------------
+  // ===========================================================================
   private def nestingPlaceholderRootIds(dag: DAG[AtomNode]): Seq[RootId] =
     dag.roots.filter(_.atom == NestingDataPlaceholder).map(_.id)
 
@@ -34,6 +35,9 @@ case class AtomPlan(atomDag: DAG[AtomNode]) { // = data plan (TODO: rename?)
       .nodes // TODO: t210614142629 - confirm/enforce guaranteed topologically sorted if chain?
       .tail  // TODO: confirm always has placeholder
       .pipe(ChainAtomNodes.apply)
+
+  // ---------------------------------------------------------------------------
+  private[AtomPlan] def transformUnderlyingDag(f: DAG[AtomNode] => DAG[AtomNode]): DAG[AtomNode] = f(atomDag)
 
   // ===========================================================================    
   def naiveRun(missingInputs: Map[RootId, NDT] = Map()): NDT = // TODO: t201027130649 - abstract runner strategy       
@@ -125,8 +129,7 @@ object AtomPlan {
 
   def stitchAll(atomPlans: Seq[AtomPlan]): AtomPlan =  
     atomPlans
-      .map(_.atomDag)
-      .map(_.exciseAllFromChain(_.isNestedOrIdentity))
+      .map { _.transformUnderlyingDag { _.exciseAllFromChain(_.isNestedOrIdentity) } }
       .reduceLeft { (previous, current) =>
         val previousLeaf = previous.leaveIds.force.one  
         val currentRoot  = current .rootIds .force.one
@@ -134,6 +137,6 @@ object AtomPlan {
         current.mergeDisjointContinuous(
             previous)(
             previousLeaf -> currentRoot) }
-    .pipe(AtomPlan.apply) }
+      .pipe { new AtomPlan(_) } }
 
 // ===========================================================================

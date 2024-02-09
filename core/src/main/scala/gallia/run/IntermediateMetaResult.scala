@@ -1,14 +1,15 @@
 package gallia
 package run
 
-import aptus.{String_, Seq_, Option_}
+import aptus.{Anything_, String_, Seq_, Option_}
 
 import plans._
 import result._
 
 // ===========================================================================
 /** meta may still have failed here */
-case class IntermediateMetaResult(dag: DAG[IntermediateMetaResultNode]) {
+class IntermediateMetaResult(dag: DAG[IntermediateMetaResultNode])
+        extends gallia.dag.GalliaDAG[IntermediateMetaResultNode](dag) {
 
       override def toString: String = formatDefault
 
@@ -23,9 +24,9 @@ case class IntermediateMetaResult(dag: DAG[IntermediateMetaResultNode]) {
           else
             dag
               .transform(_.successOpt.force)(_.id)
-              .pipe(SuccessMetaResult.apply)
-              .pipe { successMetaResult =>
-                Right(successMetaResult -> ActionPlanPopulator(successMetaResult.dag)) }
+              .pipe { new SuccessMetaResult(_) }
+              .associateRight(_.actionPlan)
+              .in.right
 
         // ---------------------------------------------------------------------------
         def forceNestedActionPlan: ActionPlan =

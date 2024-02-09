@@ -3,9 +3,11 @@ package plans
 
 import aptus.Anything_
 import run._
+import env._
 
 // ===========================================================================
-class IntermediatePlan private[gallia] (dag: env.ActionDag) {
+class IntermediatePlan private[gallia](dag: ActionDag)
+      extends gallia.dag.GalliaDAG[ActionNodePair](dag) {
     dag
       .nodes
       .foreach { // TODO: move to transform3 (else may fail at runtime); may need classtag
@@ -23,7 +25,7 @@ class IntermediatePlan private[gallia] (dag: env.ActionDag) {
     private def run(dag: env.ActionDag)(dataMap: Map[NodeId, ResultSchema]): IntermediateMetaResult =
         dag
           .transform { _ .intermediateMetaResultNode(dataMap) }(newIdResolver = _.id)
-          .pipe(IntermediateMetaResult.apply)
+          .pipe(new IntermediateMetaResult(_))
 
     // ===========================================================================
     private def populateDataMap(dag: env.ActionDag): Map[NodeId, ResultSchema] = {

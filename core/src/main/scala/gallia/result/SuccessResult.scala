@@ -5,9 +5,7 @@ package result
 class SuccessResult[$Data](
       val meta: SuccessMetaResult,
       val data: $Data) {
-    def leavesCount = meta.dag.leaves.size  
-    def pair: (Cls, $Data) = (meta.forceLeafClass, data)  
-  }
+    def pair: (Cls, $Data) = (meta.forceLeafClass, data) }
 
   // ===========================================================================
   case class SuccessResultM   (override val meta: SuccessMetaResult, override val data: Plan) extends SuccessResult[Plan](meta, data) { def value: Plan  = data }

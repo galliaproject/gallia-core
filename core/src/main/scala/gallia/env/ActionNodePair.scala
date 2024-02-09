@@ -15,7 +15,7 @@ case class ActionNodePair(id: NodeId, actionvm: ActionVN with ActionMN) {
 
     // ---------------------------------------------------------------------------
     def intermediateMetaResultNode(data: Map[NodeId, run.ResultSchema]) =
-      run.IntermediateMetaResultNode(
+      new run.IntermediateMetaResultNode(
         id,
         origin   = actionvm.callSite,
         actionan = actionvm.pipe(ActionNodePair.actionAN),

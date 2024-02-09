@@ -31,8 +31,8 @@ private object TestValue {
         case util.Failure(f)   => problem(f.getMessage)
         case util.Success(res) =>
           res.resultEither match {
-            case Left (metaErrorResult)                                   => problem(s"210414125640:${metaErrorResult.formatErrors}")
-            case Right(successResult) if (successResult.leavesCount != 1) => problem(s"210414125643:MultipleLeaves")
+            case Left (metaErrorResult)                                        => problem(s"210414125640:${metaErrorResult.formatErrors}")
+            case Right(successResult) if (successResult.meta.leavesCount != 1) => problem(s"210414125643:MultipleLeaves")
             case Right(successResult) =>
               val (meta, data0) = successResult.pair
               val data = data0 match {
@@ -56,8 +56,8 @@ private object TestValue {
         case util.Failure(f)   => problem(f.getMessage)
         case util.Success(res) =>
           res.resultEither match {
-            case Left (metaErrorResult)                                   => problem(s"210414125640:${metaErrorResult.formatErrors}")
-            case Right(successResult) if (successResult.leavesCount != 1) => problem(s"210414125643:MultipleLeaves")
+            case Left (metaErrorResult)                                        => problem(s"210414125640:${metaErrorResult.formatErrors}")
+            case Right(successResult) if (successResult.meta.leavesCount != 1) => problem(s"210414125643:MultipleLeaves")
             case Right(successResult) =>
               val (_, data) = successResult.pair
               

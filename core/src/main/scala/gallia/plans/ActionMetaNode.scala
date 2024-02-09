@@ -20,12 +20,12 @@ case class ActionMetaNode(id: NodeId, actionvm: ActionVMN)
       actionvm.isInstanceOf[ActionZO]
 
     // ---------------------------------------------------------------------------
-    def intermediateMetaPlanNode(data: Map[NodeId, run.ResultSchema]) =
+    def intermediateMetaPlanNode(data: Map[NodeId, run.PotentialResultSchema]) =
       new run.IntermediateMetaPlan.Node(
         id,
-        origin  = actionvm.callSite,
-        actiona = actionvm.pipe(ActionMetaNode.actionAN),
-        result  = id.pipe(data)) }
+        origin                = actionvm.callSite,
+        actiona               = actionvm.pipe(ActionMetaNode.actionAN),
+        potentialResultSchema = id.pipe(data)) }
 
   // ===========================================================================
   object ActionMetaNode {

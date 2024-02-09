@@ -4,19 +4,19 @@ package run
 import aptus.{String_, Seq_}
 
 // ===========================================================================
-sealed trait ResultSchema {
+sealed trait PotentialResultSchema {
     def successOpt: Option[Cls]
-    def errorOpt  : Option[ResultSchema.Errors]
+    def errorOpt  : Option[PotentialResultSchema.Errors]
 
     // ---------------------------------------------------------------------------
     def errors    : Errs    = errorOpt.toSeq.flatMap(_.values) // may be empty
     def isError   : Boolean = errors.nonEmpty }
 
   // ===========================================================================
-  object ResultSchema {
-    case object UpstreamError                          extends ResultSchema { def successOpt = None       ; val errorOpt = None  }
-    case class  Success(value: Cls)                    extends ResultSchema { def successOpt = Some(value); val errorOpt = None    }
-    case class  Errors(values: Errs, origin: CallSite) extends ResultSchema { def successOpt = None       ; val errorOpt = Some(this)
+  object PotentialResultSchema {
+    case object UpstreamError                          extends PotentialResultSchema { def successOpt = None       ; val errorOpt = None  }
+    case class  Success(value: Cls)                    extends PotentialResultSchema { def successOpt = Some(value); val errorOpt = None    }
+    case class  Errors(values: Errs, origin: CallSite) extends PotentialResultSchema { def successOpt = None       ; val errorOpt = Some(this)
       def formatExceptionMessage: String =
         Seq(
               origin.formatDefault,

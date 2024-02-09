@@ -262,7 +262,7 @@ package gallia {
   trait HasToObj { def toObj: Obj }
 
   // ---------------------------------------------------------------------------
-  case class MetaError(errors: gallia.run.ResultSchema.Errors) extends RuntimeException(errors.formatExceptionMessage)
+  case class MetaError(errors: run.PotentialResultSchema.Errors) extends RuntimeException(errors.formatExceptionMessage)
 
   /** those can't be called until we have the actual data's (eg ensure uniqueness, pivot for new keys, ...) */
   case class RuntimeError   (details: Any) extends RuntimeException(details.toString)

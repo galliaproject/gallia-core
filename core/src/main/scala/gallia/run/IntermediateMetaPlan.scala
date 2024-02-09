@@ -36,7 +36,7 @@ class IntermediateMetaPlan(dag: DAG[IntermediateMetaPlan.Node])
             case Right((_, actionPlan)) => actionPlan }
 
       // ===========================================================================
-      def allErrors: Errs = dag.kahnTraverseNodes.flatMap(_.result.errors)
+      def allErrors: Errs = dag.kahnTraverseNodes.flatMap(_.potentialResultSchema.errors)
 
         // ---------------------------------------------------------------------------
         def containsAllErrorMarkers(markers: Seq[String]): Boolean =
@@ -47,17 +47,18 @@ class IntermediateMetaPlan(dag: DAG[IntermediateMetaPlan.Node])
       def metaErrorOpt: Option[MetaError] =
         dag
           .kahnTraverseNodes
-          .map(_.result)
+          .map(_.potentialResultSchema)
           .dropWhile(!_.isError)
           .headOption
           .map(_.errorOpt.get /* since isError */)
           .map(MetaError)
 
       // ---------------------------------------------------------------------------
-      def forceLeafClass: Cls  = leafNode.result match {
-          case ResultSchema.UpstreamError          => aptus.illegalState("UpstreamError:201006134638") //TODO
-          case ResultSchema.Errors(values, origin) => aptus.illegalState(s"MetaErrors:201006134639:${values}:${origin}") //TODO
-          case ResultSchema.Success(value)         => value }
+      def forceLeafClass: Cls =
+        leafNode.potentialResultSchema match {
+          case PotentialResultSchema.UpstreamError          => aptus.illegalState("UpstreamError:201006134638") //TODO
+          case PotentialResultSchema.Errors(values, origin) => aptus.illegalState(s"MetaErrors:201006134639:${values}:${origin}") //TODO
+          case PotentialResultSchema.Success(value)         => value }
 
       // ===========================================================================
       private def leafNode: IntermediateMetaPlan.Node =
@@ -67,7 +68,7 @@ class IntermediateMetaPlan(dag: DAG[IntermediateMetaPlan.Node])
 
   // ===========================================================================
   object IntermediateMetaPlan {
-    case class Node(id: NodeId, origin: CallSite, actiona: ActionAN, result: ResultSchema)
+    case class Node(id: NodeId, origin: CallSite, actiona: ActionAN, potentialResultSchema: PotentialResultSchema)
         extends HasNodeId
         with    HasNodeContext[CallSite]
         with    dag.HasNodeTarget [ActionAN] {
@@ -75,10 +76,10 @@ class IntermediateMetaPlan(dag: DAG[IntermediateMetaPlan.Node])
       protected val target = actiona
 
       // ---------------------------------------------------------------------------
-      def isSuccess: Boolean = result.successOpt.isDefined
+      def isSuccess: Boolean = potentialResultSchema.successOpt.isDefined
 
       def successOpt: Option[SuccessMetaPlan.Node] =
-        result
+        potentialResultSchema
           .successOpt
           .map(SuccessMetaPlan.Node(id, origin, actiona, _)) } }
 

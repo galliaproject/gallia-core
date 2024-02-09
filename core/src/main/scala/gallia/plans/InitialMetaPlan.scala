@@ -21,14 +21,14 @@ class InitialMetaPlan private[gallia](actionMetaDag: ActionMetaDag)
   // ===========================================================================
   object InitialMetaPlan {
 
-    private def run(actionMetaDag: ActionMetaDag)(dataMap: Map[NodeId, ResultSchema]): IntermediateMetaPlan =
+    private def run(actionMetaDag: ActionMetaDag)(dataMap: Map[NodeId, PotentialResultSchema]): IntermediateMetaPlan =
         actionMetaDag
           .transform { _ .intermediateMetaPlanNode(dataMap) }(newIdResolver = _.id)
           .pipe(new IntermediateMetaPlan(_))
 
     // ===========================================================================
-    private def populateDataMap(actionMetaDag: ActionMetaDag): Map[NodeId, ResultSchema] = {
-        val mut = collection.mutable.Map[NodeId, ResultSchema]()
+    private def populateDataMap(actionMetaDag: ActionMetaDag): Map[NodeId, PotentialResultSchema] = {
+        val mut = collection.mutable.Map[NodeId, PotentialResultSchema]()
 
         // ---------------------------------------------------------------------------
         actionMetaDag
@@ -47,14 +47,14 @@ class InitialMetaPlan private[gallia](actionMetaDag: ActionMetaDag)
         mut.toMap }
 
       // ===========================================================================
-      private def resultSchema(inputs: Seq[ResultSchema])(actionvm: ActionVMN): ResultSchema =
+      private def resultSchema(inputs: Seq[PotentialResultSchema])(actionvm: ActionVMN): PotentialResultSchema =
         inputs
           .map(_.successOpt)
           .in.noneIf(_.exists(_.isEmpty)) // = none if any failure
           .map(_.flatten)
           .map(Clss.apply)
            match {
-            case None       => ResultSchema.UpstreamError
+            case None => PotentialResultSchema.UpstreamError
             case Some(afferentClss) =>
               actionvm.vldt(afferentClss) match {
                 case Nil =>
@@ -63,7 +63,7 @@ class InitialMetaPlan private[gallia](actionMetaDag: ActionMetaDag)
                     .tap { efferent =>
                       actionvm._metaContext =
                         ActionMetaContext(afferentClss, efferent, CallSite(None, Nil)) }
-                    .pipe(ResultSchema.Success.apply)
-                case errors => ResultSchema.Errors(errors, actionvm.callSite) } } }
+                    .pipe(PotentialResultSchema.Success.apply)
+                case errors => PotentialResultSchema.Errors(errors, actionvm.callSite) } } }
 
 // ===========================================================================

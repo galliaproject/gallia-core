@@ -9,8 +9,8 @@ import plans.{Clss, ActionNode, ActionPlan}
 
 // ===========================================================================
 /** meta must have succeeded here */
-class SuccessMetaResult(dag: DAG[SuccessMetaResultNode])
-      extends GalliaDAG[SuccessMetaResultNode, CallSite, ActionAN](dag) {
+class SuccessMetaResult(dag: DAG[SuccessMetaResult.Node])
+      extends GalliaDAG[SuccessMetaResult.Node, CallSite, ActionAN](dag) {
 
     def leavesCount   : Size = dag.leaves.size
     def forceLeafClass: Cls  = dag.leaves.force.one.cls
@@ -26,17 +26,18 @@ class SuccessMetaResult(dag: DAG[SuccessMetaResultNode])
         .pipe { new ActionPlan(_) } }
 
   // ===========================================================================
-  case class SuccessMetaResultNode(id: NodeId, origin: CallSite, actiona: ActionAN, cls: Cls)
-      extends HasNodeId
-      with    HasNodeContext[CallSite]
-      with    HasNodeTarget [ActionAN] {
-    protected val ctxOpt = Some(origin)
-    protected val target = actiona
+  object SuccessMetaResult {
+    case class Node(id: NodeId, origin: CallSite, actiona: ActionAN, cls: Cls)
+        extends HasNodeId
+        with    HasNodeContext[CallSite]
+        with    HasNodeTarget [ActionAN] {
+      protected val ctxOpt = Some(origin)
+      protected val target = actiona
 
-    // ---------------------------------------------------------------------------
-    def actionNode(afferents: Clss): ActionNode =
-      ActionMetaContext(afferents, cls, origin)
-        .pipe { ctx =>
-          ActionNode(id, ctx, actiona.atoms(ctx))} }
+      // ---------------------------------------------------------------------------
+      def actionNode(afferents: Clss): ActionNode =
+        ActionMetaContext(afferents, cls, origin)
+          .pipe { ctx =>
+            ActionNode(id, ctx, actiona.atoms(ctx))} } }
 
 // ===========================================================================

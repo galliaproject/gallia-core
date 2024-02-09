@@ -8,8 +8,8 @@ import result._
 
 // ===========================================================================
 /** meta may still have failed here */
-class IntermediateMetaResult(dag: DAG[IntermediateMetaResultNode])
-        extends gallia.dag.GalliaDAG[IntermediateMetaResultNode, CallSite, ActionAN](dag) {
+class IntermediateMetaResult(dag: DAG[IntermediateMetaResult.Node])
+        extends gallia.dag.GalliaDAG[IntermediateMetaResult.Node, CallSite, ActionAN](dag) {
 
       override def toString: String = formatDefault
 
@@ -60,25 +60,26 @@ class IntermediateMetaResult(dag: DAG[IntermediateMetaResultNode])
           case ResultSchema.Success(value)         => value }
 
       // ===========================================================================
-      private def leafNode: IntermediateMetaResultNode =
+      private def leafNode: IntermediateMetaResult.Node =
         dag
           .leaves
           .force.one /* since ASG */ }
 
   // ===========================================================================
-  case class IntermediateMetaResultNode(id: NodeId, origin: CallSite, actiona: ActionAN, result: ResultSchema)
-      extends HasNodeId
-      with    HasNodeContext[CallSite]
-      with    dag.HasNodeTarget [ActionAN] {
-    protected val ctxOpt = Some(origin)
-    protected val target = actiona
+  object IntermediateMetaResult {
+    case class Node(id: NodeId, origin: CallSite, actiona: ActionAN, result: ResultSchema)
+        extends HasNodeId
+        with    HasNodeContext[CallSite]
+        with    dag.HasNodeTarget [ActionAN] {
+      protected val ctxOpt = Some(origin)
+      protected val target = actiona
 
-    // ---------------------------------------------------------------------------
-    def isSuccess: Boolean = result.successOpt.isDefined
+      // ---------------------------------------------------------------------------
+      def isSuccess: Boolean = result.successOpt.isDefined
 
-    def successOpt: Option[SuccessMetaResultNode] =
-      result
-        .successOpt
-        .map(SuccessMetaResultNode(id, origin, actiona, _)) }
+      def successOpt: Option[SuccessMetaResult.Node] =
+        result
+          .successOpt
+          .map(SuccessMetaResult.Node(id, origin, actiona, _)) } }
 
 // ===========================================================================

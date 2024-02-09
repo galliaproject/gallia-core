@@ -2,6 +2,6 @@ package gallia
 
 // ===========================================================================
 package object env {
-  type ActionDag = dag.DAG[NodePair] }
+  type ActionDag = dag.DAG[ActionNodePair] }
 
 // ===========================================================================

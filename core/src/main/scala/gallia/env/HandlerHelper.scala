@@ -2,7 +2,7 @@ package gallia
 package env
 
 import dag._
-import env.NodePair
+import env.ActionNodePair
 
 // ===========================================================================
 class HandlerHelper() {
@@ -12,7 +12,7 @@ class HandlerHelper() {
     val rootId = Env.nextNodeId()
     Env.associateNode(rootId -> dagId)
 
-    val dag: ActionDag = DAG.trivial[gallia.env.NodePair](_.id)(NodePair(rootId, input))
+    val dag: ActionDag = DAG.trivial[ActionNodePair](_.id)(ActionNodePair(rootId, input))
     Env.associateDag(dagId -> dag)
 
     rootId
@@ -23,7 +23,7 @@ class HandlerHelper() {
     val (dagId, originalDag) = Env.retrieveDagPair(nodeId)
 
     val newNodeId = Env.nextNodeId()
-    val updatedDag = originalDag.appendNode(nodeId -> NodePair(newNodeId, action))
+    val updatedDag = originalDag.appendNode(nodeId -> ActionNodePair(newNodeId, action))
 
     Env.associateNode(newNodeId -> dagId)
     Env.associateDag(dagId -> updatedDag)
@@ -40,9 +40,9 @@ class HandlerHelper() {
     val (originalDagId2, originalDag2) = Env.retrieveDagPair(thatNodeId)
 
     val newDag =
-      originalDag1.appendNode(thisNodeId -> NodePair(newNodeId, action))
+      originalDag1.appendNode(thisNodeId -> ActionNodePair(newNodeId, action))
         .mergeBlindly(
-      originalDag2.appendNode(thatNodeId -> NodePair(newNodeId, action)) )
+      originalDag2.appendNode(thatNodeId -> ActionNodePair(newNodeId, action)) )
 
     Env.associateDag(newDagId -> newDag)
     Env.dissociateDag(originalDagId1)

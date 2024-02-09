@@ -24,7 +24,7 @@ case class MetaPlan(dag: ActionDag) { // requires slightly larger glasses
       .assert(
           _.lookup(rootId).isNestingMetaPlaceholder,
           _.lookup(rootId))
-      .replaceNode(env.NodePair(rootId, InMemoryMetaInput(c)))
+      .replaceNode(env.ActionNodePair(rootId, InMemoryMetaInput(c)))
       .pipe(MetaPlan.apply)
 }
 

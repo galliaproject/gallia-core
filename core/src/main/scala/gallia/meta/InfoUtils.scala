@@ -54,6 +54,6 @@ private[gallia] object InfoUtils {
         /**/ if (leaf.galliaEnumValue) enmOpt.orElse(Some(BasicType._Enm.Dummy) /* typically for validations, see 220506101842 */)
         else if (leaf.isEnumeratum)    Some(BasicType._Enm(leaf.enumeratumEnum))
         else if (leaf.bytes)           Some(BasicType._Binary)
-        else                           BasicType.fromFullNameOpt(leaf.fullName.format) }
+        else                           BasicType.fromFullNameOpt(leaf.fullName) }
 
 // ===========================================================================

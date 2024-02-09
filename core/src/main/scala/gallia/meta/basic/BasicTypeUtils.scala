@@ -2,14 +2,15 @@ package gallia
 package meta
 package basic
 
-import aptus.Seq_
+import aptus.{Anything_, Seq_}
+import gallia.reflect.FullyQualifiedName
 
 // ===========================================================================
 object BasicTypeUtils {
 
-  private[basic] def createLookup(values: Seq[BasicType]): Map[FullNameString, BasicType] =
+  private[basic] def createLookup(values: Seq[BasicType]): Map[FullyQualifiedName, BasicType] =
     values
-      .map { x => x.fullNameString -> x }
+      .map { _.associateLeft(_.fullName) }
       .force.map
       .withDefault { value => aptus.illegalState(s"TODO:CantFindType:201013093225:${value}") }
 

@@ -99,14 +99,11 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
     private[gallia] lazy val fullNameSet: Set[FullyQualifiedName] = fullNames.toSet
 
     // ---------------------------------------------------------------------------
-    // TODO: change those to use FullyQualifiedName
-    def fromFullNameOpt(value: FullNameString): Option[BasicType] = lookup.get     (FullyQualifiedName.normalizeFullName(value))
-    def fromFullName   (value: FullNameString):        BasicType  = lookup.apply   (FullyQualifiedName.normalizeFullName(value))
-    def isKnown        (value: FullNameString):        Boolean    = lookup.contains(FullyQualifiedName.normalizeFullName(value))
-    def isKnown        (value: FullyQualifiedName):    Boolean    = lookup.contains(FullyQualifiedName.normalizeFullName(value.format))
+    def fromFullNameOpt(value: FullyQualifiedName): Option[BasicType] = lookup.get     (FullyQualifiedName.normalizeFullName(value))
+    def isKnown        (value: FullyQualifiedName):        Boolean    = lookup.contains(FullyQualifiedName.normalizeFullName(value))
 
     // ---------------------------------------------------------------------------
-      private val lookup: Map[FullNameString, BasicType] = BasicTypeUtils.createLookup(orderedValues)
+      private val lookup: Map[FullyQualifiedName, BasicType] = BasicTypeUtils.createLookup(orderedValues)
 
     // ---------------------------------------------------------------------------
     @inline def matchingSubinfos(info: meta.InfoLike)(multiple: Multiple)(value: Any): Seq[meta.SubInfo] =

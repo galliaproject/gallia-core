@@ -53,7 +53,12 @@ object FullyQualifiedName {
 
   // ===========================================================================
   @annotation.switch
-  private[gallia] def normalizeFullName(value: FullNameString): FullNameString = // TODO: switch to non-String version
+  private[gallia] def normalizeFullName(value: FullyQualifiedName): FullyQualifiedName =
+      FullyQualifiedName.from(normalizeFullName(value.format))
+
+    // ---------------------------------------------------------------------------
+    @annotation.switch
+    private def normalizeFullName(value: FullNameString): FullNameString = // TODO: switch to non-String version
       value match {
         case FullNameBuiltIns._JavaString       => FullNameBuiltIns._JavaString // leave unchanged (TODO: use scala Predef's alias?)
 
@@ -73,7 +78,7 @@ object FullyQualifiedName {
 
         // ---------------------------------------------------------------------------
         // note: no automatic conversions between scala.math.Big* and java.math.Big*, unlike the java.lang.* counterparts
-        case _ => value.replace(FullNameBuiltIns.JavaLangPackageNameDot, FullNameBuiltIns.ScalaPackageNameDot) /* not so for java.math (not equivalent at runtime) */ }
+        case other => other.replace(FullNameBuiltIns.JavaLangPackageNameDot, FullNameBuiltIns.ScalaPackageNameDot) /* not so for java.math (not equivalent at runtime) */ }
 
   // ===========================================================================
   private[reflect] def fromRuntimeValue(value: Any): FullNameString =

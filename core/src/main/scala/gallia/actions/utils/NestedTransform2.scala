@@ -9,7 +9,7 @@ import dag.RootId
 import heads.HeadsNestingHandler
 
 // ===========================================================================
-class NestedTransform2(adag: MetaPlan, val rootId1: RootId, val rootId2: RootId) { // TODO: as a peer of MetaPlan rather?
+class NestedTransform2(adag: NestedMetaPlan, val rootId1: RootId, val rootId2: RootId) { // TODO: as a peer of MetaPlan rather?
 
     def vldt(c: Cls, kpath1: KPath, kpath2: KPath): Errs = {
       val a = c.field_(kpath1).flatMap(_.nestedClassOpt)
@@ -38,7 +38,7 @@ class NestedTransform2(adag: MetaPlan, val rootId1: RootId, val rootId2: RootId)
     private def actionPlan(c1: Cls, c2: Cls): ActionPlan =
       adag
         .runMeta(rootId1, rootId2, c1, c2)
-        .forceActionPlan
+        .forceNestedActionPlan
 
   }
 
@@ -46,8 +46,6 @@ class NestedTransform2(adag: MetaPlan, val rootId1: RootId, val rootId2: RootId)
   object NestedTransform2 {
     def parseUUtoU(f: (HeadU, HeadU) => HeadU): NestedTransform2 = {
       val (rootIdPair, dag, leafId) = HeadsNestingHandler.uuToU(f)
-      new NestedTransform2(MetaPlan(dag), rootIdPair._1, rootIdPair._2)
-    }
-  }
+      new NestedTransform2(NestedMetaPlan(dag), rootIdPair._1, rootIdPair._2) } }
 
 // ===========================================================================

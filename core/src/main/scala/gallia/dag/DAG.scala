@@ -186,7 +186,7 @@ class DAG[$NodeType](
          idResolver)
 
     // ---------------------------------------------------------------------------
-    def replaceNode(target: $NodeType): Self = { // used in MetaPlan
+    def replaceNode(target: $NodeType): Self = { // used in NestedMetaPlan
       val targetId = idResolver(target)
       require(nodeIdSet.contains(targetId), (target, nodeIds.#@@))
 

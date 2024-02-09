@@ -7,6 +7,7 @@ import plans._
 import result._
 
 // ===========================================================================
+/** meta may still have failed here */
 case class IntermediateMetaResult(dag: DAG[IntermediateMetaResultNode]) {
 
       override def toString: String = formatDefault
@@ -16,25 +17,24 @@ case class IntermediateMetaResult(dag: DAG[IntermediateMetaResultNode]) {
           //graphviz.GraphVizUtils.IntermediateMetaResultNode_ ; { node => (node.formatDotLabel, node.formatDotColor) }
 
       // ===========================================================================
-      def forceActionPlan = successOpt match {
-          case None          => aptus.illegalArgument(allErrors.joinln.prepend("ActionPlanCreation:210114174456:"))
-          case Some(success) => ActionPlanPopulator(success.dag) }
-
-      // ---------------------------------------------------------------------------
-      def successOpt: Option[SuccessMetaResult] = if (leafNode.isSuccess) Some(_successMetaResult) else None
-
-        private def _successMetaResult =
-          dag
-            .transform(_.successOpt.force)(_.id)
-            .pipe(SuccessMetaResult.apply)
-
-      // ---------------------------------------------------------------------------
+      /** left if meta failed */
       def intermediateEither: Either[MetaErrorResult, (SuccessMetaResult, ActionPlan)] =
-        successOpt match {
-          case None                             => Left (this)
-          case Some(success: SuccessMetaResult) => Right(success, ActionPlanPopulator(success.dag)) }
+          if (!leafNode.isSuccess) Left(this)
+          else
+            dag
+              .transform(_.successOpt.force)(_.id)
+              .pipe(SuccessMetaResult.apply)
+              .pipe { successMetaResult =>
+                Right(successMetaResult -> ActionPlanPopulator(successMetaResult.dag)) }
 
-      // ---------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------
+        def forceNestedActionPlan: ActionPlan =
+          intermediateEither match {
+            case Left(errorneousMetaRun) => aptus.illegalArgument(
+              errorneousMetaRun.allErrors.joinln.prepend("ActionPlanCreation:210114174456:"))
+            case Right((_, actionPlan)) => actionPlan }
+
+      // ===========================================================================
       def allErrors: Errs = dag.kahnTraverseNodes.flatMap(_.result.errors)
 
         // ---------------------------------------------------------------------------

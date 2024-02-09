@@ -5,7 +5,10 @@ import aptus._
 
 // ===========================================================================
 private object OswoAtomFieldFormatter { import source.SourceFluentBuilders._
-  private val DeserializeFunction = fullName(classOf[OswoSerDes.type]) + ".deserializeFunction[Any => Any]"
+  private val DeserializeFunction =
+       //fullName(classOf[OswoSerDes.type]) // fails for scala 2.12...
+        "gallia.oswo.OswoSerDes" +
+      ".deserializeFunction[Any => Any]"
 
   // ===========================================================================
   private implicit class OswoKey_(key: Key) {

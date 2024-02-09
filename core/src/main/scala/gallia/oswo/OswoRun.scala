@@ -15,12 +15,12 @@ object OswoRun
     head.end().runToNdt()
 
     // ---------------------------------------------------------------------------
-    val code = formatCode(FinalObjectName)(gallia.finalCode)
+    val code = sourceCode(FinalObjectName)(gallia.finalCode)
       .tap { _.format.writeFileContent("/tmp/code.scala") }
 
     // ---------------------------------------------------------------------------
     runtimeCompilation
-      .objectInstance[gallia.oswo.OptimRunner](code.format, FinalObjectName)
+      .objectInstance[OptimRunner](code.format, FinalObjectName)
       .run()
       .tap { _ =>
         val parentDir = "/home/tony/scl/gallia/gallia-core/core/src/main/scala/gallia/oswo/"
@@ -45,7 +45,7 @@ object OswoRun
   import source.SourceFluentBuilders._
 
   // ---------------------------------------------------------------------------
-  private def formatCode(name: Name)(body: String): SourceCode =
+  private def sourceCode(name: Name)(body: String): SourceCode =
     _Object(_Name(name), fullName(classOf[gallia.oswo.OptimRunner]).in.list,
       // TODO: use macro to extract method name rather: mymacro[gallia.oswo.MyApp](body: Source)
       ().methodDefinition("run").returnAny.body(body))

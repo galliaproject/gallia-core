@@ -2,7 +2,6 @@ package gallia
 package env
 
 import dag._
-import env.ActionNodePair
 
 // ===========================================================================
 class HandlerHelper() {
@@ -12,24 +11,22 @@ class HandlerHelper() {
     val rootId = Env.nextNodeId()
     Env.associateNode(rootId -> dagId)
 
-    val dag: ActionDag = DAG.trivial[ActionNodePair](_.id)(ActionNodePair(rootId, input))
+    val dag: plans.ActionMetaDag = DAG.trivial[ActionMetaNode](_.id)(ActionMetaNode(rootId, input))
     Env.associateDag(dagId -> dag)
 
-    rootId
-  }
+    rootId }
 
   // ---------------------------------------------------------------------------
   private[gallia] def chain(nodeId: NodeId, action: ActionVMN): NodeId = {
     val (dagId, originalDag) = Env.retrieveDagPair(nodeId)
 
     val newNodeId = Env.nextNodeId()
-    val updatedDag = originalDag.appendNode(nodeId -> ActionNodePair(newNodeId, action))
+    val updatedDag = originalDag.appendNode(nodeId -> ActionMetaNode(newNodeId, action))
 
     Env.associateNode(newNodeId -> dagId)
     Env.associateDag(dagId -> updatedDag)
 
-    newNodeId
-  }
+    newNodeId }
 
   // ---------------------------------------------------------------------------
   private[gallia] def join2(thisNodeId: NodeId, thatNodeId: NodeId)(action: ActionVMN): LeafId = {
@@ -40,9 +37,9 @@ class HandlerHelper() {
     val (originalDagId2, originalDag2) = Env.retrieveDagPair(thatNodeId)
 
     val newDag =
-      originalDag1.appendNode(thisNodeId -> ActionNodePair(newNodeId, action))
+      originalDag1.appendNode(thisNodeId -> ActionMetaNode(newNodeId, action))
         .mergeBlindly(
-      originalDag2.appendNode(thatNodeId -> ActionNodePair(newNodeId, action)) )
+      originalDag2.appendNode(thatNodeId -> ActionMetaNode(newNodeId, action)) )
 
     Env.associateDag(newDagId -> newDag)
     Env.dissociateDag(originalDagId1)
@@ -54,14 +51,13 @@ class HandlerHelper() {
         // TODO: differentiate reassociate?
         Env.associateNode(nodeId -> newDagId) }
 
-    newNodeId
-  }
+    newNodeId }
 
   // ===========================================================================
   def updateAs(nodeId: NodeId, key: Key) = { // TODO: t210116192032 - generalize
       val (dagId, dag) = Env.retrieveDagPair(nodeId)
 
-      val updatedDag: ActionDag =
+      val updatedDag: plans.ActionMetaDag =
         dag.transformNodeTypeConditionally(_ == nodeId) {
           _.tranform {
             _ .asInstanceOf[actions.CanForceAs1[_]] /* by design */
@@ -70,9 +66,6 @@ class HandlerHelper() {
 
       Env.associateDag(dagId -> updatedDag)
       
-      ()
-    }
-
-}
+      () } }
 
 // ===========================================================================

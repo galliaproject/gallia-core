@@ -7,6 +7,7 @@ import env._
 import plans._
 import result._
 import dag.LeafId
+import run.MetaErrorResult
 
 // ===========================================================================
 case class HeadEnd private (leafId : LeafId) {

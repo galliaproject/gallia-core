@@ -1,6 +1,8 @@
 package gallia
 package result
 
+import plans.{ActionPlan => Plan}
+
 // ===========================================================================
 class SuccessResult[$Data](
       val meta: SuccessMetaResult,

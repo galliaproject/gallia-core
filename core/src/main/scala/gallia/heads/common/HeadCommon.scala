@@ -2,7 +2,7 @@ package gallia
 package heads
 package common
 
-import env.ActionDag
+import plans.ActionMetaDag
 import actions.common.ActionsCommonVeryBasics._
 import actions.common.ActionsCommonUnionTypes
 import actions.ActionsCustoms.CustomUU
@@ -25,7 +25,7 @@ trait HeadCommon[F <: HeadCommon[F]]
       with    HeadCommonMiscTransformations[F]
       with    HeadCommonTransformObjectIf  [F] {
 
-    def fullDag: ActionDag = env.Env.retrieveDagFromNode(nodeId)
+    def fullDag: ActionMetaDag = env.Env.retrieveDagFromNode(nodeId)
     def showFullGraph(): Self2 = ???//fullDag.pipe(misc.CanDot.showGraph)
     // TODO: print
 

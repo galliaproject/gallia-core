@@ -3,14 +3,12 @@ package plans
 
 import aptus.Anything_
 
+import dag.RootId
 import run._
-import dag._
-import env.ActionDag
-import actions.in.InMemoryMetaInput
 
 // ===========================================================================
 /** most for addMetaInput */ // TODO: just reuse IntermediatePlan?
-case class NestedMetaPlan(dag: ActionDag) { // requires slightly larger glasses
+case class NestedMetaPlan(dag: ActionMetaDag) { // requires slightly larger glasses
   def runMeta(rootId : RootId, input: Cls): IntermediateMetaResult =
     addMetaInput(rootId , input ).dag.pipe(new IntermediatePlan(_)).run()
 
@@ -24,7 +22,7 @@ case class NestedMetaPlan(dag: ActionDag) { // requires slightly larger glasses
       .assert(
           _.lookup(rootId).isNestingMetaPlaceholder,
           _.lookup(rootId))
-      .replaceNode(env.ActionNodePair(rootId, InMemoryMetaInput(c)))
+      .replaceNode(env.ActionMetaNode(rootId, actions.in.InMemoryMetaInput(c)))
       .pipe(NestedMetaPlan.apply) }
 
 // ===========================================================================

@@ -19,6 +19,9 @@ package object plans {
   type DAG[T] = dag.DAG[T]
   type NodeId = dag.NodeId
 
+  // ---------------------------------------------------------------------------
+  type ActionMetaDag = dag.DAG[env.ActionMetaNode]
+
   // ===========================================================================
   case class AtomMetaContext(
     actionId     : NodeId,

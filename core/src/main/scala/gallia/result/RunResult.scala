@@ -2,6 +2,8 @@ package gallia
 package result
 
 import aptus.Seq_
+import plans.{ActionPlan => Plan}
+import run.MetaErrorResult
 
 // ===========================================================================
 class RunResult[$SuccessResult <: SuccessResult[$Data], $Data](val resultEither: Either[MetaErrorResult, $SuccessResult]) {

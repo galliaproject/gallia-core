@@ -2,6 +2,8 @@ package gallia
 package env
 
 import aptus.String_
+
+import plans.ActionMetaDag
 import dag._
 
 // ===========================================================================
@@ -13,7 +15,7 @@ private[gallia] object Env extends Env
     private var nodeId: Int = -1
   
     // ---------------------------------------------------------------------------
-    private val _dags  = collection.mutable.Map[DagId , ActionDag ]()
+    private val _dags  = collection.mutable.Map[DagId , ActionMetaDag ]()
     private val _nodes = collection.mutable.Map[NodeId, DagId]()
   
     // ---------------------------------------------------------------------------
@@ -22,16 +24,15 @@ private[gallia] object Env extends Env
   
     // ---------------------------------------------------------------------------
     def retrieveDagId(nodeId: NodeId): DagId      = synchronized { _nodes(nodeId) }
-    def retrieveDag  (dagId : NodeId): ActionDag  = synchronized { _dags (dagId)  }
+    def retrieveDag  (dagId : NodeId): ActionMetaDag  = synchronized { _dags (dagId)  }
   
     // ---------------------------------------------------------------------------
     def associateNode(pair: (NodeId, DagId))     = synchronized { _nodes += pair }
-    def associateDag (pair: (DagId , ActionDag)) = synchronized { _dags  += pair }
+    def associateDag (pair: (DagId , ActionMetaDag)) = synchronized { _dags  += pair }
     def dissociateDag(dagId: DagId)              = synchronized { _dags  -= dagId }
   
     // ---------------------------------------------------------------------------
-    def retrieveDagFromNode(nodeId: NodeId):         ActionDag  =  retrieveDag(retrieveDagId(nodeId))
-    def retrieveDagPair    (nodeId: NodeId): (DagId, ActionDag) = (retrieveDagId(nodeId), retrieveDagFromNode(nodeId))
-  }
+    def retrieveDagFromNode(nodeId: NodeId):         ActionMetaDag  =  retrieveDag(retrieveDagId(nodeId))
+    def retrieveDagPair    (nodeId: NodeId): (DagId, ActionMetaDag) = (retrieveDagId(nodeId), retrieveDagFromNode(nodeId)) }
 
 // ===========================================================================

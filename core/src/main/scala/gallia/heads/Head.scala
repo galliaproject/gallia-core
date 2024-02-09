@@ -1,8 +1,6 @@
 package gallia
 package heads
 
-import env._
-
 // ===========================================================================
 @aptus.pseudosealed trait Head[F <: Head[_]] { // useful restrict eg f: HeadZ => $Head such that $Head <: Head
     protected[gallia] val nodeId : NodeId
@@ -14,7 +12,7 @@ import env._
       retrieveDag.leaves.forall(_.isActionXO /* by design */) // TODO: create common XO trait
 
     // ---------------------------------------------------------------------------
-    private def retrieveDag: ActionDag = Env.retrieveDagFromNode(nodeId) }
+    private def retrieveDag: plans.ActionMetaDag = env.Env.retrieveDagFromNode(nodeId) }
 
   // ===========================================================================
   object Head {

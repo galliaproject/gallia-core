@@ -6,9 +6,9 @@ import run._
 import env._
 
 // ===========================================================================
-class IntermediatePlan private[gallia](dag: ActionDag)
-      extends gallia.dag.GalliaDAG[ActionNodePair, Nothing, ActionVMN](dag) {
-    dag
+class IntermediatePlan private[gallia](actionMetaDag: ActionMetaDag)
+      extends dag.GalliaDAG[ActionMetaNode, Nothing, ActionVMN](actionMetaDag) {
+    actionMetaDag
       .nodes
       .foreach { // TODO: move to transform3 (else may fail at runtime); may need classtag
          _.ensuring(!_.isNestingMetaPlaceholder) }
@@ -16,27 +16,27 @@ class IntermediatePlan private[gallia](dag: ActionDag)
     // ---------------------------------------------------------------------------
     def run(): IntermediateMetaResult =
       IntermediatePlan
-        .populateDataMap(dag)
-        .pipe(IntermediatePlan.run(dag)) }
+        .populateDataMap(actionMetaDag)
+        .pipe(IntermediatePlan.run(actionMetaDag)) }
 
   // ===========================================================================
   object IntermediatePlan {
 
-    private def run(dag: env.ActionDag)(dataMap: Map[NodeId, ResultSchema]): IntermediateMetaResult =
-        dag
+    private def run(actionMetaDag: ActionMetaDag)(dataMap: Map[NodeId, ResultSchema]): IntermediateMetaResult =
+        actionMetaDag
           .transform { _ .intermediateMetaResultNode(dataMap) }(newIdResolver = _.id)
           .pipe(new IntermediateMetaResult(_))
 
     // ===========================================================================
-    private def populateDataMap(dag: env.ActionDag): Map[NodeId, ResultSchema] = {
+    private def populateDataMap(actionMetaDag: ActionMetaDag): Map[NodeId, ResultSchema] = {
         val mut = collection.mutable.Map[NodeId, ResultSchema]()
 
         // ---------------------------------------------------------------------------
-        dag
+        actionMetaDag
           .kahnTraverseNodes // any topological order will do though
           .foreach { pair =>
             val inputs =
-              dag
+              actionMetaDag
                 .afferentIds(pair.id) // may be empty if root
                 .map(mut.apply)
 

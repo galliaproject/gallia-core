@@ -9,7 +9,7 @@ import result._
 // ===========================================================================
 /** meta may still have failed here */
 class IntermediateMetaResult(dag: DAG[IntermediateMetaResult.Node])
-        extends gallia.dag.GalliaDAG[IntermediateMetaResult.Node, CallSite, ActionAN](dag) {
+        extends gallia.dag.GalliaDAG [IntermediateMetaResult.Node, CallSite, ActionAN](dag) {
 
       override def toString: String = formatDefault
 

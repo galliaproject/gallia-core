@@ -116,10 +116,6 @@ object ActionAtomsBoilerplate {
       final override def atomuus(ctx: NodeMetaContext): Seq[AtomUU] = atomuus(ctx.forceOneAfferent)
                      def atomuus(afferent: Cls)       : Seq[AtomUU] }
 
-trait ActionAtomsUU1Nb extends ActionAtomsUU { // TODO: see t210616122449
-  final override def atomuus(ctx: NodeMetaContext)           : AtomUUs = atomuus(ctx.origin)(ctx.afferents.forceOne)
-                 def atomuus(origin: CallSite)(afferent: Cls): AtomUUs }
-
   // ===========================================================================
   trait ActionAtomsZZ01 extends ActionAtomsZZ {
       final override def atomzzs(ignored: NodeMetaContext): AtomZZs = atomzz.in.seq

@@ -1,6 +1,7 @@
 package gallia
 package env
 
+import plans.ActionMetaNode
 import dag._
 
 // ===========================================================================

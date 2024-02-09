@@ -22,7 +22,7 @@ case class NestedMetaPlan(dag: ActionMetaDag) { // requires slightly larger glas
       .assert(
           _.lookup(rootId).isNestingMetaPlaceholder,
           _.lookup(rootId))
-      .replaceNode(env.ActionMetaNode(rootId, actions.in.InMemoryMetaInput(c)))
+      .replaceNode(ActionMetaNode(rootId, actions.in.InMemoryMetaInput(c)))
       .pipe(NestedMetaPlan.apply) }
 
 // ===========================================================================

@@ -20,7 +20,7 @@ package object plans {
   type NodeId = dag.NodeId
 
   // ---------------------------------------------------------------------------
-  type ActionMetaDag = dag.DAG[env.ActionMetaNode]
+  type ActionMetaDag = dag.DAG[ActionMetaNode]
 
   // ===========================================================================
   case class AtomMetaContext(

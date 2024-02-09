@@ -4,7 +4,7 @@ package reflect
 import aptus.String_
 
 // ===========================================================================
-case class FullName(items: Seq[String]) {
+case class FullyQualifiedName(items: Seq[String]) {
   require(items.nonEmpty)
 
   // ---------------------------------------------------------------------------
@@ -44,8 +44,8 @@ case class FullName(items: Seq[String]) {
   private[reflect] def startsWithGalliaPackage: Boolean = firstItem == FullNameBuiltIns.GalliaPackageName }
 
 // ===========================================================================
-object FullName {
-  def from(value: FullNameString): FullName = value.splitBy(".").pipe(FullName.apply)
+object FullyQualifiedName {
+  def from(value: FullNameString): FullyQualifiedName = value.splitBy(".").pipe(FullyQualifiedName.apply)
 
   // ===========================================================================
   def containsSeq      (fullNames: Seq[FullNameString]): Boolean = fullNames.contains(FullNameBuiltIns._Seq)

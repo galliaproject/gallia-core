@@ -16,14 +16,14 @@ package lowlevel
   private def apply(tpe: UType): TypeLeaf = {
     val symbol = tpe.typeSymbol
 
-    val fullName       : FullName = symbol.fullName.pipe(FullName.from)
+    val fullName       : FullyQualifiedName   = symbol.fullName.pipe(FullyQualifiedName.from)
     val baseClassNames : List[FullNameString] = tpe.baseClasses.map(_.fullName)
     val galliaEnumValue: Boolean = fullName.isGalliaEnumValue
 
     // ---------------------------------------------------------------------------
     val enumeratumValueNamesOpt =
-      if (FullName.containsEnumEntry(baseClassNames)) Some(ReflectUtils.enumValueNames(tpe))
-      else                                            None
+      if (FullyQualifiedName.containsEnumEntry(baseClassNames)) Some(ReflectUtils.enumValueNames(tpe))
+      else                                                      None
 
     // ---------------------------------------------------------------------------
     val caseClass: Boolean =
@@ -45,7 +45,7 @@ package lowlevel
       dataClass       = dataClass,
       galliaEnumValue = galliaEnumValue,
       bytes           = fullName.isByteBuffer,
-      inheritsSeq     = FullName.containsSeq(baseClassNames),
+      inheritsSeq     = FullyQualifiedName.containsSeq(baseClassNames),
 
       enumeratumValueNamesOpt = enumeratumValueNamesOpt,
 

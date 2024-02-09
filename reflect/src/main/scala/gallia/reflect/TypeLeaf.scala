@@ -15,8 +15,8 @@ case class TypeLeaf(
       enumeratumValueNamesOpt: Option[Seq[String]] = None, // not used currently
 
       fields: Seq[Field] = Nil) {
-    val fullName   : FullName = FullName.from(name) // favor over name now
-    def inScopeName: String   = fullName.lastItem
+    val fullName   : FullyQualifiedName = FullyQualifiedName.from(name) // favor over name now
+    def inScopeName: String             = fullName.lastItem
 
     def keys: Seq[String] = fields.map(_.key)
 

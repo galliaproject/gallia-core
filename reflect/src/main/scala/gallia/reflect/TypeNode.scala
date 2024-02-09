@@ -53,7 +53,7 @@ case class TypeNode(
     // ---------------------------------------------------------------------------
     // TODO: t220411094433 - hopefully there's a cleaner way...
     private def sameType(value: Any): Boolean =
-      leaf.name == reflect.FullName.fromRuntimeValue(value)
+      leaf.name == reflect.FullyQualifiedName.fromRuntimeValue(value)
 
   // ===========================================================================
   def forceSoleTypeArg: TypeNode = args.force.one

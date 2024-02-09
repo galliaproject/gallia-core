@@ -5,7 +5,7 @@ package basic
 import java.time._
 import aptus.{Long_, String_}
 import data.{DataFormatting, DataParsing}
-import reflect.{FullName, TypeNodeBuiltIns}
+import reflect.{FullyQualifiedName, TypeNodeBuiltIns}
 
 // ===========================================================================
 sealed trait NumericalType extends BasicType
@@ -84,8 +84,8 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
 
     protected[basic]       val node          : TypeNode
     protected[basic]       val ordinal       : Int // scala 3
-    protected[basic] final def fullNameString: FullNameString = node.leaf.name
-                     final def fullName      : FullName       = node.leaf.fullName
+    protected[basic] final def fullNameString: FullNameString     = node.leaf.name
+                     final def fullName      : FullyQualifiedName = node.leaf.fullName
 
     def formatScala  : String = fullName.format.replace("scala.", "").replace("java.lang.String", "String") // TODO
     def formatDefault: String = entryName }
@@ -95,13 +95,13 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
     @deprecated val values        = findValues
                 val orderedValues = findValues.sortBy(_.ordinal).distinct // TODO: distinct necessary with scala-3?
 
-    private[gallia] lazy val fullNames  : Seq[reflect.FullName] = orderedValues.map(_.node.leaf.fullName) :+ _Enm.Node.leaf.fullName
-    private[gallia] lazy val fullNameSet: Set[reflect.FullName] = fullNames.toSet
+    private[gallia] lazy val fullNames  : Seq[FullyQualifiedName] = orderedValues.map(_.node.leaf.fullName) :+ _Enm.Node.leaf.fullName
+    private[gallia] lazy val fullNameSet: Set[FullyQualifiedName] = fullNames.toSet
 
     // ---------------------------------------------------------------------------
-    def fromFullNameOpt(value: FullNameString): Option[BasicType] = lookup.get     (reflect.FullName.normalizeFullName(value))
-    def fromFullName   (value: FullNameString):        BasicType  = lookup.apply   (reflect.FullName.normalizeFullName(value))
-    def isKnown        (value: FullNameString):        Boolean    = lookup.contains(reflect.FullName.normalizeFullName(value))
+    def fromFullNameOpt(value: FullNameString): Option[BasicType] = lookup.get     (FullyQualifiedName.normalizeFullName(value))
+    def fromFullName   (value: FullNameString):        BasicType  = lookup.apply   (FullyQualifiedName.normalizeFullName(value))
+    def isKnown        (value: FullNameString):        Boolean    = lookup.contains(FullyQualifiedName.normalizeFullName(value))
 
     // ---------------------------------------------------------------------------
       private val lookup: Map[FullNameString, BasicType] = BasicTypeUtils.createLookup(orderedValues)

@@ -23,15 +23,15 @@ private object TypeLeafParserMacro3 {
 
     val fullNameString: FullNameString = typeSymbol.fullName
 
-    val fullName       : FullName       = fullNameString.pipe(FullName.from)
-    val galliaEnumValue: Boolean        = fullName.isGalliaEnumValue
+    val fullName       : FullyQualifiedName = fullNameString.pipe(FullyQualifiedName.from)
+    val galliaEnumValue: Boolean            = fullName.isGalliaEnumValue
 
     val baseClassNames: List[FullNameString] = baseClassesFullNames(typeRepr)
 
     // ---------------------------------------------------------------------------
     val enumeratumValueNamesOpt: Option[Seq[EntryNameString]] =
-      if FullName.containsEnumEntry(baseClassNames) then Some(enumValueNames(typeSymbol))
-      else                                               None
+      if FullyQualifiedName.containsEnumEntry(baseClassNames) then Some(enumValueNames(typeSymbol))
+      else                                                         None
 
     // ---------------------------------------------------------------------------
     val dataClass: Boolean =
@@ -48,7 +48,7 @@ private object TypeLeafParserMacro3 {
       dataClass       = dataClass,
       galliaEnumValue = galliaEnumValue,
       bytes           = fullName.isByteBuffer,
-      inheritsSeq     = FullName.containsSeq(baseClassNames),
+      inheritsSeq     = FullyQualifiedName.containsSeq(baseClassNames),
 
       enumeratumValueNamesOpt = enumeratumValueNamesOpt,
 

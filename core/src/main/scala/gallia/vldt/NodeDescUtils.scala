@@ -54,7 +54,7 @@ object NodeDescUtils {
       u match {
         case Error(_)         => true
         case Enumeratum       => false
-        case Named(fullName)  => !FullName.from(fullName).isGalliaEnumValue && !BasicType.isKnown(fullName)
+        case Named(fullName)  => !FullyQualifiedName.from(fullName).isGalliaEnumValue && !BasicType.isKnown(fullName)
         case Nesting(nesting) => nesting.isInvalid }
 
     // ===========================================================================

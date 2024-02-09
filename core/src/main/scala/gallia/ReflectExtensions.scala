@@ -16,10 +16,11 @@ trait ReflectExtensions {
     // ---------------------------------------------------------------------------
     // eg for translate type mismatch
     def formatSuccinct: String = {
-        def tmp(value: TypeLeaf) = value.name
+        def tmp(value: TypeLeaf) = value.fullName.format
 
         def isTopLevel(value: TypeNode): Boolean =
-          !value.complex && basic.BasicType.isKnown(value.leaf.name)
+          !value.complex &&
+           basic.BasicType.isKnown(value.leaf.fullName)
 
         // ---------------------------------------------------------------------------
         dis.containerTypeOpt match {

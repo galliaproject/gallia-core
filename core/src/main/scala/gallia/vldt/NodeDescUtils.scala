@@ -54,7 +54,7 @@ object NodeDescUtils {
       u match {
         case Error(_)         => true
         case Enumeratum       => false
-        case Named(fullName)  => !FullyQualifiedName.from(fullName).isGalliaEnumValue && !BasicType.isKnown(fullName)
+        case Named(fullName)  => !fullName.isGalliaEnumValue && !BasicType.isKnown(fullName)
         case Nesting(nesting) => nesting.isInvalid }
 
     // ===========================================================================
@@ -63,9 +63,9 @@ object NodeDescUtils {
       u match {
         case Error(node) => s"${ErrorId.InvalidTypeNode} - ${parent} ${node.formatDefault}".in.seq
         case Enumeratum  => Nil
-        case Named(name) =>
-          if (BasicType.isKnown(name) || name == BasicType.ScalaAnyFullName) Nil
-          else s"${ErrorId.UnsupportedTlSubtype} - ${parent} - ${name.quote}".in.seq
+        case Named(fullName) =>
+          if (BasicType.isKnown(fullName) || fullName.format == BasicType.ScalaAnyFullName) Nil
+          else s"${ErrorId.UnsupportedTlSubtype} - ${parent} - ${fullName.format.quote}".in.seq
         case Nesting(nesting) => nesting.errorMessages(parent) } }
 
   // ===========================================================================

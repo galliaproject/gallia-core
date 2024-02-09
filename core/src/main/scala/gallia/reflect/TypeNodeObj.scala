@@ -12,7 +12,7 @@ object TypeNodeObj {
     // ---------------------------------------------------------------------------
     def typeLeaf(value: TypeLeaf): Obj =
         obj(
-          "name"            -> value.name,
+          "name"            -> value.fullName.format,
 
           "dataClass"       -> value.dataClass,
           "galliaEnumValue" -> value.galliaEnumValue,

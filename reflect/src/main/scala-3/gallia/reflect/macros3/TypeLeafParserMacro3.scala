@@ -43,7 +43,7 @@ private object TypeLeafParserMacro3 {
 
     // ---------------------------------------------------------------------------
     TypeLeaf(
-      name        = fullNameString,
+      fullName        = fullName,
 
       dataClass       = dataClass,
       galliaEnumValue = galliaEnumValue,

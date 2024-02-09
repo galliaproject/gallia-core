@@ -15,9 +15,9 @@ private[gallia] object InfoUtils {
         Fld(
           field.key.symbol,
           field.typeNode.forceNonBObjInfo)
-          .setEnumName(field.typeNode.leaf.name) /* mostly for macros */ }
+          .setEnumName(field.typeNode.leaf.fullName.format) /* mostly for macros */ }
       .pipe(Cls.apply)
-      .setName(leaf.name.splitBy(".").last /* TODO: see t210325105833 - need to be in scope for macros */) // mostly for macros
+      .setName(leaf.fullName.items.last /* TODO: see t210325105833 - need to be in scope for macros */) // mostly for macros
 
   // ---------------------------------------------------------------------------
   def forceNonBObjSubInfo(node: TypeNode): SubInfo =
@@ -54,6 +54,6 @@ private[gallia] object InfoUtils {
         /**/ if (leaf.galliaEnumValue) enmOpt.orElse(Some(BasicType._Enm.Dummy) /* typically for validations, see 220506101842 */)
         else if (leaf.isEnumeratum)    Some(BasicType._Enm(leaf.enumeratumEnum))
         else if (leaf.bytes)           Some(BasicType._Binary)
-        else                           BasicType.fromFullNameOpt(leaf.name) }
+        else                           BasicType.fromFullNameOpt(leaf.fullName.format) }
 
 // ===========================================================================

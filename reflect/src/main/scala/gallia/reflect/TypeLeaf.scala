@@ -5,7 +5,7 @@ import aptus.{Anything_, String_, Seq_}
 
 // ===========================================================================
 case class TypeLeaf(
-      name           : FullNameString,  // eg java.lang.String
+      fullName       : FullyQualifiedName, // eg ["java", "lang", "String"]
 
       dataClass      : Boolean = false, // eg "case class Foo(a: String, b: Int)", but not necessarily all case classes (eg not scala.Some)
       galliaEnumValue: Boolean = false,
@@ -15,14 +15,13 @@ case class TypeLeaf(
       enumeratumValueNamesOpt: Option[Seq[String]] = None, // not used currently
 
       fields: Seq[Field] = Nil) {
-    val fullName   : FullyQualifiedName = FullyQualifiedName.from(name) // favor over name now
-    def inScopeName: String             = fullName.lastItem
+    def inScopeName: String = fullName.lastItem
 
     def keys: Seq[String] = fields.map(_.key)
 
     // ---------------------------------------------------------------------------
     def formatDebug: String = // TODO: use PPrint
-      "[" + name.quote + " - " +
+      "[" + fullName.format.quote + " - " +
       Seq(
             dataClass      .in.someIf(_ == true).map(_ => "dataClass"),
             galliaEnumValue.in.someIf(_ == true).map(_ => "galliaEnumValue"),
@@ -58,13 +57,14 @@ case class TypeLeaf(
 
   // ===========================================================================
   object TypeLeaf {
-    val Dummy: TypeLeaf = TypeLeaf.trivial("gallia.Dummy")
+    val Dummy: TypeLeaf = TypeLeaf.trivial(FullyQualifiedName(Seq("gallia", "Dummy")))
 
     // ---------------------------------------------------------------------------
-    lazy val ScalaOption = TypeLeaf.trivial(FullNameBuiltIns._ScalaOption)
-    lazy val ScalaSeq    = TypeLeaf.trivial(FullNameBuiltIns._ScalaSeq   ).inheritsSeq(value = true)
+    lazy val ScalaOption = TypeLeaf.trivial(FullyQualifiedName.from(FullNameBuiltIns._ScalaOption))
+    lazy val ScalaSeq    = TypeLeaf.trivial(FullyQualifiedName.from(FullNameBuiltIns._ScalaSeq   )).inheritsSeq(value = true)
 
     // ---------------------------------------------------------------------------
-    def trivial(name: String): TypeLeaf = TypeLeaf(name = name) }
+    def trivial(name    : String)            : TypeLeaf = TypeLeaf(fullName = FullyQualifiedName.from(name))
+    def trivial(fullName: FullyQualifiedName): TypeLeaf = TypeLeaf(fullName = fullName)}
 
 // ===========================================================================

@@ -84,7 +84,7 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
 
     protected[basic]       val node          : TypeNode
     protected[basic]       val ordinal       : Int // scala 3
-    protected[basic] final def fullNameString: FullNameString     = node.leaf.name
+    protected[basic] final def fullNameString: FullNameString     = node.leaf.fullName.format
                      final def fullName      : FullyQualifiedName = node.leaf.fullName
 
     def formatScala  : String = fullName.format.replace("scala.", "").replace("java.lang.String", "String") // TODO
@@ -99,9 +99,11 @@ sealed trait BasicType // TODO: t210125111338 - investigate union types (coming 
     private[gallia] lazy val fullNameSet: Set[FullyQualifiedName] = fullNames.toSet
 
     // ---------------------------------------------------------------------------
+    // TODO: change those to use FullyQualifiedName
     def fromFullNameOpt(value: FullNameString): Option[BasicType] = lookup.get     (FullyQualifiedName.normalizeFullName(value))
     def fromFullName   (value: FullNameString):        BasicType  = lookup.apply   (FullyQualifiedName.normalizeFullName(value))
     def isKnown        (value: FullNameString):        Boolean    = lookup.contains(FullyQualifiedName.normalizeFullName(value))
+    def isKnown        (value: FullyQualifiedName):    Boolean    = lookup.contains(FullyQualifiedName.normalizeFullName(value.format))
 
     // ---------------------------------------------------------------------------
       private val lookup: Map[FullNameString, BasicType] = BasicTypeUtils.createLookup(orderedValues)

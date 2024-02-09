@@ -12,6 +12,11 @@ object TypeNodeToExpr {
       fieldToExpr(x) }
 
   // ---------------------------------------------------------------------------
+  given ToExpr[FullyQualifiedName] = new ToExpr[FullyQualifiedName] {
+    def apply(x: FullyQualifiedName)(using Quotes) =
+      fullyQualifiedNameToExpr(x) }
+
+  // ---------------------------------------------------------------------------
   given ToExpr[TypeLeaf] = new ToExpr[TypeLeaf] {
     def apply(x: TypeLeaf)(using Quotes) =
       typeLeafToExpr(x) }
@@ -28,9 +33,13 @@ object TypeNodeToExpr {
           args = ${Expr(x.args)}) }
 
     // ---------------------------------------------------------------------------
+    private def fullyQualifiedNameToExpr(x: FullyQualifiedName)(using Quotes) =
+      '{FullyQualifiedName(items = ${Expr(x.items)}) }
+
+    // ---------------------------------------------------------------------------
     private def typeLeafToExpr(x: TypeLeaf)(using Quotes) =
       '{TypeLeaf(
-          name        = ${Expr(x.name)},
+          fullName        = ${Expr(x.fullName)},
 
           dataClass       = ${Expr(x.dataClass)},
           galliaEnumValue = ${Expr(x.galliaEnumValue)},

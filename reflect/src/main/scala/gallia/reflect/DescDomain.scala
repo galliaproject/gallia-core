@@ -14,8 +14,7 @@ case class ClsDesc( // TODO: rename
     // ---------------------------------------------------------------------------
     override def toString: String = formatDefault
       def formatDefault: String =
-        s"${name}\t${generic}\t${fields.map(_.formatDefault).section2}"
-  }
+        s"${name}\t${generic}\t${fields.map(_.formatDefault).section2}" }
 
   // ===========================================================================
   object ClsDesc {
@@ -23,8 +22,8 @@ case class ClsDesc( // TODO: rename
     def from(leaf: TypeLeaf, generic: Boolean): ClsDesc =
       ClsDesc(
         NameDesc(
-            leaf.name,
-            !KeyValidation.isValid(leaf.name)),
+            leaf.fullName.format,
+            !KeyValidation.isValid(leaf.fullName.format)),
         generic,
         leaf.fields.map(FldDesc.from)) }
 
@@ -53,10 +52,10 @@ sealed trait NodeDesc
   // ---------------------------------------------------------------------------
   object NodeDesc {
 
-    case class  Error   (node: TypeNode)       extends NodeDesc
-    case class  Nesting (nested: ClsDesc)      extends NodeDesc
-    case object Enumeratum                     extends NodeDesc
-    case class  Named   (name: FullNameString) extends NodeDesc
+    case class  Error   (node: TypeNode)           extends NodeDesc
+    case class  Nesting (nested: ClsDesc)          extends NodeDesc
+    case class  Named   (name: FullyQualifiedName) extends NodeDesc
+    case object Enumeratum                         extends NodeDesc
 
     // ---------------------------------------------------------------------------
     def from(node: TypeNode): NodeDesc =
@@ -64,6 +63,6 @@ sealed trait NodeDesc
         case None                                        => Error(node)
         case Some(fieldType) if (fieldType.dataClass)    => Nesting(ClsDesc.from(fieldType, generic = false))
         case Some(fieldType) if (fieldType.isEnumeratum) => Enumeratum // not actually used at the moment
-        case Some(fieldType)                             => Named(fieldType.name) } }
+        case Some(fieldType)                             => Named(fieldType.fullName) } }
 
 // ===========================================================================

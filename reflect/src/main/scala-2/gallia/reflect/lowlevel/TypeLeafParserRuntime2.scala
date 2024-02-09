@@ -40,7 +40,7 @@ package lowlevel
 
     // ---------------------------------------------------------------------------
     TypeLeaf(
-      name        = fullName.format,
+      fullName        = fullName,
 
       dataClass       = dataClass,
       galliaEnumValue = galliaEnumValue,

@@ -9,8 +9,8 @@ import plans.{Clss, ActionNode, ActionPlan}
 
 // ===========================================================================
 /** meta must have succeeded here */
-class SuccessMetaResult(dag: DAG[SuccessMetaResult.Node])
-      extends GalliaDAG[SuccessMetaResult.Node, CallSite, ActionAN](dag) {
+class SuccessMetaPlan(dag: DAG[SuccessMetaPlan.Node])
+      extends GalliaDAG[SuccessMetaPlan.Node, CallSite, ActionAN](dag) {
 
     def leavesCount   : Size = dag.leaves.size
     def forceLeafClass: Cls  = dag.leaves.force.one.cls
@@ -26,7 +26,7 @@ class SuccessMetaResult(dag: DAG[SuccessMetaResult.Node])
         .pipe { new ActionPlan(_) } }
 
   // ===========================================================================
-  object SuccessMetaResult {
+  object SuccessMetaPlan {
     case class Node(id: NodeId, origin: CallSite, actiona: ActionAN, cls: Cls)
         extends HasNodeId
         with    HasNodeContext[CallSite]

@@ -21,7 +21,7 @@ case class HeadEnd private (leafId : LeafId) {
         .pipe(RunResultM)
 
     // ===========================================================================
-    private[gallia] def runToNdt(): Either[MetaErrorResult, (SuccessMetaResult, NDT)] =
+    private[gallia] def runToNdt(): Either[MetaErrorResult, (SuccessMetaPlan, NDT)] =
         adagm
           .run().intermediateEither
           .map(_.mapSecond(_.atomPlan.naiveRun()))

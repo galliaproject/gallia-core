@@ -19,12 +19,12 @@ class IntermediateMetaPlan(dag: DAG[IntermediateMetaPlan.Node])
 
       // ===========================================================================
       /** left if meta failed */
-      def intermediateEither: Either[MetaErrorResult, (SuccessMetaResult, ActionPlan)] =
+      def intermediateEither: Either[MetaErrorResult, (SuccessMetaPlan, ActionPlan)] =
           if (!leafNode.isSuccess) Left(this)
           else
             dag
               .transform(_.successOpt.force)(_.id)
-              .pipe { new SuccessMetaResult(_) }
+              .pipe { new SuccessMetaPlan(_) }
               .associateRight(_.actionPlan)
               .in.right
 
@@ -77,9 +77,9 @@ class IntermediateMetaPlan(dag: DAG[IntermediateMetaPlan.Node])
       // ---------------------------------------------------------------------------
       def isSuccess: Boolean = result.successOpt.isDefined
 
-      def successOpt: Option[SuccessMetaResult.Node] =
+      def successOpt: Option[SuccessMetaPlan.Node] =
         result
           .successOpt
-          .map(SuccessMetaResult.Node(id, origin, actiona, _)) } }
+          .map(SuccessMetaPlan.Node(id, origin, actiona, _)) } }
 
 // ===========================================================================

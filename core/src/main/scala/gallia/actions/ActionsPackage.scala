@@ -119,6 +119,6 @@ package object actions extends boilerplate.ActionBoilerplate { // TODO: delegate
 
       // ---------------------------------------------------------------------------
       final def _meta(ignored: Cls): Cls = Cls.Dummy //TODO?
-      final def atoms(ctx: NodeMetaContext): Atoms = Seq(ctx.afferents.forceOne.pipe(atom)) } }
+      final def atoms(ctx: ActionMetaContext): Atoms = Seq(ctx.afferents.forceOne.pipe(atom)) } }
 
 // ===========================================================================

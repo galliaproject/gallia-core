@@ -63,7 +63,7 @@ class HeadZ private[gallia] ( // TODO: t210121105809 - rename to HeadS and gener
     private case class UWrapper(u: ActionUU) extends ActionZZ {
       def vldt   (in: Cls): Errs = u. vldt(in)
       def _meta  (in: Cls): Cls  = u._meta(in)
-      def atomzzs(ctx: NodeMetaContext): AtomZZs =
+      def atomzzs(ctx: ActionMetaContext): AtomZZs =
         u .atomuus(ctx)
           .map(gallia.atoms._UWrapper.apply) }
 

@@ -9,7 +9,7 @@ import dag.HasNodeId
 case class ActionNode(
       id    : NodeId,
       atoms : Seq[Atom], // may be empty, eg for ValidateX or OutputX
-      ctx   : NodeMetaContext)
+      ctx   : ActionMetaContext)
     extends HasNodeId {
 
   override def toString: String = formatDefault

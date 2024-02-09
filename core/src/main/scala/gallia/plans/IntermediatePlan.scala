@@ -61,7 +61,7 @@ class IntermediatePlan private[gallia] (dag: env.ActionDag) {
                     ._meta(afferentClss)
                     .tap { efferent =>
                       actionvm._metaContext =
-                        NodeMetaContext(afferentClss, efferent, CallSite(None, Nil)) }
+                        ActionMetaContext(afferentClss, efferent, CallSite(None, Nil)) }
                     .pipe(ResultSchema.Success.apply)
                 case errors => ResultSchema.Errors(errors, actionvm.callSite) } } }
 

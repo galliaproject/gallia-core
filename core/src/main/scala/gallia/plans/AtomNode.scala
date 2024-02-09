@@ -29,6 +29,6 @@ case class AtomNode(
 // ===========================================================================
 case class AtomMetaContext(
     actionId     : NodeId,
-    actionMetaCtx: NodeMetaContext)
+    actionMetaCtx: ActionMetaContext)
     
 // ===========================================================================

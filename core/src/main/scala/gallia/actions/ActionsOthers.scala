@@ -18,7 +18,7 @@ object ActionsOthers {
   object Output extends ActionVM1 with ActionAN {
     def  vldt(in: Cls) = Nil
     def _meta(in: Cls) = in
-    def atoms(ignored: NodeMetaContext): Atoms = Nil }
+    def atoms(ignored: ActionMetaContext): Atoms = Nil }
 
   // ===========================================================================
   case class ModifyUnderlyingStreamer(f: Streamer[Obj] => Streamer[Obj]) extends IdentityVM1 with ActionZZ01 {
@@ -76,7 +76,7 @@ object ActionsOthers {
   case object UnionUU extends ActionV2 with ActionM2 with ActionAN {
     def  vldt (in1: Cls, in2: Cls): Errs  = Nil // TODO: eg collisions
     def _meta (in1: Cls, in2: Cls): Cls   = in1.mergeDisjoint(in2)
-    def atoms(ignored: NodeMetaContext): Atoms = _Merge.in.seq }
+    def atoms(ignored: ActionMetaContext): Atoms = _Merge.in.seq }
 
   // ===========================================================================
   // uz
@@ -91,11 +91,11 @@ object ActionsOthers {
 
     // ---------------------------------------------------------------------------
     case class FlattenByU(target: KPath) extends FlattenBy(target) with ActionUZ {
-      def atomuzs(ignored: NodeMetaContext): AtomUZs =
+      def atomuzs(ignored: ActionMetaContext): AtomUZs =
         _FlattenByU(target).in.seq }
 
     case class FlattenByZ(target: KPath) extends FlattenBy(target) with ActionZZ {
-      def atomzzs(ignored: NodeMetaContext): AtomZZs =
+      def atomzzs(ignored: ActionMetaContext): AtomZZs =
         _FlattenByZ(target).in.seq }
 
   // ===========================================================================
@@ -103,23 +103,23 @@ object ActionsOthers {
 
   case object MergeAll extends ActionZU with TodoV1 {
     def _meta(in: Cls): Cls = ???//in.reduceLeft(_ mergeDisjoint _) - FIXME:?
-    def atomzus(ctx: NodeMetaContext): AtomZUs = ??? } //_MergeAll.in.seq
+    def atomzus(ctx: ActionMetaContext): AtomZUs = ??? } //_MergeAll.in.seq
 
   // ---------------------------------------------------------------------------
   case object AsArray1 extends ActionZU with TodoV1 { // TODO: key sole + not array
       def _meta(in: Cls): Cls =  in.soleField.key.pipe(in.toMultiple(_))
-      def atomzus(ctx: NodeMetaContext): AtomZUs = ctx.afferents.forceOne.soleField.key.pipe(_AsArray1).in.seq }
+      def atomzus(ctx: ActionMetaContext): AtomZUs = ctx.afferents.forceOne.soleField.key.pipe(_AsArray1).in.seq }
 
     // ---------------------------------------------------------------------------
     case class AsArray2(newKey: Key) extends ActionZU with TodoV1 {
       def _meta(in: Cls): Cls =  in.nest(in.keyz.renz, newKey).toMultiple(newKey)
-      def atomzus(ctx: NodeMetaContext): AtomZUs = _AsArray2(newKey).in.seq }
+      def atomzus(ctx: ActionMetaContext): AtomZUs = _AsArray2(newKey).in.seq }
 
   // ---------------------------------------------------------------------------
   case object ForceOne extends ActionZU {
     def vldt (in: Cls): Errs = Nil
     def _meta(in: Cls): Cls = in
-    def atomzus(ignored: NodeMetaContext): AtomZUs = _ForceOne.in.seq }
+    def atomzus(ignored: ActionMetaContext): AtomZUs = _ForceOne.in.seq }
 
   // ===========================================================================
   //FIXME t210115175242 - runtime validation of newKeys for these
@@ -144,7 +144,7 @@ object ActionsOthers {
   case class MapV2V(to: TypeNode, f: _ff11) extends ActionVV {
     def  vldt(in: Clss): Errs = Nil // TODO: t240124123030 - missing validations
     def _meta(in: Clss): Cls  = in.forceOne//TODO: ok? t220627162134 - must adapt type
-    def atoms (ignored: NodeMetaContext): Atoms = _MapV2V(f).in.seq }
+    def atoms (ignored: ActionMetaContext): Atoms = _MapV2V(f).in.seq }
 
   // ---------------------------------------------------------------------------
   case class CombineVV(x: TypeNode, y: TypeNode, result: TypeNode, f: _ff21) extends ActionVvToV {
@@ -168,13 +168,13 @@ object ActionsOthers {
   case class PopulateDataClass(node: TypeNode) extends ActionUV {
     def  vldt(in     : Clss): Errs = Nil // TODO: t240124123030 - missing validations
     def _meta(ignored: Clss): Cls  = ???
-    def atoms(ctx: NodeMetaContext): Atoms = ??? } //_PopulateDataClass
+    def atoms(ctx: ActionMetaContext): Atoms = ??? } //_PopulateDataClass
 
   // ---------------------------------------------------------------------------
   case class SquashUUnsafe(to: TypeNode, f: Obj => Any) extends ActionUV {
       def  vldt(in     : Clss): Errs = Nil // TODO: t240124123030 - missing validations
       def _meta(ignored: Clss): Cls  = Cls.vle(to)
-      def atoms(ignored: NodeMetaContext): Atoms = _SquashUUnsafe(f).in.seq }
+      def atoms(ignored: ActionMetaContext): Atoms = _SquashUUnsafe(f).in.seq }
 
     // ---------------------------------------------------------------------------
     case class SquashU1(from: TtqKPath1, to: TypeNode, f: _ff11) extends ActionUV with SquashXN { // == Grab1
@@ -198,7 +198,7 @@ object ActionsOthers {
   case object Size extends ActionZV {
     def  vldt(ignored: Clss): Errs = Nil // TODO: t240124123030 - missing validations
     def _meta(ignored: Clss): Cls  = Cls.vleInt
-    def atoms(ctx: NodeMetaContext): Atoms = _Size.in.seq }
+    def atoms(ctx: ActionMetaContext): Atoms = _Size.in.seq }
 
   // ---------------------------------------------------------------------------
   case class GrabZ(from: TtqKPath1 /* does not specify the surrounding Seq */, checkOrigin: Boolean /* not for V=Any */) 
@@ -208,7 +208,7 @@ object ActionsOthers {
   case class SquashZUnsafe(to: TypeNode, f: Seq[Obj] => Any) extends ActionZV {
       def  vldt(in     : Clss): Errs = Nil // TODO: t240124123030 - missing validations
       def _meta(ignored: Clss): Cls  = Cls.vle(to)
-      def atoms(ignored: NodeMetaContext): Atoms = _SquashZUnsafe(f).in.seq }
+      def atoms(ignored: ActionMetaContext): Atoms = _SquashZUnsafe(f).in.seq }
 
     // ---------------------------------------------------------------------------
     case class SquashZ1(from: TtqKPath, to: TypeNode, f: _agg1) extends ActionZV with SquashXN {
@@ -243,7 +243,7 @@ object ActionsOthers {
     def _meta(in: Clss): Cls  = if (!checkOrigin) in.forceOne else Cls.vles(from.typeNode)
 
     // ---------------------------------------------------------------------------
-    def atoms(ctx: NodeMetaContext): Atoms =
+    def atoms(ctx: ActionMetaContext): Atoms =
       ctx.afferents.forceOne
         .pipe(from.pathPairT)
         .pipe { pair =>

@@ -13,16 +13,16 @@ trait ActionVN {
     // ---------------------------------------------------------------------------
     /* 201214105653 - keeping old hack around to help prototyping, avoid using otherwise (also see t220615121216)
          can only be used from 'def atom[...]' */
-    var _metaContext: NodeMetaContext = null }
+    var _metaContext: ActionMetaContext = null }
 
   // ===========================================================================
   trait ActionMN { def _meta(in: Clss): Cls }
 
   // ===========================================================================
-  trait ActionAN { def atoms(ctx: NodeMetaContext): Atoms }
+  trait ActionAN { def atoms(ctx: ActionMetaContext): Atoms }
 
     // ---------------------------------------------------------------------------
-    case class NodeMetaContext(afferents: Clss, efferent: Cls, origin: CallSite) { import aptus.String_
+    case class ActionMetaContext(afferents: Clss, efferent: Cls, origin: CallSite) { import aptus.String_
       def forceOneAfferent: Cls = afferents.forceOne
 
       def formatDebugAfferents: String = afferents.values.map(_.formatShort0.sectionAllOff).joinln.newline
@@ -30,7 +30,7 @@ trait ActionVN {
 
 // ===========================================================================
 trait ActionAN1 extends ActionAN {
-  final override def atoms(ctx: NodeMetaContext): Atoms = Seq(atom)
+  final override def atoms(ctx: ActionMetaContext): Atoms = Seq(atom)
                  def atom: Atom }
 
 // ===========================================================================

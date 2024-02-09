@@ -14,7 +14,6 @@ case class AtomNode(
     def process(input: DataInput)(missingInputs: RootId => NDT): NDT =
         AtomProcessor(input, missingInputs)(
           id, atom)(
-          afferentSchemas, efferentSchema)(
           debug)
 
       // ---------------------------------------------------------------------------

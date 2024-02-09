@@ -19,9 +19,8 @@ sealed trait ResultSchema {
     case class  Errors(values: Errs, origin: CallSite) extends ResultSchema { def successOpt = None       ; val errorOpt = Some(this)
       def formatExceptionMessage: String =
         Seq(
-              origin.formatSuccinct,
-              errors.map(_.format).joinln,
-              origin.formatSuccinct)
+              origin.formatDefault,
+              errors.map(_.format).joinln)
           .joinlnln
           .sectionAllOff(2) } }
 

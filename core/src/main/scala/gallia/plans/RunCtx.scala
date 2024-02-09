@@ -19,7 +19,6 @@ private case class RunCtx[$Data](
       Seq(
         // have those twice as the rest can be big
         "message"    .padRight(12, ' ') -> throwable.getMessage,
-        "origin"     .padRight(12, ' ') -> debug.origin.formatSuccinct,
 
         // ---------------------------------------------------------------------------
         "node.parent".padRight(12, ' ') -> debug.parentId,
@@ -32,7 +31,7 @@ private case class RunCtx[$Data](
         // ---------------------------------------------------------------------------
         // have those twice as the rest can be big
         "message".padRight(12, ' ') -> throwable.getMessage,
-        "origin" .padRight(12, ' ') -> debug.origin.formatSuccinct)
+        "origin" .padRight(12, ' ') -> debug.origin.formatDefault)
       .map { case (key, value) => s"${key}\t${value}" }
       .joinln
       .sectionAllOff(2)

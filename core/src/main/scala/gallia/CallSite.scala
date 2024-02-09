@@ -8,11 +8,9 @@ case class CallSite(
       fullTrace: List[StackTraceElement]) {
 
     override def toString: String = formatDefault
-      def formatDefault: String = formatLines.joinln
-        def formatLines: Seq[String] = sub.flatMap(_.formatPathOpt.map(_.newline)).toSeq ++ Seq(sub.toString, fullTrace.section)
-
-    def formatSuccinct: String = sub.flatMap(_.formatPathOpt.map(_.newline)).getOrElse(fullTrace.joinln.sectionAllOff("?"))
-  }
+      def formatDefault: String =
+        fullTrace
+          .section { sub.flatMap(_.formatPathOpt).getOrElse("no-origin") } }
 
   // ===========================================================================
   case class SubCallSite(

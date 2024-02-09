@@ -9,7 +9,6 @@ private[plans] object AtomProcessor {
   def apply
         (input: DataInput, missingInputs: dag.RootId => NDT)
         (nodeId: NodeId, nodeAtom: Atom)
-        (afferentSchemas: Clss, efferentSchema: Cls) // TODO: these are very misleading, as they are action-based, not atom-based (see ActionNode.ctx and its construction)
         (debug: AtomNodeDebugging)
       : NDT = { import InputData._
 
@@ -90,8 +89,8 @@ private[plans] object AtomProcessor {
         case x: AtomZV => x.naive(input.objs).pipe(NDT.vle)
 
         // ---------------------------------------------------------------------------
-        case x: AtomVU => x.naive(input.vle)//.pipe(NDT.to)
-        case x: AtomVZ => x.naive(input.vle)//.pipe(NDT.to)
+        case x: AtomVU => x.naive(input.vle)
+        case x: AtomVZ => x.naive(input.vle)
 
         // ---------------------------------------------------------------------------
         case x: AtomVv2V  => (x.naive _).tupled(input.vle2)   .pipe(NDT.vle)

@@ -146,7 +146,7 @@ object ActionAtomsBoilerplate {
         final override def atomius(ignored: NodeMetaContext): Seq[AtomIU] = atomiu.in.seq
                        def atomiu                           :     AtomIU }
 
-  trait ActionAtomsIU01y extends ActionAtomsIU {
+  trait ActionAtomsIU011 extends ActionAtomsIU {
         final override def atomius(ctx: NodeMetaContext): Seq[AtomIU] = atomiuy(ctx.efferent).in.seq
                        def atomiuy(efferent: Cls)       :     AtomIU } // !! efferent, not afferent here
 

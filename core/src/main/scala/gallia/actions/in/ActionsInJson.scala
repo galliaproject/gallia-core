@@ -21,7 +21,7 @@ case class GenericInputU(schema: Cls, datum : Obj)
 
 // ===========================================================================
 case class JsonObjectString(inputString: InputString, schemaProvider: OtherSchemaProvider)
-    extends ActionIU01y with TodoV0
+    extends ActionIU011 with TodoV0
        with HasSchemaProviderAndProjectionU[_JsonObjectString.Conf] with HasNoProjection {
   override def _meta: Cls = __meta
   override def atomiuy(resultSchema: Cls): AtomIU = _JsonObjectString(hasCommonObj, resultSchema)
@@ -45,7 +45,7 @@ case class JsonObjectFileInputU(
       input         : InputUrlLike,
       schemaProvider: OtherSchemaProvider,
       projectionOpt : Option[ReadProjection])
-    extends ActionIU01y with TodoV0
+    extends ActionIU011 with TodoV0
     with    HasSchemaProviderAndProjectionU[_JsonObjectFileInputU.Conf] {
   override def _meta: Cls = __meta
   override def atomiuy(resultSchema: Cls): AtomIU = _JsonObjectFileInputU(hasCommonObj, resultSchema)

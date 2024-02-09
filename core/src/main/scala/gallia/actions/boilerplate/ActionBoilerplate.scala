@@ -46,7 +46,7 @@ trait ActionBoilerplate { import ActionAtomsBoilerplate._
     trait ActionIU11 extends ActionIU with ActionAtomsIU11
     trait ActionIU1N extends ActionIU with ActionAtomsIU1N
 
-      trait ActionIU01y extends ActionIU with ActionAtomsIU01y
+      trait ActionIU011 extends ActionIU with ActionAtomsIU011
 
     // ---------------------------------------------------------------------------
     trait ActionIZ01 extends ActionIZ with ActionAtomsIZ01

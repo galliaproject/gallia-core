@@ -104,8 +104,9 @@ private[plans] object AtomProcessor {
       case util.Failure(throwable) =>
         throw new Exception( // will be pretty ugly...
           RunCtx(nodeId, nodeAtom, debug, throwable, inputData(nodeAtom))
-            .formatDefault
-            .prepend("240125155846:"))
+              .formatDefault
+              .prepend("240125155846:"),
+            throwable)
 
       // ---------------------------------------------------------------------------
       case util.Success(ndt) => ndt

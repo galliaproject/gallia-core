@@ -32,10 +32,7 @@ private case class RunCtx[$Data](
         // ---------------------------------------------------------------------------
         // have those twice as the rest can be big
         "message".padRight(12, ' ') -> throwable.getMessage,
-        "origin" .padRight(12, ' ') -> debug.origin.formatSuccinct,
-
-        // ---------------------------------------------------------------------------
-        "stack_trace:".padRight(12, ' ') -> throwable.getStackTrace.toList.joinln.sectionAllOff )
+        "origin" .padRight(12, ' ') -> debug.origin.formatSuccinct)
       .map { case (key, value) => s"${key}\t${value}" }
       .joinln
       .sectionAllOff(2)

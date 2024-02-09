@@ -19,9 +19,6 @@ ThisBuild / developers           := List(Developer(
 ThisBuild / scmInfo              := Some(ScmInfo(
   browseUrl  = url("https://github.com/galliaproject/gallia-core"),
   connection =     "scm:git@github.com:galliaproject/gallia-core.git"))
-ThisBuild / libraryDependencies  += "com.lihaoyi" %% "utest" % uTestVersion % "test"
-ThisBuild / testFrameworks       += new TestFramework("utest.runner.Framework")
-// more tests: see https://github.com/galliaproject/gallia-testing (being moved here)
 
 // ===========================================================================
 lazy val reflect = (project in file("reflect"))
@@ -43,7 +40,7 @@ lazy val root = (project in file("."))
   .settings(GalliaCommonSettings.mainSettings:_*)
   .aggregate(reflect, core)
 
-// ===========================================================================    
+// ===========================================================================
 // see https://github.com/aptusproject/aptus-core
 //   our own utilities library, bundles low level library such as commons-{io,lang3,math3,csv}, gson, enumeratum, ...
 
@@ -52,8 +49,10 @@ lazy val enumeratumVersion = "1.7.3"
 lazy val uTestVersion      = "0.8.1"
 
 // ---------------------------------------------------------------------------
+ThisBuild / testFrameworks       += new TestFramework("utest.runner.Framework")
 ThisBuild / libraryDependencies ++=
-                   Seq("com.beachape" %% "enumeratum" % enumeratumVersion) ++
+                   Seq("com.beachape" %% "enumeratum" % enumeratumVersion,
+                       "com.lihaoyi"  %% "utest"      % uTestVersion % "test") ++ // more tests: see https://github.com/galliaproject/gallia-testing (being moved here)
   (scalaBinaryVersion.value match {
     case "3"    => Seq(("io.github.aptusproject" %% "aptus-core" % aptusVersion).cross(CrossVersion.for3Use2_13) /* because of gallia-spark, which will bring in 2.13's scala-parallel-collections */)
     case "2.13" => Seq( "io.github.aptusproject" %% "aptus-core" % aptusVersion)
@@ -65,11 +64,11 @@ ThisBuild / libraryDependencies ++=
   (scalaBinaryVersion.value match {
     case "3"    => Seq.empty
     case "2.13" => Seq("org.scala-lang" %  "scala-reflect" % scalaVersion.value) /* for scala.reflect.runtime.universe */
-    case "2.12" => Seq("org.scala-lang" %  "scala-reflect" % scalaVersion.value) /* for scala.reflect.runtime.universe */ })                  
+    case "2.12" => Seq("org.scala-lang" %  "scala-reflect" % scalaVersion.value) /* for scala.reflect.runtime.universe */ })
 
 // ===========================================================================
 sonatypeRepository     := "https://s01.oss.sonatype.org/service/local"
-sonatypeCredentialHost :=         "s01.oss.sonatype.org"        
+sonatypeCredentialHost :=         "s01.oss.sonatype.org"
 publishMavenStyle      := true
 publishTo              := sonatypePublishToBundle.value
 

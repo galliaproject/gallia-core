@@ -1,11 +1,17 @@
 package gallia
 package env
 
-import dag.NodeId
+import dag._
 
 // ===========================================================================
-case class ActionNodePair(id: NodeId, actionvm: ActionVN with ActionMN) {
-    def tranform(f: ActionVN with ActionMN => ActionVN with ActionMN): ActionNodePair = copy(actionvm = f(actionvm))
+case class ActionNodePair(id: NodeId, actionvm: ActionVMN)
+      extends HasNodeId
+      with    HasNoNodeContext
+      with    HasNodeTarget[ActionVMN] {
+    protected val target = actionvm
+
+    // ---------------------------------------------------------------------------
+    def tranform(f: ActionVMN => ActionVMN): ActionNodePair = copy(actionvm = f(actionvm))
 
     // ---------------------------------------------------------------------------
     def isNestingMetaPlaceholder: Boolean = actionvm.isInstanceOf[heads.HeadsNestingHandler.NestingMetaPlaceholder]
@@ -17,14 +23,14 @@ case class ActionNodePair(id: NodeId, actionvm: ActionVN with ActionMN) {
     def intermediateMetaResultNode(data: Map[NodeId, run.ResultSchema]) =
       new run.IntermediateMetaResultNode(
         id,
-        origin   = actionvm.callSite,
-        actionan = actionvm.pipe(ActionNodePair.actionAN),
-        result   = id.pipe(data)) }
+        origin  = actionvm.callSite,
+        actiona = actionvm.pipe(ActionNodePair.actionAN),
+        result  = id.pipe(data)) }
 
   // ===========================================================================
   object ActionNodePair {
-    private def actionAN(action: ActionVN with ActionMN): ActionAN = // 210205060908
-      action match {
+    private def actionAN(actionvm: ActionVMN): ActionAN = // 210205060908
+      actionvm match {
         case x: ActionAN                     => x // <=> asInstanceOf[ActionAN]
         case _: actions.in.InMemoryMetaInput => NestingDataPlaceholder // TODO: build-in InMemoryMetaInput
         case x                               => aptus.illegalState(s"not an ActionAN: ${x}") } }

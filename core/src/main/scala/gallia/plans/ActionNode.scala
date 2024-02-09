@@ -3,15 +3,20 @@ package plans
 
 import aptus.Seq_
 
-import dag.HasNodeId
+import dag._
 
 // ===========================================================================
 case class ActionNode(
       id    : NodeId,
-      atoms : Seq[Atom], // may be empty, eg for ValidateX or OutputX
-      ctx   : ActionMetaContext)
-    extends HasNodeId {
+      ctx   : ActionMetaContext,
+      atoms : Seq[Atom] /* may be empty, eg for ValidateX or OutputX */)
+    extends HasNodeId
+    with    HasNodeContext[ActionMetaContext]
+    with    HasNodeTarget [Seq[Atom]] {
+  protected val ctxOpt = Some(ctx)
+  protected val target = atoms
 
+  // ---------------------------------------------------------------------------
   override def toString: String = formatDefault
 
     def formatDefault: String =
@@ -31,8 +36,10 @@ case class ActionNode(
     private def atomNode(newNodeId: NodeId, atom: Atom): AtomNode =
       AtomNode(
         newNodeId,
-        atom,
-        AtomMetaContext(actionId = id, ctx))
+        ctx = AtomMetaContext(
+          actionId      = id,
+          actionMetaCtx = ctx),
+        atom)
 
     // ---------------------------------------------------------------------------
     private[plans] def atomNodeIds: Seq[NodeId] =
@@ -40,6 +47,6 @@ case class ActionNode(
         .ensuring(_.nonEmpty)
         .zipWithIndex
         .map { case (_, index) =>
-          AtomNode.atomId(id, index) } }
+          atomId(id, index) } }
 
 // ===========================================================================

@@ -15,8 +15,16 @@ package object plans {
   // ---------------------------------------------------------------------------
   case class ClsIO(in: Cls, out: Cls)
 
-  // ---------------------------------------------------------------------------
+  // ===========================================================================
   type DAG[T] = dag.DAG[T]
-  type NodeId = dag.NodeId }
+  type NodeId = dag.NodeId
+
+  // ===========================================================================
+  case class AtomMetaContext(
+    actionId     : NodeId,
+    actionMetaCtx: ActionMetaContext)
+
+  // ---------------------------------------------------------------------------
+  private[plans] def atomId(id: NodeId, index: Int): NodeId = id + s"-${index}" /* TODO: not if only one? */ }
 
 // ===========================================================================

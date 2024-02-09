@@ -7,7 +7,7 @@ import env._
 
 // ===========================================================================
 class IntermediatePlan private[gallia](dag: ActionDag)
-      extends gallia.dag.GalliaDAG[ActionNodePair](dag) {
+      extends gallia.dag.GalliaDAG[ActionNodePair, Nothing, ActionVMN](dag) {
     dag
       .nodes
       .foreach { // TODO: move to transform3 (else may fail at runtime); may need classtag
@@ -48,7 +48,7 @@ class IntermediatePlan private[gallia](dag: ActionDag)
         mut.toMap }
 
       // ===========================================================================
-      private def resultSchema(inputs: Seq[ResultSchema])(actionvm: ActionVN with ActionMN): ResultSchema =
+      private def resultSchema(inputs: Seq[ResultSchema])(actionvm: ActionVMN): ResultSchema =
         inputs
           .map(_.successOpt)
           .in.noneIf(_.exists(_.isEmpty)) // = none if any failure

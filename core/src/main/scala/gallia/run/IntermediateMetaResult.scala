@@ -9,7 +9,7 @@ import result._
 // ===========================================================================
 /** meta may still have failed here */
 class IntermediateMetaResult(dag: DAG[IntermediateMetaResultNode])
-        extends gallia.dag.GalliaDAG[IntermediateMetaResultNode](dag) {
+        extends gallia.dag.GalliaDAG[IntermediateMetaResultNode, CallSite, ActionAN](dag) {
 
       override def toString: String = formatDefault
 
@@ -66,12 +66,19 @@ class IntermediateMetaResult(dag: DAG[IntermediateMetaResultNode])
           .force.one /* since ASG */ }
 
   // ===========================================================================
-  case class IntermediateMetaResultNode(id: NodeId, origin: CallSite, actionan: ActionAN, result: ResultSchema) extends HasNodeId {
+  case class IntermediateMetaResultNode(id: NodeId, origin: CallSite, actiona: ActionAN, result: ResultSchema)
+      extends HasNodeId
+      with    HasNodeContext[CallSite]
+      with    dag.HasNodeTarget [ActionAN] {
+    protected val ctxOpt = Some(origin)
+    protected val target = actiona
+
+    // ---------------------------------------------------------------------------
     def isSuccess: Boolean = result.successOpt.isDefined
 
     def successOpt: Option[SuccessMetaResultNode] =
       result
         .successOpt
-        .map(SuccessMetaResultNode(id, origin, actionan, _)) }
+        .map(SuccessMetaResultNode(id, origin, actiona, _)) }
 
 // ===========================================================================

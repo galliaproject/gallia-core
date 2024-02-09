@@ -10,7 +10,7 @@ import plans.{Clss, ActionNode, ActionPlan}
 // ===========================================================================
 /** meta must have succeeded here */
 class SuccessMetaResult(dag: DAG[SuccessMetaResultNode])
-      extends GalliaDAG[SuccessMetaResultNode](dag) {
+      extends GalliaDAG[SuccessMetaResultNode, CallSite, ActionAN](dag) {
 
     def leavesCount   : Size = dag.leaves.size
     def forceLeafClass: Cls  = dag.leaves.force.one.cls
@@ -26,10 +26,17 @@ class SuccessMetaResult(dag: DAG[SuccessMetaResultNode])
         .pipe { new ActionPlan(_) } }
 
   // ===========================================================================
-  case class SuccessMetaResultNode(id: NodeId, origin: CallSite, actionan: ActionAN, cls: Cls) extends HasNodeId {
+  case class SuccessMetaResultNode(id: NodeId, origin: CallSite, actiona: ActionAN, cls: Cls)
+      extends HasNodeId
+      with    HasNodeContext[CallSite]
+      with    HasNodeTarget [ActionAN] {
+    protected val ctxOpt = Some(origin)
+    protected val target = actiona
+
+    // ---------------------------------------------------------------------------
     def actionNode(afferents: Clss): ActionNode =
       ActionMetaContext(afferents, cls, origin)
         .pipe { ctx =>
-          ActionNode(id, actionan.atoms(ctx), ctx)} }
+          ActionNode(id, ctx, actiona.atoms(ctx))} }
 
 // ===========================================================================

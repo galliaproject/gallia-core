@@ -7,7 +7,7 @@ import dag._
 
 // ===========================================================================
 class AtomPlan(atomDag: DAG[AtomNode]) // = data plan (TODO: rename?)
-    extends GalliaDAG[AtomNode](atomDag) {
+    extends GalliaDAG[AtomNode, AtomMetaContext, Atom](atomDag) {
 
   override def toString: String = formatSuccinct1
     def formatDefault  : String = atomDag.formatDefault

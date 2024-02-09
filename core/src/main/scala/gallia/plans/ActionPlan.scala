@@ -6,7 +6,8 @@ import dag.Edge
 
 // ===========================================================================
 class ActionPlan(actionNodeDag: DAG[ActionNode])
-      extends dag.GalliaDAG[ActionNode](actionNodeDag) {
+      extends dag.GalliaDAG[ActionNode, ActionMetaContext, Seq[Atom]](
+        actionNodeDag) {
 
     def atomPlan: AtomPlan =
       ActionPlan
@@ -55,7 +56,7 @@ class ActionPlan(actionNodeDag: DAG[ActionNode])
               efferentNodeIds(actionNode.id) // arbirarily over afferent, though easier to compute since can use 0 as index
                 .map { efferentId =>
                   newNodeIds.last ->
-                    AtomNode.atomId(efferentId, 0) }
+                    atomId(efferentId, 0) }
 
             internalEdges ++ efferentEdges }
 

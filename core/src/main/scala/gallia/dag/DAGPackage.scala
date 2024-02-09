@@ -4,8 +4,20 @@ import aptus.IdValue
 
 // ===========================================================================
 package object dag {
-  trait HasNodeId { val id: NodeId }
+  trait HasNodeId { /*protected - TODO: use GalliaDAG now to make it protected */val id: NodeId }
 
+  // ---------------------------------------------------------------------------
+  trait HasNodeContext[$Ctx] { protected val ctxOpt: Option[$Ctx] }
+
+    // ---------------------------------------------------------------------------
+    trait HasNoNodeContext
+      extends HasNodeContext[Nothing] {
+        final override protected val ctxOpt = None }
+
+  // ---------------------------------------------------------------------------
+  trait HasNodeTarget[$NodeType] { protected val target: $NodeType }
+
+  // ===========================================================================
   type DagId  = IdValue
   type NodeId = IdValue
   type RootId = NodeId
@@ -24,7 +36,6 @@ package object dag {
 
   // ---------------------------------------------------------------------------
   type IdDAG   = DAG  [NodeId]
-  type IdChain = Chain[NodeId]
-}
+  type IdChain = Chain[NodeId] }
 
 // ===========================================================================

@@ -99,6 +99,9 @@ package object gallia
   private[gallia] type KeyPair = GenericEntry[Key]
   private         type VEntry  = GenericEntry[HeadV[_]]
 
+  // ---------------------------------------------------------------------------
+  private[gallia] type ActionVMN = ActionVN with ActionMN
+
   // ===========================================================================
   @aptus.ordermatters
   def headV[T: WTT](values: Seq[T])                : HeadV[Seq[T]] = heads.Head.inputV[Seq[T]](values)

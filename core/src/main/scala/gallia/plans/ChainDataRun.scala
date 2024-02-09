@@ -6,7 +6,7 @@ import dag._
 // ===========================================================================
 object ChainDataRun {
 
-  def apply(missingInputs: Map[RootId, NDT])(atomNodes: AtomNodes): NDT = {
+  def apply(missingInputs: Map[RootId, NDT])(atomNodes: ChainAtomNodes): NDT = {
     var latest: NDT = null // using foldLeft is tricky because of missingInputs
 
     atomNodes

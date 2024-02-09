@@ -19,7 +19,7 @@ case class _UWrappers(wrappees: Seq[AtomUU]) extends AtomZZ with AtomCombiner[_U
 
     def fromMapU2U(plan: AtomPlan): _UWrappers =
       plan
-        .atomNodesTail
+        .chainAtomNodesTail
         .pruneChain
         .values
         .map (_.atom.asInstanceOf[AtomUU])
@@ -29,7 +29,7 @@ case class _UWrappers(wrappees: Seq[AtomUU]) extends AtomZZ with AtomCombiner[_U
     def from(values: Seq[_UWrapper]): _UWrappers =
       values  
           .map(_.wrappee)
-          .pipe(AtomNodes.combineUWrapping)
+          .pipe(ChainAtomNodes.combineUWrapping)
           .map(_.asInstanceOf[AtomUU])  
         .pipe(_UWrappers.apply) }
 

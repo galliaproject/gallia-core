@@ -8,7 +8,7 @@ import atoms.common.AtomsCommonSomewhatBasics._RemoveWhateverIfAll
 import atoms                                 ._UWrappers
 
 // ===========================================================================
-case class AtomNodes(values: Seq[AtomNode]) extends AnyVal { // TODO: rename to ChainAtomNodes?
+case class ChainAtomNodes(values: Seq[AtomNode]) extends AnyVal {
 
   def valuesWithContext: Seq[(Option[NodeId], AtomNode, Boolean /* last */)] =
     values
@@ -18,22 +18,21 @@ case class AtomNodes(values: Seq[AtomNode]) extends AnyVal { // TODO: rename to 
         (previousOpt.map(_.id), atomNode, isLast) }
 
   // ---------------------------------------------------------------------------        
-  def pruneChain: AtomNodes =
+  def pruneChain: ChainAtomNodes =
       this
         .combine(_.isUWrapper)        (_.asUWrapper)        (_UWrappers          .from)
         .combine(_.isRename)          (_.asRename)          (_RenameAll          .from)
         .combine(_.isRemoveWhateverIf)(_.asRemoveWhateverIf)(_RemoveWhateverIfAll.from) // FIXME: t210727091024 - only if same level
 
     // ===========================================================================  
-    def combine[$Atom <: Atom](pred: Atom => Boolean)(specifier: Atom => $Atom)(combiner: Seq[$Atom] => AtomCombiner[$Atom]): AtomNodes =
+    def combine[$Atom <: Atom](pred: Atom => Boolean)(specifier: Atom => $Atom)(combiner: Seq[$Atom] => AtomCombiner[$Atom]): ChainAtomNodes =
       values
           .pipe(AdjacencyGrouping.apply(_)(_.atom.pipe(pred)))
-          .pipe(_.flatMap(AtomNodes._combineAtomNodes(_.map(_.atom.pipe(specifier)).pipe(combiner))))
-        .pipe(AtomNodes.apply) }
+          .pipe(_.flatMap(ChainAtomNodes._combineAtomNodes(_.map(_.atom.pipe(specifier)).pipe(combiner))))
+        .pipe(ChainAtomNodes.apply) }
 
 // ===========================================================================
-object AtomNodes {
-  
+object ChainAtomNodes {
   private val Threshold = 5 // TODO: better heuristic: as ratio of object size rather  
 
   // ===========================================================================  
@@ -65,8 +64,6 @@ object AtomNodes {
        grouped
           .flatMap { subNodes =>          
             if (subNodes.size <= Threshold) subNodes          
-            else Seq(combiner(subNodes)) }
-  
-}
+            else Seq(combiner(subNodes)) } }
 
 // ===========================================================================

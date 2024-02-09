@@ -29,18 +29,18 @@ case class AtomPlan(atomDag: DAG[AtomNode]) { // = data plan (TODO: rename?)
   def isChain: Boolean = atomDag.isChain
 
   // ---------------------------------------------------------------------------
-  def atomNodesTail: AtomNodes = // used for MapU2U optimization
+  def chainAtomNodesTail: ChainAtomNodes = // used for MapU2U optimization
     atomDag
       .nodes // TODO: t210614142629 - confirm/enforce guaranteed topologically sorted if chain?
       .tail  // TODO: confirm always has placeholder
-      .pipe(AtomNodes.apply)
+      .pipe(ChainAtomNodes.apply)
 
   // ===========================================================================    
   def naiveRun(missingInputs: Map[RootId, NDT] = Map()): NDT = // TODO: t201027130649 - abstract runner strategy       
        if (atomDag.isChain)
          atomDag
            .nodes // TODO: t210614142629 - confirm/enforce guaranteed topologically sorted if chain?
-           .pipe(AtomNodes.apply)
+           .pipe(ChainAtomNodes.apply)
            .pruneChain
            .pipe(ChainDataRun(missingInputs))    
        else

@@ -19,7 +19,7 @@ class HandlerHelper() {
   }
 
   // ---------------------------------------------------------------------------
-  private[gallia] def chain(nodeId: NodeId, action: Node): NodeId = {
+  private[gallia] def chain(nodeId: NodeId, action: ActionVN with ActionMN): NodeId = {
     val (dagId, originalDag) = Env.retrieveDagPair(nodeId)
 
     val newNodeId = Env.nextNodeId()
@@ -32,7 +32,7 @@ class HandlerHelper() {
   }
 
   // ---------------------------------------------------------------------------
-  private[gallia] def join2(thisNodeId: NodeId, thatNodeId: NodeId)(action: Node): LeafId = {
+  private[gallia] def join2(thisNodeId: NodeId, thatNodeId: NodeId)(action: ActionVN with ActionMN): LeafId = {
     val newDagId  = Env.nextDagId()
     val newNodeId = Env.nextNodeId()
 
@@ -66,7 +66,7 @@ class HandlerHelper() {
           _.tranform {
             _ .asInstanceOf[actions.CanForceAs1[_]] /* by design */
               .forceAs(key)
-              .asInstanceOf[Node]  /* by design */ } }
+              .asInstanceOf[ActionVN with ActionMN]  /* by design */ } }
 
       Env.associateDag(dagId -> updatedDag)
       

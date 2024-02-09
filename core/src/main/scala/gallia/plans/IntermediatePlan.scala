@@ -2,19 +2,18 @@ package gallia
 package plans
 
 import aptus.Anything_
-
 import run._
-import dag._
-import env.ActionDag
 
 // ===========================================================================
-case class IntermediatePlan private[plans] (dag: ActionDag) {
-  def run(): IntermediateMetaResult = IntermediatePlan.applyx(dag).pipe(IntermediateMetaResultNodeCreator(dag)) }
+case class IntermediatePlan private[plans] (dag: env.ActionDag) {
 
-// ===========================================================================
-private object IntermediatePlan {
+  def run(): IntermediateMetaResult =
+      dag
+        .transform { _ .intermediateMetaResultNode(dataMap) }(newIdResolver = _.id)
+        .pipe(IntermediateMetaResult.apply)
 
-    def applyx(dag: ActionDag): Map[NodeId, ResultSchema] = {
+  // ===========================================================================
+  private def dataMap: Map[NodeId, ResultSchema] = {
       val mut = collection.mutable.Map[NodeId, ResultSchema]()
 
       // ---------------------------------------------------------------------------
@@ -33,8 +32,8 @@ private object IntermediatePlan {
       // ---------------------------------------------------------------------------
       mut.toMap }
 
-  // ===========================================================================
-  private def resultSchema(inputs: Seq[ResultSchema])(actionm: ActionVN with ActionMN): ResultSchema =
+    // ---------------------------------------------------------------------------
+    private def resultSchema(inputs: Seq[ResultSchema])(actionm: ActionVN with ActionMN): ResultSchema =
       inputs
         .map(_.successOpt)
         .in.noneIf(_.exists(_.isEmpty)) // = none if any failure

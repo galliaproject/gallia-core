@@ -37,7 +37,7 @@ The library is available for Scala 2.12, 2.13, and 3.3.1
 <a name="sbt"></a><a name="210121153201"></a>
 Include the following in your `build.sbt` file:
 ```
-libraryDependencies += "io.github.galliaproject" %% "gallia-core" % "0.6.0"
+libraryDependencies += "io.github.galliaproject" %% "gallia-core" % "0.6.1"
 ```
 
 <a name="210121153200"></a>

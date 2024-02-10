@@ -30,13 +30,14 @@ lazy val reflect = (project in file("reflect"))
 // ---------------------------------------------------------------------------
 lazy val core = (project in file("core"))
   .settings(
-    name   := "gallia-core",
+    name   := "gallia-core0", // TODO: t240209192100 - where is this name used?
     target := baseDirectory.value / ".." / "bin" / "core")
   .settings(GalliaCommonSettings.mainSettings:_*)
   .dependsOn(reflect) // TODO: also bring in gallia-macros
 
 // ---------------------------------------------------------------------------
 lazy val root = (project in file("."))
+  .settings(name := "gallia-core")
   .settings(GalliaCommonSettings.mainSettings:_*)
   .aggregate(reflect, core)
 
@@ -67,11 +68,4 @@ ThisBuild / libraryDependencies ++=
     case "2.12" => Seq("org.scala-lang" %  "scala-reflect" % scalaVersion.value) /* for scala.reflect.runtime.universe */ })
 
 // ===========================================================================
-sonatypeRepository     := "https://s01.oss.sonatype.org/service/local"
-sonatypeCredentialHost :=         "s01.oss.sonatype.org"
-publishMavenStyle      := true
-publishTo              := sonatypePublishToBundle.value
-
-// ===========================================================================
-ThisBuild / logLevel in compile := Level.Error
 

@@ -567,7 +567,7 @@ See Apache Spark's <a href="https://spark.apache.org/docs/latest/rdd-programming
 This module requires
 
 ```
-libraryDependencies += "org.gallia" %% "gallia-spark" % "0.4.0"
+libraryDependencies += "org.gallia" %% "gallia-spark" % "0.6.1"
 ```
 
 And the following import:
